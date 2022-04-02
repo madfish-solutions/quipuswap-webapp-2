@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
-
 import { Button } from '@shared/components';
+import { useTranslation } from '@shared/hooks';
 import { ArrowDown } from '@shared/svg';
 
 import styles from './farming-reward-header.module.scss';

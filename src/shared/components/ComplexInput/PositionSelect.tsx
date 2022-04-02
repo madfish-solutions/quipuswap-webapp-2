@@ -1,12 +1,12 @@
 import { Dispatch, FC, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
 import { getMessageNotWhitelistedTokenPair, getTokenSymbol, prepareTokenLogo } from '@shared/helpers';
+import { useTranslation } from '@shared/hooks';
 import { PositionsModal } from '@shared/modals';
 import { Shevron } from '@shared/svg';
 import { Nullable, Token, TokenPair } from '@shared/types';
@@ -14,7 +14,7 @@ import { Nullable, Token, TokenPair } from '@shared/types';
 import { Button } from '../button';
 import { LoadableTokenPairName } from '../loadable-token-pair-name';
 import { Scaffolding } from '../scaffolding';
-import { Balance } from '../state-components/balance';
+import { Balance } from '../state-components';
 import { TokensLogos } from '../tokens-logos';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS } from '@config/config';
+import { useTranslation } from '@shared/hooks';
 import { Nullable } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 

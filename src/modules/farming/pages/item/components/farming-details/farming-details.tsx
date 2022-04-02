@@ -2,9 +2,9 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Button, CandidateButton, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { useTranslation } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
 
 import { Countdown } from '../countdown';

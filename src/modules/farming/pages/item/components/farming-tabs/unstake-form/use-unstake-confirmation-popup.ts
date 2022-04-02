@@ -1,9 +1,9 @@
 import { BigNumber } from 'bignumber.js';
-import { TFunction, useTranslation } from 'next-i18next';
 
 import { MS_IN_SECOND } from '@config/config';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { isExist, isUndefined, parseTimelock } from '@shared/helpers';
+import { TFunction, useTranslation } from '@shared/hooks';
 import { Nullable, Undefined } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
 

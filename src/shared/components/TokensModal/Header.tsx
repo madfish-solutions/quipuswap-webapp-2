@@ -1,12 +1,12 @@
 import { FC, useCallback } from 'react';
 
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { Field, FieldMetaState } from 'react-final-form';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { parseNumber } from '@shared/helpers';
 import { useSaveFunction } from '@shared/helpers/crutches';
+import { useTranslation } from '@shared/hooks';
 import { Search } from '@shared/svg';
 import { validateMinMaxNonStrict } from '@shared/validators';
 
