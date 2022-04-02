@@ -1,0 +1,83 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.root {
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+.buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  width: fit-content;
+  position: relative;
+}
+.button {
+  min-width: 56px;
+  padding: 1px;
+  border-radius: 9px;
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}
+.buttonInner {
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  min-height: 25px;
+  font-size: 0.857rem;
+  line-height: 1;
+  border-radius: 8px;
+  font-weight: bold;
+  justify-content: center;
+}
+.customAmount {
+  position: absolute;
+  right: 8px !important;
+  font-size: 0.857rem;
+  line-height: 1;
+  font-weight: bold;
+}
+.unit {
+  color: $text-03;
+  margin-left: 8px;
+  font-size: 0.857rem;
+  font-weight: 700;
+  position: absolute;
+  right: 8px;
+}
+.light {
+  .button {
+    background-color: $ui-03;
+    &.active {
+      background: $brand-01;
+    }
+  }
+  .buttonInner {
+    background-color: $ui-01;
+    color: $text-01;
+  }
+  .customAmount {
+    color: $text-01;
+  }
+}
+.dark {
+  .button {
+    background-color: $text-02;
+    &.active {
+      background: $brand-02;
+    }
+  }
+  .buttonInner {
+    background-color: $ui-07;
+    color: $text-inverse;
+  }
+  .customAmount {
+    color: $text-inverse;
+  }
+}

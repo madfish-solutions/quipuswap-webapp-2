@@ -2,11 +2,12 @@ import { FC } from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
+import { Swap } from '@modules/swap/swap.page';
+
 import { Farming } from './modules/farming';
 import { Home } from './modules/home';
 import { Liquidity } from './modules/liquidity';
 import { PrivacyPolicy } from './modules/privacy-policy';
-import { Swap } from './modules/swap';
 import { TermsOfService } from './modules/terms-of-service';
 import { Voting } from './modules/voting';
 
@@ -15,7 +16,7 @@ export const routes = {
   privacyPolicy: 'privacy-policy',
   termsOfService: 'terms-of-service',
   liquidity: 'liquidity',
-  swap: 'swap',
+  swap: 'swap/*',
   farming: 'farming/*',
   voting: 'voting'
 };

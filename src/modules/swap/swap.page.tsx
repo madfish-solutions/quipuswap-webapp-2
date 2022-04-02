@@ -1,11 +1,16 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { Route, Routes } from 'react-router-dom';
 
-import { PageTitle } from '@shared/components/page-title';
+import { SwapTabAction } from '@shared/types';
+
+import { SwapSend } from './swap-send';
 
 export const Swap: FC = () => {
-  const { t } = useTranslation(['common']);
-
-  return <PageTitle>{t('Swap Page')}</PageTitle>;
+  return (
+    <Routes>
+      <Route path={'swap'} element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
+      <Route path={'send'} element={<SwapSend initialAction={'send' as SwapTabAction} />} />
+    </Routes>
+  );
 };

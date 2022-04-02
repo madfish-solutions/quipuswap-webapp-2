@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
-import { Token } from '../types/types';
+import { Token } from '@shared/types';
 
 const BASE = 10;
 

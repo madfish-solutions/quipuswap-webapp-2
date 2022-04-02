@@ -249,3 +249,5 @@ const dummyBakers: Record<QSNets, string> = {
 };
 
 export const DUMMY_BAKER = dummyBakers[NETWORK_ID];
+
+export const HIDE_ANALYTICS = true;

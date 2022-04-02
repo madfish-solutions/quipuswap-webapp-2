@@ -34,3 +34,8 @@ export * from './baker-cell';
 export * from './tabs';
 export * from './details-card-cell';
 export * from './candidate-button';
+export * from './rate-view';
+export * from './view-pair-analytics';
+export * from './swap-button';
+export * from './deadline-input';
+export * from './slippage';
