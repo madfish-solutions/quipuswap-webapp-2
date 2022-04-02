@@ -21,5 +21,5 @@ export const makeSwapOrSendRedirectionUrl = (
   const to = legacyTo ?? defaultTo;
   const tab = action ?? SwapTabAction.SWAP;
 
-  return `swap/${tab}/${from}-${to}`;
+  return `/${tab}/${from}-${to}`;
 };
