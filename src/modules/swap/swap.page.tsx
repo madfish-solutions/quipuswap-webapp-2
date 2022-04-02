@@ -9,6 +9,7 @@ import { SwapSend } from './swap-send';
 export const Swap: FC = () => {
   return (
     <Routes>
+      <Route path="/" element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
       <Route path=":fromTo" element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
     </Routes>
   );
@@ -17,6 +18,7 @@ export const Swap: FC = () => {
 export const Send: FC = () => {
   return (
     <Routes>
+      <Route path="/" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
       <Route path=":fromTo" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
     </Routes>
   );
