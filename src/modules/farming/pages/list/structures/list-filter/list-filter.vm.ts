@@ -1,8 +1,10 @@
 import { FormEvent } from 'react';
 
+import { useTranslation } from 'next-i18next';
+
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { isNull } from '@shared/helpers';
-import { useTranslation, useAuthStore } from '@shared/hooks';
+import { useAuthStore } from '@shared/hooks';
 
 export const useListFilterViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);

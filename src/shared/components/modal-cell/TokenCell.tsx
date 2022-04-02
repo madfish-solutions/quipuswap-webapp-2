@@ -1,11 +1,11 @@
 import { FC, useContext, KeyboardEvent } from 'react';
 
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Bage } from '@shared/elements';
 import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
-import { useTranslation } from '@shared/hooks';
 import { Standard } from '@shared/types';
 
 import { TokensLogos } from '../tokens-logos';

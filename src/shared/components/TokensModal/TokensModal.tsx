@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 import { FormApi } from 'final-form';
+import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 
@@ -16,7 +17,6 @@ import {
   isTezosToken,
   prepareTokenLogo
 } from '@shared/helpers';
-import { useTranslation } from '@shared/hooks';
 import { Modal } from '@shared/modals';
 import { useTokensSearchService } from '@shared/services';
 import { NotFound } from '@shared/svg';

@@ -1,5 +1,6 @@
+import { useTranslation } from 'next-i18next';
+
 import { useFarmingListStore } from '@modules/farming/hooks';
-import { useTranslation } from '@shared/hooks';
 import { FarmingListStatsDTA } from '@tests/farming';
 
 export const useListStatsViewModel = () => {

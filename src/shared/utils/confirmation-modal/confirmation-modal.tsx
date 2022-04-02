@@ -1,10 +1,10 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
-import { useTranslation } from '@shared/hooks';
 import { Modal } from '@shared/modals';
 import { StakeIcon } from '@shared/svg';
 

@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { HIDE_ANALYTICS, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@config/config';
 import {
@@ -13,7 +14,6 @@ import {
   StatePriceImpact,
   ViewPairAnlytics
 } from '@shared/components';
-import { useTranslation } from '@shared/hooks';
 import { DexPair, Nullable, Token, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
