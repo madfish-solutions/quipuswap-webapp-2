@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
+
 import { useTranslation } from '@translation';
 
 import { Section } from '../section';

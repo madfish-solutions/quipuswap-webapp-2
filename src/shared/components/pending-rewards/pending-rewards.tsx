@@ -2,13 +2,13 @@ import { FC, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 
 import { USD_DECIMALS } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
+import { useTranslation } from '@translation';
 import { DataTestAttribute } from 'tests/types';
 
 import { StateCurrencyAmount } from '../state-components';

@@ -1,10 +1,10 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { useTranslation } from '@translation';
 
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';

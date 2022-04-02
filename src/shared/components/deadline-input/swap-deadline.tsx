@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from '@translation';
 
 import { DEFAULT_DEADLINE_MINS } from '@config/config';
 import { Nullable } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { Tooltip } from '../tooltip';
 import { TransactionDeadline } from '../transaction-deadline';

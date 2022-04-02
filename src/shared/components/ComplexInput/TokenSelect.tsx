@@ -2,7 +2,6 @@ import { FC, HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -18,6 +17,7 @@ import {
 } from '@shared/helpers';
 import { Shevron } from '@shared/svg';
 import { Nullable, Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import { Button } from '../button';
 import { DashPlug } from '../dash-plug';

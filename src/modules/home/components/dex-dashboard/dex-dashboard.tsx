@@ -3,13 +3,13 @@ import { useEffect, FC, useState } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 
 import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@config/config';
 import { Card } from '@shared/components/card';
 import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
 import { fromDecimals } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
 import { Section } from '../section';
 import { DexDashboardInner } from './dex-dashboard-inner';

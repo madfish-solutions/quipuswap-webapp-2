@@ -1,12 +1,12 @@
 import { FC, useContext, KeyboardEvent } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Bage } from '@shared/elements';
 import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { Standard } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import { TokensLogos } from '../tokens-logos';
 import s from './ModalCell.module.scss';

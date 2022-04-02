@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect, useContext, FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from '@translation';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 import { noop } from 'rxjs';
@@ -22,6 +21,7 @@ import {
 import { NotFound, Search } from '@shared/svg';
 import { WhitelistedBaker } from '@shared/types';
 import { isValidBakerAddress } from '@shared/validators';
+import { useTranslation } from '@translation';
 
 import { Modal } from '../modal';
 import s from './bakers-modal.module.scss';
