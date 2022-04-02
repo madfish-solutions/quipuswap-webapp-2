@@ -14,7 +14,7 @@ export const routes = {
   home: '/',
   privacyPolicy: 'privacy-policy',
   termsOfService: 'terms-of-service',
-  liquidity: 'liquidity',
+  liquidity: 'liquidity/*',
   swap: 'swap',
   farming: 'farming/*',
   voting: 'voting'

@@ -3,9 +3,9 @@ import memoizee from 'memoizee';
 
 import { READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH } from '@config/config';
 
-import { ReadOnlySigner } from '../helpers';
+import { ReadOnlySigner } from '../helpers/readonly-signer';
 
-const readOnlySigner = new ReadOnlySigner(READ_ONLY_SIGNER_PK_HASH, READ_ONLY_SIGNER_PK);
+const readOnlySigner = new ReadOnlySigner(READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH);
 
 export const createReadOnlyTezos = (origin: TezosToolkit) => {
   const roTezos = new TezosToolkit(origin.rpc);
