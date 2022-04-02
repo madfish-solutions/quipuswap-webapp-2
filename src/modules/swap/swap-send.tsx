@@ -80,9 +80,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const navigate = useNavigate();
   const params = useParams();
   const { t } = useTranslation(['swap']);
-  const fromToSlug = (params['from-to'] as string) ?? '';
-  // eslint-disable-next-line no-console
-  console.log(fromToSlug);
+  const fromToSlug = (params.fromTo as string) ?? '';
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
 
   const getRedirectionUrl = useCallback(
@@ -145,7 +143,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const onTokensSelected = useCallback(
     (inputToken: Token, outputToken: Token) => {
       updateSwapLimits(inputToken, outputToken);
-      const newRoute = `swap/swap/${getTokenPairSlug(inputToken, outputToken)}`;
+      const newRoute = `/swap/swap/${getTokenPairSlug(inputToken, outputToken)}`;
 
       // if (router.asPath !== newRoute) {
       navigate(newRoute);
@@ -514,8 +512,14 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   );
 };
 
-export const SwapSend = (props: SwapSendProps) => (
-  <SwapLimitsProvider>
-    <OrdinarySwapSend {...props} />
-  </SwapLimitsProvider>
-);
+export const SwapSend = (props: SwapSendProps) => {
+  console.log(SwapSend.name, props);
+  const params = useParams();
+  console.log(params);
+
+  return (
+    <SwapLimitsProvider>
+      <OrdinarySwapSend {...props} />
+    </SwapLimitsProvider>
+  );
+};

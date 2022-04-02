@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
-import { Swap } from '@modules/swap/swap.page';
+import { Send, Swap } from '@modules/swap/swap.page';
 
 import { Farming } from './modules/farming';
 import { Home } from './modules/home';
@@ -17,6 +17,7 @@ export const routes = {
   termsOfService: 'terms-of-service',
   liquidity: 'liquidity',
   swap: 'swap/*',
+  send: 'send/*',
   farming: 'farming/*',
   voting: 'voting'
 };
@@ -25,6 +26,7 @@ export const Router: FC = () => (
   <Routes>
     <Route path={routes.home} element={<Home />} />
     <Route path={routes.swap} element={<Swap />} />
+    <Route path={routes.swap} element={<Send />} />
     <Route path={routes.liquidity} element={<Liquidity />} />
     <Route path={routes.voting} element={<Voting />} />
     <Route path={routes.farming} element={<Farming />} />
