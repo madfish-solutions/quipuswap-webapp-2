@@ -26,7 +26,7 @@ export const Router: FC = () => (
   <Routes>
     <Route path={routes.home} element={<Home />} />
     <Route path={routes.swap} element={<Swap />} />
-    <Route path={routes.swap} element={<Send />} />
+    <Route path={routes.send} element={<Send />} />
     <Route path={routes.liquidity} element={<Liquidity />} />
     <Route path={routes.voting} element={<Voting />} />
     <Route path={routes.farming} element={<Farming />} />
