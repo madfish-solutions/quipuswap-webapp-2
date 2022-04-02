@@ -2,7 +2,7 @@ import { useContext, FC } from 'react';
 
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 

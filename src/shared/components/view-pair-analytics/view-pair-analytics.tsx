@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@config/config';
 import { getTokenSymbol, isTokenToTezosDex } from '@shared/helpers';

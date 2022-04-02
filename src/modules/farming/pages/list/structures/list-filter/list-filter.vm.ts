@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { isNull } from '@shared/helpers';

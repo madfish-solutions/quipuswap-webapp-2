@@ -3,7 +3,7 @@ import { useEffect, FC, useState } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@config/config';
 import { Card } from '@shared/components/card';

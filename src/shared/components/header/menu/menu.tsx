@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/config';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';

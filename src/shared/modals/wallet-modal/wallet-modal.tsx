@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { SAVED_TERMS_KEY } from '@config/config';
 import { useConnectWithBeacon, useConnectWithTemple } from '@providers/use-dapp';

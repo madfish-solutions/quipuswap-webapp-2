@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Button, CandidateButton, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg/external-link';
+import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
 import { StateData } from '../state-data';

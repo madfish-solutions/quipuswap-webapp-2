@@ -1,7 +1,7 @@
 import { Dispatch, FC, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { TEZOS_TOKEN } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';

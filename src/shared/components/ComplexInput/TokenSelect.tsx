@@ -2,7 +2,7 @@ import { FC, HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';

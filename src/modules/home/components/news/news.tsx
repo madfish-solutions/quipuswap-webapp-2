@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 

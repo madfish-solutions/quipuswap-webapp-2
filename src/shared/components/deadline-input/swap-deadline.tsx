@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { DEFAULT_DEADLINE_MINS } from '@config/config';
 import { Nullable } from '@shared/types';

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';

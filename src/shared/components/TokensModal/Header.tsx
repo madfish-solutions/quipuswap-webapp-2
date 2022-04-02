@@ -1,7 +1,7 @@
 import { FC, useCallback } from 'react';
 
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 import { Field, FieldMetaState } from 'react-final-form';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';

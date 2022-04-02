@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext, FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@translation';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 import { noop } from 'rxjs';

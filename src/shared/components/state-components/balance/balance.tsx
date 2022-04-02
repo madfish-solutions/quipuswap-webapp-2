@@ -1,12 +1,12 @@
 import { FC, useMemo } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { ColorModes } from '@providers/color-theme-context';
 import { DashPlug, StateWrapper } from '@shared/components';
 import { formatBalance, isExist, isNull, isUndefined } from '@shared/helpers';
 import { Optional } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import styles from './balance.module.scss';
 
