@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Nullable } from '@shared/types';
 
@@ -16,7 +16,7 @@ interface Props {
   placeholder?: string;
 }
 
-export const Slippage: React.FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
+export const Slippage: FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
   <PresetsAmountInput
     className={className}
     defaultValue={slippagePresets[0].value}

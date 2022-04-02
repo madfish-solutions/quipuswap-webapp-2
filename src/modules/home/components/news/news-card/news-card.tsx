@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { isNewsWithLink, News } from '../content';
 
@@ -7,7 +7,7 @@ interface NewsCardProps {
   className?: string;
 }
 
-export const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
+export const NewsCard: FC<NewsCardProps> = ({ news, className }) => {
   const ImageComponent = <img width={272} height={136} src={news.img} alt="news" />;
 
   return (
