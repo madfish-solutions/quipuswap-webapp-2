@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/config';
 import { Slippage, StateCurrencyAmount, Tooltip } from '@shared/components';
 import { getMinimalOutput, getTokenSymbol } from '@shared/helpers';
+import { useTranslation } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 

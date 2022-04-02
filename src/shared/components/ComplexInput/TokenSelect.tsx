@@ -2,7 +2,6 @@ import { FC, HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -16,13 +15,14 @@ import {
   prepareTokenLogo,
   getTokenInputAmountCap
 } from '@shared/helpers';
+import { useTranslation } from '@shared/hooks';
 import { Shevron } from '@shared/svg';
 import { Nullable, Token } from '@shared/types';
 
 import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
-import { Balance } from '../state-components/balance';
+import { Balance } from '../state-components';
 import { TokensLogos } from '../tokens-logos';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';

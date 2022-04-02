@@ -1,6 +1,6 @@
-import { useTranslation } from 'next-i18next';
 import { object } from 'yup';
 
+import { useTranslation } from '@shared/hooks';
 import { ActiveStatus, Undefined } from '@shared/types';
 
 export const useFarmingStatusValidation = (farmStatus: Undefined<ActiveStatus>) => {

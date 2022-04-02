@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
+import { useTranslation } from '@shared/hooks';
 import s from '@styles/CommonContainer.module.scss';
 
 import { FarmingAlert } from '../../farming-alert';

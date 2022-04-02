@@ -1,4 +1,5 @@
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '@shared/hooks';
+
 export const useListItemViewModal = () => {
   const { t } = useTranslation(['farm']);
 

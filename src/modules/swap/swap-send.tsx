@@ -2,7 +2,6 @@ import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { MAX_HOPS_COUNT } from '@config/config';
@@ -38,12 +37,12 @@ import {
 } from '@shared/helpers';
 import { makeToken } from '@shared/helpers/makers/make-token';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
-import { useDexGraph, useOnBlock } from '@shared/hooks';
+import { useTranslation, useDexGraph, useOnBlock } from '@shared/hooks';
 import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
 import { SwapTabAction, Token, TokenMetadata, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
-import { SwapDetails } from './components/swap-details/swap-details';
+import { SwapDetails } from './components/swap-details';
 import { SwapSlippage } from './components/swap-slippage';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';

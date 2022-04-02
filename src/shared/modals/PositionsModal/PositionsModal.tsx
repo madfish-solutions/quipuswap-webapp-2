@@ -2,7 +2,6 @@ import { useContext, FC } from 'react';
 
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 
@@ -11,6 +10,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAddCustomToken } from '@providers/dapp-tokens';
 import { Button, LoadingTokenCell } from '@shared/components';
 import { getTokenSlug, isEmptyArray, isTokenEqual } from '@shared/helpers';
+import { useTranslation } from '@shared/hooks';
 import { useTokensSearchService } from '@shared/services';
 import { NotFound, Plus } from '@shared/svg';
 import { Token } from '@shared/types';

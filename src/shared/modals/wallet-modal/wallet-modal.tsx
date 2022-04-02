@@ -2,14 +2,13 @@ import { FC, useCallback, useEffect, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
-import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@config/config';
 import { useConnectWithBeacon, useConnectWithTemple } from '@providers/use-dapp';
 import { Button } from '@shared/components';
 import { Checkbox } from '@shared/elements';
 import { NoTempleWallet } from '@shared/errors';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useTranslation, useGlobalModalsState } from '@shared/hooks';
 import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 

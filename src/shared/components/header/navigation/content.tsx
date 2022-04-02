@@ -1,8 +1,7 @@
 import { FC, ReactNode } from 'react';
 
-import { Trans } from 'next-i18next';
-
 import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '../../../svg';
+import { Trans } from '../../trans';
 
 interface LinkInterface {
   id: number;
