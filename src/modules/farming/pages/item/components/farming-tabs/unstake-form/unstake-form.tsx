@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import s from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { useUnstakeFormViewModel } from './use-unstake-form.vm';
 

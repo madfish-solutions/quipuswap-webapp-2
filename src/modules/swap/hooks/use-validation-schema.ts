@@ -1,5 +1,4 @@
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
 import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@config/config';
@@ -7,6 +6,7 @@ import { useBalances } from '@providers/balances-provider';
 import { fromDecimals, getTokenSlug, isTezosToken } from '@shared/helpers';
 import { SwapTabAction, Token } from '@shared/types';
 import { addressSchema, bigNumberSchema } from '@shared/validators';
+import { useTranslation } from '@translation';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
 import { getUserMaxInputAmount } from '../utils/get-user-max-input-amount';

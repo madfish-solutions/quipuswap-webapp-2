@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useFarmingItemStore } from '@modules/farming/hooks';
@@ -10,6 +9,7 @@ import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { DashPlug } from '@shared/components';
 import { getTokensName, isNull, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import styles from './farming-item.page.module.scss';
 

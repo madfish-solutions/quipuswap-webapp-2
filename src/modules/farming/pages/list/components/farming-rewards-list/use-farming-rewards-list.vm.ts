@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 
-import { useTranslation } from 'next-i18next';
-
 import { useFarmingListStore } from '@modules/farming/hooks';
 import { useDoHarvestAll } from '@modules/farming/hooks/blockchain/use-do-harvest-all';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
 import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
+import { useTranslation } from '@translation';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation(['farm']);

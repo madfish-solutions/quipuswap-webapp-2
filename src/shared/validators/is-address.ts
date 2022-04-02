@@ -1,6 +1,7 @@
 import { validateAddress, validateContractAddress, ValidationResult } from '@taquito/utils';
-import { i18n } from 'next-i18next';
 import { string as stringSchema } from 'yup';
+
+import { i18n } from '@translation';
 
 export const isAddress = async (value: string) => {
   const isAddr = validateAddress(value) === ValidationResult.VALID;

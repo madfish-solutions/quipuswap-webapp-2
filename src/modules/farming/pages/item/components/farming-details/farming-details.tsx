@@ -2,10 +2,11 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Button, CandidateButton, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg/external-link';
+import commonContainerStyles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
 import { StateData } from '../state-data';
@@ -49,7 +50,7 @@ export const FarmingDetails: FC = observer(() => {
         content: t('farm|Farming Details'),
         status: stakeStatus
       }}
-      contentClassName={styles.content}
+      contentClassName={commonContainerStyles.content}
     >
       <DetailsCardCell
         cellName={t('farm|Value Locked')}
@@ -157,23 +158,23 @@ export const FarmingDetails: FC = observer(() => {
         </StateData>
       </DetailsCardCell>
 
-      <div className={cx(styles.detailsButtons, styles.stakeDetailsButtons)}>
+      <div className={cx(commonContainerStyles.detailsButtons, styles.stakeDetailsButtons)}>
         <Button
-          className={cx(styles.detailsButton, styles.stakeDetailsButton)}
+          className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
           href={depositTokenUrl}
           external
-          icon={<ExternalLink className={styles.linkIcon} />}
+          icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
         >
           {t('farm|Token Contract')}
         </Button>
 
         <Button
-          className={cx(styles.detailsButton, styles.stakeDetailsButton)}
+          className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
           href={stakeUrl}
           external
-          icon={<ExternalLink className={styles.linkIcon} />}
+          icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
         >
           {t('farm|Farming Contract')}
         </Button>

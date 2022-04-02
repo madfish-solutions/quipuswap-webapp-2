@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+
+import { useTranslation } from '@translation';
 
 import { Section } from '../section';
 import { OpportunitiesCardsData } from './content';
