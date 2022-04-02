@@ -142,7 +142,6 @@ export class FarmingItemStore {
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
       return null;
     }
-    console.log('here');
 
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }

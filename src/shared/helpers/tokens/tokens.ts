@@ -26,7 +26,7 @@ import {
 import { isValidContractAddress } from '@shared/validators';
 
 import { getUniqArray } from '../arrays';
-import { ipfsToHttps } from '../ipfs-to-https';
+import { ipfsToHttps } from '../link-transformers';
 import { getTokenSlug } from './get-token-slug';
 import { isTokenEqual } from './is-token-equal';
 
