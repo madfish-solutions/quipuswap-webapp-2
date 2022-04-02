@@ -5,7 +5,6 @@ import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from '@config/constants';
 import { useSearchCustomTokens, useSearchTokens, useTokens } from '@providers/dapp-tokens';
 import { useTezos } from '@providers/use-dapp';
 import {
-  defined,
   getTokenSlug,
   getTokenType,
   getUniqArray,
@@ -81,7 +80,9 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
   );
 
   useEffect(() => {
-    getTokenType(inputValue, defined(tezos)).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
+    if (tezos) {
+      getTokenType(inputValue, tezos).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
+    }
   }, [inputValue, tezos]);
 
   const isTokensNotFound = isEmptyTokens && !searchLoading && !tokensLoading;

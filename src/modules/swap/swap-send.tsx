@@ -513,10 +513,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 };
 
 export const SwapSend = (props: SwapSendProps) => {
-  console.log(SwapSend.name, props);
-  const params = useParams();
-  console.log(params);
-
   return (
     <SwapLimitsProvider>
       <OrdinarySwapSend {...props} />
