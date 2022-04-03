@@ -10,9 +10,26 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 
 export type Key = KeysOfUnion<Values>;
 
-export type TFunction = (localText: `${FileName}|${Key}`, params: Params) => string;
+type StringKey<Type> = string & keyof Type;
 
-const t = (localText: `${FileName}|${Key}`, params?: Record<string, number | string>) => {
+type LocalisationText<
+  Local,
+  FileName extends string & keyof Local,
+  Key extends string & keyof Local[FileName]
+> = Local[FileName][Key] extends string ? `${FileName}|${Key}` : never;
+
+type Localisation<Local> = {
+  translation<Key extends string & keyof Local>(
+    localText: LocalisationText<Local, Key, StringKey<Local[Key]>>,
+    params?: Params
+  ): string;
+};
+
+export type TFunction = Localisation<typeof enLocal>['translation'];
+
+const FIRST_INDEX = 0;
+
+const t: TFunction = (localText, params?) => {
   const [file, key] = localText.split('|') as [FileName, Key];
   if (!key) {
     return file as string;
@@ -24,7 +41,7 @@ const t = (localText: `${FileName}|${Key}`, params?: Record<string, number | str
 
   if (!text) {
     // eslint-disable-next-line no-console
-    console.error(`File ${file} does not have key ${key}`);
+    console.error(`Json in file ${file} does not have key ${key}`);
   }
 
   if (!params || !text) {
@@ -36,7 +53,7 @@ const t = (localText: `${FileName}|${Key}`, params?: Record<string, number | str
   const parsedParts = [];
 
   for (let index = 0; index < textParts.length; index++) {
-    if (index === 0) {
+    if (index === FIRST_INDEX) {
       parsedParts.push(textParts[index]);
       continue;
     }

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { FileName, Key, useTranslation } from '@translation';
+import { FileName, useTranslation } from '@translation';
 
 interface Props {
   ns: FileName;
@@ -9,5 +9,7 @@ interface Props {
 export const Trans: FC<Props> = ({ ns, children }) => {
   const { t } = useTranslation();
 
-  return <>{t(`${ns}|${children as Key}`)}</>;
+  //TODO create Key
+  //@ts-ignore
+  return <>{t(`${ns}|${children}`)}</>;
 };
