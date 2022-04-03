@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 
 import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
@@ -158,6 +159,8 @@ export const useAddLiquidityService = (
         setValidationMessageTokenA
       );
     }
+
+    return noop;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, tokenABalance, tokenBBalance]);
 

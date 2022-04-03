@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
@@ -61,6 +62,8 @@ export const useRemoveLiquidityService = (
     setValidatedInputMessage(undefined);
     setValidatedOutputMessageA(undefined);
     setValidatedOutputMessageB(undefined);
+
+    return noop;
   }, [dex, tokenA, tokenB]);
 
   const handleSetTokenPair = (tokensPair: TokenPair) => {
@@ -128,6 +131,9 @@ export const useRemoveLiquidityService = (
     if (!isNaN(amountTokenB.toNumber())) {
       setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
     }
+
+    return noop;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, lpTokenInput, share]);
 

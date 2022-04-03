@@ -10,7 +10,7 @@ export const validateInputtedDecimals = (userInput: string, decimals: number, to
 
     if (fraction.length > decimals) {
       return (
-        i18n?.t('common|tokenDecimalsOverflowError', {
+        i18n.t('common|tokenDecimalsOverflowError', {
           tokenSymbol: tokenSymbol,
           decimalPlaces: decimals
         }) || INPUTTED_DECIMALS_ERROR

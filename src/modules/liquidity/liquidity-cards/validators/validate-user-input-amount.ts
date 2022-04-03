@@ -13,7 +13,7 @@ export const validateUserInputAmount = (
   }
 
   if (!userBalance || inputValue.gt(userBalance)) {
-    return i18n?.t('common|Insufficient funds') || 'Insufficient funds';
+    return i18n.t('common|Insufficient funds') || 'Insufficient funds';
   }
 
   return undefined;

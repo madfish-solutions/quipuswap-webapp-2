@@ -84,7 +84,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
       <DetailsCardCell
         cellName={t('common|Pair ID')}
-        tooltipContent={t('common|Token id of the share(LP) token.', { tokenASymbol, tokenBSymbol })}
+        tooltipContent={t('common|Token id of the share(LP) token.')}
         className={styles.LiquidityDetails_CardCell}
       >
         <StateWrapper
@@ -119,8 +119,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={t('liquidity|{{tokenASymbol}} Locked', { tokenASymbol })}
-        tooltipContent={t('liquidity|The amount of {{tokenASymbol}} locked in the pool by liquidity providers.', {
+        cellName={t('common|{{tokenASymbol}} Locked', { tokenASymbol })}
+        tooltipContent={t('common|The amount of {{tokenASymbol}} locked in the pool by liquidity providers.', {
           tokenASymbol
         })}
         className={styles.LiquidityDetails_CardCell}
