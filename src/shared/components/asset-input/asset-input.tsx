@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -21,7 +21,7 @@ export interface AssetInputProps extends Omit<InputProps, 'value' | 'onChange'> 
  * https://github.com/madfish-solutions/templewallet-extension/blob/develop/src/app/atoms/AssetField.tsx
  */
 
-export const AssetInput: React.FC<AssetInputProps> = ({
+export const AssetInput: FC<AssetInputProps> = ({
   value,
   min = 0,
   max = Number.MAX_SAFE_INTEGER,

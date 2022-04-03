@@ -9,6 +9,10 @@
   margin-bottom: 16px;
 }
 
+.button {
+  display: block;
+}
+
 @include media('>SDesktop') {
   .root {
     display: flex;

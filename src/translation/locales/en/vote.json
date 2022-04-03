@@ -6,5 +6,6 @@
   "The total amount of votes cast to elect a baker in the pool.": "The total amount of votes cast to elect a baker in the pool.",
   "The total amount of shares cast so far to veto the current baker.": "The total amount of shares cast so far to veto the current baker.",
   "The candidate you voted for.": "The candidate you voted for.",
-  "This much more votes needed to veto a delegate.": "This much more votes needed to veto a delegate."
+  "This much more votes needed to veto a delegate.": "This much more votes needed to veto a delegate.",
+  "Available balance": "Available balance"
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback, FC } from 'react';
 
 import cx from 'classnames';
 
@@ -34,7 +34,7 @@ const INPUT_BUTTON_ID = 'input';
 type ActiveButtonId = number | typeof INPUT_BUTTON_ID;
 const MAX_UNIT_VISIBLE_LENGTH = 3;
 
-export const PresetsAmountInput: React.FC<Props> = ({
+export const PresetsAmountInput: FC<Props> = ({
   className,
   decimals,
   defaultValue,

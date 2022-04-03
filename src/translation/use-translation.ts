@@ -22,7 +22,12 @@ const t = (localText: `${FileName}|${Key}`, params?: Record<string, number | str
 
   const text = local[key as never] as string;
 
-  if (!params) {
+  if (!text) {
+    // eslint-disable-next-line no-console
+    console.error(`File ${file} does not have key ${key}`);
+  }
+
+  if (!params || !text) {
     return text ?? key ?? localText;
   }
 
