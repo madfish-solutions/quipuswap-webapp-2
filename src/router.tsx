@@ -19,7 +19,7 @@ export const routes = {
   swap: 'swap/*',
   send: 'send/*',
   farming: 'farming/*',
-  voting: 'voting'
+  voting: 'voting/*'
 };
 
 export const Router: FC = () => (

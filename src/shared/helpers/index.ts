@@ -34,3 +34,7 @@ export * from './strings';
 export * from './swap';
 export * from './taquito-fast-rpc';
 export * from './type-checks';
+export * from './parse-decimals';
+export * from './local-search-sort-symbol';
+export * from './is-asset-equal';
+export * from './handle-search-token';
