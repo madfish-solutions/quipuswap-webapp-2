@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
@@ -11,11 +10,12 @@ import {
   PRESET_AMOUNT_INPUT_DECIMALS,
   TEZOS_TOKEN
 } from '@config/config';
-import { PresetsAmountInput, Tooltip, StateCurrencyAmount } from '@shared/components';
+import { Tooltip, StateCurrencyAmount, NewPresetsAmountInput } from '@shared/components';
 import { useSlippage } from '@shared/dapp';
 import { getTokenSymbol } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
 
@@ -72,7 +72,7 @@ export const LiquiditySlippage: FC<Props> = ({
           )}
         />
       </label>
-      <PresetsAmountInput
+      <NewPresetsAmountInput
         className={className}
         decimals={PRESET_AMOUNT_INPUT_DECIMALS}
         value={slippage}

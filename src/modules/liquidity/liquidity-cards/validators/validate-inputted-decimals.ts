@@ -1,4 +1,4 @@
-import { i18n } from 'next-i18next';
+import { i18n } from '@translation';
 
 const DECIMAL = '.';
 const FRACTION_PART_INDEX = 1;

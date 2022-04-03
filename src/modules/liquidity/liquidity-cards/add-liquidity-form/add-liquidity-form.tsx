@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { AlarmMessage, Button, ConnectWalletButton, getBlackListedTokens, TokenSelect } from '@shared/components';
 import { isTezIncluded, isExist, isUndefined } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';

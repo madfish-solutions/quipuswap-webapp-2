@@ -2,11 +2,11 @@ import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { Button, Skeleton } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import { Nullable, Optional } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import styles from '../liquidity-details.module.scss';
 

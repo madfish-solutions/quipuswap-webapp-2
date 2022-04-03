@@ -1,6 +1,5 @@
-import { useContext, Dispatch, SetStateAction, FC } from 'react';
+import { useContext, useState, useCallback, FC } from 'react';
 
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -16,13 +15,11 @@ interface AmountPreset {
 
 interface Props {
   className?: string;
-  value: BigNumber;
-  handleChange: (newValue: Nullable<string>) => void;
-  activeButton: string;
-  setActiveButton: Dispatch<SetStateAction<string>>;
   decimals?: number;
+  defaultValue: Nullable<string>;
   min?: number;
   max?: number;
+  handleChange: (value: Nullable<string>) => void;
   placeholder?: string;
   presets: AmountPreset[];
   unit?: string;
@@ -33,41 +30,40 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const DEFAULT_PLACEHOLDER = 'CUSTOM';
-const INPUT = 'input';
+const INPUT_BUTTON_ID = 'input';
+type ActiveButtonId = number | typeof INPUT_BUTTON_ID;
 const MAX_UNIT_VISIBLE_LENGTH = 3;
 
 export const PresetsAmountInput: FC<Props> = ({
   className,
-  value,
-  handleChange,
-  activeButton,
-  setActiveButton,
   decimals,
+  defaultValue,
   min,
   max,
-  placeholder = DEFAULT_PLACEHOLDER,
+  handleChange,
+  placeholder = 'CUSTOM',
   presets,
   unit
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const handleCustomValueChange = (val: Nullable<string>) => handleChange(val);
+  const presetMatchesDefaultValue = ({ label, value }: AmountPreset) => defaultValue === value ?? label;
+  const shouldMakePresetActive = presets.some(presetMatchesDefaultValue);
+  const defaultActiveButton = shouldMakePresetActive ? presets.findIndex(presetMatchesDefaultValue) : 'input';
+  const defaultCustomValue = shouldMakePresetActive ? null : defaultValue;
 
-  const handlePresetClick = (index: number, value: Nullable<string>, label: string) => {
-    setActiveButton(index.toString());
-    handleCustomValueChange(null);
-    handleChange(value ?? label);
-  };
+  const [activeButton, setActiveButton] = useState<ActiveButtonId>(defaultActiveButton);
+  const [customValue, setCustomValue] = useState(defaultCustomValue);
 
-  const handleAssetInputChange = (val: Nullable<string>) => {
-    setActiveButton(INPUT);
-    handleCustomValueChange(val);
-  };
+  const handleCustomValueChange = useCallback(
+    (val: Nullable<string>) => {
+      setCustomValue(val);
+      handleChange(val);
+    },
+    [handleChange]
+  );
 
-  const isInputActive = activeButton === INPUT;
-
-  const wrapUnit = !value || value.toFixed().length < MAX_UNIT_VISIBLE_LENGTH ? unit : null;
+  const wrapUnit = !customValue || customValue.length < MAX_UNIT_VISIBLE_LENGTH ? unit : null;
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
@@ -76,8 +72,12 @@ export const PresetsAmountInput: FC<Props> = ({
           <button
             key={label}
             type="button"
-            className={cx(styles.button, { [styles.active]: index === Number(activeButton) })}
-            onClick={() => handlePresetClick(index, value, label)}
+            className={cx(styles.button, { [styles.active]: index === activeButton })}
+            onClick={() => {
+              setActiveButton(index);
+              handleCustomValueChange(null);
+              handleChange(value ?? label);
+            }}
           >
             <span className={styles.buttonInner}>{label}</span>
           </button>
@@ -86,12 +86,15 @@ export const PresetsAmountInput: FC<Props> = ({
           assetDecimals={decimals}
           inputClassName={styles.customInput}
           inputSize="small"
-          value={value.toFixed()}
           placeholder={placeholder}
-          active={isInputActive}
+          value={customValue}
+          active={activeButton === 'input'}
           min={min}
           max={max}
-          onChange={handleAssetInputChange}
+          onChange={val => {
+            setActiveButton('input');
+            handleCustomValueChange(val);
+          }}
         />
         {unit && <span className={styles.unit}>{wrapUnit}</span>}
       </div>

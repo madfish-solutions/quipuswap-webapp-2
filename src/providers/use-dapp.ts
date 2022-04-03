@@ -86,7 +86,7 @@ function useDApp() {
             perm = await TempleWallet.getCurrentPermission();
           } catch (error) {
             // eslint-disable-next-line
-            console.log(error);
+             console.error(error);
           }
 
           const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);

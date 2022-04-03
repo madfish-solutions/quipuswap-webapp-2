@@ -1,7 +1,6 @@
 import { FC, useCallback } from 'react';
 
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { Field, FieldMetaState } from 'react-final-form';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
@@ -9,6 +8,7 @@ import { parseNumber } from '@shared/helpers';
 import { useSaveFunction } from '@shared/helpers/crutches';
 import { Search } from '@shared/svg';
 import { validateMinMaxNonStrict } from '@shared/validators';
+import { useTranslation } from '@translation';
 
 import { Input } from '../input';
 import { NumberInput } from '../number-input';

@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js';
-import { i18n } from 'next-i18next';
 import { object, SchemaOf } from 'yup';
 
 import { Optional } from '@shared/types';
+import { i18n } from '@translation';
 
 const basicBigNumberSchema: SchemaOf<BigNumber> = object()
   .shape({})

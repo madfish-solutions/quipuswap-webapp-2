@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import {
@@ -15,6 +14,7 @@ import {
 import { isExist, isTezIncluded } from '@shared/helpers';
 import { ArrowDown, Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';

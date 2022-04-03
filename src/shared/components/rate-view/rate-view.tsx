@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
+import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getTokenSlug, getTokenSymbol, isNull } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
@@ -15,7 +16,7 @@ interface RateViewProps {
 }
 
 export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) => {
-  const exchangeRates: { [key: string]: number } = {}; // useNewExchangeRates();
+  const exchangeRates = useNewExchangeRates();
 
   const outputTokenUsdExchangeRate = outputToken ? exchangeRates[getTokenSlug(outputToken)] : null;
 

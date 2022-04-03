@@ -2,7 +2,6 @@
 import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { useTranslation } from 'next-i18next';
 
 import { EMPTY_POOL_AMOUNT } from '@config/config';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -16,6 +15,7 @@ import {
 } from '@shared/components';
 import { isExist, isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import { useLoadLiquidityShare } from '../../hooks';
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -58,6 +58,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const totalAmount = share?.total ?? null;
   const frozenAmount = share?.frozen ?? null;
+
+  if (!tokenASymbol || !tokenBSymbol) {
+    return null;
+  }
 
   return (
     <>

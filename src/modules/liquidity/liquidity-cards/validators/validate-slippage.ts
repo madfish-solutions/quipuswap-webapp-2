@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { i18n } from 'next-i18next';
+
+import { i18n } from '@translation';
 
 const MAX_SLIPPAGE = 30;
 

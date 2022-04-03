@@ -1,6 +1,6 @@
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState, FocusEvent } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 import { Nullable } from '@shared/types';
 
@@ -21,17 +21,12 @@ export interface AssetInputProps extends Omit<InputProps, 'value' | 'onChange'> 
  * https://github.com/madfish-solutions/templewallet-extension/blob/develop/src/app/atoms/AssetField.tsx
  */
 
-const DEFAULT_MIN_VALUE = 0;
-const DEFAULT_ASSET_DECIMALS = 6;
-const ONE = 1;
-const MINUS_ONE = -1;
-
 export const AssetInput: FC<AssetInputProps> = ({
   value,
-  min = DEFAULT_MIN_VALUE,
+  min = 0,
   max = Number.MAX_SAFE_INTEGER,
   assetSymbol,
-  assetDecimals = DEFAULT_ASSET_DECIMALS,
+  assetDecimals = 6,
   onChange,
   onFocus,
   onBlur,
@@ -47,12 +42,12 @@ export const AssetInput: FC<AssetInputProps> = ({
     }
   }, [setLocalValue, focused, valueStr]);
 
-  const handleFocus = (evt: FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (evt: React.FocusEvent<HTMLInputElement>) => {
     setFocused(true);
     onFocus?.(evt);
   };
 
-  const handleBlur = (evt: FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (evt: React.FocusEvent<HTMLInputElement>) => {
     setFocused(false);
     onBlur?.(evt);
   };
@@ -60,10 +55,10 @@ export const AssetInput: FC<AssetInputProps> = ({
   const handleChange = useCallback(
     evt => {
       let val = getOnlyDecimals(evt.target.value);
-      let numVal = new BigNumber(val || DEFAULT_MIN_VALUE);
+      let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
-      if (indexOfDot !== MINUS_ONE && val.length - indexOfDot > assetDecimals + ONE) {
-        val = val.substring(DEFAULT_MIN_VALUE, indexOfDot + assetDecimals + ONE);
+      if (indexOfDot !== -1 && val.length - indexOfDot > assetDecimals + 1) {
+        val = val.substring(0, indexOfDot + assetDecimals + 1);
         numVal = new BigNumber(val);
       }
 

@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+
+import { useTranslation } from '@translation';
 
 import { Section } from '../section';
 import { OpportunitiesCardsData } from './content';
@@ -18,7 +19,7 @@ export const Opportunities: FC<OpportunitiesProps> = ({ className }) => {
   return (
     <Section
       className={cx(s.root, className)}
-      header={t('QuipuSwap opportunities')}
+      header={t('home|QuipuSwap opportunities')}
       description={`${t('home|Start to work with the biggest DEX on Tezos: swap, farm, stake.')}`}
     >
       <div className={s.cards}>

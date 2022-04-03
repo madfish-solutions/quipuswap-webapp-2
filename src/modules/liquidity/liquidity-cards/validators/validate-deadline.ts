@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { i18n } from 'next-i18next';
 
 import { MIN_DEADLINE_MINS, MAX_DEADLINE_MINS } from '@config/config';
+import { i18n } from '@translation';
 
 export const validateDeadline = (deadline: BigNumber) => {
   if (deadline.lt(MIN_DEADLINE_MINS) || deadline.gt(MAX_DEADLINE_MINS)) {
