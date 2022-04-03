@@ -29,13 +29,14 @@ export const TabsContent = [
 export const useVotingRouter = (token1: Token, token2: Token) => {
   const params = useParams();
   const navigate = useNavigate();
-  console.log(params);
+  const method = params.method ?? VotingTabs.vote;
+
   const [urlLoaded, setUrlLoaded] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
-  const [votingTab, setVotingTab] = useState<VotingTabs>(params.method as VotingTabs);
+  const [votingTab, setVotingTab] = useState<VotingTabs>(method as VotingTabs);
 
   const { from, to } = useRouterPair({
-    page: `${VOTING}/${params.method}`,
+    page: `${VOTING}/${method}`,
     urlLoaded,
     initialLoad,
     token1,
