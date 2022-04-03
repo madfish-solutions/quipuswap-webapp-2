@@ -10,11 +10,13 @@ import { Button } from '@shared/components/button';
 import { isNull } from '@shared/helpers';
 import { ExternalLink } from '@shared/svg';
 import s from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
 
 export const VotingDetails: FC = () => {
+  const { t } = useTranslation();
   const { data: bakers } = useBakers();
   const { candidate } = useVoter();
   const { tokenPair } = useTokensPair();
@@ -44,55 +46,55 @@ export const VotingDetails: FC = () => {
   return (
     <Card
       header={{
-        content: 'Voting Details'
+        content: t('voting|Voting Details')
       }}
       contentClassName={s.content}
     >
       <DetailsCardCell
-        cellName={'vote|Delegated To'}
-        tooltipContent={'vote|Current baker elected by simple majority of votes.'}
+        cellName={t('voting|Delegated To')}
+        tooltipContent={t('voting|Current baker elected by simple majority of votes.')}
         className={CardCellClassName}
       >
         <CandidateButton candidate={wrapCurrentCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={'vote|Second Candidate'}
-        tooltipContent={
-          'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.'
-        }
+        cellName={t('voting|Second Candidate')}
+        tooltipContent={t(
+          'voting|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.'
+        )}
         className={CardCellClassName}
       >
         <CandidateButton candidate={wrapSecondCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={'vote|Total Votes'}
-        tooltipContent={'vote|The total amount of votes cast to elect a baker in the pool.'}
+        cellName={t('voting|Total Votes')}
+        tooltipContent={t('voting|The total amount of votes cast to elect a baker in the pool.')}
         className={CardCellClassName}
       >
         <StateCurrencyAmount amount={totalVotesAmount} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={'vote|Total Vetos'}
-        tooltipContent={'vote|The total amount of shares cast so far to veto the current baker.'}
+        cellName={t('voting|Total Vetos')}
+        tooltipContent={t('voting|The total amount of shares cast so far to veto the current baker.')}
         className={CardCellClassName}
       >
         <StateCurrencyAmount amount={totalVetoAmount} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={'vote|Your Candidate'}
-        tooltipContent={'vote|The candidate you voted for.'}
+        cellName={t('voting|Your Candidate')}
+        tooltipContent={t('voting|The candidate you voted for.')}
         className={CardCellClassName}
       >
         <CandidateButton candidate={wrapMyCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={'Votes To Veto Left'}
-        tooltipContent={'vote|This much more votes needed to veto a delegate.'}
+        cellName={t('voting|Votes To Veto Left')}
+        tooltipContent={t('voting|This much more votes needed to veto a delegate.')}
         className={CardCellClassName}
       >
         <StateCurrencyAmount amount={votesToVetoAmount} />
@@ -107,7 +109,7 @@ export const VotingDetails: FC = () => {
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
-            {'vote|Pair Analytics'}
+            {t('voting|Pair Analytics')}
           </Button>
         </div>
       )}

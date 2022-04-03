@@ -2,7 +2,6 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 
@@ -21,6 +20,7 @@ import { Modal } from '@shared/modals';
 import { useTokensSearchService } from '@shared/services';
 import { NotFound } from '@shared/svg';
 import { Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import { LoadingTokenCell, TokenCell } from '../modal-cell';
 import { AutoSave } from './AutoSave';

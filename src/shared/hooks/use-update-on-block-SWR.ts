@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import useSWR, { Fetcher, Key, SWRConfiguration, SWRResponse, useSWRConfig } from 'swr';
 
-import { useOnBlock } from '@providers/use-on-block';
+import { useOnBlock } from './use-on-block';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useUpdateOnBlockSWR<Data = any, Error = any, SWRKey extends Key = null>(

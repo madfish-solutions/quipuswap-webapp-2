@@ -8,9 +8,8 @@ import { useVotingRouter } from '@modules/voting/hooks';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { useOnBlock } from '@providers/use-on-block';
 import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@shared/helpers';
-import { useToasts } from '@shared/hooks';
+import { useOnBlock, useToasts } from '@shared/hooks';
 import { useExchangeRates } from '@shared/hooks/use-exchange-rate';
 import { Nullable, VoterType, Token, TokenPair } from '@shared/types';
 

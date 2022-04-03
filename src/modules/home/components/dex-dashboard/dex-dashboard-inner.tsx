@@ -2,12 +2,12 @@ import { FC, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
+import { useTranslation } from '@translation';
 
 import { DashboardCard } from './dashboard-card';
 import styles from './dex-dashboard.module.scss';

@@ -6,7 +6,7 @@ import { TEZOS_TOKEN } from '@config/config';
 import { getUserBalance } from '@shared/api/get-user-balance';
 import { Nullable, TokenDataMap, Token } from '@shared/types';
 
-import { fromDecimals } from './from-decimals';
+import { fromDecimals } from './bignumber';
 
 export enum TokenNumber {
   FIRST = 'first',

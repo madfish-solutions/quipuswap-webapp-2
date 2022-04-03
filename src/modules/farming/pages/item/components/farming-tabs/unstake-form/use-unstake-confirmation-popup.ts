@@ -1,11 +1,11 @@
 import { BigNumber } from 'bignumber.js';
-import { TFunction, useTranslation } from 'next-i18next';
 
 import { MS_IN_SECOND } from '@config/config';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { isExist, isUndefined, parseTimelock } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
+import { TFunction, useTranslation } from '@translation';
 
 const TIME_LOCK_ENDS = 0;
 
@@ -38,7 +38,7 @@ const getConfirmationMessage = (
 export const useUnstakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
   const { t } = useTranslation('farm');
-  const { farmingItem, userInfoStore } = useFarmingItemStore()!;
+  const { farmingItem, userInfoStore } = useFarmingItemStore();
   const timelock = farmingItem?.timelock;
   const lastStaked = userInfoStore.data?.last_staked;
 

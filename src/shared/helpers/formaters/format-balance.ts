@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { bigNumberToString } from '../big-number-to-string';
+import { bigNumberToString } from '../bignumber/big-number-to-string';
 import { FormatNumber } from './format-number';
 import { shortNumberWithLetters } from './short-number-with-letters';
 

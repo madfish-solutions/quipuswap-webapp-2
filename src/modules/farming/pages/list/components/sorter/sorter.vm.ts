@@ -1,8 +1,7 @@
-import { useTranslation } from 'next-i18next';
-
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { useTranslation } from '@translation';
 
 import { SortDirection, SortFieldItem, SortField } from './sorter.types';
 

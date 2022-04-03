@@ -1,12 +1,12 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { Modal } from '@shared/modals';
 import { StakeIcon } from '@shared/svg';
+import { useTranslation } from '@translation';
 
 import styles from './confirmation-modal.module.scss';
 import { useConfirmationModal } from './use-confirmation-modal';

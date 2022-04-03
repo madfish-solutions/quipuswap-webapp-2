@@ -16,6 +16,7 @@ import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { Card } from '@shared/components';
 import { Button } from '@shared/components/button';
 import { isNull } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
 import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
 import s from './voting-stats.module.scss';
@@ -30,6 +31,7 @@ interface VotingStatsProps {
 }
 
 export const VotingStats: FC<VotingStatsProps> = ({ className }) => {
+  const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -53,31 +55,33 @@ export const VotingStats: FC<VotingStatsProps> = ({ className }) => {
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <VotingRewardItem description={'vote|Your Claimable Rewards'} amount={rewardAmount} currency="TEZ" />
+      <VotingRewardItem description={t('voting|Your Claimable Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>
         <div className={s.votingsStatsItemContainer}>
           <VotingStatsItem
             value={balanceAmount}
-            itemName={'vote|Your LP'}
-            tooltip={'vote|Total number of LP tokens you own.'}
+            itemName={t('voting|Your LP')}
+            tooltip={'voting|Total number of LP tokens you own.'}
           />
 
           <VotingStatsItem
             value={voteAmount}
-            itemName={'vote|Your votes'}
-            tooltip={'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.'}
+            itemName={t('voting|Your votes')}
+            tooltip={t('voting|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.')}
           />
 
           <VotingStatsItem
             value={vetoAmount}
-            itemName={'vote|Your vetos'}
-            tooltip={'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'}
+            itemName={t('voting|Your vetos')}
+            tooltip={t(
+              'voting|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
+            )}
           />
         </div>
 
         <Button disabled={isButtonDisabled} onClick={handleClick} className={s.button}>
-          {'vote|Claim Reward'}
+          {t('voting|Claim Reward')}
         </Button>
       </div>
     </Card>

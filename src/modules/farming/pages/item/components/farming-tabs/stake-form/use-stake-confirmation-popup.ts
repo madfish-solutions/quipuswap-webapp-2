@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js';
-import { TFunction, useTranslation } from 'next-i18next';
 
 import { NO_TIMELOCK_VALUE } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { isExist, parseTimelock } from '@shared/helpers';
 import { Optional, Undefined } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
+import { TFunction, useTranslation } from '@translation';
 
 const IS_TIMELOCK_IN_SECONDS = true;
 

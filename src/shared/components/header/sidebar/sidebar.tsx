@@ -1,10 +1,10 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { useTranslation } from '@translation';
 
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
@@ -38,7 +38,12 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       <footer className={styles.footer}>
         <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
-        <Button className={styles.footerItem} href="https://www.madfish.solutions/" external theme="clean">
+        <Button
+          className={cx(styles.footerItem, styles.button)}
+          href="https://www.madfish.solutions/"
+          external
+          theme="clean"
+        >
           <Madfish />
         </Button>
         <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={styles.button}>

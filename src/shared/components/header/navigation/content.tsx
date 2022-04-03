@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 
-import { Trans } from 'next-i18next';
+import { Trans } from '@translation';
 
 import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '../../../svg';
 
@@ -31,7 +31,7 @@ export const navigationData: NavigationDataProps[] = [
   },
   {
     id: 2,
-    to: '/liquidity',
+    to: '/liquidity/add/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },

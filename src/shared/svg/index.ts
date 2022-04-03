@@ -42,3 +42,5 @@ export * from './checkbox-icon';
 export * from './plus';
 export * from './baker';
 export * from './external-link';
+export * from './check-mark';
+export * from './copy';

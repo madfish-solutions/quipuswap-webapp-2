@@ -1,8 +1,7 @@
 import { FC, ReactNode } from 'react';
 
-import { Trans } from 'next-i18next';
-
 import { Earn, Farm, Trade } from '@shared/svg';
+import { Trans } from '@translation';
 
 interface OpportunitiesCardsDataType {
   id: number;

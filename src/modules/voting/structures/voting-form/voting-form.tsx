@@ -4,7 +4,6 @@ import { Token, findDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 
 import { FACTORIES, LP_TOKEN_DECIMALS, NETWORK_ID, TEZOS_TOKEN } from '@config/config';
@@ -32,6 +31,7 @@ import { useGlobalModalsState } from '@shared/hooks';
 import { VoteFormValues, Undefined } from '@shared/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@shared/validators';
 import s from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 interface VotingFormProps {
   values: VoteFormValues;
@@ -157,7 +157,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               }}
               tokensUpdating={tokensUpdating}
               shouldShowBalanceButtons={Boolean(accountPkh)}
-              balanceLabel={t('vote|Available balance')}
+              balanceLabel={t('voting|Available balance')}
               notFrozen
               id="liquidity-remove-input"
               label={currentTab.label}
@@ -199,7 +199,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           {accountPkh && <UnvoteButton className={s.button} />}
           {accountPkh ? (
             <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
-              {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}
+              {currentTab.id === VotingTabs.vote && isBanned ? t('voting|Baker under Veto') : currentTab.label}
             </Button>
           ) : (
             <ConnectWalletButton className={cx(s.connect, s['mt-24'])} />

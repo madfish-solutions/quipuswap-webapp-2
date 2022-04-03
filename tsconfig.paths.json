@@ -10,7 +10,8 @@
       "@styles/*": ["./styles/*"],
       "@types/*": ["./types/*"],
       "@images/*": ["./images/*"],
-      "@tests/*": ["./tests/*"]
+      "@tests/*": ["./tests/*"],
+      "@translation": ["./translation"]
     }
   }
 }
