@@ -87,6 +87,8 @@ export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
 export const DONATION_ADDRESS = 'tz1LpP5zU73ivpXwHnKYBDRBL3F7aoNsaGWu';
 
+export const HIDE_ANALYTICS = true;
+
 export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
   contractAddress: 'tez',

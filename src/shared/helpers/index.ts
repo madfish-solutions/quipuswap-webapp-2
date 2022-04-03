@@ -26,3 +26,7 @@ export * from './parse-number';
 export * from './bakers';
 export * from './sleep';
 export * from './blockchain';
+export * from './local-search-sort-symbol';
+export * from './handle-search-token';
+export * from './parse-decimals';
+export * from './is-asset-equal';

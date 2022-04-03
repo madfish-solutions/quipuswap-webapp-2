@@ -17,7 +17,7 @@ export const routes = {
   liquidity: 'liquidity',
   swap: 'swap',
   farming: 'farming/*',
-  voting: 'voting'
+  voting: 'voting/*'
 };
 
 export const Router: FC = () => (
