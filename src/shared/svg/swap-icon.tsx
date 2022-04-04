@@ -7,14 +7,7 @@ export const SwapIcon: FC<IconProps> = ({ id, className }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
+    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
       <path
         d="M16 3.99976L19 6.99976L16 9.99976"
         stroke={`url(#SwapIcon-${id}paint0_linear)`}

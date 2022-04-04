@@ -1,12 +1,10 @@
 @import '@styles/_variables';
-@import '@styles/_text';
 
 .root {
   position: relative;
   font-size: 1rem;
   font-weight: 600;
 }
-
 .root {
   :global(.customSelect__control) {
     min-height: 24px;
@@ -16,7 +14,6 @@
     border: none;
     border-radius: 9px;
   }
-
   :global(.customSelect__value-container) {
     min-height: 24px;
     max-width: 100%;
@@ -25,7 +22,6 @@
     padding: 0;
     transition: background-color $colorChangeAnimationTime;
   }
-
   :global(.customSelect__single-value) {
     max-width: 100%;
     width: 100%;
@@ -37,7 +33,6 @@
     text-align: left;
     font-weight: 600;
     transition: color $colorChangeAnimationTime;
-
     &::after {
       content: '';
       position: absolute;
@@ -50,7 +45,6 @@
       transition: transform $animationTime, border-color $colorChangeAnimationTime;
     }
   }
-
   :global(.customSelect__control--menu-is-open) {
     :global(.customSelect__single-value) {
       &::after {
@@ -58,7 +52,6 @@
       }
     }
   }
-
   :global(.customSelect__option) {
     background-color: transparent;
     transition: background-color $colorChangeAnimationTime;
@@ -66,7 +59,6 @@
     cursor: pointer;
     color: $text-02;
   }
-
   :global(.customSelect__menu) {
     padding-top: 8px;
     padding-bottom: 8px;
@@ -75,42 +67,35 @@
     border-radius: 8px;
     box-shadow: $elevation-03;
   }
-
   :global(.customSelect__menu-list) {
     padding-top: 0;
     padding-bottom: 0;
   }
-
   :global(.customSelect__indicators) {
     display: none;
   }
 }
-
 .light {
   :global(.customSelect__control) {
     background: $brand-01;
   }
-
   :global(.customSelect__value-container) {
     background-color: $ui-01;
   }
-
   :global(.customSelect__single-value) {
     color: $text-01;
-
     &::after {
-      border-top: 5px solid $hover-primary-01-fallback // COLOR
+      border-top: 5px solid $hover-primary-01-fallback; // COLOR;
     }
   }
-
   :global(.customSelect__option--is-selected) {
     color: $hover-primary-01-fallback;
-    @include background-text-color($hover-primary-01);
+    background: $hover-primary-01;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-
   :global(.customSelect__menu) {
     background-color: $ui-01;
-
     &:hover {
       :global(.customSelect__option--is-focused) {
         background-color: $hover-light-row;
@@ -119,28 +104,25 @@
     }
   }
 }
-
-.dark
+.dark {
   :global(.customSelect__control) {
     background: $brand-02;
   }
-
   :global(.customSelect__value-container) {
     background-color: $ui-07;
   }
   :global(.customSelect__single-value) {
     color: $text-inverse;
-
     &::after {
-      border-top: 5px solid $hover-primary-02-fallback
+      border-top: 5px solid $hover-primary-02-fallback;
     }
   }
-
   :global(.customSelect__option--is-selected) {
     color: $hover-primary-02-fallback;
-    @include background-text-color($hover-primary-02);
+    background: $hover-primary-02;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-
   :global(.customSelect__menu) {
     background-color: $ui-07;
     &:hover {
@@ -150,3 +132,4 @@
       }
     }
   }
+}

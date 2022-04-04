@@ -38,12 +38,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       <footer className={styles.footer}>
         <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
-        <Button
-          className={cx(styles.footerItem, styles.button)}
-          href="https://www.madfish.solutions/"
-          external
-          theme="clean"
-        >
+        <Button className={styles.footerItem} href="https://www.madfish.solutions/" external theme="clean">
           <Madfish />
         </Button>
         <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={styles.button}>
