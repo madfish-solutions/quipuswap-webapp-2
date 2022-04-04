@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { localSearchToken, TokenWithRequiredNetwork, localSearchSortSymbol } from '@shared/helpers';
 import { isTokenEqual } from '@shared/helpers/tokens/is-token-equal';
 import { Nullable, QSNetwork, Token, TokenPair } from '@shared/types';

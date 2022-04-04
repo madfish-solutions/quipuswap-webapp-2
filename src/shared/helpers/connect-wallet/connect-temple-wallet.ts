@@ -1,6 +1,7 @@
 import { TempleWallet } from '@temple-wallet/dapp';
 
-import { APP_NAME, LAST_USED_CONNECTION_KEY } from '@config/config';
+import { APP_NAME } from '@config/enviroment';
+import { LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoTempleWallet } from '@shared/errors';
 import { LastUsedConnectionKey, QSNetwork } from '@shared/types';
 

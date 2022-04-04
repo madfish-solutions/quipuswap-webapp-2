@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useCallback, useContext, useEffect, useMemo, useRef, u
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { Danger } from '@shared/elements';

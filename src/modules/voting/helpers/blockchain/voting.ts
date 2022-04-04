@@ -2,7 +2,7 @@ import { batchify, FoundDex, vetoCurrentBaker, voteForBaker } from '@quipuswap/s
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { toDecimals } from '@shared/helpers';
 import { UseToasts } from '@shared/hooks';

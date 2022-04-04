@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
 import { Slippage, StateCurrencyAmount, Tooltip } from '@shared/components';
 import { getMinimalOutput, getTokenSymbol } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';

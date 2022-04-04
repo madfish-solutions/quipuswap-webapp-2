@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
-import { LP_TOKEN_DECIMALS } from '@config/config';
+import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { fromDecimals, isTezIncluded } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 

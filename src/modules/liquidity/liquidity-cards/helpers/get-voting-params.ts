@@ -2,7 +2,7 @@ import { FoundDex, TransferParams, voteForBaker } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS } from '@config/config';
+import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { toDecimals } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 

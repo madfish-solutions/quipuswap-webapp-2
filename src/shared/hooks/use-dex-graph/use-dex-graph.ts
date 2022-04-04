@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import constate from 'constate';
 
-import { DEX_POOLS_URLS, NETWORK_ID } from '@config/config';
+import { DEX_POOL_URL } from '@config/enviroment';
 import { useTokens } from '@providers/dapp-tokens';
 import { Nullable } from '@shared/types';
 
@@ -27,7 +27,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     setDisplayedRawDexPools(response.routePairs);
   }, []);
   const { data: rawDexPoolsResponse, initLoading: dexPoolsLoading } = useWebSocket<RawDexPoolsResponse>(
-    DEX_POOLS_URLS[NETWORK_ID],
+    DEX_POOL_URL,
     handleSuccess,
     handleLoadError
   );

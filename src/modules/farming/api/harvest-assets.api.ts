@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/config';
+import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
 
 export const harvestAssetsApi = async (tezos: TezosToolkit, farmingId: BigNumber, rewardsReceiver: string) => {
   const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);

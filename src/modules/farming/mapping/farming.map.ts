@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_DECIMALS } from '@config/config';
+import { DEFAULT_DECIMALS } from '@config/constants';
 import { fromDecimals, getTokensName, isExist } from '@shared/helpers';
 import { balanceMap } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';

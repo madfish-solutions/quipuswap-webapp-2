@@ -2,7 +2,8 @@ import { batchify } from '@quipuswap/sdk';
 import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@config/config';
+import { DEFAULT_DEADLINE_MINS } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { DexPair, Standard, TokenId } from '@shared/types';
 
 import { getBlockchainTimestamp } from './blockchain';

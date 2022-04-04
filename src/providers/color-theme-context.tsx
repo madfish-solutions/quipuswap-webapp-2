@@ -2,7 +2,7 @@ import { FC, createContext, useEffect, useState } from 'react';
 
 import { noop } from 'rxjs';
 
-import { COLOR_MODE_STORAGE_KEY } from '@config/config';
+import { COLOR_MODE_STORAGE_KEY } from '@config/localstorage';
 
 export enum ColorModes {
   Light = 'light',

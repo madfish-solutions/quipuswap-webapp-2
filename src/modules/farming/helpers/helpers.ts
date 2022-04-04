@@ -1,8 +1,7 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND, SECONDS_IN_DAY } from '@config/config';
-import { NO_TIMELOCK_VALUE } from '@config/constants';
+import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE } from '@config/constants';
 import { defined, isExist, fromDecimals } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 

@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@config/config';
+import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@config/constants';
 import { getBlockchainTimestamp, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 

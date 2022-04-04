@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { getUserBalance } from '@shared/api/get-user-balance';
 import { Nullable, TokenDataMap, Token } from '@shared/types';
 

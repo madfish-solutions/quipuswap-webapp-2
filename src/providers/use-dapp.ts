@@ -5,16 +5,10 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
+import { NETWORK } from '@config/config';
+import { APP_NAME, NETWORK_ID } from '@config/enviroment';
+import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
-  APP_NAME,
-  LAST_USED_ACCOUNT_KEY,
-  LAST_USED_CONNECTION_KEY,
-  NETWORK,
-  //   networksBaseUrls,
-  NETWORK_ID
-} from '@config/config';
-import {
-  //   isNull,
   ReadOnlySigner,
   beaconWallet,
   connectWalletBeacon,
@@ -35,8 +29,9 @@ export interface DAppType {
 }
 
 export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
-  hangzhounet: new TezosToolkit(rpcClients.hangzhounet),
-  mainnet: new TezosToolkit(rpcClients.mainnet)
+  [QSNets.mainnet]: new TezosToolkit(rpcClients.mainnet),
+  [QSNets.hangzhounet]: new TezosToolkit(rpcClients.hangzhounet),
+  [QSNets.ithacanet]: new TezosToolkit(rpcClients.ithacanet)
 };
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));

@@ -2,15 +2,12 @@ import { ChainIds, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { KNOWN_LAMBDA_CONTRACTS } from '@config/config';
 import { getReadOnlyTezos } from '@shared/dapp';
 import { Standard, Token } from '@shared/types';
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
 });
-
-const INDEX_OF_FIRST_ELEMENT = 0;
 
 export const getUserBalance = async (
   tezos: TezosToolkit,
@@ -26,21 +23,20 @@ export const getUserBalance = async (
   }
   const contract = await newTezos.contract.at(contractAddress);
 
-  const chainId = await loadChainId(newTezos);
-  const lambdaContract = KNOWN_LAMBDA_CONTRACTS.get(chainId) as ChainIds | undefined;
+  const chainId = (await loadChainId(newTezos)) as ChainIds;
 
   let nat: BigNumber | undefined;
 
   if (type === Standard.Fa2) {
     try {
-      const response = await contract.views.balance_of([{ owner: account, token_id: tokenId }]).read(lambdaContract);
-      nat = response[INDEX_OF_FIRST_ELEMENT].balance;
+      const response = await contract.views.balance_of([{ owner: account, token_id: tokenId }]).read(chainId);
+      nat = response[0].balance;
     } catch (e) {
       return null;
     }
   } else {
     try {
-      nat = await contract.views.getBalance(account).read(lambdaContract);
+      nat = await contract.views.getBalance(account).read(chainId);
     } catch {
       return null;
     }
