@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback, useMemo, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,7 +50,6 @@ export const useVotingRouter = (token1: Token, token2: Token) => {
     [token1, token2, navigate]
   );
 
-  console.log(votingTab);
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === votingTab)!, [votingTab]);
 
   return {

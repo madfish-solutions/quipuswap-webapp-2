@@ -68,16 +68,13 @@ export const Button: FC<ButtonProps> = ({
   );
 
   if ('href' in props && !isUndefined(props.href)) {
-    // eslint-disable-next-line no-console
-    console.log('external: ', external);
     const anchorProps = {
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,
       className: compoundClassName,
       ...(props as ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>> & { href: string })
     };
-    // eslint-disable-next-line no-console
-    console.log(anchorProps);
+
     if (anchorProps.target === '_blank') {
       return (
         <a data-test-id={testId} {...anchorProps}>
