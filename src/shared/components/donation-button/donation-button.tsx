@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -19,7 +19,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const DonationButton: React.FC<DonationButtonProps> = ({ className }) => {
+export const DonationButton: FC<DonationButtonProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { openDonationModal } = useGlobalModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
