@@ -16,7 +16,7 @@ interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[];
 }
 
-export const navigationData: NavigationDataProps[] = [
+export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
     id: 0,
     to: '/',
@@ -31,7 +31,7 @@ export const navigationData: NavigationDataProps[] = [
   },
   {
     id: 2,
-    to: '/liquidity/add/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0',
+    to: '/liquidity',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },

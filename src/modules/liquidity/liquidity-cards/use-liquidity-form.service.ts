@@ -69,7 +69,7 @@ export const useLiquidityFormService = ({
     if (validTokenA) {
       setTokenA(validTokenA);
     } else {
-      handleSearchPromise(
+      void handleSearchPromise(
         searchCustomTokens(contractTokenA, Number(idTokenA), true),
         setTokenA,
         tokenADirtyRef,
@@ -81,7 +81,7 @@ export const useLiquidityFormService = ({
     if (validTokenB) {
       setTokenB(validTokenB);
     } else {
-      handleSearchPromise(
+      void handleSearchPromise(
         searchCustomTokens(contractTokenB, Number(idTokenB), true),
         setTokenB,
         tokenBDirtyRef,

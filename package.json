@@ -6,6 +6,7 @@
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3003 craco start -p 3000",
     "dev:hangzhounet": "cross-env REACT_APP_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3003 craco start -p 3002",
     "dev:ithacanet": "cross-env REACT_APP_NETWORK=ithacanet DEFAULT_TOKENS_SLUGS=tez-KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c_0 REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 craco start -p 3003",
+    "start": "yarn dev:mainnet",
     "build": "craco build",
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",

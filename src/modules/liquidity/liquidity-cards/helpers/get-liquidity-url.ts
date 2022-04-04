@@ -14,3 +14,6 @@ export const getLiquidityUrl = (tabId: Nullable<string>, tokenA: Nullable<Token>
 
   return `${LIQUIDITY_URL}/${tabId}/${getTokenPairSlug(tokenA, tokenB)}`;
 };
+
+export const getFullLiquidityUrl = (tabId: string, tokenA: string, tokenB: string) =>
+  `${LIQUIDITY_URL}/${tabId}/${tokenA}-${tokenB}`;

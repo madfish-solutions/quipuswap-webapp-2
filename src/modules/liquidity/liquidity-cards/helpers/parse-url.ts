@@ -11,14 +11,16 @@ export const parseUrl = (url: string) => {
   const tokenAFromUrl = tokensUrl?.[FIRST_TOKEN_INDEX];
   const tokenBFromUrl = tokensUrl?.[SECOND_TOKEN_INDEX];
 
-  const [contractTokenA, idTokenA] = tokenAFromUrl?.split('_');
-  const [contractTokenB, idTokenB] = tokenBFromUrl?.split('_');
+  const [contractTokenA, idTokenA] = `${tokenAFromUrl}`?.split('_');
+  const [contractTokenB, idTokenB] = `${tokenBFromUrl}`?.split('_');
 
   return {
     tabId,
     contractTokenA,
     idTokenA,
     contractTokenB,
-    idTokenB
+    idTokenB,
+    tokenAFromUrl,
+    tokenBFromUrl
   };
 };
