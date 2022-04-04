@@ -1,2 +1,11 @@
-export const isActivePath = (pathname: string, href: string) =>
-  pathname === '/' ? href === '/' : href !== '/' && pathname.includes(href);
+export const isActivePath = (pathname: string, href: string) => {
+  if (href === '/') {
+    return pathname === '/';
+  }
+
+  if (pathname.startsWith('/send/')) {
+    return pathname.replace('/send/', '/swap/').startsWith(href);
+  }
+
+  return pathname.startsWith(href);
+};

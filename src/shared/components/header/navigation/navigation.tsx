@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import { navigationData } from './content';
+import { NAVIGATION_DATA } from './content';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
 
@@ -26,7 +26,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    navigationData.forEach(({ id, to, label, Icon, links }) => {
+    NAVIGATION_DATA.forEach(({ id, to, label, Icon, links }) => {
       if (to) {
         result.push(
           <Link key={id} to={to}>

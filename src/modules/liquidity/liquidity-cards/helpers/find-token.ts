@@ -1,6 +1,6 @@
 import { Nullable, Token } from '@shared/types';
 
-export const findToken = (contractToken: string, idToken: string, tokens: Token[]): Nullable<Token> =>
+export const findToken = (contractToken: string, idToken: string | undefined, tokens: Token[]): Nullable<Token> =>
   tokens.find(token => {
     if (contractToken !== token.contractAddress) {
       return false;
