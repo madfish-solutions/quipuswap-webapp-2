@@ -2,7 +2,7 @@ import { Dispatch, FC, HTMLProps, SetStateAction, useContext, useEffect, useRef,
 
 import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
 import { getMessageNotWhitelistedTokenPair, getTokenSymbol, prepareTokenLogo } from '@shared/helpers';

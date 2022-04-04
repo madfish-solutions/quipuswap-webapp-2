@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@config/config';
+import { MS_IN_SECOND } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { isExist, isUndefined, parseTimelock } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';

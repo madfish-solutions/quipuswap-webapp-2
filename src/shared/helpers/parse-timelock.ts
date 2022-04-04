@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { HOURS_IN_DAY, MINUTES_IN_HOUR, MS_IN_SECOND, SECONDS_IN_MINUTE } from '@config/config';
+import { HOURS_IN_DAY, MINUTES_IN_HOUR, MS_IN_SECOND, SECONDS_IN_MINUTE } from '@config/constants';
 
 export const parseTimelock = (timelock: BigNumber.Value, isTimelockInSeconds?: boolean) => {
   let totalMins = new BigNumber(timelock).dividedToIntegerBy(SECONDS_IN_MINUTE);

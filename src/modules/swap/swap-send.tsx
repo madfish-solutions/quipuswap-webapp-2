@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { MAX_HOPS_COUNT } from '@config/config';
+import { MAX_HOPS_COUNT } from '@config/constants';
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';

@@ -1,9 +1,14 @@
-import { BAKERS_API, HANGZHOUNET_BAKERS, IS_NETWORK_MAINNET } from '@config/config';
+import { HANGZHOUNET_BAKERS, ITHACANET_BAKERS } from '@config/bakers';
+import { BAKERS_API, NETWORK_ID } from '@config/enviroment';
+import { QSNets } from '@shared/types';
 
 export const getBakers = async () => {
-  if (IS_NETWORK_MAINNET) {
-    return fetch(BAKERS_API).then(async res => await res.json());
+  switch (NETWORK_ID) {
+    case QSNets.hangzhounet:
+      return HANGZHOUNET_BAKERS;
+    case QSNets.ithacanet:
+      return ITHACANET_BAKERS;
+    default:
+      return fetch(BAKERS_API).then(async res => await res.json());
   }
-
-  return HANGZHOUNET_BAKERS;
 };

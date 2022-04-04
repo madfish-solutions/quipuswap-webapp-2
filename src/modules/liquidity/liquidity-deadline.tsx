@@ -2,7 +2,11 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_DEADLINE_MINS, PRESET_AMOUNT_INPUT_DECIMALS, MINIMUM_PRESET_AMOUNT_INPUT_VALUE } from '@config/config';
+import {
+  DEFAULT_DEADLINE_MINS,
+  PRESET_AMOUNT_INPUT_DECIMALS,
+  MINIMUM_PRESET_AMOUNT_INPUT_VALUE
+} from '@config/constants';
 import { NewPresetsAmountInput, Tooltip } from '@shared/components';
 import { useDeadline } from '@shared/dapp';
 import { Nullable } from '@shared/types';

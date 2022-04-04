@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { DELAY_BEFORE_DATA_UPDATE } from '@config/config';
+import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';

@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import memoizee from 'memoizee';
 
-import { READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH } from '@config/config';
+import { READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH } from '@config/enviroment';
 
 import { ReadOnlySigner } from '../helpers/readonly-signer';
 

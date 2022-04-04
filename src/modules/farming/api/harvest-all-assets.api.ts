@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/config';
+import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
 import { batchOperations } from '@shared/helpers';
 
 export const harvestAllAssets = async (tezos: TezosToolkit, farmingIds: BigNumber[], rewardsReceiver: string) => {

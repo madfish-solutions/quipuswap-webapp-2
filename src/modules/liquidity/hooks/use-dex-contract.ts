@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
-import { NETWORK_ID } from '@config/config';
+import { NETWORK_ID } from '@config/enviroment';
 import { useTezos } from '@providers/use-dapp';
 import { isTezIncluded } from '@shared/helpers';
 import { Nullable, Token, Optional } from '@shared/types';

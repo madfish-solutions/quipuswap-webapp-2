@@ -1,6 +1,6 @@
 import constate from 'constate';
 
-import { EXCHANGE_RATES_URL } from '@config/config';
+import { EXCHANGE_RATES_URL } from '@config/enviroment';
 import { useTezos } from '@providers/use-dapp';
 
 import useUpdateOnBlockSWR from './use-update-on-block-SWR';
