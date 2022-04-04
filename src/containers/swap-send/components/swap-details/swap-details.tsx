@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { HIDE_ANALYTICS, NETWORK_ID, networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
@@ -13,7 +13,7 @@ import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
-import { DexPair, Nullable, Undefined, Token } from '@utils/types';
+import { DexPair, Nullable, Token, Undefined } from '@utils/types';
 
 import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
@@ -87,7 +87,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         tooltipContent={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
         className={s.cell}
       >
-        <StateCurrencyAmount balanceRule isError={Boolean(feeError)} amount={fee} currency="TEZ" />
+        <StateCurrencyAmount isError={Boolean(feeError)} amount={fee} currency="TEZ" />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -100,12 +100,14 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug animation={false} />}
       </DetailsCardCell>
 
-      <ViewPairAnlitics
-        route={route}
-        className={s.detailsButtons}
-        buttonClassName={s.detailsButton}
-        iconClassName={s.linkIcon}
-      />
+      {!HIDE_ANALYTICS && (
+        <ViewPairAnlitics
+          route={route}
+          className={s.detailsButtons}
+          buttonClassName={s.detailsButton}
+          iconClassName={s.linkIcon}
+        />
+      )}
     </Card>
   );
 };

@@ -39,6 +39,7 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
+  const [isTokenChanging, setIsTokenChanging] = useState(true);
 
   const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
@@ -105,7 +106,8 @@ export const useRemoveLiquidityService = (
     const { decimals: decimalsB } = tokenB.metadata;
     const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
 
-    const isTokensOrderValid = pairTokenA.contractAddress === tokenA.contractAddress;
+    const isTokensOrderValid =
+      tokenA.contractAddress === pairTokenA.contractAddress && tokenA.fa2TokenId === pairTokenA.fa2TokenId;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
@@ -211,6 +213,8 @@ export const useRemoveLiquidityService = (
     tokenBBalance,
     share,
     isPoolNotExist,
+    isTokenChanging,
+    setIsTokenChanging,
     handleChange,
     handleBalance,
     handleSetTokenPair,

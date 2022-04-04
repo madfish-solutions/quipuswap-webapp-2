@@ -3,9 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NETWORK } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenType, useSearchCustomTokens, useSearchTokens, useTezos, useTokens } from '@utils/dapp';
-import { isEmptyArray, isTokenEqual, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
+import {
+  defined,
+  isEmptyArray,
+  isExist,
+  isTokenEqual,
+  localSearchToken,
+  TokenWithRequiredNetwork
+} from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
-import { Token } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from './constants';
 import { getTokenKey } from './get-token-key';
@@ -52,7 +59,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
     setInputToken(DEFAULT_TOKEN_ID);
   };
 
-  const handleTokenSearch = useCallback(() => {
+  const handleTokenSearch = useCallback(async () => {
     if (!tezos) {
       return;
     }
@@ -61,10 +68,11 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
       localSearchToken(token as TokenWithRequiredNetwork, NETWORK, inputValue, inputToken)
     );
 
-    setFilteredTokens(isTokens);
+    let foundToken: Nullable<Token> = null;
     if (!isEmptyString(inputValue) && isEmptyArray(isTokens)) {
-      searchCustomToken(inputValue, inputToken);
+      foundToken = await searchCustomToken(inputValue, inputToken);
     }
+    setFilteredTokens(isExist(foundToken) ? [...isTokens, foundToken] : isTokens);
   }, [inputValue, inputToken, tezos, searchCustomToken, tokens]);
 
   const isEmptyTokens = useMemo(
@@ -72,24 +80,24 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
     [searchTokens, filteredTokens]
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
+  useEffect(() => void handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
-  const isCurrentToken = (token: Token) =>
-    token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken;
-
-  const allTokens = useMemo(
-    () => {
-      const targetTokens = !isEmptyArray(filteredTokens) ? filteredTokens : searchTokens.filter(isCurrentToken);
-      const uniqTokens_ = uniqTokens(targetTokens);
-
-      return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
-      // inputValue is needed
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputValue, filteredTokens, searchTokens, blackListedTokens]
+  const isCurrentToken = useCallback(
+    (token: Token) =>
+      token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken,
+    [inputToken, inputValue]
   );
 
+  const allTokens = useMemo(() => {
+    const targetTokens = !isEmptyArray(filteredTokens) ? filteredTokens : searchTokens.filter(isCurrentToken);
+    const uniqTokens_ = uniqTokens(targetTokens);
+    void inputValue; // static for require dependency
+
+    return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
+  }, [filteredTokens, searchTokens, isCurrentToken, blackListedTokens, inputValue]);
+
   useEffect(() => {
-    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
+    getTokenType(inputValue, defined(tezos)).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
   const isTokensNotFound = isEmptyTokens && !searchLoading && !tokensLoading;

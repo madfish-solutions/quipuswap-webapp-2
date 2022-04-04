@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext, Loader, ToastError, ToastSuccess } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -21,7 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const ToastWrapper: React.FC = () => {
+export const ToastWrapper: FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

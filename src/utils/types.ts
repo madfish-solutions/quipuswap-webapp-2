@@ -9,7 +9,8 @@ export type Optional<T> = T | null | undefined;
 
 export enum QSNets {
   mainnet = 'mainnet',
-  hangzhounet = 'hangzhounet'
+  hangzhounet = 'hangzhounet',
+  ithacanet = 'ithacanet'
 }
 
 export enum QSNetworkType {
@@ -52,7 +53,6 @@ export interface TokenPair {
 export interface Token {
   type: Standard;
   contractAddress: string;
-  // TODO: change the type to BigNumber
   fa2TokenId?: number;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;

@@ -4,7 +4,7 @@ import { Card, ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
+import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -31,7 +31,7 @@ export const VotingDetails: FC = () => {
 
   const { totalVotes, totalVeto, votesToVeto } = getVotingInfo(dex);
 
-  const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
+  const pairLink = tokenPair?.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertialCenter);
 
@@ -102,7 +102,7 @@ export const VotingDetails: FC = () => {
         <StateCurrencyAmount amount={votesToVetoAmount} />
       </DetailsCardCell>
 
-      {tokenPair.dex && (
+      {!HIDE_ANALYTICS && tokenPair?.dex && (
         <div className={s.detailsButtons}>
           <Button
             className={s.detailsButton}

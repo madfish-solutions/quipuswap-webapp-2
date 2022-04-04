@@ -68,7 +68,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
             size="extraLarge"
             volume={transactions24h}
             tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
-            label={t('home|Daily Transaction')}
+            label={t('home|Daily Transactions')}
           />
         </>
       ) : null}

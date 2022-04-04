@@ -10,12 +10,12 @@ import { PositionsModal } from '@components/modals/PositionsModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { LoadableTokenPairName } from '@components/ui/loadable-token-pair-name';
 import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/is-whitelisted-token';
 import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { Danger } from '../components/danger';
-import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
@@ -34,7 +34,7 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   handleChange?: (tokenPair: TokenPair) => void;
   handleBalance: (value: string) => void;
   tokenPair: Nullable<TokenPair>;
-  setTokenPair: (tokenPair: TokenPair) => void;
+  setTokenPair?: (tokenPair: TokenPair) => void;
   tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
@@ -98,6 +98,8 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
   const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;
 
+  const tokenPairFrozen = notSelectable1 && notSelectable2;
+
   return (
     <>
       <PositionsModal
@@ -105,7 +107,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
           tokensUpdating?.setIsTokenChanging(true);
-          setTokenPair(selectedToken);
+          setTokenPair?.(selectedToken);
           if (handleChange) {
             handleChange(selectedToken);
           }
@@ -150,7 +152,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             <div className={s.dangerContainer}>
               {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
               <Button
-                onClick={() => setTokensModal(true)}
+                onClick={() => !tokenPairFrozen && setTokensModal(true)}
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
@@ -163,16 +165,14 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                   loading={isTokensLoading}
                 />
                 <h6 className={cx(s.token, s.tokensSelect)}>
-                  {tokenPair ? (
-                    <Fragment>
-                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
-                    </Fragment>
-                  ) : (
-                    'Select LP'
-                  )}
+                  <LoadableTokenPairName
+                    tokenPair={tokenPair}
+                    isLoading={isTokensLoading}
+                    placeholder="Select LP"
+                    tokenSymbolSliceAmount={5}
+                  />
                 </h6>
-                <Shevron />
+                {!tokenPairFrozen && <Shevron />}
               </Button>
             </div>
           </div>

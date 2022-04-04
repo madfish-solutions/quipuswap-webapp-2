@@ -21,6 +21,7 @@ import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { FormatNumber } from '@utils/formatNumber';
 import {
   amountsAreEqual,
   getTokenIdFromSlug,
@@ -29,7 +30,8 @@ import {
   isEmptyArray,
   makeToken,
   getTokenPairSlug,
-  isTokenToTokenDex
+  isTokenToTokenDex,
+  defined
 } from '@utils/helpers';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
 import { DexGraph } from '@utils/routing';
@@ -55,10 +57,13 @@ function tokensMetadataIsSame(token1: Token, token2: Token) {
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
+const PRICE_IMPACT_WARNING_THRESHOLD = 10;
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, initialAction, router }) => {
   const {
     errors,
+    isSubmitting,
     values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
     validateField,
     setValues,
@@ -388,6 +393,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
 
   const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
   const noRouteFound = !dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
+  const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return (
     <>
@@ -395,7 +401,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
       <StickyBlock className={className}>
         <Card
           header={{
-            content: <Tabs values={TabsContent} activeId={action!} setActiveId={handleTabSwitch} className={s.tabs} />,
+            content: (
+              <Tabs values={TabsContent} activeId={defined(action)} setActiveId={handleTabSwitch} className={s.tabs} />
+            ),
             // TODO: add a button for transactions history
             className: s.header
           }}
@@ -457,14 +465,27 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
           <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
             <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />
           </div>
+          <div className={cx({ [complexInputStyles.error]: shouldShowPriceImpactWarning })}>
+            <ComplexError
+              error={t('swap|priceImpactWarning', {
+                priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
+              })}
+            />
+          </div>
           {!accountPkh && <ConnectWalletButton className={s.button} />}
-          {accountPkh && dataIsStale && (
+          {accountPkh && dataIsStale && !isSubmitting && (
             <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}
-          {accountPkh && !dataIsStale && (
-            <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
+          {accountPkh && (!dataIsStale || isSubmitting) && (
+            <Button
+              disabled={submitDisabled}
+              loading={isSubmitting}
+              type="submit"
+              onClick={handleSubmit}
+              className={s.button}
+            >
               {currentTabLabel}
             </Button>
           )}

@@ -1,20 +1,21 @@
-import { FC, useContext, useEffect } from 'react';
+import { FC } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import Script from 'next/script';
 
-import { BASE_URL, QUIPUSWAP } from '@app.config';
+import { BASE_URL } from '@app.config';
+import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-base-layout.vm';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
+import { ConfirmationModalProvider } from '@components/modals/confirmation-modal';
+import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@components/modals/WalletModal';
-import { Background } from '@components/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
-import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
+import { GlobalModalsStateProvider } from '@hooks/use-global-modals-state';
 import { DEFAULT_SEO } from '@seo.config';
 
 import s from './BaseLayout.module.sass';
@@ -26,24 +27,13 @@ interface BaseLayoutProps {
   className?: string;
 }
 
-export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
-  const canonicalURL = QUIPUSWAP + useRouter().asPath;
-  const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
-
-  useEffect(() => {
-    if (colorThemeMode === ColorModes.Dark) {
-      document.querySelector('body')?.classList.add(ColorModes.Dark);
-    } else {
-      document.querySelector('body')?.classList.remove(ColorModes.Dark);
-    }
-  }, [colorThemeMode]);
-
-  const isDarkFavicon = colorThemeMode === ColorModes.Dark;
+export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, image, className, children }) => {
+  const { isDarkTheme, canonicalURL, isComponentDidMount } = useBaseLayoutViewModel();
 
   return (
     <>
       <Head>
-        {isDarkFavicon ? (
+        {isDarkTheme ? (
           <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
           <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
@@ -100,23 +90,27 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
         }
       />
       {isComponentDidMount ? (
-        <ConnectModalsStateProvider>
-          <div className={s.root}>
-            <Header />
-            <Sidebar className={s.sidebar} />
-            <Background className={s.background} />
-            <main className={cx(s.wrapper, className)}>
-              <ToastWrapper />
-              {children}
-            </main>
-          </div>
+        <GlobalModalsStateProvider>
+          <ConfirmationModalProvider>
+            <div className={s.root}>
+              <Header />
+              <Sidebar className={s.sidebar} />
+              <div className={cx(s.mainWrapper, isDarkTheme ? s.dark : s.light)}>
+                <main className={cx(s.wrapper, className)}>
+                  <ToastWrapper />
+                  {children}
+                </main>
+              </div>
+            </div>
+          </ConfirmationModalProvider>
 
           <WalletModal />
           <AccountModal />
-        </ConnectModalsStateProvider>
+          <DonationModal />
+        </GlobalModalsStateProvider>
       ) : (
         <div />
       )}
     </>
   );
-};
+});

@@ -94,10 +94,14 @@ export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   return shortize(token.contractAddress);
 };
 
-export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
-  return `${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`;
+export const getTokensPairName = (tokenX: Token, tokenY: Token, sliceAmount?: number) => {
+  return `${getTokenSymbol(tokenX, sliceAmount)} / ${getTokenSymbol(tokenY, sliceAmount)}`;
 };
 
 export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
+};
+
+export const getTokensName = (token: Token, optionalToken: Optional<Token>) => {
+  return optionalToken ? `${getTokenSymbol(token)} / ${getTokenSymbol(optionalToken)}` : getTokenSymbol(token);
 };

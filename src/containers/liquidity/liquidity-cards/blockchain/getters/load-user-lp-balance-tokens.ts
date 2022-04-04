@@ -2,8 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { getUserBalance } from '@api/get-user-balance';
 import { LP_TOKEN_DECIMALS } from '@app.config';
-import { getUserBalance } from '@utils/dapp';
 import { fromDecimals, isTezIncluded } from '@utils/helpers';
 import { Nullable, Token } from '@utils/types';
 

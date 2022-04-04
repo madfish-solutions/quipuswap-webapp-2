@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 
 import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
@@ -35,7 +35,7 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
     [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
   };
 
-  const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
+  const handleSubmit = async (formValues: Partial<SwapFormValues>, actions: FormikHelpers<Partial<SwapFormValues>>) => {
     if (!tezos || !accountPkh) {
       return;
     }
@@ -45,6 +45,7 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
 
     const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
+      actions.setSubmitting(true);
       const walletOperation = await swap(tezos, accountPkh, {
         deadlineTimespan: deadline.times(SECS_IN_MIN).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
@@ -59,6 +60,7 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
         })!,
         ttDexAddress: TOKEN_TO_TOKEN_DEX
       });
+      actions.setSubmitting(false);
 
       const inputTokenSymbol = getTokenSymbol(inputToken);
       const outputTokenSymbol = getTokenSymbol(outputToken);
@@ -69,6 +71,7 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
         message: swapMessage
       });
     } catch (e) {
+      actions.setSubmitting(false);
       showErrorToast(e as Error);
       throw e;
     }

@@ -48,7 +48,6 @@ export const SwapSlippage: FC<Props> = ({ error, outputAmount, onChange, slippag
               amount={minimumReceived}
               isError={!minimumReceived && !loading}
               currency={outputToken ? getTokenSymbol(outputToken) : ''}
-              balanceRule
             />
           </>
         )}

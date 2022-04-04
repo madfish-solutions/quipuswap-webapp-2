@@ -3,6 +3,12 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
+import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
+
+import { StatusLabel } from '../../../ui/status-label';
+import s from './Navigation.module.sass';
+
 interface LinkInterface {
   id: number;
   href?: string;
@@ -11,6 +17,7 @@ interface LinkInterface {
   label: React.ReactNode;
   target?: string;
   Icon?: React.FC<{ className?: string; id?: string }>;
+  status?: React.ReactNode;
 }
 
 interface NavigationDataProps extends LinkInterface {
@@ -45,6 +52,14 @@ export const navigationData: NavigationDataProps[] = [
     as: `/voting/vote`,
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
+  },
+  {
+    id: 4,
+    href: '/farming',
+    as: `/farming`,
+    label: <Trans ns="common">Farming</Trans>,
+    Icon: FarmIcon,
+    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={s.navigationStatus} />
   },
   // {
   //   id: 5,

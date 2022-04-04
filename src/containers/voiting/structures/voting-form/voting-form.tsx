@@ -14,7 +14,7 @@ import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
 import { UnvoteButton } from '@containers/voiting/components';
-import { getCandidateInfo, BakerCleaner } from '@containers/voiting/helpers';
+import { getCandidateInfo } from '@containers/voiting/helpers';
 import {
   useAvailableBalances,
   useTokensLoading,
@@ -26,10 +26,10 @@ import {
 } from '@containers/voiting/helpers/voting.provider';
 import { TabsContent } from '@containers/voiting/hooks';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
-import { isAssetEqual, parseDecimals } from '@utils/helpers';
+import { isAssetEqual, isTezosToken, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
@@ -38,21 +38,18 @@ interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
   handleSubmit: () => Promise<void>;
-  bakerCleaner: BakerCleaner;
 }
 
-const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
 const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
   values,
-  form,
-  bakerCleaner
+  form
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
+  const { connectWalletModalOpen, closeConnectWalletModal } = useGlobalModalsState();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
@@ -71,30 +68,24 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { availableBalance } = useAvailableBalances();
   const tokensUpdating = useTokensLoading();
 
-  useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
-
   const handleInputChange = async () => {
-    if (!tezos) {
-      return;
-    }
-    const currentTokenA = tokenDataToToken(token1);
-    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
-      return;
-    }
-    if (tezos && tokenPair) {
-      const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId ?? undefined
-      };
-      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
-      if (isAssetSame) {
-        return;
+    try {
+      const currentTokenA = tokenDataToToken(token1);
+      if (isTezosToken(currentTokenA) && tezos && tokenPair) {
+        const toAsset = {
+          contract: tokenPair.token2.contractAddress,
+          id: tokenPair.token2.fa2TokenId ?? undefined
+        };
+        if (!oldAsset || !isAssetEqual(toAsset, oldAsset)) {
+          const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
+          if (tempDex !== dex) {
+            setDex(tempDex);
+          }
+          setOldAsset(toAsset);
+        }
       }
-      const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
-      if (tempDex && tempDex !== dex) {
-        setDex(tempDex);
-      }
-      setOldAsset(toAsset);
+    } catch (_) {
+      // nothing to do
     }
   };
 
@@ -184,7 +175,6 @@ const RealForm: React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt24}
-                cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {

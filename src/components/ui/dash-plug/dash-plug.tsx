@@ -10,14 +10,15 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-interface DashPlugProps {
+export interface DashPlugProps {
   zoom?: number;
   animation?: boolean;
   className?: string;
+  quantity?: number;
 }
 const DASH_QUANTITY = 4;
 
-export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className }) => {
+export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className, quantity }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const container = useRef<HTMLDivElement>(null);
@@ -36,8 +37,8 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className }) => {
   }, [zoom]);
 
   const iterator = useMemo(() => {
-    return new Array(DASH_QUANTITY).fill(null).map((_, index) => index);
-  }, []);
+    return new Array(quantity ?? DASH_QUANTITY).fill(null).map((_, index) => index);
+  }, [quantity]);
 
   return (
     <div ref={container} className={wrapperClassName}>

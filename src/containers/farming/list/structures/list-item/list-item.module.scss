@@ -1,0 +1,318 @@
+@import "@styles/breakpoints";
+@import "@styles/variables";
+
+.card {
+  padding: 24px;
+}
+
+.card > div {
+  padding-top: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 24px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.itemLeftHeader {
+  display: grid;
+  column-gap: 5px;
+  grid-template-columns: repeat(2, min-content);
+  grid-template-rows: repeat(2, min-content);
+  align-items: center;
+}
+
+.tagsWithTooltip {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 8px;
+  grid-column: 1 / 2;
+  margin-top: 8px;
+}
+
+.iconWithStatusLabel {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.tooltip {
+  margin-left: -5px;
+}
+
+.rewardTarget {
+  margin-top: 16px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  row-gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+
+  scrollbar-width: thin;
+
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  &::-webkit-resizer {
+    display: none;
+  }
+}
+
+.CardCellHeader {
+  white-space: nowrap;
+}
+
+.cardCell {
+  row-gap: 6px;
+}
+
+.stakeStats,
+.userData {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  justify-content: space-between;
+}
+
+.links {
+  display: flex;
+  column-gap: 24px;
+}
+
+.light {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $ui-05;
+    }
+  }
+
+  .userData {
+    &::before {
+      background-color: $text-03;
+    }
+  }
+}
+
+.dark {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $text-02;
+    }
+  }
+
+  .userData {
+    &::before {
+      background-color: $text-02;
+    }
+  }
+}
+
+@include media(">phone", "<Lphone") {
+  .stats {
+    flex-direction: column;
+    row-gap: 24px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .stakeStats,
+  .userData {
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}
+
+@include media(">=Lphone", "<=tablet") {
+  .stats {
+    flex-direction: row;
+    column-gap: 42px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .stakeStats,
+  .userData {
+    width: 50%;
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
+  }
+}
+
+@include media(">900px") {
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
+  }
+}
+
+@include media(">tablet", "<Ltablet") {
+  .container {
+    flex-direction: row;
+    row-gap: 24px;
+  }
+
+  .left {
+    width: calc(100% - 260px);
+  }
+
+  .stats {
+    margin-top: 16px;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 24px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 16px;
+  }
+
+  .stakeStats,
+  .userData {
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}
+
+@include media(">=Ltablet") {
+  .container {
+    flex-direction: row;
+    row-gap: 24px;
+  }
+
+  .rewardTarget {
+    margin-top: 0px;
+  }
+
+  .left {
+    width: calc(100% - 260px);
+  }
+
+  .stats {
+    flex-direction: row;
+    justify-content: flex-start;
+    column-gap: 48px;
+  }
+
+  .cardCell {
+    flex-direction: column;
+    justify-content: space-between;
+    column-gap: 16px;
+  }
+
+  .stakeStats,
+  .userData {
+    flex-direction: row;
+    column-gap: 32px;
+  }
+
+  .userData {
+    position: relative;
+    &:before {
+      content: "";
+      position: absolute;
+
+      width: 1px;
+      height: 80%;
+
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: -28px;
+    }
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}

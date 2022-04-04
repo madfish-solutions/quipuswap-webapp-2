@@ -1,0 +1,39 @@
+@import "@styles/variables";
+
+.container {
+  padding: 1px;
+  width: fit-content;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.status {
+  display: block;
+
+  padding: 4px 8px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  border-radius: 8px;
+}
+
+.light {
+  .filled {
+    color: $text-inverse;
+  }
+  .bordered {
+    background-color: $ui-01;
+    color: $text-03;
+  }
+}
+
+.dark {
+  .filled {
+    color: $text-inverse;
+  }
+  .bordered {
+    background-color: $ui-07;
+    color: $text-03;
+  }
+}

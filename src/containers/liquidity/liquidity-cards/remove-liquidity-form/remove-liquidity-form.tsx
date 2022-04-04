@@ -38,6 +38,8 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     tokenBBalance,
     share,
     isPoolNotExist,
+    isTokenChanging,
+    setIsTokenChanging,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -86,6 +88,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         className={s.input}
         error={validatedInputMessage}
         isPoolNotExists={isPoolNotExist}
+        tokensUpdating={{ isTokenChanging, setIsTokenChanging }}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect

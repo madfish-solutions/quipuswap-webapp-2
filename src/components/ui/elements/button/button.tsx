@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { DataTestAttribute } from '@tests/types';
 import { isUndefined } from '@utils/helpers';
 
 import { ButtonContent } from './button-content';
@@ -19,7 +20,9 @@ export type ButtonProps = {
   textClassName?: string;
   icon?: React.ReactNode;
   control?: React.ReactNode;
-} & (React.HTMLProps<HTMLButtonElement> | React.HTMLProps<HTMLAnchorElement>);
+} & (React.HTMLProps<HTMLButtonElement> | React.HTMLProps<HTMLAnchorElement>) &
+  // eslint-disable-next-line @typescript-eslint/no-type-alias
+  DataTestAttribute;
 
 const themeClass = {
   primary: s.primary,
@@ -48,6 +51,7 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   control,
   themeOposite,
+  testId,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -71,7 +75,7 @@ export const Button: React.FC<ButtonProps> = ({
     };
 
     return (
-      <a {...anchorProps}>
+      <a data-test-id={testId} {...anchorProps}>
         {control}
         {content}
         {icon}
@@ -84,6 +88,7 @@ export const Button: React.FC<ButtonProps> = ({
       // @ts-ignore
       type={type}
       className={compoundClassName}
+      data-test-id={testId}
       {...(props as React.HTMLProps<HTMLButtonElement>)}
     >
       {control}

@@ -7,7 +7,7 @@ import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.co
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
-import { handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
+import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
 import { Nullable, VoterType, Token, TokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks';
@@ -23,12 +23,6 @@ const initialVoter: VoterType = {
 
 const defaultToken = networksDefaultTokens[NETWORK_ID];
 
-const fallbackTokenPair: TokenPair = {
-  token1: TEZOS_TOKEN,
-  token2: defaultToken,
-  balance: null,
-  frozenBalance: null
-};
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const useVotingService = () => {
   const tezos = useTezos();
@@ -40,14 +34,14 @@ const useVotingService = () => {
 
   const exchangeRates = useExchangeRates();
 
-  const [isTokenChanging, setIsTokenChanging] = useState(false);
+  const [isTokenChanging, setIsTokenChanging] = useState(true);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
   const [voter, setVoter] = useState<VoterType>(initialVoter);
 
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
-  const [tokenPair, setTokenPair] = useState<TokenPair>(fallbackTokenPair);
+  const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
   const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, defaultToken]);
   const tokensRef = useRef<[Token, Token]>([token1, token2]);
 
@@ -65,7 +59,8 @@ const useVotingService = () => {
   } = useVotingRouter(token1, token2);
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
-    () => getVoteVetoBalances(tokenPair, voter),
+    () =>
+      tokenPair ? getVoteVetoBalances(tokenPair, voter) : { availableVoteBalance: null, availableVetoBalance: null },
     [tokenPair, voter]
   );
 
@@ -102,13 +97,13 @@ const useVotingService = () => {
     tokenPairSelect(pair);
   };
 
-  const getBalances = useCallback(async () => tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
+  const getBalances = useCallback(async () => tokenPair && tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
 
   useEffect(() => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
       void handleSearchToken({
         tokens,
-        tezos: tezos!,
+        tezos: defined(tezos),
         network: NETWORK,
         from,
         to,
@@ -131,7 +126,7 @@ const useVotingService = () => {
   }, [tezos, accountPkh]);
 
   const updateBalances = useCallback(() => {
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
+    if (tezos && tokenPair?.token1 && tokenPair?.token2) {
       getBalances();
     }
   }, [tezos, tokenPair, getBalances]);
