@@ -2,7 +2,6 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useTranslation } from '@translation';
@@ -10,7 +9,6 @@ import { useTranslation } from '@translation';
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
 import { ConnectWalletButton } from '../../connect-wallet-button';
-import { DonationButton } from '../../donation-button';
 import { NetworkSelect } from '../../network-select';
 import { Navigation } from '../navigation';
 import { QPToken } from '../qp-token';
@@ -33,7 +31,6 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <div className={styles.wallet}>
-        {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
         <ConnectWalletButton className={styles.button} />
         <NetworkSelect className={cx(styles.button, styles.select)} />
       </div>
