@@ -134,6 +134,8 @@ export const networksDefaultTokens: Record<QSNets, Token> = {
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
 
+export const DEFAULT_TOKEN = networksDefaultTokens[NETWORK_ID];
+
 export const FACTORIES = {
   mainnet: {
     fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
