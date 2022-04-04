@@ -163,7 +163,7 @@ export const FarmingDetails: FC = observer(() => {
           className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
           href={depositTokenUrl}
-          external
+          external={true}
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
         >
           {t('farm|Token Contract')}
@@ -173,7 +173,7 @@ export const FarmingDetails: FC = observer(() => {
           className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
           href={stakeUrl}
-          external
+          external={true}
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
         >
           {t('farm|Farming Contract')}
