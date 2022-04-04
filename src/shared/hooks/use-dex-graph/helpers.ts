@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT } from '@config/config';
+import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { DexGraph, getTokenSlug } from '@shared/helpers';
 import { makeToken } from '@shared/helpers/makers/make-token';
 import { DexPair, DexPairType, Standard, Token } from '@shared/types';

@@ -12,7 +12,8 @@ export type Optional<T> = T | null | undefined;
 
 export enum QSNets {
   mainnet = 'mainnet',
-  hangzhounet = 'hangzhounet'
+  hangzhounet = 'hangzhounet',
+  ithacanet = 'ithacanet'
 }
 
 export enum QSNetworkType {

@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { DEFAULT_DECIMALS } from '@config/config';
+import { DEFAULT_DECIMALS } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoUnstake } from '@modules/farming/hooks/blockchain/use-do-unstake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';

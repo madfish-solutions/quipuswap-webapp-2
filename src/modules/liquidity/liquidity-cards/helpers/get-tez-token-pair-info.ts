@@ -1,6 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { Nullable, Token } from '@shared/types';
 
 import { PairInfo } from '../add-liquidity-form/pair-info.interface';

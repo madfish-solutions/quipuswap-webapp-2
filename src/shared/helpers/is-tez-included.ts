@@ -1,4 +1,4 @@
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { Nullable, Token } from '@shared/types';
 
 import { isExist } from './type-checks';

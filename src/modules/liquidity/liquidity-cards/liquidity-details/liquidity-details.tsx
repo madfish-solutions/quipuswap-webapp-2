@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
-import { EMPTY_POOL_AMOUNT } from '@config/config';
+import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   ContractHashWithCopy,

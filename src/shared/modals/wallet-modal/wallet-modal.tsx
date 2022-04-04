@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 
-import { SAVED_TERMS_KEY } from '@config/config';
+import { SAVED_TERMS_KEY } from '@config/localstorage';
 import { useConnectWithBeacon, useConnectWithTemple } from '@providers/use-dapp';
 import { Button } from '@shared/components';
 import { Checkbox } from '@shared/elements';

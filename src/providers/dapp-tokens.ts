@@ -3,7 +3,8 @@ import { useState, useCallback, useEffect } from 'react';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { NETWORK, NETWORK_ID } from '@config/config';
+import { NETWORK } from '@config/config';
+import { NETWORK_ID } from '@config/enviroment';
 import { getTokenMetadata } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { InvalidFa2TokenIdError, TokenMetadataError } from '@shared/errors';

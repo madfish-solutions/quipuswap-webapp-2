@@ -1,7 +1,7 @@
-import { FC, HTMLProps, ReactNode, useContext } from 'react';
+import { FC, ForwardRefExoticComponent, HTMLProps, ReactNode, RefAttributes, useContext } from 'react';
 
 import cx from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isUndefined } from '@shared/helpers/type-checks';
@@ -21,7 +21,7 @@ export type ButtonProps = {
   textClassName?: string;
   icon?: ReactNode;
   control?: ReactNode;
-} & (HTMLProps<HTMLButtonElement> | HTMLProps<HTMLAnchorElement>) &
+} & (HTMLProps<HTMLButtonElement> | ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>) &
   // eslint-disable-next-line @typescript-eslint/no-type-alias
   DataTestAttribute;
 
@@ -72,17 +72,15 @@ export const Button: FC<ButtonProps> = ({
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,
       className: compoundClassName,
-      ...(props as HTMLProps<HTMLAnchorElement>)
+      ...(props as ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>> & { href: string })
     };
 
     //TODO _blank
     return (
-      <Link to={props.href}>
-        <a data-test-id={testId} {...anchorProps}>
-          {control}
-          {content}
-          {icon}
-        </a>
+      <Link data-test-id={testId} to={anchorProps.href} {...anchorProps}>
+        {control}
+        {content}
+        {icon}
       </Link>
     );
   }

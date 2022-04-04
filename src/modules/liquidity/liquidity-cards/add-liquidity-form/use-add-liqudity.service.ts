@@ -4,7 +4,10 @@ import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { noop } from 'rxjs';
 
-import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { EMPTY_POOL_AMOUNT } from '@config/constants';
+import { NETWORK_ID } from '@config/enviroment';
+import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation } from '@shared/dapp';
 import { useDeadline, useSlippage } from '@shared/dapp/slippage-deadline';
@@ -330,9 +333,9 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
-    const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
-    const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
+    const notTezToken = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenB : tokenA;
+    const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenAInput : tokenBInput;
+    const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenBInput : tokenAInput;
     const tezTokenBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
@@ -347,7 +350,7 @@ export const useAddLiquidityService = (
 
       const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenSymbol);
+      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
 
       await confirmOperation(addLiquidityTezOperation.opHash, {
         message: addLiquidityMessage
@@ -370,7 +373,7 @@ export const useAddLiquidityService = (
 
       const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenSymbol);
+      const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
 
       await confirmOperation(initializeLiquidityTezOperation.opHash, {
         message: initializeLiquidityMessage

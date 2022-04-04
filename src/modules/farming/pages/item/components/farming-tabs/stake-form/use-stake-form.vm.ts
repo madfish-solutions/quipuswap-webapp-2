@@ -3,7 +3,9 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@config/config';
+import { DUMMY_BAKER } from '@config/bakers';
+import { DEFAULT_DECIMALS } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoStake } from '@modules/farming/hooks/blockchain/use-do-stake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';

@@ -1,6 +1,6 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/config';
+import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
 import { getStorageInfo } from '@shared/dapp';
 
 import { DEFAULT_RAW_USER_INFO, getAllFarmUserInfo } from '../helpers';

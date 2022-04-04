@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL } from '@config/config';
+import { FARM_REWARD_UPDATE_INTERVAL } from '@config/constants';
 import { fromDecimals, isExist, isNull, MakeInterval, multipliedIfPossible } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { networksDefaultTokens, NETWORK_ID } from '@config/config';
+import { DEFAULT_TOKEN } from '@config/tokens';
 import { getTokenPairSlug, getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
 
@@ -19,7 +19,7 @@ export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: 
   const navigate = useNavigate();
   const urlSearchParams = params.fromTo?.split('-');
   let from_ = 'tez';
-  let to_ = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
+  let to_ = getTokenSlug(DEFAULT_TOKEN);
   if (urlSearchParams) {
     const fromTo = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
     const { from, to } = fromTo;

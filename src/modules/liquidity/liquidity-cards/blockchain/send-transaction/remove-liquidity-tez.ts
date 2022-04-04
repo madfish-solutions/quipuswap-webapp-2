@@ -2,7 +2,7 @@ import { FoundDex, removeLiquidity as getRemoveLiquidityParams } from '@quipuswa
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS } from '@config/config';
+import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { toDecimals } from '@shared/helpers';
 
 const PERCENTAGE = 100;

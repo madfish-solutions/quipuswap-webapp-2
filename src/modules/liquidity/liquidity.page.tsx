@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { DEFAULT_TOKEN, TEZOS_TOKEN_SYMBOL } from '@config/config';
+import { DEFAULT_TOKEN, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { DeadlineAndSlippageProvider } from '@shared/dapp';
 import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
