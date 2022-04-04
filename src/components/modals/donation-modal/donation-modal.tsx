@@ -51,7 +51,8 @@ export const DonationModal: FC = () => {
 
   return (
     <Modal
-      portalClassName={s.modal}
+      className={s.modal}
+      portalClassName={s.modalPortal}
       title={t('common|Donate')}
       contentClassName={compoundClassName}
       isOpen={donationModalOpen}
