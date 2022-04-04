@@ -3,14 +3,9 @@ import { BigNumber } from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
-import {
-  IS_NETWORK_MAINNET,
-  MAINNET_TOKENS,
-  networksDefaultTokens,
-  SAVED_TOKENS_KEY,
-  TESTNET_TOKENS,
-  TEZOS_TOKEN
-} from '@config/config';
+import { TOKENS_URL } from '@config/enviroment';
+import { SAVED_TOKENS_KEY } from '@config/localstorage';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
 import { getContract } from '@shared/dapp';
 import { InvalidTokensListError } from '@shared/errors';
 import {
@@ -123,12 +118,12 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(IS_NETWORK_MAINNET ? MAINNET_TOKENS : TESTNET_TOKENS));
+  const response = await fetch(ipfsToHttps(TOKENS_URL));
   const json = await response.json();
-  if (json.tokens?.length) {
-    // TODO: remove 'any' type as soon as fa2TokenId type is changed to BigNumber
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const Tokens: Token[] = json.tokens.map((token: any) => ({
+  const arr: Token[] = json.tokens?.length ? json.tokens : json.length ? json : [];
+
+  if (arr.length) {
+    const Tokens: Token[] = arr.map(token => ({
       ...token,
       isWhitelisted: true
     }));

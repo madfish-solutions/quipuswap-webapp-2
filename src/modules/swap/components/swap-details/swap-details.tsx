@@ -3,7 +3,8 @@ import { FC, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { HIDE_ANALYTICS, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@config/config';
+import { HIDE_ANALYTICS } from '@config/config';
+import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import {
   Card,
   DashPlug,
@@ -45,7 +46,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
 
   const fallbackInputToken = TEZOS_TOKEN;
-  const fallbackOutputToken = networksDefaultTokens[NETWORK_ID];
+  const fallbackOutputToken = DEFAULT_TOKEN;
   const inputTokenWithFallback = inputToken ?? fallbackInputToken;
   const outputTokenWithFallback = outputToken ?? fallbackOutputToken;
 

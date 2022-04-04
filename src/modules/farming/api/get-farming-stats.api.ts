@@ -1,4 +1,4 @@
-import { FARMING_API_URL } from '@config/config';
+import { FARMING_API_URL } from '@config/enviroment';
 
 import { FarmingStatsResponse } from '../interfaces';
 

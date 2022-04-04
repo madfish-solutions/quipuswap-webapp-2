@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_DEADLINE_MINS } from '@config/config';
+import { DEFAULT_DEADLINE_MINS } from '@config/constants';
 import { Nullable } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';

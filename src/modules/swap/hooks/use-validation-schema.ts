@@ -1,7 +1,12 @@
 import { BigNumber } from 'bignumber.js';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@config/config';
+import {
+  DEFAULT_DEADLINE_MINS,
+  MAX_DEADLINE_MINS,
+  MAX_SLIPPAGE_PERCENTAGE,
+  MIN_DEADLINE_MINS
+} from '@config/constants';
 import { useBalances } from '@providers/balances-provider';
 import { fromDecimals, getTokenSlug, isTezosToken } from '@shared/helpers';
 import { SwapTabAction, Token } from '@shared/types';

@@ -2,7 +2,7 @@ import { FoundDex, getLiquidityShare } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@config/config';
+import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@config/constants';
 import { fromDecimals, isTezIncluded } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 

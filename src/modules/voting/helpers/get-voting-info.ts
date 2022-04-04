@@ -1,7 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { fromDecimals } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 

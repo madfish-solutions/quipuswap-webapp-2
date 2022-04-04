@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/config';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/constants';
 import { fromDecimals, isNull, MakeInterval } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';

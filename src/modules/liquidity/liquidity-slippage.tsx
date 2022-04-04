@@ -5,11 +5,9 @@ import BigNumber from 'bignumber.js';
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
   MINIMUM_PRESET_AMOUNT_INPUT_VALUE,
-  NETWORK_ID,
-  networksDefaultTokens,
-  PRESET_AMOUNT_INPUT_DECIMALS,
-  TEZOS_TOKEN
-} from '@config/config';
+  PRESET_AMOUNT_INPUT_DECIMALS
+} from '@config/constants';
+import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { Tooltip, StateCurrencyAmount, NewPresetsAmountInput } from '@shared/components';
 import { useSlippage } from '@shared/dapp';
 import { getTokenSymbol } from '@shared/helpers';
@@ -60,7 +58,7 @@ export const LiquiditySlippage: FC<Props> = ({
   const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, slippage);
 
   const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
-  const DEFAULT_STABLE_TOKEN = networksDefaultTokens[NETWORK_ID];
+  const DEFAULT_STABLE_TOKEN = DEFAULT_TOKEN;
 
   return (
     <>

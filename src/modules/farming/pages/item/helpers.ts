@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { ZERO_ADDRESS } from '@config/config';
+import { ZERO_ADDRESS } from '@config/constants';
 import { FarmingItem } from '@modules/farming/interfaces';
 import { isTezosToken } from '@shared/helpers';
 import { Nullable, Optional, WhitelistedBaker } from '@shared/types';
