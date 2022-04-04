@@ -1,7 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import constate from 'constate';
 
-import { EXCHANGE_RATES_URL, IS_NETWORK_MAINNET, TEZOS_TOKEN } from '@config/config';
+import { IS_NETWORK_MAINNET } from '@config/config';
+import { EXCHANGE_RATES_URL } from '@config/enviroment';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { getTokenSlug } from '@shared/helpers';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { Standard } from '@shared/types';

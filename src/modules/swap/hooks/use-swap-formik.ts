@@ -1,7 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { getRouteWithInput, getTokenSlug, getTokenSymbol, toDecimals, getSwapMessage } from '@shared/helpers';
 import { swap } from '@shared/helpers/swap';

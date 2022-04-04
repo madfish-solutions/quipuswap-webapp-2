@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { MAX_HOPS_COUNT } from '@config/config';
+import { MAX_HOPS_COUNT } from '@config/constants';
 import { DexPair } from '@shared/types';
 
 import { getMarketQuotient, getTokenOutput } from '../dex';

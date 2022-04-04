@@ -2,7 +2,8 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@config/config';
+import { IS_NETWORK_MAINNET } from '@config/config';
+import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useTranslation } from '@translation';
 

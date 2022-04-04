@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE, DEFAULT_DEADLINE_MINS } from '@config/config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, DEFAULT_DEADLINE_MINS } from '@config/constants';
 
 const useDeadlineAndSlippage = () => {
   const slippagePresets = useMemo(

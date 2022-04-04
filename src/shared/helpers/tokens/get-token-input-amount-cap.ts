@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { TEZ_TO_LEAVE } from '@config/config';
+import { TEZ_TO_LEAVE } from '@config/constants';
 import { Optional, Token } from '@shared/types';
 
 import { isTezosToken } from '../get-token-appellation';

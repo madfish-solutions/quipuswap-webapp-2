@@ -4,7 +4,9 @@ import { FoundDex, findDex, estimateReward, getLiquidityShare } from '@quipuswap
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES, LP_TOKEN_DECIMALS, TEZOS_TOKEN } from '@config/config';
+import { FACTORIES } from '@config/config';
+import { LP_TOKEN_DECIMALS } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { fromDecimals } from '@shared/helpers';
 import { UseToasts } from '@shared/hooks';
 import { VoterType, QSNets, Nullable, TokenPair } from '@shared/types';

@@ -2,7 +2,8 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
 import { defined, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@shared/helpers';
 import { estimateSwapFee } from '@shared/helpers/swap';

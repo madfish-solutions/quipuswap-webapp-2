@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { DELAY_BEFORE_DATA_UPDATE } from '@config/config';
+import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
 import { useToasts } from '@shared/utils';

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { MIN_DEADLINE_MINS, MAX_DEADLINE_MINS } from '@config/config';
+import { MIN_DEADLINE_MINS, MAX_DEADLINE_MINS } from '@config/constants';
 import { i18n } from '@translation';
 
 export const validateDeadline = (deadline: BigNumber) => {

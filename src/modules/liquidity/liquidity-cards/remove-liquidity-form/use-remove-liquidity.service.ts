@@ -4,7 +4,8 @@ import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { noop } from 'rxjs';
 
-import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation, useDeadline, useSlippage } from '@shared/dapp';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@shared/helpers';

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT } from '@config/config';
+import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 

@@ -5,8 +5,8 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 import { noop } from 'rxjs';
 
-import { TEZOS_TOKEN } from '@config/config';
 import { AUTOSAVE_DEBOUNCE_MS, MOCK_LOADING_ARRAY, TAB_INDEX } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@providers/dapp-bakers';
 import { BakerCell, Input, LoadingBakerCell } from '@shared/components';

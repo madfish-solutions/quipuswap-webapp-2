@@ -2,15 +2,9 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
-import {
-  APP_NAME,
-  BASE_URL,
-  IS_NETWORK_MAINNET,
-  LAST_USED_ACCOUNT_KEY,
-  LAST_USED_CONNECTION_KEY,
-  NETWORK,
-  NETWORK_ID
-} from '@config/config';
+import { IS_NETWORK_MAINNET, NETWORK } from '@config/config';
+import { APP_NAME, BASE_URL, NETWORK_ID } from '@config/enviroment';
+import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoBeaconWallet, WalletNotConnected } from '@shared/errors';
 import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@shared/types';
 

@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Baker } from '@shared/svg';
 

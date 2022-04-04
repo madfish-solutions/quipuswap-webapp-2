@@ -1,4 +1,4 @@
-import { TEZOS_TOKEN } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { Token } from '@shared/types';
 
 export const findNotTezToken = (tokens: Token[]) =>
