@@ -4,15 +4,9 @@
 .root {
   display: none;
 }
-
 .footerItem {
   margin-bottom: 16px;
 }
-
-.button {
-  display: block;
-}
-
 @include media('>SDesktop') {
   .root {
     display: flex;
@@ -25,40 +19,33 @@
     overflow-y: scroll;
     padding-right: 0;
   }
-
   .root::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: transparent;
   }
-
   .root::-webkit-scrollbar {
     width: 8px;
     background-color: transparent;
   }
-
   .root::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: $hover-dark-row;
   }
-
   .wallet {
     display: flex;
     flex-direction: column;
     padding: 24px 16px;
     row-gap: 16px;
   }
-
   .select {
     & > div {
       & > div:nth-of-type(1) {
         height: 40px;
         justify-content: center;
-
         & > div:nth-of-type(1) {
           height: 36px;
           width: 155px;
           flex: none;
-
           & > div:nth-of-type(1) {
             display: flex;
             align-items: center;
@@ -67,49 +54,40 @@
       }
     }
   }
-
   .navigation {
     margin-bottom: auto;
   }
-
   .footer {
     margin: 32px 8px 4px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 180px;
     justify-content: space-between;
   }
-
   .light {
     border-right: 1px solid $ui-03;
     background-color: $ui-02;
-
     .wallet {
       border-bottom: 1px solid $ui-03;
     }
-
     .price {
       color: $text-01;
     }
   }
-
   .light::-webkit-scrollbar-thumb {
     background-color: $hover-light-row;
   }
-
   .dark {
     background-color: $ui-06;
     border-right: 1px solid $ui-07;
-
     .wallet {
       border-bottom: 1px solid $ui-07;
     }
-
     .price {
       color: $ui-01;
     }
   }
-
   .dark::-webkit-scrollbar-thumb {
     background-color: $hover-dark-row;
   }
