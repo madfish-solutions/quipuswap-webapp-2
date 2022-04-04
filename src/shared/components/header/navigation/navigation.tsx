@@ -72,16 +72,15 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                   );
                 } else {
                   return (
-                    <Link key={link.id} to={link.to ?? ''}>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a
-                        className={cx(styles.linkInner, modeClass[colorThemeMode])}
-                        target={link.target}
-                        rel="noreferrer noopener"
-                        onFocus={() => setIsInnerMenuOpened(true)}
-                      >
-                        {link.label}
-                      </a>
+                    <Link
+                      key={link.id}
+                      to={link.to ?? ''}
+                      className={cx(styles.linkInner, modeClass[colorThemeMode])}
+                      target={link.target}
+                      rel="noreferrer noopener"
+                      onFocus={() => setIsInnerMenuOpened(true)}
+                    >
+                      {link.label}
                     </Link>
                   );
                 }
