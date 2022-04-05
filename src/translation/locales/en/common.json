@@ -103,5 +103,6 @@
   "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.":"Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.",
   "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.": "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.",
   "Invalid output": "Invalid output",
-  "Available balance": "Available balance"
+  "Available balance": "Available balance",
+  "Support": "Support"
 }

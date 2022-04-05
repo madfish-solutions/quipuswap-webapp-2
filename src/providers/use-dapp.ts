@@ -3,10 +3,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
+import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
-import { APP_NAME, NETWORK_ID } from '@config/enviroment';
+import { APP_NAME, networksBaseUrls, NETWORK_ID } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
   ReadOnlySigner,
@@ -15,7 +16,8 @@ import {
   connectWalletTemple,
   getTempleWalletState,
   michelEncoder,
-  rpcClients
+  rpcClients,
+  isNull
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
 
@@ -36,10 +38,10 @@ export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
 
-// const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
+const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
 
 function useDApp() {
-  //   const router = useRouter();
+  const location = useLocation();
 
   const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
     useState<DAppType>({
@@ -241,15 +243,14 @@ function useDApp() {
         return;
       }
 
-      //TODO
-      //   const currentPath = router.asPath;
-      //   const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
-      //   if (isNull(urlWithSlugsRegexResult)) {
-      //     window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
-      //   } else {
-      //     const basePath = urlWithSlugsRegexResult[1];
-      //     window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}`;
-      //   }
+      const currentPath = location.pathname;
+      const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
+      if (isNull(urlWithSlugsRegexResult)) {
+        window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
+      } else {
+        const basePath = urlWithSlugsRegexResult[1];
+        window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}`;
+      }
 
       setState(prevState => ({
         ...prevState,
@@ -260,8 +261,7 @@ function useDApp() {
         isLoading: false
       }));
     },
-    //[router.asPath]
-    []
+    [location.pathname]
   );
 
   const estimationToolkit = useMemo(() => {
