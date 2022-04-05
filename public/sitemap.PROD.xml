@@ -35,6 +35,10 @@
         <loc>https://quipuswap.com/voting/veto</loc>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://quipuswap.com/farming</loc>
+        <priority>0.9</priority>
+    </url>
 
     <url>
         <loc>https://quipuswap.com/terms-of-service</loc>
