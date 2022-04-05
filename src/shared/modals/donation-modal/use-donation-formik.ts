@@ -8,7 +8,7 @@ import { TEZOS_TOKEN_DECIMALS, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@con
 import { useBalances } from '@providers/balances-provider';
 import { useTezos } from '@providers/use-dapp';
 import { defined, fromDecimals, prepareNumberAsString } from '@shared/helpers';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { numberAsStringSchema, makeNumberAsStringTestFn } from '@shared/validators';
 import { useTranslation } from '@translation';

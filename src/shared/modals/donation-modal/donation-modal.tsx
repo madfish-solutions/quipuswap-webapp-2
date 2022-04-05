@@ -11,7 +11,8 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { Button, TokenSelect, ConnectWalletButton } from '@shared/components';
 import { isExist, isNull } from '@shared/helpers';
-import { useGlobalModalsState, useOnBlock } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
+import { useOnBlock } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { Modal } from '../modal';

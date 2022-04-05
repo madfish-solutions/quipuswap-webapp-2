@@ -1,6 +1,6 @@
 import constate from 'constate';
 
-import { useSingleModalState } from './use-single-modal-state';
+import { useSingleModalState } from '../shared/hooks/use-single-modal-state';
 
 export const [GlobalModalsStateProvider, useGlobalModalsState] = constate(() => {
   const {
