@@ -75,14 +75,23 @@ export const Button: FC<ButtonProps> = ({
       ...(props as ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>> & { href: string })
     };
 
-    //TODO _blank
-    return (
-      <Link data-test-id={testId} to={anchorProps.href} {...anchorProps}>
-        {control}
-        {content}
-        {icon}
-      </Link>
-    );
+    if (anchorProps.target === '_blank') {
+      return (
+        <a data-test-id={testId} {...anchorProps}>
+          {control}
+          {content}
+          {icon}
+        </a>
+      );
+    } else {
+      return (
+        <Link data-test-id={testId} to={anchorProps.href} {...anchorProps}>
+          {control}
+          {content}
+          {icon}
+        </Link>
+      );
+    }
   }
 
   return (

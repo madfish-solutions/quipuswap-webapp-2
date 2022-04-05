@@ -29,20 +29,19 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     NAVIGATION_DATA.forEach(({ id, to, label, Icon, links }) => {
       if (to) {
         result.push(
-          <Link key={id} to={to}>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a
-              className={cx(
-                styles.link,
-                {
-                  [styles.active]: isActivePath(router.pathname, to)
-                },
-                modeClass[colorThemeMode]
-              )}
-            >
-              {Icon && <Icon className={styles.icon} id={iconId} />}
-              {label}
-            </a>
+          <Link
+            key={id}
+            to={to}
+            className={cx(
+              styles.link,
+              {
+                [styles.active]: isActivePath(router.pathname, to)
+              },
+              modeClass[colorThemeMode]
+            )}
+          >
+            {Icon && <Icon className={styles.icon} id={iconId} />}
+            {label}
           </Link>
         );
       }
@@ -58,19 +57,34 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               {label}
             </button>
             <span className={styles.linksInner}>
-              {links.map(link => (
-                <Link key={link.id} to={link.to ?? ''}>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a
-                    className={cx(styles.linkInner, modeClass[colorThemeMode])}
-                    target={link.target}
-                    rel="noreferrer noopener"
-                    onFocus={() => setIsInnerMenuOpened(true)}
-                  >
-                    {link.label}
-                  </a>
-                </Link>
-              ))}
+              {links.map(link => {
+                if (link.target === '_blank') {
+                  return (
+                    <a
+                      href={link.to}
+                      className={cx(styles.linkInner, modeClass[colorThemeMode])}
+                      target={link.target}
+                      rel="noreferrer noopener"
+                      onFocus={() => setIsInnerMenuOpened(true)}
+                    >
+                      {link.label}
+                    </a>
+                  );
+                } else {
+                  return (
+                    <Link
+                      key={link.id}
+                      to={link.to ?? ''}
+                      className={cx(styles.linkInner, modeClass[colorThemeMode])}
+                      target={link.target}
+                      rel="noreferrer noopener"
+                      onFocus={() => setIsInnerMenuOpened(true)}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                }
+              })}
             </span>
           </div>
         );

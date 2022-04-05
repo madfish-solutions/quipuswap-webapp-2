@@ -23,8 +23,6 @@ export const useFarmingItemPageViewModel = () => {
   const params = useParams();
 
   const rawStakeId = params.farmId;
-  // eslint-disable-next-line no-console
-  console.log(rawStakeId);
   /*
    Load data
   */
