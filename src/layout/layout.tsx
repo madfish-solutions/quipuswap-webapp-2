@@ -6,7 +6,7 @@ import { Sidebar, Header } from '@shared/components';
 import { GlobalModalsStateProvider } from '@shared/hooks';
 import { AccountModal, DonationModal, WalletModal } from '@shared/modals';
 import { Background } from '@shared/svg';
-import { ToastWrapper } from '@shared/utils';
+import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
 import styles from './layout.module.scss';
 import { useLayoutViewModel } from './use-layout.vm';
@@ -25,19 +25,21 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
     <>
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
-          <div className={styles.root}>
-            <Header />
-            <Sidebar className={styles.sidebar} />
-            <Background className={styles.background} />
-            <main className={cx(styles.wrapper, className)}>
-              <ToastWrapper />
-              {children}
-            </main>
-          </div>
+          <ConfirmationModalProvider>
+            <div className={styles.root}>
+              <Header />
+              <Sidebar className={styles.sidebar} />
+              <Background className={styles.background} />
+              <main className={cx(styles.wrapper, className)}>
+                <ToastWrapper />
+                {children}
+              </main>
+            </div>
 
-          <WalletModal />
-          <AccountModal />
-          <DonationModal />
+            <WalletModal />
+            <AccountModal />
+            <DonationModal />
+          </ConfirmationModalProvider>
         </GlobalModalsStateProvider>
       ) : (
         <div />
