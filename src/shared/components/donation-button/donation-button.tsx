@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import Ukraine from '@images/ukraine_outline.png';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useTranslation } from '@translation';
 
 import { Button } from '../button';

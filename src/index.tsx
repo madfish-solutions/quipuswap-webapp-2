@@ -10,7 +10,6 @@ import { DAppTokensProvider } from '@providers/dapp-tokens';
 import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppProvider } from '@providers/use-dapp';
 import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
-import { WalletWrapper } from '@providers/wallet-wrapper';
 import { DexGraphProvider } from '@shared/hooks';
 
 import App from './App';
@@ -27,11 +26,9 @@ render(
               <DAppBakerProvider>
                 <DAppTokensProvider>
                   <BalancesProvider>
-                    <WalletWrapper>
                       <DexGraphProvider>
                         <App />
                       </DexGraphProvider>
-                    </WalletWrapper>
                   </BalancesProvider>
                 </DAppTokensProvider>
               </DAppBakerProvider>

@@ -24,6 +24,11 @@ export const Switcher: FC<Props> = ({ onClick, disabled, value }) => {
     [styles.active]: Boolean(value),
     [styles.disabled]: Boolean(disabled)
   });
+  const onToggle = () => {
+    if (!disabled) {
+      onClick(!value);
+    }
+  };
 
-  return <div onClick={() => onClick(!value)} className={compoundClassName}></div>;
+  return <div onClick={onToggle} className={compoundClassName}></div>;
 };

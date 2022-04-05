@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
+import { isExist } from '@shared/helpers';
+
 import { en as enLocal } from './locales';
 type Params = Record<string, number | string>;
 
@@ -63,7 +65,7 @@ const t: TFunction = (localText, params?) => {
 
     const value = params[paramKey.trim()];
 
-    if (value) {
+    if (isExist(value)) {
       parsedParts.push(value);
     }
 

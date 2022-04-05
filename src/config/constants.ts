@@ -49,3 +49,5 @@ export const DEFAULT_DECIMALS = 6;
 export const LP_TOKEN_DECIMALS = 6;
 
 export const EMPTY_POOL_AMOUNT = 0;
+
+export const FIRST_TWO_DIGITS_NUMBER = 10;

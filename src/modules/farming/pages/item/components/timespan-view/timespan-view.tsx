@@ -3,6 +3,7 @@ import { Fragment, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
+import { FIRST_TWO_DIGITS_NUMBER } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DashPlug } from '@shared/components';
 import { parseTimelock } from '@shared/helpers';
@@ -26,7 +27,7 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-const FIRST_TWO_DIGITS_NUMBER = 10;
+
 const DASH_QUANTITY = 2;
 
 const formatValue = (time: number, shouldShow: Undefined<boolean>) => {
