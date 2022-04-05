@@ -2,14 +2,14 @@ import { FC } from 'react';
 
 import { AccountModal, WalletModal } from '@shared/modals';
 
-import { ConnectModalsStateProvider } from './use-connect-modals-state';
+import { GlobalModalsStateProvider } from './use-global-modals-state';
 
 export const WalletWrapper: FC = ({ children }) => {
   return (
-    <ConnectModalsStateProvider>
+    <GlobalModalsStateProvider>
       {children}
       <WalletModal />
       <AccountModal />
-    </ConnectModalsStateProvider>
+    </GlobalModalsStateProvider>
   );
 };

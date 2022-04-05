@@ -30,7 +30,7 @@ import { Button } from '@shared/components/button';
 import { PositionSelect } from '@shared/components/ComplexInput/PositionSelect';
 import { isAssetEqual, parseDecimals, isTezosToken } from '@shared/helpers';
 import { tokenDataToToken } from '@shared/helpers/token-data-to-token';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { VoteFormValues, Undefined } from '@shared/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@shared/validators';
 import s from '@styles/CommonContainer.module.scss';

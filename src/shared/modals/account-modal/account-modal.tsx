@@ -1,7 +1,7 @@
 import { FC, useCallback, useRef, useEffect, useState } from 'react';
 
 import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { CheckMark, Copy } from '@shared/svg';
 
 import { Button } from '../../components/button';

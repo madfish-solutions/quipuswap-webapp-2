@@ -8,7 +8,7 @@ import { useConnectWithBeacon, useConnectWithTemple } from '@providers/use-dapp'
 import { Button } from '@shared/components';
 import { Checkbox } from '@shared/elements';
 import { NoTempleWallet } from '@shared/errors';
-import { useGlobalModalsState } from '@shared/hooks';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';

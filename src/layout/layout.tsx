@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 
 import { Sidebar, Header } from '@shared/components';
-import { GlobalModalsStateProvider } from '@shared/hooks';
+import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { AccountModal, WalletModal } from '@shared/modals';
 import { Background } from '@shared/svg';
 import { ToastWrapper } from '@shared/utils';
