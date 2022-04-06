@@ -9,9 +9,9 @@ import Ukraine from '@images/ukraine_outline.png';
 import { useBalances } from '@providers/balances-provider';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button, TokenSelect, ConnectWalletButton } from '@shared/components';
 import { isExist, isNull } from '@shared/helpers';
-import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useOnBlock } from '@shared/hooks';
 import { useTranslation } from '@translation';
 

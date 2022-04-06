@@ -26,9 +26,9 @@ render(
               <DAppBakerProvider>
                 <DAppTokensProvider>
                   <BalancesProvider>
-                      <DexGraphProvider>
-                        <App />
-                      </DexGraphProvider>
+                    <DexGraphProvider>
+                      <App />
+                    </DexGraphProvider>
                   </BalancesProvider>
                 </DAppTokensProvider>
               </DAppBakerProvider>

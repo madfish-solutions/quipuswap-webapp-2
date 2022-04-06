@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import { useAccountPkh, useReady } from '@providers/use-dapp';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 
 import { shortize } from '../../helpers';
-import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button } from '../button';
 
 interface ConnectWalletButtonProps {

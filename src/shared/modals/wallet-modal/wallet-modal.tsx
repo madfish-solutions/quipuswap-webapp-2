@@ -5,10 +5,10 @@ import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 
 import { SAVED_TERMS_KEY } from '@config/localstorage';
 import { useConnectWithBeacon, useConnectWithTemple } from '@providers/use-dapp';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button } from '@shared/components';
 import { Checkbox } from '@shared/elements';
 import { NoTempleWallet } from '@shared/errors';
-import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
