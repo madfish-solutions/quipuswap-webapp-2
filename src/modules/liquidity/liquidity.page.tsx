@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { DEFAULT_TOKEN, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
+import { DEFAULT_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { DeadlineAndSlippageProvider } from '@shared/dapp';
 import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
@@ -13,7 +13,7 @@ import { LiquidityCards } from './liquidity-cards';
 import { getFullLiquidityUrl, parseUrl } from './liquidity-cards/helpers';
 
 const DEFAULT_TAB = 'add';
-const DEFAULT_LIQUIDITY_TOKEN_A = TEZOS_TOKEN_SYMBOL;
+const DEFAULT_LIQUIDITY_TOKEN_A = TEZOS_TOKEN_SLUG;
 const DEFAULT_LIQUIDITY_TOKEN_B = getTokenSlug(DEFAULT_TOKEN);
 
 interface LiquidityProps {
