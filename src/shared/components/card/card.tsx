@@ -47,7 +47,7 @@ export const Card: FC<Props> = ({
       {header && (
         <div className={cx(styles.header, header.className)}>
           {header.content}
-          {header.status ? <StatusLabel status={header.status} /> : null}
+          {header.status ? <StatusLabel filled status={header.status} /> : null}
           {header.button}
         </div>
       )}
