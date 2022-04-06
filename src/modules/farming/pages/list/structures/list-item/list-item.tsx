@@ -18,6 +18,7 @@ import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
 
 const ICON_SIZE = 48;
+const ZERO = 0;
 const LINKS_THEME = 'underlined';
 
 const themeClass = {
@@ -83,7 +84,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const shouldShowLockPeriod = !!Number(timelock);
 
   const withdrawalFeeLabel = withdrawalFee.toFixed();
-  const shouldShowWithdrawalFee = !withdrawalFee.eq(0);
+  const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
     <Card className={cx(styles.card, themeClass[colorThemeMode])}>

@@ -10,41 +10,35 @@
   padding-top: 64px;
 }
 
-.wrapper {
-  overflow: hidden;
-  padding: 24px;
+.sidebar {
+  min-width: 200px;
 }
 
-.background {
-  display: none;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: -1;
+.mainWrapper {
+  flex: 1;
+  padding: 0 24px;
 }
 
-@include media('>tablet') {
-  .background {
-    display: block;
-    left: 0;
-  }
+.light.mainWrapper {
+  background: top center url('../images/bg-white.png') repeat-x;
+  background-size: 75%;
+}
+
+.dark.mainWrapper {
+  background: top center url('../images/bg-dark.png') repeat-x;
+  background-size: 75%;
 }
 
 @include media('>SDesktop') {
   .root {
     flex-direction: row;
   }
-
+  .mainWrapper {
+    width: calc(100% - 200px)
+  }
   .wrapper {
-    width: calc(100% - 200px);
     max-width: 1236px;
     padding: 24px 32px 32px;
     margin: 0 auto;
-  }
-
-  .background {
-    display: block;
-    left: calc(50% + 200px);
-    transform: translateX(calc(-50% - 100px));
   }
 }
