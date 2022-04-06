@@ -26,7 +26,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    NAVIGATION_DATA.forEach(({ id, to, label, Icon, links }) => {
+    NAVIGATION_DATA.forEach(({ id, to, label, Icon, status, links }) => {
       if (to) {
         result.push(
           <Link
@@ -42,6 +42,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
           >
             {Icon && <Icon className={styles.icon} id={iconId} />}
             {label}
+            {status}
           </Link>
         );
       }
