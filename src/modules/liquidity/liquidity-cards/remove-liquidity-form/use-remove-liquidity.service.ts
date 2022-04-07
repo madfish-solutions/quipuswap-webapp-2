@@ -14,7 +14,7 @@ import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain/send-transaction';
 import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
-import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import { useLoadingDecorator, useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
 export const useRemoveLiquidityService = (
@@ -32,6 +32,7 @@ export const useRemoveLiquidityService = (
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
   const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { isLoading, decoratorFunction } = useLoadingDecorator();
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -201,6 +202,10 @@ export const useRemoveLiquidityService = (
     ]);
   };
 
+  const handleSubmit = () => {
+    decoratorFunction(handleRemoveLiquidity);
+  };
+
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
 
@@ -220,10 +225,11 @@ export const useRemoveLiquidityService = (
     share,
     isPoolNotExist,
     isTokenChanging,
+    isSubmiting: isLoading,
     setIsTokenChanging,
     handleChange,
     handleBalance,
     handleSetTokenPair,
-    handleRemoveLiquidity
+    handleSubmit
   };
 };

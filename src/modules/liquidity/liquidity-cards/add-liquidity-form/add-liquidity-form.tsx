@@ -35,16 +35,18 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     tokenAInput,
     tokenBInput,
     isPoolNotExist,
+    isSubmiting,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
     handleTokenBChange,
     handleTokenABalance,
     handleTokenBBalance,
-    handleAddLiquidity
+    handleSubmit
   } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   const isButtonDisabled =
+    isSubmiting ||
     isUndefined(dex) ||
     !accountPkh ||
     !tokenA ||
@@ -121,7 +123,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         />
       )}
       {accountPkh ? (
-        <Button className={styles.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
+        <Button className={styles.button} onClick={handleSubmit} disabled={isButtonDisabled} loading={isSubmiting}>
           Add
         </Button>
       ) : (
