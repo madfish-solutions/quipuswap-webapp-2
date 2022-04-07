@@ -1,13 +1,13 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { MAINNET_DEFAULT_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { useExchangeRates } from '@providers/use-new-exchange-rate';
+import { QuipuToken } from '@shared/svg';
 
-// import { MAINNET_DEFAULT_TOKEN } from '@config/config';
-
-import { QuipuToken } from '../../../svg';
 import styles from './qp-token.module.scss';
 
 const modeClass = {
@@ -24,20 +24,18 @@ const DEFAULT_PRECISION = 2;
 
 export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  // const exchangeRates = useExchangeRates();
+  const exchangeRates = useExchangeRates();
 
-  // const price = useMemo(() => {
-  //   if (!exchangeRates) {
-  //     return new BigNumber(NaN);
-  //   }
-  //   const rawExchangeRate = exchangeRates.find(
-  //     ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress
-  //   )?.exchangeRate;
+  const price = useMemo(() => {
+    if (!exchangeRates) {
+      return new BigNumber(NaN);
+    }
+    const rawExchangeRate = exchangeRates.find(
+      ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress
+    )?.exchangeRate;
 
-  //   return new BigNumber(rawExchangeRate || NaN);
-  // }, [exchangeRates]);
-
-  const price = new BigNumber(DEFAULT_PRECISION);
+    return new BigNumber(rawExchangeRate || NaN);
+  }, [exchangeRates]);
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
