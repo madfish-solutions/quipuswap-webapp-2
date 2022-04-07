@@ -28,9 +28,9 @@
   max-width: 327px;
   width: 100%;
   &.loading {
-    padding: 6px 12px;
-    -webkit-padding-before: 6px;
-    -webkit-padding-after: 6px;
+    padding: 6.442px 12px;
+    -webkit-padding-before: 6.028px;
+    -webkit-padding-after: 6.028px;
   }
 }
 .quaternary,
@@ -50,7 +50,7 @@
   &.loading {
     padding: 2px;
     .inner {
-      padding: 4px 22px;
+      padding: 4.028px 22px;
     }
   }
   .inner {
@@ -316,4 +316,4 @@
   100% {
     transform: rotate(360deg);
   }
-};
+}

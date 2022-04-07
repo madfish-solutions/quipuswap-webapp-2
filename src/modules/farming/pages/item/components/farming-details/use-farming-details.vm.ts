@@ -7,7 +7,7 @@ import { getDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
-import { bigNumberToString, multipliedIfPossible, getTokenSymbol } from '@shared/helpers';
+import { bigNumberToString, getTokenSymbol, getDollarEquivalent, getTimeLockDescription } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import s from '@styles/CommonContainer.module.scss';
 
@@ -44,6 +44,8 @@ export const useFarmingDetailsViewModel = () => {
       currentDelegate: null,
       nextDelegate: null,
       timelock: null,
+      timeLockLabel: '',
+      shouldShowTags: false,
       CardCellClassName,
       depositTokenDecimals: 0,
       stakeUrl: `${TZKT_EXPLORER_URL}/${FARMING_CONTRACT_ADDRESS}`,
@@ -78,15 +80,22 @@ export const useFarmingDetailsViewModel = () => {
 
   const dailyDistribution = bigNumberToString(getDailyDistribution(rewardPerSecond, rewardToken));
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
-    ? multipliedIfPossible(dailyDistribution, earnExchangeRate)
+    ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
     : null;
   const currentDelegate = makeBaker(farmingItem.currentDelegate, bakers);
   const nextDelegate = makeBaker(farmingItem.nextDelegate, bakers);
 
+  const timeLockLabel = getTimeLockDescription(timelock);
+
+  const shouldShowLockPeriod = timelock !== NO_TIMELOCK_VALUE;
+  const shouldShowWithdrawalFee = !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE);
+
+  const shouldShowTags = shouldShowLockPeriod || shouldShowWithdrawalFee;
+
   return {
     shouldShowDelegates: canDelegate(farmingItem),
-    shouldShowLockPeriod: timelock !== NO_TIMELOCK_VALUE,
-    shouldShowWithdrawalFee: !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE),
+    shouldShowLockPeriod,
+    shouldShowWithdrawalFee,
     endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent: tvlDollarEquivalent && bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
@@ -95,7 +104,10 @@ export const useFarmingDetailsViewModel = () => {
     dailyApr: apr ? bigNumberToString(apr.dividedBy(DAYS_IN_YEAR)) : null,
     currentDelegate,
     nextDelegate,
+    // TODO: Move it to mapping
     timelock: Number(timelock) * MS_IN_SECOND,
+    timeLockLabel,
+    shouldShowTags,
     CardCellClassName,
     depositTokenDecimals: stakedToken.metadata.decimals,
     stakeUrl,

@@ -8,7 +8,7 @@ import { Tooltip } from '../tooltip';
 
 interface DetailsCardCellProps {
   cellName: string;
-  tooltipContent: Nullable<string>;
+  tooltipContent?: Nullable<string>;
   className: string;
 }
 

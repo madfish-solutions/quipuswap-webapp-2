@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { Sidebar, Header } from '@shared/components';
 import { AccountModal, DonationModal, WalletModal } from '@shared/modals';
-import { Background } from '@shared/svg';
 import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
 import styles from './layout.module.scss';
@@ -19,7 +18,7 @@ interface LayoutProps {
 }
 
 export const Layout: FC<LayoutProps> = ({ title, description, image, className, children }) => {
-  const { isComponentDidMount } = useLayoutViewModel();
+  const { isComponentDidMount, isDarkTheme } = useLayoutViewModel();
 
   return (
     <>
@@ -29,11 +28,12 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
             <div className={styles.root}>
               <Header />
               <Sidebar className={styles.sidebar} />
-              <Background className={styles.background} />
-              <main className={cx(styles.wrapper, className)}>
-                <ToastWrapper />
-                {children}
-              </main>
+              <div className={cx(styles.mainWrapper, isDarkTheme ? styles.dark : styles.light)}>
+                <main className={cx(styles.wrapper, className)}>
+                  <ToastWrapper />
+                  {children}
+                </main>
+              </div>
             </div>
 
             <WalletModal />
