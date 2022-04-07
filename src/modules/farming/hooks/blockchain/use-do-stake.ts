@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { stakeTokenApi } from '@modules/farming/api/stake-token.api';
+import { stakeAssetsApi } from '@modules/farming/api/stake-assets.api';
 import { FarmingItem } from '@modules/farming/interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
@@ -17,7 +17,7 @@ export const useDoStake = () => {
   const doStake = useCallback(
     async (farmingItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
       try {
-        const operation = await stakeTokenApi(
+        const operation = await stakeAssetsApi(
           defined(rootStore.tezos),
           tokenAddress,
           defined(rootStore.authStore.accountPkh),

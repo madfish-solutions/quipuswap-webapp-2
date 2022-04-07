@@ -1,3 +1,4 @@
+import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
@@ -12,5 +13,9 @@ export const unstakeAssetsApi = async (
   const farmingParams = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
   const withdrawParams = farmingParams.methods.withdraw(farmingId, amount, accountPkh, accountPkh);
 
-  return await withdrawParams.send();
+  return await batchify(tezos.wallet.batch([]), [
+    withdrawParams.toTransferParams({
+      storageLimit: 250
+    })
+  ]).send();
 };

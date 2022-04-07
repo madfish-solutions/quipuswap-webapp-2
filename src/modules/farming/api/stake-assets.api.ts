@@ -6,7 +6,7 @@ import { Token } from '@shared/types';
 
 import { withApproveApi } from './with-approve-api';
 
-export const stakeTokenApi = async (
+export const stakeAssetsApi = async (
   tezos: TezosToolkit,
   token: Token,
   accountPkh: string,
@@ -17,7 +17,7 @@ export const stakeTokenApi = async (
   const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
   const farmingParams = farmingContract.methods
     .deposit(farmingId, amount, FARMING_REFERRER_CONTRACT, accountPkh, bakerAddress)
-    .toTransferParams();
+    .toTransferParams({ storageLimit: 750 });
 
   return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, farmingParams);
 };
