@@ -406,6 +406,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 
   return (
     <>
+      <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
@@ -516,7 +517,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 export const SwapSend = (props: SwapSendProps) => {
   return (
     <SwapLimitsProvider>
-      <TestnetAlert />
       <OrdinarySwapSend {...props} />
     </SwapLimitsProvider>
   );
