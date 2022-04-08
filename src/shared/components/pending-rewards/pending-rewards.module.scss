@@ -35,6 +35,24 @@
   line-height: 1.5;
 }
 
+.statesOfCurrencysAmount {
+  display: flex;
+}
+
+.fullRewards {
+  display: inline-block;
+}
+
+.slash {
+  margin: 0 4px;
+}
+
+.bigSlash {
+  margin: 0 4px;
+  font-size: 16px;
+  color: $text-03;
+}
+
 .light {
   &.reward {
     border: 2px dashed $hover-primary-01-fallback;
@@ -65,5 +83,9 @@
   .amount {
     max-width: 208px;
     font-size: 1.714rem;
+  }
+
+  .bigSlash {
+    font-size: 24px;
   }
 }
