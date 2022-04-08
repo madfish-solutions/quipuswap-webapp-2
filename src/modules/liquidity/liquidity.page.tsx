@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DEFAULT_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
-import { PageTitle, StickyBlock } from '@shared/components';
+import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { DeadlineAndSlippageProvider } from '@shared/dapp';
 import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
@@ -53,6 +53,7 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
 
   return (
     <DeadlineAndSlippageProvider>
+      <TestnetAlert />
       <PageTitle>
         {t('common|Liquidity')} {title}
       </PageTitle>
