@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { StickyBlock, PageTitle } from '@shared/components';
+import { StickyBlock, PageTitle, TestnetAlert } from '@shared/components';
 import { getTokensOptionalPairName } from '@shared/helpers';
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -20,6 +20,8 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
 
   return (
     <Fragment>
+      <TestnetAlert />
+
       <PageTitle>{title}</PageTitle>
 
       <VotingStats className={s.votingStats} />

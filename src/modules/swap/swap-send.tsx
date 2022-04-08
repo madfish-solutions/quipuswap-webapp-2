@@ -18,7 +18,8 @@ import {
   StickyBlock,
   SwapButton,
   SwapDeadline,
-  Tabs
+  Tabs,
+  TestnetAlert
 } from '@shared/components';
 import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
 import complexInputStyles from '@shared/components/ComplexInput/ComplexInput.module.scss';
@@ -405,6 +406,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 
   return (
     <>
+      <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
