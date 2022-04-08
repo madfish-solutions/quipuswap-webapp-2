@@ -9,12 +9,13 @@ import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation, useDeadline, useSlippage } from '@shared/dapp';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@shared/helpers';
+import { useLoadingDecorator } from '@shared/hooks';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain/send-transaction';
 import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
-import { useLoadingDecorator, useLoadTokenBalance, usePairInfo } from '../hooks';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
 export const useRemoveLiquidityService = (
@@ -32,7 +33,6 @@ export const useRemoveLiquidityService = (
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
   const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
-  const { isLoading, decoratorFunction } = useLoadingDecorator();
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -146,7 +146,7 @@ export const useRemoveLiquidityService = (
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
-  const handleRemoveLiquidity = async () => {
+  const [isLoading, handleRemoveLiquidity] = useLoadingDecorator(async () => {
     if (!tezos || !accountPkh || !pairInfo || !dex || !tokenA || !tokenB) {
       return;
     }
@@ -200,11 +200,7 @@ export const useRemoveLiquidityService = (
       updateLiquidityShares(dex, tokenA, tokenB),
       updatePairInfo(dex, tokenA, tokenB)
     ]);
-  };
-
-  const handleSubmit = () => {
-    decoratorFunction(handleRemoveLiquidity);
-  };
+  });
 
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
@@ -230,6 +226,6 @@ export const useRemoveLiquidityService = (
     handleChange,
     handleBalance,
     handleSetTokenPair,
-    handleSubmit
+    handleRemoveLiquidity
   };
 };

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-import { useToasts } from '@shared/hooks';
+import { useToasts } from './use-toasts';
 
-export const useLoadingDecorator = () => {
+export const useLoadingDecorator = (func: () => Promise<void>) => {
   const { showErrorToast } = useToasts();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const decoratorFunction = async (func: () => Promise<void>) => {
+  const decoratorFunction = async () => {
     setIsLoading(true);
     try {
       return await func();
@@ -18,8 +18,7 @@ export const useLoadingDecorator = () => {
     }
   };
 
-  return {
-    isLoading,
-    decoratorFunction
-  };
+  const result: [boolean, () => Promise<void>] = [isLoading, decoratorFunction];
+
+  return result;
 };

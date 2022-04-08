@@ -23,6 +23,7 @@ import {
   isUndefined,
   toDecimals
 } from '@shared/helpers';
+import { useLoadingDecorator } from '@shared/hooks';
 import { Nullable, Optional, Undefined, Token } from '@shared/types';
 
 import {
@@ -32,7 +33,7 @@ import {
   initializeLiquidityTez
 } from '../blockchain/send-transaction';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
-import { useLoadingDecorator, useLoadTokenBalance, usePairInfo } from '../hooks';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
@@ -63,7 +64,6 @@ export const useAddLiquidityService = (
     clearBalance: clearBalanceB
   } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
-  const { isLoading, decoratorFunction } = useLoadingDecorator();
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
@@ -387,7 +387,7 @@ export const useAddLiquidityService = (
     await Promise.all([updateTokenABalance(tokenA), updateTokenBBalance(tokenB)]);
   };
 
-  const handleAddLiquidity = async () => {
+  const [isLiquidityLoading, handleAddLiquidity] = useLoadingDecorator(async () => {
     if (isExist(dex) && dex.contract.address === TOKEN_TO_TOKEN_DEX) {
       await investTokenToToken();
 
@@ -395,11 +395,7 @@ export const useAddLiquidityService = (
     }
 
     await investTezosToToken();
-  };
-
-  const handleSubmit = async () => {
-    decoratorFunction(handleAddLiquidity);
-  };
+  });
 
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
@@ -415,13 +411,13 @@ export const useAddLiquidityService = (
     tokenAInput,
     tokenBInput,
     isPoolNotExist,
-    isSubmiting: isLoading,
+    isSubmiting: isLiquidityLoading,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
     handleTokenBChange,
     handleTokenABalance,
     handleTokenBBalance,
-    handleSubmit
+    handleAddLiquidity
   };
 };
