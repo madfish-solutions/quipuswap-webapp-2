@@ -15,7 +15,7 @@ export const FarmingRewardsList: FC = observer(() => {
 
   return (
     <RewardInfo
-      amount={farmingListStore.pendingRewards}
+      amount={farmingListStore.claimablePendingRewards}
       onButtonClick={handleHarvestAll}
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={harvestAllTranslation}
