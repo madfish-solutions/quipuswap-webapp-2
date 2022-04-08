@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
+import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
@@ -16,7 +16,7 @@ interface DexDashboardInnerProps {
   totalLiquidity: Nullable<string> | undefined;
   xtzUsdQuote: Nullable<string> | undefined;
   volume24: Nullable<string> | undefined;
-  trasactionsCount24h: number | undefined;
+  transactionsCount24h: Nullable<number> | undefined;
   totalSupply?: BigNumber;
   loading?: boolean;
 }
@@ -31,7 +31,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   xtzUsdQuote,
   totalSupply,
   volume24,
-  trasactionsCount24h,
+  transactionsCount24h,
   loading = false
 }) => {
   const { t } = useTranslation(['home']);
@@ -39,11 +39,11 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tvl = isExist(totalLiquidity) && isExist(xtzUsdQuote) ? calculateRateAmount(totalLiquidity, xtzUsdQuote) : null;
   const volume24h = isExist(volume24) && isExist(xtzUsdQuote) ? calculateRateAmount(volume24, xtzUsdQuote) : null;
-  const transactions24h = trasactionsCount24h?.toString() ?? null;
+  const transactions24h = transactionsCount24h?.toString() ?? null;
 
   return (
     <>
-      {IS_NETWORK_MAINNET ? (
+      {IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? (
         <>
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
