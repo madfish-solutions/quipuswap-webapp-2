@@ -1,14 +1,21 @@
 import { FC } from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import { Voting as VotingPage } from './voting';
+import { VotingProvider } from './helpers/voting.provider';
+import { VotingInner } from './voting-inner';
 
-export const Voting: FC = () => {
+interface VotingProps {
+  className?: string;
+}
+
+export const VotingPage: FC<VotingProps> = ({ className }) => {
   return (
-    <Routes>
-      <Route path="/" element={<VotingPage />} />
-      <Route path=":method" element={<VotingPage />} />
-    </Routes>
+    <VotingProvider>
+      <Routes>
+        <Route path="/" element={<VotingInner className={className} />} />
+        <Route path=":method/:fromTo" element={<VotingInner className={className} />} />
+      </Routes>
+    </VotingProvider>
   );
 };

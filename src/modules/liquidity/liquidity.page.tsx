@@ -32,12 +32,12 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
 
   useEffect(() => {
     if (!tabId || !tokenAFromUrl || !tokenBFromUrl) {
-      const url = getFullLiquidityUrl(
+      const _url = getFullLiquidityUrl(
         tabId || DEFAULT_TAB,
         tokenAFromUrl || DEFAULT_LIQUIDITY_TOKEN_A,
         tokenBFromUrl || DEFAULT_LIQUIDITY_TOKEN_B
       );
-      navigate(url, { replace: true });
+      navigate(_url, { replace: true });
     }
   }, [navigate, tabId, tokenAFromUrl, tokenBFromUrl]);
 

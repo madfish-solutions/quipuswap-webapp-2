@@ -74,59 +74,59 @@ export const useAddLiquidityService = (
   const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   const tokensCalculations = (
-    tokenAInput: string,
-    tokenBInput: string,
-    tokenA: Token,
-    tokenB: Token,
-    pairInfo: Optional<PairInfo>,
-    tokenABalance: Nullable<BigNumber>,
-    tokenBBalance: Nullable<BigNumber>,
-    setTokenAInput: Dispatch<SetStateAction<string>>,
-    setTokenBInput: Dispatch<SetStateAction<string>>,
-    setValidationMessageTokenA: Dispatch<SetStateAction<Undefined<string>>>,
-    setValidationMessageTokenB: Dispatch<SetStateAction<Undefined<string>>>
+    _tokenAInput: string,
+    _tokenBInput: string,
+    _tokenA: Token,
+    _tokenB: Token,
+    _pairInfo: Optional<PairInfo>,
+    _tokenABalance: Nullable<BigNumber>,
+    _tokenBBalance: Nullable<BigNumber>,
+    _setTokenAInput: Dispatch<SetStateAction<string>>,
+    _setTokenBInput: Dispatch<SetStateAction<string>>,
+    _setValidationMessageTokenA: Dispatch<SetStateAction<Undefined<string>>>,
+    _setValidationMessageTokenB: Dispatch<SetStateAction<Undefined<string>>>
   ) => {
-    setTokenAInput(tokenAInput);
+    _setTokenAInput(_tokenAInput);
 
-    if (tokenAInput === '') {
-      setTokenBInput('');
-      setValidationMessageTokenA(undefined);
-      setValidationMessageTokenB(undefined);
+    if (_tokenAInput === '') {
+      _setTokenBInput('');
+      _setValidationMessageTokenA(undefined);
+      _setValidationMessageTokenB(undefined);
 
       return;
     }
-    const tokenABN = new BigNumber(tokenAInput);
+    const tokenABN = new BigNumber(_tokenAInput);
 
-    const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
-    const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
+    const { decimals: decimalsA, symbol: symbolA } = _tokenA.metadata;
+    const { decimals: decimalsB, symbol: symbolB } = _tokenB.metadata;
 
     const maxTokenAInput =
-      tokenABalance && BigNumber.maximum(tokenABalance.minus(getTokenInputAmountCap(tokenA)), EMPTY_BALANCE_AMOUNT);
-    const validationA = validations(accountPkh, tokenABN, maxTokenAInput, tokenAInput, decimalsA, symbolA);
-    setValidationMessageTokenA(validationA);
+      _tokenABalance && BigNumber.maximum(_tokenABalance.minus(getTokenInputAmountCap(_tokenA)), EMPTY_BALANCE_AMOUNT);
+    const validationA = validations(accountPkh, tokenABN, maxTokenAInput, _tokenAInput, decimalsA, symbolA);
+    _setValidationMessageTokenA(validationA);
 
-    if (isPoolNotExist || !pairInfo) {
+    if (isPoolNotExist || !_pairInfo) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
+    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = _pairInfo;
 
     const isTokensOrderValid =
-      tokenA.contractAddress === pairTokenA.contractAddress && tokenA.fa2TokenId === pairTokenA.fa2TokenId;
+      _tokenA.contractAddress === pairTokenA.contractAddress && _tokenA.fa2TokenId === pairTokenA.fa2TokenId;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
-    const tokenBAmount = calculatePoolAmount(tokenABN, tokenA, tokenB, validTokenAPool, validTokenBPool);
+    const tokenBAmount = calculatePoolAmount(tokenABN, _tokenA, _tokenB, validTokenAPool, validTokenBPool);
 
     const maxTokenBInput =
-      tokenBBalance && BigNumber.maximum(tokenBBalance.minus(getTokenInputAmountCap(tokenB)), EMPTY_BALANCE_AMOUNT);
+      _tokenBBalance && BigNumber.maximum(_tokenBBalance.minus(getTokenInputAmountCap(_tokenB)), EMPTY_BALANCE_AMOUNT);
     const validationB = tokenBAmount
-      ? validations(accountPkh, tokenBAmount, maxTokenBInput, tokenBInput, decimalsB, symbolB)
+      ? validations(accountPkh, tokenBAmount, maxTokenBInput, _tokenBInput, decimalsB, symbolB)
       : undefined;
 
-    setValidationMessageTokenB(validationB);
+    _setValidationMessageTokenB(validationB);
 
-    setTokenBInput(tokenBAmount ? tokenBAmount.toFixed() : '');
+    _setTokenBInput(tokenBAmount ? tokenBAmount.toFixed() : '');
   };
 
   useEffect(() => {

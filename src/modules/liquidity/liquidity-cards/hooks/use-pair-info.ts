@@ -13,22 +13,25 @@ import { checkIsPoolNotExists, getTezTokenPairInfo } from '../helpers';
 export const usePairInfo = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const [pairInfo, setPairInfo] = useState<Optional<PairInfo>>(undefined);
 
-  const getPairInfo = useCallback(async (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
-    if (isUndefined(dex)) {
-      return undefined;
-    }
+  const getPairInfo = useCallback(
+    async (_dex: Optional<FoundDex>, _tokenA: Nullable<Token>, _tokenB: Nullable<Token>) => {
+      if (isUndefined(_dex)) {
+        return undefined;
+      }
 
-    if (isNull(dex) || isNull(tokenA) || isNull(tokenB)) {
-      return null;
-    }
+      if (isNull(_dex) || isNull(_tokenA) || isNull(_tokenB)) {
+        return null;
+      }
 
-    return dex.contract.address === TOKEN_TO_TOKEN_DEX
-      ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
-      : getTezTokenPairInfo(dex, tokenA, tokenB);
-  }, []);
+      return _dex.contract.address === TOKEN_TO_TOKEN_DEX
+        ? await loadTokenToTokenPairInfo(_dex, _tokenA, _tokenB)
+        : getTezTokenPairInfo(_dex, _tokenA, _tokenB);
+    },
+    []
+  );
 
-  const loadPairInfo = async (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) =>
-    setPairInfo(await getPairInfo(dex, tokenA, tokenB));
+  const loadPairInfo = async (_dex: Optional<FoundDex>, _tokenA: Nullable<Token>, _tokenB: Nullable<Token>) =>
+    setPairInfo(await getPairInfo(_dex, _tokenA, _tokenB));
 
   useEffect(() => {
     void loadPairInfo(dex, tokenA, tokenB);

@@ -92,13 +92,13 @@ export const useLiquidityFormService = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, url, tokens, searchCustomTokens]);
 
-  const changeRoute = async (tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
-    const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
+  const changeRoute = async (_tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
+    const liqUrl = getLiquidityUrl(_tabId || tab.id, _tokenA, _tokenB);
     navigate(liqUrl);
   };
 
-  const handleChangeTab = (tabId: LiquidityTabs) => {
-    const newTab = getTabById(tabId);
+  const handleChangeTab = (_tabId: LiquidityTabs) => {
+    const newTab = getTabById(_tabId);
 
     setTab(newTab);
 

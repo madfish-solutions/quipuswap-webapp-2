@@ -154,7 +154,7 @@ export const FarmingDetails: FC = observer(() => {
           className={CardCellClassName}
         >
           <StateData isLoading={isLoading} data={withdrawalFee}>
-            {withdrawalFee => <StatePercentage isLoading={false} value={withdrawalFee} />}
+            {_withdrawalFee => <StatePercentage isLoading={false} value={_withdrawalFee} />}
           </StateData>
         </DetailsCardCell>
       )}
@@ -165,7 +165,7 @@ export const FarmingDetails: FC = observer(() => {
         className={CardCellClassName}
       >
         <StateData isLoading={isLoading} data={harvestFee}>
-          {harvestFee => <StatePercentage isLoading={false} value={harvestFee} />}
+          {_harvestFee => <StatePercentage isLoading={false} value={_harvestFee} />}
         </StateData>
       </DetailsCardCell>
 
