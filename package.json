@@ -8,7 +8,7 @@
     "dev:ithacanet": "cross-env REACT_APP_NETWORK=ithacanet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3003 craco start",
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
     "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
-    "build": "PUBLIC=true yarn pre-build && craco build",
+    "build": "yarn pre-build && craco build",
     "start": "yarn dev:mainnet",
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",
