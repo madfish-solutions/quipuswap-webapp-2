@@ -2,19 +2,15 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { FARM_REWARD_UPDATE_INTERVAL } from '@config/constants';
-import { fromDecimals, isExist, isNull, MakeInterval, multipliedIfPossible } from '@shared/helpers';
+import { isExist, isNull, MakeInterval } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingStatsApi } from '../api';
-import {
-  getEndTimestamp,
-  getIsHarvestAvailable,
-  getUserInfoLastStakedTime,
-  getUserPendingReward,
-  UsersInfoValueWithId
-} from '../helpers';
+import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime, UsersInfoValueWithId } from '../helpers';
+import { getPendingRewards } from '../helpers/get-pending-rewards';
+import { getRewardsInUsd } from '../helpers/get-rewards-in-usd';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
 
@@ -39,7 +35,8 @@ export class FarmingListStore {
     mapFarmingStats
   );
 
-  pendingRewards: Nullable<BigNumber> = null;
+  claimablePendingRewards: Nullable<BigNumber> = null;
+  totalPendingRewards: Nullable<BigNumber> = null;
 
   readonly updateUserInfoInterval = new MakeInterval(
     async () => await this.userInfo.load(),
@@ -49,7 +46,8 @@ export class FarmingListStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      pendingRewards: observable,
+      claimablePendingRewards: observable,
+      totalPendingRewards: observable,
       list: computed,
 
       updatePendingRewards: action
@@ -87,29 +85,31 @@ export class FarmingListStore {
   }
 
   updatePendingRewards() {
-    const rewardsInUsd = this.listStore.data
-      .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
-      .filter(farmingItem => {
+    const isBalanceLoaded = this.listStore.data.some(({ earnBalance }) => isExist(earnBalance));
+
+    if (!isBalanceLoaded || !this.userInfo.data) {
+      this.totalPendingRewards = null;
+      this.claimablePendingRewards = null;
+    } else {
+      const stakedFarmings = this.listStore.data.filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT));
+
+      const claimableFarmings = stakedFarmings.filter(farmingItem => {
         const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
         const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
 
         return getIsHarvestAvailable(endTimestamp);
-      })
-      .map(farmingItem => {
-        const userInfo = this.findUserInfo(farmingItem);
-        const rewards = userInfo && getUserPendingReward(userInfo, farmingItem);
-        const earnBalance = rewards && fromDecimals(rewards, farmingItem.rewardToken);
-
-        return multipliedIfPossible(earnBalance, farmingItem.earnExchangeRate);
       });
 
-    this.pendingRewards = rewardsInUsd.some(isExist)
-      ? rewardsInUsd.reduce<BigNumber>(
-          (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
-          new BigNumber(ZERO_AMOUNT)
-        )
-      : this.listStore.data.filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT)).some(isExist)
-      ? new BigNumber(ZERO_AMOUNT)
-      : null;
+      const totalRewardsInUsd = stakedFarmings.map(farmingItem =>
+        getRewardsInUsd(farmingItem, this.findUserInfo(farmingItem))
+      );
+
+      const claimableRewardsInUsd = claimableFarmings.map(farmingItem =>
+        getRewardsInUsd(farmingItem, this.findUserInfo(farmingItem))
+      );
+
+      this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
+      this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
+    }
   }
 }

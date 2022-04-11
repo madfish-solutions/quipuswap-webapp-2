@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { USD_DECIMALS } from '@config/constants';
+import { useFarmingListStore } from '@modules/farming/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
@@ -12,7 +13,6 @@ import { useTranslation } from '@translation';
 import { DataTestAttribute } from 'tests/types';
 
 import { StateCurrencyAmount } from '../state-components';
-import { Tooltip } from '../tooltip';
 import styles from './pending-rewards.module.scss';
 
 const modeClass = {
@@ -39,6 +39,8 @@ export const PendingRewards: FC<Props> = ({
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const farmingListStore = useFarmingListStore();
+  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
 
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
@@ -46,18 +48,33 @@ export const PendingRewards: FC<Props> = ({
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>{t('farm|Your Claimable Rewards')}</span>
-              {tooltip && <Tooltip content={tooltip} />}
+              <span className={styles.title}>
+                {t('farm|Your Claimable')}
+                <span className={styles.slash}>{'/'}</span>
+                <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
+              </span>
             </div>
-            <StateCurrencyAmount
-              className={styles.amount}
-              amount={amount}
-              currency={currency}
-              dollarEquivalent={dollarEquivalent}
-              amountDecimals={amountDecimals}
-              isLeftCurrency={currency === '$'}
-              testId={testId}
-            />
+            <div className={styles.statesOfCurrencysAmount}>
+              <StateCurrencyAmount
+                className={styles.amount}
+                amount={claimablePendingRewards}
+                currency={currency}
+                dollarEquivalent={dollarEquivalent}
+                amountDecimals={amountDecimals}
+                isLeftCurrency={currency === '$'}
+                testId={testId}
+              />
+              <div className={styles.bigSlash}>{'/'}</div>
+              <StateCurrencyAmount
+                className={styles.amount}
+                amount={totalPendingRewards}
+                currency={currency}
+                dollarEquivalent={dollarEquivalent}
+                amountDecimals={amountDecimals}
+                isLeftCurrency={currency === '$'}
+                testId={testId}
+              />
+            </div>
           </>
         ) : (
           <span className={styles.amount}>{t('farm|Earn extra income with QuipuSwap')}</span>

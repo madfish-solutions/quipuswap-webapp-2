@@ -18,7 +18,8 @@ import {
   StickyBlock,
   SwapButton,
   SwapDeadline,
-  Tabs
+  Tabs,
+  TestnetAlert
 } from '@shared/components';
 import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
 import complexInputStyles from '@shared/components/ComplexInput/ComplexInput.module.scss';
@@ -69,6 +70,7 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const {
     errors,
+    isSubmitting,
     values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
     validateField,
     setValues,
@@ -405,6 +407,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 
   return (
     <>
+      <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
@@ -486,13 +489,19 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           </div>
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
-          {accountPkh && dataIsStale && (
+          {accountPkh && dataIsStale && !isSubmitting && (
             <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={styles.button}>
               {t('swap|Update Rates')}
             </Button>
           )}
-          {accountPkh && !dataIsStale && (
-            <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={styles.button}>
+          {accountPkh && (!dataIsStale || isSubmitting) && (
+            <Button
+              disabled={submitDisabled}
+              loading={isSubmitting}
+              type="submit"
+              onClick={handleSubmit}
+              className={styles.button}
+            >
               {currentTabLabel}
             </Button>
           )}
