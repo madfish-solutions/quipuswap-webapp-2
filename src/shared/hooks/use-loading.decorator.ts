@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useToasts } from './use-toasts';
 
-export const useLoadingDecorator = (func: () => Promise<void>) => {
+export const useLoadingDecorator = (func: <T>() => Promise<T>) => {
   const { showErrorToast } = useToasts();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const decoratorFunction = async () => {
+  const decoratorFunction = useCallback<() => Promise<void>>(async () => {
     setIsLoading(true);
     try {
       return await func();
@@ -16,9 +16,7 @@ export const useLoadingDecorator = (func: () => Promise<void>) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [func, showErrorToast]);
 
-  const result: [boolean, () => Promise<void>] = [isLoading, decoratorFunction];
-
-  return result;
+  return [isLoading, decoratorFunction];
 };
