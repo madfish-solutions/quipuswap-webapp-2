@@ -28,14 +28,7 @@ interface Props extends DataTestAttribute {
   tooltip?: string;
 }
 
-export const PendingRewards: FC<Props> = ({
-  amount,
-  currency,
-  tooltip,
-  testId,
-  dollarEquivalent,
-  amountDecimals = USD_DECIMALS
-}) => {
+export const PendingRewards: FC<Props> = ({ currency, testId, dollarEquivalent, amountDecimals = USD_DECIMALS }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);

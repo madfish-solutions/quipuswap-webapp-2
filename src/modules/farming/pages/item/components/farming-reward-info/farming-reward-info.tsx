@@ -62,6 +62,7 @@ export const FarmingRewardInfo: FC = observer(() => {
       rewardButtonAttributeTestId={FarmingItemPandingReward.HARVEST_BUTTON}
       pendingRewardAttributeTestId={FarmingItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
+      claimableOnly
     >
       <FarmingStatsItem
         itemName={t('farm|Your Share')}

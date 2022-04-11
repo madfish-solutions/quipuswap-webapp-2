@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { Button, Card, ConnectWalletOrDoSomething, PendingRewards } from '@shared/components';
+import { ClaimableRewards } from '@shared/components/claimable_rewards';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
@@ -24,6 +25,7 @@ interface Props {
   };
   rewardTooltip?: string;
   disabled?: boolean;
+  claimableOnly?: boolean;
   rewardButtonAttributeTestId: string;
   pendingRewardAttributeTestId: string;
 }
@@ -43,6 +45,7 @@ export const RewardInfo: FC<Props> = ({
   disabled,
   rewardButtonAttributeTestId,
   pendingRewardAttributeTestId,
+  claimableOnly,
   children
 }) => {
   const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS) || disabled;
@@ -50,14 +53,25 @@ export const RewardInfo: FC<Props> = ({
   return (
     <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
-        <PendingRewards
-          testId={pendingRewardAttributeTestId}
-          amount={amount}
-          dollarEquivalent={dollarEquivalent}
-          amountDecimals={amountDecimals}
-          currency={currency}
-          tooltip={rewardTooltip}
-        />
+        {claimableOnly ? (
+          <ClaimableRewards
+            testId={pendingRewardAttributeTestId}
+            amount={amount}
+            dollarEquivalent={dollarEquivalent}
+            amountDecimals={amountDecimals}
+            currency={currency}
+            tooltip={rewardTooltip}
+          />
+        ) : (
+          <PendingRewards
+            testId={pendingRewardAttributeTestId}
+            amount={amount}
+            dollarEquivalent={dollarEquivalent}
+            amountDecimals={amountDecimals}
+            currency={currency}
+            tooltip={rewardTooltip}
+          />
+        )}
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>
