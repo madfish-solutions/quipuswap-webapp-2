@@ -23,6 +23,7 @@ import {
   isUndefined,
   toDecimals
 } from '@shared/helpers';
+import { useLoadingDecorator } from '@shared/hooks';
 import { Nullable, Optional, Undefined, Token } from '@shared/types';
 
 import {
@@ -386,13 +387,15 @@ export const useAddLiquidityService = (
     await Promise.all([updateTokenABalance(tokenA), updateTokenBBalance(tokenB)]);
   };
 
-  const handleAddLiquidity = async () => {
+  const [isLiquidityLoading, handleAddLiquidity] = useLoadingDecorator(async () => {
     if (isExist(dex) && dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      return await investTokenToToken();
+      await investTokenToToken();
+
+      return;
     }
 
-    return await investTezosToToken();
-  };
+    await investTezosToToken();
+  });
 
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
@@ -408,6 +411,7 @@ export const useAddLiquidityService = (
     tokenAInput,
     tokenBInput,
     isPoolNotExist,
+    isSubmiting: isLiquidityLoading,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
