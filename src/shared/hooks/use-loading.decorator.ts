@@ -1,22 +1,24 @@
 import { useCallback, useState } from 'react';
 
-import { Undefined } from '@shared/types';
-
 import { useToasts } from './use-toasts';
 
-export const useLoadingDecorator = <T>(func: () => Promise<T>): [boolean, () => Promise<Undefined<T>>] => {
+export const useLoadingDecorator = <T>(func: () => Promise<T>): [boolean, () => Promise<T>] => {
   const { showErrorToast } = useToasts();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const decoratorFunction = useCallback<() => Promise<Undefined<T>>>(async () => {
+  const decoratorFunction = useCallback<() => Promise<T>>(async () => {
     setIsLoading(true);
     try {
-      return await func();
+      const result = await func();
+      setIsLoading(false);
+
+      return result;
     } catch (error) {
       showErrorToast(error as Error);
-    } finally {
       setIsLoading(false);
+
+      return Promise.reject(error);
     }
   }, [func, showErrorToast]);
 

@@ -50,7 +50,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
   } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
 
   const isButtonDisabled =
-    isSubmiting ||
     !dex ||
     !tokenA ||
     !tokenB ||

@@ -46,7 +46,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   const isButtonDisabled =
-    isSubmiting ||
     isUndefined(dex) ||
     !accountPkh ||
     !tokenA ||
