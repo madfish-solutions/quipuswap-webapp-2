@@ -31,6 +31,7 @@ import { Button } from '@shared/components/button';
 import { PositionSelect } from '@shared/components/ComplexInput/PositionSelect';
 import { isAssetEqual, parseDecimals, isTezosToken } from '@shared/helpers';
 import { tokenDataToToken } from '@shared/helpers/token-data-to-token';
+import { useLoadingDecorator } from '@shared/hooks';
 import { VoteFormValues, Undefined } from '@shared/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@shared/validators';
 import s from '@styles/CommonContainer.module.scss';
@@ -108,13 +109,13 @@ const RealForm: React.FC<VotingFormProps> = ({
     // eslint-disable-next-line
   }, [accountPkh, closeConnectWalletModal]);
 
-  const handleVoteOrVeto = async () => {
+  const [isSubmitting, handleVoteOrVeto] = useLoadingDecorator(async () => {
     if (!tezos || !dex || !values.balance1) {
       return;
     }
 
     await handleSubmit();
-  };
+  });
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
@@ -201,7 +202,12 @@ const RealForm: React.FC<VotingFormProps> = ({
         <div className={s.buttons}>
           {accountPkh && <UnvoteButton className={s.button} />}
           {accountPkh ? (
-            <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
+            <Button
+              onClick={handleVoteOrVeto}
+              className={s.button}
+              disabled={isVoteOrVetoButtonDisabled()}
+              loading={isSubmitting}
+            >
               {currentTab.id === VotingTabs.vote && isBanned ? t('voting|Baker under Veto') : currentTab.label}
             </Button>
           ) : (
