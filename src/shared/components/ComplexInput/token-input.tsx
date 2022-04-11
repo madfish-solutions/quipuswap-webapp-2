@@ -97,12 +97,12 @@ export const TokenInput: FC<Props> = ({
   const disabled = !isExist(balance) || !isExistTokenA;
   const isBothTokensExist = isExistTokenA && isExist(tokenB);
 
-  const getTokensSymbols = (tokenA: Nullable<Token>, tokenB?: Nullable<Token>) => {
-    const firstTokenIcon = tokenA ? prepareTokenLogo(tokenA.metadata?.thumbnailUri) : null;
-    const firstTokenSymbol = tokenA ? getTokenSymbol(tokenA) : 'TOKEN';
+  const getTokensSymbols = (_tokenA: Nullable<Token>, _tokenB?: Nullable<Token>) => {
+    const firstTokenIcon = _tokenA ? prepareTokenLogo(_tokenA.metadata?.thumbnailUri) : null;
+    const firstTokenSymbol = _tokenA ? getTokenSymbol(_tokenA) : 'TOKEN';
 
-    const secondTokenIcon = tokenB ? prepareTokenLogo(tokenB.metadata?.thumbnailUri) : null;
-    const secondTokenSymbol = tokenB ? getTokenSymbol(tokenB) : 'TOKEN';
+    const secondTokenIcon = _tokenB ? prepareTokenLogo(_tokenB.metadata?.thumbnailUri) : null;
+    const secondTokenSymbol = _tokenB ? getTokenSymbol(_tokenB) : 'TOKEN';
 
     if (isBothTokensExist) {
       return {
@@ -147,8 +147,8 @@ export const TokenInput: FC<Props> = ({
   };
 
   const handlePercentageSelect = (newValue: string) => {
-    const value = new BigNumber(newValue).decimalPlaces(decimals).toFixed();
-    onInputChange(value);
+    const _value = new BigNumber(newValue).decimalPlaces(decimals).toFixed();
+    onInputChange(_value);
   };
 
   const amountCap = isNull(tokenB) ? getTokenInputAmountCap(tokenA) : undefined;

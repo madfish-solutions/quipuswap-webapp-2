@@ -27,8 +27,8 @@ export const Iterator: IteratorComponent = ({ data, keyFn, render, fallback, isG
 
   return (
     <Wrapper className={wrapperClassName}>
-      {data.map((data, index) => (
-        <Render key={keyFn ? keyFn(data) : index} {...data} />
+      {data.map((_data, index) => (
+        <Render key={keyFn ? keyFn(_data) : index} {..._data} />
       ))}
     </Wrapper>
   );

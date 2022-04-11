@@ -54,10 +54,10 @@ export const NewPresetsAmountInput: FC<Props> = ({
 
   const handleCustomValueChange = (val: Nullable<string>) => handleChange(val);
 
-  const handlePresetClick = (index: number, value: Nullable<string>, label: string) => {
+  const handlePresetClick = (index: number, _value: Nullable<string>, label: string) => {
     setActiveButton(index.toString());
     handleCustomValueChange(null);
-    handleChange(value ?? label);
+    handleChange(_value ?? label);
   };
 
   const handleAssetInputChange = (val: Nullable<string>) => {
@@ -72,12 +72,12 @@ export const NewPresetsAmountInput: FC<Props> = ({
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <div className={styles.buttons}>
-        {presets.map(({ label, value }, index) => (
+        {presets.map(({ label, value: _value }, index) => (
           <button
             key={label}
             type="button"
             className={cx(styles.button, { [styles.active]: index === Number(activeButton) })}
-            onClick={() => handlePresetClick(index, value, label)}
+            onClick={() => handlePresetClick(index, _value, label)}
           >
             <span className={styles.buttonInner}>{label}</span>
           </button>

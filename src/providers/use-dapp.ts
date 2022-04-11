@@ -83,17 +83,17 @@ function useDApp() {
             perm = await TempleWallet.getCurrentPermission();
           } catch (error) {
             // eslint-disable-next-line
-             console.error(error);
+            console.error(error);
           }
 
           const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
 
           if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
-            const { pkh, pk, tezos } = await getTempleWalletState(wlt, NETWORK_ID);
+            const { pkh, pk, tezos: _tezos } = await getTempleWalletState(wlt, NETWORK_ID);
             setState(prevState => ({
               ...prevState,
               templeWallet: wlt,
-              tezos,
+              tezos: _tezos,
               accountPkh: pkh,
               accountPublicKey: pk,
               connectionType: wlt.connected ? LastUsedConnectionKey.TEMPLE : null
