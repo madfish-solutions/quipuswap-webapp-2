@@ -10,9 +10,7 @@
 
 # production
 /build
-/public/robots.DEV.txt
-/public/robots.PROD.txt
-/public/sitemap.PROD.xml
+/public/robots.txt
 
 # misc
 .DS_Store
