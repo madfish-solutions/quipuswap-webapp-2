@@ -41,6 +41,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     share,
     isPoolNotExist,
     isTokenChanging,
+    isSubmiting,
     setIsTokenChanging,
     handleRemoveLiquidity,
     handleChange,
@@ -141,7 +142,12 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         <AlarmMessage message={t("liquidity|Note! The pool doesn't exist")} className={styles['mt-24']} />
       )}
       {accountPkh ? (
-        <Button className={styles.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
+        <Button
+          className={styles.button}
+          onClick={handleRemoveLiquidity}
+          disabled={isButtonDisabled}
+          loading={isSubmiting}
+        >
           Remove
         </Button>
       ) : (
