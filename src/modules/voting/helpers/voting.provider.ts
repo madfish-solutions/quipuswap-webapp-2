@@ -11,6 +11,7 @@ import { VotingTabs } from '@modules/voting/tabs.enum';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@shared/helpers';
+import { isEqualTokenPairs } from '@shared/helpers/token-pair';
 import { useOnBlock, useToasts } from '@shared/hooks';
 import { useExchangeRates } from '@shared/hooks/use-exchange-rate';
 import { Nullable, VoterType, Token, TokenPair } from '@shared/types';
@@ -71,34 +72,49 @@ const useVotingService = () => {
 
   const localAvailableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
 
-  const dataSetter = (data: Nullable<HandleTokenPairSelectReturnType>) => {
-    if (isExist(data)) {
-      const { tokenPair, rewards, dex, voter } = data;
-
-      const [token1, token2] = tokensRef.current;
-
-      if (isTokenEqual(tokenPair.token1, token1) && isTokenEqual(tokenPair.token2, token2)) {
-        setRewards(rewards);
-        setDex(dex);
-        setVoter(voter);
-        setTokenPair(tokenPair);
+  const dataSetter = useCallback(
+    (data: Nullable<HandleTokenPairSelectReturnType>) => {
+      if (!isExist(data)) {
+        return;
       }
-    }
-  };
 
-  const tokenPairSelect = useCallback(
+      if (
+        isTokenEqual(data.tokenPair.token1, tokensRef.current[0]) &&
+        isTokenEqual(data.tokenPair.token2, tokensRef.current[1])
+      ) {
+        if (data.rewards !== rewards) {
+          setRewards(data.rewards);
+        }
+        if (data.dex !== dex) {
+          setDex(data.dex);
+        }
+        if (data.voter !== voter) {
+          setVoter(data.voter);
+        }
+        if (!tokenPair || !isEqualTokenPairs(data.tokenPair, tokenPair)) {
+          setTokenPair(data.tokenPair);
+        }
+      }
+    },
+    [dex, rewards, tokenPair, voter]
+  );
+
+  const _handleTokenPairSelect = useCallback(
     async (pair: TokenPair) => {
       handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
-    [tezos, accountPkh, showErrorToast]
+    [showErrorToast, tezos, accountPkh, dataSetter]
   );
 
   const handleTokenPairSelectChange = (pair: TokenPair) => {
     setTokens([pair.token1, pair.token2]);
-    tokenPairSelect(pair);
+    void _handleTokenPairSelect(pair);
   };
 
-  const getBalances = useCallback(async () => tokenPair && tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
+  const getBalances = useCallback(
+    async (_tokenPair: Nullable<TokenPair>) => _tokenPair && _handleTokenPairSelect(_tokenPair),
+    [_handleTokenPairSelect]
+  );
 
   useEffect(() => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
@@ -116,19 +132,18 @@ const useVotingService = () => {
         searchCustomToken
       });
     }
-    // eslint-disable-next-line
-  }, [from, to, initialLoad, tokens, exchangeRates]);
+  }, [from, to, initialLoad, tokens, exchangeRates, tezos, setInitialLoad, setUrlLoaded, searchCustomToken]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
-      void getBalances();
+      void getBalances({ token1, token2 });
     }
     // eslint-disable-next-line
-  }, [tezos, accountPkh]);
+  }, [tezos, accountPkh, initialLoad, token1, token2]); //, getBalances
 
   const updateBalances = useCallback(() => {
     if (tezos && tokenPair?.token1 && tokenPair?.token2) {
-      getBalances();
+      void getBalances(tokenPair);
     }
   }, [tezos, tokenPair, getBalances]);
 

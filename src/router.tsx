@@ -8,7 +8,7 @@ import { Liquidity } from '@modules/liquidity';
 import { PrivacyPolicy } from '@modules/privacy-policy';
 import { Send, Swap } from '@modules/swap/swap.page';
 import { TermsOfService } from '@modules/terms-of-service';
-import { Voting } from '@modules/voting';
+import { VotingPage } from '@modules/voting';
 
 export const routes = {
   home: '/',
@@ -27,7 +27,7 @@ export const Router: FC = () => (
     <Route path={routes.swap} element={<Swap />} />
     <Route path={routes.send} element={<Send />} />
     <Route path={routes.liquidity} element={<Liquidity />} />
-    <Route path={routes.voting} element={<Voting />} />
+    <Route path={routes.voting} element={<VotingPage />} />
     <Route path={routes.farming} element={<Farming />} />
     <Route path={routes.privacyPolicy} element={<PrivacyPolicy />} />
     <Route path={routes.termsOfService} element={<TermsOfService />} />

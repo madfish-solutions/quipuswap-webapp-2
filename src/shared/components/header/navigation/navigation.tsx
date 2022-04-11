@@ -48,7 +48,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
       }
       if (links) {
         result.push(
-          <div key="navigationWrapper" className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened })}>
+          <div className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened })} key={id}>
             <button
               type="button"
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
@@ -62,6 +62,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                 if (link.target === '_blank') {
                   return (
                     <a
+                      key={link.id}
                       href={link.to}
                       className={cx(styles.linkInner, modeClass[colorThemeMode])}
                       target={link.target}
