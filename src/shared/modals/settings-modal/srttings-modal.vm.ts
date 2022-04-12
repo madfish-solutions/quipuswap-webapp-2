@@ -1,14 +1,18 @@
+import { useState } from 'react';
+
 import { BigNumber } from 'bignumber.js';
 
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 
-const useLiquiditySlippageFormik = () => {
-  const liquiditySlippageError = 'Error';
-  let liquiditySlippageValue = new BigNumber('0');
+const useLiquiditySlippageFormik = (liquiditySlippage: BigNumber) => {
+  const [liquiditySlippageValue, setLiquiditySlippageValue] = useState(liquiditySlippage);
+
   const handleLiquiditySlippageChange = (newValue: BigNumber) => {
-    liquiditySlippageValue = newValue;
+    setLiquiditySlippageValue(newValue);
   };
+
+  const liquiditySlippageError = 'Error';
 
   return {
     liquiditySlippageValue,
@@ -17,12 +21,14 @@ const useLiquiditySlippageFormik = () => {
   };
 };
 
-const useTradingSlippageFormik = () => {
-  const tradingSlippageError = 'Error';
-  let tradingSlippageValue = new BigNumber('0');
+const useTradingSlippageFormik = (tradingSlippage: BigNumber) => {
+  const [tradingSlippageValue, setTradingSlippageValue] = useState(tradingSlippage);
+
   const handleTradingSlippageChange = (newValue: BigNumber) => {
-    tradingSlippageValue = newValue;
+    setTradingSlippageValue(newValue);
   };
+
+  const tradingSlippageError = 'Error';
 
   return {
     tradingSlippageValue,
@@ -31,12 +37,14 @@ const useTradingSlippageFormik = () => {
   };
 };
 
-const useTransactionDeadlineFormik = () => {
-  const transactionDeadlineError = 'Error';
-  let transactionDeadlineValue = new BigNumber('0');
+const useTransactionDeadlineFormik = (transactionDeadLine: BigNumber) => {
+  const [transactionDeadlineValue, setTransactionDeadlineValue] = useState(transactionDeadLine);
+
   const handleTransactionDeadlineChange = (newValue: BigNumber) => {
-    transactionDeadlineValue = newValue;
+    setTransactionDeadlineValue(newValue);
   };
+
+  const transactionDeadlineError = 'Error';
 
   return {
     transactionDeadlineValue,
@@ -46,23 +54,34 @@ const useTransactionDeadlineFormik = () => {
 };
 
 export const useSettingModalViewModel = () => {
-  const { updateSettings, resetSettings } = useSettingsStore();
+  const settingsStore = useSettingsStore();
+  const { settings } = settingsStore;
   const { settingsModalOpen, closeSettingsModal } = useGlobalModalsState();
 
-  const { liquiditySlippageValue, handleLiquiditySlippageChange, liquiditySlippageError } =
-    useLiquiditySlippageFormik();
+  const { liquiditySlippageValue, handleLiquiditySlippageChange, liquiditySlippageError } = useLiquiditySlippageFormik(
+    settings.liquiditySlippage
+  );
 
-  const { tradingSlippageValue, handleTradingSlippageChange, tradingSlippageError } = useTradingSlippageFormik();
+  const { tradingSlippageValue, handleTradingSlippageChange, tradingSlippageError } = useTradingSlippageFormik(
+    settings.tradingSlippage
+  );
 
   const { transactionDeadlineValue, handleTransactionDeadlineChange, transactionDeadlineError } =
-    useTransactionDeadlineFormik();
+    useTransactionDeadlineFormik(settings.transactionDeadline);
 
   const setSettings = () => {
-    updateSettings({
+    settingsStore.updateSettings({
       liquiditySlippage: liquiditySlippageValue.toFixed(),
       tradingSlippage: tradingSlippageValue.toFixed(),
       transactionDeadline: transactionDeadlineValue.toFixed()
     });
+
+    closeSettingsModal();
+  };
+  const resetSettings = () => {
+    settingsStore.resetSettings();
+
+    closeSettingsModal();
   };
 
   const translation = {

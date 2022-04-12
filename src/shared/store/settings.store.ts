@@ -14,13 +14,13 @@ interface RawSettings {
 interface SettingsModel {
   liquiditySlippage: BigNumber;
   tradingSlippage: BigNumber;
-  transactionDeadline: string;
+  transactionDeadline: BigNumber;
 }
 
 const defaultSettings: RawSettings = {
   liquiditySlippage: '0',
   tradingSlippage: '0.5',
-  transactionDeadline: '30m'
+  transactionDeadline: '30'
 };
 
 const settingsMapper = (rawSettings: RawSettings): SettingsModel => {
@@ -28,7 +28,7 @@ const settingsMapper = (rawSettings: RawSettings): SettingsModel => {
     ...rawSettings,
     liquiditySlippage: new BigNumber(rawSettings.liquiditySlippage),
     tradingSlippage: new BigNumber(rawSettings.tradingSlippage),
-    transactionDeadline: rawSettings.transactionDeadline
+    transactionDeadline: new BigNumber(rawSettings.transactionDeadline)
   };
 };
 
