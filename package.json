@@ -1,6 +1,6 @@
 {
   "name": "next-production-starter",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3000",
@@ -22,7 +22,7 @@
     "@apollo/client": "^3.3.21",
     "@quipuswap/sdk": "^3.0.0",
     "@quipuswap/ui-kit": "^0.1.45",
-    "@taquito/beacon-wallet": "12.0.0",
+    "@taquito/beacon-wallet": "^12.0.3",
     "@taquito/michel-codec": "12.0.0",
     "@taquito/taquito": "12.0.0",
     "@taquito/utils": "12.0.0",
