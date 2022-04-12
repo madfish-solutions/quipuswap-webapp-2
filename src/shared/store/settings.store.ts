@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { RootStore } from './root.store';
 
@@ -86,9 +86,28 @@ class LocalStorageModel<RawData, Model> {
 export class SettingsStore {
   settingsModel = new LocalStorageModel(GLOBAL_SETTINGS_KEY, defaultSettings, settingsMapper);
 
+  get settings() {
+    return this.settingsModel.model;
+  }
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      settingsModel: observable
+      settingsModel: observable,
+
+      updateSettings: action,
+      resetSettings: action,
+
+      settings: computed
     });
+    this.updateSettings.bind(this);
+    this.resetSettings.bind(this);
+  }
+
+  updateSettings(newSettings: RawSettings) {
+    this.settingsModel.update(newSettings);
+  }
+
+  resetSettings() {
+    this.settingsModel.reset();
   }
 }

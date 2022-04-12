@@ -10,11 +10,13 @@ import {
 import { isNull } from '../helpers';
 import { Nullable } from '../types/types';
 import { AuthStore } from './auth.store';
+import { SettingsStore } from './settings.store';
 import { UiStore } from './ui.store';
 
 export class RootStore {
   authStore: AuthStore;
   uiStore: UiStore;
+  settingsStore: SettingsStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
@@ -25,14 +27,17 @@ export class RootStore {
   constructor() {
     this.authStore = new AuthStore(this);
     this.uiStore = new UiStore(this);
+    this.settingsStore = new SettingsStore(this);
 
     makeObservable(this, {
       tezos: observable,
       authStore: observable,
       uiStore: observable,
+      settingsStore: observable,
       farmingListStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
+
       setTezos: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,

@@ -17,7 +17,7 @@ import {
   PageTitle,
   StickyBlock,
   SwapButton,
-  SwapDeadline,
+  TransactionDeadline,
   Tabs
 } from '@shared/components';
 import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
@@ -44,7 +44,6 @@ import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { SwapDetails } from './components/swap-details/swap-details';
-import { SwapSlippage } from './components/swap-slippage';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -369,11 +368,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     [handleRecipientChange]
   );
 
-  const handleSlippageChange = (newValue?: BigNumber) => {
-    setFieldTouched(SwapField.SLIPPAGE, true);
-    setFieldValue(SwapField.SLIPPAGE, newValue, true);
-  };
-
   const handleDeadlineChange = (newValue?: BigNumber) => {
     setFieldTouched(SwapField.DEADLINE, true);
     setFieldValue(SwapField.DEADLINE, newValue, true);
@@ -464,16 +458,13 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
               error={touchedFieldsErrors.recipient}
             />
           )}
-          <SwapSlippage
-            error={touchedFieldsErrors.slippage}
-            loading={dexPoolsLoading}
-            outputAmount={outputAmount}
-            onChange={handleSlippageChange}
-            slippage={slippage}
-            outputToken={outputToken}
-          />
+
           {shouldShowDeadlineInput && (
-            <SwapDeadline error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+            <TransactionDeadline
+              error={touchedFieldsErrors.deadline}
+              onChange={handleDeadlineChange}
+              value={deadline}
+            />
           )}
           <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
             <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />

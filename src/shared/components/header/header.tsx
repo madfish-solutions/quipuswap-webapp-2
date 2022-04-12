@@ -3,8 +3,9 @@ import { useState, useEffect, useContext, FC } from 'react';
 import cx from 'classnames';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
 
-import { MenuClosed, MenuOpened } from '../../svg';
+import { MenuClosed, MenuOpened, SettingsIcon } from '../../svg';
 import { Button } from '../button';
 import { ColorModeSwitcher } from '../color-mode-switcher';
 import { ConnectWalletButton } from '../connect-wallet-button';
@@ -25,6 +26,7 @@ export const Header: FC<HeaderProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
+  const { openSettingsModal } = useGlobalModalsState();
 
   useEffect(() => {
     if (isMenuOpened) {
@@ -40,6 +42,9 @@ export const Header: FC<HeaderProps> = ({ className }) => {
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
+        <Button theme="quaternary" onClick={openSettingsModal}>
+          <SettingsIcon />
+        </Button>
         <Button theme="quaternary" className={styles.menuButton} onClick={() => setIsMenuOpened(!isMenuOpened)}>
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}
         </Button>

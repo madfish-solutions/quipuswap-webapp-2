@@ -14,7 +14,7 @@ interface Props {
   placeholder?: string;
 }
 
-export const TransactionDeadline: React.FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
+export const DeadlineInput: React.FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
   <PresetsAmountInput
     className={className}
     decimals={2}
