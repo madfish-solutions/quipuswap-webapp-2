@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext, FC } from 'react';
+import { useState, useEffect, useContext, FC, useRef } from 'react';
 
 import cx from 'classnames';
+import { useLocation } from 'react-router-dom';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 
@@ -25,6 +26,9 @@ const modeClass = {
 export const Header: FC<HeaderProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const location = useLocation();
+  const locationRef = useRef(location.pathname);
+
   const [isMenuOpened, setIsMenuOpened] = useState(false);
 
   useEffect(() => {
@@ -35,12 +39,19 @@ export const Header: FC<HeaderProps> = ({ className }) => {
     }
   }, [isMenuOpened]);
 
+  useEffect(() => {
+    if (locationRef.current !== location.pathname) {
+      locationRef.current = location.pathname;
+      setIsMenuOpened(false);
+    }
+  }, [location.pathname]);
+
   return (
     <div className={styles.wrapper}>
       <header className={cx(styles.root, modeClass[colorThemeMode], className)}>
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
-        <SettingsButton />
+        <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
         <Button theme="quaternary" className={styles.menuButton} onClick={() => setIsMenuOpened(!isMenuOpened)}>
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}

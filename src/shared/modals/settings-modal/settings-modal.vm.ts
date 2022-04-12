@@ -16,6 +16,7 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SettingsModel } from '@shared/store/settings.store';
 import { Undefined } from '@shared/types';
 import { bigNumberSchema } from '@shared/validators';
+import { useTranslation } from '@translation';
 
 enum SettingsFormValues {
   LIQUIDITY_SLIPPAGE = 'LIQUIDITY_SLIPPAGE',
@@ -69,6 +70,7 @@ const useSettingsFormik = (initialSettings: SettingsModel) => {
 };
 
 export const useSettingModalViewModel = () => {
+  const { t } = useTranslation();
   const settingsStore = useSettingsStore();
   const { settings } = settingsStore;
   const { settingsModalOpen, closeSettingsModal } = useGlobalModalsState();
@@ -113,16 +115,16 @@ export const useSettingModalViewModel = () => {
   };
 
   const translation = {
-    modalTitleTranslation: 'Settings',
+    modalTitleTranslation: t('settings|settings'),
 
-    liquiditySlippageTitleTranslation: 'Liquidity Slippage',
-    liquiditySlippageTooltipTranslation: 'toolitp',
+    liquiditySlippageTitleTranslation: t('settings|liquiditySlippage'),
+    liquiditySlippageTooltipTranslation: t('settings|slippageTooltip'),
 
-    tradingSlippageTitleTranslation: 'Trading Slippage',
-    tradingSlippageTooltipTranslation: 'toolitp2',
+    tradingSlippageTitleTranslation: t('settings|tradingSlippage'),
+    tradingSlippageTooltipTranslation: t('settings|slippageTooltip'),
 
-    resetTranslation: 'Reset',
-    saveTranslation: 'Save'
+    resetTranslation: t('settings|reset'),
+    saveTranslation: t('settings|save')
   };
 
   return {
