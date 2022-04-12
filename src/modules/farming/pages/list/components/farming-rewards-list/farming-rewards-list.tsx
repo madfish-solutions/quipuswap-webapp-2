@@ -10,18 +10,21 @@ import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
   const farmingListStore = useFarmingListStore();
+  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
   const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 
   return (
     <RewardInfo
-      amount={farmingListStore.claimablePendingRewards}
+      claimablePendingRewards={claimablePendingRewards}
+      totalPendingRewards={totalPendingRewards}
       onButtonClick={handleHarvestAll}
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={harvestAllTranslation}
       currency="$"
       rewardButtonAttributeTestId={FarmingListPandingReward.HARVEST_ALL_BUTTON}
       pendingRewardAttributeTestId={FarmingListPandingReward.PENDING_REWARD}
+      claimableOnly
     />
   );
 });

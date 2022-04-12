@@ -21,14 +21,21 @@ const modeClass = {
 };
 
 interface Props extends DataTestAttribute {
-  amount: Nullable<BigNumber>;
+  claimablePendingRewards: Nullable<BigNumber>;
+  totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
-  tooltip?: string;
+  claimableOnly?: boolean;
 }
 
-export const PendingRewards: FC<Props> = ({ currency, testId, dollarEquivalent, amountDecimals = USD_DECIMALS }) => {
+export const PendingRewards: FC<Props> = ({
+  currency,
+  testId,
+  dollarEquivalent,
+  claimableOnly,
+  amountDecimals = USD_DECIMALS
+}) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -41,23 +48,31 @@ export const PendingRewards: FC<Props> = ({ currency, testId, dollarEquivalent, 
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>
-                {t('farm|Your Claimable')}
-                <span className={styles.slash}>{'/'}</span>
-                <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
-              </span>
+              {claimableOnly ? (
+                <span className={styles.title}>
+                  {t('farm|Your Claimable')}
+                  <span className={styles.slash}>{'/'}</span>
+                  <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
+                </span>
+              ) : (
+                <span className={styles.title}>{t('farm|Your Full Rewards')}</span>
+              )}
             </div>
             <div className={styles.statesOfCurrencysAmount}>
-              <StateCurrencyAmount
-                className={styles.amount}
-                amount={claimablePendingRewards}
-                currency={currency}
-                dollarEquivalent={dollarEquivalent}
-                amountDecimals={amountDecimals}
-                isLeftCurrency={currency === '$'}
-                testId={testId}
-              />
-              <div className={styles.bigSlash}>{'/'}</div>
+              {claimableOnly && (
+                <>
+                  <StateCurrencyAmount
+                    className={styles.amount}
+                    amount={claimablePendingRewards}
+                    currency={currency}
+                    dollarEquivalent={dollarEquivalent}
+                    amountDecimals={amountDecimals}
+                    isLeftCurrency={currency === '$'}
+                    testId={testId}
+                  />
+                  <div className={styles.bigSlash}>{'/'}</div>
+                </>
+              )}
               <StateCurrencyAmount
                 className={styles.amount}
                 amount={totalPendingRewards}
