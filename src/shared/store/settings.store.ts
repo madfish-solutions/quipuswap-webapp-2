@@ -1,14 +1,16 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
+
 import { RootStore } from './root.store';
 
 const GLOBAL_SETTINGS_KEY = 'globalSettings';
 
 interface RawSettings {
-  liquiditySlippage: string;
-  tradingSlippage: string;
-  transactionDeadline: string;
+  liquiditySlippage: number;
+  tradingSlippage: number;
+  transactionDeadline: number;
 }
 
 export interface SettingsModel {
@@ -18,9 +20,9 @@ export interface SettingsModel {
 }
 
 const defaultSettings: RawSettings = {
-  liquiditySlippage: '0',
-  tradingSlippage: '0.5',
-  transactionDeadline: '30'
+  liquiditySlippage: DEFAULT_SLIPPAGE_PERCENTAGE,
+  tradingSlippage: DEFAULT_SLIPPAGE_PERCENTAGE,
+  transactionDeadline: DEFAULT_DEADLINE_MINS
 };
 
 const settingsMapper = (rawSettings: RawSettings): SettingsModel => {

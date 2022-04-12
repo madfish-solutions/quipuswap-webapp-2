@@ -4,14 +4,17 @@ import { useFormik } from 'formik';
 import { noop } from 'rxjs';
 import { object as objectSchema } from 'yup';
 
+import {
+  MAX_SLIPPAGE_PERCENTAGE,
+  MAX_DEADLINE_MINS,
+  MIN_DEADLINE_MINS,
+  MIN_SLIPPAGE_PERCENTAGE
+} from '@config/constants';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SettingsModel } from '@shared/store/settings.store';
 import { Undefined } from '@shared/types';
 import { bigNumberSchema } from '@shared/validators';
-
-const MIN_SLIPPAGE_VALUE = new BigNumber('0');
-const MAX_SLIPPAGE_VALUE = new BigNumber('30');
 
 enum SettingsFormValues {
   LIQUIDITY_SLIPPAGE = 'LIQUIDITY_SLIPPAGE',
@@ -21,10 +24,9 @@ enum SettingsFormValues {
 
 const useSettingsFormik = (initialSettings: SettingsModel) => {
   const validationSchema = objectSchema().shape({
-    //TODO: validate validation :)
-    [SettingsFormValues.LIQUIDITY_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
-    [SettingsFormValues.TRADING_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
-    [SettingsFormValues.TRANSACTION_DEADLINE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE)
+    [SettingsFormValues.LIQUIDITY_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_PERCENTAGE, MAX_SLIPPAGE_PERCENTAGE),
+    [SettingsFormValues.TRADING_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_PERCENTAGE, MAX_SLIPPAGE_PERCENTAGE),
+    [SettingsFormValues.TRANSACTION_DEADLINE]: bigNumberSchema(MIN_DEADLINE_MINS, MAX_DEADLINE_MINS)
   });
 
   const initialValues = {
@@ -86,9 +88,9 @@ export const useSettingModalViewModel = () => {
 
   const setSettings = () => {
     settingsStore.updateSettings({
-      liquiditySlippage: liquiditySlippageValue.toFixed(),
-      tradingSlippage: tradingSlippageValue.toFixed(),
-      transactionDeadline: transactionDeadlineValue.toFixed()
+      liquiditySlippage: liquiditySlippageValue.toNumber(),
+      tradingSlippage: tradingSlippageValue.toNumber(),
+      transactionDeadline: transactionDeadlineValue.toNumber()
     });
 
     closeSettingsModal();
