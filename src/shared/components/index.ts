@@ -47,3 +47,4 @@ export * from './tooltip';
 export * from './top-stats';
 export * from './deadline-input';
 export * from './view-pair-analytics';
+export * from './settings-button';

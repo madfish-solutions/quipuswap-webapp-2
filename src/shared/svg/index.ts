@@ -44,4 +44,4 @@ export * from './baker';
 export * from './external-link';
 export * from './check-mark';
 export * from './copy';
-export * from './settings';
+export * from './settings-icon';

@@ -6,7 +6,7 @@ import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { useTranslation } from '@translation';
 
-import { Madfish, SettingsIcon } from '../../../svg';
+import { Madfish } from '../../../svg';
 import { Button } from '../../button';
 import { ColorModeSwitcher } from '../../color-mode-switcher';
 import { NetworkSelect } from '../../network-select';
@@ -36,7 +36,6 @@ export const Menu: FC<MenuProps> = ({ className }) => {
           <QPToken />
           <div className={cx(styles.mb0, styles.row)}>
             <div className={styles.ml24}>
-              <SettingsIcon />
               <ColorModeSwitcher id="mobile" />
             </div>
           </div>
