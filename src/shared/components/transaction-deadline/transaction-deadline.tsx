@@ -34,7 +34,7 @@ export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
         />
       </label>
       <DeadlineInput handleChange={handleChange} placeholder={value?.toFixed()} />
-      <Scaffolding height={24} showChild={Boolean(error)}>
+      <Scaffolding height={27.5} showChild={Boolean(error)}>
         <div className={styles.simpleError}>{error}</div>
       </Scaffolding>
     </div>
