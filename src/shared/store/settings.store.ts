@@ -19,7 +19,7 @@ export interface SettingsModel {
   transactionDeadline: BigNumber;
 }
 
-const defaultSettings: RawSettings = {
+export const defaultSettings: RawSettings = {
   liquiditySlippage: DEFAULT_SLIPPAGE_PERCENTAGE,
   tradingSlippage: DEFAULT_SLIPPAGE_PERCENTAGE,
   transactionDeadline: DEFAULT_DEADLINE_MINS
@@ -51,15 +51,14 @@ const localStorageExstractor = <RawData, Model>(
 };
 
 class LocalStorageModel<RawData, Model> {
-  model: Model;
+  model!: Model;
   constructor(private key: string, private defaultValue: RawData, private mapping: (raw: RawData) => Model) {
-    this.model = this.getModel();
+    this.getModel();
 
     makeObservable(this, {
       model: observable,
 
       getModel: action,
-      reset: action,
       update: action
     });
   }
@@ -69,8 +68,7 @@ class LocalStorageModel<RawData, Model> {
     if (isNew) {
       this.update(this.defaultValue);
     }
-
-    return model;
+    this.model = model;
   }
 
   reset() {
@@ -81,7 +79,7 @@ class LocalStorageModel<RawData, Model> {
     const newValue = JSON.stringify(value);
     localStorage.setItem(this.key, newValue);
 
-    this.model = this.mapping(this.defaultValue);
+    this.model = this.mapping(value);
   }
 }
 
@@ -101,8 +99,6 @@ export class SettingsStore {
 
       settings: computed
     });
-    this.updateSettings.bind(this);
-    this.resetSettings.bind(this);
   }
 
   updateSettings(newSettings: RawSettings) {

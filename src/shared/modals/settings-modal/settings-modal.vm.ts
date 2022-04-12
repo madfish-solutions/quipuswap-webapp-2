@@ -105,6 +105,9 @@ export const useSettingModalViewModel = () => {
   };
   const resetSettings = () => {
     settingsStore.resetSettings();
+    handleLiquiditySlippageChange(settingsStore.settings.liquiditySlippage);
+    handleTradingSlippageChange(settingsStore.settings.tradingSlippage);
+    handleTransactionDeadlineChange(settingsStore.settings.transactionDeadline);
 
     closeSettingsModal();
   };

@@ -1,10 +1,12 @@
+import { observer } from 'mobx-react-lite';
+
 import { Button, Slippage, TransactionDeadline } from '@shared/components';
 
 import { Modal } from '../modal';
 import styles from './settings-modal.module.scss';
 import { useSettingModalViewModel } from './settings-modal.vm';
 
-export const SettingsModal = () => {
+export const SettingsModal = observer(() => {
   const {
     liquiditySlippageValue,
     handleLiquiditySlippageChange,
@@ -78,4 +80,4 @@ export const SettingsModal = () => {
       </div>
     </Modal>
   );
-};
+});
