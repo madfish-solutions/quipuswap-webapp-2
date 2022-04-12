@@ -3,7 +3,7 @@ import { Button, TransactionDeadline } from '@shared/components';
 
 import { Modal } from '../modal';
 import styles from './settings-modal.module.scss';
-import { useSettingModalViewModel } from './srttings-modal.vm';
+import { useSettingModalViewModel } from './settings-modal.vm';
 
 export const SettingsModal = () => {
   const {

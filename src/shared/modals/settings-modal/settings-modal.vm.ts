@@ -21,10 +21,12 @@ enum SettingsFormValues {
 
 const useSettingsFormik = (initialSettings: SettingsModel) => {
   const validationSchema = objectSchema().shape({
+    //TODO: validate validation :)
     [SettingsFormValues.LIQUIDITY_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
     [SettingsFormValues.TRADING_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
     [SettingsFormValues.TRANSACTION_DEADLINE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE)
   });
+
   const initialValues = {
     [SettingsFormValues.LIQUIDITY_SLIPPAGE]: initialSettings.liquiditySlippage,
     [SettingsFormValues.TRADING_SLIPPAGE]: initialSettings.tradingSlippage,

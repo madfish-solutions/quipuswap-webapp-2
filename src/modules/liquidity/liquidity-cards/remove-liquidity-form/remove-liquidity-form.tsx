@@ -16,9 +16,8 @@ import { ArrowDown, Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { LiquidityDeadline } from '../../liquidity-deadline';
-import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import styles from '../../liquidity.module.scss';
+import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
@@ -29,8 +28,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
-    validationMessageDeadline,
-    validationMessageSlippage,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -56,9 +53,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     !lpTokenInput ||
     isExist(validatedInputMessage) ||
     isExist(validatedOutputMessageA) ||
-    isExist(validatedOutputMessageB) ||
-    isExist(validationMessageDeadline) ||
-    isExist(validationMessageSlippage);
+    isExist(validatedOutputMessageB);
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
@@ -121,21 +116,15 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         notSelectable
       />
       {isDeadlineAndSlippageVisible && (
-        <>
-          <div className={styles['mt-24']}>
-            <LiquiditySlippage
-              liquidityType={LiquiditySlippageType.REMOVE}
-              tokenA={tokenA}
-              tokenB={tokenB}
-              tokenAInput={tokenAOutput}
-              tokenBInput={tokenBOutput}
-              error={validationMessageSlippage}
-            />
-          </div>
-          <div className={styles['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-        </>
+        <div className={styles['mt-24']}>
+          <SlippageInfo
+            liquidityType={LiquiditySlippageType.REMOVE}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            tokenAInput={tokenAOutput}
+            tokenBInput={tokenBOutput}
+          />
+        </div>
       )}
       {isPoolNotExist && (
         <AlarmMessage message={t("liquidity|Note! The pool doesn't exist")} className={styles['mt-24']} />

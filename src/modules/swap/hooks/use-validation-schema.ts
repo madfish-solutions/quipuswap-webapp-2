@@ -1,12 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import {
-  DEFAULT_DEADLINE_MINS,
-  MAX_DEADLINE_MINS,
-  MAX_SLIPPAGE_PERCENTAGE,
-  MIN_DEADLINE_MINS
-} from '@config/constants';
 import { useBalances } from '@providers/balances-provider';
 import { fromDecimals, getTokenSlug, isTezosToken } from '@shared/helpers';
 import { SwapTabAction, Token } from '@shared/types';
@@ -101,12 +95,6 @@ export const useValidationSchema = () => {
     [SwapField.RECIPIENT]: mixedSchema().when(SwapField.ACTION, (currentAction: SwapTabAction) =>
       currentAction === SwapTabAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
-    [SwapField.SLIPPAGE]: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
-    [SwapField.DEADLINE]: bigNumberSchema(
-      MIN_DEADLINE_MINS,
-      MAX_DEADLINE_MINS,
-      t('common|deadlineOutOfRangeError')
-    ).default(new BigNumber(DEFAULT_DEADLINE_MINS)),
     [SwapField.ACTION]: stringSchema().oneOf([SwapTabAction.SWAP, SwapTabAction.SEND]).required()
   });
 };

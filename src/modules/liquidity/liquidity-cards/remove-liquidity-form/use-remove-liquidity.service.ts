@@ -7,15 +7,16 @@ import { noop } from 'rxjs';
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { useConfirmOperation, useDeadline, useSlippage } from '@shared/dapp';
+import { useConfirmOperation } from '@shared/dapp';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@shared/helpers';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain/send-transaction';
 import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
+import { INVALID_INPUT, validateOutputAmount, validations } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: Optional<FoundDex>,
@@ -25,8 +26,10 @@ export const useRemoveLiquidityService = (
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const { deadline } = useDeadline();
-  const { slippage } = useSlippage();
+  const {
+    settings: { transactionDeadline, liquiditySlippage }
+  } = useSettingsStore();
+
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
@@ -162,8 +165,8 @@ export const useRemoveLiquidityService = (
         tokenBOutput,
         tokenA,
         tokenB,
-        deadline,
-        slippage
+        transactionDeadline,
+        liquiditySlippage
       );
 
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
@@ -179,7 +182,7 @@ export const useRemoveLiquidityService = (
         });
       }
     } else {
-      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
+      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, liquiditySlippage);
 
       const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
@@ -201,15 +204,10 @@ export const useRemoveLiquidityService = (
     ]);
   };
 
-  const validationMessageDeadline = validateDeadline(deadline);
-  const validationMessageSlippage = validateSlippage(slippage);
-
   return {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
-    validationMessageDeadline,
-    validationMessageSlippage,
     tokenPair,
     accountPkh,
     lpTokenInput,

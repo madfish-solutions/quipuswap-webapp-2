@@ -10,7 +10,6 @@ import { NETWORK_ID } from '@config/enviroment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation } from '@shared/dapp';
-import { useDeadline, useSlippage } from '@shared/dapp/slippage-deadline';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,
@@ -23,6 +22,7 @@ import {
   isUndefined,
   toDecimals
 } from '@shared/helpers';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Optional, Undefined, Token } from '@shared/types';
 
 import {
@@ -33,7 +33,7 @@ import {
 } from '../blockchain/send-transaction';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateDeadline, validateSlippage, validations } from '../validators';
+import { validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
@@ -49,8 +49,9 @@ export const useAddLiquidityService = (
   const tezos = useTezos();
   const estimatedTezos = useEstimationToolkit();
   const accountPkh = useAccountPkh();
-  const { deadline } = useDeadline();
-  const { slippage } = useSlippage();
+  const {
+    settings: { transactionDeadline, liquiditySlippage }
+  } = useSettingsStore();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const {
     tokenBalance: tokenABalance,
@@ -308,8 +309,8 @@ export const useAddLiquidityService = (
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
         pairInfo.tokenBPool,
-        deadline,
-        slippage
+        transactionDeadline,
+        liquiditySlippage
       );
 
       const tokenASymbol = getTokenSymbol(pairTokenA);
@@ -394,14 +395,9 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
-  const validationMessageDeadline = validateDeadline(deadline);
-  const validationMessageSlippage = validateSlippage(slippage);
-
   return {
     validationMessageTokenA,
     validationMessageTokenB,
-    validationMessageDeadline,
-    validationMessageSlippage,
     accountPkh,
     tokenABalance,
     tokenBBalance,

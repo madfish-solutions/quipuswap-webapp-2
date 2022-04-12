@@ -17,7 +17,6 @@ import {
   PageTitle,
   StickyBlock,
   SwapButton,
-  TransactionDeadline,
   Tabs
 } from '@shared/components';
 import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
@@ -32,13 +31,13 @@ import {
   getTokenSlug,
   getTokensOptionalPairName,
   isEmptyArray,
-  isTokenToTokenDex,
   makeSwapOrSendRedirectionUrl
 } from '@shared/helpers';
 import { makeToken } from '@shared/helpers/makers/make-token';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { useDexGraph, useOnBlock } from '@shared/hooks';
 import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, TokenMetadata, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -68,7 +67,7 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const {
     errors,
-    values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
+    values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient },
     validateField,
     setValues,
     setFieldValue,
@@ -81,6 +80,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const { t } = useTranslation(['swap']);
   const fromToSlug = (params.fromTo as string) ?? '';
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
+  const {
+    settings: { tradingSlippage }
+  } = useSettingsStore();
 
   const getRedirectionUrl = useCallback(
     (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, action),
@@ -134,7 +136,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     outputToken,
     inputAmount,
     outputAmount,
-    slippageTolerance: slippage,
+    slippageTolerance: tradingSlippage,
     dexRoute,
     recipient
   });
@@ -368,11 +370,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     [handleRecipientChange]
   );
 
-  const handleDeadlineChange = (newValue?: BigNumber) => {
-    setFieldTouched(SwapField.DEADLINE, true);
-    setFieldValue(SwapField.DEADLINE, newValue, true);
-  };
-
   const inputTokenSlug = inputToken && getTokenSlug(inputToken);
   const outputTokenSlug = outputToken && getTokenSlug(outputToken);
   const inputTokenBalance = getBalanceByTokenSlug(inputTokenSlug, balances);
@@ -386,7 +383,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     {}
   );
 
-  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(isTokenToTokenDex);
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
@@ -435,7 +431,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           <NewTokenSelect
             showBalanceButtons={false}
             amount={outputAmount}
-            className={cx(styles.input, styles.mb24)}
+            className={cx(styles.input)}
             balance={outputTokenBalance}
             exchangeRate={outputExchangeRate}
             label="To"
@@ -456,14 +452,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
               id="swap-send-recipient"
               className={cx(styles.input, styles.mb24)}
               error={touchedFieldsErrors.recipient}
-            />
-          )}
-
-          {shouldShowDeadlineInput && (
-            <TransactionDeadline
-              error={touchedFieldsErrors.deadline}
-              onChange={handleDeadlineChange}
-              value={deadline}
             />
           )}
           <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
