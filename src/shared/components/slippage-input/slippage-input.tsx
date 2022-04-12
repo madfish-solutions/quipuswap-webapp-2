@@ -11,19 +11,22 @@ const slippagePresets = [
 ];
 
 interface Props {
+  value: string;
   className?: string;
   handleChange: (value: Nullable<string>) => void;
   placeholder?: string;
 }
 
-export const SlippageInput: FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
-  <PresetsAmountInput
-    className={className}
-    defaultValue={slippagePresets[0].value}
-    min={0}
-    handleChange={handleChange}
-    placeholder={placeholder}
-    presets={slippagePresets}
-    unit="%"
-  />
-);
+export const SlippageInput: FC<Props> = ({ className, value, handleChange }) => {
+  return (
+    <PresetsAmountInput
+      className={className}
+      defaultValue={value}
+      min={0}
+      handleChange={handleChange}
+      placeholder={value}
+      presets={slippagePresets}
+      unit="%"
+    />
+  );
+};

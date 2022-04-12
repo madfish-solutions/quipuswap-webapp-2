@@ -11,6 +11,7 @@ import {
   MIN_SLIPPAGE_PERCENTAGE
 } from '@config/constants';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
+import { isExist } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SettingsModel } from '@shared/store/settings.store';
 import { Undefined } from '@shared/types';
@@ -86,7 +87,14 @@ export const useSettingModalViewModel = () => {
     transactionDeadlineError
   } = useSettingsFormik(settings);
 
+  const isInvalid =
+    isExist(liquiditySlippageError) || isExist(tradingSlippageError) || isExist(transactionDeadlineError);
+
   const setSettings = () => {
+    if (isInvalid) {
+      return;
+    }
+
     settingsStore.updateSettings({
       liquiditySlippage: liquiditySlippageValue.toNumber(),
       tradingSlippage: tradingSlippageValue.toNumber(),
@@ -127,6 +135,7 @@ export const useSettingModalViewModel = () => {
     handleTransactionDeadlineChange,
     transactionDeadlineError,
 
+    isInvalid,
     setSettings,
     resetSettings,
 

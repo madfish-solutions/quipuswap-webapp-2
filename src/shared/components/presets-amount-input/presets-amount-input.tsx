@@ -47,7 +47,8 @@ export const PresetsAmountInput: FC<Props> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const presetMatchesDefaultValue = ({ label, value }: AmountPreset) => defaultValue === value ?? label;
+  const presetMatchesDefaultValue = ({ label, value }: AmountPreset) =>
+    defaultValue === value || defaultValue === label;
   const shouldMakePresetActive = presets.some(presetMatchesDefaultValue);
   const defaultActiveButton = shouldMakePresetActive ? presets.findIndex(presetMatchesDefaultValue) : 'input';
   const defaultCustomValue = shouldMakePresetActive ? null : defaultValue;

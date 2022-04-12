@@ -11,7 +11,7 @@ interface Props {
   title: string;
   tooltip: string;
   error: Undefined<string>;
-  slippage: Undefined<BigNumber>;
+  slippage: BigNumber;
   onChange: (newValue: BigNumber) => void;
 }
 
@@ -25,7 +25,7 @@ export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip 
         <span>{title}</span>
         <Tooltip content={tooltip} />
       </label>
-      <SlippageInput handleChange={handleChange} placeholder={slippage?.toFixed()} />
+      <SlippageInput handleChange={handleChange} value={slippage.toFixed()} />
       <Scaffolding height={27.5} showChild={Boolean(error)}>
         <div className={styles.simpleError}>{error}</div>
       </Scaffolding>

@@ -18,6 +18,7 @@ export const SettingsModal = () => {
     handleTransactionDeadlineChange,
     transactionDeadlineError,
 
+    isInvalid,
     setSettings,
     resetSettings,
 
@@ -71,7 +72,9 @@ export const SettingsModal = () => {
         <Button theme="secondary" onClick={resetSettings}>
           {resetTranslation}
         </Button>
-        <Button onClick={setSettings}>{saveTranslation}</Button>
+        <Button disabled={isInvalid} onClick={setSettings}>
+          {saveTranslation}
+        </Button>
       </div>
     </Modal>
   );

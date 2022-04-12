@@ -21,7 +21,6 @@ export * from './loader';
 export * from './logo-button';
 export * from './modal-cell';
 export * from './network-select';
-export * from './new-preset-amount';
 export * from './number-input';
 export * from './page-title';
 export * from './pending-rewards';

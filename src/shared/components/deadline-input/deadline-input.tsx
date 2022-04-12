@@ -18,7 +18,7 @@ export const DeadlineInput: React.FC<Props> = ({ className, handleChange, placeh
   <PresetsAmountInput
     className={className}
     decimals={2}
-    defaultValue={deadlinePresets[0].value}
+    defaultValue={placeholder}
     min={0}
     handleChange={handleChange}
     placeholder={placeholder}
