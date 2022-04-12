@@ -24,7 +24,6 @@ export const FarmingRewardsList: FC = observer(() => {
       currency="$"
       rewardButtonAttributeTestId={FarmingListPandingReward.HARVEST_ALL_BUTTON}
       pendingRewardAttributeTestId={FarmingListPandingReward.PENDING_REWARD}
-      claimableOnly
     />
   );
 });

@@ -11,7 +11,7 @@ import styles from './reward-info.module.scss';
 
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
-  totalPendingRewards: Nullable<BigNumber>;
+  totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   className?: string;
@@ -25,7 +25,6 @@ interface Props {
   };
   rewardTooltip?: string;
   disabled?: boolean;
-  claimableOnly?: boolean;
   rewardButtonAttributeTestId: string;
   pendingRewardAttributeTestId: string;
 }
@@ -45,7 +44,6 @@ export const RewardInfo: FC<Props> = ({
   totalPendingRewards,
   rewardButtonAttributeTestId,
   pendingRewardAttributeTestId,
-  claimableOnly,
   children
 }) => {
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
@@ -56,11 +54,10 @@ export const RewardInfo: FC<Props> = ({
         <PendingRewards
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}
-          testId={pendingRewardAttributeTestId}
           dollarEquivalent={dollarEquivalent}
+          testId={pendingRewardAttributeTestId}
           amountDecimals={amountDecimals}
           currency={currency}
-          claimableOnly={claimableOnly}
         />
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}

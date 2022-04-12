@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { USD_DECIMALS } from '@config/constants';
-import { useFarmingListStore } from '@modules/farming/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
@@ -26,21 +25,19 @@ interface Props extends DataTestAttribute {
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
-  claimableOnly?: boolean;
 }
 
 export const PendingRewards: FC<Props> = ({
   currency,
   testId,
   dollarEquivalent,
-  claimableOnly,
-  amountDecimals = USD_DECIMALS
+  amountDecimals = USD_DECIMALS,
+  claimablePendingRewards,
+  totalPendingRewards
 }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const farmingListStore = useFarmingListStore();
-  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
 
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
@@ -48,7 +45,7 @@ export const PendingRewards: FC<Props> = ({
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              {claimableOnly ? (
+              {totalPendingRewards ? (
                 <span className={styles.title}>
                   {t('farm|Your Claimable')}
                   <span className={styles.slash}>{'/'}</span>
@@ -59,29 +56,29 @@ export const PendingRewards: FC<Props> = ({
               )}
             </div>
             <div className={styles.statesOfCurrencysAmount}>
-              {claimableOnly && (
-                <>
-                  <StateCurrencyAmount
-                    className={styles.amount}
-                    amount={claimablePendingRewards}
-                    currency={currency}
-                    dollarEquivalent={dollarEquivalent}
-                    amountDecimals={amountDecimals}
-                    isLeftCurrency={currency === '$'}
-                    testId={testId}
-                  />
-                  <div className={styles.bigSlash}>{'/'}</div>
-                </>
-              )}
               <StateCurrencyAmount
                 className={styles.amount}
-                amount={totalPendingRewards}
+                amount={claimablePendingRewards}
                 currency={currency}
                 dollarEquivalent={dollarEquivalent}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 testId={testId}
               />
+              {totalPendingRewards && (
+                <>
+                  <div className={styles.bigSlash}>{'/'}</div>
+                  <StateCurrencyAmount
+                    className={styles.amount}
+                    amount={totalPendingRewards}
+                    currency={currency}
+                    dollarEquivalent={dollarEquivalent}
+                    amountDecimals={amountDecimals}
+                    isLeftCurrency={currency === '$'}
+                    testId={testId}
+                  />
+                </>
+              )}
             </div>
           </>
         ) : (

@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { TZKT_EXPLORER_URL } from '@config/config';
-import { useFarmingListStore } from '@modules/farming/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getBakerName, getTokenSymbol } from '@shared/helpers';
@@ -26,8 +25,6 @@ const modeClass = {
 };
 
 export const FarmingRewardInfo: FC = observer(() => {
-  const farmingListStore = useFarmingListStore();
-  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['farm']);
   const {
@@ -37,6 +34,7 @@ export const FarmingRewardInfo: FC = observer(() => {
     delegatesLoading,
     endTimestamp,
     myDepositDollarEquivalent,
+    myRewardInTokens,
     myRewardInUsd,
     rewardTokenDecimals,
     rewardTokenSymbol,
@@ -49,8 +47,7 @@ export const FarmingRewardInfo: FC = observer(() => {
 
   return (
     <RewardInfo
-      claimablePendingRewards={claimablePendingRewards}
-      totalPendingRewards={totalPendingRewards}
+      claimablePendingRewards={myRewardInTokens}
       dollarEquivalent={myRewardInUsd}
       amountDecimals={rewardTokenDecimals}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
