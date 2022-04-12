@@ -1,9 +1,13 @@
 .modal {
   padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
 }
 
 .buttons {
-  margin-top: 40px;
+  margin-top: 8px;
 
   display: flex;
   column-gap: 16px;

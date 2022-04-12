@@ -8,6 +8,7 @@ import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { DeadlineInput } from '../deadline-input';
+import { Scaffolding } from '../scaffolding';
 import { Tooltip } from '../tooltip';
 
 interface Props {
@@ -23,7 +24,7 @@ export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
     onChange(new BigNumber(newValue ? newValue : DEFAULT_DEADLINE_MINS));
 
   return (
-    <>
+    <div>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{t('common|Transaction deadline')}</span>
         <Tooltip
@@ -33,7 +34,9 @@ export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
         />
       </label>
       <DeadlineInput handleChange={handleChange} placeholder={value?.toFixed()} />
-      {error && <div className={styles.simpleError}>{error}</div>}
-    </>
+      <Scaffolding height={24} showChild={Boolean(error)}>
+        <div className={styles.simpleError}>{error}</div>
+      </Scaffolding>
+    </div>
   );
 };

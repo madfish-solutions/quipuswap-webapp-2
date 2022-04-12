@@ -1,5 +1,4 @@
-import { Slippage } from '@modules/swap/components/swap-slippage';
-import { Button, TransactionDeadline } from '@shared/components';
+import { Button, Slippage, TransactionDeadline } from '@shared/components';
 
 import { Modal } from '../modal';
 import styles from './settings-modal.module.scss';
@@ -40,7 +39,7 @@ export const SettingsModal = () => {
 
   return (
     <Modal
-      portalClassName={styles.modal}
+      // portalClassName={styles.modal}
       title={modalTitleTranslation}
       contentClassName={styles.modal}
       isOpen={settingsModalOpen}
