@@ -13,8 +13,8 @@ export const [ConfirmationModalConstateProvider, useConfirmationModal] = constat
   const { isOpen: confirmationModalOpen, open: openModal, close: closeConfirmationModal } = useSingleModalState();
 
   const openConfirmationModal = useCallback(
-    (message: ReactNode, callback: () => Promise<void>) => {
-      setMessage(message);
+    (_message: ReactNode, callback: () => Promise<void>) => {
+      setMessage(_message);
       setYesCallback({ yesCallback: callback });
 
       openModal();

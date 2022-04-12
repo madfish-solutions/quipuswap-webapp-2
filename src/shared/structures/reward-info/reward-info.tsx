@@ -10,7 +10,8 @@ import { Nullable } from '@shared/types';
 import styles from './reward-info.module.scss';
 
 interface Props {
-  amount: Nullable<BigNumber>;
+  claimablePendingRewards: Nullable<BigNumber>;
+  totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   className?: string;
@@ -31,32 +32,32 @@ interface Props {
 const ZERO_REWARDS = 0;
 
 export const RewardInfo: FC<Props> = ({
-  amount,
   dollarEquivalent,
   amountDecimals,
   className,
   onButtonClick,
   currency,
   header,
-  rewardTooltip,
   buttonText,
   disabled,
+  claimablePendingRewards,
+  totalPendingRewards,
   rewardButtonAttributeTestId,
   pendingRewardAttributeTestId,
   children
 }) => {
-  const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS) || disabled;
+  const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
 
   return (
     <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
         <PendingRewards
-          testId={pendingRewardAttributeTestId}
-          amount={amount}
+          claimablePendingRewards={claimablePendingRewards}
+          totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
+          testId={pendingRewardAttributeTestId}
           amountDecimals={amountDecimals}
           currency={currency}
-          tooltip={rewardTooltip}
         />
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}

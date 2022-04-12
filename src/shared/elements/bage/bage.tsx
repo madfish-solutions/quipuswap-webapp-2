@@ -4,25 +4,25 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import s from './bage.module.scss';
+import styles from './bage.module.scss';
 
-export interface BageProps {
+interface Props {
   className?: string;
   innerClassName?: string;
   text: string;
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
-export const Bage: FC<BageProps> = ({ className, innerClassName, text }) => {
+export const Bage: FC<Props> = ({ className, innerClassName, text }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(modeClass[colorThemeMode], s.bageBorder, className)}>
-      <div className={cx(s.bage, innerClassName)}>{text}</div>
+    <div className={cx(modeClass[colorThemeMode], styles.bageBorder, className)}>
+      <div className={cx(styles.bage, innerClassName)}>{text}</div>
     </div>
   );
 };

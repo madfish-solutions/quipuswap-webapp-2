@@ -16,13 +16,13 @@ type StringKey<Type> = string & keyof Type;
 
 type LocalisationText<
   Local,
-  FileName extends string & keyof Local,
-  Key extends string & keyof Local[FileName]
-> = Local[FileName][Key] extends string ? `${FileName}|${Key}` : never;
+  _FileName extends string & keyof Local,
+  _Key extends string & keyof Local[_FileName]
+> = Local[_FileName][_Key] extends string ? `${_FileName}|${_Key}` : never;
 
 type Localisation<Local> = {
-  translation<Key extends string & keyof Local>(
-    localText: LocalisationText<Local, Key, StringKey<Local[Key]>>,
+  translation<_Key extends string & keyof Local>(
+    localText: LocalisationText<Local, _Key, StringKey<Local[_Key]>>,
     params?: Params
   ): string;
 };
@@ -43,7 +43,7 @@ const t: TFunction = (localText, params?) => {
 
   if (!text) {
     // eslint-disable-next-line no-console
-    console.error(`Json in file ${file} does not have key ${key}`);
+    console.error(`Json in file "${file}" does not have key "${key}"`);
   }
 
   if (!params || !text) {

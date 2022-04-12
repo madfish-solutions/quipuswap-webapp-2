@@ -45,8 +45,8 @@ export const useLayoutViewModel = () => {
     }
   }, [colorThemeMode]);
 
-  const isDarkFavicon = colorThemeMode === ColorModes.Dark;
+  const isDarkTheme = colorThemeMode === ColorModes.Dark;
   const canonicalURL = QUIPUSWAP + useLocation().pathname;
 
-  return { isDarkFavicon, canonicalURL, isComponentDidMount: true };
+  return { isDarkTheme, canonicalURL, isComponentDidMount: true };
 };

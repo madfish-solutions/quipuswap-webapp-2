@@ -2,16 +2,23 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
-import { FarmingItem } from '@modules/farming/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card, StateCurrencyAmount, StatusLabel, Tooltip } from '@shared/components';
-import { getTokensPairName, getTokenSymbol, isExist, multipliedIfPossible } from '@shared/helpers';
+import {
+  getDollarEquivalent,
+  getTimeLockDescription,
+  getTokensPairName,
+  getTokenSymbol,
+  isExist
+} from '@shared/helpers';
 
+import { FarmingItem } from '../../../../interfaces';
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
 
 const ICON_SIZE = 48;
+const ZERO = 0;
 const LINKS_THEME = 'underlined';
 
 const themeClass = {
@@ -35,7 +42,9 @@ export const FarmingListItem: FC<FarmingItem> = ({
   depositTokenUrl,
   myBalance,
   depositBalance,
-  earnBalance
+  earnBalance,
+  timelock,
+  withdrawalFee
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { translation } = useListItemViewModal();
@@ -62,23 +71,37 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
-  const selectLink = `/farming/${id}`;
+  const selectLink = `${id}`;
 
-  const myBalanceDollarEquivalent = multipliedIfPossible(myBalance, depositExchangeRate);
-  const myDepositDollarEquivalent = multipliedIfPossible(depositBalance, depositExchangeRate);
+  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
+  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
-  const myEarnDollarEquivalent = multipliedIfPossible(earnBalance, earnExchangeRate);
+  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExchangeRate);
 
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
+
+  const timeLockLabel = getTimeLockDescription(timelock);
+  const shouldShowLockPeriod = !!Number(timelock);
+
+  const withdrawalFeeLabel = withdrawalFee.toFixed();
+  const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
     <Card className={cx(styles.card, themeClass[colorThemeMode])}>
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
-            <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StatusLabel status={stakeStatus} />
-            <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
+            <div className={styles.iconWithStatusLabel}>
+              <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
+              <StatusLabel status={stakeStatus} filled />
+            </div>
+            <div className={styles.tagsWithTooltip}>
+              {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+              {shouldShowWithdrawalFee && (
+                <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+              )}
+              <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
+            </div>
           </div>
 
           <div className={styles.rewardTarget}>

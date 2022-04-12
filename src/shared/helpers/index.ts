@@ -14,6 +14,7 @@ export * from './tokens';
 export * from './arrays';
 export * from './calculate-rate-amount';
 export * from './comparison';
+export * from './get-dollar-equivalent';
 export * from './get-minimal-output';
 export * from './get-success-messages';
 export * from './get-token-appellation';

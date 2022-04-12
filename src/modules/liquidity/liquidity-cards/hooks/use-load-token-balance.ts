@@ -14,17 +14,17 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
   const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
 
   const getTokenBalance = useCallback(
-    async (token: Nullable<Token>) => {
-      if (!tezos || !accountPkh || !token) {
+    async (_token: Nullable<Token>) => {
+      if (!tezos || !accountPkh || !_token) {
         return;
       }
 
-      const { contractAddress, type, fa2TokenId } = token;
+      const { contractAddress, type, fa2TokenId } = _token;
 
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
       if (userTokenABalance) {
-        setTokenBalance(fromDecimals(userTokenABalance, token));
+        setTokenBalance(fromDecimals(userTokenABalance, _token));
       }
 
       return userTokenABalance;

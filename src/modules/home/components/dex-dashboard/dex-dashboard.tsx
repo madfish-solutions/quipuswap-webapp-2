@@ -4,7 +4,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
+import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { RPC_URLS } from '@config/enviroment';
 import { MAINNET_DEFAULT_TOKEN } from '@config/tokens';
 import { Card } from '@shared/components/card';
@@ -40,7 +40,7 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
     void asyncLoad();
   }, []);
 
-  const desktopContentClassName = IS_NETWORK_MAINNET ? s.content : cx(s.content, s.testnet);
+  const desktopContentClassName = IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? s.content : cx(s.content, s.testnet);
 
   return (
     <Section
@@ -51,10 +51,10 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
       <Card className={s.mobile} contentClassName={s.mobContent}>
         <Slider className={s.mobSlider}>
           <DexDashboardInner
-            volume24={'888888'}
-            totalLiquidity={'888888'}
-            xtzUsdQuote={'888888'}
-            trasactionsCount24h={888888}
+            volume24={null}
+            totalLiquidity={null}
+            xtzUsdQuote={null}
+            transactionsCount24h={null}
             totalSupply={totalSupply}
             loading={false}
           />
@@ -65,7 +65,7 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
           volume24={'888888'}
           totalLiquidity={'888888'}
           xtzUsdQuote={'888888'}
-          trasactionsCount24h={888888}
+          transactionsCount24h={888888}
           totalSupply={totalSupply}
           loading={false}
         />

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import s from '@styles/CommonContainer.module.scss';
+import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { FarmingAlert } from '../../farming-alert';
@@ -51,13 +51,13 @@ export const StakeForm: FC = observer(() => {
       {shouldShowBakerInput && (
         <ComplexBaker
           label={t('common|Baker')}
-          className={s.mt24}
+          className={styles.mt24}
           handleChange={handleBakerChange}
           error={bakerError}
           value={bakerInputValue}
         />
       )}
-      <div className={s.suggestedOperationsButtons}>
+      <div className={styles.suggestedOperationsButtons}>
         <Button theme="underlined" href={tradeHref}>
           {t('common|Trade')}
         </Button>
@@ -67,10 +67,10 @@ export const StakeForm: FC = observer(() => {
           </Button>
         )}
       </div>
-      <FarmingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
-      <div className={s.buttons}>
+      <FarmingAlert className={styles.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
+      <div className={styles.buttons}>
         <ConnectWalletOrDoSomething>
-          <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
+          <Button type="submit" className={styles.button} disabled={disabled} loading={isSubmitting}>
             {t('farm|Stake')}
           </Button>
         </ConnectWalletOrDoSomething>

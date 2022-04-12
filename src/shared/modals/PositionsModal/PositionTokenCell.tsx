@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { TokenCell } from '@shared/components';
 import { Checkbox } from '@shared/elements';
-import { getTokenName, getTokenSymbol, prepareTokenLogo } from '@shared/helpers';
+import { getTokenName, getTokenSymbol, isTezosToken, prepareTokenLogo } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 interface PositionTokenCellProps {
@@ -16,6 +16,8 @@ export const PositionTokenCell: FC<PositionTokenCellProps> = ({ token, onClick, 
     tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
     tokenName={getTokenName(token)}
     tokenSymbol={getTokenSymbol(token)}
+    tokenType={token.type}
+    isTezosToken={isTezosToken(token)}
     tabIndex={0}
     onClick={onClick}
   >

@@ -5,13 +5,24 @@
   display: flex;
   row-gap: 6px;
   margin-bottom: 12px;
+  align-items: center;
 }
+
+.tags {
+  display: flex;
+  align-items: flex-end;
+  & > div {
+    margin-left: 4px;
+  }
+}
+
 @include media('>=tablet') {
   .stakeDetailsButtons {
     flex-direction: row;
     column-gap: 16px;
   }
 }
+
 @include media('<tablet') {
   .stakeDetailsButtons {
     .stakeDetailsButton:not(:first-child) {

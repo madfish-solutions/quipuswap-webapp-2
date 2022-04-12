@@ -1,8 +1,11 @@
 import { FC, ReactNode } from 'react';
 
+import { StatusLabel } from '@shared/components/status-label';
+import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '@shared/svg';
+import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
 
-import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '../../../svg';
+import styles from './navigation.module.scss';
 
 interface LinkInterface {
   id: number;
@@ -10,6 +13,7 @@ interface LinkInterface {
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
+  status?: ReactNode;
 }
 
 interface NavigationDataProps extends LinkInterface {
@@ -45,7 +49,8 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 4,
     to: '/farming',
     label: <Trans ns="common">Farming</Trans>,
-    Icon: FarmIcon
+    Icon: FarmIcon,
+    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />
   },
   // {
   //   id: 5,

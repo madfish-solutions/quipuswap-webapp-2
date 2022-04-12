@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
-export type DataTestAttribute = {
+export interface DataTestAttribute {
   testId?: string;
-};
+}

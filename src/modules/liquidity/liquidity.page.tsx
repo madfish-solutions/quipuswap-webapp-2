@@ -2,8 +2,8 @@ import { FC, Fragment, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { DEFAULT_TOKEN, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
-import { PageTitle, StickyBlock } from '@shared/components';
+import { DEFAULT_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
+import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -12,7 +12,7 @@ import { LiquidityCards } from './liquidity-cards';
 import { getFullLiquidityUrl, parseUrl } from './liquidity-cards/helpers';
 
 const DEFAULT_TAB = 'add';
-const DEFAULT_LIQUIDITY_TOKEN_A = TEZOS_TOKEN_SYMBOL;
+const DEFAULT_LIQUIDITY_TOKEN_A = TEZOS_TOKEN_SLUG;
 const DEFAULT_LIQUIDITY_TOKEN_B = getTokenSlug(DEFAULT_TOKEN);
 
 interface LiquidityProps {
@@ -31,12 +31,12 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
 
   useEffect(() => {
     if (!tabId || !tokenAFromUrl || !tokenBFromUrl) {
-      const url = getFullLiquidityUrl(
+      const _url = getFullLiquidityUrl(
         tabId || DEFAULT_TAB,
         tokenAFromUrl || DEFAULT_LIQUIDITY_TOKEN_A,
         tokenBFromUrl || DEFAULT_LIQUIDITY_TOKEN_B
       );
-      navigate(url, { replace: true });
+      navigate(_url, { replace: true });
     }
   }, [navigate, tabId, tokenAFromUrl, tokenBFromUrl]);
 
@@ -52,6 +52,7 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
 
   return (
     <Fragment>
+      <TestnetAlert />
       <PageTitle>
         {t('common|Liquidity')} {title}
       </PageTitle>

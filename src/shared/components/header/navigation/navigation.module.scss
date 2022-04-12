@@ -122,3 +122,10 @@
     }
   }
 }
+
+.navigationStatus {
+  margin-left: 4px;
+  & > span {
+    padding: 2px 4px;
+  }
+}

@@ -10,12 +10,14 @@ import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
   const farmingListStore = useFarmingListStore();
+  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
   const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 
   return (
     <RewardInfo
-      amount={farmingListStore.pendingRewards}
+      claimablePendingRewards={claimablePendingRewards}
+      totalPendingRewards={totalPendingRewards}
       onButtonClick={handleHarvestAll}
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={harvestAllTranslation}

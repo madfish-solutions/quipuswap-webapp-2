@@ -33,7 +33,7 @@ const initializeStore = (): RootStore => {
 };
 
 export const RootStoreProvider = ({ children }: { children: ReactNode }) => {
-  const store = initializeStore();
+  const _store = initializeStore();
 
-  return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+  return <StoreContext.Provider value={_store}>{children}</StoreContext.Provider>;
 };

@@ -21,12 +21,12 @@ export const useLoadLiquidityShare = (dex: Optional<FoundDex>, tokenA: Nullable<
   const [share, setShare] = useState<Nullable<LiquidityShareResult>>(null);
 
   const loadShare = useCallback(
-    async (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+    async (_dex: Optional<FoundDex>, _tokenA: Nullable<Token>, _tokenB: Nullable<Token>) => {
+      if (!tezos || !accountPkh || !_dex || !_tokenA || !_tokenB) {
         return;
       }
 
-      const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, dex, tokenA, tokenB);
+      const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, _dex, _tokenA, _tokenB);
 
       setShare(userLiquidityShares);
     },

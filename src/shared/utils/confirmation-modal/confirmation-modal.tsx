@@ -29,7 +29,8 @@ export const ConfirmationModal: FC = () => {
 
   return (
     <Modal
-      portalClassName={styles.modal}
+      className={styles.modal}
+      portalClassName={styles.modalPortal}
       title={t('common|confirmation')}
       contentClassName={compoundClassName}
       isOpen={confirmationModalOpen}

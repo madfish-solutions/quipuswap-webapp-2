@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -17,7 +17,8 @@ import {
   PageTitle,
   StickyBlock,
   SwapButton,
-  Tabs
+  Tabs,
+  TestnetAlert
 } from '@shared/components';
 import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
 import complexInputStyles from '@shared/components/ComplexInput/ComplexInput.module.scss';
@@ -68,6 +69,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const {
     errors,
     values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient },
+    isSubmitting,
     validateField,
     setValues,
     setFieldValue,
@@ -142,9 +144,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   });
 
   const onTokensSelected = useCallback(
-    (inputToken: Token, outputToken: Token) => {
-      updateSwapLimits(inputToken, outputToken);
-      const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
+    (_inputToken: Token, _outputToken: Token) => {
+      updateSwapLimits(_inputToken, _outputToken);
+      const newRoute = `/swap/${getTokenPairSlug(_inputToken, _outputToken)}`;
 
       // if (router.asPath !== newRoute) {
       navigate(newRoute);
@@ -395,6 +397,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 
   return (
     <>
+      <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
@@ -465,13 +468,19 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           </div>
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
-          {accountPkh && dataIsStale && (
+          {accountPkh && dataIsStale && !isSubmitting && (
             <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={styles.button}>
               {t('swap|Update Rates')}
             </Button>
           )}
-          {accountPkh && !dataIsStale && (
-            <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={styles.button}>
+          {accountPkh && (!dataIsStale || isSubmitting) && (
+            <Button
+              disabled={submitDisabled}
+              loading={isSubmitting}
+              type="submit"
+              onClick={handleSubmit}
+              className={styles.button}
+            >
               {currentTabLabel}
             </Button>
           )}

@@ -1,13 +1,15 @@
 {
-  "name": "tezos-landing",
-  "version": "0.1.0",
+  "name": "quipuswap-webapp",
+  "version": "3.0.1",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3000 craco start",
     "dev:hangzhounet": "cross-env REACT_APP_NETWORK=hangzhounet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3002 craco start",
     "dev:ithacanet": "cross-env REACT_APP_NETWORK=ithacanet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3003 craco start",
+    "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
+    "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
+    "build": "yarn pre-build && craco build",
     "start": "yarn dev:mainnet",
-    "build": "craco build",
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
@@ -15,10 +17,10 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^2.3.10",
+    "@airgap/beacon-sdk": "^2.3.12",
     "@craco/craco": "^6.4.3",
     "@quipuswap/sdk": "^3.0.0",
-    "@taquito/beacon-wallet": "^12.0.0",
+    "@taquito/beacon-wallet": "^12.0.3",
     "@taquito/taquito": "^12.0.0",
     "@temple-wallet/dapp": "^6.1.1",
     "@tippyjs/react": "^4.2.6",

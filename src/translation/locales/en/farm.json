@@ -14,6 +14,8 @@
   "Harvest All": "Harvest all",
   "Your Claimed": "Your Claimed",
   "Your Claimable Rewards": "Your Claimable Rewards",
+  "Your Claimable": "Your Claimable",
+  "Your Full Rewards": "Your Full Rewards",
   "Harvest": "Harvest",
   "Earn extra income with QuipuSwap": "Earn extra income with QuipuSwap",
   "Connect Wallet now!": "Connect Wallet now!",
@@ -73,5 +75,6 @@
   "Unstake": "Unstake",
   "confirmationFirstStake": "This is the farm with lock period. You will need to wait {{days}} days {{hours}} hours to make the free withdrawal or pay {{persent}}% of your deposit and lose all your rewards if you decide to withdraw earlier.",
   "confirmationUpdateStake":"If you make the new stake, your lock countdown will be reset but all rewards will be saved. Your lock countdown ends in {{days}} days {{hours}} hours {{minutes}} minutes.",
-  "confirmationUnstake": "If you make the withdrawal now, the {{persent}}% withdrawal fee will be charged from your deposit and all your rewards will be lost. You can wait {{days}} days {{hours}} hours to make the free withdrawal."
+  "confirmationUnstake": "If you make the withdrawal now, the {{persent}}% withdrawal fee will be charged from your deposit and all your rewards will be lost. You can wait {{days}} days {{hours}} hours to make the free withdrawal.",
+  "Tags": "Tags"
 }

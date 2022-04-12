@@ -9,6 +9,7 @@ import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation } from '@shared/dapp';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@shared/helpers';
+import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
 
@@ -148,7 +149,7 @@ export const useRemoveLiquidityService = (
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
-  const handleRemoveLiquidity = async () => {
+  const [isLoading, handleRemoveLiquidity] = useLoadingDecorator(async () => {
     if (!tezos || !accountPkh || !pairInfo || !dex || !tokenA || !tokenB) {
       return;
     }
@@ -202,7 +203,7 @@ export const useRemoveLiquidityService = (
       updateLiquidityShares(dex, tokenA, tokenB),
       updatePairInfo(dex, tokenA, tokenB)
     ]);
-  };
+  });
 
   return {
     validatedInputMessage,
@@ -218,6 +219,7 @@ export const useRemoveLiquidityService = (
     share,
     isPoolNotExist,
     isTokenChanging,
+    isSubmiting: isLoading,
     setIsTokenChanging,
     handleChange,
     handleBalance,
