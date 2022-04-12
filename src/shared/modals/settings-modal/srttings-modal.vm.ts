@@ -1,55 +1,65 @@
-import { useState } from 'react';
-
+/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
+import { useFormik } from 'formik';
+import { noop } from 'rxjs';
+import { object as objectSchema } from 'yup';
 
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { SettingsModel } from '@shared/store/settings.store';
+import { Undefined } from '@shared/types';
+import { bigNumberSchema } from '@shared/validators';
 
-const useLiquiditySlippageFormik = (liquiditySlippage: BigNumber) => {
-  const [liquiditySlippageValue, setLiquiditySlippageValue] = useState(liquiditySlippage);
+const MIN_SLIPPAGE_VALUE = new BigNumber('0');
+const MAX_SLIPPAGE_VALUE = new BigNumber('30');
+
+enum SettingsFormValues {
+  LIQUIDITY_SLIPPAGE = 'LIQUIDITY_SLIPPAGE',
+  TRADING_SLIPPAGE = 'TRADING_SLIPPAGE',
+  TRANSACTION_DEADLINE = 'TRANSACTION_DEADLINE'
+}
+
+const useSettingsFormik = (initialSettings: SettingsModel) => {
+  const validationSchema = objectSchema().shape({
+    [SettingsFormValues.LIQUIDITY_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
+    [SettingsFormValues.TRADING_SLIPPAGE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE),
+    [SettingsFormValues.TRANSACTION_DEADLINE]: bigNumberSchema(MIN_SLIPPAGE_VALUE, MAX_SLIPPAGE_VALUE)
+  });
+  const initialValues = {
+    [SettingsFormValues.LIQUIDITY_SLIPPAGE]: initialSettings.liquiditySlippage,
+    [SettingsFormValues.TRADING_SLIPPAGE]: initialSettings.tradingSlippage,
+    [SettingsFormValues.TRANSACTION_DEADLINE]: initialSettings.transactionDeadline
+  };
+
+  const { errors, values, setFieldValue } = useFormik({
+    validationSchema,
+    initialValues,
+    onSubmit: noop,
+    validateOnChange: true
+  });
 
   const handleLiquiditySlippageChange = (newValue: BigNumber) => {
-    setLiquiditySlippageValue(newValue);
+    setFieldValue(SettingsFormValues.LIQUIDITY_SLIPPAGE, newValue);
   };
-
-  const liquiditySlippageError = 'Error';
-
-  return {
-    liquiditySlippageValue,
-    handleLiquiditySlippageChange,
-    liquiditySlippageError
-  };
-};
-
-const useTradingSlippageFormik = (tradingSlippage: BigNumber) => {
-  const [tradingSlippageValue, setTradingSlippageValue] = useState(tradingSlippage);
-
   const handleTradingSlippageChange = (newValue: BigNumber) => {
-    setTradingSlippageValue(newValue);
+    setFieldValue(SettingsFormValues.TRADING_SLIPPAGE, newValue);
   };
-
-  const tradingSlippageError = 'Error';
-
-  return {
-    tradingSlippageValue,
-    handleTradingSlippageChange,
-    tradingSlippageError
-  };
-};
-
-const useTransactionDeadlineFormik = (transactionDeadLine: BigNumber) => {
-  const [transactionDeadlineValue, setTransactionDeadlineValue] = useState(transactionDeadLine);
-
   const handleTransactionDeadlineChange = (newValue: BigNumber) => {
-    setTransactionDeadlineValue(newValue);
+    setFieldValue(SettingsFormValues.TRANSACTION_DEADLINE, newValue);
   };
 
-  const transactionDeadlineError = 'Error';
-
   return {
-    transactionDeadlineValue,
+    liquiditySlippageValue: values[SettingsFormValues.LIQUIDITY_SLIPPAGE],
+    handleLiquiditySlippageChange,
+    liquiditySlippageError: errors[SettingsFormValues.LIQUIDITY_SLIPPAGE] as Undefined<string>,
+
+    tradingSlippageValue: values[SettingsFormValues.TRADING_SLIPPAGE],
+    handleTradingSlippageChange,
+    tradingSlippageError: errors[SettingsFormValues.TRADING_SLIPPAGE] as Undefined<string>,
+
+    transactionDeadlineValue: values[SettingsFormValues.TRANSACTION_DEADLINE],
     handleTransactionDeadlineChange,
-    transactionDeadlineError
+    transactionDeadlineError: errors[SettingsFormValues.TRANSACTION_DEADLINE] as Undefined<string>
   };
 };
 
@@ -58,16 +68,19 @@ export const useSettingModalViewModel = () => {
   const { settings } = settingsStore;
   const { settingsModalOpen, closeSettingsModal } = useGlobalModalsState();
 
-  const { liquiditySlippageValue, handleLiquiditySlippageChange, liquiditySlippageError } = useLiquiditySlippageFormik(
-    settings.liquiditySlippage
-  );
+  const {
+    liquiditySlippageValue,
+    handleLiquiditySlippageChange,
+    liquiditySlippageError,
 
-  const { tradingSlippageValue, handleTradingSlippageChange, tradingSlippageError } = useTradingSlippageFormik(
-    settings.tradingSlippage
-  );
+    tradingSlippageValue,
+    handleTradingSlippageChange,
+    tradingSlippageError,
 
-  const { transactionDeadlineValue, handleTransactionDeadlineChange, transactionDeadlineError } =
-    useTransactionDeadlineFormik(settings.transactionDeadline);
+    transactionDeadlineValue,
+    handleTransactionDeadlineChange,
+    transactionDeadlineError
+  } = useSettingsFormik(settings);
 
   const setSettings = () => {
     settingsStore.updateSettings({

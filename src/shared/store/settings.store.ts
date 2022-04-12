@@ -11,7 +11,7 @@ interface RawSettings {
   transactionDeadline: string;
 }
 
-interface SettingsModel {
+export interface SettingsModel {
   liquiditySlippage: BigNumber;
   tradingSlippage: BigNumber;
   transactionDeadline: BigNumber;
