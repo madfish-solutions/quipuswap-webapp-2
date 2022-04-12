@@ -15,6 +15,7 @@ import {
   ComplexRecipient,
   ConnectWalletButton,
   PageTitle,
+  SettingsButton,
   StickyBlock,
   SwapButton,
   Tabs,
@@ -410,6 +411,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
                 className={styles.tabs}
               />
             ),
+            button: <SettingsButton />,
             // TODO: add a button for transactions history
             className: styles.header
           }}
