@@ -237,8 +237,7 @@ function useDApp() {
       return;
     }
 
-    const homePath = '/';
-    window.location.pathname = `${networksBaseUrls[networkNew.id]}${homePath}`;
+    window.location.href = `${networksBaseUrls[networkNew.id]}/`;
 
     setState(prevState => ({
       ...prevState,
