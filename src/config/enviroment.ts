@@ -14,9 +14,9 @@ export const APOLLO_CLIENT_ENDPOINT = process.env.REACT_APP_APOLLO_CLIENT_ENDPOI
 
 //#region BASE_URL
 export const networksBaseUrls: Record<QSNets, string> = {
-  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_RPC_URL!,
-  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_RPC_URL!,
-  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_RPC_URL!
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_BASE_URL!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_BASE_URL!,
+  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_BASE_URL!
 };
 
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
