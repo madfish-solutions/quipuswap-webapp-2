@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { USD_DECIMALS } from '@config/constants';
-import { useFarmingListStore } from '@modules/farming/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
@@ -21,26 +20,24 @@ const modeClass = {
 };
 
 interface Props extends DataTestAttribute {
-  amount: Nullable<BigNumber>;
+  claimablePendingRewards: Nullable<BigNumber>;
+  totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
-  tooltip?: string;
 }
 
 export const PendingRewards: FC<Props> = ({
-  amount,
   currency,
-  tooltip,
   testId,
   dollarEquivalent,
-  amountDecimals = USD_DECIMALS
+  amountDecimals = USD_DECIMALS,
+  claimablePendingRewards,
+  totalPendingRewards
 }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const farmingListStore = useFarmingListStore();
-  const { claimablePendingRewards, totalPendingRewards } = farmingListStore;
 
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
@@ -48,11 +45,15 @@ export const PendingRewards: FC<Props> = ({
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>
-                {t('farm|Your Claimable')}
-                <span className={styles.slash}>{'/'}</span>
-                <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
-              </span>
+              {totalPendingRewards ? (
+                <span className={styles.title}>
+                  {t('farm|Your Claimable')}
+                  <span className={styles.slash}>{'/'}</span>
+                  <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
+                </span>
+              ) : (
+                <span className={styles.title}>{t('farm|Your Full Rewards')}</span>
+              )}
             </div>
             <div className={styles.statesOfCurrencysAmount}>
               <StateCurrencyAmount
@@ -64,16 +65,20 @@ export const PendingRewards: FC<Props> = ({
                 isLeftCurrency={currency === '$'}
                 testId={testId}
               />
-              <div className={styles.bigSlash}>{'/'}</div>
-              <StateCurrencyAmount
-                className={styles.amount}
-                amount={totalPendingRewards}
-                currency={currency}
-                dollarEquivalent={dollarEquivalent}
-                amountDecimals={amountDecimals}
-                isLeftCurrency={currency === '$'}
-                testId={testId}
-              />
+              {totalPendingRewards && (
+                <>
+                  <div className={styles.bigSlash}>{'/'}</div>
+                  <StateCurrencyAmount
+                    className={styles.amount}
+                    amount={totalPendingRewards}
+                    currency={currency}
+                    dollarEquivalent={dollarEquivalent}
+                    amountDecimals={amountDecimals}
+                    isLeftCurrency={currency === '$'}
+                    testId={testId}
+                  />
+                </>
+              )}
             </div>
           </>
         ) : (
