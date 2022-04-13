@@ -236,7 +236,7 @@ function useDApp() {
       return;
     }
 
-    window.location.href = `${networksBaseUrls[networkNew.id]}/`;
+    window.location.href = `${networksBaseUrls[networkNew.id]}`;
 
     setState(prevState => ({
       ...prevState,
