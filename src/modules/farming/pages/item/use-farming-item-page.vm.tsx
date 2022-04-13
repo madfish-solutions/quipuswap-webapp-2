@@ -21,8 +21,8 @@ export const useFarmingItemPageViewModel = () => {
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const params = useParams();
-
   const rawStakeId = params.farmId;
+
   /*
    Load data
   */

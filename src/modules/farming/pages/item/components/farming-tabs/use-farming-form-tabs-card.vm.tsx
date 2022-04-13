@@ -1,6 +1,8 @@
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { useFarmingItemStore } from '@modules/farming/hooks';
 
-import { FarmingFormTabs } from '../../types'; //TODO
+import { FarmingFormTabs } from '../../types';
 
 export const TabsContent = [
   {
@@ -15,15 +17,18 @@ export const TabsContent = [
 
 export const useFarmingFormTabsCardViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
-
-  const changeTabHandle = (tab: FarmingFormTabs) => {
-    farmingItemStore.setTab(tab);
-  };
+  const navigate = useNavigate();
+  const farmId = useParams().farmId;
 
   const { itemStore, currentTab } = farmingItemStore;
   const { data: farmingItem } = itemStore;
 
   const isStakeForm = farmingItemStore.currentTab === FarmingFormTabs.stake;
+
+  const changeTabHandle = (tab: FarmingFormTabs) => {
+    farmingItemStore.setTab(tab);
+    navigate(`/farming/${tab}/${farmId}`);
+  };
 
   return {
     farmingItem,
