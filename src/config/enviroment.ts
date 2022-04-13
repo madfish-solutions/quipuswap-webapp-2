@@ -12,15 +12,11 @@ export const BAKERS_API = process.env.REACT_APP_BAKERS_API_URL!;
 export const QUIPUSWAP_OLD_VERSION_LINK = process.env.REACT_APP_QUIPUSWAP_OLD_VERSION_LINK!;
 export const APOLLO_CLIENT_ENDPOINT = process.env.REACT_APP_APOLLO_CLIENT_ENDPOINT!;
 
-const REACT_APP_MAINNET_BASE_URL = process.env.REACT_APP_MAINNET_BASE_URL!;
-const REACT_APP_HANGZHOUNET_BASE_URL = process.env.REACT_APP_HANGZHOUNET_BASE_URL!;
-const REACT_APP_ITHACANET_BASE_URL = process.env.REACT_APP_ITHACANET_BASE_URL!;
-
 //#region BASE_URL
 export const networksBaseUrls: Record<QSNets, string> = {
-  [QSNets.mainnet]: REACT_APP_MAINNET_BASE_URL,
-  [QSNets.hangzhounet]: REACT_APP_HANGZHOUNET_BASE_URL,
-  [QSNets.ithacanet]: REACT_APP_ITHACANET_BASE_URL
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_RPC_URL!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_RPC_URL!,
+  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_RPC_URL!
 };
 
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
