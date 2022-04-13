@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
-import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
@@ -39,7 +38,6 @@ export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
 
 function useDApp() {
-  const navigate = useNavigate();
   const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
     useState<DAppType>({
       connectionType: null,
@@ -234,25 +232,23 @@ function useDApp() {
     localStorage.removeItem(LAST_USED_CONNECTION_KEY);
   }, []);
 
-  const changeNetwork = useCallback(
-    (networkNew: QSNetwork) => {
-      if (networkNew.id === NETWORK_ID) {
-        return;
-      }
+  const changeNetwork = useCallback((networkNew: QSNetwork) => {
+    if (networkNew.id === NETWORK_ID) {
+      return;
+    }
 
-      navigate(`${networksBaseUrls[networkNew.id]}/`);
+    const homePath = '/';
+    window.location.pathname = `${networksBaseUrls[networkNew.id]}${homePath}`;
 
-      setState(prevState => ({
-        ...prevState,
-        accountPkh: null,
-        accountPublicKey: null,
-        connectionType: null,
-        tezos: fallbackToolkits[networkNew.id],
-        isLoading: false
-      }));
-    },
-    [navigate]
-  );
+    setState(prevState => ({
+      ...prevState,
+      accountPkh: null,
+      accountPublicKey: null,
+      connectionType: null,
+      tezos: fallbackToolkits[networkNew.id],
+      isLoading: false
+    }));
+  }, []);
 
   const estimationToolkit = useMemo(() => {
     if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
