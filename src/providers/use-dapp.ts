@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
@@ -238,6 +237,8 @@ function useDApp() {
     }
 
     window.location.href = `${networksBaseUrls[networkNew.id]}/`;
+    // eslint-disable-next-line no-console
+    console.log(`${networksBaseUrls[networkNew.id]}/`);
 
     setState(prevState => ({
       ...prevState,
