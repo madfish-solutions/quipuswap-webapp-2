@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
-import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
@@ -16,8 +15,7 @@ import {
   connectWalletTemple,
   getTempleWalletState,
   michelEncoder,
-  rpcClients,
-  isNull
+  rpcClients
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
 
@@ -38,11 +36,7 @@ export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
 
-const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
-
 function useDApp() {
-  const location = useLocation();
-
   const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
     useState<DAppType>({
       connectionType: null,
@@ -237,32 +231,22 @@ function useDApp() {
     localStorage.removeItem(LAST_USED_CONNECTION_KEY);
   }, []);
 
-  const changeNetwork = useCallback(
-    (networkNew: QSNetwork) => {
-      if (networkNew.id === NETWORK_ID) {
-        return;
-      }
+  const changeNetwork = useCallback((networkNew: QSNetwork) => {
+    if (networkNew.id === NETWORK_ID) {
+      return;
+    }
 
-      const currentPath = location.pathname;
-      const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
-      if (isNull(urlWithSlugsRegexResult)) {
-        window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
-      } else {
-        const basePath = urlWithSlugsRegexResult[1];
-        window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}`;
-      }
+    window.location.href = `${networksBaseUrls[networkNew.id]}/`;
 
-      setState(prevState => ({
-        ...prevState,
-        accountPkh: null,
-        accountPublicKey: null,
-        connectionType: null,
-        tezos: fallbackToolkits[networkNew.id],
-        isLoading: false
-      }));
-    },
-    [location.pathname]
-  );
+    setState(prevState => ({
+      ...prevState,
+      accountPkh: null,
+      accountPublicKey: null,
+      connectionType: null,
+      tezos: fallbackToolkits[networkNew.id],
+      isLoading: false
+    }));
+  }, []);
 
   const estimationToolkit = useMemo(() => {
     if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
