@@ -12,12 +12,12 @@ import { ListFilter } from './structures/list-filter';
 import { useFarmingListViewModel } from './use-farming-list.vm';
 
 export const FarmsListPage = observer(() => {
-  const { isLoading, list } = useFarmingListViewModel();
+  const { isLoading, list, title } = useFarmingListViewModel();
 
   return (
     <>
       <TestnetAlert />
-      <PageTitle>Farming</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
         <FarmingRewardsList />

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Card, Tabs } from '@shared/components';
+import { Card, SettingsButton, Tabs } from '@shared/components';
 import { Nullable, Token } from '@shared/types';
 
 import styles from '../liquidity.module.scss';
@@ -42,6 +42,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
               className={styles.tabs}
             />
           ),
+          button: <SettingsButton />,
           className: styles.header
         }}
         contentClassName={styles.content}

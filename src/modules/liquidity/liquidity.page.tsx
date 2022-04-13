@@ -1,10 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DEFAULT_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
 import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
-import { DeadlineAndSlippageProvider } from '@shared/dapp';
 import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -52,7 +51,7 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
   }
 
   return (
-    <DeadlineAndSlippageProvider>
+    <Fragment>
       <TestnetAlert />
       <PageTitle>
         {t('common|Liquidity')} {title}
@@ -60,6 +59,6 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
       <StickyBlock className={className}>
         <LiquidityCards onTokensChange={handleTokensChange} />
       </StickyBlock>
-    </DeadlineAndSlippageProvider>
+    </Fragment>
   );
 };
