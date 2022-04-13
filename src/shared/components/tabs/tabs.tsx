@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState, useRef, FC } from 'react';
 
 import cx from 'classnames';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
@@ -24,6 +25,8 @@ const modeClass = {
 
 export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, withUnderline = true }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const navigate = useNavigate();
+  const params = useParams().farmId;
 
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);
 
@@ -57,7 +60,10 @@ export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, 
           type="button"
           className={cx(s.item, { [s.active]: id === activeId })}
           title={label}
-          onClick={() => setActiveId(id)}
+          onClick={() => {
+            setActiveId(id);
+            navigate(`/farming/${id}/${params}`);
+          }}
           ref={el => addToRefs(id, el)}
         >
           <span className={s.inner}>{label}</span>

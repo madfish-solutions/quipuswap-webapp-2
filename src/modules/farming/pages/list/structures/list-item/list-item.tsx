@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { FarmingFormTabs } from '@modules/farming/pages/item/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card, StateCurrencyAmount, StatusLabel, Tooltip } from '@shared/components';
 import {
@@ -71,7 +72,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
-  const selectLink = `${id}`;
+  const selectLink = `${FarmingFormTabs.stake}/${id}`;
 
   const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
   const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
