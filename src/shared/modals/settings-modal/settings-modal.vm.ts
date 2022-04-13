@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { noop } from 'rxjs';
@@ -105,6 +104,7 @@ export const useSettingModalViewModel = () => {
 
     closeSettingsModal();
   };
+
   const resetSettings = () => {
     settingsStore.resetSettings();
     handleLiquiditySlippageChange(settingsStore.settings.liquiditySlippage);

@@ -42,7 +42,6 @@ export const SettingsModal = observer(() => {
 
   return (
     <Modal
-      // portalClassName={styles.modal}
       title={modalTitleTranslation}
       contentClassName={styles.modal}
       isOpen={settingsModalOpen}

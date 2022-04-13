@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { MIN_SLIPPAGE_PERCENTAGE } from '@config/constants';
 import { Nullable } from '@shared/types';
 
 import { PresetsAmountInput } from '../presets-amount-input';
@@ -22,7 +23,7 @@ export const SlippageInput: FC<Props> = ({ className, value, handleChange }) => 
     <PresetsAmountInput
       className={className}
       defaultValue={value}
-      min={0}
+      min={MIN_SLIPPAGE_PERCENTAGE}
       handleChange={handleChange}
       placeholder={value}
       presets={slippagePresets}
