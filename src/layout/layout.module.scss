@@ -29,6 +29,12 @@
   background-size: 75%;
 }
 
+@include media('>tablet') {
+  .wrapper {
+    height: calc(100vh - 64px);
+  }
+}
+
 @include media('>SDesktop') {
   .root {
     flex-direction: row;
