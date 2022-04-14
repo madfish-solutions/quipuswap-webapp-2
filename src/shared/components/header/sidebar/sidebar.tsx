@@ -8,6 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DonationButton } from '@shared/components';
 import { useTranslation } from '@translation';
 
+import { amplitudeService } from '../../../services';
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
 import { ConnectWalletButton } from '../../connect-wallet-button';
@@ -30,6 +31,14 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const handleOldVersionClick = () => {
+    amplitudeService.logEvent('OLD_VERSION_CLICK');
+  };
+
+  const handleMadfishClick = () => {
+    amplitudeService.logEvent('MADFISH_CLICK');
+  };
+
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <div className={styles.wallet}>
@@ -41,10 +50,22 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       <footer className={styles.footer}>
         <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
-        <Button className={styles.footerItem} href="https://www.madfish.solutions/" external theme="clean">
+        <Button
+          className={styles.footerItem}
+          href="https://www.madfish.solutions/"
+          external
+          theme="clean"
+          onClick={handleMadfishClick}
+        >
           <Madfish />
         </Button>
-        <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={styles.button}>
+        <Button
+          external
+          href={QUIPUSWAP_OLD_VERSION_LINK}
+          theme="secondary"
+          className={styles.button}
+          onClick={handleOldVersionClick}
+        >
           {t('common|Old version')}
         </Button>
       </footer>
