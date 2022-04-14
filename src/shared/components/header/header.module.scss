@@ -19,7 +19,9 @@
   align-items: center;
 }
 
-.coloModeSwitcher, .languageSwitcher {
+.coloModeSwitcher,
+.languageSwitcher,
+.settings {
   display: none;
 }
 
@@ -54,20 +56,24 @@
   background-color: $ui-06;
 }
 
-@include media('>SDesktop') {
+@include media(">SDesktop") {
   .root {
     padding: 0 32px 0 16px;
   }
 
-  .menuButton, .menu, .connect {
+  .menuButton,
+  .menu,
+  .connect {
     display: none;
   }
 
   .coloModeSwitcher {
-    margin-left: 40px;
+    margin-left: 24px;
   }
 
-  .languageSwitcher, .coloModeSwitcher {
+  .languageSwitcher,
+  .coloModeSwitcher,
+  .settings {
     display: flex;
   }
 }

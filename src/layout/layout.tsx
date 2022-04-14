@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { Sidebar, Header, AmplitudeSubscription } from '@shared/components';
-import { AccountModal, DonationModal, WalletModal } from '@shared/modals';
+import { AccountModal, DonationModal, SettingsModal, WalletModal } from '@shared/modals';
 import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
 import styles from './layout.module.scss';
@@ -40,6 +40,7 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
             <AccountModal />
             <DonationModal />
             <AmplitudeSubscription />
+            <SettingsModal />
           </ConfirmationModalProvider>
         </GlobalModalsStateProvider>
       ) : (

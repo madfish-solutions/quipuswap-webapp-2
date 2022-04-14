@@ -1,29 +1,34 @@
 import { FC } from 'react';
 
-import { Nullable } from '@shared/types';
+import BigNumber from 'bignumber.js';
 
-import { PresetsAmountInput } from '../presets-amount-input';
-
-const slippagePresets = [
-  { label: '0.5 %', value: '0.5' },
-  { label: '1 %', value: '1' },
-  { label: '3 %', value: '3' }
-];
+import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
+import { Scaffolding, SlippageInput, Tooltip } from '@shared/components';
+import { Nullable, Undefined } from '@shared/types';
+import styles from '@styles/CommonContainer.module.scss';
 
 interface Props {
-  className?: string;
-  handleChange: (value: Nullable<string>) => void;
-  placeholder?: string;
+  title: string;
+  tooltip: string;
+  error: Undefined<string>;
+  slippage: BigNumber;
+  onChange: (newValue: BigNumber) => void;
 }
 
-export const Slippage: FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
-  <PresetsAmountInput
-    className={className}
-    defaultValue={slippagePresets[0].value}
-    min={0}
-    handleChange={handleChange}
-    placeholder={placeholder}
-    presets={slippagePresets}
-    unit="%"
-  />
-);
+export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip }) => {
+  const handleChange = (newValue: Nullable<string>) =>
+    onChange(new BigNumber(newValue ? newValue : DEFAULT_SLIPPAGE_PERCENTAGE));
+
+  return (
+    <div>
+      <label htmlFor="deadline" className={styles.inputLabel}>
+        <span>{title}</span>
+        <Tooltip content={tooltip} />
+      </label>
+      <SlippageInput handleChange={handleChange} value={slippage.toFixed()} />
+      <Scaffolding height={27.5} showChild={Boolean(error)}>
+        <div className={styles.simpleError}>{error}</div>
+      </Scaffolding>
+    </div>
+  );
+};

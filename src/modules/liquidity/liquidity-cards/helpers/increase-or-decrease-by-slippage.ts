@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { LiquiditySlippageType } from '../../liquidity-slippage';
+import { LiquiditySlippageType } from '../../slippage-info';
 import { decreaseBySlippage } from './decrease-by-slippage';
 import { increaseBySlippage } from './increase-by-slippage';
 
