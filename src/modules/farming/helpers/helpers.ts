@@ -1,8 +1,9 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
+import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE } from '@config/constants';
-import { defined, isExist, fromDecimals } from '@shared/helpers';
+import { defined, isExist, fromDecimals, getBlockchainTimestamp } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 
 import {
@@ -59,6 +60,29 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   }
 
   const reward = new BigNumber(Math.floor((Date.now() - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+    rewardPerSecond
+  );
+
+  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
+
+  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
+
+  return fromRewardPrecision(pending);
+};
+
+export const getUserPendingRewardOnCurrBlock = async (
+  tezos: TezosToolkit,
+  userInfo: UsersInfoValue,
+  item: FarmingItem
+) => {
+  const timespamp = await getBlockchainTimestamp(tezos);
+  const { staked: totalStaked, rewardPerSecond } = item;
+
+  if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
+    return new BigNumber('0');
+  }
+
+  const reward = new BigNumber(Math.floor(timespamp - new Date(item.udp).getTime() / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
   );
 

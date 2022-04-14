@@ -10,7 +10,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
-import { getUserPendingReward } from '../helpers';
+import { getUserPendingReward, getUserPendingRewardOnCurrBlock } from '../helpers';
 import { FarmingItem, RawFarmingItem, RawUsersInfoValue, UsersInfoValue } from '../interfaces';
 import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
@@ -85,6 +85,14 @@ export class FarmingItemStore {
         earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
       }
     );
+  }
+
+  get pendingRewardsOnBlock(): Nullable<Promise<BigNumber>> {
+    const { tezos } = this.rootStore;
+    const { data: userInfo } = this.userInfoStore;
+    const { data: item } = this.itemStore;
+
+    return tezos && userInfo && item && getUserPendingRewardOnCurrBlock(tezos, userInfo, item);
   }
 
   makePendingRewardsLiveable() {

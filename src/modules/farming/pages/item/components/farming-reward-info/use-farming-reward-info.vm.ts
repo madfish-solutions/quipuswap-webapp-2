@@ -1,13 +1,21 @@
 import { NO_TIMELOCK_VALUE } from '@config/constants';
+import { DEFAULT_TOKEN } from '@config/tokens';
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@modules/farming/helpers';
 import { useFarmingItemStore, useDoHarvestAndRestake } from '@modules/farming/hooks';
 import { useDoHarvest } from '@modules/farming/hooks/blockchain/use-do-harvest';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { toDecimals, defined, getTokenSymbol, isExist, isNull, multipliedIfPossible } from '@shared/helpers';
+import {
+  toDecimals,
+  defined,
+  getTokenSymbol,
+  isExist,
+  isNull,
+  multipliedIfPossible,
+  areTokensEqual
+} from '@shared/helpers';
 
-import { isRewardTokenQUIPU } from '../../../../helpers/is-reward-token-quipu';
 import { canDelegate, makeBaker } from '../../helpers';
 import { useHarvestConfirmationPopup } from './use-harvest-confirmation-popup';
 
@@ -46,7 +54,7 @@ export const useFarmingRewardInfoViewModel = () => {
       await delayedGetFarmingItem(defined(farmingItem).id);
     };
 
-    if (isRewardTokenQUIPU(defined(farmingItem).rewardToken)) {
+    if (areTokensEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
         await doHarvestAndRestake(farmingItem, userRewardsInTokensMutez, selectedBaker);
 
