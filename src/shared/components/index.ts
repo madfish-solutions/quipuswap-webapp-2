@@ -47,3 +47,4 @@ export * from './tooltip';
 export * from './top-stats';
 export * from './transaction-deadline';
 export * from './view-pair-analytics';
+export * from './amplitude-subscription';
