@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE } from '@config/constants';
-import { defined, isExist, fromDecimals, getBlockchainTimestamp } from '@shared/helpers';
+import { defined, isExist, fromDecimals } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 
 import {
@@ -52,16 +52,15 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-export const getUserPendingReward = (
-  userInfo: UsersInfoValue,
-  item: FarmingItem,
-  timestamp: Undefined<number> = Date.now()
-) => {
+export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem, timestamp: number = Date.now()) => {
   const { staked: totalStaked, rewardPerSecond } = item;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
   }
+
+  // eslint-disable-next-line no-console
+  console.log('item.udp', new Date(item.udp).getTime());
 
   const reward = new BigNumber(Math.floor((timestamp - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
@@ -79,22 +78,10 @@ export const getUserPendingRewardOnCurrBlock = async (
   userInfo: UsersInfoValue,
   item: FarmingItem
 ) => {
-  const timespamp = await getBlockchainTimestamp(tezos);
-  const { staked: totalStaked, rewardPerSecond } = item;
+  const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
+  const blockTimestampMS = new Date(blockTimestamp).getTime();
 
-  if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
-    return new BigNumber('0');
-  }
-
-  const reward = new BigNumber(Math.floor(timespamp - new Date(item.udp).getTime() / MS_IN_SECOND)).multipliedBy(
-    rewardPerSecond
-  );
-
-  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
-
-  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
-
-  return fromRewardPrecision(pending);
+  return getUserPendingReward(userInfo, item, blockTimestampMS);
 };
 
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {

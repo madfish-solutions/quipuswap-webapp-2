@@ -37,8 +37,6 @@ export const useFarmingRewardInfoViewModel = () => {
 
   const handleHarvest = async () => {
     const userRewardsInTokensMutez = await farmingItemStore.pendingRewardsOnBlock;
-    // eslint-disable-next-line no-console
-    console.log('userRewardsInTokensMutez', userRewardsInTokensMutez?.toFixed());
 
     const doSimpleHarvest = async () => {
       await doHarvest(farmingItem);
