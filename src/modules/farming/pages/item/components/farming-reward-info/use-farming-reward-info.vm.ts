@@ -6,7 +6,7 @@ import { useDoHarvest } from '@modules/farming/hooks/blockchain/use-do-harvest';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, areTokensEqual } from '@shared/helpers';
+import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, isTokenEqual } from '@shared/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 import { useHarvestConfirmationPopup } from './use-harvest-confirmation-popup';
@@ -36,7 +36,7 @@ export const useFarmingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
 
   const handleHarvest = async () => {
-    const userRewardsInTokensMutez = await farmingItemStore.pendingRewardsOnBlock;
+    const pendingRewardsOnCurrentBlock = await farmingItemStore.getPendingRewardsOnCurrentBlock();
 
     const doSimpleHarvest = async () => {
       await doHarvest(farmingItem);
@@ -44,9 +44,9 @@ export const useFarmingRewardInfoViewModel = () => {
       await delayedGetFarmingItem(defined(farmingItem).id);
     };
 
-    if (areTokensEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
+    if (isTokenEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
-        await doHarvestAndRestake(farmingItem, userRewardsInTokensMutez, selectedBaker);
+        await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock, selectedBaker);
 
         await delayedGetFarmingItem(defined(farmingItem).id);
       };

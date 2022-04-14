@@ -3,13 +3,13 @@ import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/constants';
-import { fromDecimals, isNull, MakeInterval } from '@shared/helpers';
+import { fromDecimals, isExist, isNull, MakeInterval } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
-import { getUserPendingReward, getUserPendingRewardOnCurrBlock } from '../helpers';
+import { getUserPendingReward } from '../helpers';
 import { FarmingItem, RawFarmingItem, RawUsersInfoValue, UsersInfoValue } from '../interfaces';
 import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
@@ -86,12 +86,19 @@ export class FarmingItemStore {
     );
   }
 
-  get pendingRewardsOnBlock(): Nullable<Promise<BigNumber>> {
+  async getPendingRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
     const { tezos } = this.rootStore;
     const { data: userInfo } = this.userInfoStore;
     const { data: item } = this.itemStore;
 
-    return tezos && userInfo && item && getUserPendingRewardOnCurrBlock(tezos, userInfo, item);
+    if (!isExist(tezos) || !isExist(userInfo) || !isExist(item)) {
+      return null;
+    }
+
+    const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
+    const blockTimestampMS = new Date(blockTimestamp).getTime();
+
+    return getUserPendingReward(userInfo, item, blockTimestampMS);
   }
 
   makePendingRewardsLiveable() {

@@ -6,6 +6,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
+import { useTranslation } from '@translation';
 
 import { harvestAndRestake } from '../../api';
 import { FarmingItem } from '../../interfaces';
@@ -14,6 +15,7 @@ export const useDoHarvestAndRestake = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
+  const { t } = useTranslation();
 
   const doHarvestAndRestake = useCallback(
     async (
@@ -33,14 +35,14 @@ export const useDoHarvestAndRestake = () => {
           farmingIntemDefined.rewardToken
         );
 
-        await confirmOperation(operation.opHash, { message: 'Harvest successful' });
+        await confirmOperation(operation.opHash, { message: t('farm|Harvest successful') });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
+    [rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, t, showErrorToast]
   );
 
   return { doHarvestAndRestake };

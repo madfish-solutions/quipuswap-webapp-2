@@ -1,5 +1,4 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
-import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE } from '@config/constants';
@@ -68,17 +67,6 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
 
   return fromRewardPrecision(pending);
-};
-
-export const getUserPendingRewardOnCurrBlock = async (
-  tezos: TezosToolkit,
-  userInfo: UsersInfoValue,
-  item: FarmingItem
-) => {
-  const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
-  const blockTimestampMS = new Date(blockTimestamp).getTime();
-
-  return getUserPendingReward(userInfo, item, blockTimestampMS);
 };
 
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {

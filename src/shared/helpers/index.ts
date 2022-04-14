@@ -11,7 +11,6 @@ export * from './makers';
 export * from './redirections';
 export * from './routing';
 export * from './tokens';
-export * from './are-tokens-equal';
 export * from './arrays';
 export * from './calculate-rate-amount';
 export * from './comparison';

@@ -3,7 +3,7 @@ import { useTranslation } from '@translation';
 
 export const useHarvestConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
-  const { t } = useTranslation('farm');
+  const { t } = useTranslation();
 
   const title = t('farm|Wanna earn more?');
   const confirmationMessage = t('farm|increaseYourIncome');

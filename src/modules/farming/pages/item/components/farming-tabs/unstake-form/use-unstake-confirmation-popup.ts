@@ -37,7 +37,7 @@ const getConfirmationMessage = (
 
 export const useUnstakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
-  const { t } = useTranslation(['common', 'farm']);
+  const { t } = useTranslation();
   const { farmingItem, userInfoStore } = useFarmingItemStore();
   const timelock = farmingItem?.timelock;
   const lastStaked = userInfoStore.data?.last_staked;
@@ -50,11 +50,7 @@ export const useUnstakeConfirmationPopup = () => {
 
   const withdrawalFee = farmingItem?.withdrawalFee;
 
-  const title = t('common|areYouSure');
   const message = getConfirmationMessage(timeout, withdrawalFee, t);
-  const yesButtonText = t('common|yes');
-  const noButtonText = t('common|no');
 
-  return (yesCallback: () => Promise<void>) =>
-    openConfirmationModal({ title, yesButtonText, noButtonText, message, yesCallback });
+  return (yesCallback: () => Promise<void>) => openConfirmationModal({ message, yesCallback });
 };
