@@ -52,14 +52,18 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem) => {
+export const getUserPendingReward = (
+  userInfo: UsersInfoValue,
+  item: FarmingItem,
+  timestamp: Undefined<number> = Date.now()
+) => {
   const { staked: totalStaked, rewardPerSecond } = item;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
   }
 
-  const reward = new BigNumber(Math.floor((Date.now() - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+  const reward = new BigNumber(Math.floor((timestamp - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
   );
 

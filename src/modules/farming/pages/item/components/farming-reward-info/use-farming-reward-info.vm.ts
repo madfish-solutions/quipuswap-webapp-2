@@ -6,15 +6,7 @@ import { useDoHarvest } from '@modules/farming/hooks/blockchain/use-do-harvest';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import {
-  toDecimals,
-  defined,
-  getTokenSymbol,
-  isExist,
-  isNull,
-  multipliedIfPossible,
-  areTokensEqual
-} from '@shared/helpers';
+import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, areTokensEqual } from '@shared/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 import { useHarvestConfirmationPopup } from './use-harvest-confirmation-popup';
@@ -42,12 +34,12 @@ export const useFarmingRewardInfoViewModel = () => {
   const pendingRewardsReady = isExist(farmingItem?.earnBalance) || !walletIsConnected;
   const farmingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
-  const userRewardsInTokensMutez =
-    farmingItem && farmingItem.earnBalance
-      ? toDecimals(farmingItem.earnBalance, farmingItem.rewardToken.metadata.decimals)
-      : null;
 
   const handleHarvest = async () => {
+    const userRewardsInTokensMutez = await farmingItemStore.pendingRewardsOnBlock;
+    // eslint-disable-next-line no-console
+    console.log('userRewardsInTokensMutez', userRewardsInTokensMutez?.toFixed());
+
     const doSimpleHarvest = async () => {
       await doHarvest(farmingItem);
 
