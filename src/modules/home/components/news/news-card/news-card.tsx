@@ -13,7 +13,7 @@ export const NewsCard: FC<NewsCardProps> = ({ news, className }) => {
   return (
     <div className={className}>
       {isNewsWithLink(news) ? (
-        <a href={news.url} target={news.external ? '_blank' : '_self'} rel="noreferrer noopener">
+        <a href={news.url} data-cy={news.testId} target={news.external ? '_blank' : '_self'} rel="noreferrer noopener">
           {ImageComponent}
         </a>
       ) : (

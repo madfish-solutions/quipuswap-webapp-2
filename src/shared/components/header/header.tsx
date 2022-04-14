@@ -53,7 +53,12 @@ export const Header: FC<HeaderProps> = ({ className }) => {
         <ConnectWalletButton className={styles.connect} />
         <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
-        <Button theme="quaternary" className={styles.menuButton} onClick={() => setIsMenuOpened(!isMenuOpened)}>
+        <Button
+          theme="quaternary"
+          data-cy="hBurgerMenu"
+          className={styles.menuButton}
+          onClick={() => setIsMenuOpened(!isMenuOpened)}
+        >
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}
         </Button>
       </header>

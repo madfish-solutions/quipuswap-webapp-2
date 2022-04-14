@@ -13,6 +13,7 @@ interface NewsWithLink {
   img: string;
   url: string;
   external?: boolean;
+  testId?: string;
 }
 
 export type News = NewsWithoutLink | NewsWithLink;
@@ -24,30 +25,35 @@ export const NewsData: News[] = [
     id: 'token-to-token-security-audit',
     img: TokenToToken,
     url: 'https://story.madfish.solutions/runtime-verification-published-quipuswaps-token-to-token-contract-audit/',
-    external: true
+    external: true,
+    testId: 'hTokenToToken'
   },
   {
     id: 'major-update',
     img: MajorUpdate,
     url: 'https://story.madfish.solutions/quipuswap-update-token-to-token-swaps-improved-routing-interfaces-and-more/',
-    external: true
+    external: true,
+    testId: 'hMajorUpdate'
   },
   {
     id: 'quipu-airdrop',
     img: QuipuAirdrop,
     url: 'https://story.madfish.solutions/quipuswap-governance-token-airdrop-announcement/',
-    external: true
+    external: true,
+    testId: 'hQuipuAirdrop'
   },
   {
     id: 'tokenomics-guide',
     img: TokenomicsGuide,
     url: 'https://story.madfish.solutions/quipuswap-tokenomics-guide-quipu-learn-everything-about-our-governance-token/',
-    external: true
+    external: true,
+    testId: 'hTokenomicsGuide'
   },
   {
     id: 'quipuswap-security-audit',
     img: SecurityAudit,
     url: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
-    external: true
+    external: true,
+    testId: 'hSecurityAudit'
   }
 ];

@@ -18,14 +18,14 @@ export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className })
 
   if (ready && accountPkh) {
     return (
-      <Button className={className} onClick={openAccountInfoModal} title={accountPkh}>
+      <Button className={className} onClick={openAccountInfoModal} title={accountPkh} testId="sButtonConnected">
         {shortize(accountPkh)}
       </Button>
     );
   }
 
   return (
-    <Button className={className} onClick={openConnectWalletModal}>
+    <Button className={className} onClick={openConnectWalletModal} testId="sConnectButton">
       Connect wallet
     </Button>
   );

@@ -38,7 +38,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
       <h4 className={styles.header}>
-        {label} <Tooltip content={tooltip} />
+        {label} <Tooltip content={tooltip} testId="hTooltip" />
       </h4>
       <StateCurrencyAmount
         className={styles.currencyAmount}

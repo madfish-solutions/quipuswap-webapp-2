@@ -26,7 +26,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    NAVIGATION_DATA.forEach(({ id, to, label, Icon, status, links }) => {
+    NAVIGATION_DATA.forEach(({ id, to, label, Icon, status, links, testId }) => {
       if (to) {
         result.push(
           <Link
@@ -39,6 +39,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               },
               modeClass[colorThemeMode]
             )}
+            data-cy={testId}
           >
             {Icon && <Icon className={styles.icon} id={iconId} />}
             {label}
@@ -53,6 +54,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               type="button"
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
               onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
+              data-cy={testId}
             >
               {Icon && <Icon className={styles.icon} id={iconId} />}
               {label}
@@ -68,6 +70,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      data-cy={link.testId}
                     >
                       {link.label}
                     </a>
@@ -81,6 +84,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      data-cy={link.testId}
                     >
                       {link.label}
                     </Link>

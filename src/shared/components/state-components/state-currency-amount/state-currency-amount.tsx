@@ -36,7 +36,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
+export const Currency: FC = ({ children }) => (
+  <span data-cy="hcurrency1" className={styles.currency}>
+    {children}
+  </span>
+);
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -84,7 +88,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={testId} className={styles.inner} title={title}>
+        <span data-test-id={testId} data-cy="hamount1" className={styles.inner} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>

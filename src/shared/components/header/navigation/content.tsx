@@ -13,6 +13,7 @@ interface LinkInterface {
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
+  testId?: string;
   status?: ReactNode;
 }
 
@@ -25,31 +26,36 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 0,
     to: '/',
     label: <Trans ns="common">Home</Trans>,
-    Icon: HomeIcon
+    Icon: HomeIcon,
+    testId: 'sHome'
   },
   {
     id: 1,
     to: '/swap',
     label: <Trans ns="common">Swap</Trans>,
-    Icon: SwapIcon
+    Icon: SwapIcon,
+    testId: 'sSwap'
   },
   {
     id: 2,
     to: '/liquidity',
     label: <Trans ns="common">Liquidity</Trans>,
-    Icon: LiquidityIcon
+    Icon: LiquidityIcon,
+    testId: 'sLiquidity'
   },
   {
     id: 3,
     to: '/voting',
     label: <Trans ns="common">Voting</Trans>,
-    Icon: VotingIcon
+    Icon: VotingIcon,
+    testId: 'sVoting'
   },
   {
     id: 4,
     to: '/farming',
     label: <Trans ns="common">Farming</Trans>,
     Icon: FarmIcon,
+    testId: 'sFarming',
     status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />
   },
   // {
@@ -74,59 +80,69 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 7,
     label: <Trans ns="common">More</Trans>,
     Icon: MoreIcon,
+    testId: 'smore',
     links: [
       {
         id: 0,
         to: 'https://analytics.quipuswap.com/',
         label: 'Analytics',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sAnalytics'
       },
       {
         id: 1,
         to: 'https://story.madfish.solutions/category/quipuswap/',
         label: 'About',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sAbout'
       },
       {
         id: 2,
         to: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
         label: 'Audit',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sAudit'
       },
       {
         id: 3,
         to: 'https://madfish.crunch.help/quipu-swap',
         label: 'Help',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sHelp'
       },
       {
         id: 4,
         to: 'https://docs.quipuswap.com/',
         label: 'Docs',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sDocs'
       },
       {
         id: 5,
         to: 'https://story.madfish.solutions/',
         label: 'Blog',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sBlog'
       },
 
       {
         id: 8,
         to: 'https://madfish.canny.io/quipuswap-feature-requests',
         label: 'Feedback',
-        target: '_blank'
+        target: '_blank',
+        testId: 'sFeedback'
       },
       {
         id: 6,
         to: '/terms-of-service',
-        label: 'Terms of Usage'
+        label: 'Terms of Usage',
+        testId: 'sTermsOfUsage'
       },
       {
         id: 7,
         to: '/privacy-policy',
-        label: 'Privacy Policy'
+        label: 'Privacy Policy',
+        testId: 'sPrivacyPolicy'
       }
     ]
   }

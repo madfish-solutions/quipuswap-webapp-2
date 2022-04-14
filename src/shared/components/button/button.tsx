@@ -77,7 +77,7 @@ export const Button: FC<ButtonProps> = ({
 
     if (anchorProps.target === '_blank') {
       return (
-        <a data-test-id={testId} {...anchorProps}>
+        <a data-cy={testId} {...anchorProps}>
           {control}
           {content}
           {icon}
@@ -85,7 +85,7 @@ export const Button: FC<ButtonProps> = ({
       );
     } else {
       return (
-        <Link data-test-id={testId} to={anchorProps.href} {...anchorProps}>
+        <Link data-cy={testId} to={anchorProps.href} {...anchorProps}>
           {control}
           {content}
           {icon}
@@ -99,7 +99,7 @@ export const Button: FC<ButtonProps> = ({
       // @ts-ignore
       type={type}
       className={compoundClassName}
-      data-test-id={testId}
+      data-cy={testId}
       {...(props as HTMLProps<HTMLButtonElement>)}
     >
       {control}

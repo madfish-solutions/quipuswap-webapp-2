@@ -14,7 +14,13 @@ export const SettingsButton: FC<Props> = ({ className }) => {
   const { openSettingsModal } = useGlobalModalsState();
 
   return (
-    <Button className={className} textClassName={styles.flex} theme="quaternary" onClick={openSettingsModal}>
+    <Button
+      className={className}
+      testId="hSettingsButton"
+      textClassName={styles.flex}
+      theme="quaternary"
+      onClick={openSettingsModal}
+    >
       <SettingsIcon />
     </Button>
   );

@@ -21,6 +21,10 @@ export type ModalProps = {
   cardClassName?: string;
   header?: ReactNode;
   footer?: ReactNode;
+  testIds?: {
+    titleTestId?: string;
+    buttonCloseId?: string;
+  };
   title?: string;
 } & ReactModal.Props;
 
@@ -43,6 +47,7 @@ export const Modal: FC<ModalProps> = ({
   cardClassName,
   title = '',
   header,
+  testIds,
   footer,
   ...props
 }) => {
@@ -80,9 +85,14 @@ export const Modal: FC<ModalProps> = ({
             className={cardClassName}
             contentClassName={cx(contentClassName, styles.modalCard)}
             header={{
-              content: <h5>{title}</h5>,
+              content: <h5 data-cy={testIds?.titleTestId}>{title}</h5>,
               button: (
-                <Button className={styles.closeButton} onClick={onRequestClose} theme="quaternary">
+                <Button
+                  className={styles.closeButton}
+                  testId={testIds?.buttonCloseId}
+                  onClick={onRequestClose}
+                  theme="quaternary"
+                >
                   <PopupClose />
                 </Button>
               )

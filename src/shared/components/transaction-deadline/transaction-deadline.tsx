@@ -14,10 +14,11 @@ import { Tooltip } from '../tooltip';
 interface Props {
   error?: string;
   value?: BigNumber;
+  tooltipId: string;
   onChange: (newValue: BigNumber) => void;
 }
 
-export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
+export const TransactionDeadline: FC<Props> = ({ error, onChange, value, tooltipId }) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
@@ -28,6 +29,7 @@ export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{t('common|Transaction deadline')}</span>
         <Tooltip
+          testId={tooltipId}
           content={t(
             'common|Set the transaction execution deadline. If reached before the transaction is executed, the transaction will be aborted.'
           )}
