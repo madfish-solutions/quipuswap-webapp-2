@@ -7,8 +7,9 @@ import { Nullable } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { DeadlineInput } from '../deadline-input';
+import { Scaffolding } from '../scaffolding';
 import { Tooltip } from '../tooltip';
-import { TransactionDeadline } from '../transaction-deadline';
 
 interface Props {
   error?: string;
@@ -16,14 +17,14 @@ interface Props {
   onChange: (newValue: BigNumber) => void;
 }
 
-export const SwapDeadline: FC<Props> = ({ error, onChange, value }) => {
+export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
     onChange(new BigNumber(newValue ? newValue : DEFAULT_DEADLINE_MINS));
 
   return (
-    <>
+    <div>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{t('common|Transaction deadline')}</span>
         <Tooltip
@@ -32,8 +33,10 @@ export const SwapDeadline: FC<Props> = ({ error, onChange, value }) => {
           )}
         />
       </label>
-      <TransactionDeadline handleChange={handleChange} placeholder={value?.toFixed()} />
-      {error && <div className={styles.simpleError}>{error}</div>}
-    </>
+      <DeadlineInput handleChange={handleChange} placeholder={value?.toFixed()} />
+      <Scaffolding height={24} showChild={Boolean(error)}>
+        <div className={styles.simpleError}>{error}</div>
+      </Scaffolding>
+    </div>
   );
 };

@@ -1,29 +1,40 @@
 import { FC } from 'react';
 
-import { Nullable } from '@shared/types';
+import BigNumber from 'bignumber.js';
 
-import { PresetsAmountInput } from '../presets-amount-input';
-
-const slippagePresets = [
-  { label: '0.5 %', value: '0.5' },
-  { label: '1 %', value: '1' },
-  { label: '3 %', value: '3' }
-];
+import { DEFAULT_LIQUIDITY_SLIPPAGE_PERCENTAGE, DEFAULT_TRADING_SLIPPAGE_PERCENTAGE } from '@config/constants';
+import { Scaffolding, SlippageInput, SlippageType, Tooltip } from '@shared/components';
+import { Nullable, Undefined } from '@shared/types';
+import styles from '@styles/CommonContainer.module.scss';
 
 interface Props {
-  className?: string;
-  handleChange: (value: Nullable<string>) => void;
-  placeholder?: string;
+  title: string;
+  tooltip: string;
+  error: Undefined<string>;
+  slippage: BigNumber;
+  type: SlippageType;
+  onChange: (newValue: BigNumber) => void;
 }
 
-export const Slippage: FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
-  <PresetsAmountInput
-    className={className}
-    defaultValue={slippagePresets[0].value}
-    min={0}
-    handleChange={handleChange}
-    placeholder={placeholder}
-    presets={slippagePresets}
-    unit="%"
-  />
-);
+const defaultSlippagePercentage = {
+  [SlippageType.LIQUIDITY]: DEFAULT_LIQUIDITY_SLIPPAGE_PERCENTAGE,
+  [SlippageType.TRADING]: DEFAULT_TRADING_SLIPPAGE_PERCENTAGE
+};
+
+export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip, type }) => {
+  const handleChange = (newValue: Nullable<string>) =>
+    onChange(new BigNumber(newValue ?? defaultSlippagePercentage[type]));
+
+  return (
+    <div>
+      <label htmlFor="deadline" className={styles.inputLabel}>
+        <span>{title}</span>
+        <Tooltip content={tooltip} />
+      </label>
+      <SlippageInput type={type} handleChange={handleChange} value={slippage.toFixed()} />
+      <Scaffolding height={27.5} showChild={Boolean(error)}>
+        <div className={styles.simpleError}>{error}</div>
+      </Scaffolding>
+    </div>
+  );
+};

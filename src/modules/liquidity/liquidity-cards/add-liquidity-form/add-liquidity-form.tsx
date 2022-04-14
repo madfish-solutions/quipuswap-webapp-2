@@ -8,9 +8,8 @@ import { Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { LiquidityDeadline } from '../../liquidity-deadline';
-import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import styles from '../../liquidity.module.scss';
+import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
@@ -27,8 +26,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   const {
     validationMessageTokenA,
     validationMessageTokenB,
-    validationMessageDeadline,
-    validationMessageSlippage,
     accountPkh,
     tokenABalance,
     tokenBBalance,
@@ -53,9 +50,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     !tokenAInput ||
     !tokenBInput ||
     isExist(validationMessageTokenA) ||
-    isExist(validationMessageTokenB) ||
-    isExist(validationMessageDeadline) ||
-    isExist(validationMessageSlippage);
+    isExist(validationMessageTokenB);
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
@@ -99,21 +94,15 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         placeholder="0.0"
       />
       {isDeadlineAndSkippageVisible && (
-        <>
-          <div className={styles['mt-24']}>
-            <LiquiditySlippage
-              liquidityType={LiquiditySlippageType.ADD}
-              tokenA={tokenA}
-              tokenB={tokenB}
-              tokenAInput={tokenAInput}
-              tokenBInput={tokenBInput}
-              error={validationMessageSlippage}
-            />
-          </div>
-          <div className={styles['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-        </>
+        <div className={styles['mt-24']}>
+          <SlippageInfo
+            liquidityType={LiquiditySlippageType.ADD}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            tokenAInput={tokenAInput}
+            tokenBInput={tokenBInput}
+          />
+        </div>
       )}
       {isPoolNotExist && (
         <AlarmMessage

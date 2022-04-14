@@ -1,1 +1,1 @@
-export * from './TransactionDeadline';
+export * from './transaction-deadline';

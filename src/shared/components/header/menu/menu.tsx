@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+import { SettingsButton } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { Madfish } from '../../../svg';
@@ -35,6 +36,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
         <div className={styles.row}>
           <QPToken />
           <div className={cx(styles.mb0, styles.row)}>
+            <SettingsButton />
             <div className={styles.ml24}>
               <ColorModeSwitcher id="mobile" />
             </div>
