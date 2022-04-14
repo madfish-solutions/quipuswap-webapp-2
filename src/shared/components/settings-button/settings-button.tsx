@@ -8,14 +8,15 @@ import styles from './settings-button.module.scss';
 
 interface Props {
   className?: string;
+  colored?: boolean;
 }
 
-export const SettingsButton: FC<Props> = ({ className }) => {
+export const SettingsButton: FC<Props> = ({ className, colored }) => {
   const { openSettingsModal } = useGlobalModalsState();
 
   return (
     <Button className={className} textClassName={styles.flex} theme="quaternary" onClick={openSettingsModal}>
-      <SettingsIcon />
+      <SettingsIcon colored={colored} />
     </Button>
   );
 };
