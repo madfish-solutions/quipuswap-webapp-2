@@ -36,9 +36,9 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
               </div>
             </div>
 
+            <DonationModal />
             <WalletModal />
             <AccountModal />
-            <DonationModal />
             <SettingsModal />
           </ConfirmationModalProvider>
         </GlobalModalsStateProvider>
