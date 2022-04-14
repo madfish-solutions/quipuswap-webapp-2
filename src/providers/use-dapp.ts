@@ -50,7 +50,7 @@ function useDApp() {
     });
 
   useEffect(() => {
-    amplitudeService.setProps('pkh_hash', accountPkh ? cyrb53(accountPkh) : null);
+    amplitudeService.setUserId(accountPkh ? `${cyrb53(accountPkh)}` : null);
   }, [accountPkh]);
 
   const setFallbackState = useCallback(
