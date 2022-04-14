@@ -15,7 +15,8 @@ export const Farming: FC = () => {
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
       <Routes>
         <Route path="/" element={<FarmsListPage />} />
-        <Route path="/:farmId" element={<FarmingItemPage />} />
+        <Route path="/:farmId/" element={<FarmingItemPage />} />
+        <Route path="/:farmId/:tab" element={<FarmingItemPage />} />
       </Routes>
     </StateWrapper>
   );
