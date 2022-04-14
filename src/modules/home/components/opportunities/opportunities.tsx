@@ -24,7 +24,7 @@ export const Opportunities: FC<OpportunitiesProps> = ({ className }) => {
     >
       <div className={s.cards}>
         {OpportunitiesCardsData.map(({ id, Icon, title, description, button }) => (
-          <OpportunityCard key={id} Icon={Icon} title={title} description={description} button={button} />
+          <OpportunityCard key={id} Icon={Icon} title={title} description={description} button={button} id={id} />
         ))}
       </div>
     </Section>
