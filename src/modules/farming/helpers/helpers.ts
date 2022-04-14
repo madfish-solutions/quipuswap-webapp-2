@@ -59,9 +59,6 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
     return new BigNumber('0');
   }
 
-  // eslint-disable-next-line no-console
-  console.log('item.udp', new Date(item.udp).getTime());
-
   const reward = new BigNumber(Math.floor((timestamp - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
   );
