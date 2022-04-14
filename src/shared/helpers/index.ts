@@ -39,3 +39,4 @@ export * from './parse-decimals';
 export * from './local-search-sort-symbol';
 export * from './is-asset-equal';
 export * from './handle-search-token';
+export * from './hash';

@@ -15,8 +15,10 @@ import {
   connectWalletTemple,
   getTempleWalletState,
   michelEncoder,
-  rpcClients
+  rpcClients,
+  cyrb53
 } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
 
 export interface DAppType {
@@ -46,6 +48,10 @@ function useDApp() {
       templeWallet: null,
       isLoading: true
     });
+
+  useEffect(() => {
+    amplitudeService.setProps('pkh_hash', accountPkh ? cyrb53(accountPkh) : null);
+  }, [accountPkh]);
 
   const setFallbackState = useCallback(
     () =>
