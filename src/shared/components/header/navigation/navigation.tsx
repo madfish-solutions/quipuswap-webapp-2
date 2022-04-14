@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import { amplitudeService } from '../../../services';
 import { NAVIGATION_DATA } from './content';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
@@ -24,6 +25,10 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isInnerMenuOpened, setIsInnerMenuOpened] = useState(false);
 
+  const handleMenuClick = (url: string) => {
+    amplitudeService.logEvent('MAIN_MENU_CLICK', { url });
+  };
+
   const content = useMemo(() => {
     const result: ReactNode[] = [];
     NAVIGATION_DATA.forEach(({ id, to, label, Icon, status, links }) => {
@@ -39,6 +44,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               },
               modeClass[colorThemeMode]
             )}
+            onClick={() => handleMenuClick(to)}
           >
             {Icon && <Icon className={styles.icon} id={iconId} />}
             {label}
@@ -68,6 +74,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      onClick={() => handleMenuClick(link.to ?? '')}
                     >
                       {link.label}
                     </a>
@@ -81,6 +88,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      onClick={() => handleMenuClick(link.to ?? '')}
                     >
                       {link.label}
                     </Link>
