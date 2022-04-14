@@ -1,1 +1,1 @@
-export * from './swap-deadline';
+export * from './deadline-input';

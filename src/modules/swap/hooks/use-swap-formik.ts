@@ -2,11 +2,12 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
-import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
+import { SECONDS_IN_MINUTE } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { getRouteWithInput, getTokenSlug, getTokenSymbol, toDecimals, getSwapMessage } from '@shared/helpers';
 import { swap } from '@shared/helpers/swap';
 import { useDexGraph } from '@shared/hooks';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
@@ -18,8 +19,6 @@ const initialErrors = {
   outputAmount: 'Required'
 };
 
-const SECS_IN_MIN = 60;
-
 export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
   const validationSchema = useValidationSchema();
   const tezos = useTezos();
@@ -28,10 +27,12 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
 
+  const {
+    settings: { tradingSlippage, transactionDeadline }
+  } = useSettingsStore();
+
   const initialValues: Partial<SwapFormValues> = {
-    [SwapField.ACTION]: initialAction,
-    [SwapField.SLIPPAGE]: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
-    [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
+    [SwapField.ACTION]: initialAction
   };
 
   const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
@@ -39,16 +40,16 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
       return;
     }
 
-    const { inputAmount, inputToken, outputToken, recipient, slippage, action, deadline } = formValues;
+    const { inputAmount, inputToken, outputToken, recipient, action } = formValues;
 
     const rawInputAmount = toDecimals(inputAmount!, inputToken!);
     try {
       const walletOperation = await swap(tezos, accountPkh, {
-        deadlineTimespan: deadline!.times(SECS_IN_MIN).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
+        deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
         inputToken: inputToken!,
         recipient: action === 'send' ? recipient : undefined,
-        slippageTolerance: slippage!.div(100),
+        slippageTolerance: tradingSlippage.div(100),
         dexChain: getRouteWithInput({
           startTokenSlug: getTokenSlug(inputToken!),
           endTokenSlug: getTokenSlug(outputToken!),

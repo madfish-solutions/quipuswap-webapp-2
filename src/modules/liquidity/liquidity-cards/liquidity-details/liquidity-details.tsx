@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';

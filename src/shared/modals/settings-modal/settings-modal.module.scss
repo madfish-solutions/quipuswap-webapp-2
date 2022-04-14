@@ -1,0 +1,14 @@
+.modal {
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.buttons {
+  margin-top: 35px;
+
+  display: flex;
+  column-gap: 16px;
+}
