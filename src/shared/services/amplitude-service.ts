@@ -2,7 +2,7 @@ import amplitude, { AmplitudeClient } from 'amplitude-js';
 
 import { AMPLITUDE_API_KEY } from '@config/enviroment';
 
-import { cyrb53 } from '../helpers';
+import { hash } from '../helpers';
 import { Nullable } from '../types';
 
 export class AmplitudeService {
@@ -29,7 +29,7 @@ export class AmplitudeService {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   logEvent(action: string, payload: { [key: string]: any } = {}) {
-    this.instance.logEvent(action, payload);
+    this.instance.logEvent(action, { ...this.props, ...payload });
     // eslint-disable-next-line no-console
     console.log('\x1b[36m%s\x1b[0m', action, { ...this.props, ...payload });
   }
@@ -37,4 +37,4 @@ export class AmplitudeService {
 
 export const amplitudeService = new AmplitudeService(AMPLITUDE_API_KEY);
 
-amplitudeService.setProps('session_id', cyrb53(`${new Date().getTime()}`));
+amplitudeService.setProps('session_id', hash(`${new Date().getTime()}`));

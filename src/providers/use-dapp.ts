@@ -6,19 +6,17 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
-import { APP_NAME, networksBaseUrls, NETWORK_ID } from '@config/enviroment';
+import { APP_NAME, NETWORK_ID, networksBaseUrls } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
-  ReadOnlySigner,
   beaconWallet,
   connectWalletBeacon,
   connectWalletTemple,
   getTempleWalletState,
   michelEncoder,
-  rpcClients,
-  cyrb53
+  ReadOnlySigner,
+  rpcClients
 } from '@shared/helpers';
-import { amplitudeService } from '@shared/services';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
 
 export interface DAppType {
@@ -48,10 +46,6 @@ function useDApp() {
       templeWallet: null,
       isLoading: true
     });
-
-  useEffect(() => {
-    amplitudeService.setUserId(accountPkh ? `${cyrb53(accountPkh)}` : null);
-  }, [accountPkh]);
 
   const setFallbackState = useCallback(
     () =>
