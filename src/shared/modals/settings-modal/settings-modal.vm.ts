@@ -36,7 +36,7 @@ const useSettingsFormik = (initialSettings: SettingsModel) => {
     [SettingsFormValues.TRANSACTION_DEADLINE]: initialSettings.transactionDeadline
   };
 
-  const { errors, values, setFieldValue } = useFormik({
+  const { errors, values, setFieldValue, resetForm } = useFormik({
     validationSchema,
     initialValues,
     onSubmit: noop,
@@ -54,6 +54,8 @@ const useSettingsFormik = (initialSettings: SettingsModel) => {
   };
 
   return {
+    resetForm,
+
     liquiditySlippageValue: values[SettingsFormValues.LIQUIDITY_SLIPPAGE],
     handleLiquiditySlippageChange,
     liquiditySlippageError: errors[SettingsFormValues.LIQUIDITY_SLIPPAGE] as Undefined<string>,
@@ -75,6 +77,8 @@ export const useSettingModalViewModel = () => {
   const { settingsModalOpen, closeSettingsModal } = useGlobalModalsState();
 
   const {
+    resetForm,
+
     liquiditySlippageValue,
     handleLiquiditySlippageChange,
     liquiditySlippageError,
@@ -107,9 +111,14 @@ export const useSettingModalViewModel = () => {
 
   const resetSettings = () => {
     settingsStore.resetSettings();
-    handleLiquiditySlippageChange(settingsStore.settings.liquiditySlippage);
-    handleTradingSlippageChange(settingsStore.settings.tradingSlippage);
-    handleTransactionDeadlineChange(settingsStore.settings.transactionDeadline);
+
+    resetForm({
+      values: {
+        [SettingsFormValues.LIQUIDITY_SLIPPAGE]: settingsStore.settings.liquiditySlippage,
+        [SettingsFormValues.TRADING_SLIPPAGE]: settingsStore.settings.tradingSlippage,
+        [SettingsFormValues.TRANSACTION_DEADLINE]: settingsStore.settings.transactionDeadline
+      }
+    });
 
     closeSettingsModal();
   };
