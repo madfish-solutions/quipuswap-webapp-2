@@ -72,7 +72,7 @@ export const RPC_URL = RPC_URLS[NETWORK_ID];
 export const METADATA_API: Record<QSNets, string> = {
   [QSNets.mainnet]: process.env.REACT_APP_METADATA_API_MAINNET!,
   [QSNets.hangzhounet]: process.env.REACT_APP_METADATA_API_HANGZHOUNET!,
-  [QSNets.ithacanet]: process.env.REACT_APP_EXCHANGE_RATES_URL!
+  [QSNets.ithacanet]: process.env.REACT_APP_METADATA_API_ITHACANET!
 };
 //#endregion METADATA_API
 
