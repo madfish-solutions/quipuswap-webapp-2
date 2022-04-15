@@ -4,14 +4,14 @@ import constate from 'constate';
 import { noop } from 'rxjs';
 
 import { useSingleModalState } from '@shared/hooks';
-import { Nullable, Undefined } from '@shared/types';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 interface OpenConfirmationModal {
-  title?: Undefined<ReactNode>;
-  message: Undefined<ReactNode>;
-  yesButtonText?: Undefined<ReactNode>;
-  noButtonText?: Undefined<ReactNode>;
+  title?: ReactNode;
+  message: ReactNode;
+  yesButtonText?: ReactNode;
+  noButtonText?: ReactNode;
   yesCallback?: () => Promise<void>;
   noCallback?: () => Promise<void>;
 }
@@ -30,17 +30,17 @@ export const [ConfirmationModalConstateProvider, useConfirmationModal] = constat
 
   const openConfirmationModal = useCallback(
     ({
-      title: _title = t('common|areYouSure'),
-      message: _message = t('farm|confirmationUpdateStake'),
-      yesButtonText: _yesButtonText = t('common|no'),
-      noButtonText: _noButtonText = t('common|yes'),
+      title: _title,
+      message: _message,
+      yesButtonText: _yesButtonText,
+      noButtonText: _noButtonText,
       yesCallback: _yesCallback,
       noCallback: _noCallback
     }: OpenConfirmationModal) => {
-      setTitle(_title);
-      setMessage(_message);
-      setYesButtonText(_yesButtonText);
-      setNoButtonText(_noButtonText);
+      setTitle(_title ?? t('common|areYouSure'));
+      setMessage(_message ?? t('farm|confirmationUpdateStake'));
+      setYesButtonText(_yesButtonText ?? t('common|yes'));
+      setNoButtonText(_noButtonText ?? t('common|no'));
 
       setYesCallback({ yesCallback: _yesCallback ?? noop });
       setNosCallback({ noCallback: _noCallback ?? noop });

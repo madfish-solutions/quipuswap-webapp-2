@@ -88,3 +88,11 @@ const DEX_POOLS_URLS: Record<QSNets, string> = {
 
 export const DEX_POOL_URL = DEX_POOLS_URLS[NETWORK_ID];
 //#region DEX_POOLS_URLS
+
+const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
+  [QSNets.hangzhounet]: 16,
+  [QSNets.mainnet]: 3,
+  [QSNets.ithacanet]: 6
+};
+
+export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
