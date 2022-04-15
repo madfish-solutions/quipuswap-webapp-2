@@ -30,7 +30,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="menu">
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="menu1">
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
         <div className={styles.row}>
@@ -48,7 +48,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             {t('common|Old version')}
           </Button>
         </div>
-        <div className={styles.row}>
+        <div className={styles.row} data-cy="menu2">
           <Button href="https://www.madfish.solutions/" external theme="clean" className={styles.madfish}>
             <Madfish />
           </Button>

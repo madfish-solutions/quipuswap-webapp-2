@@ -31,14 +31,14 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="sidebar">
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="sidebar1">
       <div className={styles.wallet}>
         {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
         <ConnectWalletButton className={styles.button} />
         <NetworkSelect className={cx(styles.button, styles.select)} />
       </div>
       <Navigation className={styles.navigation} iconId="desktop" />
-      <footer className={styles.footer}>
+      <footer className={styles.footer} data-cy="sidebar2">
         <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
         <Button
