@@ -38,7 +38,7 @@ export const [ConfirmationModalConstateProvider, useConfirmationModal] = constat
       noCallback: _noCallback
     }: OpenConfirmationModal) => {
       setTitle(_title ?? t('common|areYouSure'));
-      setMessage(_message ?? t('farm|confirmationUpdateStake'));
+      setMessage(_message ?? null);
       setYesButtonText(_yesButtonText ?? t('common|yes'));
       setNoButtonText(_noButtonText ?? t('common|no'));
 

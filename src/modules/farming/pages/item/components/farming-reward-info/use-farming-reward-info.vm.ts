@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { NO_TIMELOCK_VALUE } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@modules/farming/helpers';
@@ -35,14 +37,14 @@ export const useFarmingRewardInfoViewModel = () => {
   const farmingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
 
+  const doSimpleHarvest = useCallback(async () => {
+    await doHarvest(farmingItem);
+
+    await delayedGetFarmingItem(defined(farmingItem).id);
+  }, [delayedGetFarmingItem, doHarvest, farmingItem]);
+
   const handleHarvest = async () => {
     const pendingRewardsOnCurrentBlock = await farmingItemStore.getPendingRewardsOnCurrentBlock();
-
-    const doSimpleHarvest = async () => {
-      await doHarvest(farmingItem);
-
-      await delayedGetFarmingItem(defined(farmingItem).id);
-    };
 
     if (isTokenEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
