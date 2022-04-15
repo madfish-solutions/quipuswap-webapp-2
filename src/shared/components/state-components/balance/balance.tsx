@@ -14,6 +14,7 @@ export interface BalanceProps {
   balance: Optional<string>;
   colorMode: ColorModes;
   text?: string;
+  testId?: string;
   unit?: string;
 }
 
@@ -22,7 +23,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit }) => {
+export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit, testId }) => {
   const { t } = useTranslation();
 
   const formattedBalance = useMemo(() => {
@@ -40,7 +41,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit }) =>
   return (
     <div className={styles.item2Line}>
       <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
-      <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
+      <div className={cx(themeClass[colorMode], styles.label2, styles.price)} data-cy={testId}>
         <StateWrapper
           isLoading={isLoading}
           isError={isError}

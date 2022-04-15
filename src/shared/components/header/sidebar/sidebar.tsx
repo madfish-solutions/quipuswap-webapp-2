@@ -32,9 +32,9 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="sidebar1">
-      <div className={styles.wallet}>
+      <div className={styles.wallet} data-cy="sidebar2">
         {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
-        <ConnectWalletButton className={styles.button} />
+        <ConnectWalletButton className={styles.button} testId="sConnectWalletButton" />
         <NetworkSelect className={cx(styles.button, styles.select)} />
       </div>
       <Navigation className={styles.navigation} iconId="desktop" />

@@ -58,7 +58,6 @@ export const SettingsModal = observer(() => {
         error={liquiditySlippageError}
         slippage={liquiditySlippageValue}
         onChange={handleLiquiditySlippageChange}
-        tooltipId="liquiditySlippageTooltip"
       />
 
       <Slippage
@@ -68,7 +67,6 @@ export const SettingsModal = observer(() => {
         error={tradingSlippageError}
         slippage={tradingSlippageValue}
         onChange={handleTradingSlippageChange}
-        tooltipId="tradingSlippageTooltip"
       />
 
       <TransactionDeadline

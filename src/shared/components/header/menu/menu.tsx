@@ -50,7 +50,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
           </Button>
         </div>
         {IS_NETWORK_MAINNET && (
-          <div className={styles.mb16}>
+          <div className={styles.mb16} data-cy="menu2">
             <DonationButton />
           </div>
         )}

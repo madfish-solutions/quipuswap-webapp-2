@@ -47,6 +47,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   token: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
+  testId?: string;
   setToken?: (token: Token) => void;
 }
 
@@ -74,6 +75,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
   blackListedTokens,
   tokensLoading,
   tokenInputAmountCap,
+  testId,
   ...props
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
@@ -139,7 +141,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                 />
               )}
               {shouldHideTokenSelect && !account && (
-                <Balance balance="0" unit={tokenSelectSymbol} colorMode={colorThemeMode} />
+                <Balance balance="0" unit={tokenSelectSymbol} colorMode={colorThemeMode} testId={testId} />
               )}
             </div>
             <input

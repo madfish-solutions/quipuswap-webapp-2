@@ -29,7 +29,7 @@ export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip,
     <div>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{title}</span>
-        <Tooltip content={tooltip}/>
+        <Tooltip content={tooltip} />
       </label>
       <SlippageInput type={type} handleChange={handleChange} value={slippage.toFixed()} />
       <Scaffolding height={27.5} showChild={Boolean(error)}>
