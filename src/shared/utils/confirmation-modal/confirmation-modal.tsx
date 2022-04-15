@@ -17,13 +17,27 @@ const modeClass = {
 };
 
 export const ConfirmationModal: FC = () => {
-  const { t } = useTranslation(['common']);
-  const { message, yesCallback, confirmationModalOpen, closeConfirmationModal } = useConfirmationModal();
+  const { t } = useTranslation(['common', 'farm']);
+  const {
+    message,
+    title,
+    yesCallback,
+    noCallback,
+    confirmationModalOpen,
+    closeConfirmationModal,
+    yesButtonText,
+    noButtonText
+  } = useConfirmationModal();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.modal, modeClass[colorThemeMode]);
 
   const onYesClick = () => {
     yesCallback();
+    closeConfirmationModal();
+  };
+
+  const onNoClick = () => {
+    noCallback();
     closeConfirmationModal();
   };
 
@@ -37,13 +51,13 @@ export const ConfirmationModal: FC = () => {
       onRequestClose={closeConfirmationModal}
     >
       <StakeIcon className={styles.stakeIcon} />
-      <div className={styles.title}>{t('common|areYouSure')}</div>
+      <div className={styles.title}>{title}</div>
       <div className={styles.description}>{message}</div>
       <div className={styles.buttons}>
-        <Button theme="secondary" onClick={closeConfirmationModal}>
-          {t('common|no')}
+        <Button theme="secondary" onClick={onNoClick}>
+          {noButtonText}
         </Button>
-        <Button onClick={onYesClick}>{t('common|yes')}</Button>
+        <Button onClick={onYesClick}>{yesButtonText}</Button>
       </div>
     </Modal>
   );
