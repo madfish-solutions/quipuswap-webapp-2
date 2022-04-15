@@ -31,7 +31,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-cy="sidebar">
       <div className={styles.wallet}>
         {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
         <ConnectWalletButton className={styles.button} />
