@@ -5,15 +5,14 @@ import { useFarmingItemStore } from '@modules/farming/hooks';
 import { isExist, parseTimelock } from '@shared/helpers';
 import { Optional, Undefined } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
-import { TFunction, useTranslation } from '@translation';
+import { i18n } from '@translation';
 
 const IS_TIMELOCK_IN_SECONDS = true;
 
 const getConfirmationMessage = (
   depositBalance: Optional<BigNumber>,
   timelock: Undefined<string>,
-  withdrawalFee: Undefined<BigNumber>,
-  translation: TFunction
+  withdrawalFee: Undefined<BigNumber>
 ) => {
   if (!isExist(depositBalance) || !isExist(timelock) || !isExist(withdrawalFee)) {
     return null;
@@ -23,15 +22,14 @@ const getConfirmationMessage = (
   const persent = withdrawalFee.toFixed();
 
   if (depositBalance.isZero()) {
-    return translation('farm|confirmationFirstStake', { days, hours, persent });
+    return i18n.t('farm|confirmationFirstStake', { days, hours, persent });
   } else {
-    return translation('farm|confirmationUpdateStake', { days, hours, minutes });
+    return i18n.t('farm|confirmationUpdateStake', { days, hours, minutes });
   }
 };
 
 export const useStakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
-  const { t } = useTranslation();
   const farmingItemStore = useFarmingItemStore();
   const timelock = farmingItemStore.farmingItem?.timelock;
 
@@ -42,7 +40,7 @@ export const useStakeConfirmationPopup = () => {
   const depositBalance = farmingItemStore.farmingItem?.depositBalance;
   const withdrawalFee = farmingItemStore.farmingItem?.withdrawalFee;
 
-  const message = getConfirmationMessage(depositBalance, timelock, withdrawalFee, t);
+  const message = getConfirmationMessage(depositBalance, timelock, withdrawalFee);
 
   return (yesCallback: () => Promise<void>) => openConfirmationModal({ message, yesCallback });
 };
