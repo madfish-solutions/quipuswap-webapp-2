@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 
-import { Button, Slippage, TransactionDeadline } from '@shared/components';
+import { Button, Slippage, SlippageType, TransactionDeadline } from '@shared/components';
 
 import { Modal } from '../modal';
 import styles from './settings-modal.module.scss';
@@ -52,6 +52,7 @@ export const SettingsModal = observer(() => {
       }}
     >
       <Slippage
+        type={SlippageType.LIQUIDITY}
         title={liquiditySlippageTitleTranslation}
         tooltip={liquiditySlippageTooltipTranslation}
         error={liquiditySlippageError}
@@ -61,6 +62,7 @@ export const SettingsModal = observer(() => {
       />
 
       <Slippage
+        type={SlippageType.TRADING}
         title={tradingSlippageTitleTranslation}
         tooltip={tradingSlippageTooltipTranslation}
         error={tradingSlippageError}

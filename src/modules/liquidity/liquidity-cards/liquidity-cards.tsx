@@ -42,7 +42,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
               className={styles.tabs}
             />
           ),
-          button: <SettingsButton />,
+          button: <SettingsButton colored />,
           className: styles.header
         }}
         contentClassName={styles.content}

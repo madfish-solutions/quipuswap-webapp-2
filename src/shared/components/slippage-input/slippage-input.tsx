@@ -5,20 +5,37 @@ import { Nullable } from '@shared/types';
 
 import { PresetsAmountInput } from '../presets-amount-input';
 
-const slippagePresets = [
+const liquiditySlippagePresets = [
+  { label: '0 %', value: '0' },
+  { label: '0.5 %', value: '0.5' },
+  { label: '1 %', value: '1' }
+];
+
+const tradingSlippagePresets = [
   { label: '0.5 %', value: '0.5' },
   { label: '1 %', value: '1' },
   { label: '3 %', value: '3' }
 ];
 
+export enum SlippageType {
+  LIQUIDITY = 'LIQUIDITY',
+  TRADING = 'TRADING'
+}
+
+const slippagePresets = {
+  [SlippageType.LIQUIDITY]: liquiditySlippagePresets,
+  [SlippageType.TRADING]: tradingSlippagePresets
+};
+
 interface Props {
   value: string;
+  type: SlippageType;
   className?: string;
   handleChange: (value: Nullable<string>) => void;
   placeholder?: string;
 }
 
-export const SlippageInput: FC<Props> = ({ className, value, handleChange }) => {
+export const SlippageInput: FC<Props> = ({ className, value, type, handleChange }) => {
   return (
     <PresetsAmountInput
       className={className}
@@ -26,7 +43,7 @@ export const SlippageInput: FC<Props> = ({ className, value, handleChange }) => 
       min={MIN_SLIPPAGE_PERCENTAGE}
       handleChange={handleChange}
       placeholder={value}
-      presets={slippagePresets}
+      presets={slippagePresets[type]}
       unit="%"
     />
   );

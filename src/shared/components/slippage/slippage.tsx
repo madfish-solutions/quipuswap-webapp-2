@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@config/constants';
-import { Scaffolding, SlippageInput, Tooltip } from '@shared/components';
+import { DEFAULT_LIQUIDITY_SLIPPAGE_PERCENTAGE, DEFAULT_TRADING_SLIPPAGE_PERCENTAGE } from '@config/constants';
+import { Scaffolding, SlippageInput, SlippageType, Tooltip } from '@shared/components';
 import { Nullable, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
@@ -12,21 +12,26 @@ interface Props {
   tooltip: string;
   error: Undefined<string>;
   slippage: BigNumber;
-  tooltipId: string;
+  type: SlippageType;
   onChange: (newValue: BigNumber) => void;
 }
 
-export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip, tooltipId }) => {
+const defaultSlippagePercentage = {
+  [SlippageType.LIQUIDITY]: DEFAULT_LIQUIDITY_SLIPPAGE_PERCENTAGE,
+  [SlippageType.TRADING]: DEFAULT_TRADING_SLIPPAGE_PERCENTAGE
+};
+
+export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip, type }) => {
   const handleChange = (newValue: Nullable<string>) =>
-    onChange(new BigNumber(newValue ? newValue : DEFAULT_SLIPPAGE_PERCENTAGE));
+    onChange(new BigNumber(newValue ?? defaultSlippagePercentage[type]));
 
   return (
     <div>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{title}</span>
-        <Tooltip content={tooltip} testId={tooltipId} />
+        <Tooltip content={tooltip}/>
       </label>
-      <SlippageInput handleChange={handleChange} value={slippage.toFixed()} />
+      <SlippageInput type={type} handleChange={handleChange} value={slippage.toFixed()} />
       <Scaffolding height={27.5} showChild={Boolean(error)}>
         <div className={styles.simpleError}>{error}</div>
       </Scaffolding>
