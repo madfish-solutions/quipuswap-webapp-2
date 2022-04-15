@@ -2,7 +2,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { FARM_ID_FOR_RESTAKE, FARMING_CONTRACT_ADDRESS, FARMING_REFERRER_CONTRACT } from '@config/enviroment';
+import { FARM_ID_FOR_RESTAKE } from '@config/constants';
+import { FARMING_CONTRACT_ADDRESS, FARMING_REFERRER_CONTRACT } from '@config/enviroment';
 import { Token } from '@shared/types';
 
 export const harvestAndRestake = async (
