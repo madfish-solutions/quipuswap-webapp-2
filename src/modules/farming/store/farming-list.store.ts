@@ -1,14 +1,21 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL } from '@config/constants';
-import { isExist, isNull, MakeInterval } from '@shared/helpers';
+import { FARM_REWARD_UPDATE_INTERVAL, DEFAULT_DECIMALS } from '@config/constants';
+import { DEFAULT_TOKEN } from '@config/tokens';
+import { isExist, isNull, MakeInterval, isTokenEqual } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingStatsApi } from '../api';
-import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime, UsersInfoValueWithId } from '../helpers';
+import {
+  getEndTimestamp,
+  getIsHarvestAvailable,
+  getUserInfoLastStakedTime,
+  getUserPendingReward,
+  UsersInfoValueWithId
+} from '../helpers';
 import { getPendingRewards } from '../helpers/get-pending-rewards';
 import { getRewardsInUsd } from '../helpers/get-rewards-in-usd';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
@@ -69,6 +76,44 @@ export class FarmingListStore {
     return await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
   }
 
+  async getQuipuPendingRewards() {
+    const { tezos } = this.rootStore;
+    const isBalanceLoaded = this.listStore.data.some(({ earnBalance }) => isExist(earnBalance));
+
+    if (!isBalanceLoaded || !this.userInfo.data || !tezos) {
+      return new BigNumber(ZERO_AMOUNT);
+    } else {
+      const stakedFarmingsWithQuipuRewards = this.listStore.data.filter(
+        ({ earnBalance, rewardToken }) =>
+          earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, DEFAULT_TOKEN)
+      );
+
+      const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithQuipuRewards);
+
+      const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
+      const blockTimestampMS = new Date(blockTimestamp).getTime();
+
+      return claimableFarmings
+        .map(farm => {
+          const userInfo = this.findUserInfo(farm);
+
+          if (!userInfo) {
+            return new BigNumber(ZERO_AMOUNT);
+          }
+
+          return getUserPendingReward(userInfo, farm, blockTimestampMS).decimalPlaces(
+            DEFAULT_DECIMALS,
+            BigNumber.ROUND_DOWN
+          );
+        })
+        .reduce<BigNumber>(
+          (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
+          new BigNumber(ZERO_AMOUNT)
+        )
+        .decimalPlaces(DEFAULT_DECIMALS, BigNumber.ROUND_DOWN);
+    }
+  }
+
   makePendingRewardsLiveable() {
     this.updateUserInfoInterval.start();
     this.pendingRewardsInterval.start();
@@ -93,12 +138,7 @@ export class FarmingListStore {
     } else {
       const stakedFarmings = this.listStore.data.filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT));
 
-      const claimableFarmings = stakedFarmings.filter(farmingItem => {
-        const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
-        const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
-
-        return getIsHarvestAvailable(endTimestamp);
-      });
+      const claimableFarmings = this.getClimableFarmings(stakedFarmings);
 
       const totalRewardsInUsd = stakedFarmings.map(farmingItem =>
         getRewardsInUsd(farmingItem, this.findUserInfo(farmingItem))
@@ -111,5 +151,14 @@ export class FarmingListStore {
       this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
       this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
     }
+  }
+
+  private getClimableFarmings(stakedFarmings: FarmingItem[]) {
+    return stakedFarmings.filter(farmingItem => {
+      const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
+      const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
+
+      return getIsHarvestAvailable(endTimestamp);
+    });
   }
 }
