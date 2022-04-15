@@ -89,5 +89,13 @@ export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<Us
     last_staked: new Date(raw.last_staked)
   };
 
-export const mapUsersInfoValues = (rawList: RawUsersInfoValue[]): UsersInfoValue[] =>
-  rawList.map(mapUsersInfoValue).filter(isExist);
+export const clearFarmingItem = (farmingItem: FarmingItem) => {
+  return {
+    id: farmingItem.id.toFixed(),
+    apr: farmingItem.apr?.toFixed(),
+    tvlInStakedToken: farmingItem.tvlInStakedToken.toFixed(),
+    tvlInUsd: farmingItem.tvlInUsd?.toFixed(),
+    staked: farmingItem.staked.toFixed(),
+    depositBalance: farmingItem.depositBalance?.toFixed()
+  };
+};
