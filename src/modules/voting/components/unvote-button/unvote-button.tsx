@@ -10,6 +10,7 @@ import { useTezos } from '@providers/use-dapp';
 import { Button } from '@shared/components/button';
 import { isExist } from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 import { useToasts } from '@shared/utils';
 import { useConfirmOperation } from '@shared/utils/confirm-operation';
 
@@ -41,15 +42,35 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
       return;
     }
 
-    await unvoteOrRemoveVeto(
-      currentTab.id,
-      tezos,
-      dex,
-      showErrorToast,
-      confirmOperation,
-      updateBalances,
-      wrapCandidate
-    );
+    const logData = {
+      unvote: {
+        tab: currentTab.id,
+        vote: vote?.toFixed(),
+        veto: veto?.toFixed(),
+        dex: dex.contract.address,
+        candidate,
+        currentCandidate: currentCandidate?.address
+      }
+    };
+
+    try {
+      amplitudeService.logEvent('UNVOTE', logData);
+      await unvoteOrRemoveVeto(
+        currentTab.id,
+        tezos,
+        dex,
+        showErrorToast,
+        confirmOperation,
+        updateBalances,
+        wrapCandidate
+      );
+      amplitudeService.logEvent('UNVOTE_SUCCESS', logData);
+    } catch (error) {
+      amplitudeService.logEvent('UNVOTE_FAILED', {
+        ...logData,
+        error
+      });
+    }
   });
 
   const value = isVoteTab ? vote : veto;

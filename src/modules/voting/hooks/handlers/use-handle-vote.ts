@@ -2,6 +2,7 @@ import { submitForm } from '@modules/voting/helpers/blockchain/voting';
 import { useVotingDex, useVotingRouting } from '@modules/voting/helpers/voting.provider';
 import { useTezos } from '@providers/use-dapp';
 import { useToasts } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 import { VoteFormValues } from '@shared/types';
 import { useConfirmOperation } from '@shared/utils';
 
@@ -17,7 +18,16 @@ export const useHandleVote = () => {
       return;
     }
 
+    const logData = {
+      vote: {
+        tab: currentTab.id,
+        ...values,
+        dex: dex.contract.address
+      }
+    };
+
     try {
+      amplitudeService.logEvent('VOTE', logData);
       await submitForm({
         tezos,
         values,
@@ -25,8 +35,13 @@ export const useHandleVote = () => {
         tab: currentTab.id,
         confirmOperation
       });
-    } catch (e) {
-      showErrorToast(e as Error);
+      amplitudeService.logEvent('VOTE_SUCCESS', logData);
+    } catch (error) {
+      showErrorToast(error as Error);
+      amplitudeService.logEvent('VOTE_FAILED', {
+        ...logData,
+        error
+      });
     }
   };
 };
