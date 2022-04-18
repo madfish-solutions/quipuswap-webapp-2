@@ -16,6 +16,7 @@ import {
   getAddLiquidityMessage,
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
+  getTokenSlug,
   getTokenSymbol,
   isExist,
   isNull,
@@ -24,7 +25,8 @@ import {
 } from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { Nullable, Optional, Undefined, Token } from '@shared/types';
+import { amplitudeService } from '@shared/services';
+import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import {
   addLiquidityTez,
@@ -32,7 +34,7 @@ import {
   addPairTokenToToken,
   initializeLiquidityTez
 } from '../blockchain/send-transaction';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
+import { calculatePoolAmount, checkIsPoolNotExists, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
@@ -263,6 +265,8 @@ export const useAddLiquidityService = (
     );
   };
 
+  // TODO: Refactor this
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const investTokenToToken = async () => {
     if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
       return;
@@ -291,37 +295,71 @@ export const useAddLiquidityService = (
 
         const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenASymbol, tokenBSymbol);
 
-        await confirmOperation(addPairTokenToTokenOperation.opHash, {
-          message: initializeLiquidityMessage
-        });
+        const logData = {
+          type: 'TokenToToken',
+          tokenASymbol,
+          tokenBSymbol,
+          pairInputA,
+          pairInputB
+        };
+
+        try {
+          amplitudeService.logEvent('LIQUIDITY_INIT', logData);
+          await confirmOperation(addPairTokenToTokenOperation.opHash, {
+            message: initializeLiquidityMessage
+          });
+          amplitudeService.logEvent('LIQUIDITY_INIT_SUCCESS', logData);
+        } catch (error) {
+          amplitudeService.logEvent('LIQUIDITY_INIT_FAILED', { ...logData, error });
+        }
       }
     } else {
       if (!pairInfo || !pairInfo.id) {
         throw new UnexpectedEmptyValueError('PairInfo');
       }
-      const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
-        tezos,
-        accountPkh,
-        dex,
-        pairInfo.id,
+
+      const logData = {
+        type: 'TokenToToken',
+        tokenASymbol: getTokenSymbol(pairTokenA),
+        tokenBSymbol: getTokenSymbol(pairTokenB),
         pairInputA,
-        pairTokenA,
-        pairTokenB,
-        pairInfo.totalSupply,
-        pairInfo.tokenAPool,
-        pairInfo.tokenBPool,
-        transactionDeadline,
-        liquiditySlippage
-      );
+        pairInputB,
+        totalSupply: pairInfo.totalSupply.toFixed(),
+        tokenAPool: pairInfo.tokenAPool.toFixed(),
+        tokenBPool: pairInfo.tokenBPool.toFixed(),
+        transactionDeadline: transactionDeadline.toFixed(),
+        liquiditySlippage: liquiditySlippage.toFixed()
+      };
 
-      const tokenASymbol = getTokenSymbol(pairTokenA);
-      const tokenBSymbol = getTokenSymbol(pairTokenB);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_ADD', logData);
+        const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
+          tezos,
+          accountPkh,
+          dex,
+          pairInfo.id,
+          pairInputA,
+          pairTokenA,
+          pairTokenB,
+          pairInfo.totalSupply,
+          pairInfo.tokenAPool,
+          pairInfo.tokenBPool,
+          transactionDeadline,
+          liquiditySlippage
+        );
 
-      const addLiquidityMessage = getAddLiquidityMessage(tokenASymbol, tokenBSymbol);
+        const tokenASymbol = getTokenSymbol(pairTokenA);
+        const tokenBSymbol = getTokenSymbol(pairTokenB);
 
-      await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
-        message: addLiquidityMessage
-      });
+        const addLiquidityMessage = getAddLiquidityMessage(tokenASymbol, tokenBSymbol);
+
+        await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
+          message: addLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_ADD_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_ADD_FAILED', { ...logData, error });
+      }
     }
 
     setLastEditedInput(null);
@@ -348,15 +386,28 @@ export const useAddLiquidityService = (
       pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
+      const logData = {
+        type: 'TezosToToken',
+        token: getTokenSlug(notTezToken),
+        tezTokenInput,
+        notTezTokenInput
+      };
 
-      const notTezTokenSymbol = getTokenSymbol(notTezToken);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_ADD', logData);
+        const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
 
-      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+        const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      await confirmOperation(addLiquidityTezOperation.opHash, {
-        message: addLiquidityMessage
-      });
+        const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+
+        await confirmOperation(addLiquidityTezOperation.opHash, {
+          message: addLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_ADD_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_ADD_FAILED', logData);
+      }
     } else {
       const token: QuipuswapSdkToken = {
         contract: notTezToken.contractAddress,
@@ -365,21 +416,35 @@ export const useAddLiquidityService = (
       const notTezTokenBN = new BigNumber(notTezTokenInput);
       const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
 
-      const initializeLiquidityTezOperation = await initializeLiquidityTez(
-        tezos,
-        NETWORK_ID,
-        token,
-        tokenBValue,
-        tezValue
-      );
+      const logData = {
+        type: 'TezosToToken',
+        token: getTokenSlug(notTezToken),
+        notTezTokenInput,
+        tokenBValue: tokenBValue.toFixed(),
+        tezValue: tezValue.toFixed()
+      };
 
-      const notTezTokenSymbol = getTokenSymbol(notTezToken);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_INIT', logData);
+        const initializeLiquidityTezOperation = await initializeLiquidityTez(
+          tezos,
+          NETWORK_ID,
+          token,
+          tokenBValue,
+          tezValue
+        );
 
-      const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+        const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      await confirmOperation(initializeLiquidityTezOperation.opHash, {
-        message: initializeLiquidityMessage
-      });
+        const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+
+        await confirmOperation(initializeLiquidityTezOperation.opHash, {
+          message: initializeLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_INIT_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_INIT_FAILED', { ...logData, error });
+      }
     }
 
     setLastEditedInput(null);

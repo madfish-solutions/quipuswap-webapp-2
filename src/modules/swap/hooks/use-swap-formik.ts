@@ -51,8 +51,6 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
         deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: inputAmount?.toFixed(),
         outputAmount: outputAmount?.toFixed(),
-        inputToken,
-        outputToken,
         recipient: action === 'send' ? recipient : undefined,
         slippageTolerance: tradingSlippage.div(100).toFixed(),
         startTokenSlug: getTokenSlug(inputToken!),
