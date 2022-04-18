@@ -2,10 +2,11 @@ import { FC, ReactNode } from 'react';
 
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
+import { DataTestAttribute } from '@tests/types';
 
 import s from './opportunity-card.module.scss';
 
-interface OpportunityCardProps {
+interface OpportunityCardProps extends DataTestAttribute {
   className?: string;
   Icon: FC<{ className?: string }>;
   title: ReactNode;
@@ -18,7 +19,7 @@ interface OpportunityCardProps {
   };
 }
 
-export const OpportunityCard: FC<OpportunityCardProps> = ({ className, Icon, title, description, button }) => {
+export const OpportunityCard: FC<OpportunityCardProps> = ({ className, Icon, title, description, button, testId }) => {
   const props = button.href ? { href: button.href, external: button.external } : {};
 
   return (
@@ -26,7 +27,7 @@ export const OpportunityCard: FC<OpportunityCardProps> = ({ className, Icon, tit
       <Icon className={s.icon} />
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
-      <Button {...props} disabled={!!button.disabled} className={s.button}>
+      <Button {...props} disabled={!!button.disabled} className={s.button} testId={testId}>
         {button.label}
       </Button>
     </Card>

@@ -6,10 +6,11 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components/state-components';
 import { Tooltip } from '@shared/components/tooltip';
 import { Nullable } from '@shared/types/types';
+import { DexDashboardTestAttribute } from '@tests/types';
 
 import styles from './dashboard-card.module.scss';
 
-interface DashboardCardProps {
+interface DashboardCardProps extends DexDashboardTestAttribute {
   volume: Nullable<string>;
   size?: 'large' | 'extraLarge';
   label: ReactNode;
@@ -31,6 +32,9 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   currency,
   tooltip,
   className,
+  tooltipTestId,
+  currencyTestId,
+  amountTestId,
   loading = false
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -38,7 +42,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
       <h4 className={styles.header}>
-        {label} <Tooltip content={tooltip} />
+        {label} <Tooltip content={tooltip} testId={tooltipTestId} />
       </h4>
       <StateCurrencyAmount
         className={styles.currencyAmount}
@@ -47,6 +51,8 @@ export const DashboardCard: FC<DashboardCardProps> = ({
         isLeftCurrency={currency === '$'}
         labelSize={size}
         isLoading={loading}
+        currencyTestId={currencyTestId}
+        amountTestId={amountTestId}
       />
     </div>
   );

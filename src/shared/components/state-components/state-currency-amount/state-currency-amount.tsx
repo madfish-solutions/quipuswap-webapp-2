@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
@@ -6,14 +6,14 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-import { DataTestAttribute } from 'tests/types';
+import { DexDashboardTestAttribute } from 'tests/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
 import styles from './state-currency-amount.module.scss';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DexDashboardTestAttribute {
   className?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
@@ -23,6 +23,11 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, Da
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
+}
+
+interface CurrencyProps {
+  testId?: string;
+  children?: ReactNode;
 }
 
 const sizeClass = {
@@ -36,7 +41,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
+export const Currency: FC<CurrencyProps> = ({ testId, children }) => (
+  <span className={styles.currency} data-test-id={testId}>
+    {children}
+  </span>
+);
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -51,7 +60,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   errorFallback,
   amountDecimals,
   aliternativeView,
-  testId
+  currencyTestId,
+  amountTestId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -84,12 +94,12 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={testId} className={styles.inner} title={title}>
+        <span data-test-id={amountTestId} className={styles.inner} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency>{currency}</Currency>}
+      {isRightVisible && <Currency testId={currencyTestId}>{currency}</Currency>}
     </span>
   );
 

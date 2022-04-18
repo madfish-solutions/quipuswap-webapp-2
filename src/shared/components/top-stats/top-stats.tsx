@@ -24,7 +24,7 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, testId }) 
       </span>
 
       <StateCurrencyAmount
-        testId={testId}
+        amountTestId={testId}
         className={styles.currencyAmount}
         currency="$"
         amount={amount || null}

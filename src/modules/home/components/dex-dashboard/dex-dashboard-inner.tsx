@@ -7,12 +7,13 @@ import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
+import { DexDashboardTestAttribute } from '@tests/types';
 import { useTranslation } from '@translation';
 
 import { DashboardCard } from './dashboard-card';
 import styles from './dex-dashboard.module.scss';
 
-interface DexDashboardInnerProps {
+interface DexDashboardInnerProps extends DexDashboardTestAttribute {
   totalLiquidity: Nullable<string> | undefined;
   xtzUsdQuote: Nullable<string> | undefined;
   volume24: Nullable<string> | undefined;
@@ -32,7 +33,10 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   totalSupply,
   volume24,
   transactionsCount24h,
-  loading = false
+  loading = false,
+  tooltipTestId,
+  currencyTestId,
+  amountTestId
 }) => {
   const { t } = useTranslation(['home']);
 
@@ -80,6 +84,9 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
         label={t('home|Total supply')}
         currency="QUIPU"
         loading={totalSupply === undefined}
+        tooltipTestId={tooltipTestId}
+        currencyTestId={currencyTestId}
+        amountTestId={amountTestId}
       />
     </>
   );

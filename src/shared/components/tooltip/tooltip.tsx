@@ -10,6 +10,7 @@ import styles from './tooltip.module.sass';
 
 export interface TooltipProps extends TippyProps {
   content: ReactNode;
+  testId?: string;
   className?: string;
 }
 
@@ -18,13 +19,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Tooltip: FC<TooltipProps> = ({ content, className, ...props }) => {
+export const Tooltip: FC<TooltipProps> = ({ content, className, testId, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.root, modeClass[colorThemeMode]);
 
   return (
     <Tippy className={compoundClassName} duration={0} {...props} content={content}>
-      <div className={cx(styles.wrapper, styles.small, className)}>
+      <div className={cx(styles.wrapper, styles.small, className)} data-test-id={testId}>
         <Info className={cx(styles.info, modeClass[colorThemeMode])} />
       </div>
     </Tippy>
