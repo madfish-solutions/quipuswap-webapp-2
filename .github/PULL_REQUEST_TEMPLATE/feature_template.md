@@ -1,0 +1,5 @@
+- [ ] Review your code
+- [ ] Test the main flow of a new feature
+- [ ] Write in Slack quipuswap-fe chat and ask for review
+- [ ] Merge a PR after review and delete unnecessary branch
+- [ ] Change the task status in a Notion

@@ -1,0 +1,3 @@
+- [ ] Create a new branch from hotfix
+- [ ] Test the main flow of a new feature
+- [ ] Write in Slack quipuswap-fe chat and ask for review

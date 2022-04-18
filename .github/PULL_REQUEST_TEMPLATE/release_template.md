@@ -1,4 +1,4 @@
-# The release process of QuipuSwap UI
+# # The release process of QuipuSwap UI
 
 ## Release of a new feature
 1. Merge all [pull requests](https://github.com/madfish-solutions/quipuswap-webapp-2/pulls) for the release to the `develop` branch
