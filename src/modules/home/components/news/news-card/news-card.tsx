@@ -4,16 +4,22 @@ import { isNewsWithLink, News } from '../content';
 
 interface NewsCardProps {
   news: News;
+  index: number;
   className?: string;
 }
 
-export const NewsCard: FC<NewsCardProps> = ({ news, className }) => {
+export const NewsCard: FC<NewsCardProps> = ({ news, className, index }) => {
   const ImageComponent = <img width={272} height={136} src={news.img} alt="news" />;
 
   return (
     <div className={className}>
       {isNewsWithLink(news) ? (
-        <a href={news.url} target={news.external ? '_blank' : '_self'} rel="noreferrer noopener">
+        <a
+          href={news.url}
+          data-test-id={`news-testId-${index}`}
+          target={news.external ? '_blank' : '_self'}
+          rel="noreferrer noopener"
+        >
           {ImageComponent}
         </a>
       ) : (

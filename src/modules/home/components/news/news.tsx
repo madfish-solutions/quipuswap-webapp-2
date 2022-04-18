@@ -29,11 +29,12 @@ export const News: React.FC<NewsProps> = ({ className }) => {
     <Section
       header={t('home|Our latest news')}
       description={t('home|Never miss important updates. Check what has happened in the QuipuSwap ecosystem recently.')}
+      testId="news"
       className={cx(className)}
     >
       <HomeSlider className={styles.uncenter}>
-        {NewsData.map(news => (
-          <NewsCard key={news.id} className={cx(styles.card, modeClass[colorThemeMode])} news={news} />
+        {NewsData.map((news, index) => (
+          <NewsCard key={news.id} className={cx(styles.card, modeClass[colorThemeMode])} news={news} index={index} />
         ))}
       </HomeSlider>
     </Section>
