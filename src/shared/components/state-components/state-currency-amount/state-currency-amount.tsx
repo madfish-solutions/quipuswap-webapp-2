@@ -6,14 +6,13 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-import { DexDashboardTestAttribute } from 'tests/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
 import styles from './state-currency-amount.module.scss';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DexDashboardTestAttribute {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
@@ -59,9 +58,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView,
-  currencyTestId,
-  amountTestId
+  aliternativeView
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -94,12 +91,12 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={amountTestId} className={styles.inner} title={title}>
+        <span data-test-id="amount" className={styles.inner} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency testId={currencyTestId}>{currency}</Currency>}
+      {isRightVisible && <Currency testId="currency">{currency}</Currency>}
     </span>
   );
 

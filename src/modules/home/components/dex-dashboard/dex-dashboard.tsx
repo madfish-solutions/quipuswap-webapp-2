@@ -12,7 +12,6 @@ import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
 import { fromDecimals } from '@shared/helpers';
 import { QSNets } from '@shared/types';
-import { DexDashboardTooltip, DexDashboardAmount, DexDashboardCurrency } from '@tests/home';
 import { useTranslation } from '@translation';
 
 import { Section } from '../section';
@@ -61,7 +60,7 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
           />
         </Slider>
       </Card>
-      <Card className={s.desktop} contentClassName={desktopContentClassName}>
+      <Card className={s.desktop} contentClassName={desktopContentClassName} testId="DEXDashboardDesktop">
         <DexDashboardInner
           volume24={'888888'}
           totalLiquidity={'888888'}
@@ -69,9 +68,6 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
           transactionsCount24h={888888}
           totalSupply={totalSupply}
           loading={false}
-          tooltipTestId={DexDashboardTooltip.TOTAL_SUPPLY_TOOLTIP}
-          currencyTestId={DexDashboardAmount.TOTAL_SUPPLY_AMOUNT}
-          amountTestId={DexDashboardCurrency.TOTAL_SUPPLY_CURRENCY}
         />
       </Card>
     </Section>

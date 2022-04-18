@@ -23,13 +23,7 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, testId }) 
         {title} <Tooltip content={tooltip} />
       </span>
 
-      <StateCurrencyAmount
-        amountTestId={testId}
-        className={styles.currencyAmount}
-        currency="$"
-        amount={amount || null}
-        isLeftCurrency
-      />
+      <StateCurrencyAmount className={styles.currencyAmount} currency="$" amount={amount || null} isLeftCurrency />
     </div>
   );
 };

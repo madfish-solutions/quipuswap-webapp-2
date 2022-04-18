@@ -7,13 +7,13 @@ import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
-import { DexDashboardTestAttribute } from '@tests/types';
+import { DataTestAttribute } from '@tests/types';
 import { useTranslation } from '@translation';
 
 import { DashboardCard } from './dashboard-card';
 import styles from './dex-dashboard.module.scss';
 
-interface DexDashboardInnerProps extends DexDashboardTestAttribute {
+interface DexDashboardInnerProps extends DataTestAttribute {
   totalLiquidity: Nullable<string> | undefined;
   xtzUsdQuote: Nullable<string> | undefined;
   volume24: Nullable<string> | undefined;
@@ -33,10 +33,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   totalSupply,
   volume24,
   transactionsCount24h,
-  loading = false,
-  tooltipTestId,
-  currencyTestId,
-  amountTestId
+  loading = false
 }) => {
   const { t } = useTranslation(['home']);
 
@@ -47,8 +44,8 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? (
-        <>
+      {IS_NETWORK_MAINNET && HIDE_ANALYTICS ? (
+        <div data-test-id="h">
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
             size="extraLarge"
@@ -74,7 +71,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
             label={t('home|Daily Transactions')}
           />
-        </>
+        </div>
       ) : null}
       <DashboardCard
         className={cx(styles.card, modeClass[colorThemeMode])}
@@ -84,9 +81,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
         label={t('home|Total supply')}
         currency="QUIPU"
         loading={totalSupply === undefined}
-        tooltipTestId={tooltipTestId}
-        currencyTestId={currencyTestId}
-        amountTestId={amountTestId}
+        testId="totalSupply"
       />
     </>
   );

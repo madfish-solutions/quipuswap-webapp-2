@@ -25,7 +25,7 @@ export const Tooltip: FC<TooltipProps> = ({ content, className, testId, ...props
 
   return (
     <Tippy className={compoundClassName} duration={0} {...props} content={content}>
-      <div className={cx(styles.wrapper, styles.small, className)} data-test-id={testId}>
+      <div className={cx(styles.wrapper, styles.small, className)} data-test-id="tooltip">
         <Info className={cx(styles.info, modeClass[colorThemeMode])} />
       </div>
     </Tippy>

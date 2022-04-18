@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 
 import { Earn, Farm, Trade } from '@shared/svg';
-import { QSOpportunitiesButtons } from '@tests/home';
 import { DataTestAttribute } from '@tests/types';
 import { Trans } from '@translation';
 
@@ -31,8 +30,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     button: {
       label: <Trans ns="home">Start Trading</Trans>,
       href: '/swap'
-    },
-    testId: QSOpportunitiesButtons.OPPORTUNITIES_TRADING
+    }
   },
   {
     id: 1,
@@ -47,8 +45,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     button: {
       label: <Trans ns="home">Start Farming</Trans>,
       href: '/farming'
-    },
-    testId: QSOpportunitiesButtons.OPPORTUNITIES_FARMING
+    }
   },
   {
     id: 2,
@@ -63,7 +60,6 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     button: {
       label: <Trans ns="home">Add Liquidity</Trans>,
       href: '/liquidity/add'
-    },
-    testId: QSOpportunitiesButtons.OPPORTUNITIES_LIQUIDITY
+    }
   }
 ];

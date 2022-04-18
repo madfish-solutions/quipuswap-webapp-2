@@ -5,10 +5,11 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StatusLabel } from '@shared/components/status-label';
 import { ActiveStatus } from '@shared/types';
+import { DataTestAttribute } from '@tests/types';
 
 import styles from './card.module.scss';
 
-interface Props {
+interface Props extends DataTestAttribute {
   className?: string;
   header?: {
     content: ReactNode;
@@ -34,7 +35,8 @@ export const Card: FC<Props> = ({
   footer,
   children,
   isV2 = false,
-  contentClassName
+  contentClassName,
+  testId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -43,7 +45,7 @@ export const Card: FC<Props> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id={testId}>
       {header && (
         <div className={cx(styles.header, header.className)}>
           {header.content}
