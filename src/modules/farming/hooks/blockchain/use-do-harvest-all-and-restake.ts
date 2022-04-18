@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { FarmingItem } from '@modules/farming/interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, isNull } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -10,6 +9,7 @@ import { useTranslation } from '@translation';
 
 import { harvestAllAndRestake } from '../../api';
 import { getUserInfoLastStakedTime, getEndTimestamp, getIsHarvestAvailable } from '../../helpers';
+import { FarmingItem } from '../../interfaces';
 import { useFarmingListStore } from '../stores';
 
 const ZERO_AMOUNT = 0;

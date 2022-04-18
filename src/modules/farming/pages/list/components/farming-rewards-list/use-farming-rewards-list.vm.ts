@@ -1,11 +1,15 @@
 import { useCallback, useEffect } from 'react';
 
-import { useFarmingListStore, useDoHarvestAll, useDoHarvestAllAndRestake } from '@modules/farming/hooks';
-import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
-import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
 import { useTranslation } from '@translation';
 
-import { useHarvestConfirmationPopup } from './use-harvest-confirmation-popup';
+import {
+  useDoHarvestAll,
+  useGetFarmingList,
+  useGetFarmingStats,
+  useFarmingListStore,
+  useDoHarvestAllAndRestake,
+  useHarvestConfirmationPopup
+} from '../../../../hooks';
 
 export const useFarmingRewardsListViewModel = () => {
   const confirmationPopup = useHarvestConfirmationPopup();
