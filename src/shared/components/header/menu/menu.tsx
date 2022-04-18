@@ -31,7 +31,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="menu">
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
         <div className={styles.row}>

@@ -48,7 +48,7 @@ export const Header: FC<HeaderProps> = ({ className }) => {
 
   return (
     <div className={styles.wrapper}>
-      <header className={cx(styles.root, modeClass[colorThemeMode], className)}>
+      <header className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="header">
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
         <SettingsButton className={styles.settings} />
