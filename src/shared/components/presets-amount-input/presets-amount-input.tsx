@@ -74,6 +74,7 @@ export const PresetsAmountInput: FC<Props> = ({
             key={label}
             type="button"
             className={cx(styles.button, { [styles.active]: index === activeButton })}
+            data-test-id={`presetButton-${index}`}
             onClick={() => {
               setActiveButton(index);
               handleCustomValueChange(null);

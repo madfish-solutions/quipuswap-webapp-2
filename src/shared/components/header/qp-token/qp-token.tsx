@@ -40,7 +40,9 @@ export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <QuipuToken id={id} />
-      <span className={styles.price}>$ {price.isNaN() ? '???' : price.toFixed(DEFAULT_PRECISION)}</span>
+      <span className={styles.price} data-test-id="quipuPrice">
+        $ {price.isNaN() ? '???' : price.toFixed(DEFAULT_PRECISION)}
+      </span>
     </div>
   );
 };

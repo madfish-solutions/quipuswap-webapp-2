@@ -41,10 +41,22 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       <footer className={styles.footer}>
         <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
-        <Button className={styles.footerItem} href="https://www.madfish.solutions/" external theme="clean">
+        <Button
+          className={styles.footerItem}
+          href="https://www.madfish.solutions/"
+          external
+          theme="clean"
+          data-test-id="madFishLogo"
+        >
           <Madfish />
         </Button>
-        <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={styles.button}>
+        <Button
+          external
+          href={QUIPUSWAP_OLD_VERSION_LINK}
+          theme="secondary"
+          className={styles.button}
+          testId="oldVersionButton"
+        >
           {t('common|Old version')}
         </Button>
       </footer>
