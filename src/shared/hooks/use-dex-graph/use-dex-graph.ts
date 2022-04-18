@@ -6,6 +6,7 @@ import { DEX_POOL_URL } from '@config/enviroment';
 import { useTokens } from '@providers/dapp-tokens';
 import { Nullable } from '@shared/types';
 
+import { amplitudeService } from '../../services';
 import { useToasts } from '../use-toasts';
 import { useWebSocket } from '../use-web-socket';
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
@@ -40,10 +41,11 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     return quipuswapRawDexPools.map(rawDexPool => rawDexToDexPair(rawDexPool, tokens));
   }, [displayedRawDexPools, tokens]);
 
-  const refreshDexPools = useCallback(
-    () => setDisplayedRawDexPools(rawDexPools),
-    [setDisplayedRawDexPools, rawDexPools]
-  );
+  const refreshDexPools = useCallback(() => {
+    amplitudeService.logEvent('UPDATE_RATES_CLICK');
+
+    return setDisplayedRawDexPools(rawDexPools);
+  }, [rawDexPools]);
 
   const dataIsStale = displayedRawDexPools !== rawDexPools;
 

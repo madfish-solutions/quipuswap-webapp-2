@@ -8,6 +8,7 @@ import { getRouteWithInput, getTokenSlug, getTokenSymbol, toDecimals, getSwapMes
 import { swap } from '@shared/helpers/swap';
 import { useDexGraph } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { amplitudeService } from '@shared/services';
 import { SwapTabAction } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
@@ -40,10 +41,28 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
       return;
     }
 
-    const { inputAmount, inputToken, outputToken, recipient, action } = formValues;
+    const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
 
     const rawInputAmount = toDecimals(inputAmount!, inputToken!);
+
+    const logData = {
+      swap: {
+        action,
+        deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
+        inputAmount: inputAmount?.toFixed(),
+        outputAmount: outputAmount?.toFixed(),
+        inputToken,
+        outputToken,
+        recipient: action === 'send' ? recipient : undefined,
+        slippageTolerance: tradingSlippage.div(100).toFixed(),
+        startTokenSlug: getTokenSlug(inputToken!),
+        endTokenSlug: getTokenSlug(outputToken!),
+        ttDexAddress: TOKEN_TO_TOKEN_DEX
+      }
+    };
+
     try {
+      amplitudeService.logEvent('SWAP_SEND', logData);
       const walletOperation = await swap(tezos, accountPkh, {
         deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
@@ -67,9 +86,11 @@ export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
       await confirmOperation(walletOperation.opHash, {
         message: swapMessage
       });
-    } catch (e) {
-      showErrorToast(e as Error);
-      throw e;
+      amplitudeService.logEvent('SWAP_SEND_SUCCESS', logData);
+    } catch (error) {
+      showErrorToast(error as Error);
+      amplitudeService.logEvent('SWAP_SEND_FIELD', { ...logData, error });
+      throw error;
     }
   };
 
