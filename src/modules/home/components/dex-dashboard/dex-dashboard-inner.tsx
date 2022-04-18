@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -45,7 +45,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   return (
     <>
       {IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? (
-        <div data-test-id="h">
+        <div data-test-id="analytics">
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
             size="extraLarge"

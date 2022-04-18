@@ -23,7 +23,7 @@ export const OpportunityCard: FC<OpportunityCardProps> = ({ className, Icon, tit
   const props = button.href ? { href: button.href, external: button.external } : {};
 
   return (
-    <Card className={className} contentClassName={s.content}>
+    <Card className={className} contentClassName={s.content} testId="QSOpportunityCard">
       <Icon className={s.icon} />
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
