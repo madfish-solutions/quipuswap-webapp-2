@@ -32,8 +32,7 @@ export const useFarmingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
 
   const handleHarvest = async () => {
-    await doHarvest(farmingItem);
-
+    await doHarvest(defined(farmingItem));
     await delayedGetFarmingItem(defined(farmingItem).id);
   };
 
