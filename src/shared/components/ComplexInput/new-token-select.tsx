@@ -18,6 +18,7 @@ import {
 import { amountsAreEqual } from '@shared/helpers/comparison';
 import { Shevron } from '@shared/svg';
 import { Undefined, Token } from '@shared/types';
+import { DataTestAttribute } from '@tests/types';
 
 import { Button } from '../button';
 import { Scaffolding } from '../scaffolding';
@@ -28,7 +29,7 @@ import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
-interface NewTokenSelectProps {
+interface NewTokenSelectProps extends DataTestAttribute {
   className?: string;
   showBalanceButtons?: boolean;
   amount?: BigNumber;
@@ -64,7 +65,8 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   onAmountChange,
   onTokenChange,
   token,
-  blackListedTokens
+  blackListedTokens,
+  testId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -138,7 +140,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   const notWhitelistedMessage = token ? getMessageNotWhitelistedToken(token) : null;
 
   return (
-    <>
+    <div data-test-id={testId}>
       <TokensModal
         blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
@@ -171,6 +173,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
+                testId="changeToken"
               >
                 <TokensLogos
                   firstTokenIcon={
@@ -195,6 +198,6 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
         </Scaffolding>
         <ComplexError error={error} />
       </div>
-    </>
+    </div>
   );
 };
