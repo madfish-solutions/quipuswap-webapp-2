@@ -16,7 +16,6 @@ export const useFarmingRewardsListViewModel = () => {
 
   const handleHarvestAll = async () => {
     await doHarvestAll(farmingListStore.listStore.data);
-
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   };
 

@@ -6,10 +6,11 @@ import { harvestAllAssets } from '@modules/farming/api';
 import { getUserInfoLastStakedTime, getEndTimestamp, getIsHarvestAvailable } from '@modules/farming/helpers';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, isNull } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { FarmingItem } from '../../interfaces';
-import { useFarmingListStore } from '../stores/use-farming-list-store';
+import { useFarmingListStore } from '../stores';
 
 const ZERO_AMOUNT = 0;
 
@@ -37,7 +38,10 @@ export const useDoHarvestAll = () => {
         })
         .map(({ id }) => id);
 
+      const logData = { harvestAll: { farmingIds: farmingIds.map(id => id.toFixed()) } };
+
       try {
+        amplitudeService.logEvent('HARVEST_ALL', logData);
         const operation = await harvestAllAssets(
           defined(rootStore.tezos),
           farmingIds,
@@ -45,10 +49,10 @@ export const useDoHarvestAll = () => {
         );
 
         await confirmOperation(operation.opHash, { message: 'Stake successful' });
+        amplitudeService.logEvent('HARVEST_ALL_SUCCESS', logData);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('error', error);
         showErrorToast(error as Error);
+        amplitudeService.logEvent('HARVEST_ALL_FAILED', { ...logData, error });
       }
     },
     [farmingListStore, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
