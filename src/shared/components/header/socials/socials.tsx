@@ -21,7 +21,7 @@ export const Socials: FC<SocialsProps> = ({ id, className }) => (
         external
         title={label}
         className={styles.link}
-        testId={`navigationButton-${index}`}
+        testId={`socialButton-${index}`}
       >
         <Icon className={styles.icon} id={id} />
       </Button>
