@@ -59,12 +59,19 @@ export const DonationModal: FC = () => {
       contentClassName={compoundClassName}
       isOpen={donationModalOpen}
       onRequestClose={handleRequestClose}
+      testId="donationModal"
     >
       <div className={styles.column}>
         <img src={Ukraine} alt="Ukraine" className={styles.image} />
         <div className={styles.title}>Stand with Ukraine</div>
         <div className={styles.description}>Donate TEZ - support Ukrainians in their fight with Putin occupants</div>
-        <Button external href="https://donate.tezos.org.ua/" theme="underlined" className={styles.learnMore}>
+        <Button
+          external
+          href="https://donate.tezos.org.ua/"
+          theme="underlined"
+          className={styles.learnMore}
+          testId="buttonLearnMore"
+        >
           {t('common|Learn more')}
         </Button>
         <TokenSelect
@@ -86,7 +93,7 @@ export const DonationModal: FC = () => {
         {isNull(accountPkh) ? (
           <ConnectWalletButton className={styles.button} />
         ) : (
-          <Button onClick={submitForm} className={styles.button} disabled={submitDisabled}>
+          <Button onClick={submitForm} className={styles.button} disabled={submitDisabled} testId="donateButton">
             Donate
           </Button>
         )}

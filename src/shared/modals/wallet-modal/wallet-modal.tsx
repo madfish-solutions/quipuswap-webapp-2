@@ -85,6 +85,7 @@ export const WalletModal: FC = () => {
       title={t('common|Connect wallet')}
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
+      testId="connectWalletModal"
     >
       <div className={styles.terms}>
         <div className={styles.def}>
@@ -93,15 +94,16 @@ export const WalletModal: FC = () => {
             onClick={handleCheck1}
             theme="quaternary"
             className={styles.btn}
+            testId="checkButton"
           >
             <div className={styles.btnText}>{t('common|Accept terms')}</div>
           </Button>
           {t('common|I have read and agree to the')}{' '}
-          <Button className={styles.defText} theme="underlined" href="/terms-of-service" external>
+          <Button className={styles.defText} theme="underlined" href="/terms-of-service" testId="termsOfUsage" external>
             {t('common|Terms of Usage')}
           </Button>{' '}
           {t('common|and')}{' '}
-          <Button className={styles.defText} theme="underlined" href="/privacy-policy" external>
+          <Button className={styles.defText} theme="underlined" href="/privacy-policy" testId="privacyPolicy" external>
             {t('common|Privacy Policy')}
           </Button>
         </div>
@@ -114,6 +116,7 @@ export const WalletModal: FC = () => {
           label={isTempleInstalled ? Temple.label : INSTALL_TEMPLE}
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
+          testId="templeWalletButton"
         />
         <WalletButton
           id={Beacon.id}
@@ -122,6 +125,7 @@ export const WalletModal: FC = () => {
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
           available={true}
+          testId="beaconWalletButton"
         />
       </div>
     </Modal>

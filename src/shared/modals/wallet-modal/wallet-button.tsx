@@ -2,12 +2,13 @@ import { FC } from 'react';
 
 import { Button } from '@shared/components';
 import { WalletType } from '@shared/types';
+import { DataTestAttribute } from '@tests/types';
 
 import styles from './wallet-modal.module.scss';
 
 const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 
-interface Props {
+interface Props extends DataTestAttribute {
   className?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
@@ -17,7 +18,7 @@ interface Props {
   available?: boolean;
 }
 
-export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available }) => {
+export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available, testId }) => {
   return (
     <Button
       className={styles.button}
@@ -30,6 +31,7 @@ export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = f
         available && onClick(id);
       }}
       disabled={disabled}
+      testId={testId}
     >
       <Icon className={styles.icon} />
       <span>{label}</span>

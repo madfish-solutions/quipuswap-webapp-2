@@ -39,6 +39,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               },
               modeClass[colorThemeMode]
             )}
+            data-test-id={`navigationButton-${id}`}
           >
             {Icon && <Icon className={styles.icon} id={iconId} />}
             {label}
@@ -53,6 +54,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               type="button"
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
               onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
+              data-test-id="buttonMore"
             >
               {Icon && <Icon className={styles.icon} id={iconId} />}
               {label}
@@ -68,6 +70,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      data-test-id={`secondaryNavigationButton-${link.id}`}
                     >
                       {link.label}
                     </a>
@@ -81,6 +84,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                       target={link.target}
                       rel="noreferrer noopener"
                       onFocus={() => setIsInnerMenuOpened(true)}
+                      data-test-id={`secondaryNavigationButton-${link.id}`}
                     >
                       {link.label}
                     </Link>
