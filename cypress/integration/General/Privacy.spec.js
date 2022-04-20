@@ -5,21 +5,21 @@ describe('Privacy Police', () => {
     it('Should_RedirectToPrivacy_When_ClickingOnPrivacy',() => {
 // Go to the analytics page
         cy.visit('/')
-        cy.get('.Header_menuButton__1G_3l').click()
-        cy.get('.Menu_root__10FHU > .Navigation_root__2r3up > :nth-child(6) > .Navigation_link__3RuTC').click()
-        cy.get('.Navigation_menuOpened__2DZ5w > .Navigation_linksInner__1UOlU > [href="/privacy-policy"]').click()
+        cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click()
+        cy.get('[data-test-id="menu"] [data-test-id="buttonMore"]').click()
+        cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-7"]').click()
 // Check if title ok, url is ok for privacy
-        cy.get('.PrivacyPolicy_mb24__3rYdw')
+        cy.get('[data-test-id="privacyPolicyTitle"]')
             .should('contain','Privacy Policy')
         cy.url()
             .should('contain','/privacy-policy')
 })
     it('Should_RedirectToTherms_When_ClickingOnTherms',() => {
-        cy.get('.Header_menuButton__1G_3l').click()
-        cy.get('.Menu_root__10FHU > .Navigation_root__2r3up > :nth-child(6) > .Navigation_link__3RuTC').click()
-        cy.get('.Navigation_menuOpened__2DZ5w > .Navigation_linksInner__1UOlU > [href="/terms-of-service"]').click()
+        cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click()
+        cy.get('[data-test-id="menu"] [data-test-id="buttonMore"]').click()
+        cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-6"]').click()
 //Check if titl is ok, url is ok for therms
-        cy.get('.Terms_mb24__jPuff')
+        cy.get('[data-test-id="termsOfService"]')
             .should('contain','Terms of Service')
         cy.url()
             .should('contain','/terms-of-service')
