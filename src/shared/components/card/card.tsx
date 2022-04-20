@@ -48,7 +48,7 @@ export const Card: FC<Props> = ({
     <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id={testId}>
       {header && (
         <div className={cx(styles.header, header.className)}>
-          {header.content}
+          <span data-test-id="headerContent">{header.content}</span>
           {header.status ? <StatusLabel filled status={header.status} /> : null}
           {header.button}
         </div>

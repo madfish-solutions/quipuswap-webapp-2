@@ -31,16 +31,16 @@ export const PercentSelector: FC<PercentSelectorProps> = ({ handleBalance, value
 
   return (
     <div className={s.controls}>
-      <Button theme="inverse" disabled={disabled} onClick={handle25} className={s.btn}>
+      <Button theme="inverse" disabled={disabled} onClick={handle25} className={s.btn} testId="25percent">
         25%
       </Button>
-      <Button theme="inverse" disabled={disabled} onClick={handle50} className={s.btn}>
+      <Button theme="inverse" disabled={disabled} onClick={handle50} className={s.btn} testId="50percent">
         50%
       </Button>
-      <Button theme="inverse" disabled={disabled} onClick={handle75} className={s.btn}>
+      <Button theme="inverse" disabled={disabled} onClick={handle75} className={s.btn} testId="75percent">
         75%
       </Button>
-      <Button theme="inverse" disabled={disabled} onClick={handleMAX} className={s.btn}>
+      <Button theme="inverse" disabled={disabled} onClick={handleMAX} className={s.btn} testId="100percent">
         MAX
       </Button>
     </div>

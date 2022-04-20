@@ -20,5 +20,9 @@ export const PageTitle: FC<PageTitleProps> = ({ className, children }) => {
 
   const compoundClassName = cx(styles.pageTitle, modeClass[colorThemeMode], className);
 
-  return <h1 className={compoundClassName}>{children}</h1>;
+  return (
+    <h1 className={compoundClassName} data-test-id="title">
+      {children}
+    </h1>
+  );
 };

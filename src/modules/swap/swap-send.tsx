@@ -397,7 +397,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return (
-    <>
+    <div data-test-id="swapPage">
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
@@ -431,6 +431,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleInputTokenChange}
             id="swap-send-from"
             placeholder="0.0"
+            testId="from"
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
@@ -447,6 +448,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleOutputTokenChange}
             id="swap-send-to"
             placeholder="0.0"
+            testId="to"
           />
           {action === 'send' && (
             <ComplexRecipient
@@ -498,7 +500,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           sellRate={sellRate}
         />
       </StickyBlock>
-    </>
+    </div>
   );
 };
 
