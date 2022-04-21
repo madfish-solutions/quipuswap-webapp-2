@@ -30,8 +30,8 @@ export const useClaimRewards = () => {
           dexContract: dex.contract.address,
           rewards,
           tokenPair: {
-            balance: tokenPair?.balance,
-            frozenBalance: tokenPair?.frozenBalance,
+            balance: Number(tokenPair?.balance),
+            frozenBalance: Number(tokenPair?.frozenBalance),
             token1: tokenPair?.token1 ? getTokenSlug(tokenPair.token1) : null,
             token2: tokenPair?.token2 ? getTokenSlug(tokenPair.token2) : null
           }
