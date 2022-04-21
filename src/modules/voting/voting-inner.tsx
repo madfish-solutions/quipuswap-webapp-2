@@ -20,16 +20,18 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
 
   return (
     <Fragment>
-      <TestnetAlert />
+      <div data-test-id="votingPage">
+        <TestnetAlert />
 
-      <PageTitle>{title}</PageTitle>
+        <PageTitle>{title}</PageTitle>
 
-      <VotingStats className={s.votingStats} />
+        <VotingStats className={s.votingStats} />
 
-      <StickyBlock className={className}>
-        <WrappedVotingForm />
-        <VotingDetails />
-      </StickyBlock>
+        <StickyBlock className={className}>
+          <WrappedVotingForm />
+          <VotingDetails />
+        </StickyBlock>
+      </div>
     </Fragment>
   );
 };

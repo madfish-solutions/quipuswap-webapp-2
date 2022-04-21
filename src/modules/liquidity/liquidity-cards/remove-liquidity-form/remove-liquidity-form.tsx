@@ -69,7 +69,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
   const fixedFrozenBalance = share?.frozen.toFixed();
 
   return (
-    <>
+    <div data-test-id="removeLiquidityForm">
       <PositionSelect
         label="Select LP"
         tokenPair={tokenPair}
@@ -142,6 +142,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       ) : (
         <ConnectWalletButton className={cx(CC.connect, styles['mt-24'])} />
       )}
-    </>
+    </div>
   );
 };

@@ -21,7 +21,7 @@ export const Bage: FC<Props> = ({ className, innerClassName, text }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(modeClass[colorThemeMode], styles.bageBorder, className)}>
+    <div className={cx(modeClass[colorThemeMode], styles.bageBorder, className)} data-test-id="bage">
       <div className={cx(styles.bage, innerClassName)}>{text}</div>
     </div>
   );

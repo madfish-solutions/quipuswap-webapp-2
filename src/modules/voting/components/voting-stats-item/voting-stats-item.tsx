@@ -39,7 +39,9 @@ export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, too
         :
         <Tooltip content={tooltip} />
       </span>
-      <span className={styles.amount}>{contentVallue}</span>
+      <span className={styles.amount} data-test-id="contentValue">
+        {contentVallue}
+      </span>
     </div>
   );
 };

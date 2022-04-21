@@ -74,6 +74,7 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens 
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
           contentClassName={cx(s.tokenModal)}
+          testId="tokensModal"
           {...props}
         >
           {isTokensNotFound && (

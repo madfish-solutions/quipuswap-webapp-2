@@ -54,7 +54,7 @@ export const VotingStats: FC<VotingStatsProps> = ({ className }) => {
   const handleClick = async () => handleWithdrawReward(dex);
 
   return (
-    <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
+    <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])} testId="votingStats">
       <VotingRewardItem description={t('voting|Your Claimable Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>

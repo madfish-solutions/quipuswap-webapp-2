@@ -63,7 +63,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   }
 
   return (
-    <>
+    <div data-test-id="detailsCardCells">
       <DetailsCardCell
         cellName={t('common|Pair Address')}
         tooltipContent={t(
@@ -182,6 +182,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
       )}
 
       <LiquidityDetailsButtons dex={dex} contractLink={contractLink} pairLink={pairLink} />
-    </>
+    </div>
   );
 };
