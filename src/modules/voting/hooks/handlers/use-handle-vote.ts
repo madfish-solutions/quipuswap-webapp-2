@@ -1,8 +1,11 @@
 import { useLocation } from 'react-router-dom';
 
+import { TEZOS_TOKEN } from '@config/tokens';
 import { submitForm } from '@modules/voting/helpers/blockchain/voting';
 import { useVotingDex, useVotingRouting } from '@modules/voting/helpers/voting.provider';
 import { useTezos } from '@providers/use-dapp';
+import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { getDollarEquivalent } from '@shared/helpers';
 import { useToasts } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { VoteFormValues } from '@shared/types';
@@ -17,6 +20,7 @@ export const useHandleVote = () => {
   const { currentTab } = useVotingRouting();
   const { showErrorToast } = useToasts();
   const location = useLocation();
+  const exchangeRates = useNewExchangeRates();
 
   return async (values: VoteFormValues) => {
     if (!tezos || !dex) {
@@ -27,7 +31,8 @@ export const useHandleVote = () => {
       [currentTab.id]: {
         asset: location.pathname.split('/')[INDEX_OF_TOKEN_PAIR],
         tab: currentTab.id,
-        ...values,
+        balance: Number(values.balance1),
+        balanceUsd: Number(getDollarEquivalent(values.balance1, exchangeRates[TEZOS_TOKEN.contractAddress])),
         dex: dex.contract.address
       }
     };
