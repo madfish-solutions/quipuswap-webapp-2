@@ -24,7 +24,7 @@ export const useFarmingItemPageViewModel = () => {
 
   const rawStakeId = params.farmId;
   /*
-   Load data
+    Load data
   */
   useEffect(() => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {

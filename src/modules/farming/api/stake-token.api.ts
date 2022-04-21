@@ -1,10 +1,9 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { withApproveApi } from '@blockchain';
 import { FARMING_CONTRACT_ADDRESS, FARMING_REFERRER_CONTRACT } from '@config/enviroment';
 import { Token } from '@shared/types';
-
-import { withApproveApi } from './with-approve-api';
 
 export const stakeTokenApi = async (
   tezos: TezosToolkit,
@@ -19,5 +18,5 @@ export const stakeTokenApi = async (
     .deposit(farmingId, amount, FARMING_REFERRER_CONTRACT, accountPkh, bakerAddress)
     .toTransferParams();
 
-  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, farmingParams);
+  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, [farmingParams]);
 };

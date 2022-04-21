@@ -3,10 +3,15 @@
 
 .testNet {
   padding: 4px;
-  margin-top: -22px;
   margin-bottom: 4px;
 }
 .AlarmMessage {
   width: 100%;
   text-align: center;
+}
+
+@include media('>SDesktop') {
+  .testNet {
+    margin-top: -22px;
+  }
 }

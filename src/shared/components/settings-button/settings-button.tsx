@@ -9,9 +9,10 @@ import styles from './settings-button.module.scss';
 
 interface Props {
   className?: string;
+  colored?: boolean;
 }
 
-export const SettingsButton: FC<Props> = ({ className }) => {
+export const SettingsButton: FC<Props> = ({ className, colored }) => {
   const { openSettingsModal } = useGlobalModalsState();
 
   const handleSettingsClick = () => {

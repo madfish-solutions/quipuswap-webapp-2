@@ -411,7 +411,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
                 className={styles.tabs}
               />
             ),
-            button: <SettingsButton />,
+            button: <SettingsButton colored />,
             // TODO: add a button for transactions history
             className: styles.header
           }}

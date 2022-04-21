@@ -2,9 +2,10 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
-import { SettingsButton } from '@shared/components';
+import { DonationButton, SettingsButton } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { amplitudeService } from '../../../services';
@@ -63,6 +64,11 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             {t('common|Old version')}
           </Button>
         </div>
+        {IS_NETWORK_MAINNET && (
+          <div className={styles.mb16}>
+            <DonationButton />
+          </div>
+        )}
         <div className={styles.row}>
           <Button
             href="https://www.madfish.solutions/"

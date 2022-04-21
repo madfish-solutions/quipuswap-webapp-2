@@ -1,37 +1,68 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { BigNumber } from 'bignumber.js';
 
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-export const DEFAULT_TOKEN_ID = 0;
-export const DEFAULT_SEARCH_VALUE = '';
-export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
+import { QSNets } from '@shared/types';
 
-export const DEBOUNCE_MS = 200;
+import { NETWORK_ID } from './enviroment';
 
-export const MIN_TOKEN_ID = 0;
-export const MAX_TOKEN_ID = Number.MAX_SAFE_INTEGER;
-export const STEP = 1;
-
-export const AUTOSAVE_DEBOUNCE_MS = 1000;
-
-export const TAB_INDEX = 0;
-
-export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
-export const FARM_REWARD_UPDATE_INTERVAL = 1000;
-export const FARM_USER_INFO_UPDATE_INTERVAL = 30000;
+//#region time
 export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
 export const MINUTES_IN_HOUR = 60;
 export const HOURS_IN_DAY = 24;
+export const DAYS_IN_YEAR = 365;
 export const SECONDS_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
+//#endregion
+
+//#region debounce time
+export const DEBOUNCE_MS = 200;
+export const AUTOSAVE_DEBOUNCE_MS = MS_IN_SECOND;
+//#endregion
+
+//#region liveable rewards time
+export const FARM_REWARD_UPDATE_INTERVAL = MS_IN_SECOND;
+export const FARM_USER_INFO_UPDATE_INTERVAL = 30 * MS_IN_SECOND;
+//#endregion
+
+//#region numberInput
+export const MIN_TOKEN_ID = 0;
+export const MAX_TOKEN_ID = Number.MAX_SAFE_INTEGER;
+export const STEP = 1;
+//#endregion
+
+//#region settings
+const MAX_DEADLINE_DAYS = 30;
+
+export const MIN_DEADLINE_MINS = 1;
+export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR;
+
 export const MIN_SLIPPAGE_PERCENTAGE = 0;
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
-export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
+
+export const DEFAULT_LIQUIDITY_SLIPPAGE_PERCENTAGE = 0;
+export const DEFAULT_TRADING_SLIPPAGE_PERCENTAGE = 0.5;
 export const DEFAULT_DEADLINE_MINS = 30;
-const MAX_DEADLINE_DAYS = 30;
-export const DAYS_IN_YEAR = 365;
+//#endregion
+
+//#region tokens
+export const DEFAULT_DECIMALS = 6;
+export const LP_TOKEN_DECIMALS = 6;
+//#endregion
+
+//#region default value for token search
+export const DEFAULT_TOKEN_ID = 0;
+export const DEFAULT_SEARCH_VALUE = '';
+//#endregion
+
+//TODO: assort mix
+//#region mix
+export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
+export const TAB_INDEX = 0;
+
+export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
+
 export const USD_DECIMALS = 2;
-export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR;
-export const MIN_DEADLINE_MINS = 1;
+
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_HOPS_COUNT = 5;
 
@@ -45,10 +76,16 @@ export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
 
 export const DELAY_BEFORE_DATA_UPDATE = 3000;
 
-export const DEFAULT_DECIMALS = 6;
-
-export const LP_TOKEN_DECIMALS = 6;
-
 export const EMPTY_POOL_AMOUNT = 0;
 
 export const FIRST_TWO_DIGITS_NUMBER = 10;
+
+const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
+  [QSNets.hangzhounet]: 16,
+  [QSNets.mainnet]: 3,
+  [QSNets.ithacanet]: 7
+};
+
+export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
+
+//#endregion
