@@ -11,6 +11,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { FarmingItem } from '../../interfaces';
 import { useFarmingListStore } from '../stores';
+import { getPendingRewards } from './../../helpers/get-pending-rewards';
 
 const ZERO_AMOUNT = 0;
 
@@ -38,7 +39,14 @@ export const useDoHarvestAll = () => {
         })
         .map(({ id }) => id);
 
-      const logData = { harvestAll: { farmingIds: farmingIds.map(id => id.toFixed()) } };
+      const userEarnBalancesInUsd = stakeList.map(
+        ({ earnBalance, earnExchangeRate }) => earnBalance && earnBalance.multipliedBy(earnExchangeRate ?? ZERO_AMOUNT)
+      );
+      const totalUserRewardsInUsd = getPendingRewards(userEarnBalancesInUsd);
+
+      const logData = {
+        harvestAll: { farmingIds: farmingIds.map(id => id.toFixed()), rewardsInUsd: totalUserRewardsInUsd.toFixed() }
+      };
 
       try {
         amplitudeService.logEvent('HARVEST_ALL', logData);
