@@ -8,12 +8,21 @@ import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useConfirmOperation } from '@shared/dapp';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@shared/helpers';
+import {
+  fromDecimals,
+  toDecimals,
+  getRemoveLiquidityMessage,
+  getTokenSymbol,
+  isUndefined,
+  getTokenSlug
+} from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { amplitudeService } from '@shared/services';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
+import { getPairId } from '../add-liquidity-form/use-add-liqudity.service';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain/send-transaction';
 import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
@@ -157,44 +166,99 @@ export const useRemoveLiquidityService = (
     const { id } = pairInfo;
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
-      const removeLiquidityTokenToTokenOperation = await removeLiquidityTokenToToken(
-        tezos,
-        dex,
-        id,
-        lpTokenInput,
-        tokenAOutput,
-        tokenBOutput,
-        tokenA,
-        tokenB,
-        transactionDeadline,
-        liquiditySlippage
-      );
+      // TOKEN_TO_TOKEN_DEX
+      const logData = {
+        liquidity: {
+          type: 'TOKEN_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, tokenA, tokenB, pairInfo, false),
+          tokenASlug: getTokenSlug(tokenA),
+          tokenBSlug: getTokenSlug(tokenB),
+          tokenASymbol: getTokenSymbol(tokenA),
+          tokenBSymbol: getTokenSymbol(tokenB),
+          pairInputA: Number(tokenAOutput),
+          pairInputB: Number(tokenBOutput),
+          totalSupply: Number(pairInfo.totalSupply.toFixed()),
+          tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
+          tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
+          transactionDeadline: Number(transactionDeadline.toFixed()),
+          liquiditySlippage: Number(liquiditySlippage.toFixed())
+        }
+      };
 
-      const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_REMOVE', logData);
+        const removeLiquidityTokenToTokenOperation = await removeLiquidityTokenToToken(
+          tezos,
+          dex,
+          id,
+          lpTokenInput,
+          tokenAOutput,
+          tokenBOutput,
+          tokenA,
+          tokenB,
+          transactionDeadline,
+          liquiditySlippage
+        );
 
-      if (hash) {
+        const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
+
+        if (hash) {
+          const tokenASymbol = getTokenSymbol(tokenA);
+          const tokenBSymbol = getTokenSymbol(tokenB);
+
+          const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
+
+          await confirmOperation(hash, {
+            message: removeLiquidityMessage
+          });
+        }
+
+        amplitudeService.logEvent('LIQUIDITY_REMOVE_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_REMOVE_FAILED', { ...logData, error });
+      }
+    } else {
+      // TEZ_TO_TOKEN_DEX
+      const logData = {
+        liquidity: {
+          type: 'TEZ_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, tokenA, tokenB, pairInfo, false),
+          tokenASlug: getTokenSlug(tokenA),
+          tokenBSlug: getTokenSlug(tokenB),
+          tokenASymbol: getTokenSymbol(tokenA),
+          tokenBSymbol: getTokenSymbol(tokenB),
+          pairInputA: Number(tokenAOutput),
+          pairInputB: Number(tokenBOutput),
+          totalSupply: Number(pairInfo.totalSupply.toFixed()),
+          tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
+          tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
+          transactionDeadline: Number(transactionDeadline.toFixed()),
+          liquiditySlippage: Number(liquiditySlippage.toFixed())
+        }
+      };
+
+      try {
+        amplitudeService.logEvent('LIQUIDITY_REMOVE', logData);
+
+        const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, liquiditySlippage);
+
+        const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
+
         const tokenASymbol = getTokenSymbol(tokenA);
         const tokenBSymbol = getTokenSymbol(tokenB);
 
         const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
-        await confirmOperation(hash, {
+        await confirmOperation(sentTransaction.opHash, {
           message: removeLiquidityMessage
         });
+
+        amplitudeService.logEvent('LIQUIDITY_REMOVE_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_REMOVE_FAILED', { ...logData, error });
       }
-    } else {
-      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, liquiditySlippage);
-
-      const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
-
-      const tokenASymbol = getTokenSymbol(tokenA);
-      const tokenBSymbol = getTokenSymbol(tokenB);
-
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
-
-      await confirmOperation(sentTransaction.opHash, {
-        message: removeLiquidityMessage
-      });
     }
     setLpTokenInput('');
     await Promise.all([
