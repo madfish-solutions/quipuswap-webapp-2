@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+
 import { submitForm } from '@modules/voting/helpers/blockchain/voting';
 import { useVotingDex, useVotingRouting } from '@modules/voting/helpers/voting.provider';
 import { useTezos } from '@providers/use-dapp';
@@ -6,12 +8,15 @@ import { amplitudeService } from '@shared/services';
 import { VoteFormValues } from '@shared/types';
 import { useConfirmOperation } from '@shared/utils';
 
+const INDEX_OF_TOKEN_PAIR = 3;
+
 export const useHandleVote = () => {
   const tezos = useTezos();
   const confirmOperation = useConfirmOperation();
   const { dex } = useVotingDex();
   const { currentTab } = useVotingRouting();
   const { showErrorToast } = useToasts();
+  const location = useLocation();
 
   return async (values: VoteFormValues) => {
     if (!tezos || !dex) {
@@ -19,7 +24,8 @@ export const useHandleVote = () => {
     }
 
     const logData = {
-      vote: {
+      [currentTab.id]: {
+        asset: location.pathname.split('/')[INDEX_OF_TOKEN_PAIR],
         tab: currentTab.id,
         ...values,
         dex: dex.contract.address
@@ -27,7 +33,7 @@ export const useHandleVote = () => {
     };
 
     try {
-      amplitudeService.logEvent('VOTE', logData);
+      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}`, logData);
       await submitForm({
         tezos,
         values,
@@ -35,10 +41,10 @@ export const useHandleVote = () => {
         tab: currentTab.id,
         confirmOperation
       });
-      amplitudeService.logEvent('VOTE_SUCCESS', logData);
+      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}_SUCCESS`, logData);
     } catch (error) {
       showErrorToast(error as Error);
-      amplitudeService.logEvent('VOTE_FAILED', {
+      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}_FAILED`, {
         ...logData,
         error
       });
