@@ -5,11 +5,11 @@ import { BigNumber } from 'bignumber.js';
 import { unstakeAssetsApi } from '@modules/farming/api/unstake-assets.api';
 import { FarmingItem } from '@modules/farming/interfaces';
 import { useRootStore } from '@providers/root-store-provider';
-import { defined, fromDecimals } from '@shared/helpers';
+import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { mapFarmingLog } from '../../mapping';
+import { getStakeUnstakeLogData } from '../../helpers';
 import { useFarmingTimeout } from './use-farming-timeout';
 
 export const useDoUnstake = () => {
@@ -20,9 +20,8 @@ export const useDoUnstake = () => {
 
   const doUnstake = useCallback(
     async (farmingItem: FarmingItem, balance: BigNumber) => {
-      const token = defined(farmingItem).rewardToken;
-      const inputAmountWithDecimals = fromDecimals(balance, token);
-      const logData = { farming: { ...mapFarmingLog(farmingItem, inputAmountWithDecimals), timeout, isUnlocked } };
+      const logData = getStakeUnstakeLogData(farmingItem, balance, timeout, isUnlocked);
+
       try {
         amplitudeService.logEvent('UNSTAKE', logData);
         const operation = await unstakeAssetsApi(

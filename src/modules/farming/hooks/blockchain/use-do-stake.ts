@@ -5,12 +5,12 @@ import BigNumber from 'bignumber.js';
 import { stakeTokenApi } from '@modules/farming/api/stake-token.api';
 import { FarmingItem } from '@modules/farming/interfaces';
 import { useRootStore } from '@providers/root-store-provider';
-import { defined, fromDecimals } from '@shared/helpers';
+import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { Token, WhitelistedBaker } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { mapFarmingLog } from '../../mapping';
+import { getStakeUnstakeLogData } from '../../helpers';
 import { useFarmingTimeout } from './use-farming-timeout';
 
 export const useDoStake = () => {
@@ -21,9 +21,7 @@ export const useDoStake = () => {
 
   const doStake = useCallback(
     async (farmingItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
-      const token = defined(farmingItem).stakedToken;
-      const inputAmountWithDecimals = fromDecimals(balance, token);
-      const logData = { farming: { ...mapFarmingLog(farmingItem, inputAmountWithDecimals), timeout, isUnlocked } };
+      const logData = getStakeUnstakeLogData(farmingItem, balance, timeout, isUnlocked);
       try {
         amplitudeService.logEvent('STAKE', logData);
         const operation = await stakeTokenApi(

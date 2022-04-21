@@ -3,15 +3,19 @@ import { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { harvestAllAssets } from '@modules/farming/api';
-import { getUserInfoLastStakedTime, getEndTimestamp, getIsHarvestAvailable } from '@modules/farming/helpers';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, isNull } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
+import {
+  getUserInfoLastStakedTime,
+  getEndTimestamp,
+  getIsHarvestAvailable,
+  getUserRewardsLogData
+} from '../../helpers';
 import { FarmingItem } from '../../interfaces';
 import { useFarmingListStore } from '../stores';
-import { getPendingRewards } from './../../helpers/get-pending-rewards';
 
 const ZERO_AMOUNT = 0;
 
@@ -23,12 +27,12 @@ export const useDoHarvestAll = () => {
   const farmingListStore = useFarmingListStore();
 
   const doHarvestAll = useCallback(
-    async (stakeList: FarmingItem[]) => {
+    async (farmingList: FarmingItem[]) => {
       if (isNull(farmingListStore)) {
         return;
       }
 
-      const farmingIds: BigNumber[] = stakeList
+      const farmingIds: BigNumber[] = farmingList
         .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
         .filter(farmingItem => {
           const userInfo = farmingListStore.findUserInfo(farmingItem);
@@ -39,13 +43,11 @@ export const useDoHarvestAll = () => {
         })
         .map(({ id }) => id);
 
-      const userEarnBalancesInUsd = stakeList.map(
-        ({ earnBalance, earnExchangeRate }) => earnBalance && earnBalance.multipliedBy(earnExchangeRate ?? ZERO_AMOUNT)
-      );
-      const totalUserRewardsInUsd = getPendingRewards(userEarnBalancesInUsd);
-
       const logData = {
-        harvestAll: { farmingIds: farmingIds.map(id => id.toFixed()), rewardsInUsd: totalUserRewardsInUsd.toFixed() }
+        harvestAll: {
+          farmingIds: farmingIds.map(id => id.toFixed()),
+          rewardsInUsd: getUserRewardsLogData(farmingList).toFixed()
+        }
       };
 
       try {
