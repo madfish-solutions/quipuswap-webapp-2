@@ -79,8 +79,8 @@ export const TokenSelect: FC<TokenSelectProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [tokensModal, setTokensModal] = useState<boolean>(false);
-  const [focused, setActive] = useState<boolean>(false);
+  const [tokensModal, setTokensModal] = useState(false);
+  const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 

@@ -48,3 +48,4 @@ export * from './deadline-input';
 export * from './view-pair-analytics';
 export * from './settings-button';
 export * from './slippage';
+export * from './amplitude-subscription';

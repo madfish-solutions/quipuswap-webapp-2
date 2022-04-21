@@ -76,9 +76,9 @@
       }
     }
 
-     & > div:nth-of-type(2) {
-       width: 160px;
-     }
+    & > div:nth-of-type(2) {
+      width: 160px;
+    }
   }
 }
 
@@ -89,7 +89,7 @@
 }
 
 .light {
-  background-color: $ui-01
+  background-color: $ui-01;
 }
 
 .light::-webkit-scrollbar-thumb {
@@ -97,15 +97,19 @@
 }
 
 .dark {
-  background-color: $ui-06
+  background-color: $ui-06;
 }
 
 .dark::-webkit-scrollbar-thumb {
-  background-color: $hover-dark-row
+  background-color: $hover-dark-row;
 }
 
-@include media('>SDesktop') {
+@include media(">SDesktop") {
   .root {
     display: none;
   }
+}
+
+.mb16 {
+  margin-bottom: 16px;
 }

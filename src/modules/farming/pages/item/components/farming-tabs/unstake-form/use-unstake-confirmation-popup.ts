@@ -1,30 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
-import { isExist, isUndefined, parseTimelock } from '@shared/helpers';
+import { isExist, parseTimelock } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
-import { TFunction, useTranslation } from '@translation';
+import { i18n } from '@translation';
 
-const TIME_LOCK_ENDS = 0;
+import { useFarmingTimeout } from '../../../../../hooks/blockchain/use-farming-timeout';
 
-const getTimeout = (lastStaked: Undefined<Date>, timelock: Undefined<string>) => {
-  if (isUndefined(lastStaked) || isUndefined(timelock)) {
-    return null;
-  }
-
-  const lastStakedTime = lastStaked.getTime();
-  const endTimestamp = lastStakedTime + Number(timelock) * MS_IN_SECOND;
-
-  return Math.max(endTimestamp - Date.now(), TIME_LOCK_ENDS);
-};
-
-const getConfirmationMessage = (
-  timelock: Nullable<number>,
-  withdrawalFee: Undefined<BigNumber>,
-  translation: TFunction
-) => {
+const getConfirmationMessage = (timelock: Nullable<number>, withdrawalFee: Undefined<BigNumber>) => {
   if (!isExist(timelock) || !isExist(withdrawalFee)) {
     return null;
   }
@@ -32,25 +16,21 @@ const getConfirmationMessage = (
   const { days, hours } = parseTimelock(timelock);
   const persent = withdrawalFee.toFixed();
 
-  return translation('farm|confirmationUnstake', { days, hours, persent });
+  return i18n.t('farm|confirmationUnstake', { days, hours, persent });
 };
 
 export const useUnstakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
-  const { t } = useTranslation('farm');
-  const { farmingItem, userInfoStore } = useFarmingItemStore();
-  const timelock = farmingItem?.timelock;
-  const lastStaked = userInfoStore.data?.last_staked;
+  const { farmingItem } = useFarmingItemStore();
+  const { timeout, isUnlocked } = useFarmingTimeout();
 
-  const timeout = getTimeout(lastStaked, timelock);
-
-  if (timeout === TIME_LOCK_ENDS) {
+  if (isUnlocked) {
     return async (callback: () => Promise<void>) => callback();
   }
 
   const withdrawalFee = farmingItem?.withdrawalFee;
 
-  const confirmationMessage = getConfirmationMessage(timeout, withdrawalFee, t);
+  const message = getConfirmationMessage(timeout, withdrawalFee);
 
-  return (callback: () => Promise<void>) => openConfirmationModal(confirmationMessage, callback);
+  return (yesCallback: () => Promise<void>) => openConfirmationModal({ message, yesCallback });
 };

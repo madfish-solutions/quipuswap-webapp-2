@@ -2,11 +2,13 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
-import { SettingsButton } from '@shared/components';
+import { DonationButton, SettingsButton } from '@shared/components';
 import { useTranslation } from '@translation';
 
+import { amplitudeService } from '../../../services';
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
 import { ColorModeSwitcher } from '../../color-mode-switcher';
@@ -29,6 +31,14 @@ export const Menu: FC<MenuProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const handleOldVersionClick = () => {
+    amplitudeService.logEvent('OLD_VERSION_CLICK');
+  };
+
+  const handleMadfishClick = () => {
+    amplitudeService.logEvent('MADFISH_CLICK');
+  };
+
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <Navigation className={styles.navigation} />
@@ -44,12 +54,29 @@ export const Menu: FC<MenuProps> = ({ className }) => {
         </div>
         <div className={styles.row}>
           <NetworkSelect menuPlacement="top" className={styles.select} />
-          <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={styles.button}>
+          <Button
+            external
+            href={QUIPUSWAP_OLD_VERSION_LINK}
+            theme="secondary"
+            className={styles.button}
+            onClick={handleOldVersionClick}
+          >
             {t('common|Old version')}
           </Button>
         </div>
+        {IS_NETWORK_MAINNET && (
+          <div className={styles.mb16}>
+            <DonationButton />
+          </div>
+        )}
         <div className={styles.row}>
-          <Button href="https://www.madfish.solutions/" external theme="clean" className={styles.madfish}>
+          <Button
+            href="https://www.madfish.solutions/"
+            external
+            theme="clean"
+            className={styles.madfish}
+            onClick={handleMadfishClick}
+          >
             <Madfish />
           </Button>
 

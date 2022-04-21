@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { Farming } from '@modules/farming';
 import { Home } from '@modules/home';

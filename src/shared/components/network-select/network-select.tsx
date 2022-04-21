@@ -5,7 +5,8 @@ import { Props as SelectProps } from 'react-select';
 import { ALL_NETWORKS, NETWORK } from '@config/config';
 import { useChangeNetwork } from '@providers/use-dapp';
 
-import { Nullable } from '../../types/types';
+import { amplitudeService } from '../../services';
+import { Nullable } from '../../types';
 import { SelectUI } from '../select-ui';
 
 interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
@@ -20,6 +21,7 @@ export const NetworkSelect: FC<NetworkSelectProps> = ({ menuPlacement, className
   const handleSwitchNetwork = useCallback(
     ({ value, label }): Nullable<void> => {
       const selectedNetwork = ALL_NETWORKS.find(network => network.id === value && network.name === label);
+      amplitudeService.logEvent('SELECT_NETWORK', { selectedNetwork });
       if (!selectedNetwork || selectedNetwork.disabled) {
         return null;
       }
