@@ -3,23 +3,28 @@ import amplitude, { AmplitudeClient } from 'amplitude-js';
 import { AMPLITUDE_API_KEY } from '@config/enviroment';
 
 import { hash } from '../helpers';
-import { Nullable } from '../types';
+import { Nullable, Optional } from '../types';
+import { isLoading } from './is-logging';
 
 export class AmplitudeService {
-  instance: AmplitudeClient;
+  instance: Nullable<AmplitudeClient> = null;
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   props: { [key: string]: any } = {};
 
-  constructor(API_KEY: string) {
-    amplitude.getInstance().init(API_KEY);
-    this.instance = amplitude.getInstance();
+  constructor(API_KEY: Optional<string>) {
+    if (API_KEY) {
+      this.instance = amplitude.getInstance();
+      this.instance.init(API_KEY);
+    }
   }
 
   setUserId(userId: Nullable<string>) {
-    this.instance.setUserId(userId);
-    // eslint-disable-next-line no-console
-    console.log('\x1b[36m%s\x1b[0m', 'userId', userId);
+    this.instance?.setUserId(userId);
+    if (isLoading()) {
+      // eslint-disable-next-line no-console
+      console.log('\x1b[36m%s\x1b[0m', 'userId', userId);
+    }
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -29,9 +34,11 @@ export class AmplitudeService {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   logEvent(action: string, payload: { [key: string]: any } = {}) {
-    this.instance.logEvent(action, { ...this.props, ...payload });
-    // eslint-disable-next-line no-console
-    console.log('\x1b[36m%s\x1b[0m', action, { ...this.props, ...payload });
+    this.instance?.logEvent(action, { ...this.props, ...payload });
+    if (isLoading()) {
+      // eslint-disable-next-line no-console
+      console.log('\x1b[36m%s\x1b[0m', action, { ...this.props, ...payload });
+    }
   }
 }
 
