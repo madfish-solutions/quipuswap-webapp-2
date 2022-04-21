@@ -20,6 +20,7 @@ import {
   getTokenSymbol,
   isExist,
   isNull,
+  isTokenFa2,
   isUndefined,
   toDecimals
 } from '@shared/helpers';
@@ -41,6 +42,28 @@ import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
 const EMPTY_BALANCE_AMOUNT = 0;
+
+export const getPairId = (
+  dex: Optional<FoundDex>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  pairInfo: Optional<PairInfo>,
+  isPoolNotExists: boolean
+) => {
+  if (!dex || isPoolNotExists) {
+    return null;
+  }
+
+  if (pairInfo?.id) {
+    return pairInfo?.id?.toFixed();
+  }
+
+  if ((tokenA && isTokenFa2(tokenA)) || (tokenB && isTokenFa2(tokenB))) {
+    return '0';
+  }
+
+  return null;
+};
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
@@ -296,13 +319,15 @@ export const useAddLiquidityService = (
         const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenASymbol, tokenBSymbol);
 
         const logData = {
-          type: 'TokenToToken',
-          tokenASymbol,
-          tokenBSymbol,
-          tokenASlug: getTokenSlug(pairTokenA),
-          tokenBSlug: getTokenSlug(pairTokenB),
-          pairInputA: Number(pairInputA),
-          pairInputB: Number(pairInputB)
+          liquidity: {
+            type: 'TOKEN_TO_TOKEN',
+            tokenASymbol,
+            tokenBSymbol,
+            tokenASlug: getTokenSlug(pairTokenA),
+            tokenBSlug: getTokenSlug(pairTokenB),
+            pairInputA: Number(pairInputA),
+            pairInputB: Number(pairInputB)
+          }
         };
 
         try {
@@ -321,18 +346,22 @@ export const useAddLiquidityService = (
       }
 
       const logData = {
-        type: 'TokenToToken',
-        tokenASlug: getTokenSlug(pairTokenA),
-        tokenBSlug: getTokenSlug(pairTokenB),
-        tokenASymbol: getTokenSymbol(pairTokenA),
-        tokenBSymbol: getTokenSymbol(pairTokenB),
-        pairInputA: Number(pairInputA),
-        pairInputB: Number(pairInputB),
-        totalSupply: Number(pairInfo.totalSupply.toFixed()),
-        tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
-        tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
-        transactionDeadline: Number(transactionDeadline.toFixed()),
-        liquiditySlippage: Number(liquiditySlippage.toFixed())
+        liquidity: {
+          type: 'TOKEN_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, pairTokenA, pairTokenB, pairInfo, false),
+          tokenASlug: getTokenSlug(pairTokenA),
+          tokenBSlug: getTokenSlug(pairTokenB),
+          tokenASymbol: getTokenSymbol(pairTokenA),
+          tokenBSymbol: getTokenSymbol(pairTokenB),
+          pairInputA: Number(pairInputA),
+          pairInputB: Number(pairInputB),
+          totalSupply: Number(pairInfo.totalSupply.toFixed()),
+          tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
+          tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
+          transactionDeadline: Number(transactionDeadline.toFixed()),
+          liquiditySlippage: Number(liquiditySlippage.toFixed())
+        }
       };
 
       try {
@@ -391,11 +420,15 @@ export const useAddLiquidityService = (
 
     if (shouldAddLiquidity) {
       const logData = {
-        type: 'TezosToToken',
-        tokenSlug: getTokenSlug(notTezToken),
-        tokenSymbol: getTokenSymbol(notTezToken),
-        tezTokenInput: Number(tezTokenInput),
-        notTezTokenInput: Number(notTezTokenInput)
+        liquidity: {
+          type: 'TEZOS_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, tokenA, tokenB, pairInfo, false),
+          tokenSlug: getTokenSlug(notTezToken),
+          tokenSymbol: getTokenSymbol(notTezToken),
+          tezTokenInput: Number(tezTokenInput),
+          notTezTokenInput: Number(notTezTokenInput)
+        }
       };
 
       try {
@@ -422,11 +455,14 @@ export const useAddLiquidityService = (
       const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
 
       const logData = {
-        type: 'TezosToToken',
-        token: getTokenSlug(notTezToken),
-        notTezTokenInput,
-        tokenBValue: Number(tokenBValue.toFixed()),
-        tezValue: Number(tezValue.toFixed())
+        liquidity: {
+          type: 'TEZOS_TO_TOKEN',
+          tokenSlug: getTokenSlug(notTezToken),
+          tokenSymbol: getTokenSymbol(notTezToken),
+          notTezTokenInput,
+          tokenBValue: Number(tokenBValue.toFixed()),
+          tezValue: Number(tezValue.toFixed())
+        }
       };
 
       try {
