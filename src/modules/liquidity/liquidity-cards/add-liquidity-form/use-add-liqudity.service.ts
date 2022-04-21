@@ -299,8 +299,10 @@ export const useAddLiquidityService = (
           type: 'TokenToToken',
           tokenASymbol,
           tokenBSymbol,
-          pairInputA,
-          pairInputB
+          tokenASlug: getTokenSlug(pairTokenA),
+          tokenBSlug: getTokenSlug(pairTokenB),
+          pairInputA: Number(pairInputA),
+          pairInputB: Number(pairInputB)
         };
 
         try {
@@ -320,15 +322,17 @@ export const useAddLiquidityService = (
 
       const logData = {
         type: 'TokenToToken',
+        tokenASlug: getTokenSlug(pairTokenA),
+        tokenBSlug: getTokenSlug(pairTokenB),
         tokenASymbol: getTokenSymbol(pairTokenA),
         tokenBSymbol: getTokenSymbol(pairTokenB),
-        pairInputA,
-        pairInputB,
-        totalSupply: pairInfo.totalSupply.toFixed(),
-        tokenAPool: pairInfo.tokenAPool.toFixed(),
-        tokenBPool: pairInfo.tokenBPool.toFixed(),
-        transactionDeadline: transactionDeadline.toFixed(),
-        liquiditySlippage: liquiditySlippage.toFixed()
+        pairInputA: Number(pairInputA),
+        pairInputB: Number(pairInputB),
+        totalSupply: Number(pairInfo.totalSupply.toFixed()),
+        tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
+        tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
+        transactionDeadline: Number(transactionDeadline.toFixed()),
+        liquiditySlippage: Number(liquiditySlippage.toFixed())
       };
 
       try {
@@ -388,9 +392,10 @@ export const useAddLiquidityService = (
     if (shouldAddLiquidity) {
       const logData = {
         type: 'TezosToToken',
-        token: getTokenSlug(notTezToken),
-        tezTokenInput,
-        notTezTokenInput
+        tokenSlug: getTokenSlug(notTezToken),
+        tokenSymbol: getTokenSymbol(notTezToken),
+        tezTokenInput: Number(tezTokenInput),
+        notTezTokenInput: Number(notTezTokenInput)
       };
 
       try {
@@ -420,8 +425,8 @@ export const useAddLiquidityService = (
         type: 'TezosToToken',
         token: getTokenSlug(notTezToken),
         notTezTokenInput,
-        tokenBValue: tokenBValue.toFixed(),
-        tezValue: tezValue.toFixed()
+        tokenBValue: Number(tokenBValue.toFixed()),
+        tezValue: Number(tezValue.toFixed())
       };
 
       try {

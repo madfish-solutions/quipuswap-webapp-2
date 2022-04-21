@@ -45,8 +45,8 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
     const logData = {
       unvote: {
         tab: currentTab.id,
-        vote: vote?.toFixed(),
-        veto: veto?.toFixed(),
+        vote: Number(vote?.toFixed()),
+        veto: Number(veto?.toFixed()),
         dex: dex.contract.address,
         candidate,
         currentCandidate: currentCandidate?.address
