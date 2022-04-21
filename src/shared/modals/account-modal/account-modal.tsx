@@ -4,8 +4,9 @@ import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { CheckMark, Copy } from '@shared/svg';
 
-import { Button } from '../../components/button';
+import { Button } from '../../components';
 import { shortize } from '../../helpers';
+import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
 import styles from './account-modal.module.scss';
 
@@ -23,6 +24,7 @@ export const AccountModal: FC = () => {
 
   const handleLogout = useCallback(() => {
     disconnect();
+    amplitudeService.logEvent('LOGOUT_CLICK');
   }, [disconnect]);
 
   useEffect(
@@ -41,6 +43,7 @@ export const AccountModal: FC = () => {
   const handleCopy = async () => {
     navigator.clipboard.writeText(accountPkh);
     setCopied(true);
+    amplitudeService.logEvent('COPY_PK_ADDRESS_CLICK');
     timeout.current = setTimeout(() => {
       setCopied(false);
     }, 2000);

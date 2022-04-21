@@ -2,10 +2,11 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@config/config';
-import { fromDecimals, getTokenSymbol, isTezIncluded, isTokenFa2, isUndefined } from '@shared/helpers';
+import { fromDecimals, getTokenSymbol, isTezIncluded, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { PairInfo } from '../add-liquidity-form';
+import { getPairId } from '../add-liquidity-form/use-add-liqudity.service';
 import { calculatePoolAmount, checkIsPoolNotExists } from '../helpers';
 import { usePairInfo } from '../hooks';
 
@@ -23,28 +24,6 @@ const getPairLink = (
   !HIDE_ANALYTICS && dex && isTezIncluded([tokenA, tokenB]) && !isUndefined(pairInfo) && !checkIsPoolNotExists(pairInfo)
     ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}`
     : null;
-
-const getPairId = (
-  dex: Optional<FoundDex>,
-  tokenA: Nullable<Token>,
-  tokenB: Nullable<Token>,
-  pairInfo: Optional<PairInfo>,
-  isPoolNotExists: boolean
-) => {
-  if (!dex || isPoolNotExists) {
-    return null;
-  }
-
-  if (pairInfo?.id) {
-    return pairInfo?.id?.toFixed();
-  }
-
-  if ((tokenA && isTokenFa2(tokenA)) || (tokenB && isTokenFa2(tokenB))) {
-    return '0';
-  }
-
-  return null;
-};
 
 export const useLiquidityDetailsViewModel = (
   dex: Optional<FoundDex>,

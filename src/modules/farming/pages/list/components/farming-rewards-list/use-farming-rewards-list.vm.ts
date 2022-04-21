@@ -28,7 +28,6 @@ export const useFarmingRewardsListViewModel = () => {
 
   const noCallback = useCallback(async () => {
     await doHarvestAll(farmingListStore.listStore.data);
-
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   }, [delayedGetFarmingList, delayedGetFarmingStats, doHarvestAll, farmingListStore.listStore.data]);
 

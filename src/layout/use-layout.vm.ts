@@ -7,6 +7,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useAuthStore, useUiStore } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 
 export const useLayoutViewModel = () => {
   const rootStore = useRootStore();
@@ -35,6 +36,7 @@ export const useLayoutViewModel = () => {
    */
   useEffect(() => {
     uiStore.setColorThemeMode(colorThemeMode);
+    amplitudeService.setProps('color_theme', colorThemeMode);
   }, [uiStore, colorThemeMode]);
 
   useEffect(() => {
