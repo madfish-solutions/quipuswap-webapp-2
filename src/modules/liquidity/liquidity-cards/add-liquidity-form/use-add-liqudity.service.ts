@@ -299,6 +299,8 @@ export const useAddLiquidityService = (
           type: 'TokenToToken',
           tokenASymbol,
           tokenBSymbol,
+          tokenASlug: getTokenSlug(pairTokenA),
+          tokenBSlug: getTokenSlug(pairTokenB),
           pairInputA: Number(pairInputA),
           pairInputB: Number(pairInputB)
         };
@@ -320,10 +322,12 @@ export const useAddLiquidityService = (
 
       const logData = {
         type: 'TokenToToken',
+        tokenASlug: getTokenSlug(pairTokenA),
+        tokenBSlug: getTokenSlug(pairTokenB),
         tokenASymbol: getTokenSymbol(pairTokenA),
         tokenBSymbol: getTokenSymbol(pairTokenB),
-        pairInputA,
-        pairInputB,
+        pairInputA: Number(pairInputA),
+        pairInputB: Number(pairInputB),
         totalSupply: Number(pairInfo.totalSupply.toFixed()),
         tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
         tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
@@ -388,7 +392,8 @@ export const useAddLiquidityService = (
     if (shouldAddLiquidity) {
       const logData = {
         type: 'TezosToToken',
-        token: getTokenSlug(notTezToken),
+        tokenSlug: getTokenSlug(notTezToken),
+        tokenSymbol: getTokenSymbol(notTezToken),
         tezTokenInput: Number(tezTokenInput),
         notTezTokenInput: Number(notTezTokenInput)
       };

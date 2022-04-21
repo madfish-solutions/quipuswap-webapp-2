@@ -68,6 +68,8 @@ export const useSwapFormik = (
         slippageTolerance: Number(tradingSlippage.div(100).toFixed()),
         inputToken: inputTokenSlug,
         outputToken: outputTokenSlug,
+        inputTokenSymbol: getTokenSymbol(inputToken!),
+        outputTokenSymbol: getTokenSymbol(outputToken!),
         inputTokenUsd: Number(getDollarEquivalent(inputAmount, exchangeRates[inputTokenSlug])),
         outputTokenUsd: Number(getDollarEquivalent(outputAmount, exchangeRates[outputTokenSlug])),
         ttDexAddress: TOKEN_TO_TOKEN_DEX,
