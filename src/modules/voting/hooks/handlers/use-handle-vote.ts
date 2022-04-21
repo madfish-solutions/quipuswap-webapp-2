@@ -32,8 +32,10 @@ export const useHandleVote = () => {
       }
     };
 
+    const CURRENT_TAB_ID = currentTab.id.toLocaleUpperCase();
+
     try {
-      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}`, logData);
+      amplitudeService.logEvent(`${CURRENT_TAB_ID}`, logData);
       await submitForm({
         tezos,
         values,
@@ -41,10 +43,10 @@ export const useHandleVote = () => {
         tab: currentTab.id,
         confirmOperation
       });
-      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}_SUCCESS`, logData);
+      amplitudeService.logEvent(`${CURRENT_TAB_ID}_SUCCESS`, logData);
     } catch (error) {
       showErrorToast(error as Error);
-      amplitudeService.logEvent(`${currentTab.id.toLocaleUpperCase()}_FAILED`, {
+      amplitudeService.logEvent(`${CURRENT_TAB_ID}_FAILED`, {
         ...logData,
         error
       });
