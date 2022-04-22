@@ -21,7 +21,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 export const useFarmingRewardInfoViewModel = () => {
   const confirmationPopup = useHarvestConfirmationPopup();
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem, selectedBaker } = farmingItemStore;
+  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -51,7 +51,7 @@ export const useFarmingRewardInfoViewModel = () => {
 
     if (isTokenEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
-        await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock, selectedBaker);
+        await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock);
 
         await delayedGetFarmingItem(defined(farmingItem).id);
       };

@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/constants';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { fromDecimals, isExist, isNull, MakeInterval } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -95,12 +95,10 @@ export class FarmingItemStore {
       return null;
     }
 
-    const { decimals } = item.rewardToken.metadata;
-
     const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
     const blockTimestampMS = new Date(blockTimestamp).getTime();
 
-    return getUserPendingReward(userInfo, item, blockTimestampMS).decimalPlaces(decimals, BigNumber.ROUND_DOWN);
+    return getUserPendingReward(userInfo, item, blockTimestampMS).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
   }
 
   makePendingRewardsLiveable() {

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL, DEFAULT_DECIMALS } from '@config/constants';
+import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { isExist, isNull, MakeInterval, isTokenEqual } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
@@ -13,15 +13,13 @@ import {
   getRewardsInUsd,
   getEndTimestamp,
   getPendingRewards,
-  getUserPendingReward,
   UsersInfoValueWithId,
   getIsHarvestAvailable,
-  getUserInfoLastStakedTime
+  getUserInfoLastStakedTime,
+  getUserPendingRewardWithFee
 } from '../helpers';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
-
-const ZERO_AMOUNT = 0;
 
 export class FarmingListStore {
   readonly listStore = new LoadingErrorData<RawFarmingItem[], FarmingItem[]>(
@@ -101,13 +99,13 @@ export class FarmingListStore {
             return new BigNumber(ZERO_AMOUNT);
           }
 
-          return getUserPendingReward(userInfo, farm, blockTimestampMS);
+          return getUserPendingRewardWithFee(userInfo, farm, blockTimestampMS);
         })
         .reduce<BigNumber>(
           (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
           new BigNumber(ZERO_AMOUNT)
         )
-        .decimalPlaces(DEFAULT_DECIMALS, BigNumber.ROUND_DOWN);
+        .decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
     }
   }
 
