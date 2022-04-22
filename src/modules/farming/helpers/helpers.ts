@@ -69,12 +69,17 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   return fromRewardPrecision(pending);
 };
 
+const PERCENTAGE = 100;
+const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
+
 export const getUserPendingRewardWithFee = (
   userInfo: UsersInfoValue,
   item: FarmingItem,
   timestamp: number = Date.now()
 ) => {
-  return getUserPendingReward(userInfo, item, timestamp).multipliedBy(item.harvestFee);
+  const fixedHarvestFee = PERCENTAGE_BN.minus(item.harvestFee).dividedBy(PERCENTAGE);
+
+  return getUserPendingReward(userInfo, item, timestamp).multipliedBy(fixedHarvestFee);
 };
 
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {

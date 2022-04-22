@@ -15,6 +15,7 @@ import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 
 const DEFAULT_INPUT_AMOUNT = 0;
+const ZERO_AMOUNT = 0;
 
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;
@@ -95,12 +96,10 @@ export class FarmingItemStore {
       return null;
     }
 
-    const { decimals } = item.rewardToken.metadata;
-
     const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
     const blockTimestampMS = new Date(blockTimestamp).getTime();
 
-    return getUserPendingReward(userInfo, item, blockTimestampMS).decimalPlaces(decimals, BigNumber.ROUND_DOWN);
+    return getUserPendingReward(userInfo, item, blockTimestampMS).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
   }
 
   makePendingRewardsLiveable() {
