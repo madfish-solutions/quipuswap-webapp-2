@@ -101,7 +101,7 @@ export class FarmingListStore {
             return new BigNumber(ZERO_AMOUNT);
           }
 
-          return getUserPendingReward(userInfo, farm, blockTimestampMS);
+          return getUserPendingReward(userInfo, farm, blockTimestampMS).multipliedBy(farm.harvestFee);
         })
         .reduce<BigNumber>(
           (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
