@@ -69,6 +69,14 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   return fromRewardPrecision(pending);
 };
 
+export const getUserPendingRewardWithFee = (
+  userInfo: UsersInfoValue,
+  item: FarmingItem,
+  timestamp: number = Date.now()
+) => {
+  return getUserPendingReward(userInfo, item, timestamp).multipliedBy(item.harvestFee);
+};
+
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {
   if (!userInfo) {
     return {

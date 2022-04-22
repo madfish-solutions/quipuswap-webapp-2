@@ -13,10 +13,10 @@ import {
   getRewardsInUsd,
   getEndTimestamp,
   getPendingRewards,
-  getUserPendingReward,
   UsersInfoValueWithId,
   getIsHarvestAvailable,
-  getUserInfoLastStakedTime
+  getUserInfoLastStakedTime,
+  getUserPendingRewardWithFee
 } from '../helpers';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
@@ -101,7 +101,7 @@ export class FarmingListStore {
             return new BigNumber(ZERO_AMOUNT);
           }
 
-          return getUserPendingReward(userInfo, farm, blockTimestampMS).multipliedBy(farm.harvestFee);
+          return getUserPendingRewardWithFee(userInfo, farm, blockTimestampMS);
         })
         .reduce<BigNumber>(
           (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
