@@ -92,4 +92,6 @@ export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
 const PERCENTAGE = 100;
 export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
 
+export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
+
 //#endregion
