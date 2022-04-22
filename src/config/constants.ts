@@ -83,7 +83,7 @@ export const FIRST_TWO_DIGITS_NUMBER = 10;
 const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
   [QSNets.hangzhounet]: 16,
   [QSNets.mainnet]: 3,
-  [QSNets.ithacanet]: 7
+  [QSNets.ithacanet]: 8
 };
 
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
