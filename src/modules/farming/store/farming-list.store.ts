@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL } from '@config/constants';
+import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { isExist, isNull, MakeInterval, isTokenEqual } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
@@ -20,8 +20,6 @@ import {
 } from '../helpers';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
-
-const ZERO_AMOUNT = 0;
 
 export class FarmingListStore {
   readonly listStore = new LoadingErrorData<RawFarmingItem[], FarmingItem[]>(

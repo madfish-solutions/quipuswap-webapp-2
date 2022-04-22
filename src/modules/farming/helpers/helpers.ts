@@ -1,7 +1,7 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE } from '@config/constants';
+import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE, PERCENTAGE_BN } from '@config/constants';
 import { defined, isExist, fromDecimals } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 
@@ -69,15 +69,12 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   return fromRewardPrecision(pending);
 };
 
-const PERCENTAGE = 100;
-const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
-
 export const getUserPendingRewardWithFee = (
   userInfo: UsersInfoValue,
   item: FarmingItem,
   timestamp: number = Date.now()
 ) => {
-  const fixedHarvestFee = PERCENTAGE_BN.minus(item.harvestFee).dividedBy(PERCENTAGE);
+  const fixedHarvestFee = PERCENTAGE_BN.minus(item.harvestFee).dividedBy(PERCENTAGE_BN);
 
   return getUserPendingReward(userInfo, item, timestamp).multipliedBy(fixedHarvestFee);
 };

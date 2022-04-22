@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/constants';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { fromDecimals, isExist, isNull, MakeInterval } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -15,7 +15,6 @@ import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 
 const DEFAULT_INPUT_AMOUNT = 0;
-const ZERO_AMOUNT = 0;
 
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;

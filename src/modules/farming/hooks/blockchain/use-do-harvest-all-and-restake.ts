@@ -29,9 +29,6 @@ export const useDoHarvestAllAndRestake = () => {
 
       const rewardsInQuipu = await farmingListStore.getQuipuPendingRewards();
 
-      // eslint-disable-next-line no-console
-      console.log('rewardsInQuipu', rewardsInQuipu.toFixed());
-
       const farmingIds: BigNumber[] = stakeList
         .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
         .filter(farmingItem => {

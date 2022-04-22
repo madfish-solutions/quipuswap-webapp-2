@@ -60,6 +60,7 @@ export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
 export const TAB_INDEX = 0;
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
+export const ZERO_AMOUNT = 0;
 
 export const USD_DECIMALS = 2;
 
@@ -87,5 +88,8 @@ const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
 };
 
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
+
+const PERCENTAGE = 100;
+export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
 
 //#endregion
