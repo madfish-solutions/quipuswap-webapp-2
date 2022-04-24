@@ -118,7 +118,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         notSelectable2={notSelectable2}
       />
       <div className={compoundClassName} onClick={focusInput}>
-        <label htmlFor={id} className={s.label}>
+        <label htmlFor={id} className={s.label} data-test-id="positionSelectLabel">
           {label}
         </label>
         <div className={s.background}>

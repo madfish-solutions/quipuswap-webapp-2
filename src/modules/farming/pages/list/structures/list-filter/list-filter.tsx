@@ -62,12 +62,16 @@ export const ListFilter: FC = observer(() => {
 
       <div className={cx(styles.switcherContainer, styles.switcherStakeOnly)}>
         <Switcher value={stakedOnly} disabled={isStakedOnlyDisabled} onClick={setStakedOnly} />
-        <span className={styles.switcherTranslation}>{stakedOnlyTranslation}</span>
+        <span className={styles.switcherTranslation} data-test-id="stakedOnlySwticher">
+          {stakedOnlyTranslation}
+        </span>
       </div>
 
       <div className={cx(styles.switcherContainer, styles.switcherActiveOnly)}>
         <Switcher value={activeOnly} onClick={setActiveOnly} />
-        <span className={styles.switcherTranslation}>{activeOnlyTranslation}</span>
+        <span className={styles.switcherTranslation} data-test-id="activeOnlySwitcher">
+          {activeOnlyTranslation}
+        </span>
       </div>
 
       <div className={cx(styles.switcherContainer, styles.sorterContainer)}>

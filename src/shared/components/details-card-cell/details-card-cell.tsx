@@ -24,7 +24,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({
     <CardCell
       header={
         <>
-          {cellName}
+          <span data-test-id="cellName">{cellName}</span>
           {isExist(tooltipContent) && <Tooltip content={tooltipContent} />}
         </>
       }

@@ -207,6 +207,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               className={s.button}
               disabled={isVoteOrVetoButtonDisabled()}
               loading={isSubmitting}
+              testId="voteButton"
             >
               {currentTab.id === VotingTabs.vote && isBanned ? t('voting|Baker under Veto') : currentTab.label}
             </Button>

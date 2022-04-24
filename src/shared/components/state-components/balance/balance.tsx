@@ -39,7 +39,9 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit }) =>
 
   return (
     <div className={styles.item2Line}>
-      <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
+      <div className={styles.caption} data-test-id="titleBalance">
+        {text ?? t('common|Balance')}:
+      </div>
       <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
         <StateWrapper
           isLoading={isLoading}

@@ -30,5 +30,5 @@ export const Switcher: FC<Props> = ({ onClick, disabled, value }) => {
     }
   };
 
-  return <div onClick={onToggle} className={compoundClassName}></div>;
+  return <div onClick={onToggle} className={compoundClassName} data-test-id="switcher"></div>;
 };

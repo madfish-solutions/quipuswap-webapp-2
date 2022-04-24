@@ -30,7 +30,7 @@ export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({ itemName, children
   return (
     <div className={cx(modeClass[colorThemeMode], styles.item)}>
       <span className={styles.header}>
-        {itemName}
+        <span data-test-id="farmingStatsItemName">{itemName}</span>
         <Tooltip content={tooltipContent} />
       </span>
       <div className={styles.value}>{content}</div>

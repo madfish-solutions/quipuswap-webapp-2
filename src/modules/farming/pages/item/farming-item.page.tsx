@@ -13,7 +13,7 @@ export const FarmingItemPage: FC = observer(() => {
   const { getTitle } = useFarmingItemPageViewModel();
 
   return (
-    <>
+    <div data-test-id="farmingItemPage">
       <TestnetAlert />
       <PageTitle>{getTitle()}</PageTitle>
       <FarmingRewardInfo />
@@ -21,6 +21,6 @@ export const FarmingItemPage: FC = observer(() => {
         <FarmingFormTabsCard />
         <FarmingDetails />
       </StickyBlock>
-    </>
+    </div>
   );
 });

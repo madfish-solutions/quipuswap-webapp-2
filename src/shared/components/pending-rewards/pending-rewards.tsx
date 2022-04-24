@@ -46,16 +46,18 @@ export const PendingRewards: FC<Props> = ({
           <>
             <div className={styles.titleWrapper}>
               {totalPendingRewards ? (
-                <span className={styles.title}>
+                <span className={styles.title} data-test-id="farmingListYourClaimableAndFullRewards">
                   {t('farm|Your Claimable')}
                   <span className={styles.slash}>{'/'}</span>
                   <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
                 </span>
               ) : (
-                <span className={styles.title}>{t('farm|Your Full Rewards')}</span>
+                <span className={styles.title} data-test-id="farmingYourFullRewards">
+                  {t('farm|Your Full Rewards')}
+                </span>
               )}
             </div>
-            <div className={styles.statesOfCurrencysAmount}>
+            <div className={styles.statesOfCurrencysAmount} data-test-id="farmingListStateCurrencyAmount">
               <StateCurrencyAmount
                 className={styles.amount}
                 amount={claimablePendingRewards}

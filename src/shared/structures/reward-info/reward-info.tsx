@@ -50,7 +50,7 @@ export const RewardInfo: FC<Props> = ({
 
   return (
     <Card className={cx(styles.card, className)} header={header}>
-      <div className={styles.container}>
+      <div className={styles.container} data-test-id="farmingListPendingRewards">
         <PendingRewards
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}

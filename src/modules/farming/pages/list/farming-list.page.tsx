@@ -15,7 +15,7 @@ export const FarmsListPage = observer(() => {
   const { isLoading, list, title } = useFarmingListViewModel();
 
   return (
-    <>
+    <div data-test-id="farmingListPage">
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <ListStats />
@@ -33,6 +33,6 @@ export const FarmsListPage = observer(() => {
           wrapperClassName={styles.list}
         />
       </StateWrapper>
-    </>
+    </div>
   );
 });
