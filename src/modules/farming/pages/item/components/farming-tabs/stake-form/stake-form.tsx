@@ -58,7 +58,7 @@ export const StakeForm: FC = observer(() => {
         />
       )}
       <div className={styles.suggestedOperationsButtons}>
-        <Button theme="underlined" href={tradeHref}>
+        <Button theme="underlined" href={tradeHref} testId="stakeFormTradeButton">
           {t('common|Trade')}
         </Button>
         {!isNull(investHref) && (
@@ -70,7 +70,13 @@ export const StakeForm: FC = observer(() => {
       <FarmingAlert className={styles.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
       <div className={styles.buttons}>
         <ConnectWalletOrDoSomething>
-          <Button type="submit" className={styles.button} disabled={disabled} loading={isSubmitting}>
+          <Button
+            type="submit"
+            className={styles.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            testId="stakeFormStakeButton"
+          >
             {t('farm|Stake')}
           </Button>
         </ConnectWalletOrDoSomething>

@@ -41,7 +41,13 @@ export const UnstakeForm: FC = observer(() => {
       />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
-          <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
+          <Button
+            type="submit"
+            className={s.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            testId="unstakeFormUnstakeButton"
+          >
             {t('farm|Unstake')}
           </Button>
         </ConnectWalletOrDoSomething>

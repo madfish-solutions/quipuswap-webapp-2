@@ -176,6 +176,7 @@ export const FarmingDetails: FC = observer(() => {
           href={depositTokenUrl}
           external
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
+          testId="tokenContract"
         >
           {t('farm|Token Contract')}
         </Button>
@@ -186,6 +187,7 @@ export const FarmingDetails: FC = observer(() => {
           href={stakeUrl}
           external
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
+          testId="farmingContract"
         >
           {t('farm|Farming Contract')}
         </Button>
