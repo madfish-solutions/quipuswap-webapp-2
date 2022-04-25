@@ -1,1 +1,1 @@
-export * from './terms-of-service';
+export * from './terms-of-service.page';

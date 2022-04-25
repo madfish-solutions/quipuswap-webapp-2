@@ -8,7 +8,7 @@ import { useFarmingPageViewModel } from './farming-page.vm';
 import { FarmingItemPage } from './pages/item';
 import { FarmsListPage } from './pages/list';
 
-export const Farming: FC = () => {
+export const FarmingPage: FC = () => {
   const { isInitialazied } = useFarmingPageViewModel();
 
   return (
