@@ -1,3 +1,10 @@
 import { FC } from 'react';
 
-export const StableswapLiquidityPage: FC = () => <h1>Stableswap Liquidity</h1>;
+import { PageTitle, TestnetAlert } from '@shared/components';
+
+export const StableswapLiquidityPage: FC = () => (
+  <>
+    <TestnetAlert />
+    <PageTitle>Stableswap Liquidity</PageTitle>
+  </>
+);
