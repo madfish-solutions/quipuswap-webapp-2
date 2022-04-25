@@ -2,7 +2,8 @@ import { FC } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { AppRootRoutes } from '../../router';
+import { AppRootRoutes } from '@app.router';
+
 import { PageNotFoundPage } from '../errors';
 import { StableswapLiquidityPage } from './stableswap-liquidity';
 
