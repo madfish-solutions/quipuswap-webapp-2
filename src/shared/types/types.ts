@@ -1,7 +1,9 @@
+import { SVGProps } from 'react';
+
 import { FoundDex } from '@quipuswap/sdk';
 import { BigNumber } from 'bignumber.js';
 
-export interface IconProps {
+export interface IconProps extends SVGProps<SVGSVGElement> {
   id?: string;
   className?: string;
 }

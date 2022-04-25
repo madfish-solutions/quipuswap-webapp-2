@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 import { StatusLabel } from '@shared/components/status-label';
-import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '@shared/svg';
+import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, StableswapIcon, SwapIcon, VotingIcon } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
 
@@ -47,17 +47,17 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   },
   {
     id: 4,
-    to: '/farming',
-    label: <Trans ns="common">Farming</Trans>,
-    Icon: FarmIcon,
+    to: '/stableswap',
+    label: <Trans ns="common">Stableswap</Trans>,
+    Icon: StableswapIcon,
     status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />
   },
-  // {
-  //   id: 5,
-  //   to: '/farm',
-  //   label: <Trans ns="common">Farm</Trans>,
-  //   Icon: FarmIcon,
-  // },
+  {
+    id: 5,
+    to: '/farming',
+    label: <Trans ns="common">Farming</Trans>,
+    Icon: FarmIcon
+  },
   // {
   //   id: 6,
   //   to: '/portfolio',

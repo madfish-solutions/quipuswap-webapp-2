@@ -2,34 +2,43 @@ import { FC } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
-import { Farming } from '@modules/farming';
-import { Home } from '@modules/home';
-import { Liquidity } from '@modules/liquidity';
-import { PrivacyPolicy } from '@modules/privacy-policy';
-import { Send, Swap } from '@modules/swap/swap.page';
-import { TermsOfService } from '@modules/terms-of-service';
+import { PageNotFoundPage } from '@modules/errors';
+import { FarmingPage } from '@modules/farming';
+import { HomePage } from '@modules/home';
+import { LiquidityPage } from '@modules/liquidity';
+import { PrivacyPolicyPage } from '@modules/privacy-policy';
+import { StableswapPage } from '@modules/stableswap/stableswap.page';
+import { SendPage, SwapPage } from '@modules/swap/swap.page';
+import { TermsOfServicePage } from '@modules/terms-of-service';
 import { VotingPage } from '@modules/voting';
 
-export const routes = {
-  home: '/',
-  privacyPolicy: 'privacy-policy',
-  termsOfService: 'terms-of-service',
-  liquidity: 'liquidity/*',
-  swap: 'swap/*',
-  send: 'send/*',
-  farming: 'farming/*',
-  voting: 'voting/*'
-};
+export enum AppRootRoutes {
+  Root = '/',
+  PrivacyPolicy = '/privacy-policy',
+  TermsOfService = '/terms-of-service',
+  Liquidity = '/liquidity',
+  Swap = '/swap',
+  Send = '/send',
+  Farming = '/farming',
+  Voting = '/voting',
+  Stableswap = '/stableswap'
+}
 
 export const Router: FC = () => (
   <Routes>
-    <Route path={routes.home} element={<Home />} />
-    <Route path={routes.swap} element={<Swap />} />
-    <Route path={routes.send} element={<Send />} />
-    <Route path={routes.liquidity} element={<Liquidity />} />
-    <Route path={routes.voting} element={<VotingPage />} />
-    <Route path={routes.farming} element={<Farming />} />
-    <Route path={routes.privacyPolicy} element={<PrivacyPolicy />} />
-    <Route path={routes.termsOfService} element={<TermsOfService />} />
+    <Route path={AppRootRoutes.Root} element={<HomePage />} />
+
+    <Route path={`${AppRootRoutes.Swap}/*`} element={<SwapPage />} />
+    <Route path={`${AppRootRoutes.Send}/*`} element={<SendPage />} />
+
+    <Route path={`${AppRootRoutes.Liquidity}/*`} element={<LiquidityPage />} />
+    <Route path={`${AppRootRoutes.Stableswap}/*`} element={<StableswapPage />} />
+    <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingPage />} />
+    <Route path={`${AppRootRoutes.Voting}/*`} element={<VotingPage />} />
+
+    <Route path={AppRootRoutes.PrivacyPolicy} element={<PrivacyPolicyPage />} />
+    <Route path={AppRootRoutes.TermsOfService} element={<TermsOfServicePage />} />
+
+    <Route path="*" element={<PageNotFoundPage />} />
   </Routes>
 );
