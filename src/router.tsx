@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { PageNotFoundPage } from '@modules/errors';
 import { Farming } from '@modules/farming';
 import { Home } from '@modules/home';
 import { Liquidity } from '@modules/liquidity';
@@ -31,5 +32,7 @@ export const Router: FC = () => (
     <Route path={routes.farming} element={<Farming />} />
     <Route path={routes.privacyPolicy} element={<PrivacyPolicy />} />
     <Route path={routes.termsOfService} element={<TermsOfService />} />
+
+    <Route path="*" element={<PageNotFoundPage />} />
   </Routes>
 );

@@ -36,7 +36,7 @@ export const Sorter: FC<Props> = observer(({ className, ...props }) => {
         {...props}
       />
       <Button theme="tertiary" onClick={handleSortDirectionToggle}>
-        <Sort rotate={sortDirectionRotate} />
+        <Sort rotation={sortDirectionRotate} />
       </Button>
     </div>
   );
