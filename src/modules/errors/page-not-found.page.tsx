@@ -1,3 +1,10 @@
 import { FC } from 'react';
 
-export const PageNotFoundPage: FC = () => <h1>Page Not Found</h1>;
+import { PageTitle, TestnetAlert } from '@shared/components';
+
+export const PageNotFoundPage: FC = () => (
+  <>
+    <TestnetAlert />
+    <PageTitle>Page Not Found</PageTitle>
+  </>
+);
