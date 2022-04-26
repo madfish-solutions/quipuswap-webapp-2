@@ -24,7 +24,7 @@ export enum AppRootRoutes {
   Stableswap = '/stableswap'
 }
 
-export const Router: FC = () => (
+export const AppRouter: FC = () => (
   <Routes>
     <Route path={AppRootRoutes.Root} element={<HomePage />} />
 
