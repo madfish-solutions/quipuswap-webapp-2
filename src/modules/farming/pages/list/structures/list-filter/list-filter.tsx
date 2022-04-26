@@ -46,6 +46,7 @@ export const ListFilter: FC = observer(() => {
         StartAdornment={Search}
         placeholder={inputPlaceholderTranslation}
         readOnly={false}
+        data-test-id="input"
       />
 
       <NumberInput
@@ -58,6 +59,7 @@ export const ListFilter: FC = observer(() => {
         max={MAX_TOKEN_ID}
         onIncrementClick={handleIncrement}
         onDecrementClick={handleDecrement}
+        data-test-id="numberInput"
       />
 
       <div className={cx(styles.switcherContainer, styles.switcherStakeOnly)}>

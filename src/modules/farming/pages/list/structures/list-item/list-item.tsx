@@ -87,18 +87,24 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
-    <Card className={cx(styles.card, themeClass[colorThemeMode])}>
+    <Card className={cx(styles.card, themeClass[colorThemeMode])} data-test-id="listItem">
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <div className={styles.iconWithStatusLabel}>
               <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-              <StatusLabel status={stakeStatus} filled />
+              <StatusLabel status={stakeStatus} filled data-test-id="stakeStatus" />
             </div>
             <div className={styles.tagsWithTooltip}>
-              {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+              {shouldShowLockPeriod && (
+                <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} data-test-id="timeLockLabel" />
+              )}
               {shouldShowWithdrawalFee && (
-                <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+                <StatusLabel
+                  label={`${withdrawalFeeLabel}% UNLOCK FEE`}
+                  status={stakeStatus}
+                  data-test-id="withdrawalFeeLabel"
+                />
               )}
               <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
             </div>
@@ -115,6 +121,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                 tooltip={tvlTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
+                data-test-id="TVL"
               >
                 <StateCurrencyAmount
                   amount={tvl}
@@ -128,6 +135,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                 tooltip={aprTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
+                data-test-id="APR"
               >
                 <StateCurrencyAmount amount={apr} currency="%" isError={!apr} />
               </ListItemCardCell>
@@ -137,6 +145,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                 tooltip={apyTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
+                data-test-id="APY"
               >
                 <StateCurrencyAmount amount={apy} currency="%" isError={!apr} />
               </ListItemCardCell>
@@ -148,6 +157,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={yourBalanceTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="yourBalance"
                 >
                   <StateCurrencyAmount
                     amount={myBalance}
@@ -162,6 +172,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={yourDepositTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="yourDeposit"
                 >
                   <StateCurrencyAmount
                     amount={depositBalance}
@@ -176,6 +187,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={yourEarnedTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="yourEarned"
                 >
                   <StateCurrencyAmount
                     amount={earnBalance}
@@ -190,16 +202,28 @@ export const FarmingListItem: FC<FarmingItem> = ({
         </div>
         <div className={styles.right}>
           <div className={styles.links}>
-            <Button href={depositTokenUrl} external theme={LINKS_THEME} title={tokenContractTranslation}>
+            <Button
+              href={depositTokenUrl}
+              external
+              theme={LINKS_THEME}
+              title={tokenContractTranslation}
+              data-test-id="tokenContractButton"
+            >
               {tokenContractTranslation}
             </Button>
 
-            <Button href={stakeUrl} external theme={LINKS_THEME} title={farmingContractTranslation}>
+            <Button
+              href={stakeUrl}
+              external
+              theme={LINKS_THEME}
+              title={farmingContractTranslation}
+              data-test-id="farmingContractButton"
+            >
               {farmingContractTranslation}
             </Button>
           </div>
 
-          <Button className={styles.button} href={selectLink}>
+          <Button className={styles.button} href={selectLink} data-test-id="selectButton">
             {selectTranslation}
           </Button>
         </div>

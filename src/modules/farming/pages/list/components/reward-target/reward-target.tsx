@@ -31,8 +31,12 @@ export const RewardTarget: FC<Props> = ({ token }) => {
     <div className={cx(styles.container, themeClass[colorThemeMode])}>
       <ArrowDown className={styles.iconButton} />
       <TokenLogo src={tokenIcon} tokenSymbol={tokenSymbol} />
-      <span className={styles.earn}>{EARN}</span>
-      <span className={styles.tokenSymbol}>{tokenSymbol}</span>
+      <span className={styles.earn} data-test-id="earn">
+        {EARN}
+      </span>
+      <span className={styles.tokenSymbol} data-test-id="tokenSymbol">
+        {tokenSymbol}
+      </span>
     </div>
   );
 };

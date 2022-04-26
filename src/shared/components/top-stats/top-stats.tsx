@@ -16,7 +16,7 @@ interface TopStatsProps {
 
 export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip }) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-test-id={title}>
       <span className={styles.title}>
         <span data-test-id="topStatsTitle">{title}</span> <Tooltip content={tooltip} />
       </span>

@@ -58,8 +58,12 @@ export const FarmingDetails: FC = observer(() => {
       {shouldShowTags && (
         <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
           <div className={styles.tags}>
-            {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
-            {shouldShowWithdrawalFee && <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} />}
+            {shouldShowLockPeriod && (
+              <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} data-test-id="timeLockLabel" />
+            )}
+            {shouldShowWithdrawalFee && (
+              <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} data-test-id="withdrawalFee" />
+            )}
           </div>
         </DetailsCardCell>
       )}
@@ -191,7 +195,7 @@ export const FarmingDetails: FC = observer(() => {
           href={depositTokenUrl}
           external
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
-          data-test-id="tokenContract"
+          data-test-id="tokenContractButton"
         >
           {t('farm|Token Contract')}
         </Button>
@@ -202,7 +206,7 @@ export const FarmingDetails: FC = observer(() => {
           href={stakeUrl}
           external
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
-          data-test-id="farmingContract"
+          data-test-id="farmingContractButton"
         >
           {t('farm|Farming Contract')}
         </Button>

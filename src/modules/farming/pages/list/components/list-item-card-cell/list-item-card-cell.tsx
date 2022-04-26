@@ -9,7 +9,14 @@ interface Props {
   cardCellClassName: string;
 }
 
-export const ListItemCardCell: FC<Props> = ({ cellName, tooltip, cellNameClassName, cardCellClassName, children }) => {
+export const ListItemCardCell: FC<Props> = ({
+  cellName,
+  tooltip,
+  cellNameClassName,
+  cardCellClassName,
+  children,
+  ...props
+}) => {
   return (
     <CardCell
       header={
@@ -19,6 +26,7 @@ export const ListItemCardCell: FC<Props> = ({ cellName, tooltip, cellNameClassNa
         </>
       }
       className={cardCellClassName}
+      {...props}
     >
       {children}
     </CardCell>

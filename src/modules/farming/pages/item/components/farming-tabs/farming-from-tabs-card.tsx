@@ -31,6 +31,7 @@ export const FarmingFormTabsCard: FC = observer(() => {
         className: styles.header
       }}
       contentClassName={styles.content}
+      data-test-id="farmingFromTabsCard"
     >
       {isStakeForm ? <StakeForm /> : <UnstakeForm />}
     </Card>

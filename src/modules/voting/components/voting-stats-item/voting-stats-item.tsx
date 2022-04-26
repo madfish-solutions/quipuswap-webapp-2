@@ -35,7 +35,7 @@ export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, too
   return (
     <div className={cx(modeClass[colorThemeMode], styles.item)} {...props}>
       <span className={styles.header}>
-        {itemName}
+        <span data-test-id="itemName">{itemName}</span>
         :
         <Tooltip content={tooltip} />
       </span>

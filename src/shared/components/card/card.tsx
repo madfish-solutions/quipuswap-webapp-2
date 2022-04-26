@@ -49,7 +49,9 @@ export const Card: FC<Props> = ({
         <div className={cx(styles.header, header.className)}>
           <span data-test-id="headerContent">{header.content}</span>
           <span data-test-id="statusLabelCard">
-            {header.status ? <StatusLabel filled status={header.status} /> : null}
+            <span data-test-id="statusLabel">
+              {header.status ? <StatusLabel filled status={header.status} /> : null}
+            </span>
           </span>
           {header.button}
         </div>
