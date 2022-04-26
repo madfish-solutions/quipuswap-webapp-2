@@ -6,6 +6,7 @@ import { useFarmingListStore } from '@modules/farming/hooks';
 import { RewardInfo } from '@shared/structures';
 import { FarmingListPandingReward } from '@tests/farming';
 
+import { RewardTokensList } from '../reward-tokens-list';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
@@ -22,6 +23,8 @@ export const FarmingRewardsList: FC = observer(() => {
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={harvestAllTranslation}
       currency="$"
+      buttonUp
+      details={<RewardTokensList />}
       rewardButtonAttributeTestId={FarmingListPandingReward.HARVEST_ALL_BUTTON}
       pendingRewardAttributeTestId={FarmingListPandingReward.PENDING_REWARD}
     />

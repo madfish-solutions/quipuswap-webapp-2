@@ -14,6 +14,13 @@
   padding: 24px;
 }
 
+.p0 {
+  padding:0;
+}
+.pb0 {
+  padding-bottom: 0;
+}
+
 .childrenContainer {
   display: flex;
   flex-wrap: wrap;
@@ -22,6 +29,7 @@
 }
 
 .userInfoContainer {
+  min-height: 132px;
   display: flex;
   justify-content: space-between;
   align-self: flex-end;
@@ -29,8 +37,37 @@
   row-gap: 40px;
 }
 
+.order1 {
+  order: 1;
+}
+
+.order2 {
+  order: 2;
+}
+
+.order3 {
+  order: 3;
+}
+
+.viewDetailsButton {
+  align-self: flex-end;
+
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .button {
   width: 160px;
+}
+
+.details {
+  margin-top: 40px;
 }
 
 @include media('>phone') {

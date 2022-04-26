@@ -1,0 +1,15 @@
+.table {
+  width: 100%;
+}
+
+.token{
+  text-align: left;
+}
+
+.amount {
+  text-align: right;
+  width: 100px;
+  & > div{
+    margin-left: auto;
+  }
+}

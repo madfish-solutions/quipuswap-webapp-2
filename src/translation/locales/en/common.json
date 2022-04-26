@@ -103,5 +103,7 @@
   "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.": "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.",
   "Invalid output": "Invalid output",
   "Available balance": "Available balance",
-  "Support": "Support"
+  "Support": "Support",
+  "viewDetails": "View Details",
+  "lessDetails": "Less Details"
 }
