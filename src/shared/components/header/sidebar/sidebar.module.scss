@@ -37,11 +37,17 @@
     padding: 24px 16px;
     row-gap: 16px;
   }
+  .networkSelect {
+    display: flex;
+    flex-direction: column;
+  }
   .select {
+    display: flex;
     & > div {
       & > div:nth-of-type(1) {
         height: 40px;
         justify-content: center;
+        padding: 2px;
         & > div:nth-of-type(1) {
           height: 36px;
           width: 155px;
