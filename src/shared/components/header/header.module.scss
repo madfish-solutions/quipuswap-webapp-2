@@ -47,13 +47,11 @@
 }
 
 .light {
-  border-bottom: 1px solid $ui-03;
-  background-color: $ui-02;
+  background-color: $ui-01;
 }
 
 .dark {
-  border-bottom: 1px solid $ui-07;
-  background-color: $ui-06;
+  background-color: $ui-07;
 }
 
 @include media(">SDesktop") {
