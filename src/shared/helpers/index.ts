@@ -18,7 +18,6 @@ export * from './get-dollar-equivalent';
 export * from './get-minimal-output';
 export * from './get-success-messages';
 export * from './get-token-appellation';
-export * from './is-client';
 export * from './is-tez-included';
 export * from './is-whitelisted-token';
 export * from './make-interval';

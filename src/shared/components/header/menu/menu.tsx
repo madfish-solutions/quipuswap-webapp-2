@@ -3,10 +3,8 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { DonationButton, SettingsButton } from '@shared/components';
-import { useTranslation } from '@translation';
 
 import { amplitudeService } from '../../../services';
 import { Madfish } from '../../../svg';
@@ -28,12 +26,7 @@ interface MenuProps {
 }
 
 export const Menu: FC<MenuProps> = ({ className }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const handleOldVersionClick = () => {
-    amplitudeService.logEvent('OLD_VERSION_CLICK');
-  };
 
   const handleMadfishClick = () => {
     amplitudeService.logEvent('MADFISH_CLICK');
@@ -43,8 +36,15 @@ export const Menu: FC<MenuProps> = ({ className }) => {
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
-        <div className={styles.row}>
+        {IS_NETWORK_MAINNET && (
+          <div className={styles.mb16}>
+            <DonationButton />
+          </div>
+        )}
+
+        <div className={cx(styles.row)}>
           <QPToken />
+          <NetworkSelect menuPlacement="top" className={styles.select} />
           <div className={cx(styles.mb0, styles.row)}>
             <SettingsButton />
             <div className={styles.ml24}>
@@ -52,23 +52,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             </div>
           </div>
         </div>
-        <div className={styles.row}>
-          <NetworkSelect menuPlacement="top" className={styles.select} />
-          <Button
-            external
-            href={QUIPUSWAP_OLD_VERSION_LINK}
-            theme="secondary"
-            className={styles.button}
-            onClick={handleOldVersionClick}
-          >
-            {t('common|Old version')}
-          </Button>
-        </div>
-        {IS_NETWORK_MAINNET && (
-          <div className={styles.mb16}>
-            <DonationButton />
-          </div>
-        )}
+
         <div className={styles.row}>
           <Button
             href="https://www.madfish.solutions/"
@@ -79,7 +63,6 @@ export const Menu: FC<MenuProps> = ({ className }) => {
           >
             <Madfish />
           </Button>
-
           <Socials />
         </div>
       </footer>
