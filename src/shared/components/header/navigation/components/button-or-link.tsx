@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, MouseEvent } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ interface Props {
   link: NavigationDataProps;
   icon?: Nullable<ReactNode>;
   className: string;
-  onClick: () => void;
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   onFocus?: () => void;
 }
 
