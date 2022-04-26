@@ -38,7 +38,7 @@ export const ListFilter: FC = observer(() => {
   } = translation;
 
   return (
-    <Card contentClassName={styles.cardContent} className={styles.filterCard}>
+    <Card contentClassName={styles.cardContent} className={styles.filterCard} data-test-id="listFilter">
       <Input
         value={search}
         onChange={onSearchChange}
@@ -61,15 +61,20 @@ export const ListFilter: FC = observer(() => {
       />
 
       <div className={cx(styles.switcherContainer, styles.switcherStakeOnly)}>
-        <Switcher value={stakedOnly} disabled={isStakedOnlyDisabled} onClick={setStakedOnly} />
-        <span className={styles.switcherTranslation} data-test-id="stakedOnlySwticher">
+        <Switcher
+          value={stakedOnly}
+          disabled={isStakedOnlyDisabled}
+          onClick={setStakedOnly}
+          data-test-id="stakedOnlySwitcher"
+        />
+        <span className={styles.switcherTranslation} data-test-id="stakedOnlySwitcherTitle">
           {stakedOnlyTranslation}
         </span>
       </div>
 
       <div className={cx(styles.switcherContainer, styles.switcherActiveOnly)}>
-        <Switcher value={activeOnly} onClick={setActiveOnly} />
-        <span className={styles.switcherTranslation} data-test-id="activeOnlySwitcher">
+        <Switcher value={activeOnly} onClick={setActiveOnly} data-test-id="activeOnlySwitcher" />
+        <span className={styles.switcherTranslation} data-test-id="activeOnlySwitcherTitle">
           {activeOnlyTranslation}
         </span>
       </div>

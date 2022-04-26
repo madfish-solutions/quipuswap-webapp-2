@@ -45,8 +45,8 @@ export const RewardInfo: FC<Props> = ({
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
 
   return (
-    <Card className={cx(styles.card, className)} header={header}>
-      <div className={styles.container} data-test-id="farmingListPendingRewards">
+    <Card className={cx(styles.card, className)} header={header} data-test-id="farmingListPendingRewards">
+      <div className={styles.container}>
         <PendingRewards
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}

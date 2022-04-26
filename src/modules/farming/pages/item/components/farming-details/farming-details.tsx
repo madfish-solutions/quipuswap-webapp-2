@@ -53,9 +53,10 @@ export const FarmingDetails: FC = observer(() => {
         status: stakeStatus
       }}
       contentClassName={commonContainerStyles.content}
+      data-test-id="farmingDetails"
     >
       {shouldShowTags && (
-        <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName}>
+        <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
           <div className={styles.tags}>
             {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
             {shouldShowWithdrawalFee && <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} />}
@@ -67,6 +68,7 @@ export const FarmingDetails: FC = observer(() => {
         cellName={t('farm|Value Locked')}
         className={CardCellClassName}
         tooltipContent={t('farm|valueLockedTooltip')}
+        data-test-id="valueLocked"
       >
         <StateCurrencyAmount
           dollarEquivalent={tvlDollarEquivalent}
@@ -80,6 +82,7 @@ export const FarmingDetails: FC = observer(() => {
         cellName={t('farm|Daily Distribution')}
         tooltipContent={t('farm|dailyDistributionTooltip')}
         className={CardCellClassName}
+        data-test-id="dailyDistribution"
       >
         <StateCurrencyAmount
           dollarEquivalent={distributionDollarEquivalent}
@@ -89,7 +92,12 @@ export const FarmingDetails: FC = observer(() => {
         />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('farm|APR')} tooltipContent={t('farm|aprTooltip')} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('farm|APR')}
+        tooltipContent={t('farm|aprTooltip')}
+        className={CardCellClassName}
+        data-test-id="APR"
+      >
         <StatePercentage value={apr} isLoading={isLoading} />
       </DetailsCardCell>
 
@@ -97,6 +105,7 @@ export const FarmingDetails: FC = observer(() => {
         cellName={t('farm|dailyApr')}
         tooltipContent={t('farm|dailyAprTooltip')}
         className={CardCellClassName}
+        data-test-id="dailyApr"
       >
         <StatePercentage isLoading={isLoading} value={dailyApr} />
       </DetailsCardCell>
@@ -107,6 +116,7 @@ export const FarmingDetails: FC = observer(() => {
             cellName={t('farm|Current Delegate')}
             tooltipContent={t('farm|currentDelegateTooltip')}
             className={CardCellClassName}
+            data-test-id="currentDelegate"
           >
             <StateData isLoading={isLoading} data={currentDelegate}>
               {delegate => <CandidateButton candidate={delegate} />}
@@ -117,6 +127,7 @@ export const FarmingDetails: FC = observer(() => {
             cellName={t('farm|Next Delegate')}
             tooltipContent={t('farm|nextDelegateTooltip')}
             className={CardCellClassName}
+            data-test-id="nextDelegate"
           >
             <StateData isLoading={isLoading} data={nextDelegate}>
               {delegate => <CandidateButton candidate={delegate} />}
@@ -129,6 +140,7 @@ export const FarmingDetails: FC = observer(() => {
         cellName={t('farm|farmingEndsIn')}
         tooltipContent={t('farm|farmingEndsInTooltip')}
         className={CardCellClassName}
+        data-test-id="farmingEndsIn"
       >
         <StateData isLoading={isLoading} data={endTime}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
@@ -140,6 +152,7 @@ export const FarmingDetails: FC = observer(() => {
           cellName={t('farm|Lock Period')}
           tooltipContent={t('farm|lockPeriodTooltip')}
           className={CardCellClassName}
+          data-test-id="lockPeriod"
         >
           <StateData isLoading={isLoading} data={timelock}>
             {value => <TimespanView value={value} />}
@@ -152,6 +165,7 @@ export const FarmingDetails: FC = observer(() => {
           cellName={t('farm|Withdrawal Fee')}
           tooltipContent={t('farm|withdrawalFeeTooltip')}
           className={CardCellClassName}
+          data-test-id="withdrawalFee"
         >
           <StateData isLoading={isLoading} data={withdrawalFee}>
             {_withdrawalFee => <StatePercentage isLoading={false} value={_withdrawalFee} />}
@@ -163,6 +177,7 @@ export const FarmingDetails: FC = observer(() => {
         cellName={t('farm|Interface Fee')}
         tooltipContent={t('farm|interfaceFeeTooltip')}
         className={CardCellClassName}
+        data-test-id="interfaceFee"
       >
         <StateData isLoading={isLoading} data={harvestFee}>
           {_harvestFee => <StatePercentage isLoading={false} value={_harvestFee} />}

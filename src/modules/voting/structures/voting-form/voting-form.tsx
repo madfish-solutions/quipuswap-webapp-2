@@ -147,6 +147,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           className: s.header
         }}
         contentClassName={s.content}
+        data-test-id="votingTokenSelect"
       >
         <Field name="balance1" validate={validate} parse={v => parseDecimals(v, 0, Infinity, LP_TOKEN_DECIMALS)}>
           {({ input, meta }) => (

@@ -28,7 +28,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({
         </>
       }
       className={className}
-      data-test-id={props}
+      {...props}
     >
       {children}
     </CardCell>

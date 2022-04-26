@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -51,14 +51,14 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
   }
 
   return (
-    <div data-test-id="liquidityPage">
+    <Fragment>
       <TestnetAlert />
-      <PageTitle>
+      <PageTitle data-test-id="liquidityPageTitle">
         {t('common|Liquidity')} {title}
       </PageTitle>
       <StickyBlock className={className}>
         <LiquidityCards onTokensChange={handleTokensChange} />
       </StickyBlock>
-    </div>
+    </Fragment>
   );
 };

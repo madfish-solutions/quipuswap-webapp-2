@@ -64,6 +64,7 @@ export const FarmingRewardInfo: FC = observer(() => {
         itemName={t('farm|Your Share')}
         loading={farmingLoading}
         tooltipContent={t('farm|yourShareTooltip')}
+        data-test-id="yourShare"
       >
         <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
           {({ depositBalance, stakedToken }) => (
@@ -84,6 +85,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           itemName={t('farm|Your delegate')}
           loading={delegatesLoading}
           tooltipContent={t('farm|yourDelegateTooltip')}
+          data-test-id="yourDelegate"
         >
           <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
@@ -105,6 +107,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           itemName={t('farm|Lock period ends in')}
           loading={farmingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
+          data-test-id="lockPeriodEndsIn"
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}

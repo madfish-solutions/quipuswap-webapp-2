@@ -55,6 +55,7 @@ export const VotingDetails: FC = () => {
         cellName={t('voting|Delegated To')}
         tooltipContent={t('voting|Current baker elected by simple majority of votes.')}
         className={CardCellClassName}
+        data-test-id="delegatedTo"
       >
         <CandidateButton candidate={wrapCurrentCandidate} />
       </DetailsCardCell>
@@ -65,6 +66,7 @@ export const VotingDetails: FC = () => {
           'voting|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.'
         )}
         className={CardCellClassName}
+        data-test-id="secondCandidate"
       >
         <CandidateButton candidate={wrapSecondCandidate} />
       </DetailsCardCell>
@@ -73,6 +75,7 @@ export const VotingDetails: FC = () => {
         cellName={t('voting|Total Votes')}
         tooltipContent={t('voting|The total amount of votes cast to elect a baker in the pool.')}
         className={CardCellClassName}
+        data-test-id="totalVotes"
       >
         <StateCurrencyAmount amount={totalVotesAmount} />
       </DetailsCardCell>
@@ -81,6 +84,7 @@ export const VotingDetails: FC = () => {
         cellName={t('voting|Total Vetos')}
         tooltipContent={t('voting|The total amount of shares cast so far to veto the current baker.')}
         className={CardCellClassName}
+        data-test-id="totalVetos"
       >
         <StateCurrencyAmount amount={totalVetoAmount} />
       </DetailsCardCell>
@@ -89,6 +93,7 @@ export const VotingDetails: FC = () => {
         cellName={t('voting|Your Candidate')}
         tooltipContent={t('voting|The candidate you voted for.')}
         className={CardCellClassName}
+        data-test-id="yourCandidate"
       >
         <CandidateButton candidate={wrapMyCandidate} />
       </DetailsCardCell>
@@ -97,6 +102,7 @@ export const VotingDetails: FC = () => {
         cellName={t('voting|Votes To Veto Left')}
         tooltipContent={t('voting|This much more votes needed to veto a delegate.')}
         className={CardCellClassName}
+        data-test-id="votesToVetoLeft"
       >
         <StateCurrencyAmount amount={votesToVetoAmount} />
       </DetailsCardCell>
@@ -109,6 +115,7 @@ export const VotingDetails: FC = () => {
             href={isNull(pairLink) ? undefined : pairLink}
             external
             icon={<ExternalLink className={s.linkIcon} />}
+            data-test-id="pairAnalytics"
           >
             {t('voting|Pair Analytics')}
           </Button>

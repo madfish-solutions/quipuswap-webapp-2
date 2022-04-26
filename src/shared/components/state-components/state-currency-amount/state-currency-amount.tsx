@@ -82,7 +82,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
   const content = (
-    <span className={wrapClassName}>
+    <span className={wrapClassName} {...props}>
       {isLeftVisible && <Currency data-test-id="leftVisibleCurrency">{currency}</Currency>}
 
       <StateWrapper

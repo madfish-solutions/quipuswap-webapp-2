@@ -63,6 +63,7 @@ export const PendingRewards: FC<Props> = ({
                 dollarEquivalent={dollarEquivalent}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
+                data-test-id="yourClaimableReward"
               />
               {totalPendingRewards && (
                 <>
@@ -74,6 +75,7 @@ export const PendingRewards: FC<Props> = ({
                     dollarEquivalent={dollarEquivalent}
                     amountDecimals={amountDecimals}
                     isLeftCurrency={currency === '$'}
+                    data-test-id="yourFullReward"
                   />
                 </>
               )}

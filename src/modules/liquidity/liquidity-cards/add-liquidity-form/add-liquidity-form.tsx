@@ -61,7 +61,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
 
   return (
-    <div data-test-id="liquidityTokenSelect">
+    <>
       <TokenSelect
         label="Input"
         balance={fixedBalanceA}
@@ -76,6 +76,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenA}
         disabled={!tokenB}
         placeholder="0.0"
+        data-test-id="addLiquidityTokenA"
       />
       <Plus className={styles.iconButton} />
       <TokenSelect
@@ -92,6 +93,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenB}
         disabled={!tokenA}
         placeholder="0.0"
+        data-test-id="addLiquidityTokenB"
       />
       {isDeadlineAndSkippageVisible && (
         <div className={styles['mt-24']}>
@@ -122,6 +124,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       ) : (
         <ConnectWalletButton className={cx(CC.connect, styles['mt-24'])} />
       )}
-    </div>
+    </>
   );
 };

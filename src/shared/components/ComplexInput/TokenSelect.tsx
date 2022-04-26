@@ -113,7 +113,14 @@ export const TokenSelect: FC<TokenSelectProps> = ({
 
   return (
     <>
-      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
+      <div
+        className={compoundClassName}
+        onClick={focusInput}
+        onKeyPress={focusInput}
+        role="button"
+        tabIndex={0}
+        {...props}
+      >
         <label htmlFor={id} className={s.label}>
           {label}
         </label>

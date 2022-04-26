@@ -21,7 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, tooltip }) => {
+export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, tooltip, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const accountPkh = useAccountPkh();
 
@@ -33,7 +33,7 @@ export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, too
     );
 
   return (
-    <div className={cx(modeClass[colorThemeMode], styles.item)}>
+    <div className={cx(modeClass[colorThemeMode], styles.item)} {...props}>
       <span className={styles.header}>
         {itemName}
         :

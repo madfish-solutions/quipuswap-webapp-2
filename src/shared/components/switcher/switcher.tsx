@@ -17,7 +17,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Switcher: FC<Props> = ({ onClick, disabled, value }) => {
+export const Switcher: FC<Props> = ({ onClick, disabled, value, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(modeClass[colorThemeMode], styles.switcher, {
@@ -30,5 +30,5 @@ export const Switcher: FC<Props> = ({ onClick, disabled, value }) => {
     }
   };
 
-  return <div onClick={onToggle} className={compoundClassName} data-test-id="switcher"></div>;
+  return <div onClick={onToggle} className={compoundClassName} {...props}></div>;
 };

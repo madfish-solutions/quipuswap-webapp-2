@@ -63,12 +63,14 @@ export const VotingStats: FC<VotingStatsProps> = ({ className }) => {
             value={balanceAmount}
             itemName={t('voting|Your LP')}
             tooltip={'voting|Total number of LP tokens you own.'}
+            data-test-id="yourLP"
           />
 
           <VotingStatsItem
             value={voteAmount}
             itemName={t('voting|Your votes')}
             tooltip={t('voting|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.')}
+            data-test-id="yourVotes"
           />
 
           <VotingStatsItem
@@ -77,10 +79,11 @@ export const VotingStats: FC<VotingStatsProps> = ({ className }) => {
             tooltip={t(
               'voting|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
             )}
+            data-test-id="yourVetos"
           />
         </div>
 
-        <Button disabled={isButtonDisabled} onClick={handleClick} className={s.button}>
+        <Button disabled={isButtonDisabled} onClick={handleClick} className={s.button} data-test-id="claimRewardButton">
           {t('voting|Claim Reward')}
         </Button>
       </div>

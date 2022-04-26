@@ -20,7 +20,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({ itemName, children, loading, tooltipContent }) => {
+export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({
+  itemName,
+  children,
+  loading,
+  tooltipContent,
+  ...props
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { accountPkh } = useAuthStore();
 
@@ -28,7 +34,7 @@ export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({ itemName, children
     isNull(accountPkh) || isNull(children) ? <DashPlug animation={loading} className={styles.dash} /> : children;
 
   return (
-    <div className={cx(modeClass[colorThemeMode], styles.item)}>
+    <div className={cx(modeClass[colorThemeMode], styles.item)} {...props}>
       <span className={styles.header}>
         <span data-test-id="farmingStatsItemName">{itemName}</span>
         <Tooltip content={tooltipContent} />

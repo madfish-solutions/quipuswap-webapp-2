@@ -15,9 +15,9 @@ export const FarmsListPage = observer(() => {
   const { isLoading, list, title } = useFarmingListViewModel();
 
   return (
-    <div data-test-id="farmingListPage">
+    <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="farmingListPageTitle">{title}</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
         <FarmingRewardsList />
@@ -33,6 +33,6 @@ export const FarmsListPage = observer(() => {
           wrapperClassName={styles.list}
         />
       </StateWrapper>
-    </div>
+    </>
   );
 });

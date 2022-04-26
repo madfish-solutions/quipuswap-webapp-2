@@ -71,6 +71,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           { tokenASymbol, tokenBSymbol }
         )}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="pairAddress"
       >
         <StateWrapper
           loaderFallback={<DashPlug />}
@@ -85,6 +86,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         cellName={t('common|Pair ID')}
         tooltipContent={t('common|Token id of the share(LP) token.')}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="pairId"
       >
         <StateWrapper
           loaderFallback={<DashPlug />}
@@ -102,6 +104,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           { tokenASymbol, tokenBSymbol }
         )}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="sellPrice"
       >
         <RateView rate={sellPrice} inputToken={tokenA} outputToken={tokenB} />
       </DetailsCardCell>
@@ -113,6 +116,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           { tokenASymbol, tokenBSymbol }
         )}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="buyPrice"
       >
         <RateView rate={buyPrice} inputToken={tokenB} outputToken={tokenA} />
       </DetailsCardCell>
@@ -123,6 +127,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           tokenASymbol
         })}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="tokenALocked"
       >
         <StateCurrencyAmount
           amount={fixedTokenAPoll}
@@ -139,6 +144,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           tokenBSymbol
         })}
         className={styles.LiquidityDetails_CardCell}
+        data-test-id="tokenBLocked"
       >
         <StateCurrencyAmount
           amount={fixedTokenBPoll}
@@ -157,6 +163,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
               "liquidity|Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool."
             )}
             className={styles.LiquidityDetails_CardCell}
+            data-test-id="yourTotalLp"
           >
             <StateCurrencyAmount
               amount={totalAmount}
@@ -171,6 +178,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
               'liquidity|Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.'
             )}
             className={styles.LiquidityDetails_CardCell}
+            data-test-id="yourFrozenLP"
           >
             <StateCurrencyAmount
               amount={frozenAmount}

@@ -15,13 +15,13 @@ interface PageTitleProps {
   className?: string;
 }
 
-export const PageTitle: FC<PageTitleProps> = ({ className, children }) => {
+export const PageTitle: FC<PageTitleProps> = ({ className, children, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(styles.pageTitle, modeClass[colorThemeMode], className);
 
   return (
-    <h1 className={compoundClassName} data-test-id="title">
+    <h1 className={compoundClassName} {...props}>
       {children}
     </h1>
   );

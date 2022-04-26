@@ -397,9 +397,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return (
-    <div data-test-id="swapPage">
+    <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="swapPageTitle">{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{
@@ -416,6 +416,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             className: styles.header
           }}
           contentClassName={styles.content}
+          data-test-id="swapPageTokenSelect"
         >
           <NewTokenSelect
             showBalanceButtons={!!accountPkh}
@@ -473,7 +474,12 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           </div>
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
           {accountPkh && dataIsStale && !isSubmitting && (
-            <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={styles.button}>
+            <Button
+              loading={dexPoolsLoading}
+              onClick={refreshDexPools}
+              className={styles.button}
+              data-test-id="updateRatesButton"
+            >
               {t('swap|Update Rates')}
             </Button>
           )}
@@ -500,7 +506,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           sellRate={sellRate}
         />
       </StickyBlock>
-    </div>
+    </>
   );
 };
 

@@ -139,6 +139,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
                 disabled={isSelectDisabled(values)}
                 className={s.modalButton}
                 theme="primary"
+                data-test-id="buttonSelect"
               >
                 Select
               </Button>
