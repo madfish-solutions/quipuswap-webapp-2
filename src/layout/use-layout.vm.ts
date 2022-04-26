@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { QUIPUSWAP } from '@config/config';
+import { QUIPUSWAP_URL } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
@@ -48,7 +48,7 @@ export const useLayoutViewModel = () => {
   }, [colorThemeMode]);
 
   const isDarkTheme = colorThemeMode === ColorModes.Dark;
-  const canonicalURL = QUIPUSWAP + useLocation().pathname;
+  const canonicalURL = QUIPUSWAP_URL + useLocation().pathname;
 
   return { isDarkTheme, canonicalURL, isComponentDidMount: true };
 };

@@ -1,4 +1,3 @@
-export * from './background';
 export * from './beacon';
 export * from './close-icon';
 export * from './logo-small-monochrome';

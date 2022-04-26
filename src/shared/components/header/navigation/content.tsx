@@ -15,6 +15,7 @@ import {
 import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
 
+import { isProd } from '../../../helpers/is-prod';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -24,11 +25,14 @@ interface LinkInterface {
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
   status?: ReactNode;
+  hide?: boolean;
 }
 
 export interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[];
 }
+
+export const isShow = (nav: NavigationDataProps) => !nav.hide;
 
 export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
@@ -54,7 +58,8 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Stableswap,
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />
+    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />,
+    hide: isProd()
   },
   {
     id: 'Farming',

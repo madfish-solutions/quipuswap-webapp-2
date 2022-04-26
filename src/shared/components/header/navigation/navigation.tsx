@@ -7,7 +7,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import { amplitudeService } from '../../../services';
 import { ButtonOrLink } from './components';
-import { NAVIGATION_DATA } from './content';
+import { isShow, NAVIGATION_DATA } from './content';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
 
@@ -32,7 +32,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    NAVIGATION_DATA.forEach(link => {
+    NAVIGATION_DATA.filter(isShow).forEach(link => {
       if (link.to) {
         result.push(
           <ButtonOrLink
@@ -61,7 +61,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
             />
             <span className={styles.linksInner}>
-              {link.links.map(subLink => (
+              {link.links.filter(isShow).map(subLink => (
                 <ButtonOrLink
                   key={subLink.id}
                   link={subLink}
