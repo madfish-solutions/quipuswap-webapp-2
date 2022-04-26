@@ -36,11 +36,15 @@ export const Menu: FC<MenuProps> = ({ className }) => {
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
-        <div className={styles.row}>
-          <QPToken />
-          <div className={styles.row}>
-            <NetworkSelect menuPlacement="top" className={styles.select} />
+        {IS_NETWORK_MAINNET && (
+          <div className={styles.mb16}>
+            <DonationButton />
           </div>
+        )}
+
+        <div className={cx(styles.row)}>
+          <QPToken />
+          <NetworkSelect menuPlacement="top" className={styles.select} />
           <div className={cx(styles.mb0, styles.row)}>
             <SettingsButton />
             <div className={styles.ml24}>
@@ -48,11 +52,6 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             </div>
           </div>
         </div>
-        {IS_NETWORK_MAINNET && (
-          <div className={styles.mb16}>
-            <DonationButton />
-          </div>
-        )}
 
         <div className={styles.row}>
           <Button
