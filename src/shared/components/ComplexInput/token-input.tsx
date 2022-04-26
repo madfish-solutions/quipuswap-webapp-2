@@ -180,7 +180,7 @@ export const TokenInput: FC<Props> = ({
               theme="quaternary"
               className={cx(styles.item4, styles.frozen)}
               textClassName={styles.item4Inner}
-              testId="tokenInputSelectButton"
+              data-test-id="tokenInputSelectButton"
             >
               {isBothTokensExist ? (
                 <TokensLogos

@@ -29,7 +29,7 @@ export const DonationButton: FC<DonationButtonProps> = ({ className }) => {
       className={cx(styles.button, modeClass[colorThemeMode], className)}
       onClick={openDonationModal}
       theme="secondary"
-      testId="donationButton"
+      data-test-id="donationButton"
     >
       <span>{t('common|Support')}</span>
       <img src={Ukraine} alt="Ukraine" className={styles.ukraineOutline} />

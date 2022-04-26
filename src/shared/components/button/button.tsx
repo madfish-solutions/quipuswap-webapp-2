@@ -6,7 +6,6 @@ import { Link, LinkProps } from 'react-router-dom';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isUndefined } from '@shared/helpers/type-checks';
 
-import { DataTestAttribute } from '../../../tests/types';
 import { ButtonContent } from './button-content';
 import styles from './button.module.scss';
 
@@ -21,9 +20,7 @@ export type ButtonProps = {
   textClassName?: string;
   icon?: ReactNode;
   control?: ReactNode;
-} & (HTMLProps<HTMLButtonElement> | ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>) &
-  // eslint-disable-next-line @typescript-eslint/no-type-alias
-  DataTestAttribute;
+} & (HTMLProps<HTMLButtonElement> | ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>);
 
 const themeClass = {
   primary: styles.primary,
@@ -52,7 +49,6 @@ export const Button: FC<ButtonProps> = ({
   icon,
   control,
   themeOposite,
-  testId,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -77,7 +73,7 @@ export const Button: FC<ButtonProps> = ({
 
     if (anchorProps.target === '_blank') {
       return (
-        <a data-test-id={testId} {...anchorProps}>
+        <a {...anchorProps}>
           {control}
           {content}
           {icon}
@@ -85,7 +81,7 @@ export const Button: FC<ButtonProps> = ({
       );
     } else {
       return (
-        <Link data-test-id={testId} to={anchorProps.href} {...anchorProps}>
+        <Link to={anchorProps.href} {...anchorProps}>
           {control}
           {content}
           {icon}
@@ -99,7 +95,6 @@ export const Button: FC<ButtonProps> = ({
       // @ts-ignore
       type={type}
       className={compoundClassName}
-      data-test-id={testId}
       {...(props as HTMLProps<HTMLButtonElement>)}
     >
       {control}

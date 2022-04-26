@@ -1,5 +1,3 @@
-import { Fragment } from 'react';
-
 import { StickyBlock, PageTitle, TestnetAlert } from '@shared/components';
 import { getTokensOptionalPairName } from '@shared/helpers';
 import s from '@styles/CommonContainer.module.scss';
@@ -19,19 +17,17 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   const title = `${t('common|Voting')} ${getTokensOptionalPairName(token1, token2)}`;
 
   return (
-    <Fragment>
-      <div data-test-id="votingPage">
-        <TestnetAlert />
+    <div data-test-id="votingPage">
+      <TestnetAlert />
 
-        <PageTitle>{title}</PageTitle>
+      <PageTitle>{title}</PageTitle>
 
-        <VotingStats className={s.votingStats} />
+      <VotingStats className={s.votingStats} />
 
-        <StickyBlock className={className}>
-          <WrappedVotingForm />
-          <VotingDetails />
-        </StickyBlock>
-      </div>
-    </Fragment>
+      <StickyBlock className={className}>
+        <WrappedVotingForm />
+        <VotingDetails />
+      </StickyBlock>
+    </div>
   );
 };

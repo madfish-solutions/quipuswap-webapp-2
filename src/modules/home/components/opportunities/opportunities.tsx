@@ -21,17 +21,17 @@ export const Opportunities: FC<OpportunitiesProps> = ({ className }) => {
       className={cx(s.root, className)}
       header={t('home|QuipuSwap opportunities')}
       description={`${t('home|Start to work with the biggest DEX on Tezos: swap, farm, stake.')}`}
-      testId="QSOpportunities"
+      data-test-id="QSOpportunitiesSection"
     >
       <div className={s.cards}>
-        {OpportunitiesCardsData.map(({ id, Icon, title, description, button, testId }, index) => (
+        {OpportunitiesCardsData.map(({ id, Icon, title, description, button }, index) => (
           <OpportunityCard
             key={id}
             Icon={Icon}
             title={title}
             description={description}
             button={button}
-            testId={`buttonTestId-${index}`}
+            data-test-id={`QSOpportunitiesButton-${index}`}
           />
         ))}
       </div>

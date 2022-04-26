@@ -44,7 +44,6 @@ export const Modal: FC<ModalProps> = ({
   title = '',
   header,
   footer,
-  testId,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -83,14 +82,19 @@ export const Modal: FC<ModalProps> = ({
             header={{
               content: <h5 data-test-id="cardTitle">{title}</h5>,
               button: (
-                <Button className={styles.closeButton} onClick={onRequestClose} theme="quaternary" testId="closeButton">
+                <Button
+                  className={styles.closeButton}
+                  onClick={onRequestClose}
+                  theme="quaternary"
+                  data-test-id="closeButton"
+                >
                   <PopupClose />
                 </Button>
               )
             }}
             additional={header}
             footer={footer}
-            testId={testId}
+            data-test-id="modalCard"
           >
             {children}
           </Card>

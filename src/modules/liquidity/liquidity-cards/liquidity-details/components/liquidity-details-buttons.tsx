@@ -41,7 +41,7 @@ export const LiquidityDetailsButtons: FC<Props> = ({ dex, pairLink, contractLink
           href={contractLink}
           external
           icon={<ExternalLink className={styles.LiquidityDetails_DetailsButtons_Button_Icon} />}
-          testId="pairContractButton"
+          data-test-id="pairContractButton"
         >
           {t('liquidity|Pair Contract')}
         </Button>

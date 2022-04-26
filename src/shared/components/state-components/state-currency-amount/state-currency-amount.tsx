@@ -1,4 +1,4 @@
-import { FC, ReactNode, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
@@ -24,8 +24,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   aliternativeView?: Nullable<string>;
 }
 
-interface CurrencyProps {
-  testId?: string;
+interface CurrencyProps extends HTMLProps<HTMLDivElement> {
   children?: ReactNode;
 }
 
@@ -40,8 +39,8 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC<CurrencyProps> = ({ testId, children }) => (
-  <span className={styles.currency} data-test-id={testId}>
+export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
+  <span className={styles.currency} {...props}>
     {children}
   </span>
 );
@@ -58,7 +57,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView
+  aliternativeView,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -83,7 +83,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const content = (
     <span className={wrapClassName}>
-      {isLeftVisible && <Currency>{currency}</Currency>}
+      {isLeftVisible && <Currency data-test-id="leftVisibleCurrency">{currency}</Currency>}
 
       <StateWrapper
         isLoading={wrapIsLoading}
@@ -96,7 +96,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency testId="currency">{currency}</Currency>}
+      {isRightVisible && <Currency data-test-id="rightVisibleCurrency">{currency}</Currency>}
     </span>
   );
 
@@ -105,7 +105,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
       {content}
       <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
     </div>

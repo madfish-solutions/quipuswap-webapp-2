@@ -49,7 +49,7 @@ export const VotingDetails: FC = () => {
         content: t('voting|Voting Details')
       }}
       contentClassName={s.content}
-      testId="votingDetails"
+      data-test-id="votingDetails"
     >
       <DetailsCardCell
         cellName={t('voting|Delegated To')}

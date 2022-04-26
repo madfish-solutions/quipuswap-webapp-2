@@ -46,7 +46,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
           href="https://www.madfish.solutions/"
           external
           theme="clean"
-          data-test-id="madFishLogo"
+          data-test-id="madFishLogoButton"
         >
           <Madfish />
         </Button>
@@ -55,7 +55,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
           href={QUIPUSWAP_OLD_VERSION_LINK}
           theme="secondary"
           className={styles.button}
-          testId="oldVersionButton"
+          data-test-id="oldVersionButton"
         >
           {t('common|Old version')}
         </Button>

@@ -50,7 +50,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             href={QUIPUSWAP_OLD_VERSION_LINK}
             theme="secondary"
             className={styles.button}
-            testId="oldVersionButton"
+            data-test-id="oldVersionButton"
           >
             {t('common|Old version')}
           </Button>
@@ -66,7 +66,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             external
             theme="clean"
             className={styles.madfish}
-            data-test-id="madFishLogo"
+            data-test-id="madFishLogoButton"
           >
             <Madfish />
           </Button>

@@ -83,7 +83,13 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
           />
           {'readText' in navigator.clipboard && (
             <div className={s.paste}>
-              <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn} testId="pasteButton">
+              <Button
+                disabled={readOnly}
+                onClick={handlePaste}
+                theme="inverse"
+                className={s.btn}
+                data-test-id="pasteButton"
+              >
                 {t('common|Paste')}
               </Button>
             </div>

@@ -41,6 +41,8 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
             )}
             data-test-id={`navigationButton-${id}`}
           >
+            {/* eslint-disable-next-line no-console */}
+            {console.log(label)}
             {Icon && <Icon className={styles.icon} id={iconId} />}
             {label}
             {status}

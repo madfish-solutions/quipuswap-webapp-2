@@ -59,7 +59,7 @@ export const DonationModal: FC = () => {
       contentClassName={compoundClassName}
       isOpen={donationModalOpen}
       onRequestClose={handleRequestClose}
-      testId="donationModal"
+      data-test-id="donationModal"
     >
       <div className={styles.column}>
         <img src={Ukraine} alt="Ukraine" className={styles.image} />
@@ -70,7 +70,7 @@ export const DonationModal: FC = () => {
           href="https://donate.tezos.org.ua/"
           theme="underlined"
           className={styles.learnMore}
-          testId="buttonLearnMore"
+          data-test-id="buttonLearnMore"
         >
           {t('common|Learn more')}
         </Button>
@@ -93,7 +93,7 @@ export const DonationModal: FC = () => {
         {isNull(accountPkh) ? (
           <ConnectWalletButton className={styles.button} />
         ) : (
-          <Button onClick={submitForm} className={styles.button} disabled={submitDisabled} testId="donateButton">
+          <Button onClick={submitForm} className={styles.button} disabled={submitDisabled} data-test-id="donateButton">
             Donate
           </Button>
         )}

@@ -10,7 +10,6 @@ import styles from './tooltip.module.sass';
 
 export interface TooltipProps extends TippyProps {
   content: ReactNode;
-  testId?: string;
   className?: string;
 }
 
@@ -19,7 +18,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Tooltip: FC<TooltipProps> = ({ content, className, testId, ...props }) => {
+export const Tooltip: FC<TooltipProps> = ({ content, className, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.root, modeClass[colorThemeMode]);
 

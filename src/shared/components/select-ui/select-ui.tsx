@@ -20,7 +20,7 @@ export const SelectUI: FC<SelectUIProps> = ({ value, isSearchable = false, class
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="networkSelectButton">
       <Select classNamePrefix="customSelect" isSearchable={isSearchable} value={value} {...props} />
     </div>
   );

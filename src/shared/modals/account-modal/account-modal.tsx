@@ -52,7 +52,7 @@ export const AccountModal: FC = () => {
       title="Account"
       isOpen={accountInfoModalOpen}
       onRequestClose={closeAccountInfoModal}
-      // testId="connectWalletModal"
+      data-test-id="connectWalletModal"
     >
       <div className={styles.row}>
         <div className={styles.addr} title={accountPkh}>

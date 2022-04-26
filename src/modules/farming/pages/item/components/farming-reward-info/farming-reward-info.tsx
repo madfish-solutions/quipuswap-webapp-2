@@ -8,7 +8,6 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getBakerName, getTokenSymbol } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
-import { FarmingItemPendingReward } from '@tests/farming';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
@@ -59,8 +58,6 @@ export const FarmingRewardInfo: FC = observer(() => {
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
       disabled={!isHarvestAvailable}
-      rewardButtonAttributeTestId={FarmingItemPendingReward.HARVEST_BUTTON}
-      pendingRewardAttributeTestId={FarmingItemPendingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
       <FarmingStatsItem

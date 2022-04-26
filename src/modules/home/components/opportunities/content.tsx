@@ -1,10 +1,9 @@
 import { FC, ReactNode } from 'react';
 
 import { Earn, Farm, Trade } from '@shared/svg';
-import { DataTestAttribute } from '@tests/types';
 import { Trans } from '@translation';
 
-interface OpportunitiesCardsDataType extends DataTestAttribute {
+interface OpportunitiesCardsDataType {
   id: number;
   Icon: FC<{ className?: string }>;
   title: ReactNode;

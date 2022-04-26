@@ -29,7 +29,7 @@ export const News: React.FC<NewsProps> = ({ className }) => {
     <Section
       header={t('home|Our latest news')}
       description={t('home|Never miss important updates. Check what has happened in the QuipuSwap ecosystem recently.')}
-      testId="news"
+      data-test-id="newsSection"
       className={cx(className)}
     >
       <HomeSlider className={styles.uncenter}>

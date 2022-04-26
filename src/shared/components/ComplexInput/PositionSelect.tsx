@@ -156,7 +156,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
-                testId="selectLPButton"
+                data-test-id="selectLPButton"
               >
                 <TokensLogos
                   firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}

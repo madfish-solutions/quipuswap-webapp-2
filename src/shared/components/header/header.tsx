@@ -57,7 +57,7 @@ export const Header: FC<HeaderProps> = ({ className }) => {
           theme="quaternary"
           className={styles.menuButton}
           onClick={() => setIsMenuOpened(!isMenuOpened)}
-          testId="menuButton"
+          data-test-id="menuButton"
         >
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}
         </Button>

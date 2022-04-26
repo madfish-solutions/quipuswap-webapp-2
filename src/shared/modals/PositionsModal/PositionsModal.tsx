@@ -156,7 +156,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
                 onRequestClose(e);
               }
             }}
-            testId="modalYourPositions"
+            data-test-id="modalYourPositions"
             {...props}
           >
             <Field name={PMFormField.FIRST_TOKEN} initialValue={notSelectable1}>

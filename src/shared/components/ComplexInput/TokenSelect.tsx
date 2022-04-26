@@ -161,7 +161,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                   theme="quaternary"
                   className={s.item4}
                   textClassName={s.item4Inner}
-                  testId="tokenSelectButton"
+                  data-test-id="tokenSelectButton"
                 >
                   <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
                   <h6 className={cx(s.token)}>{tokenLabel}</h6>

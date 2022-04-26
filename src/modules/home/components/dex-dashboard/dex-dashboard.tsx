@@ -46,9 +46,10 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
     <Section
       header={t('home|DEX Dashboard')}
       description={t('home|The short overview of the most relevant DEX information.')}
+      data-test-id="dexDashboardSection"
       className={cx(className)}
     >
-      <Card className={s.mobile} contentClassName={s.mobContent}>
+      <Card className={s.mobile} contentClassName={s.mobContent} data-test-id="DEXDashboardMobile">
         <Slider className={s.mobSlider}>
           <DexDashboardInner
             volume24={null}
@@ -60,7 +61,7 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
           />
         </Slider>
       </Card>
-      <Card className={s.desktop} contentClassName={desktopContentClassName} testId="DEXDashboardDesktop">
+      <Card className={s.desktop} contentClassName={desktopContentClassName} data-test-id="DEXDashboardDesktop">
         <DexDashboardInner
           volume24={'888888'}
           totalLiquidity={'888888'}

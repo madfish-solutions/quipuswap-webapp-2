@@ -9,7 +9,6 @@ import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
-import { DataTestAttribute } from 'tests/types';
 
 import { StateCurrencyAmount } from '../state-components';
 import styles from './pending-rewards.module.scss';
@@ -19,7 +18,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props extends DataTestAttribute {
+interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
   totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
@@ -29,7 +28,6 @@ interface Props extends DataTestAttribute {
 
 export const PendingRewards: FC<Props> = ({
   currency,
-  testId,
   dollarEquivalent,
   amountDecimals = USD_DECIMALS,
   claimablePendingRewards,

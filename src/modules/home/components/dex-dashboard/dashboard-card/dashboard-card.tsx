@@ -6,11 +6,10 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components/state-components';
 import { Tooltip } from '@shared/components/tooltip';
 import { Nullable } from '@shared/types/types';
-import { DataTestAttribute } from '@tests/types';
 
 import styles from './dashboard-card.module.scss';
 
-interface DashboardCardProps extends DataTestAttribute {
+interface DashboardCardProps {
   volume: Nullable<string>;
   size?: 'large' | 'extraLarge';
   label: ReactNode;
@@ -32,13 +31,13 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   currency,
   tooltip,
   className,
-  testId,
-  loading = false
+  loading = false,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, className, modeClass[colorThemeMode])} data-test-id={testId}>
+    <div className={cx(styles.root, className, modeClass[colorThemeMode])} {...props}>
       <h4 className={styles.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
@@ -49,6 +48,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
         isLeftCurrency={currency === '$'}
         labelSize={size}
         isLoading={loading}
+        data-test-id={props}
       />
     </div>
   );

@@ -1,15 +1,14 @@
-import { FC, ReactNode, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StatusLabel } from '@shared/components/status-label';
 import { ActiveStatus } from '@shared/types';
-import { DataTestAttribute } from '@tests/types';
 
 import styles from './card.module.scss';
 
-interface Props extends DataTestAttribute {
+interface Props extends HTMLProps<HTMLDivElement> {
   className?: string;
   header?: {
     content: ReactNode;
@@ -36,7 +35,7 @@ export const Card: FC<Props> = ({
   children,
   isV2 = false,
   contentClassName,
-  testId
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -45,7 +44,7 @@ export const Card: FC<Props> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id={testId}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
       {header && (
         <div className={cx(styles.header, header.className)}>
           <span data-test-id="headerContent">{header.content}</span>

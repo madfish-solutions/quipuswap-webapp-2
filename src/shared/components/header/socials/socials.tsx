@@ -13,7 +13,7 @@ interface SocialsProps {
 
 export const Socials: FC<SocialsProps> = ({ id, className }) => (
   <div className={cx(styles.root, className)}>
-    {SocialLinksData.map(({ id: socialId, href, label, Icon }, index) => (
+    {SocialLinksData.map(({ id: socialId, href, label, Icon }) => (
       <Button
         key={socialId}
         theme="quaternary"
@@ -21,7 +21,7 @@ export const Socials: FC<SocialsProps> = ({ id, className }) => (
         external
         title={label}
         className={styles.link}
-        testId={`socialButton-${index}`}
+        data-test-id={`socialButton-${label}`}
       >
         <Icon className={styles.icon} id={id} />
       </Button>

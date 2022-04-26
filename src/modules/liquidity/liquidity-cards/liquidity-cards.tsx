@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 
 import { Card, SettingsButton, Tabs } from '@shared/components';
 import { Nullable, Token } from '@shared/types';
@@ -46,7 +46,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
           className: styles.header
         }}
         contentClassName={styles.content}
-        testId="liquidityCard"
+        data-test-id="liquidityCard"
       >
         {isAddTabActive ? (
           <AddLiquidityForm
@@ -71,7 +71,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
           )
         }}
         contentClassName={styles.LiquidityDetails}
-        testId="liquidityPoolDetails"
+        data-test-id="liquidityPoolDetails"
       >
         <LiquidityDetails dex={dex} tokenA={tokenA} tokenB={tokenB} />
       </Card>

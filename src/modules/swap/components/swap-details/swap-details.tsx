@@ -56,7 +56,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         content: `Exchange Details`
       }}
       contentClassName={styles.content}
-      testId="exchangeDetails"
+      data-test-id="exchangeDetails"
     >
       <DetailsCardCell
         cellName={t('common|Sell Price')}
@@ -64,7 +64,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
           'common|The amount of token B you receive for 1 token A, according to the current exchange rate.'
         )}
         className={styles.cell}
-        testId="sellPrice"
+        data-test-id="sellPrice"
       >
         <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
       </DetailsCardCell>
@@ -75,7 +75,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
           'common|The amount of token A you receive for 1 token B according to the current exchange rate.'
         )}
         className={styles.cell}
-        testId="buyPrice"
+        data-test-id="buyPrice"
       >
         <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
       </DetailsCardCell>
@@ -84,7 +84,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         cellName={t('common|Price impact')}
         tooltipContent={t('swap|The impact your transaction is expected to make on the exchange rate.')}
         className={styles.cell}
-        testId="priceImpact"
+        data-test-id="priceImpact"
       >
         <StatePriceImpact priceImpact={priceImpact} />
       </DetailsCardCell>
@@ -93,7 +93,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         cellName={t('common|Fee')}
         tooltipContent={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
         className={styles.cell}
-        testId="fee"
+        data-test-id="fee"
       >
         <StateCurrencyAmount isError={Boolean(feeError)} amount={fee} currency="TEZ" />
       </DetailsCardCell>
@@ -104,7 +104,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
           "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades."
         )}
         className={cx(styles.cell, styles.routeLine)}
-        testId="route"
+        data-test-id="route"
       >
         {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug animation={false} />}
       </DetailsCardCell>

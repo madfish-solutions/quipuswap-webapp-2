@@ -431,7 +431,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleInputTokenChange}
             id="swap-send-from"
             placeholder="0.0"
-            testId="from"
+            data-test-id="from"
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
@@ -448,7 +448,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleOutputTokenChange}
             id="swap-send-to"
             placeholder="0.0"
-            testId="to"
+            data-test-id="to"
           />
           {action === 'send' && (
             <ComplexRecipient

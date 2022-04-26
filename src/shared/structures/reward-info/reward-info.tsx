@@ -25,8 +25,6 @@ interface Props {
   };
   rewardTooltip?: string;
   disabled?: boolean;
-  rewardButtonAttributeTestId: string;
-  pendingRewardAttributeTestId: string;
 }
 
 const ZERO_REWARDS = 0;
@@ -42,8 +40,6 @@ export const RewardInfo: FC<Props> = ({
   disabled,
   claimablePendingRewards,
   totalPendingRewards,
-  rewardButtonAttributeTestId,
-  pendingRewardAttributeTestId,
   children
 }) => {
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
@@ -55,7 +51,6 @@ export const RewardInfo: FC<Props> = ({
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
-          testId={pendingRewardAttributeTestId}
           amountDecimals={amountDecimals}
           currency={currency}
         />
@@ -63,7 +58,7 @@ export const RewardInfo: FC<Props> = ({
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>
             <Button
-              testId={rewardButtonAttributeTestId}
+              data-test-id="rewardInfoHarvestAllButton"
               className={styles.button}
               onClick={onButtonClick}
               disabled={isButtonDisabled}

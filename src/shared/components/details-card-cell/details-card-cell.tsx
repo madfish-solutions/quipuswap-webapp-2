@@ -2,12 +2,11 @@ import { FC } from 'react';
 
 import { isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-import { DataTestAttribute } from '@tests/types';
 
 import { CardCell } from '../card-cell';
 import { Tooltip } from '../tooltip';
 
-interface DetailsCardCellProps extends DataTestAttribute {
+interface DetailsCardCellProps {
   cellName: string;
   tooltipContent?: Nullable<string>;
   className: string;
@@ -18,7 +17,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({
   cellName,
   tooltipContent,
   className,
-  testId
+  ...props
 }) => {
   return (
     <CardCell
@@ -29,7 +28,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({
         </>
       }
       className={className}
-      testId={testId}
+      data-test-id={props}
     >
       {children}
     </CardCell>

@@ -5,27 +5,26 @@ import { BigNumber } from 'bignumber.js';
 import { DEFAULT_DEADLINE_MINS } from '@config/constants';
 import { Nullable } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
-import { DataTestAttribute } from '@tests/types';
 import { useTranslation } from '@translation';
 
 import { DeadlineInput } from '../deadline-input';
 import { Scaffolding } from '../scaffolding';
 import { Tooltip } from '../tooltip';
 
-interface Props extends DataTestAttribute {
+interface Props {
   error?: string;
   value?: BigNumber;
   onChange: (newValue: BigNumber) => void;
 }
 
-export const TransactionDeadline: FC<Props> = ({ error, onChange, value, testId }) => {
+export const TransactionDeadline: FC<Props> = ({ error, onChange, value, ...props }) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
     onChange(new BigNumber(newValue ? newValue : DEFAULT_DEADLINE_MINS));
 
   return (
-    <div data-test-id={testId}>
+    <div {...props}>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{t('common|Transaction deadline')}</span>
         <Tooltip
