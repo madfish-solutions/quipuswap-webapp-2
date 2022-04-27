@@ -184,24 +184,23 @@ export class FarmingListStore {
    */
   private getUniqTokensRewardSync(token: Token, timestamp: number) {
     const isBalanceLoaded = this.listStore.data.some(({ earnBalance }) => isExist(earnBalance));
-
     if (!isBalanceLoaded || !this.userInfo.data) {
       return DEFAULT_REWARDS;
-    } else {
-      const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
-      const stakedRewards = this.extractUserPendingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
-      const stakedRewardsWithoutFee = BigNumber.sum(...stakedRewards.map(({ withoutFee }) => withoutFee));
-
-      const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithUniqTokenRewards);
-      const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
-      const claimableRewardsWithoutFee = BigNumber.sum(...claimableRewards.map(({ withoutFee }) => withoutFee));
-      const claimableRewardsWithFee = BigNumber.sum(...claimableRewards.map(({ withFee }) => withFee)).decimalPlaces(
-        ZERO_AMOUNT,
-        BigNumber.ROUND_DOWN
-      );
-
-      return { stakedRewardsWithoutFee, claimableRewardsWithFee, claimableRewardsWithoutFee };
     }
+
+    const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
+    const stakedRewards = this.extractUserPendingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
+    const stakedRewardsWithoutFee = BigNumber.sum(...stakedRewards.map(({ withoutFee }) => withoutFee));
+
+    const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithUniqTokenRewards);
+    const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
+    const claimableRewardsWithoutFee = BigNumber.sum(...claimableRewards.map(({ withoutFee }) => withoutFee));
+    const claimableRewardsWithFee = BigNumber.sum(...claimableRewards.map(({ withFee }) => withFee)).decimalPlaces(
+      ZERO_AMOUNT,
+      BigNumber.ROUND_DOWN
+    );
+
+    return { stakedRewardsWithoutFee, claimableRewardsWithFee, claimableRewardsWithoutFee };
   }
 
   private extractFarmsWithUniqToken(token: Token) {
