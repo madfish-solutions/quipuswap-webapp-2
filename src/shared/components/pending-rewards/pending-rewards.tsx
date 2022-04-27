@@ -25,6 +25,7 @@ interface Props extends DataTestAttribute {
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
+  className?: string;
 }
 
 export const PendingRewards: FC<Props> = ({
@@ -33,14 +34,15 @@ export const PendingRewards: FC<Props> = ({
   dollarEquivalent,
   amountDecimals = USD_DECIMALS,
   claimablePendingRewards,
-  totalPendingRewards
+  totalPendingRewards,
+  className
 }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.reward, modeClass[colorThemeMode])}>
+    <div className={cx(styles.reward, modeClass[colorThemeMode], className)}>
       <div className={styles.container}>
         {accountPkh ? (
           <>
