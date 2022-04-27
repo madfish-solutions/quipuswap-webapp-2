@@ -105,7 +105,7 @@ export const RewardInfo: FC<Props> = ({
             <Button
               className={cx(styles.order3, styles.viewDetailsButton)}
               theme="inverse"
-              icon={<ArrowSign rotate={isDetailsOpen} />}
+              icon={<ArrowSign rotation={isDetailsOpen} />}
               onClick={toggle}
             >
               {detailsButtonTransaction}

@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
 
-import { Column } from 'react-table';
+import { Column, HeaderGroup, MetaBase, Cell } from 'react-table';
 
 import { TokenInfo } from '@shared/elements';
 import { i18n } from '@translation';
 
 import { useFarmingListStore } from '../../../../hooks';
 import { TokenRewardCell } from '../token-reward-cell';
+import styles from './reward-tokens-list.module.scss';
 
-export enum Columns {
+enum Columns {
   TOKEN = 'TOKEN',
   STAKED = 'STAKED',
   CLAIMABLE = 'CLAIMABLE'
@@ -35,12 +36,26 @@ const rewardTokensColumns: Column<Row>[] = [
   }
 ];
 
+const getColumnProps = (id: string) => {
+  if (id === Columns.TOKEN) {
+    return { className: styles.token };
+  } else {
+    return { className: styles.amount };
+  }
+};
+
+const getCustomTableProps = () => ({ className: styles.table });
+
+const getCustomHeaderProps = (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) =>
+  getColumnProps(meta.column.id);
+
+const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
+  getColumnProps(meta.cell.column.id);
+
 export const useRewardTokensListViewModel = () => {
   const { tokensRewardList } = useFarmingListStore();
 
-  const data: Array<Row> = tokensRewardList.map(tokenReward => {
-    const { token, staked, claimable } = tokenReward;
-
+  const data: Array<Row> = tokensRewardList.map(({ token, staked, claimable }) => {
     return {
       [Columns.TOKEN]: <TokenInfo token={token} />,
       [Columns.STAKED]: <TokenRewardCell {...staked} />,
@@ -48,5 +63,11 @@ export const useRewardTokensListViewModel = () => {
     };
   });
 
-  return { data, columns: rewardTokensColumns };
+  return {
+    data,
+    columns: rewardTokensColumns,
+    getCustomTableProps,
+    getCustomHeaderProps,
+    getCustomCellProps
+  };
 };

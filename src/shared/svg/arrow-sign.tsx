@@ -4,16 +4,16 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { IconProps } from '@shared/types';
 
 interface Props extends IconProps {
-  rotate?: boolean;
+  rotation?: boolean;
 }
 
-export const ArrowSign: FC<Props> = ({ className, rotate }) => {
+export const ArrowSign: FC<Props> = ({ className, rotation }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <svg
       className={className}
-      transform={rotate ? 'rotate(180 0 0)' : undefined}
+      transform={rotation ? 'rotate(180 0 0)' : undefined}
       width="12"
       height="8"
       viewBox="0 0 12 8"

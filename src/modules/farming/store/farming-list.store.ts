@@ -151,30 +151,32 @@ export class FarmingListStore {
       ({ rewardToken, earnExchangeRate }) => ({ rewardToken, earnExchangeRate })
     );
 
-    return uniqTokens.map(({ rewardToken, earnExchangeRate }) => {
-      const { claimableRewardsWithoutFee, stakedRewardsWithoutFee } = this.getUniqTokensRewardSync(
-        rewardToken,
-        Date.now()
-      );
+    return uniqTokens.map(this.tokensRewardMapper.bind(this));
+  }
 
-      const claimableAmount = fromDecimals(claimableRewardsWithoutFee, rewardToken);
-      const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
+  private tokensRewardMapper({ rewardToken, earnExchangeRate }: Pick<FarmingItem, 'rewardToken' | 'earnExchangeRate'>) {
+    const { claimableRewardsWithoutFee, stakedRewardsWithoutFee } = this.getUniqTokensRewardSync(
+      rewardToken,
+      Date.now()
+    );
 
-      const skatedAmount = fromDecimals(stakedRewardsWithoutFee, rewardToken);
-      const skatedDollarEquivalent = multipliedIfPossible(skatedAmount, earnExchangeRate);
+    const claimableAmount = fromDecimals(claimableRewardsWithoutFee, rewardToken);
+    const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
 
-      return {
-        token: rewardToken,
-        staked: {
-          amount: skatedAmount,
-          dollarEquivalent: skatedDollarEquivalent
-        },
-        claimable: {
-          amount: claimableAmount,
-          dollarEquivalent: claimableDollarEquivalent
-        }
-      };
-    });
+    const skatedAmount = fromDecimals(stakedRewardsWithoutFee, rewardToken);
+    const skatedDollarEquivalent = multipliedIfPossible(skatedAmount, earnExchangeRate);
+
+    return {
+      token: rewardToken,
+      staked: {
+        amount: skatedAmount,
+        dollarEquivalent: skatedDollarEquivalent
+      },
+      claimable: {
+        amount: claimableAmount,
+        dollarEquivalent: claimableDollarEquivalent
+      }
+    };
   }
 
   /**
