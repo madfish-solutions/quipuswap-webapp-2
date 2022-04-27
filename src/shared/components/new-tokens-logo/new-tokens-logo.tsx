@@ -55,7 +55,7 @@ export const NewTokensLogos: FC<NewTokensLogosProps> = props => {
 
   return (
     <div className={compoundClassName}>
-      <Iterator isGrouped wrapperClassName={styles.logos} render={TokenLogo} data={preparedTokens} />
+      <Iterator render={TokenLogo} data={preparedTokens} />
     </div>
   );
 };
