@@ -1,7 +1,6 @@
 {
   "Copy": "Copy",
   "Paste": "Paste",
-  "Old version": "Old version",
   "Home": "Home",
   "Swap": "Swap",
   "Liquidity": "Liquidity",
@@ -44,7 +43,6 @@
   "Route": "Route",
   "Votes To Veto Left": "Votes To Veto Left",
   "Page Not Found": "Page Not Found",
-  "Page not found description. Couple sentences...": "Page not found description. Couple sentences...",
   "Success": "Success",
   "Loading": "Loading",
   "You entered not a valid address": "You entered not a valid address",

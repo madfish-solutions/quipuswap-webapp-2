@@ -3,10 +3,8 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/enviroment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DonationButton } from '@shared/components';
-import { useTranslation } from '@translation';
 
 import { amplitudeService } from '../../../services';
 import { Madfish } from '../../../svg';
@@ -28,12 +26,7 @@ const modeClass = {
 };
 
 export const Sidebar: FC<SidebarProps> = ({ className }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const handleOldVersionClick = () => {
-    amplitudeService.logEvent('OLD_VERSION_CLICK');
-  };
 
   const handleMadfishClick = () => {
     amplitudeService.logEvent('MADFISH_CLICK');
@@ -44,7 +37,6 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       <div className={styles.wallet}>
         {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
         <ConnectWalletButton className={styles.button} />
-        <NetworkSelect className={cx(styles.button, styles.select)} />
       </div>
       <Navigation className={styles.navigation} iconId="desktop" />
       <footer className={styles.footer}>
@@ -59,15 +51,10 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
         >
           <Madfish />
         </Button>
-        <Button
-          external
-          href={QUIPUSWAP_OLD_VERSION_LINK}
-          theme="secondary"
-          className={styles.button}
-          onClick={handleOldVersionClick}
-        >
-          {t('common|Old version')}
-        </Button>
+
+        <div className={styles.networkSelect}>
+          <NetworkSelect className={cx(styles.button, styles.select)} menuPlacement="top" />
+        </div>
       </footer>
     </div>
   );

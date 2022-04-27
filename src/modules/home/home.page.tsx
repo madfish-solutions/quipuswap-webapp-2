@@ -2,9 +2,9 @@ import { FC } from 'react';
 
 import { TestnetAlert } from '@shared/components/testnet-alert';
 
-import { News, DexDashboard, Opportunities } from './components';
+import { DexDashboard, News, Opportunities } from './components';
 
-export const Home: FC = () => {
+export const HomePage: FC = () => {
   return (
     <>
       <TestnetAlert />
