@@ -18,13 +18,9 @@ import { Section } from '../section';
 import { DexDashboardInner } from './dex-dashboard-inner';
 import s from './dex-dashboard.module.scss';
 
-interface DexDashboardProps {
-  className?: string;
-}
-
 const ZERO = 0;
 
-export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
+export const DexDashboard: FC = () => {
   const { t } = useTranslation(['home']);
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
 
@@ -46,7 +42,6 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
     <Section
       header={t('home|DEX Dashboard')}
       description={t('home|The short overview of the most relevant DEX information.')}
-      className={cx(className)}
     >
       <Card className={s.mobile} contentClassName={s.mobContent}>
         <Slider className={s.mobSlider}>
