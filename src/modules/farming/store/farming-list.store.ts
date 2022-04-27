@@ -42,7 +42,7 @@ interface TokensReward {
 }
 
 const DEFAULT_REWARDS = {
-  stakedRewards: new BigNumber(ZERO_AMOUNT),
+  stakedRewardsWithoutFee: new BigNumber(ZERO_AMOUNT),
   claimableRewardsWithFee: new BigNumber(ZERO_AMOUNT),
   claimableRewardsWithoutFee: new BigNumber(ZERO_AMOUNT)
 };
@@ -80,6 +80,7 @@ export class FarmingListStore {
     makeObservable(this, {
       claimablePendingRewards: observable,
       totalPendingRewards: observable,
+      tokensRewardList: observable,
       list: computed,
 
       updatePendingRewards: action
@@ -102,7 +103,7 @@ export class FarmingListStore {
   }
 
   async getQuipuPendingRewards() {
-    return (await this.getUniqTokensReward(DEFAULT_TOKEN)).claimableRewardsWithFee;
+    return (await this.getUniqTokensRewardForLastBlock(DEFAULT_TOKEN)).claimableRewardsWithFee;
   }
 
   makePendingRewardsLiveable() {
@@ -152,20 +153,21 @@ export class FarmingListStore {
     );
 
     return uniqTokens.map(({ rewardToken, earnExchangeRate }) => {
-      const { claimableRewardsWithoutFee, stakedRewards } = this.getUniqTokensRewardSync(rewardToken, Date.now());
+      const { claimableRewardsWithoutFee, stakedRewardsWithoutFee } = this.getUniqTokensRewardSync(
+        rewardToken,
+        Date.now()
+      );
 
       const claimableAmount = fromDecimals(claimableRewardsWithoutFee, rewardToken);
       const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
 
-      const skatedDollarEquivalent = multipliedIfPossible(stakedRewards, earnExchangeRate);
-
-      console.log({ claimableAmount: claimableAmount.toFixed() });
-      console.log({ stakedRewards: stakedRewards.toFixed() });
+      const skatedAmount = fromDecimals(stakedRewardsWithoutFee, rewardToken);
+      const skatedDollarEquivalent = multipliedIfPossible(skatedAmount, earnExchangeRate);
 
       return {
         token: rewardToken,
         staked: {
-          amount: stakedRewards,
+          amount: skatedAmount,
           dollarEquivalent: skatedDollarEquivalent
         },
         claimable: {
@@ -185,54 +187,55 @@ export class FarmingListStore {
     });
   }
 
+  /**
+   * All results retuns in atoms
+   */
   private getUniqTokensRewardSync(token: Token, timestamp: number) {
     const isBalanceLoaded = this.listStore.data.some(({ earnBalance }) => isExist(earnBalance));
 
     if (!isBalanceLoaded || !this.userInfo.data) {
       return DEFAULT_REWARDS;
     } else {
-      const stakedFarmingsWithUniqTokenRewards = this.listStore.data.filter(
-        ({ earnBalance, rewardToken }) =>
-          earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token)
-      );
+      const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
 
-      const stakedRewards = stakedFarmingsWithUniqTokenRewards.reduce(
-        (accumulator, currentFarm) => accumulator.plus(currentFarm.earnBalance ?? ZERO_AMOUNT),
-        new BigNumber(ZERO_AMOUNT)
-      );
+      const realtimeUniqTokenRewards = this.extractUserPandingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
+
+      const stakedRewardsWithoutFee = reduceEarnBalance(realtimeUniqTokenRewards.map(({ withoutFee }) => withoutFee));
 
       const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithUniqTokenRewards);
 
-      const claimableRewards = claimableFarmings.map(farm => {
-        const userInfo = this.findUserInfo(farm);
+      const claimableRewards = this.extractUserPandingReward(claimableFarmings, timestamp);
 
-        if (!userInfo) {
-          return { withFee: new BigNumber(ZERO_AMOUNT), withoutFee: new BigNumber(ZERO_AMOUNT) };
-        }
+      const claimableRewardsWithoutFee = reduceEarnBalance(claimableRewards.map(({ withoutFee }) => withoutFee));
 
-        return getUserPendingRewardWithFee(userInfo, farm, timestamp);
-      });
+      const claimableRewardsWithFee = reduceEarnBalance(claimableRewards.map(({ withFee }) => withFee)).decimalPlaces(
+        ZERO_AMOUNT,
+        BigNumber.ROUND_DOWN
+      );
 
-      const claimableRewardsWithoutFee = claimableRewards
-        .map(({ withoutFee }) => withoutFee)
-        .reduce<BigNumber>(
-          (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
-          new BigNumber(ZERO_AMOUNT)
-        );
-
-      const claimableRewardsWithFee = claimableRewards
-        .map(({ withFee }) => withFee)
-        .reduce<BigNumber>(
-          (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
-          new BigNumber(ZERO_AMOUNT)
-        )
-        .decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
-
-      return { stakedRewards, claimableRewardsWithFee, claimableRewardsWithoutFee };
+      return { stakedRewardsWithoutFee, claimableRewardsWithFee, claimableRewardsWithoutFee };
     }
   }
 
-  private async getUniqTokensReward(token: Token) {
+  private extractFarmsWithUniqToken(token: Token) {
+    return this.listStore.data.filter(
+      ({ earnBalance, rewardToken }) => earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token)
+    );
+  }
+
+  private extractUserPandingReward(farmings: FarmingItem[], timestamp: number) {
+    return farmings.map(farm => {
+      const userInfo = this.findUserInfo(farm);
+
+      if (!userInfo) {
+        return { withFee: new BigNumber(ZERO_AMOUNT), withoutFee: new BigNumber(ZERO_AMOUNT) };
+      }
+
+      return getUserPendingRewardWithFee(userInfo, farm, timestamp);
+    });
+  }
+
+  private async getUniqTokensRewardForLastBlock(token: Token) {
     const { tezos } = this.rootStore;
     if (!tezos) {
       return DEFAULT_REWARDS;
@@ -243,4 +246,11 @@ export class FarmingListStore {
 
     return this.getUniqTokensRewardSync(token, blockTimestampMS);
   }
+}
+
+function reduceEarnBalance(earnBalances: Array<BigNumber>) {
+  return earnBalances.reduce(
+    (prevValue: BigNumber, currentValue: BigNumber) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
+    new BigNumber(ZERO_AMOUNT)
+  );
 }
