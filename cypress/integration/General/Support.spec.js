@@ -14,9 +14,9 @@ describe('Support section', () => {
 // Support popup should opened
     cy.get('h5')
         .should('contain','Donate')
-    cy.get('[data-test-id="donationModal"] [data-test-id="connectButton"]')
+    cy.get('[data-test-id="modalCard"] [data-test-id="connectButton"], [data-test-id="modalCard"] [data-test-id="donateButton"]')
         .should('exist')
-    cy.get('[data-test-id="donationModal"] [data-test-id="closeButton"]')
+    cy.get('[data-test-id="modalCard"] [data-test-id="closeButton"]')
         .click()
 })
     it('Should_OpenPopup_When_ClickingOnConnectWallet',() => {
@@ -25,11 +25,11 @@ describe('Support section', () => {
         .click()
     cy.get('h5')
         .should('contain','Connect wallet')
-    cy.get('[data-test-id="closeButton"]')
+    cy.get('[data-test-id="modalCard"] [data-test-id="closeButton"]')
         .click()
     })
 
-    //there is no selector for net swithcing
+    //there is no selector for net swithcing. Add this section after
     
     // it('Should_HaveNetSwitcher_When_LoadingPage',() => {
     // cy.get(':nth-child(2) > .select-ui_root__2OTsf > .css-b62m3t-container > .customSelect__control > .customSelect__value-container > .customSelect__single-value')

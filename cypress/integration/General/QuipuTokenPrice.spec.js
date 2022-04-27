@@ -8,7 +8,7 @@ describe('QUIPU price', () => {
         
 // Find Quipu Price  
         cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click()
-        cy.get('[data-test-id="sidebar"] [data-test-id="quipuPrice"]')
+        cy.get('[data-test-id="menu"] [data-test-id="quipuTokenPrice"]')
         .should('not.contain', '?')
     })
 })

@@ -5,27 +5,27 @@ describe('Form exists', () => {
     it('Should_DisplayVotingDetails_When_OpenedVotingPage',() => {
 // Go to the Voting page from home page
         cy.visit('/')
-        cy.get('.Header_menuButton__1G_3l').click()
-        cy.get('.Menu_root__10FHU > .Navigation_root__2r3up > [href="/voting/vote"]').click()
+        cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click()
+        cy.get('[data-test-id="menu"] [data-test-id="navigationButton-3"]').click()
        
 // Check if Title 'Voting Details' ok
-        cy.get(':nth-child(2) > .Card-module_header__2yfdc')
+        cy.get('[data-test-id="votingDetails"] [data-test-id="headerContent"]')
             .should('contain', 'Voting Details')
-        cy.get(':nth-child(1) > .CardCell-module_header__3h12j')
+        cy.get('[data-test-id="votingDetails"] [data-test-id="delegatedTo"] [data-test-id="cellName"]')
             .should('contain','Delegated To')
 })
     it('Should_DisplayPageTitle_When_PageIsLoaded',() =>{
-        cy.get('.page-title_pageTitle__2SlXy')
+        cy.get('[data-test-id="votingPageTitle"]')
             .should('contain','Voting TEZ / QUIPU')
     })
-    it('Should_DisplayRewardsSection_When_PageIsLoaded',() =>{
-        cy.get('.voting-reward-item_rewardContent__EYIKW > :nth-child(1)')
-            .should('contain','Your Claimable Rewards')
-        cy.get(':nth-child(1) > .voting-stats-item_header__3YcOI')
-            .should('contain','Your LP')
-        cy.get(':nth-child(2) > .voting-stats-item_header__3YcOI')
-            .should('contain','Your votes')
-        cy.get(':nth-child(3) > .voting-stats-item_header__3YcOI')
-            .should('contain','Your vetos')
-    })
+    // it('Should_DisplayRewardsSection_When_PageIsLoaded',() =>{
+    //     cy.get(' [data-test-id="votingStats"] [data-test-id="description"]')
+    //         .should('contain','Your Claimable Rewards')
+    //     cy.get('[data-test-id="votingStats"] [data-test-id="yourLP"] [data-test-id="contentValue"]')
+    //         .should('contain','_')
+    //     cy.get('[data-test-id="votingStats"] [data-test-id="yourVotes"] [data-test-id="contentValue"]')
+    //         .should('contain','_')
+    //     cy.get('[data-test-id="votingStats"] [data-test-id="yourVetos"] [data-test-id="contentValue"]')
+    //         .should('contain','_')
+    // })
 })

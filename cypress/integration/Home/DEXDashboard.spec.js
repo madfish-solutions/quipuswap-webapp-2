@@ -2,17 +2,15 @@
 
 describe('DEX Dashboard section', () => {
 
-    it.only('Should_DisplayTooltips_When_HowerMouseOverTheTooltipIcons',() => {
+    it('Should_DisplayTooltips_When_HowerMouseOverTheTooltipIcons',() => {
     cy.visit('/')
 // tooltip is ok
 
     cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="totalSupply"] [data-test-id="tooltip"]')
         .trigger('focus')
+    cy.get('[aria-describedby="tippy-3"]')
         .should('be.visible')
     
-    it('')
-
-    cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="totalSupply"] [data-test-id="tooltip"]')
     // cy.get('.Card-module_content__3gIG2 > :nth-child(1) > .DashboardCard_header__1QjFP > .tooltip_wrapper__2x_KN > .tooltip_info__3hAfB').trigger('focus')
     // cy.get('[aria-describedby="tippy-5"]')
     //     .should('be.visible')
@@ -31,17 +29,16 @@ describe('DEX Dashboard section', () => {
 })
 
     it('Should_DisplayStatisticInfo_When_PageIsLoaded',() => {
-    cy.get('.Card-module_content__3gIG2 > :nth-child(4) > .state-currency-amount_amount__3uxL1 > .state-currency-amount_inner__Cvyph')
-        .should('exist')
+    // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="TVL"] [data-test-id="amount"]')
+    //     .should('exist')
         
-    cy.get('.Card-module_content__3gIG2 > :nth-child(3) > .state-currency-amount_amount__3uxL1 > .state-currency-amount_inner__Cvyph')
-        .should('exist')
+    // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="dailyVolume"] [data-test-id="amount"]')
+    //     .should('exist')
 
-    cy.get('.Card-module_content__3gIG2 > :nth-child(2) > .state-currency-amount_amount__3uxL1 > .state-currency-amount_inner__Cvyph')
-        .should('exist')
+    // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="dailyTransaction"] [data-test-id="amount"]')
+    //     .should('exist')
     
-    cy.get('.Card-module_content__3gIG2 > :nth-child(1) > .state-currency-amount_amount__3uxL1 > .state-currency-amount_inner__Cvyph')
+    cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="totalSupply"] [data-test-id="amount"]')
         .should('exist')
-    
 })
 })
