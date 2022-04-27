@@ -1,10 +1,13 @@
-## Security Checklist
+## Checklist
 
-- [ ] Authorization has been implemented across these changes
-- [ ] Injection has been prevented (parameterized queries, no eval or system calls)
-- [ ] Any web UI is escaping output (to prevent XSS)
-- [ ] Sensitive data has been identified and is being protected properly
+- [ ] Pull Request: Assign yourself, Assign reviewers, Check tags
+- [ ] Requirements: Check all details in a task
+- [ ] Self-Testing in a staging
+- [ ] Self-Code-Review
+- [ ] Tests: Check all tests, Fix failed, Add new
+- [ ] Move a task to correct status
+- [ ] Delete a brunch after merging
 
-## Additional Deploy Steps
+## Release
 
-This section lists any additional steps to deploy the PR
+[Release checklist](./docs/release_checklist.md)
