@@ -1,0 +1,20 @@
+@import "@styles/variables";
+
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.externalLinkIcon {
+  width: 16px;
+  height: 16px;
+  & * {
+    fill: $text-02;
+  }
+}
