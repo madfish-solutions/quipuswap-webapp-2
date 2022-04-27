@@ -87,7 +87,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
-    <Card className={cx(styles.card, themeClass[colorThemeMode])} data-test-id="listItem">
+    <Card className={cx(styles.card, themeClass[colorThemeMode])} data-test-id={`farming-item-${id}`}>
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>

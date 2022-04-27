@@ -21,7 +21,9 @@ export const ListItemCardCell: FC<Props> = ({
     <CardCell
       header={
         <>
-          <span className={cellNameClassName}>{cellName}</span>
+          <span className={cellNameClassName} data-test-id="cellName">
+            {cellName}
+          </span>
           <Tooltip content={tooltip} />
         </>
       }
