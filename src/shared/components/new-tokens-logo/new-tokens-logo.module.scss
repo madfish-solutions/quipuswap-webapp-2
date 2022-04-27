@@ -1,0 +1,30 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+$left-offset: -16px;
+$logos-quantity: 4;
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin create-index-offset($quantity) {
+  @for $index from 1 through $quantity {
+    & img:nth-child(#{$index}) {
+      margin-left: $left-offset;
+      @include flexCenter
+    }
+  }
+}
+
+.root {
+  display: flex;
+}
+
+.logos {
+  @include flexCenter;
+  @include create-index-offset($logos-quantity);
+}
+

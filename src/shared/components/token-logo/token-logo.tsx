@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 
+import { isNull } from '@shared/helpers';
 import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
 import s from './token-logo.module.scss';
 
 interface PropsAbstraction {
-  src: string;
+  src: Nullable<string>;
   tokenSymbol?: Nullable<string>;
 }
 
@@ -31,7 +32,7 @@ export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size 
 
   const layoutBasedProps = layout === 'fill' ? { layout: 'fill' } : { layout: 'fixed', width: size, height: size };
 
-  return loadError ? (
+  return loadError || isNull(src) ? (
     <FallbackLogo className={s.image} />
   ) : (
     <img
