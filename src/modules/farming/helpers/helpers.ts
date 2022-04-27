@@ -75,8 +75,12 @@ export const getUserPendingRewardWithFee = (
   timestamp: number = Date.now()
 ) => {
   const fixedHarvestFee = PERCENTAGE_BN.minus(item.harvestFee).dividedBy(PERCENTAGE_BN);
+  const pendingRewards = getUserPendingReward(userInfo, item, timestamp);
 
-  return getUserPendingReward(userInfo, item, timestamp).multipliedBy(fixedHarvestFee);
+  return {
+    withoutFee: pendingRewards,
+    withFee: pendingRewards.multipliedBy(fixedHarvestFee)
+  };
 };
 
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {

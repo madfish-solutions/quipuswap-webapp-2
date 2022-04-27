@@ -15,6 +15,7 @@ import styles from './state-currency-amount.module.scss';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;
+  amountClassName?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
@@ -23,6 +24,8 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, Da
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
+  approximately?: boolean;
+  noSpace?: boolean;
 }
 
 const sizeClass = {
@@ -36,10 +39,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const EPPROXIMATILY_SIGN = '~';
+
 export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
+  amountClassName,
   labelSize = 'small',
   amount,
   currency,
@@ -51,6 +57,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   errorFallback,
   amountDecimals,
   aliternativeView,
+  approximately,
+  noSpace,
   testId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -60,8 +68,10 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
     { [styles.isLeftCurrency]: isLeftCurrency },
     sizeClass[labelSize],
     modeClass[colorThemeMode],
+    { [styles.noSpace]: noSpace },
     className
   );
+  const wrapAmountClassName = cx(styles.inner, amountClassName);
 
   const wrapIsLoading = isLoading ?? (!isExist(amount) || amount === '');
   const wrapLoaderFallback = loaderFallback ?? <DashPlug />;
@@ -76,6 +86,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const content = (
     <span className={wrapClassName}>
+      {approximately && EPPROXIMATILY_SIGN}
+
       {isLeftVisible && <Currency>{currency}</Currency>}
 
       <StateWrapper
@@ -84,7 +96,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={testId} className={styles.inner} title={title}>
+        <span data-test-id={testId} className={wrapAmountClassName} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>

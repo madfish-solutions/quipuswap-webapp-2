@@ -82,5 +82,8 @@
   "Nope": "Nope",
   "iAmIn": "Yes, I am in!",
   "Harvest successful": "Harvest successful",
-  "Stake successful": "Stake successful"
+  "Stake successful": "Stake successful",
+  "Token": "Token",
+  "Full": "Full",
+  "Claimable": "Claimable"
 }

@@ -12,7 +12,8 @@
       "@images/*": ["./images/*"],
       "@tests/*": ["./tests/*"],
       "@translation": ["./translation"],
-      "@app.router": ["./app.router"]
+      "@app.router": ["./app.router"],
+      "@layout": ["./layout"]
     }
   }
 }

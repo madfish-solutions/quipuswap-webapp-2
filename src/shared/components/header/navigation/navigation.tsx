@@ -1,4 +1,4 @@
-import { FC, ReactNode, useContext, useMemo, useState } from 'react';
+import { FC, MouseEvent, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import cx from 'classnames';
 import { useLocation } from 'react-router-dom';
@@ -30,6 +30,14 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     amplitudeService.logEvent('MAIN_MENU_CLICK', { url });
   };
 
+  const handleMoreButtonClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      setIsInnerMenuOpened(!isInnerMenuOpened);
+    },
+    [isInnerMenuOpened]
+  );
+
   const content = useMemo(() => {
     const result: ReactNode[] = [];
     NAVIGATION_DATA.filter(isShow).forEach(link => {
@@ -58,7 +66,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               key={link.id}
               link={link}
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
-              onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
+              onClick={handleMoreButtonClick}
             />
             <span className={styles.linksInner}>
               {link.links.filter(isShow).map(subLink => (
@@ -77,7 +85,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     });
 
     return result;
-  }, [colorThemeMode, iconId, isInnerMenuOpened, router.pathname]);
+  }, [colorThemeMode, handleMoreButtonClick, iconId, isInnerMenuOpened, router.pathname]);
 
   return <nav className={cx(styles.root, className)}>{content}</nav>;
 };

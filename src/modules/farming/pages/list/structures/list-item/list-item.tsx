@@ -12,7 +12,9 @@ import {
   isExist
 } from '@shared/helpers';
 
+import { isNewFarming } from '../../../../helpers/is-new-farming';
 import { FarmingItem } from '../../../../interfaces';
+import { NewLabel } from '../../../item/components/new-label';
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
@@ -72,6 +74,8 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
   const selectLink = `${id}`;
+
+  const isNew = isNewFarming(id);
 
   const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
   const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
@@ -197,6 +201,8 @@ export const FarmingListItem: FC<FarmingItem> = ({
             <Button href={stakeUrl} external theme={LINKS_THEME} title={farmingContractTranslation}>
               {farmingContractTranslation}
             </Button>
+
+            {isNew && <NewLabel />}
           </div>
 
           <Button className={styles.button} href={selectLink}>

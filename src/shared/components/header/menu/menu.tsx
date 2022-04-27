@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DonationButton, SettingsButton } from '@shared/components';
 
 import { amplitudeService } from '../../../services';
@@ -12,7 +12,6 @@ import { Button } from '../../button';
 import { ColorModeSwitcher } from '../../color-mode-switcher';
 import { NetworkSelect } from '../../network-select';
 import { Navigation } from '../navigation';
-import { QPToken } from '../qp-token';
 import { Socials } from '../socials';
 import styles from './menu.module.scss';
 
@@ -43,7 +42,6 @@ export const Menu: FC<MenuProps> = ({ className }) => {
         )}
 
         <div className={cx(styles.row)}>
-          <QPToken />
           <NetworkSelect menuPlacement="top" className={styles.select} />
           <div className={cx(styles.mb0, styles.row)}>
             <SettingsButton />
