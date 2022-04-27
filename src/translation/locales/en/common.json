@@ -83,6 +83,7 @@
   "Privacy Policy":"Privacy Policy",
   "Terms of Usage": "Terms of Usage",
   "Accept terms":"Accept terms",
+  "Accept": "Accept",
   "and":"and",
   "Amount": "Amount",
   "Baker": "Baker",
@@ -101,5 +102,6 @@
   "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.": "The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.",
   "Invalid output": "Invalid output",
   "Available balance": "Available balance",
-  "Support": "Support"
+  "Support": "Support",
+  "Сookie Text": "By using this website, you automatically accept that we use cookies"
 }
