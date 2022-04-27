@@ -44,6 +44,7 @@ export * from './external-link';
 export * from './check-mark';
 export * from './copy';
 export * from './settings-icon';
+export * from './arrow-sign';
 export * from './stableswap-icon';
 export * from './analytics-icon';
 export * from './feedback-icon';

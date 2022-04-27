@@ -1,0 +1,14 @@
+@import "@styles/variables";
+
+.tokenRewardCell{
+  width: fit-content;
+}
+
+.dollarEquivalent {
+  color: $text-03 !important;
+  font-size: 12px;
+}
+
+.toRight {
+  margin-left: auto;
+}

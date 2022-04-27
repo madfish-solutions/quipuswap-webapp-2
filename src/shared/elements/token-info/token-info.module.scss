@@ -1,0 +1,15 @@
+@import "@styles/breakpoints";
+
+.tokenInfo {
+  display: flex;
+  column-gap: 8px;
+}
+.tokenName {
+  display: none;
+}
+
+@include media(">tablet") {
+  .tokenName {
+    display: unset;
+  }
+}

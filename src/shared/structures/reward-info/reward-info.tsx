@@ -5,9 +5,11 @@ import cx from 'classnames';
 
 import { Button, Card, ConnectWalletOrDoSomething, PendingRewards } from '@shared/components';
 import { isNull } from '@shared/helpers';
+import { ArrowSign } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
 import styles from './reward-info.module.scss';
+import { useRewardInfoViewModel } from './reward-info.vm';
 
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
@@ -25,6 +27,8 @@ interface Props {
   };
   rewardTooltip?: string;
   disabled?: boolean;
+  buttonUp?: boolean;
+  details?: ReactNode;
   rewardButtonAttributeTestId: string;
   pendingRewardAttributeTestId: string;
 }
@@ -42,16 +46,39 @@ export const RewardInfo: FC<Props> = ({
   disabled,
   claimablePendingRewards,
   totalPendingRewards,
+  buttonUp,
+  details,
   rewardButtonAttributeTestId,
   pendingRewardAttributeTestId,
   children
 }) => {
+  const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
+  const { detailsButtonTransaction } = transaction;
+
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
 
+  const childrenContainerClassName = cx(styles.childrenContainer, {
+    [styles.order2]: buttonUp
+  });
+
+  const buttonContainerClassName = cx(styles.buttonContainer, {
+    [styles.order1]: buttonUp
+  });
+
+  const containerClassName = cx(styles.container, {
+    [styles.pb0]: isDetailsOpen
+  });
+
   return (
-    <Card className={cx(styles.card, className)} header={header}>
-      <div className={styles.container}>
+    <Card
+      className={cx(styles.card, className)}
+      contentClassName={styles.p0}
+      header={header}
+      footer={isDetailsOpen && details}
+    >
+      <div className={containerClassName}>
         <PendingRewards
+          className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
@@ -60,17 +87,30 @@ export const RewardInfo: FC<Props> = ({
           currency={currency}
         />
         <div className={styles.userInfoContainer}>
-          {children && <div className={styles.childrenContainer}>{children}</div>}
-          <ConnectWalletOrDoSomething>
+          {children && <div className={childrenContainerClassName}>{children}</div>}
+          <div className={buttonContainerClassName}>
+            <ConnectWalletOrDoSomething>
+              <Button
+                testId={rewardButtonAttributeTestId}
+                className={styles.button}
+                onClick={onButtonClick}
+                disabled={isButtonDisabled}
+              >
+                {buttonText}
+              </Button>
+            </ConnectWalletOrDoSomething>
+          </div>
+
+          {details && showDetails && (
             <Button
-              testId={rewardButtonAttributeTestId}
-              className={styles.button}
-              onClick={onButtonClick}
-              disabled={isButtonDisabled}
+              className={cx(styles.order3, styles.viewDetailsButton)}
+              theme="inverse"
+              icon={<ArrowSign rotation={isDetailsOpen} />}
+              onClick={toggle}
             >
-              {buttonText}
+              {detailsButtonTransaction}
             </Button>
-          </ConnectWalletOrDoSomething>
+          )}
         </div>
       </div>
     </Card>
