@@ -88,4 +88,5 @@ export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const HIDE_ANALYTICS = true;
 
-export const NEW_FARMINGS = ['3', '2'];
+// FarmingItems with the "NEW" label
+export const NEW_FARMINGS = ['5', '6'];
