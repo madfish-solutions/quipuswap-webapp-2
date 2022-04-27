@@ -2,7 +2,8 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { useLayoutViewModel } from '../../../../../../layout/use-layout.vm';
+import { useLayoutViewModel } from '@layout';
+
 import styles from './new-label.module.scss';
 
 export const NewLabel: FC = () => {
