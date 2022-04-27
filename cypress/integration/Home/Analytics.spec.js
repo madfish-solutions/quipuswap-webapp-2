@@ -2,7 +2,7 @@
 
 describe('Analytics', () => {
 
-    it('Should_RedirectToSwapPage_When_ClickingOnPairs',() => {
+    it.skip('Should_RedirectToSwapPage_When_ClickingOnPairs',() => {
 // Go to the home page
     cy.visit('/')
 //Find 4th element in the table and click on 'Trade' button, it should lead to approptiate page

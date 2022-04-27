@@ -2,7 +2,7 @@
 
 describe('Form exists', () => {
 
-    it('Should_DisplayFarmingDetails_When_OpenedSpecificFarming',() => {
+    it.skip('Should_DisplayFarmingDetails_When_OpenedSpecificFarming',() => {
 // Go to the Farming page
     cy.visit('/farming')
 // Find first farming and go in the farm form, check if title in the list is the same as title in the form

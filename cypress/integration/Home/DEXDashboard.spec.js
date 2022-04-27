@@ -28,7 +28,7 @@ describe('DEX Dashboard section', () => {
     //     .should('be.visible')
 })
 
-    it('Should_DisplayStatisticInfo_When_PageIsLoaded',() => {
+    it.skip('Should_DisplayStatisticInfo_When_PageIsLoaded',() => {
     // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="TVL"] [data-test-id="amount"]')
     //     .should('exist')
         

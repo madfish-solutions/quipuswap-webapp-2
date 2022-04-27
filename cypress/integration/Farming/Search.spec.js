@@ -2,7 +2,7 @@
 
 describe('Search section', () => {
 
-    it('Should_ChangeSwitcherStatus_When_ClickingOnSwitcher',() => {
+    it.skip('Should_ChangeSwitcherStatus_When_ClickingOnSwitcher',() => {
 // Go to the home page
         cy.visit('/farming')
 // Check if swithcer is swithced
