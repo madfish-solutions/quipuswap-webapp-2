@@ -60,6 +60,10 @@
   background-color: $ui-07;
 }
 
+.coloModeSwitcher {
+  margin-right: 8px;
+}
+
 @include media(">SDesktop") {
   .root {
     padding: 0 32px 0 16px;
@@ -72,7 +76,8 @@
   }
 
   .coloModeSwitcher {
-    margin-left: 24px;
+    margin-right: 16px;
+    margin-left: 16px;
   }
 
   .languageSwitcher,
