@@ -1,3 +1,28 @@
-.poolCard {
-  padding: 24px;
+@import "@styles/variables";
+
+@mixin poolCard($logos-text-color) {
+  .poolCard {
+    padding: 24px;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+  }
+
+  .tokensLogos {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: $logos-text-color;
+  }
+}
+
+.light {
+  @include poolCard($text-01);
+}
+
+.dark {
+  @include poolCard($text-inverse);
 }

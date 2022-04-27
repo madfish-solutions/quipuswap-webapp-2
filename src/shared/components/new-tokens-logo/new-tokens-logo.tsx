@@ -3,6 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 
 import { Iterator } from '@modules/farming/pages/list/helpers';
+import { toArray } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { TokenLogo } from '../token-logo';
@@ -37,11 +38,11 @@ interface FillTokensLogosProps extends FillTokensLogos, TokensLogosPropsAbstract
 type NewTokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
 const prepareTokens = (tokens: TokensList, layoutProps: FixedTokensLogos | FillTokensLogos) => {
-  if (Array.isArray(tokens)) {
-    return tokens.map(({ tokenIcon, tokenSymbol }) => ({ src: tokenIcon, tokenSymbol, ...layoutProps }));
-  } else {
-    return [{ src: tokens.tokenIcon, tokenSymbol: tokens.tokenSymbol, ...layoutProps }];
-  }
+  return toArray(tokens).map(({ tokenIcon, tokenSymbol }) => ({
+    src: tokenIcon,
+    tokenSymbol,
+    ...layoutProps
+  }));
 };
 
 export const NewTokensLogos: FC<NewTokensLogosProps> = props => {

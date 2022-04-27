@@ -1,16 +1,25 @@
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { Card, NewTokensLogos } from '@shared/components';
+import { useContext } from 'react';
+
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { Card, NewTokensLogos, TokensSymbols } from '@shared/components';
 
 import styles from './pool-card.module.scss';
+import { usePoolCardViewModel } from './pool-card.vm';
+
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const PoolCard = () => {
-  const tokens = [DEFAULT_TOKEN, TEZOS_TOKEN, DEFAULT_TOKEN, TEZOS_TOKEN].map(
-    ({ metadata: { symbol, thumbnailUri } }) => ({ tokenIcon: thumbnailUri, tokenSymbol: symbol })
-  );
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { tokens, preparelogos } = usePoolCardViewModel();
 
   return (
-    <Card contentClassName={styles.poolCard}>
+    <Card className={modeClass[colorThemeMode]} contentClassName={styles.poolCard}>
       <div className={styles.info}>
-        <NewTokensLogos tokens={tokens} width={48} />
+        <NewTokensLogos tokens={preparelogos(tokens)} width={48} />
+        <TokensSymbols className={styles.tokensLogos} tokens={tokens} />
       </div>
       <div className={styles.stats}>Stats</div>
     </Card>
