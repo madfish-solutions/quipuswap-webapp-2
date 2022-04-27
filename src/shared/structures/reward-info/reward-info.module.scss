@@ -1,5 +1,5 @@
-@import '@styles/variables';
-@import '@styles/breakpoints';
+@import "@styles/variables";
+@import "@styles/breakpoints";
 
 .card {
   margin-bottom: 48px;
@@ -15,7 +15,7 @@
 }
 
 .p0 {
-  padding:0;
+  padding: 0;
 }
 .pb0 {
   padding-bottom: 0;
@@ -70,13 +70,13 @@
   margin-top: 40px;
 }
 
-@include media('>phone') {
+@include media(">phone") {
   .button {
     width: 160px;
   }
 }
 
-@include media('>SDesktop') {
+@include media(">SDesktop") {
   .userRewards {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: auto auto;
@@ -88,8 +88,26 @@
   }
 }
 
-@include media('>Lphone') {
+@include media(">Lphone") {
   .button {
     align-self: end;
+  }
+}
+
+@include media("<tablet") {
+  .paddingRewards {
+    max-width: auto;
+  }
+  .userInfoContainer {
+    min-height: auto;
+    width: 100%;
+  }
+
+  .viewDetailsButton{
+    align-self: center;
+  }
+
+  .button {
+    width: 100%;
   }
 }

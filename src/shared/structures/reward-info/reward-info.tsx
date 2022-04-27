@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
@@ -7,9 +7,9 @@ import { Button, Card, ConnectWalletOrDoSomething, PendingRewards } from '@share
 import { isNull } from '@shared/helpers';
 import { ArrowSign } from '@shared/svg';
 import { Nullable } from '@shared/types';
-import { useTranslation } from '@translation';
 
 import styles from './reward-info.module.scss';
+import { useRewardInfoViewModel } from './reward-info.vm';
 
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
@@ -52,8 +52,8 @@ export const RewardInfo: FC<Props> = ({
   pendingRewardAttributeTestId,
   children
 }) => {
-  const { t } = useTranslation();
-  const [toggles, setToggles] = useState(false);
+  const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
+  const { detailsButtonTransaction } = transaction;
 
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
 
@@ -66,7 +66,7 @@ export const RewardInfo: FC<Props> = ({
   });
 
   const containerClassName = cx(styles.container, {
-    [styles.pb0]: toggles
+    [styles.pb0]: isDetailsOpen
   });
 
   return (
@@ -74,10 +74,11 @@ export const RewardInfo: FC<Props> = ({
       className={cx(styles.card, className)}
       contentClassName={styles.p0}
       header={header}
-      footer={toggles && details}
+      footer={isDetailsOpen && details}
     >
       <div className={containerClassName}>
         <PendingRewards
+          className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
@@ -100,14 +101,14 @@ export const RewardInfo: FC<Props> = ({
             </ConnectWalletOrDoSomething>
           </div>
 
-          {details && (
+          {details && showDetails && (
             <Button
               className={cx(styles.order3, styles.viewDetailsButton)}
               theme="inverse"
-              icon={<ArrowSign rotate={toggles} />}
-              onClick={() => setToggles(!toggles)}
+              icon={<ArrowSign rotate={isDetailsOpen} />}
+              onClick={toggle}
             >
-              {toggles ? t('common|lessDetails') : t('common|viewDetails')}
+              {detailsButtonTransaction}
             </Button>
           )}
         </div>

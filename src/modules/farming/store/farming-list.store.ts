@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
@@ -178,15 +177,6 @@ export class FarmingListStore {
     });
   }
 
-  private getClimableFarmings(stakedFarmings: FarmingItem[]) {
-    return stakedFarmings.filter(farmingItem => {
-      const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
-      const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
-
-      return getIsHarvestAvailable(endTimestamp);
-    });
-  }
-
   /**
    * All results retuns in atoms
    */
@@ -197,18 +187,13 @@ export class FarmingListStore {
       return DEFAULT_REWARDS;
     } else {
       const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
-
-      const realtimeUniqTokenRewards = this.extractUserPandingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
-
-      const stakedRewardsWithoutFee = reduceEarnBalance(realtimeUniqTokenRewards.map(({ withoutFee }) => withoutFee));
+      const stakedRewards = this.extractUserPendingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
+      const stakedRewardsWithoutFee = BigNumber.sum(...stakedRewards.map(({ withoutFee }) => withoutFee));
 
       const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithUniqTokenRewards);
-
-      const claimableRewards = this.extractUserPandingReward(claimableFarmings, timestamp);
-
-      const claimableRewardsWithoutFee = reduceEarnBalance(claimableRewards.map(({ withoutFee }) => withoutFee));
-
-      const claimableRewardsWithFee = reduceEarnBalance(claimableRewards.map(({ withFee }) => withFee)).decimalPlaces(
+      const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
+      const claimableRewardsWithoutFee = BigNumber.sum(...claimableRewards.map(({ withoutFee }) => withoutFee));
+      const claimableRewardsWithFee = BigNumber.sum(...claimableRewards.map(({ withFee }) => withFee)).decimalPlaces(
         ZERO_AMOUNT,
         BigNumber.ROUND_DOWN
       );
@@ -223,7 +208,7 @@ export class FarmingListStore {
     );
   }
 
-  private extractUserPandingReward(farmings: FarmingItem[], timestamp: number) {
+  private extractUserPendingReward(farmings: FarmingItem[], timestamp: number) {
     return farmings.map(farm => {
       const userInfo = this.findUserInfo(farm);
 
@@ -232,6 +217,15 @@ export class FarmingListStore {
       }
 
       return getUserPendingRewardWithFee(userInfo, farm, timestamp);
+    });
+  }
+
+  private getClimableFarmings(stakedFarmings: FarmingItem[]) {
+    return stakedFarmings.filter(farmingItem => {
+      const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
+      const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
+
+      return getIsHarvestAvailable(endTimestamp);
     });
   }
 
@@ -246,11 +240,4 @@ export class FarmingListStore {
 
     return this.getUniqTokensRewardSync(token, blockTimestampMS);
   }
-}
-
-function reduceEarnBalance(earnBalances: Array<BigNumber>) {
-  return earnBalances.reduce(
-    (prevValue: BigNumber, currentValue: BigNumber) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
-    new BigNumber(ZERO_AMOUNT)
-  );
 }

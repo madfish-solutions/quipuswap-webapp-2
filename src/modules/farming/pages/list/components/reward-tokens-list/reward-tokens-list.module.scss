@@ -2,14 +2,14 @@
   width: 100%;
 }
 
-.token{
+.token {
   text-align: left;
 }
 
 .amount {
   text-align: right;
   width: 100px;
-  & > div{
+  & > div {
     margin-left: auto;
   }
 }
