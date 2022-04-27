@@ -31,7 +31,7 @@ export const TokenInfo: FC<Props> = ({ token, className }) => {
       <TokensLogos firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
       <div>
         <h6>{tokenSymbol}</h6>
-        <span>{tokenName}</span>
+        <span className={styles.tokenName}>{tokenName}</span>
       </div>
     </div>
   );

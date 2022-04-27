@@ -96,7 +96,7 @@
 
 @include media("<tablet") {
   .paddingRewards {
-    max-width: auto;
+    max-width: 100%;
   }
   .userInfoContainer {
     min-height: auto;
