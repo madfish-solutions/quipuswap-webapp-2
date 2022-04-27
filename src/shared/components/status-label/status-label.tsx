@@ -29,13 +29,14 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StatusLabel: FC<Props> = ({ className, status, label, filled }) => {
+export const StatusLabel: FC<Props> = ({ className, status, label, filled, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div
       className={cx(styles.container, themeClass[colorThemeMode], className)}
       style={{ background: gradients[status] }}
+      {...props}
     >
       <span className={cx(styles.status, filled ? styles.filled : styles.bordered)}>{label ?? status}</span>
     </div>

@@ -46,7 +46,7 @@ export const UnstakeForm: FC = observer(() => {
             className={s.button}
             disabled={disabled}
             loading={isSubmitting}
-            data-test-id="unstakeFormUnstakeButton"
+            data-test-id="unstakeButton"
           >
             {t('farm|Unstake')}
           </Button>
