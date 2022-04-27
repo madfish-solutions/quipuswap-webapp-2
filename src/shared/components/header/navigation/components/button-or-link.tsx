@@ -1,16 +1,19 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, MouseEvent } from 'react';
 
+import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { Nullable } from '@shared/types';
 
+import { ExternalLink } from '../../../../svg';
 import { NavigationDataProps } from '../content';
+import styles from './button-or-link.module.scss';
 
 interface Props {
   link: NavigationDataProps;
   icon?: Nullable<ReactNode>;
   className: string;
-  onClick: () => void;
+  onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   onFocus?: () => void;
 }
 
@@ -20,15 +23,18 @@ export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, ico
       <a
         key={link.id}
         href={link.to}
-        className={className}
+        className={cx(styles.root, className)}
         target={link.target}
         rel="noreferrer noopener"
         onFocus={onFocus}
         onClick={onClick}
       >
-        {icon}
-        {link.label}
-        {link.status}
+        <span className={styles.name}>
+          {icon}
+          {link.label}
+          {link.status}
+        </span>
+        <ExternalLink className={styles.externalLinkIcon} />
       </a>
     );
   }

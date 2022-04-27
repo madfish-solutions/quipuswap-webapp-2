@@ -25,6 +25,12 @@
   display: none;
 }
 
+.qpToken {
+  margin-left: 8px;
+  margin-right: 8px;
+  white-space: nowrap;
+}
+
 .connect {
   display: flex;
   align-items: center;
@@ -47,13 +53,15 @@
 }
 
 .light {
-  border-bottom: 1px solid $ui-03;
-  background-color: $ui-02;
+  background-color: $ui-01;
 }
 
 .dark {
-  border-bottom: 1px solid $ui-07;
-  background-color: $ui-06;
+  background-color: $ui-07;
+}
+
+.coloModeSwitcher {
+  margin-right: 8px;
 }
 
 @include media(">SDesktop") {
@@ -68,7 +76,8 @@
   }
 
   .coloModeSwitcher {
-    margin-left: 24px;
+    margin-right: 16px;
+    margin-left: 16px;
   }
 
   .languageSwitcher,

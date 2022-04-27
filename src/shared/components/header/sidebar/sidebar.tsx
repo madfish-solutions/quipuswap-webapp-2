@@ -12,7 +12,6 @@ import { Button } from '../../button';
 import { ConnectWalletButton } from '../../connect-wallet-button';
 import { NetworkSelect } from '../../network-select';
 import { Navigation } from '../navigation';
-import { QPToken } from '../qp-token';
 import { Socials } from '../socials';
 import styles from './sidebar.module.scss';
 
@@ -40,7 +39,6 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       </div>
       <Navigation className={styles.navigation} iconId="desktop" />
       <footer className={styles.footer}>
-        <QPToken className={styles.footerItem} id="desktop" />
         <Socials className={styles.footerItem} id="desktop" />
         <Button
           className={styles.footerItem}
