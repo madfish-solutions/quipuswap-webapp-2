@@ -1,4 +1,4 @@
-import amplitude, { AmplitudeClient } from 'amplitude-js';
+import amplitude, { AmplitudeClient, Identify } from 'amplitude-js';
 
 import { AMPLITUDE_API_KEY } from '@config/enviroment';
 
@@ -8,6 +8,7 @@ import { Console } from './console';
 
 export class AmplitudeService {
   instance: Nullable<AmplitudeClient> = null;
+  identify: Nullable<Identify> = null;
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   props: { [key: string]: any } = {};
@@ -16,6 +17,7 @@ export class AmplitudeService {
     if (API_KEY) {
       this.instance = amplitude.getInstance();
       this.instance.init(API_KEY);
+      this.identify = new amplitude.Identify();
       Console.info('Amplitude.init', API_KEY);
     }
   }
@@ -23,6 +25,11 @@ export class AmplitudeService {
   setUserId(userId: Nullable<string>) {
     this.instance?.setUserId(userId);
     Console.info('Amplitude.userId', userId);
+  }
+
+  setUserProps(key: string, value: any) {
+    this.identify?.set(key, value);
+    Console.info('Amplitude.setUserProps.key', value);
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -40,5 +47,5 @@ export class AmplitudeService {
 export const amplitudeService = new AmplitudeService(AMPLITUDE_API_KEY);
 
 const sessionId = hash(`${new Date().getTime()}`);
-amplitudeService.setProps('session_id', sessionId);
+amplitudeService.setUserProps('session_id', sessionId);
 Console.info('Amplitude.sessionId', sessionId);
