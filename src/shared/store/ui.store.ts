@@ -1,5 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
+import { COOKIES_APPRROVAL_KEY } from '@config/localstorage';
 import { ColorModes } from '@providers/color-theme-context';
 import { noopMap } from '@shared/mapping';
 
@@ -8,7 +9,7 @@ import { LocalStorageModel } from './utils';
 
 export class UiStore {
   colorThemeMode: ColorModes = ColorModes.Dark;
-  cookieApprovalModel = new LocalStorageModel('cookieApproval', false, noopMap);
+  cookieApprovalModel = new LocalStorageModel(COOKIES_APPRROVAL_KEY, false, noopMap);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {

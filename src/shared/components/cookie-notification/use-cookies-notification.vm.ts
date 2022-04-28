@@ -1,6 +1,6 @@
 import { useUiStore } from '@shared/hooks/use-ui-store';
 
-export const useCookiesNotification = () => {
+export const useCookiesNotificationViewModel = () => {
   const uiStore = useUiStore();
   const { cookieApprovalModel } = uiStore;
 

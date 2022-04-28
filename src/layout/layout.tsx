@@ -26,7 +26,7 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
           <ConfirmationModalProvider>
-            <div className={styles.root}>
+            <div className={cx(styles.root)}>
               <Header />
               <Sidebar className={styles.sidebar} />
               <div className={cx(styles.mainWrapper, isDarkTheme ? styles.dark : styles.light)}>

@@ -18,13 +18,14 @@
   bottom: 0;
   left: 0;
   right: 0;
+  box-shadow: $elevation-03;
 
   &.light {
-    background-color: $ui-01;
+    background-color: $hover-light-row;
   }
 
   &.dark {
-    background-color: $ui-07;
+    background-color: $hover-dark-row;
   }
 }
 
