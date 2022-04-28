@@ -1,12 +1,13 @@
 @import "@styles/variables";
 @import "@styles/breakpoints";
 
-$left-offset: -16px;
+$left-offset: -8px;
 $logos-quantity: 4;
 
 @mixin create-index-offset($quantity) {
   @for $index from 2 through $quantity {
-    & img:nth-child(#{$index}) {
+    & img:nth-child(#{$index}),
+    & svg:nth-child(#{$index}) {
       margin-left: $left-offset;
     }
   }
@@ -16,5 +17,3 @@ $logos-quantity: 4;
   display: flex;
   @include create-index-offset($logos-quantity);
 }
-
-

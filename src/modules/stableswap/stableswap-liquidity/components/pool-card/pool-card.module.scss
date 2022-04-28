@@ -1,21 +1,181 @@
 @import "@styles/variables";
+@import "@styles/breakpoints";
 
 @mixin poolCard($logos-text-color) {
   .poolCard {
     padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
   }
 
   .info {
     display: flex;
     align-items: center;
-    column-gap: 16px;
+    gap: 16px;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
-  .tokensLogos {
+  .poolInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logoSymbols {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tokenLogos {
+  }
+
+  .whitelistedTag {
+    text-transform: uppercase;
+  }
+
+  .tokensSymbols {
+    white-space: nowrap;
+
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
     color: $logos-text-color;
+  }
+
+  .poolTags {
+  }
+
+  .poolStats {
+    display: flex;
+    column-gap: 24px;
+  }
+
+  .cardCellHeader {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .cardCell {
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 4px;
+  }
+
+  .poolStatsAmount {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .tokensValue {
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 4px;
+  }
+
+  .tokensInfo {
+    display: flex;
+    column-gap: 16px;
+  }
+
+  .button {
+    align-self: flex-end;
+
+    height: 40px;
+    width: 160px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @include media("<=tablet") {
+    .whitelistedTag {
+      margin-top: calc((48px / 2) - (24px / 2));
+      margin-left: 24px;
+      align-self: flex-start;
+    }
+
+    .poolInfo {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .stats {
+      flex-direction: column;
+      row-gap: 16px;
+    }
+
+    .tokensValue {
+      width: 100%;
+    }
+  }
+
+  @include media("<=Lphone") {
+    .logoSymbols {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .whitelistedTag {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+    }
+    .stats {
+      flex-direction: column;
+      row-gap: 24px;
+    }
+
+    .tokensInfo {
+      width: 100%;
+      flex-wrap: wrap;
+      column-gap: 0;
+      row-gap: 16px;
+
+      & > div {
+        width: 50%;
+      }
+    }
+  }
+
+  @include media("<=phone") {
+    .logoSymbols {
+      row-gap: calc(8px - (48px - 36px) / 2)
+    }
+
+    .tokensLogos > img {
+      width: 36px !important; //force overwrite
+    }
+
+    .stats {
+      row-gap: 40px;
+    }
+
+    .button {
+      width: 100%;
+    }
+  }
+
+  @include media("<=Sphone") {
+    .poolStats {
+      flex-direction: column;
+      row-gap: 16px;
+    }
+
+    .tokensInfo {
+      flex-direction: column;
+    }
   }
 }
 

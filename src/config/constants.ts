@@ -54,6 +54,11 @@ export const DEFAULT_TOKEN_ID = 0;
 export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
+//#region signs
+export const DOLLAR = '$';
+export const PERCENT = '%';
+//#endregion
+
 //TODO: assort mix
 //#region mix
 export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
