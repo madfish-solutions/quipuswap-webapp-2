@@ -151,11 +151,14 @@
 
   @include media("<=phone") {
     .logoSymbols {
-      row-gap: calc(8px - (48px - 36px) / 2)
+      row-gap: calc(8px - (48px - 36px) / 2);
     }
 
-    .tokensLogos > img {
-      width: 36px !important; //force overwrite
+    .tokensLogos {
+      & > img,
+      & > svg {
+        width: 36px !important; //force overwrite
+      }
     }
 
     .stats {
