@@ -90,3 +90,5 @@ export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
 export const NEW_FARMINGS = ['5', '6'];
+
+export const YOUVES_LINK = 'https://app.youves.com/earn';

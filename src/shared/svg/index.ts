@@ -48,3 +48,4 @@ export * from './arrow-sign';
 export * from './stableswap-icon';
 export * from './analytics-icon';
 export * from './feedback-icon';
+export * from './youves-icon';

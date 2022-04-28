@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 
 import { PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
-import { EmptyFarmingList, FarmingListSkeleton } from './components';
+import { EmptyFarmingList, FarmingListSkeleton, YouvesCard } from './components';
 import { FarmingRewardsList } from './components/farming-rewards-list';
 import styles from './farming-list.page.module.scss';
 import { Iterator } from './helpers';
@@ -22,6 +22,7 @@ export const FarmsListPage = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
         <FarmingRewardsList />
       </StateWrapper>
+      <YouvesCard />
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
         <ListFilter />
         <Iterator
