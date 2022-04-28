@@ -87,3 +87,6 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK, ITHACANET_NET
 export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const HIDE_ANALYTICS = true;
+
+// FarmingItems with the "NEW" label
+export const NEW_FARMINGS = ['5', '6'];

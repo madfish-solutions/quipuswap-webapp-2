@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { Sidebar, Header, AmplitudeSubscription } from '@shared/components';
+import { CookiesNotification } from '@shared/components/cookie-notification';
 import { AccountModal, DonationModal, SettingsModal, WalletModal } from '@shared/modals';
 import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
@@ -36,6 +37,7 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
               </div>
             </div>
 
+            <CookiesNotification />
             <DonationModal />
             <WalletModal />
             <AccountModal />
