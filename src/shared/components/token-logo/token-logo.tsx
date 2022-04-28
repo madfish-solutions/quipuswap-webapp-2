@@ -23,7 +23,9 @@ interface PropsFill extends PropsAbstraction {
 
 type Props = PropsFixed | PropsFill;
 
-export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = 24 }) => {
+const DEFAULT_SIZE = 24;
+
+export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = DEFAULT_SIZE }) => {
   const [loadError, setLoadError] = useState(false);
 
   const url = prepareTokenLogo(src);
