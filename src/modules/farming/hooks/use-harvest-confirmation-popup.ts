@@ -8,7 +8,7 @@ export const useHarvestConfirmationPopup = () => {
   const title = t('farm|Wanna earn more?');
   const confirmationMessage = t('farm|increaseYourIncome');
   const yesButtonText = t('farm|iAmIn');
-  const noButtonText = t('farm|Nope');
+  const noButtonText = t('farm|JustHarvest');
 
   return (yesCallback: () => Promise<void>, noCallback?: () => Promise<void>) =>
     openConfirmationModal({
