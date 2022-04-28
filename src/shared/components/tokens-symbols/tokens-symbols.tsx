@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 import { FC } from 'react';
 
+import { SLASH } from '@config/constants';
 import { getTokenSymbol, isLastElementIndex, toArray } from '@shared/helpers';
 import { Token } from '@shared/types';
 
@@ -10,8 +10,6 @@ interface Props {
   tokens: Tokens;
   className?: string;
 }
-
-const SLASH = ' / ';
 
 const getSymbolsString = (symbols: Array<string>) => {
   let sybolsStr = '';

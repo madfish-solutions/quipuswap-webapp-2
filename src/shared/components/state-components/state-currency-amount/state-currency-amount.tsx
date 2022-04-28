@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
+import { EPPROXIMATILY_SIGN } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -38,8 +39,6 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-
-const EPPROXIMATILY_SIGN = '~';
 
 export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
 

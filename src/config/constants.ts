@@ -57,6 +57,8 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#region signs
 export const DOLLAR = '$';
 export const PERCENT = '%';
+export const SLASH = ' / ';
+export const EPPROXIMATILY_SIGN = '~';
 //#endregion
 
 //TODO: assort mix
