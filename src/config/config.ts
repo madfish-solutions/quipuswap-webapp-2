@@ -2,7 +2,9 @@ import { ConnectType, QSNets, QSNetwork, QSNetworkType } from '@shared/types';
 
 import { METADATA_API, NETWORK_ID, RPC_URLS } from './enviroment';
 
-export const QUIPUSWAP = 'https://quipuswap.com';
+export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
+
+export const QUIPUSWAP_URL = `https://${QUIPUSWAP_DOMAIN_NAME}`;
 
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
 
@@ -85,3 +87,6 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK, ITHACANET_NET
 export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const HIDE_ANALYTICS = true;
+
+// FarmingItems with the "NEW" label
+export const NEW_FARMINGS = ['5', '6'];

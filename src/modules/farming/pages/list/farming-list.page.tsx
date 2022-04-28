@@ -5,7 +5,7 @@ import { PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 import { EmptyFarmingList, FarmingListSkeleton } from './components';
 import { FarmingRewardsList } from './components/farming-rewards-list';
 import styles from './farming-list.page.module.scss';
-import { Iterator } from './helpers/iterator';
+import { Iterator } from './helpers';
 import { ListStats } from './list-stats/list-stats';
 import { FarmingListItem } from './structures';
 import { ListFilter } from './structures/list-filter';

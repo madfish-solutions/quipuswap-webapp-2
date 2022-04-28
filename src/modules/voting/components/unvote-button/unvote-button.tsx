@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { useLocation } from 'react-router-dom';
 
 import { getCandidateInfo, unvoteOrRemoveVeto } from '@modules/voting/helpers';
 import { useVoter, useVotingDex, useVotingHandlers, useVotingRouting } from '@modules/voting/helpers/voting.provider';
@@ -10,6 +11,7 @@ import { useTezos } from '@providers/use-dapp';
 import { Button } from '@shared/components/button';
 import { isExist } from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 import { useToasts } from '@shared/utils';
 import { useConfirmOperation } from '@shared/utils/confirm-operation';
 
@@ -18,6 +20,7 @@ export interface UnvoteButtonProps {
 }
 
 const EMPTY_POOL = 0;
+const INDEX_OF_TOKEN_PAIR = 3;
 
 export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
   const tezos = useTezos();
@@ -28,6 +31,7 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
   const { dex } = useVotingDex();
   const { updateBalances } = useVotingHandlers();
   const { data: bakers } = useBakers();
+  const location = useLocation();
 
   const isVoteTab = currentTab.id === VotingTabs.vote;
   const { currentCandidate } = getCandidateInfo(dex, bakers);
@@ -41,15 +45,36 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
       return;
     }
 
-    await unvoteOrRemoveVeto(
-      currentTab.id,
-      tezos,
-      dex,
-      showErrorToast,
-      confirmOperation,
-      updateBalances,
-      wrapCandidate
-    );
+    const logData = {
+      unvote: {
+        tab: currentTab.id,
+        vote: Number(vote?.toFixed()),
+        veto: Number(veto?.toFixed()),
+        dex: dex.contract.address,
+        candidate,
+        currentCandidate: currentCandidate?.address,
+        asset: location.pathname.split('/')[INDEX_OF_TOKEN_PAIR]
+      }
+    };
+
+    try {
+      amplitudeService.logEvent('UNVOTE', logData);
+      await unvoteOrRemoveVeto(
+        currentTab.id,
+        tezos,
+        dex,
+        showErrorToast,
+        confirmOperation,
+        updateBalances,
+        wrapCandidate
+      );
+      amplitudeService.logEvent('UNVOTE_SUCCESS', logData);
+    } catch (error) {
+      amplitudeService.logEvent('UNVOTE_FAILED', {
+        ...logData,
+        error
+      });
+    }
   });
 
   const value = isVoteTab ? vote : veto;

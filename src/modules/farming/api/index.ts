@@ -9,3 +9,4 @@ export * from './unstake-assets.api';
 export * from './harvest-assets.api';
 export * from './harvest-all-assets.api';
 export * from './harvest-and-restake';
+export * from './harvest-all-and-restake';

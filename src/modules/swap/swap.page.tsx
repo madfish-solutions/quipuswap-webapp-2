@@ -6,7 +6,7 @@ import { SwapTabAction } from '@shared/types';
 
 import { SwapSend } from './swap-send';
 
-export const Swap: FC = () => {
+export const SwapPage: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
@@ -15,7 +15,7 @@ export const Swap: FC = () => {
   );
 };
 
-export const Send: FC = () => {
+export const SendPage: FC = () => {
   return (
     <Routes>
       <Route path="/" element={<SwapSend initialAction={'send' as SwapTabAction} />} />

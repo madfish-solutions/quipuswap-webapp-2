@@ -11,7 +11,9 @@
       "@types/*": ["./types/*"],
       "@images/*": ["./images/*"],
       "@tests/*": ["./tests/*"],
-      "@translation": ["./translation"]
+      "@translation": ["./translation"],
+      "@app.router": ["./app.router"],
+      "@layout": ["./layout"]
     }
   }
 }

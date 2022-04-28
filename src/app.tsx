@@ -1,17 +1,15 @@
-/* eslint-disable import/no-default-export */
 import { observer } from 'mobx-react-lite';
 
+import { AppRouter } from '@app.router';
+
 import { Layout } from './layout';
-import { Router } from './router';
 
 import './styles/globals.scss';
 
-const App = observer(() => {
+export const App = observer(() => {
   return (
     <Layout>
-      <Router />
+      <AppRouter />
     </Layout>
   );
 });
-
-export default App;

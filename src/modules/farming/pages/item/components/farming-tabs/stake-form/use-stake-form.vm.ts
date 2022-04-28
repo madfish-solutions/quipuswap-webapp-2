@@ -50,6 +50,7 @@ export const useStakeFormViewModel = () => {
 
     if (isStakingAvailable) {
       const token = defined(farmingItem).stakedToken;
+      // TODO: Move to model
       const inputAmountWithDecimals = toDecimals(inputAmount, token);
       await doStake(defined(farmingItem), inputAmountWithDecimals, token, defined(selectedBaker));
     }

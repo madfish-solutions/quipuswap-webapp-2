@@ -17,7 +17,7 @@ import {
   prepareTokenLogo
 } from '@shared/helpers';
 import { Modal } from '@shared/modals';
-import { useTokensSearchService } from '@shared/services';
+import { amplitudeService, useTokensSearchService } from '@shared/services';
 import { NotFound } from '@shared/svg';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -32,7 +32,6 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-// eslint-disable-next-line import/no-named-as-default-member
 interface TokensModalProps extends Props {
   onChange: (token: Token) => void;
   blackListedTokens: Token[];
@@ -51,6 +50,9 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens 
     onChange(token);
     if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);
+      amplitudeService.logEvent('SELECT_TOKEN', { token: getTokenSlug(token), customToken: true });
+    } else {
+      amplitudeService.logEvent('SELECT_TOKEN', { token: getTokenSlug(token), customToken: false });
     }
     form.mutators.setValue(TMFormField.SEARCH, DEFAULT_SEARCH_VALUE);
     form.mutators.setValue(TMFormField.TOKEN_ID, DEFAULT_TOKEN_ID);

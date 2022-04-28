@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_DECIMALS } from '@config/constants';
-import { fromDecimals, getTokensName, isExist } from '@shared/helpers';
+import { fromDecimals, getTokensName, isExist, multipliedIfPossible } from '@shared/helpers';
 import { balanceMap } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
@@ -89,5 +89,24 @@ export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<Us
     last_staked: new Date(raw.last_staked)
   };
 
-export const mapUsersInfoValues = (rawList: RawUsersInfoValue[]): UsersInfoValue[] =>
-  rawList.map(mapUsersInfoValue).filter(isExist);
+export const clearFarmingItem = (farmingItem: FarmingItem) => {
+  return {
+    id: farmingItem.id.toFixed(),
+    apr: farmingItem.apr?.toFixed(),
+    tvlInStakedToken: farmingItem.tvlInStakedToken.toFixed(),
+    tvlInUsd: farmingItem.tvlInUsd?.toFixed(),
+    depositBalance: farmingItem.depositBalance?.toFixed(),
+    earnExchangeRate: farmingItem.earnExchangeRate?.toFixed(),
+    timelock: farmingItem.timelock
+  };
+};
+
+export const mapFarmingLog = (farmingItem: FarmingItem, balance: BigNumber) => {
+  const balanceInUsd = multipliedIfPossible(balance, farmingItem.earnExchangeRate)?.toFixed();
+
+  return {
+    ...clearFarmingItem(farmingItem),
+    balance: balance.toFixed(),
+    balanceInUsd
+  };
+};

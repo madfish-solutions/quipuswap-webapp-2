@@ -24,14 +24,15 @@ export const Opportunities: FC<OpportunitiesProps> = ({ className }) => {
       data-test-id="QSOpportunitiesSection"
     >
       <div className={s.cards}>
-        {OpportunitiesCardsData.map(({ id, Icon, title, description, button }, index) => (
+        {OpportunitiesCardsData.map(({ id, Icon, title, description, button }) => (
           <OpportunityCard
             key={id}
             Icon={Icon}
             title={title}
             description={description}
             button={button}
-            data-test-id={`QSOpportunitiesButton-${index}`}
+            id={id}
+            data-test-id={`QSOpportunitiesButton-${id}`}
           />
         ))}
       </div>

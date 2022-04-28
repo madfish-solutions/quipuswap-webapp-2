@@ -6,11 +6,11 @@ export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY!;
 export const FEE_RATE = process.env.REACT_APP_FEE!;
 export const APP_NAME = process.env.REACT_APP_APP_NAME!;
 
+export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY!;
+
 export const NETWORK_ID = (process.env.REACT_APP_NETWORK! ?? QSNets.mainnet) as QSNets;
 export const EXCHANGE_RATES_URL = process.env.REACT_APP_EXCHANGE_RATES_URL!;
 export const BAKERS_API = process.env.REACT_APP_BAKERS_API_URL!;
-export const QUIPUSWAP_OLD_VERSION_LINK = process.env.REACT_APP_QUIPUSWAP_OLD_VERSION_LINK!;
-export const APOLLO_CLIENT_ENDPOINT = process.env.REACT_APP_APOLLO_CLIENT_ENDPOINT!;
 
 //#region BASE_URL
 export const networksBaseUrls: Record<QSNets, string> = {

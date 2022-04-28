@@ -19,7 +19,7 @@ interface LiquidityProps {
   className?: string;
 }
 
-export const Liquidity: FC<LiquidityProps> = ({ className }) => {
+export const LiquidityPage: FC<LiquidityProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
 
   const [title, setTitle] = useState('');

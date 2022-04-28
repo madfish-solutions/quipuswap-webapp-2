@@ -12,7 +12,7 @@ import { DAppProvider } from '@providers/use-dapp';
 import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
 import { DexGraphProvider } from '@shared/hooks';
 
-import App from './App';
+import { App } from './app';
 
 require('dotenv').config();
 
