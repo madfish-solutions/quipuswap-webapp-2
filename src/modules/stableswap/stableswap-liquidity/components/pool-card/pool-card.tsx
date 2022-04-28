@@ -3,11 +3,11 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR, PERCENT } from '@config/constants';
-import { Iterator } from '@modules/farming/pages/list/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
   Button,
   Card,
+  Iterator,
   ListItemCardCell,
   NewTokensLogos,
   StateCurrencyAmount,

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import { Iterator } from '@modules/farming/pages/list/helpers';
-import { PageTitle, TestnetAlert } from '@shared/components';
+import { Iterator, PageTitle, TestnetAlert } from '@shared/components';
 
 import { PoolCard } from './components';
 import mock from './components/pool-card/mock.json';

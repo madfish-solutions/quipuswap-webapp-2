@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { Iterator } from '@modules/farming/pages/list/helpers';
 import { toArray } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import { Iterator } from '../iterator';
 import { TokenLogo } from '../token-logo';
 import styles from './new-tokens-logo.module.scss';
 
