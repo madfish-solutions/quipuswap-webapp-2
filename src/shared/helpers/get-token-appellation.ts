@@ -1,12 +1,15 @@
+import { EMPTY_STRING, FISRT_INDEX, ONE_ITEM_LENGTH, SLASH } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
-import { Nullable, Optional, Token, TokenMetadata } from '@shared/types';
+import { Nullable, Optional, RawToken, Token, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
 
+import { isEmptyArray, isLastElementIndex, toArray } from './arrays';
 import { shortize } from './shortize';
 import { isExist } from './type-checks';
 
 // eslint-disable-next-line  @typescript-eslint/no-type-alias
 type isAddress = boolean;
+type RawOrMappedToken = RawToken | Token;
 
 enum MetadataTokenField {
   name = 'name',
@@ -51,12 +54,12 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: Token) =>
+export const isTezosToken = (token: RawOrMappedToken) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;
 
-export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenSymbol = (token: RawOrMappedToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
@@ -76,7 +79,7 @@ export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   return shortize(token.contractAddress);
 };
 
-export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenName = (token: RawOrMappedToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.name;
   }
@@ -94,14 +97,46 @@ export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   return shortize(token.contractAddress);
 };
 
-export const getTokensPairName = (tokenX: Token, tokenY: Token, sliceAmount?: number) => {
+/**
+ * @deprecated Use getSymbolsString() instead of that function
+ */
+export const getTokensPairName = (tokenX: RawOrMappedToken, tokenY: RawOrMappedToken, sliceAmount?: number) => {
   return `${getTokenSymbol(tokenX, sliceAmount)} / ${getTokenSymbol(tokenY, sliceAmount)}`;
 };
 
-export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
+/**
+ * @deprecated Use getSymbolsString() instead of that function
+ */
+export const getTokensOptionalPairName = (
+  inputToken: Optional<RawOrMappedToken>,
+  outputToken: Optional<RawOrMappedToken>
+) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };
 
-export const getTokensName = (token: Token, optionalToken: Optional<Token>) => {
+/**
+ * @deprecated Use getSymbolsString() instead of that function
+ */
+export const getTokensName = (token: RawOrMappedToken, optionalToken: Optional<RawOrMappedToken>) => {
   return optionalToken ? `${getTokenSymbol(token)} / ${getTokenSymbol(optionalToken)}` : getTokenSymbol(token);
+};
+
+export const getSymbolsString = (tokens: RawOrMappedToken | Array<RawOrMappedToken>, sliceAmount?: number) => {
+  const clearTokens = toArray(tokens).filter(Boolean);
+
+  if (isEmptyArray(clearTokens)) {
+    return EMPTY_STRING;
+  }
+
+  if (clearTokens.length === ONE_ITEM_LENGTH) {
+    return getTokenSymbol(clearTokens[FISRT_INDEX], sliceAmount);
+  }
+
+  return clearTokens.reduce(
+    (acc, token, index) =>
+      !isLastElementIndex(index, clearTokens)
+        ? `${acc}${getTokenSymbol(token, sliceAmount)} ${SLASH} `
+        : `${acc}${getTokenSymbol(token, sliceAmount)}`,
+    ''
+  );
 };

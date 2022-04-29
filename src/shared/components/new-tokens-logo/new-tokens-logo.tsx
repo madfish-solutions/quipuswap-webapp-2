@@ -2,19 +2,14 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { toArray } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { getTokenSymbol, toArray } from '@shared/helpers';
+import { Token } from '@shared/types';
 
 import { Iterator } from '../iterator';
 import { TokenLogo } from '../token-logo';
 import styles from './new-tokens-logo.module.scss';
 
-interface TokenLogoInfo {
-  tokenIcon: Nullable<string>;
-  tokenSymbol: Nullable<string>;
-}
-
-type TokensList = TokenLogoInfo | Array<TokenLogoInfo>;
+type TokensList = Token | Array<Token>;
 
 interface TokensLogosPropsAbstraction {
   tokens: TokensList;
@@ -35,17 +30,17 @@ interface FixedTokensLogosProps extends FixedTokensLogos, TokensLogosPropsAbstra
 
 interface FillTokensLogosProps extends FillTokensLogos, TokensLogosPropsAbstraction {}
 
-type NewTokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
+type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
 const prepareTokens = (tokens: TokensList, layoutProps: FixedTokensLogos | FillTokensLogos) => {
-  return toArray(tokens).map(({ tokenIcon, tokenSymbol }) => ({
-    src: tokenIcon,
-    tokenSymbol,
+  return toArray(tokens).map(token => ({
+    src: token.metadata.thumbnailUri,
+    tokenSymbol: getTokenSymbol(token),
     ...layoutProps
   }));
 };
 
-export const NewTokensLogos: FC<NewTokensLogosProps> = props => {
+export const TokensLogos: FC<TokensLogosProps> = props => {
   const { tokens, className } = props;
 
   const layoutBasedProps =

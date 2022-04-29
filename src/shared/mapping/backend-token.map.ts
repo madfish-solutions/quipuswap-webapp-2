@@ -1,7 +1,7 @@
 import { DEFAULT_DECIMALS } from '@config/constants';
-import { Token } from '@shared/types';
+import { RawToken, Token } from '@shared/types';
 
-export const mapBackendToken = (raw: Token, isLp?: boolean, newSymbol?: string): Token => ({
+export const mapBackendToken = (raw: RawToken, isLp?: boolean, newSymbol?: string): Token => ({
   ...raw,
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId),
   metadata: {

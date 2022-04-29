@@ -9,12 +9,13 @@ import {
   Card,
   Iterator,
   ListItemCardCell,
-  NewTokensLogos,
+  TokensLogos,
   StateCurrencyAmount,
   StatusLabel,
   TokensSymbols
 } from '@shared/components';
 
+import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
 import { PreparedTokenData } from './types';
@@ -41,22 +42,18 @@ export const PoolCard: FC<Props> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const { preparelogos, prepareValues, prepareTokens, whitelistedTag, transaction } = usePoolCardViewModel();
+  const { whitelistedTag, translation } = usePoolCardViewModel();
 
   const { status, label } = whitelistedTag;
-  const { totalValueTranslation, liquidityProvidersFeeTranslation, selectTranslation, valueTranslation } = transaction;
+  const { totalValueTranslation, liquidityProvidersFeeTranslation, selectTranslation, valueTranslation } = translation;
 
   return (
     <Card className={modeClass[colorThemeMode]} contentClassName={styles.poolCard}>
       <div className={styles.info}>
         <div className={styles.poolInfo}>
           <div className={styles.logoSymbols}>
-            <NewTokensLogos
-              className={styles.tokensLogos}
-              tokens={preparelogos(prepareTokens(tokensInfo))}
-              width={48}
-            />
-            <TokensSymbols className={styles.tokensSymbols} tokens={prepareTokens(tokensInfo)} />
+            <TokensLogos className={styles.tokensLogos} tokens={extractTokens(tokensInfo)} width={48} />
+            <TokensSymbols className={styles.tokensSymbols} tokens={extractTokens(tokensInfo)} />
           </div>
 
           {isWhitelisted && <StatusLabel className={styles.whitelistedTag} status={status} label={label} filled />}
@@ -96,7 +93,7 @@ export const PoolCard: FC<Props> = ({
             isGrouped
             wrapperClassName={styles.tokensInfo}
             render={StateCurrencyAmount}
-            data={prepareValues(tokensInfo)}
+            data={preparePoolAmounts(tokensInfo)}
           />
         </ListItemCardCell>
 

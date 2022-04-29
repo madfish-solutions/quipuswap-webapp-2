@@ -30,7 +30,10 @@ interface FillTokensLogosProps extends TokensLogosPropsAbstraction {
 
 export type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
-export const TokensLogos: FC<TokensLogosProps> = props => {
+/**
+ * @deprecated
+ */
+export const TokensLogosDeprecated: FC<TokensLogosProps> = props => {
   const { firstTokenIcon, firstTokenSymbol, secondTokenIcon, secondTokenSymbol, className, imageClassName, loading } =
     props;
 

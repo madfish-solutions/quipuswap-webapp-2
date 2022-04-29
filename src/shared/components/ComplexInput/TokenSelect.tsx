@@ -23,7 +23,7 @@ import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
@@ -162,7 +162,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                   className={s.item4}
                   textClassName={s.item4Inner}
                 >
-                  <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                  <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
                   <h6 className={cx(s.token)}>{tokenLabel}</h6>
                   {!notSelectable && <Shevron />}
                 </Button>

@@ -1,7 +1,3 @@
 {
-  "whiteListed": "Whitelisted",
-  "totalValue": "Total Value",
-  "liquidityProvidersFee": "Liquidity providers fee",
-  "select": "Select",
-  "value": "Value"
+  "liquidityProvidersFee": "Liquidity providers fee"
 }

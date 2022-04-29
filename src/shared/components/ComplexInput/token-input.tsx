@@ -22,7 +22,7 @@ import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos';
 import { ComplexError } from './ComplexError';
 import styles from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
@@ -182,14 +182,14 @@ export const TokenInput: FC<Props> = ({
               textClassName={styles.item4Inner}
             >
               {isBothTokensExist ? (
-                <TokensLogos
+                <TokensLogosDeprecated
                   firstTokenIcon={firstTokenIcon}
                   firstTokenSymbol={firstTokenSymbol}
                   secondTokenIcon={secondTokenIcon}
                   secondTokenSymbol={secondTokenSymbol}
                 />
               ) : (
-                <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
               )}
               <h6 className={styles.token}>{tokenLabel}</h6>
             </Button>

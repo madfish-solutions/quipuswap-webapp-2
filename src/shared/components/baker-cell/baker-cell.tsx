@@ -6,7 +6,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Baker } from '@shared/svg';
 
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos';
 import { Tooltip } from '../tooltip';
 import s from './baker-cell.module.scss';
 
@@ -63,7 +63,7 @@ export const BakerCell: FC<BakerCellProps> = ({
     >
       <div className={s.bakerFlexCell}>
         {bakerLogo ? (
-          <TokensLogos firstTokenIcon={bakerLogo} firstTokenSymbol={bakerName} />
+          <TokensLogosDeprecated firstTokenIcon={bakerLogo} firstTokenSymbol={bakerName} />
         ) : (
           <Baker className={s.bakerIcon} />
         )}

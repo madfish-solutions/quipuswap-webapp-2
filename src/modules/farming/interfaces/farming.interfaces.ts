@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, RawToken, Token, Undefined } from '@shared/types';
 import { ActiveStatus } from '@shared/types/active-statuts-enum';
 
 export interface BlockInfo {
@@ -46,16 +46,16 @@ export interface RawFarmingItem {
 
   rewardPerSecond: string;
   rewardPerShare: string;
-  rewardToken: Token;
+  rewardToken: RawToken;
 
   stakeStatus: ActiveStatus;
   stakeUrl: string;
-  stakedToken: Token;
+  stakedToken: RawToken;
   staked: string;
 
   timelock: string;
-  tokenA: Token;
-  tokenB: Undefined<Token>;
+  tokenA: RawToken;
+  tokenB: Undefined<RawToken>;
   tvlInStakedToken: string;
   tvlInUsd: Nullable<string>;
 

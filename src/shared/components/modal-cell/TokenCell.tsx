@@ -8,7 +8,7 @@ import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos';
 import styles from './ModalCell.module.scss';
 
 interface TokenCellProps {
@@ -53,7 +53,7 @@ export const TokenCell: FC<TokenCellProps> = ({
   return (
     <div tabIndex={tabIndex} onClick={onClick} onKeyUp={handleKeyUp} className={compoundClassName}>
       <div className={styles.splitRow}>
-        <TokensLogos firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
+        <TokensLogosDeprecated firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
         <div className={cx(styles.mleft8, styles.tokenBody)}>
           <div className={styles.joinRow}>
             <h6>{tokenSymbol}</h6>
