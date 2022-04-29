@@ -23,11 +23,11 @@ export const useDoHarvest = () => {
         farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? ZERO_BN;
       const exchangeRate = farmingItem.earnExchangeRate ?? ZERO_BN;
       const logData = {
-        harvestAll: {
+        harvest: {
           farmingId: farmingItem.id.toFixed(),
           rewardToken: `${farmingItem.rewardToken.contractAddress}_${farmingItem.rewardToken.fa2TokenId}`,
-          rewardsInToken: rewardsInToken.toFixed(),
-          rewardsInUsd: rewardsInToken.multipliedBy(exchangeRate).toFixed()
+          rewardsInToken: Number(rewardsInToken.toFixed()),
+          rewardsInUsd: Number(rewardsInToken.multipliedBy(exchangeRate).toFixed())
         }
       };
 
