@@ -46,7 +46,7 @@ export const useDoHarvestAll = () => {
       const logData = {
         harvestAll: {
           farmingIds: farmingIds.map(id => id.toFixed()),
-          rewardsInUsd: getUserRewardsLogData(farmingList).toFixed()
+          rewardsInUsd: Number(getUserRewardsLogData(farmingList).toFixed())
         }
       };
 

@@ -9,11 +9,14 @@ import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { NETWORK_ID } from '@config/enviroment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
+import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { useConfirmOperation } from '@shared/dapp';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,
+  fromDecimals,
   getAddLiquidityMessage,
+  getDollarEquivalent,
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
   getTokenSlug,
@@ -75,10 +78,11 @@ export const useAddLiquidityService = (
   const tezos = useTezos();
   const estimatedTezos = useEstimationToolkit();
   const accountPkh = useAccountPkh();
+  const exchangeRates = useNewExchangeRates();
   const {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
-  const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, updatePairInfo, tokenAPool, tokenBPool } = usePairInfo(dex, tokenA, tokenB);
   const {
     tokenBalance: tokenABalance,
     updateTokenBalance: updateTokenABalance,
@@ -135,12 +139,12 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = _pairInfo;
+    const { tokenAPool: _tokenAPool, tokenBPool: _tokenBPool, tokenA: pairTokenA } = _pairInfo;
 
     const isTokensOrderValid =
       _tokenA.contractAddress === pairTokenA.contractAddress && _tokenA.fa2TokenId === pairTokenA.fa2TokenId;
-    const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
-    const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
+    const validTokenAPool = isTokensOrderValid ? _tokenAPool : _tokenBPool;
+    const validTokenBPool = isTokensOrderValid ? _tokenBPool : _tokenAPool;
 
     const tokenBAmount = calculatePoolAmount(tokenABN, _tokenA, _tokenB, validTokenAPool, validTokenBPool);
 
@@ -301,6 +305,13 @@ export const useAddLiquidityService = (
     const pairInputA = isRevert ? tokenBInput : tokenAInput;
     const pairInputB = isRevert ? tokenAInput : tokenBInput;
 
+    const tokenAInputUsd = Number(getDollarEquivalent(tokenAPool, exchangeRates[getTokenSlug(tokenA)]));
+    const tokenBInputUsd = Number(getDollarEquivalent(tokenBPool, exchangeRates[getTokenSlug(tokenB)]));
+    const fixedTokenAPoll = Number(fromDecimals(tokenAPool!, tokenA).toFixed());
+    const fixedTokenBPoll = Number(fromDecimals(tokenBPool!, tokenB).toFixed());
+    const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
+    const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
+
     if (isPoolNotExist) {
       const addPairTokenToTokenOperation = await addPairTokenToToken(
         tezos,
@@ -326,7 +337,14 @@ export const useAddLiquidityService = (
             tokenASlug: getTokenSlug(pairTokenA),
             tokenBSlug: getTokenSlug(pairTokenB),
             pairInputA: Number(pairInputA),
-            pairInputB: Number(pairInputB)
+            pairInputB: Number(pairInputB),
+            tokenAInputUsd,
+            tokenBInputUsd,
+            fixedTokenAPoll,
+            fixedTokenBPoll,
+            fixedTokenAPollUds,
+            fixedTokenBPollUds,
+            tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
           }
         };
 
@@ -360,7 +378,14 @@ export const useAddLiquidityService = (
           tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
           tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
           transactionDeadline: Number(transactionDeadline.toFixed()),
-          liquiditySlippage: Number(liquiditySlippage.toFixed())
+          liquiditySlippage: Number(liquiditySlippage.toFixed()),
+          tokenAInputUsd,
+          tokenBInputUsd,
+          fixedTokenAPoll,
+          fixedTokenBPoll,
+          fixedTokenAPollUds,
+          fixedTokenBPollUds,
+          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
         }
       };
 
@@ -412,6 +437,13 @@ export const useAddLiquidityService = (
     const tezTokenBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
+    const tezTokenInputUsd = Number(getDollarEquivalent(tezTokenInput, exchangeRates[TEZOS_TOKEN.contractAddress]));
+    const notTezTokenInputUsd = Number(getDollarEquivalent(notTezTokenInput, exchangeRates[getTokenSlug(notTezToken)]));
+    const fixedTokenAPoll = Number(fromDecimals(tokenAPool!, tokenA).toFixed());
+    const fixedTokenBPoll = Number(fromDecimals(tokenBPool!, tokenB).toFixed());
+    const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
+    const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
+
     const shouldAddLiquidity =
       !isNull(dex) &&
       pairInfo &&
@@ -427,7 +459,15 @@ export const useAddLiquidityService = (
           tokenSlug: getTokenSlug(notTezToken),
           tokenSymbol: getTokenSymbol(notTezToken),
           tezTokenInput: Number(tezTokenInput),
-          notTezTokenInput: Number(notTezTokenInput)
+          notTezTokenInput: Number(notTezTokenInput),
+          tezTokenInputUsd,
+          notTezTokenInputUsd,
+          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd,
+          fixedTokenAPoll,
+          fixedTokenBPoll,
+          fixedTokenAPollUds,
+          fixedTokenBPollUds,
+          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
         }
       };
 
@@ -461,7 +501,15 @@ export const useAddLiquidityService = (
           tokenSymbol: getTokenSymbol(notTezToken),
           notTezTokenInput,
           tokenBValue: Number(tokenBValue.toFixed()),
-          tezValue: Number(tezValue.toFixed())
+          tezValue: Number(tezValue.toFixed()),
+          tezTokenInputUsd,
+          notTezTokenInputUsd,
+          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd,
+          fixedTokenAPoll,
+          fixedTokenBPoll,
+          fixedTokenAPollUds,
+          fixedTokenBPollUds,
+          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
         }
       };
 
