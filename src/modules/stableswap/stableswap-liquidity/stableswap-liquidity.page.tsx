@@ -6,5 +6,6 @@ export const StableswapLiquidityPage: FC = () => (
   <>
     <TestnetAlert />
     <PageTitle>Stableswap Liquidity</PageTitle>
+    <p>Coming soon</p>
   </>
 );

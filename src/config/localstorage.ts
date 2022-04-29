@@ -5,3 +5,4 @@ export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const GLOBAL_SETTINGS_KEY = 'globalSettings';
 export const IS_LOGGING_KEY = 'LOG';
+export const COOKIES_APPRROVAL_KEY = 'cookieApproval';

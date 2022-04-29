@@ -148,13 +148,11 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const onTokensSelected = useCallback(
     (_inputToken: Token, _outputToken: Token) => {
       updateSwapLimits(_inputToken, _outputToken);
-      const newRoute = `/swap/${getTokenPairSlug(_inputToken, _outputToken)}`;
+      const newRoute = `/${action}/${getTokenPairSlug(_inputToken, _outputToken)}`;
 
-      // if (router.asPath !== newRoute) {
       navigate(newRoute);
-      // }
     },
-    [navigate, updateSwapLimits]
+    [action, navigate, updateSwapLimits]
   );
 
   const { balances, updateBalance } = useBalances();

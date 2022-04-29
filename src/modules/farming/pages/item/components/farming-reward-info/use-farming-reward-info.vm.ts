@@ -5,6 +5,7 @@ import { DEFAULT_TOKEN } from '@config/tokens';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, isTokenEqual } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
 import {
@@ -47,16 +48,22 @@ export const useFarmingRewardInfoViewModel = () => {
   }, [delayedGetFarmingItem, doHarvest, farmingItem]);
 
   const handleHarvest = async () => {
+    amplitudeService.logEvent('HARVEST_CLICK');
     const pendingRewardsOnCurrentBlock = await farmingItemStore.getPendingRewardsOnCurrentBlock();
 
     if (isTokenEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
+        amplitudeService.logEvent('HARVEST_YES_CLICK');
         await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock);
-
         await delayedGetFarmingItem(defined(farmingItem).id);
       };
 
-      confirmationPopup(yesCallback, doSimpleHarvest);
+      const noCallback = async () => {
+        amplitudeService.logEvent('HARVEST_NO_CLICK');
+        await doSimpleHarvest();
+      };
+
+      confirmationPopup(yesCallback, noCallback);
     } else {
       await doSimpleHarvest();
     }

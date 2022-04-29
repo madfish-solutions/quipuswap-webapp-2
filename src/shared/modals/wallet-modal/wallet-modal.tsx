@@ -47,6 +47,7 @@ export const WalletModal: FC = () => {
         closeAccountInfoModal();
         closeConnectWalletModal();
         amplitudeService.logEvent('CONNECT_WALLET_SUCCESS', { walletType });
+        amplitudeService.setUserProps('wallet_type', walletType);
       } catch (err) {
         if (err instanceof NoTempleWallet) {
           openInstallTempleWalletModal();
