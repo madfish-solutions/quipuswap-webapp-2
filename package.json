@@ -10,15 +10,14 @@
     "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
     "build": "yarn pre-build && craco build",
     "start": "yarn dev:mainnet",
-    "test": "craco test",
+    "test": "craco test run-p http-server e2e",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
     "eject": "react-scripts eject",
     "postinstall": "husky install",
     "commit": "commit-wizard",
-    "start-test-server": "http-server -p 8888 -c-1",
-    "e2e": "cypress run",
-    "test-cypress": "run-p --race start-test-server e2e"
+    "http-server": "http-server -p 8888 -c-1",
+    "e2e": "cypress run"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.12",
@@ -124,20 +123,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint --fix && yarn tsc && yarn run build"
-    }
-  },
-  "release": {
-    "analyzeCommits": "simple-commit-message"
-  },
-  "config": {
-    "pre-git": {
-      "commit-msg": "simple",
-      "pre-commit": [],
-      "pre-push": ["yarn test-cypress"],
-      "post-commit": [],
-      "post-checkout": [],
-      "post-merge": []
+      "pre-commit": "yarn lint --fix && yarn tsc && yarn run build",
+      "pre-push": "yarn test"
     }
   }
 }
