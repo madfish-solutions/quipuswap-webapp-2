@@ -5,7 +5,7 @@ import { Card, CardContent } from '@shared/components/card';
 import { EnTermsOfService } from './content/en-terms-of-service';
 import styles from './terms.module.scss';
 
-export const TermsOfService: FC = () => (
+export const TermsOfServicePage: FC = () => (
   <Card>
     <CardContent className={styles.content}>
       <EnTermsOfService />

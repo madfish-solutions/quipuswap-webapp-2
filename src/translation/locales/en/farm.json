@@ -79,8 +79,12 @@
   "Tags": "Tags",
   "Wanna earn more?": "Wanna earn more?",
   "increaseYourIncome": "Increase your income by reinvesting the rewards to QUIPU pool with no lock periods and withdrawal fees. The compound effect is your best friend.",
-  "Nope": "Nope",
+  "JustHarvest": "Just harvest",
   "iAmIn": "Yes, I am in!",
   "Harvest successful": "Harvest successful",
-  "Stake successful": "Stake successful"
+  "Stake successful": "Stake successful",
+  "Token": "Token",
+  "Full": "Full",
+  "Claimable": "Claimable",
+  "YouvesCheckout": "Check out alternative farming on Youves"
 }

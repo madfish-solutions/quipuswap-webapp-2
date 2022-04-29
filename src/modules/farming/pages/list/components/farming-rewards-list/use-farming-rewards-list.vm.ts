@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 
+import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
 import {
@@ -22,16 +23,19 @@ export const useFarmingRewardsListViewModel = () => {
   const { doHarvestAllAndRestake } = useDoHarvestAllAndRestake();
 
   const yesCallback = useCallback(async () => {
+    amplitudeService.logEvent('HARVEST_ALL_YES_CLICK');
     await doHarvestAllAndRestake(farmingListStore.listStore.data);
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   }, [delayedGetFarmingList, delayedGetFarmingStats, doHarvestAllAndRestake, farmingListStore.listStore.data]);
 
   const noCallback = useCallback(async () => {
+    amplitudeService.logEvent('HARVEST_ALL_NO_CLICK');
     await doHarvestAll(farmingListStore.listStore.data);
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   }, [delayedGetFarmingList, delayedGetFarmingStats, doHarvestAll, farmingListStore.listStore.data]);
 
   const handleHarvestAll = async () => {
+    amplitudeService.logEvent('HARVEST_ALL_CLICK');
     confirmationPopup(yesCallback, noCallback);
   };
 

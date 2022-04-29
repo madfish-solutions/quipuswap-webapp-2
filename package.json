@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3000 craco start",
@@ -25,6 +25,7 @@
     "@temple-wallet/dapp": "^6.1.1",
     "@tippyjs/react": "^4.2.6",
     "@types/react-modal": "^3.13.1",
+    "@types/react-table": "^7.7.11",
     "amplitude-js": "^8.18.1",
     "assert": "^2.0.0",
     "bignumber.js": "^9.0.2",

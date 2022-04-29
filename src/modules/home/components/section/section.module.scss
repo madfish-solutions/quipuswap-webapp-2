@@ -1,10 +1,6 @@
 @import "@styles/variables";
 @import "@styles/breakpoints";
 
-.root {
-  padding: 20px 0;
-}
-
 .header {
   font-weight: 600;
   font-size: 1.286rem;
@@ -21,7 +17,7 @@
 
 @include media('>Lphone') {
   .root {
-    padding: 26px 0;
+    padding: 0 0 32px 0;
   }
 
   .header {
@@ -36,16 +32,12 @@
 
 
 @include media('>Ltablet') {
-  .root {
-    padding: 32px 0;
-  }
-
   .header {
     font-size: 3.143rem;
     line-height: 1.45;
   }
 
   .description {
-    margin-bottom: 40px;
+    margin-bottom: 16px;
   }
 }

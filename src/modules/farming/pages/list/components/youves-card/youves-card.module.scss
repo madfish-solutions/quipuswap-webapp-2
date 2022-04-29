@@ -1,0 +1,56 @@
+@import "@styles/breakpoints";
+@import "@styles/variables";
+
+.root {
+  margin: 32px 0;
+  padding: 24px 18px;
+}
+
+
+.content {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.youvesIcon {
+  margin-left: 8px;
+}
+
+.youvesCheckout {
+  flex: 1;
+  text-align: right;
+  margin-right: 32px;
+  font-weight: bold;
+}
+
+.button {
+  width: auto;
+}
+
+.dark {
+  .youvesCheckout {
+    color: $text-inverse;
+  }
+}
+
+.light {
+  .youvesCheckout {
+    color: $text-01;
+  }
+}
+
+@include media("<=tablet") {
+  .content {
+    flex-direction: column;
+  }
+  .youvesIcon {
+    margin: 28px 0;
+  }
+  .youvesCheckout {
+    margin: 24px 0;
+  }
+  .button {
+    width: 100%;
+  }
+}

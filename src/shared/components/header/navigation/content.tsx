@@ -1,63 +1,86 @@
 import { FC, ReactNode } from 'react';
 
+import { AppRootRoutes } from '@app.router';
 import { StatusLabel } from '@shared/components/status-label';
-import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '@shared/svg';
+import {
+  AnalyticsIcon,
+  FarmIcon,
+  FeedbackIcon,
+  HomeIcon,
+  LiquidityIcon,
+  MoreIcon,
+  StableswapIcon,
+  SwapIcon
+} from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
 
+import { isProd } from '../../../helpers/is-prod';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
-  id: number;
+  id: string;
   to?: string;
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
   status?: ReactNode;
+  hide?: boolean;
 }
 
-interface NavigationDataProps extends LinkInterface {
+export interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[];
 }
 
+export const isShow = (nav: NavigationDataProps) => !nav.hide;
+
 export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
-    id: 0,
-    to: '/',
+    id: 'Home',
+    to: AppRootRoutes.Root,
     label: <Trans ns="common">Home</Trans>,
     Icon: HomeIcon
   },
   {
-    id: 1,
-    to: '/swap',
+    id: 'Swap',
+    to: AppRootRoutes.Swap,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon
   },
   {
-    id: 2,
-    to: '/liquidity',
+    id: 'Liquidity',
+    to: AppRootRoutes.Liquidity,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },
   {
-    id: 3,
-    to: '/voting',
-    label: <Trans ns="common">Voting</Trans>,
-    Icon: VotingIcon
+    id: 'Stableswap',
+    to: AppRootRoutes.Stableswap,
+    label: <Trans ns="common">Stableswap</Trans>,
+    Icon: StableswapIcon,
+    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />,
+    hide: isProd()
   },
   {
-    id: 4,
-    to: '/farming',
+    id: 'Farming',
+    to: AppRootRoutes.Farming,
     label: <Trans ns="common">Farming</Trans>,
-    Icon: FarmIcon,
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />
+    Icon: FarmIcon
   },
-  // {
-  //   id: 5,
-  //   to: '/farm',
-  //   label: <Trans ns="common">Farm</Trans>,
-  //   Icon: FarmIcon,
-  // },
+  {
+    id: 'Analytics',
+    to: 'https://analytics.quipuswap.com/',
+    label: <Trans ns="common">Analytics</Trans>,
+    Icon: AnalyticsIcon,
+    target: '_blank'
+  },
+  {
+    id: 'Feedback',
+    to: 'https://madfish.canny.io/quipuswap-feature-requests',
+    label: <Trans ns="common">Feedback</Trans>,
+    Icon: FeedbackIcon,
+    target: '_blank'
+  },
   // {
   //   id: 6,
   //   to: '/portfolio',
@@ -71,61 +94,54 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   //   Icon: GovernanceIcon,
   // },
   {
-    id: 7,
+    id: 'More',
     label: <Trans ns="common">More</Trans>,
     Icon: MoreIcon,
     links: [
       {
-        id: 0,
-        to: 'https://analytics.quipuswap.com/',
-        label: 'Analytics',
-        target: '_blank'
+        id: 'More_Voting',
+        to: AppRootRoutes.Voting,
+        label: <Trans ns="common">Voting</Trans>
       },
       {
-        id: 1,
+        id: 'More_About',
         to: 'https://story.madfish.solutions/category/quipuswap/',
         label: 'About',
         target: '_blank'
       },
       {
-        id: 2,
+        id: 'More_Audit',
         to: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
         label: 'Audit',
         target: '_blank'
       },
       {
-        id: 3,
+        id: 'More_Help',
         to: 'https://madfish.crunch.help/quipu-swap',
         label: 'Help',
         target: '_blank'
       },
       {
-        id: 4,
+        id: 'More_Docs',
         to: 'https://docs.quipuswap.com/',
         label: 'Docs',
         target: '_blank'
       },
       {
-        id: 5,
+        id: 'More_Blog',
         to: 'https://story.madfish.solutions/',
         label: 'Blog',
         target: '_blank'
       },
 
       {
-        id: 8,
-        to: 'https://madfish.canny.io/quipuswap-feature-requests',
-        label: 'Feedback',
-        target: '_blank'
-      },
-      {
-        id: 6,
-        to: '/terms-of-service',
+        id: 'More_TermsOfService',
+        to: AppRootRoutes.TermsOfService,
         label: 'Terms of Usage'
       },
       {
-        id: 7,
-        to: '/privacy-policy',
+        id: 'More_PrivacyPolicy',
+        to: AppRootRoutes.PrivacyPolicy,
         label: 'Privacy Policy'
       }
     ]
