@@ -1,13 +1,12 @@
+import { StableswapTokensInfo } from '@modules/stableswap/types';
 import { getTokenSymbol } from '@shared/helpers';
 
-import { PreparedTokenData } from './types';
+export const extractTokens = (tokensInfo: Array<StableswapTokensInfo>) => tokensInfo.map(({ token }) => token);
 
-export const extractTokens = (tokensInfo: Array<PreparedTokenData>) => tokensInfo.map(({ token }) => token);
-
-export const preparePoolAmounts = (tokensInfo: Array<PreparedTokenData>) => {
-  return tokensInfo.map(({ token, reserves, exchangeRate }) => ({
+export const preparePoolAmounts = (tokensInfo: Array<StableswapTokensInfo>) => {
+  return tokensInfo.map(({ token, reserves, reservesInUsd }) => ({
     amount: reserves,
-    dollarEquivalent: reserves.multipliedBy(exchangeRate),
+    dollarEquivalent: reservesInUsd,
     currency: getTokenSymbol(token)
   }));
 };

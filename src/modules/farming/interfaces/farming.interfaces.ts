@@ -1,13 +1,7 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable, RawToken, Token, Undefined } from '@shared/types';
+import { BlockInfoWrap, Nullable, RawToken, Token, Undefined } from '@shared/types';
 import { ActiveStatus } from '@shared/types/active-statuts-enum';
-
-export interface BlockInfo {
-  level: number;
-  hash: string;
-  timestamp: string;
-}
 
 export interface RawFarmingStats {
   totalValueLocked: string;
@@ -16,9 +10,8 @@ export interface RawFarmingStats {
   totalClaimedReward: string;
 }
 
-export interface FarmingStatsResponse {
+export interface FarmingStatsResponse extends BlockInfoWrap {
   stats: RawFarmingStats;
-  blockInfo: BlockInfo;
 }
 
 export interface FarmingStats {
@@ -67,14 +60,12 @@ export interface RawFarmingItem {
   earnBalance?: string;
 }
 
-export interface FarmingListResponse {
+export interface FarmingListResponse extends BlockInfoWrap {
   list: Array<RawFarmingItem>;
-  blockInfo: BlockInfo;
 }
 
-export interface FarmingItemResponse {
+export interface FarmingItemResponse extends BlockInfoWrap {
   item: RawFarmingItem;
-  blockInfo: BlockInfo;
 }
 
 export interface UserBalances {
