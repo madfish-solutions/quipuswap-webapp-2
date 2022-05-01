@@ -1,15 +1,13 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { DEFAULT_TOKEN_ID, STEP } from '@config/constants';
 import { isEmptyString, isExist, isNull } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { SortDirection, sortStableswapList, SortField } from '../helpers';
 import { StableswapItem } from '../types';
-
-const ZERO = 0;
-export const STEP = 1;
 
 const includesCaseInsensitive = (strA: Optional<string>, strB: string) => {
   if (isExist(strA)) {
@@ -20,7 +18,7 @@ const includesCaseInsensitive = (strA: Optional<string>, strB: string) => {
 };
 
 const isZeroTokenId = (tokenId: Optional<number>) => {
-  return !isExist(tokenId) || tokenId === ZERO;
+  return !isExist(tokenId) || tokenId === DEFAULT_TOKEN_ID;
 };
 
 export class StableswapFilterStore {
@@ -90,7 +88,7 @@ export class StableswapFilterStore {
 
   handleIncrement() {
     if (isNull(this.tokenId)) {
-      this.tokenId = new BigNumber(ZERO);
+      this.tokenId = new BigNumber(DEFAULT_TOKEN_ID);
     } else {
       this.tokenId = this.tokenId.plus(STEP);
     }
@@ -98,8 +96,8 @@ export class StableswapFilterStore {
 
   handleDecrement() {
     if (isNull(this.tokenId)) {
-      this.tokenId = new BigNumber(ZERO);
-    } else if (this.tokenId.isGreaterThan(ZERO)) {
+      this.tokenId = new BigNumber(DEFAULT_TOKEN_ID);
+    } else if (this.tokenId.isGreaterThan(DEFAULT_TOKEN_ID)) {
       this.tokenId = this.tokenId.minus(STEP);
     }
   }
