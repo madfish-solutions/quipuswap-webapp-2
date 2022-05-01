@@ -5,21 +5,22 @@
   padding: 24px;
 }
 
+.card.light:hover {
+  background: $skeleton-light;
+}
+
+.card.dark:hover {
+  background: $skeleton-dark;
+}
+
 .card > div {
   padding-top: 0;
 }
 
-.container {
+.top {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  row-gap: 24px;
-}
-
-.left {
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .itemLeftHeader {
@@ -51,7 +52,7 @@
 }
 
 .rewardTarget {
-  margin-top: 16px;
+  flex: 1;
 }
 
 .stats {
@@ -118,14 +119,7 @@
   row-gap: 12px;
 }
 
-.right {
-  display: flex;
-  flex-direction: column;
-  row-gap: 40px;
-  justify-content: space-between;
-}
-
-.links {
+.tags {
   display: flex;
   column-gap: 24px;
 }
@@ -174,10 +168,6 @@
     row-gap: 16px;
   }
 
-  .right {
-    align-items: flex-end;
-  }
-
   .button {
     width: 160px;
   }
@@ -200,10 +190,6 @@
     row-gap: 16px;
   }
 
-  .right {
-    align-items: flex-end;
-  }
-
   .button {
     width: 160px;
   }
@@ -224,15 +210,6 @@
 }
 
 @include media(">tablet", "<Ltablet") {
-  .container {
-    flex-direction: row;
-    row-gap: 24px;
-  }
-
-  .left {
-    width: calc(100% - 260px);
-  }
-
   .stats {
     margin-top: 16px;
     flex-direction: row;
@@ -251,29 +228,12 @@
     row-gap: 16px;
   }
 
-  .right {
-    align-items: flex-end;
-  }
-
   .button {
     width: 160px;
   }
 }
 
 @include media(">=Ltablet") {
-  .container {
-    flex-direction: row;
-    row-gap: 24px;
-  }
-
-  .rewardTarget {
-    margin-top: 0px;
-  }
-
-  .left {
-    width: calc(100% - 260px);
-  }
-
   .stats {
     flex-direction: row;
     justify-content: flex-start;
@@ -306,10 +266,6 @@
       transform: translateY(-50%);
       margin-left: -28px;
     }
-  }
-
-  .right {
-    align-items: flex-end;
   }
 
   .button {
