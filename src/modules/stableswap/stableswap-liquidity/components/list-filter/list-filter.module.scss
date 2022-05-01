@@ -73,7 +73,7 @@
 @include media(">Ltablet") {
   .cardContent {
     grid-template-rows: none;
-    grid-template-columns: 2fr 1fr min-content min-content 1fr;
+    grid-template-columns: 2fr 1fr min-content 1fr 1fr;
   }
 
   .filterCard {
