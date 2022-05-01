@@ -6,7 +6,7 @@ import { RootStore } from '@shared/store';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { SortDirection, sortStableswapList, SortField } from '../helpers';
-import { StableswapList } from '../types';
+import { StableswapItem } from '../types';
 
 const ZERO = 0;
 export const STEP = 1;
@@ -58,7 +58,7 @@ export class StableswapFilterStore {
     });
   }
 
-  filterAndSort(list: StableswapList['list']) {
+  filterAndSort(list: Array<StableswapItem>) {
     if (this.whitelistedOnly) {
       list = list.filter(({ isWhitelisted }) => isWhitelisted);
     }

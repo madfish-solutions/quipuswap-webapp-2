@@ -5,10 +5,10 @@ import { Nullable } from '@shared/types';
 
 import { getStableswapListApi, getStableswapStatsApi } from '../api';
 import { poolsListMapper, statsMapper } from '../mapping';
-import { RawStableswapList, RawStableswapStats, StableswapList, StableswapStats } from '../types';
+import { RawStableswapItem, RawStableswapStats, StableswapItem, StableswapStats } from '../types';
 
 export class StableswapListStore {
-  readonly listStore = new LoadingErrorData<RawStableswapList['list'], StableswapList['list']>(
+  readonly listStore = new LoadingErrorData<Array<RawStableswapItem>, Array<StableswapItem>>(
     [],
     async () => await getStableswapListApi(),
     poolsListMapper

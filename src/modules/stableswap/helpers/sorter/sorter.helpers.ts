@@ -1,4 +1,4 @@
-import { StableswapItem, StableswapList } from '@modules/stableswap/types';
+import { StableswapItem } from '@modules/stableswap/types';
 import { cloneArray, isNull, sortBigNumber } from '@shared/helpers';
 
 import { SortDirection, SortField } from './sorter.types';
@@ -25,11 +25,7 @@ const sortStableswap = (
   return stableswapSorts[sortField](first, second, sortDirection);
 };
 
-export const sortStableswapList = (
-  list: StableswapList['list'],
-  sortField: SortField,
-  sortDirection: SortDirection
-) => {
+export const sortStableswapList = (list: Array<StableswapItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {
     return list;
   }
