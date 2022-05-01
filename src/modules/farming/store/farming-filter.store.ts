@@ -2,12 +2,12 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { DEFAULT_TOKEN_ID, STEP } from '@config/constants';
-import { isEmptyString, isExist, isNull } from '@shared/helpers';
+import { isEmptyString, isExist, isNull, SortDirection } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { ActiveStatus, Nullable, Optional, Token } from '@shared/types';
 
 import { FarmingItem } from '../interfaces';
-import { SortDirection, sortFarmingList, SortField } from '../pages/list/components'; //TODO
+import { sortFarmingList, SortField } from '../pages/list/components'; //TODO
 
 const includesCaseInsensitive = (strA: Optional<string>, strB: string) => {
   if (isExist(strA)) {
