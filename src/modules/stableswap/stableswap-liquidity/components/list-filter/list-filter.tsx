@@ -3,16 +3,13 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { STEP } from '@modules/farming/store';
+import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { Sorter } from '@modules/stableswap/helpers';
 import { Card, Input, NumberInput, Switcher } from '@shared/components';
 import { Search } from '@shared/svg';
 
 import styles from './list-filter.module.scss';
 import { useListFilterViewModel } from './list-filter.vm';
-
-export const MIN_TOKEN_ID = 0;
-export const MAX_TOKEN_ID = Number.MAX_SAFE_INTEGER;
 
 export const ListFilter: FC = observer(() => {
   const {

@@ -1,12 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 
+import { SWAP, SKIP } from '@config/constants';
 import { SortDirection } from '@modules/stableswap/helpers';
 import { Nullable } from '@shared/types';
 
 import { isNull } from '../type-checks';
-
-const SWAP = 1;
-const SKIP = -1;
 
 export const sortBigNumber = (
   first: Nullable<BigNumber>,

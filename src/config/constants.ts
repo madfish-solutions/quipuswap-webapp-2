@@ -72,6 +72,11 @@ export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
 //#endregion
 
+//#region sort
+export const SWAP = 1;
+export const SKIP = -1;
+//#endregion
+
 //TODO: assort mix
 //#region mix
 export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
