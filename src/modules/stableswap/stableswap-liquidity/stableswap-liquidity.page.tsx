@@ -16,7 +16,6 @@ export const StableswapLiquidityPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <ListFilter />
-      {/*TODO: Add sceleton */}
       <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
         <Iterator render={PoolCard} data={list ?? []} isGrouped wrapperClassName={styles.poolsList} />
       </StateWrapper>
