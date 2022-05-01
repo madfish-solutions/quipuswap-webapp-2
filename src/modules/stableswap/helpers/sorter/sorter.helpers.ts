@@ -11,7 +11,7 @@ const sortByTvl = (first: StableswapItem, second: StableswapItem, sortDirection:
   return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 };
 
-const farmingSorts = {
+const stableswapSorts = {
   [SortField.ID]: sortById,
   [SortField.TVL]: sortByTvl
 };
@@ -22,7 +22,7 @@ const sortStableswap = (
   sortField: SortField,
   sortDirection: SortDirection
 ) => {
-  return farmingSorts[sortField](first, second, sortDirection);
+  return stableswapSorts[sortField](first, second, sortDirection);
 };
 
 export const sortStableswapList = (
