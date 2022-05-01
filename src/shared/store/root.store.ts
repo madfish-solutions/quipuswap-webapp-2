@@ -58,21 +58,21 @@ export class RootStore {
     this.tezos = tezos;
   }
   async createStableswapListStore() {
-    if (isNull(this.farmingFilterStore)) {
+    if (isNull(this.stableswapListStore)) {
       const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');
       this.stableswapListStore = new StableswapListStore(this);
     }
   }
 
   async createStableswapItemStore() {
-    if (isNull(this.farmingFilterStore)) {
+    if (isNull(this.stableswapItemStore)) {
       const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
       this.stableswapItemStore = new StableswapItemStore(this);
     }
   }
 
   async createStableswapFilterStore() {
-    if (isNull(this.farmingFilterStore)) {
+    if (isNull(this.stableswapFilterStore)) {
       const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
       this.stableswapFilterStore = new StableswapFilterStore(this);
     }

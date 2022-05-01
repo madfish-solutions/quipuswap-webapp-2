@@ -7,7 +7,7 @@ import { useStableswapListStore } from '../hooks';
 import { useGetStableswapList, useGetStableswapStats } from '../loaders';
 
 export const useStableswapLiquidityPageViewModel = () => {
-  const farmingListStore = useStableswapListStore();
+  const stableswapListStore = useStableswapListStore();
   const isReady = useReady();
   const { getStableswapList } = useGetStableswapList();
   const { getStableswapStats } = useGetStableswapStats();
@@ -25,7 +25,7 @@ export const useStableswapLiquidityPageViewModel = () => {
     }
   }, [getStableswapList, getStableswapStats, isReady]);
 
-  const { listStore, list } = farmingListStore;
+  const { listStore, list } = stableswapListStore;
   const { isLoading } = listStore;
 
   return {
