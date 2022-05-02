@@ -35,7 +35,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 0 24px;
+  margin: 0 auto 0 8px;
   max-width: 160px;
 }
 
@@ -62,6 +62,12 @@
 
 .coloModeSwitcher {
   margin-right: 8px;
+}
+
+@include media(">phone") {
+  .connect {
+    margin: 0 auto 0 24px;
+  }
 }
 
 @include media(">SDesktop") {
