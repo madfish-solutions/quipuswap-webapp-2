@@ -69,7 +69,7 @@ export const TokensLogosAndSymbols: FC<Props> = props => {
           </div>
         )}
       </div>
-      <h4>{symbols}</h4>
+      <h4 className={styles.nowrap}>{symbols}</h4>
     </div>
   );
 };
