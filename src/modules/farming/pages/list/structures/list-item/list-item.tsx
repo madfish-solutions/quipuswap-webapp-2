@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Button, Card, StateCurrencyAmount, StatusLabel, Tooltip } from '@shared/components';
+import { Button, Card, StateCurrencyAmount, StatusLabel } from '@shared/components';
 import {
   getDollarEquivalent,
   getTimeLockDescription,
@@ -53,7 +53,6 @@ export const FarmingListItem: FC<FarmingItem> = ({
 
   const {
     selectTranslation,
-    fullCardTooltipTranslation,
     tokenContractTranslation,
     farmingContractTranslation,
     tvlTranslation,
@@ -104,7 +103,6 @@ export const FarmingListItem: FC<FarmingItem> = ({
               {shouldShowWithdrawalFee && (
                 <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
               )}
-              <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
             </div>
           </div>
 
