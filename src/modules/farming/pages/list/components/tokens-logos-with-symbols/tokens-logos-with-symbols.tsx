@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 
 import { TokenLogo } from '@shared/components';
-import { getTokensPairName, getTokenSymbol, isExist, isNull } from '@shared/helpers';
+import { getTokensPairName, getTokenSymbol, isExist, isNull, prepareTokenLogo } from '@shared/helpers';
 import { FallbackLogo } from '@shared/svg';
 import { Token } from '@shared/types';
 
@@ -38,10 +38,10 @@ export const TokensLogosAndSymbols: FC<Props> = props => {
   const layoutBasedProps =
     props.layout === 'fill' ? { layout: 'fill' as const } : { layout: 'fixed' as const, size: props.width };
 
-  const firstTokenIcon = tokenA.metadata.thumbnailUri;
+  const firstTokenIcon = prepareTokenLogo(tokenA.metadata.thumbnailUri);
   const firstTokenSymbol = getTokenSymbol(tokenA);
 
-  const secondTokenIcon = isTokenPair ? tokenB.metadata.thumbnailUri : undefined;
+  const secondTokenIcon = isTokenPair ? prepareTokenLogo(tokenB.metadata.thumbnailUri) : undefined;
   const secondTokenSymbol = isTokenPair ? getTokenSymbol(tokenB) : undefined;
 
   const symbols = isTokenPair ? getTokensPairName(tokenA, tokenB) : firstTokenSymbol;
