@@ -32,6 +32,7 @@ export const ColorModeSwitcher: FC<ColorModeSwitcherProps> = ({ id, className })
           className={cx(styles.button, styles.light, { [styles.active]: idLightMode })}
           disabled={idLightMode}
           onClick={handleColorThemeClick}
+          data-test-id="lightButton"
         >
           <LightMode id={id} className={styles.icon} />
         </button>
@@ -41,6 +42,7 @@ export const ColorModeSwitcher: FC<ColorModeSwitcherProps> = ({ id, className })
           className={cx(styles.button, styles.dark, { [styles.active]: idDarkMode })}
           disabled={idDarkMode}
           onClick={handleColorThemeClick}
+          data-test-id="darkButton"
         >
           <DarkMode id={id} className={styles.icon} />
         </button>

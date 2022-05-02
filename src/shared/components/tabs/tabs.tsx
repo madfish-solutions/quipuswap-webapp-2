@@ -51,7 +51,7 @@ export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, 
 
   return (
     <div className={compoundClassName}>
-      {values.map(({ id, label }) => (
+      {values.map(({ id, label }, index) => (
         <button
           key={id}
           type="button"
@@ -59,6 +59,7 @@ export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, 
           title={label}
           onClick={() => setActiveId(id)}
           ref={el => addToRefs(id, el)}
+          data-test-id={`cardTab-${index}`}
         >
           <span className={s.inner}>{label}</span>
         </button>

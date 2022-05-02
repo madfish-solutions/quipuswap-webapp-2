@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, FC, HTMLProps, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -28,7 +28,7 @@ import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
-interface NewTokenSelectProps {
+interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   className?: string;
   showBalanceButtons?: boolean;
   amount?: BigNumber;
@@ -64,7 +64,8 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   onAmountChange,
   onTokenChange,
   token,
-  blackListedTokens
+  blackListedTokens,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -138,7 +139,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   const notWhitelistedMessage = token ? getMessageNotWhitelistedToken(token) : null;
 
   return (
-    <>
+    <div {...props}>
       <TokensModal
         blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
@@ -171,6 +172,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
+                data-test-id="changeToken"
               >
                 <TokensLogosDeprecated
                   firstTokenIcon={
@@ -195,6 +197,6 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
         </Scaffolding>
         <ComplexError error={error} />
       </div>
-    </>
+    </div>
   );
 };

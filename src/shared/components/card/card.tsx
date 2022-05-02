@@ -1,4 +1,4 @@
-import { FC, ReactNode, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -8,7 +8,7 @@ import { ActiveStatus } from '@shared/types';
 
 import styles from './card.module.scss';
 
-interface Props {
+interface Props extends HTMLProps<HTMLDivElement> {
   className?: string;
   header?: {
     content: ReactNode;
@@ -34,7 +34,8 @@ export const Card: FC<Props> = ({
   footer,
   children,
   isV2 = false,
-  contentClassName
+  contentClassName,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -43,11 +44,15 @@ export const Card: FC<Props> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
       {header && (
         <div className={cx(styles.header, header.className)}>
-          {header.content}
-          {header.status ? <StatusLabel filled status={header.status} /> : null}
+          <span data-test-id="headerContent">{header.content}</span>
+          <span data-test-id="statusLabelCard">
+            <span data-test-id="statusLabel">
+              {header.status ? <StatusLabel filled status={header.status} /> : null}
+            </span>
+          </span>
           {header.button}
         </div>
       )}

@@ -53,7 +53,7 @@ export const LiquidityPage: FC<LiquidityProps> = ({ className }) => {
   return (
     <Fragment>
       <TestnetAlert />
-      <PageTitle>
+      <PageTitle data-test-id="liquidityPageTitle">
         {t('common|Liquidity')} {title}
       </PageTitle>
       <StickyBlock className={className}>

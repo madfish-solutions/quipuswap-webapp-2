@@ -113,7 +113,14 @@ export const TokenSelect: FC<TokenSelectProps> = ({
 
   return (
     <>
-      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
+      <div
+        className={compoundClassName}
+        onClick={focusInput}
+        onKeyPress={focusInput}
+        role="button"
+        tabIndex={0}
+        {...props}
+      >
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
@@ -161,6 +168,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                   theme="quaternary"
                   className={s.item4}
                   textClassName={s.item4Inner}
+                  data-test-id="tokenSelectButton"
                 >
                   <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
                   <h6 className={cx(s.token)}>{tokenLabel}</h6>

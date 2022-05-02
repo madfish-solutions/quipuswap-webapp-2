@@ -17,7 +17,7 @@ interface Props {
   available?: boolean;
 }
 
-export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available }) => {
+export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available, ...props }) => {
   return (
     <Button
       className={styles.button}
@@ -30,6 +30,7 @@ export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = f
         available && onClick(id);
       }}
       disabled={disabled}
+      {...props}
     >
       <Icon className={styles.icon} />
       <span>{label}</span>

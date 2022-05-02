@@ -31,12 +31,13 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   currency,
   tooltip,
   className,
-  loading = false
+  loading = false,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
+    <div className={cx(styles.root, className, modeClass[colorThemeMode])} {...props}>
       <h4 className={styles.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
@@ -47,6 +48,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
         isLeftCurrency={currency === '$'}
         labelSize={size}
         isLoading={loading}
+        {...props}
       />
     </div>
   );

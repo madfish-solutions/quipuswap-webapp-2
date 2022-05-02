@@ -9,7 +9,6 @@ import { useAccountPkh } from '@providers/use-dapp';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
-import { DataTestAttribute } from 'tests/types';
 
 import { StateCurrencyAmount } from '../state-components';
 import styles from './pending-rewards.module.scss';
@@ -19,7 +18,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props extends DataTestAttribute {
+interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
   totalPendingRewards?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
@@ -30,7 +29,6 @@ interface Props extends DataTestAttribute {
 
 export const PendingRewards: FC<Props> = ({
   currency,
-  testId,
   dollarEquivalent,
   amountDecimals = USD_DECIMALS,
   claimablePendingRewards,
@@ -48,16 +46,18 @@ export const PendingRewards: FC<Props> = ({
           <>
             <div className={styles.titleWrapper}>
               {totalPendingRewards ? (
-                <span className={styles.title}>
+                <span className={styles.title} data-test-id="farmingListYourClaimableAndFullRewards">
                   {t('farm|Your Claimable')}
                   <span className={styles.slash}>{'/'}</span>
                   <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
                 </span>
               ) : (
-                <span className={styles.title}>{t('farm|Your Full Rewards')}</span>
+                <span className={styles.title} data-test-id="farmingYourFullRewards">
+                  {t('farm|Your Full Rewards')}
+                </span>
               )}
             </div>
-            <div className={styles.statesOfCurrencysAmount}>
+            <div className={styles.statesOfCurrencysAmount} data-test-id="farmingListStateCurrencyAmount">
               <StateCurrencyAmount
                 className={styles.amount}
                 amount={claimablePendingRewards}
@@ -65,7 +65,7 @@ export const PendingRewards: FC<Props> = ({
                 dollarEquivalent={dollarEquivalent}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
-                testId={testId}
+                data-test-id="yourClaimableReward"
               />
               {totalPendingRewards && (
                 <>
@@ -77,7 +77,7 @@ export const PendingRewards: FC<Props> = ({
                     dollarEquivalent={dollarEquivalent}
                     amountDecimals={amountDecimals}
                     isLeftCurrency={currency === '$'}
-                    testId={testId}
+                    data-test-id="yourFullReward"
                   />
                 </>
               )}

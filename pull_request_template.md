@@ -10,4 +10,4 @@
 
 ## Release
 
-[Release checklist](./docs/release_checklist.md)
+[Release checklist](https://github.com/madfish-solutions/quipuswap-webapp-2/blob/develop/docs/release_checklist.md)

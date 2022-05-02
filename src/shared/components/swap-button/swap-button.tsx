@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 
 import cx from 'classnames';
 
@@ -14,7 +14,8 @@ export interface SwapButtonProps {
 export const SwapButton: React.FC<SwapButtonProps> = ({ onClick }) => {
   const [rotateChevron, setRotateChevron] = useState(false);
 
-  const handleRotate = () => {
+  const handleRotate = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setRotateChevron(!rotateChevron);
     onClick();
   };
@@ -26,7 +27,7 @@ export const SwapButton: React.FC<SwapButtonProps> = ({ onClick }) => {
   );
 
   return (
-    <Button theme="quaternary" className={compoundClassName} onClick={handleRotate}>
+    <Button theme="quaternary" className={compoundClassName} onClick={handleRotate} data-test-id="swapButton">
       <SwapIcon id="swap" className={styles.svg} />
     </Button>
   );

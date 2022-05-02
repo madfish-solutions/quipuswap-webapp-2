@@ -47,6 +47,7 @@ export const WalletModal: FC = () => {
         closeAccountInfoModal();
         closeConnectWalletModal();
         amplitudeService.logEvent('CONNECT_WALLET_SUCCESS', { walletType });
+        amplitudeService.setUserProps('wallet_type', walletType);
       } catch (err) {
         if (err instanceof NoTempleWallet) {
           openInstallTempleWalletModal();
@@ -93,6 +94,7 @@ export const WalletModal: FC = () => {
       title={t('common|Connect wallet')}
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
+      data-test-id="connectWalletModal"
     >
       <div className={styles.terms}>
         <div className={styles.def}>
@@ -101,15 +103,28 @@ export const WalletModal: FC = () => {
             onClick={handleCheck1}
             theme="quaternary"
             className={styles.btn}
+            data-test-id="checkButton"
           >
             <div className={styles.btnText}>{t('common|Accept terms')}</div>
           </Button>
           {t('common|I have read and agree to the')}{' '}
-          <Button className={styles.defText} theme="underlined" href="/terms-of-service" external>
+          <Button
+            className={styles.defText}
+            theme="underlined"
+            href="/terms-of-service"
+            data-test-id="termsOfUsage"
+            external
+          >
             {t('common|Terms of Usage')}
           </Button>{' '}
           {t('common|and')}{' '}
-          <Button className={styles.defText} theme="underlined" href="/privacy-policy" external>
+          <Button
+            className={styles.defText}
+            theme="underlined"
+            href="/privacy-policy"
+            data-test-id="privacyPolicy"
+            external
+          >
             {t('common|Privacy Policy')}
           </Button>
         </div>
@@ -122,6 +137,7 @@ export const WalletModal: FC = () => {
           label={isTempleInstalled ? Temple.label : INSTALL_TEMPLE}
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
+          data-test-id="templeWalletButton"
         />
         <WalletButton
           id={Beacon.id}
@@ -130,6 +146,7 @@ export const WalletModal: FC = () => {
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
           available={true}
+          data-test-id="beaconWalletButton"
         />
       </div>
     </Modal>

@@ -155,7 +155,7 @@ export const TokenInput: FC<Props> = ({
 
   return (
     <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
-      <label htmlFor={id} className={styles.label}>
+      <label htmlFor={id} className={styles.label} data-test-id="tokenInputLabel">
         {label}
       </label>
       <div className={styles.background}>
@@ -180,6 +180,7 @@ export const TokenInput: FC<Props> = ({
               theme="quaternary"
               className={cx(styles.item4, styles.frozen)}
               textClassName={styles.item4Inner}
+              data-test-id="tokenInputSelectButton"
             >
               {isBothTokensExist ? (
                 <TokensLogosDeprecated

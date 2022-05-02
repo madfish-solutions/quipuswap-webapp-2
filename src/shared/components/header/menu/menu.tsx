@@ -32,7 +32,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="menu">
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
         {IS_NETWORK_MAINNET && (
@@ -57,6 +57,7 @@ export const Menu: FC<MenuProps> = ({ className }) => {
             external
             theme="clean"
             className={styles.madfish}
+            data-test-id="madFishLogoButton"
             onClick={handleMadfishClick}
           >
             <Madfish />

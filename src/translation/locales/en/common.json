@@ -112,5 +112,6 @@
   "select": "Select",
   "whiteListed": "Whitelisted",
   "totalValue": "Total Value",
-  "value": "Value"
+  "value": "Value",
+  "Explore": "Explore"
 }

@@ -9,16 +9,26 @@ interface Props {
   cardCellClassName: string;
 }
 
-export const ListItemCardCell: FC<Props> = ({ cellName, tooltip, cellNameClassName, cardCellClassName, children }) => {
+export const ListItemCardCell: FC<Props> = ({
+  cellName,
+  tooltip,
+  cellNameClassName,
+  cardCellClassName,
+  children,
+  ...props
+}) => {
   return (
     <CardCell
       header={
         <>
-          <span className={cellNameClassName}>{cellName}</span>
+          <span className={cellNameClassName} data-test-id="cellName">
+            {cellName}
+          </span>
           {tooltip && <Tooltip content={tooltip} />}
         </>
       }
       className={cardCellClassName}
+      {...props}
     >
       {children}
     </CardCell>
