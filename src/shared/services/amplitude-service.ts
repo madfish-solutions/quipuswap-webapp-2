@@ -7,11 +7,8 @@ import { Nullable, Optional } from '../types';
 import { Console } from './console';
 
 export class AmplitudeService {
-  instance: Nullable<AmplitudeClient> = null;
-  identify: Nullable<Identify> = null;
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  props: { [key: string]: any } = {};
+  private readonly instance: Nullable<AmplitudeClient> = null;
+  private readonly identify: Nullable<Identify> = null;
 
   constructor(API_KEY: Optional<string>) {
     if (API_KEY) {
@@ -27,20 +24,16 @@ export class AmplitudeService {
     Console.info('Amplitude.userId', userId);
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   setUserProps(key: string, value: any) {
     this.identify?.set(key, value);
     Console.info('Amplitude.setUserProps.key', value);
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  setProps(key: string, value: any) {
-    this.props[key] = value;
-  }
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   logEvent(action: string, payload: { [key: string]: any } = {}) {
-    this.instance?.logEvent(action, { ...this.props, ...payload });
-    Console.info(`Amplitude.${action}`, { ...this.props, ...payload });
+    this.instance?.logEvent(action, payload);
+    Console.info(`Amplitude.${action}`, payload);
   }
 }
 

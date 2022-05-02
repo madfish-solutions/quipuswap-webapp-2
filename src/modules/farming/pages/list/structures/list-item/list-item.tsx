@@ -1,9 +1,10 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Button, Card, StateCurrencyAmount, StatusLabel } from '@shared/components';
+import { Card, StateCurrencyAmount, StatusLabel } from '@shared/components';
 import {
   getDollarEquivalent,
   getTimeLockDescription,
@@ -21,7 +22,6 @@ import { useListItemViewModal } from './use-list-item.vm';
 
 const ICON_SIZE = 48;
 const ZERO = 0;
-const LINKS_THEME = 'underlined';
 
 const themeClass = {
   [ColorModes.Light]: styles.light,
@@ -40,8 +40,6 @@ export const FarmingListItem: FC<FarmingItem> = ({
   apy,
   depositExchangeRate,
   earnExchangeRate,
-  stakeUrl,
-  depositTokenUrl,
   myBalance,
   depositBalance,
   earnBalance,
@@ -52,17 +50,12 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const { translation } = useListItemViewModal();
 
   const {
-    selectTranslation,
-    tokenContractTranslation,
-    farmingContractTranslation,
     tvlTranslation,
     tvlTooltipTranslation,
     aprTranslation,
     aprTooltipTranslation,
     apyTranslation,
     apyTooltipTranslation,
-    yourBalanceTranslation,
-    yourBalanceTooltipTranslation,
     yourDepositTranslation,
     yourDepositTooltipTranslation,
     yourEarnedTranslation,
@@ -76,12 +69,15 @@ export const FarmingListItem: FC<FarmingItem> = ({
 
   const isNew = isNewFarming(id);
 
-  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
   const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
   const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExchangeRate);
 
-  const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
+  const isAllowUserData = Boolean(
+    (myBalance && !myBalance.isZero()) ||
+      (depositBalance && !depositBalance.isZero) ||
+      (earnBalance && !earnBalance.isZero())
+  );
 
   const timeLockLabel = getTimeLockDescription(timelock);
   const shouldShowLockPeriod = !!Number(timelock);
@@ -90,124 +86,104 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
-    <Card className={cx(styles.card, themeClass[colorThemeMode])}>
-      <div className={styles.container}>
-        <div className={styles.left}>
-          <div className={styles.itemLeftHeader}>
-            <div className={styles.iconWithStatusLabel}>
+    <Link to={selectLink}>
+      <Card className={cx(styles.card, themeClass[colorThemeMode])}>
+        <div className={styles.container}>
+          <div className={styles.top}>
+            <div className={styles.tokensLogosAndSymbolsWrapper}>
               <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-              <StatusLabel status={stakeStatus} filled />
             </div>
-            <div className={styles.tagsWithTooltip}>
-              {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
-              {shouldShowWithdrawalFee && (
-                <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+
+            <div className={styles.rewardTarget}>
+              <RewardTarget token={rewardToken} />
+            </div>
+
+            <div className={styles.tags}>
+              <div className={styles.tagsWithTooltip}>
+                {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+                {shouldShowWithdrawalFee && (
+                  <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+                )}
+              </div>
+
+              <StatusLabel status={stakeStatus} filled />
+
+              {isNew && <NewLabel />}
+            </div>
+          </div>
+
+          <div className={styles.bottom}>
+            <div className={styles.stats}>
+              <div className={styles.stakeStats}>
+                <ListItemCardCell
+                  cellName={tvlTranslation}
+                  tooltip={tvlTooltipTranslation}
+                  cellNameClassName={styles.CardCellHeader}
+                  cardCellClassName={styles.cardCell}
+                >
+                  <StateCurrencyAmount
+                    amount={tvl}
+                    currency={depositTokenSymbol}
+                    dollarEquivalent={tvlDollarEquivalent}
+                    dollarEquivalentOnly
+                  />
+                </ListItemCardCell>
+
+                <ListItemCardCell
+                  cellName={aprTranslation}
+                  tooltip={aprTooltipTranslation}
+                  cellNameClassName={styles.CardCellHeader}
+                  cardCellClassName={styles.cardCell}
+                >
+                  <StateCurrencyAmount amount={apr} currency="%" isError={!apr} amountDecimals={2} />
+                </ListItemCardCell>
+
+                <ListItemCardCell
+                  cellName={apyTranslation}
+                  tooltip={apyTooltipTranslation}
+                  cellNameClassName={styles.CardCellHeader}
+                  cardCellClassName={styles.cardCell}
+                >
+                  <StateCurrencyAmount amount={apy} currency="%" isError={!apr} amountDecimals={2} />
+                </ListItemCardCell>
+              </div>
+              {isAllowUserData && (
+                <div className={styles.userData}>
+                  <ListItemCardCell
+                    cellName={yourDepositTranslation}
+                    tooltip={yourDepositTooltipTranslation}
+                    cellNameClassName={styles.CardCellHeader}
+                    cardCellClassName={styles.cardCell}
+                  >
+                    <StateCurrencyAmount
+                      amount={depositBalance}
+                      currency={depositTokenSymbol}
+                      dollarEquivalent={myDepositDollarEquivalent}
+                      isError={!depositBalance}
+                      dollarEquivalentOnly
+                    />
+                  </ListItemCardCell>
+
+                  <ListItemCardCell
+                    cellName={yourEarnedTranslation}
+                    tooltip={yourEarnedTooltipTranslation}
+                    cellNameClassName={styles.CardCellHeader}
+                    cardCellClassName={styles.cardCell}
+                  >
+                    <StateCurrencyAmount
+                      amount={earnBalance}
+                      currency={MyEarnTokenSymbol}
+                      dollarEquivalent={myEarnDollarEquivalent}
+                      isError={!earnBalance}
+                      dollarEquivalentOnly
+                    />
+                  </ListItemCardCell>
+                </div>
               )}
             </div>
           </div>
-
-          <div className={styles.rewardTarget}>
-            <RewardTarget token={rewardToken} />
-          </div>
-
-          <div className={styles.stats}>
-            <div className={styles.stakeStats}>
-              <ListItemCardCell
-                cellName={tvlTranslation}
-                tooltip={tvlTooltipTranslation}
-                cellNameClassName={styles.CardCellHeader}
-                cardCellClassName={styles.cardCell}
-              >
-                <StateCurrencyAmount
-                  amount={tvl}
-                  currency={depositTokenSymbol}
-                  dollarEquivalent={tvlDollarEquivalent}
-                />
-              </ListItemCardCell>
-
-              <ListItemCardCell
-                cellName={aprTranslation}
-                tooltip={aprTooltipTranslation}
-                cellNameClassName={styles.CardCellHeader}
-                cardCellClassName={styles.cardCell}
-              >
-                <StateCurrencyAmount amount={apr} currency="%" isError={!apr} />
-              </ListItemCardCell>
-
-              <ListItemCardCell
-                cellName={apyTranslation}
-                tooltip={apyTooltipTranslation}
-                cellNameClassName={styles.CardCellHeader}
-                cardCellClassName={styles.cardCell}
-              >
-                <StateCurrencyAmount amount={apy} currency="%" isError={!apr} />
-              </ListItemCardCell>
-            </div>
-            {isAllowUserData && (
-              <div className={styles.userData}>
-                <ListItemCardCell
-                  cellName={yourBalanceTranslation}
-                  tooltip={yourBalanceTooltipTranslation}
-                  cellNameClassName={styles.CardCellHeader}
-                  cardCellClassName={styles.cardCell}
-                >
-                  <StateCurrencyAmount
-                    amount={myBalance}
-                    currency={depositTokenSymbol}
-                    dollarEquivalent={myBalanceDollarEquivalent}
-                    isError={!myBalance}
-                  />
-                </ListItemCardCell>
-
-                <ListItemCardCell
-                  cellName={yourDepositTranslation}
-                  tooltip={yourDepositTooltipTranslation}
-                  cellNameClassName={styles.CardCellHeader}
-                  cardCellClassName={styles.cardCell}
-                >
-                  <StateCurrencyAmount
-                    amount={depositBalance}
-                    currency={depositTokenSymbol}
-                    dollarEquivalent={myDepositDollarEquivalent}
-                    isError={!depositBalance}
-                  />
-                </ListItemCardCell>
-
-                <ListItemCardCell
-                  cellName={yourEarnedTranslation}
-                  tooltip={yourEarnedTooltipTranslation}
-                  cellNameClassName={styles.CardCellHeader}
-                  cardCellClassName={styles.cardCell}
-                >
-                  <StateCurrencyAmount
-                    amount={earnBalance}
-                    currency={MyEarnTokenSymbol}
-                    dollarEquivalent={myEarnDollarEquivalent}
-                    isError={!earnBalance}
-                  />
-                </ListItemCardCell>
-              </div>
-            )}
-          </div>
         </div>
-        <div className={styles.right}>
-          <div className={styles.links}>
-            <Button href={depositTokenUrl} external theme={LINKS_THEME} title={tokenContractTranslation}>
-              {tokenContractTranslation}
-            </Button>
-
-            <Button href={stakeUrl} external theme={LINKS_THEME} title={farmingContractTranslation}>
-              {farmingContractTranslation}
-            </Button>
-
-            {isNew && <NewLabel />}
-          </div>
-
-          <Button className={styles.button} href={selectLink}>
-            {selectTranslation}
-          </Button>
-        </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 };

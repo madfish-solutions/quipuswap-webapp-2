@@ -49,7 +49,7 @@
   "yourDepositTooltip": "The amount of corresponding tokens currently staked in this pool from your currently synced account.",
   "yourEarned": "Your Earned",
   "yourEarnedTooltip": "Your total farming earning in this farm.",
-  "totalValueLocked": "Total Value  Locked",
+  "totalValueLocked": "Total Value Locked",
   "totalValueLockedTooltip": "Total value of assets locked across all farms.",
   "totalDailyReward": "Total Daily Reward",
   "totalDailyRewardTooltip": "Total amount of rewards generated in the last 24h.",
