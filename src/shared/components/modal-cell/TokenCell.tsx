@@ -8,7 +8,7 @@ import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { TokensLogosDeprecated } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import styles from './ModalCell.module.scss';
 
 interface TokenCellProps {

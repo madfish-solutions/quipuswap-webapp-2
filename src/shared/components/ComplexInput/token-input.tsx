@@ -22,7 +22,7 @@ import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { ComplexError } from './ComplexError';
 import styles from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';

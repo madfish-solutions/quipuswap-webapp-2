@@ -15,7 +15,7 @@ import { Button } from '../button';
 import { LoadableTokenPairName } from '../loadable-token-pair-name';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
