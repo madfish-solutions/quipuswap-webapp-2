@@ -23,7 +23,7 @@ export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className })
     };
 
     return (
-      <Button className={className} onClick={handleDisconnectWallet} title={accountPkh}>
+      <Button className={className} onClick={handleDisconnectWallet} title={accountPkh} data-test-id="buttonConnected">
         {shortize(accountPkh)}
       </Button>
     );
@@ -35,7 +35,7 @@ export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className })
   };
 
   return (
-    <Button className={className} onClick={handleConnectWallet}>
+    <Button className={className} onClick={handleConnectWallet} data-test-id="connectButton">
       Connect wallet
     </Button>
   );

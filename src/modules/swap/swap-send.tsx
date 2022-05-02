@@ -148,13 +148,11 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const onTokensSelected = useCallback(
     (_inputToken: Token, _outputToken: Token) => {
       updateSwapLimits(_inputToken, _outputToken);
-      const newRoute = `/swap/${getTokenPairSlug(_inputToken, _outputToken)}`;
+      const newRoute = `/${action}/${getTokenPairSlug(_inputToken, _outputToken)}`;
 
-      // if (router.asPath !== newRoute) {
       navigate(newRoute);
-      // }
     },
-    [navigate, updateSwapLimits]
+    [action, navigate, updateSwapLimits]
   );
 
   const { balances, updateBalance } = useBalances();
@@ -399,7 +397,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="swapPageTitle">{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{
@@ -416,6 +414,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             className: styles.header
           }}
           contentClassName={styles.content}
+          data-test-id="swapPageTokenSelect"
         >
           <NewTokenSelect
             showBalanceButtons={!!accountPkh}
@@ -431,6 +430,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleInputTokenChange}
             id="swap-send-from"
             placeholder="0.0"
+            data-test-id="from"
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
@@ -447,6 +447,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             onTokenChange={handleOutputTokenChange}
             id="swap-send-to"
             placeholder="0.0"
+            data-test-id="to"
           />
           {action === 'send' && (
             <ComplexRecipient
@@ -471,7 +472,12 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           </div>
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
           {accountPkh && dataIsStale && !isSubmitting && (
-            <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={styles.button}>
+            <Button
+              loading={dexPoolsLoading}
+              onClick={refreshDexPools}
+              className={styles.button}
+              data-test-id="updateRatesButton"
+            >
               {t('swap|Update Rates')}
             </Button>
           )}

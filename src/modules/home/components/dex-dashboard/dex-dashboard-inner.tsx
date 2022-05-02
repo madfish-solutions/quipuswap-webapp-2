@@ -54,6 +54,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             )}
             label={t('home|TVL')}
             currency="$"
+            data-test-id="TVL"
           />
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
@@ -62,6 +63,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
             label={t('home|Daily Volume')}
             currency="$"
+            data-test-id="dailyVolume"
           />
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
@@ -69,6 +71,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             volume={transactions24h}
             tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
             label={t('home|Daily Transactions')}
+            data-test-id="dailyTransaction"
           />
         </>
       ) : null}
@@ -80,6 +83,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
         label={t('home|Total supply')}
         currency="QUIPU"
         loading={totalSupply === undefined}
+        data-test-id="totalSupply"
       />
     </>
   );

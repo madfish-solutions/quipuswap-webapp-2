@@ -28,7 +28,7 @@ export const ContractHashWithCopy: FC<Props> = ({ contractAddress }) => {
 
   return (
     <span className={styles.root}>
-      <Button onClick={handleCopy} theme="underlined" className={styles.button}>
+      <Button onClick={handleCopy} theme="underlined" className={styles.button} data-test-id="contractHash">
         {shortize(contractAddress)}
       </Button>
       <Button

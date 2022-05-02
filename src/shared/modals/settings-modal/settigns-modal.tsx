@@ -53,6 +53,7 @@ export const SettingsModal = observer(() => {
         tooltip={liquiditySlippageTooltipTranslation}
         error={liquiditySlippageError}
         slippage={liquiditySlippageValue}
+        data-test-id="slippageLiquidity"
         onChange={handleLiquiditySlippageChange}
       />
 
@@ -62,6 +63,7 @@ export const SettingsModal = observer(() => {
         tooltip={tradingSlippageTooltipTranslation}
         error={tradingSlippageError}
         slippage={tradingSlippageValue}
+        data-test-id="slippageTrading"
         onChange={handleTradingSlippageChange}
       />
 
@@ -69,13 +71,14 @@ export const SettingsModal = observer(() => {
         error={transactionDeadlineError}
         onChange={handleTransactionDeadlineChange}
         value={transactionDeadlineValue}
+        data-test-id="transactionDeadline"
       />
 
       <div className={styles.buttons}>
-        <Button theme="secondary" onClick={resetSettings}>
+        <Button theme="secondary" onClick={resetSettings} data-test-id="resetButton">
           {resetTranslation}
         </Button>
-        <Button disabled={isInvalid} onClick={setSettings}>
+        <Button disabled={isInvalid} onClick={setSettings} data-test-id="saveButton">
           {saveTranslation}
         </Button>
       </div>

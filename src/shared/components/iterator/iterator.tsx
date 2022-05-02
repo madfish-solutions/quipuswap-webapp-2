@@ -21,7 +21,9 @@ export const Iterator: IteratorComponent = ({ data, keyFn, render, fallback, isG
 
   const Render = render;
 
-  const content = data.map((_data, index) => <Render key={keyFn ? keyFn(_data) : index} {..._data} />);
+  const content = data.map((_data, index) => (
+    <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />
+  ));
 
   return <Fragment>{isGrouped ? <div className={wrapperClassName}>{content}</div> : content}</Fragment>;
 };

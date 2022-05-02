@@ -15,7 +15,7 @@ import { Button } from '../button';
 import { LoadableTokenPairName } from '../loadable-token-pair-name';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
@@ -117,8 +117,8 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         notSelectable1={notSelectable1}
         notSelectable2={notSelectable2}
       />
-      <div className={compoundClassName} onClick={focusInput}>
-        <label htmlFor={id} className={s.label}>
+      <div className={compoundClassName} onClick={focusInput} data-test-id="positionSelectInput">
+        <label htmlFor={id} className={s.label} data-test-id="positionSelectLabel">
           {label}
         </label>
         <div className={s.background}>
@@ -156,6 +156,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
+                data-test-id="selectLPButton"
               >
                 <TokensLogosDeprecated
                   firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}

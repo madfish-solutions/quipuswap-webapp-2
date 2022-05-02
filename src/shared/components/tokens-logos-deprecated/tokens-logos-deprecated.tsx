@@ -7,7 +7,7 @@ import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
 import { TokenLogo } from '../token-logo';
-import s from './tokens-logos.module.scss';
+import s from './tokens-logos-deprecated.module.scss';
 
 interface TokensLogosPropsAbstraction {
   firstTokenIcon: Nullable<string>;

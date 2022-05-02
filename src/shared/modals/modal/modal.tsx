@@ -80,15 +80,21 @@ export const Modal: FC<ModalProps> = ({
             className={cardClassName}
             contentClassName={cx(contentClassName, styles.modalCard)}
             header={{
-              content: <h5>{title}</h5>,
+              content: <h5 data-test-id="cardTitle">{title}</h5>,
               button: (
-                <Button className={styles.closeButton} onClick={onRequestClose} theme="quaternary">
+                <Button
+                  className={styles.closeButton}
+                  onClick={onRequestClose}
+                  theme="quaternary"
+                  data-test-id="closeButton"
+                >
                   <PopupClose />
                 </Button>
               )
             }}
             additional={header}
             footer={footer}
+            data-test-id="modalCard"
           >
             {children}
           </Card>

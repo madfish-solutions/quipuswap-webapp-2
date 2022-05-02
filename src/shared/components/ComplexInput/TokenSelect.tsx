@@ -23,7 +23,7 @@ import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
@@ -113,7 +113,14 @@ export const TokenSelect: FC<TokenSelectProps> = ({
 
   return (
     <>
-      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
+      <div
+        className={compoundClassName}
+        onClick={focusInput}
+        onKeyPress={focusInput}
+        role="button"
+        tabIndex={0}
+        {...props}
+      >
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
@@ -161,6 +168,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                   theme="quaternary"
                   className={s.item4}
                   textClassName={s.item4Inner}
+                  data-test-id="tokenSelectButton"
                 >
                   <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
                   <h6 className={cx(s.token)}>{tokenLabel}</h6>

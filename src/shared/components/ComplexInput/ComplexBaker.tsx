@@ -66,7 +66,12 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
         </label>
       )}
       <div className={s.background}>
-        <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.shape}>
+        <Button
+          onClick={() => setTokensModal(true)}
+          theme="quaternary"
+          className={s.shape}
+          data-test-id="chooseBakerButton"
+        >
           <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
             <BakerLogo

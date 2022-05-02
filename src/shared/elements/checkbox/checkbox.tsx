@@ -23,7 +23,7 @@ export const Checkbox: FC<CheckboxProps> = ({ className, checked, ...props }) =>
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);
 
   return (
-    <div className={compoundClassName}>
+    <div className={compoundClassName} data-test-id="checkbox">
       {!checked ? <CheckboxIcon /> : <Checkdone />}
       <input hidden type="checkbox" {...props} />
     </div>

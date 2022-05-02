@@ -17,7 +17,13 @@ export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
   const url = `${TZKT_EXPLORER_URL}/${candidate.address}`;
 
   return (
-    <Button href={url} external theme="underlined" title={getWhitelistedBakerName(candidate)}>
+    <Button
+      href={url}
+      external
+      theme="underlined"
+      title={getWhitelistedBakerName(candidate)}
+      data-test-id="candidateButton"
+    >
       {getWhitelistedBakerName(candidate)}
     </Button>
   );

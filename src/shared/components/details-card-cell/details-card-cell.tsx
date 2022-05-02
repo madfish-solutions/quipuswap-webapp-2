@@ -12,16 +12,23 @@ interface DetailsCardCellProps {
   className: string;
 }
 
-export const DetailsCardCell: FC<DetailsCardCellProps> = ({ children, cellName, tooltipContent, className }) => {
+export const DetailsCardCell: FC<DetailsCardCellProps> = ({
+  children,
+  cellName,
+  tooltipContent,
+  className,
+  ...props
+}) => {
   return (
     <CardCell
       header={
         <>
-          {cellName}
+          <span data-test-id="cellName">{cellName}</span>
           {isExist(tooltipContent) && <Tooltip content={tooltipContent} />}
         </>
       }
       className={className}
+      {...props}
     >
       {children}
     </CardCell>

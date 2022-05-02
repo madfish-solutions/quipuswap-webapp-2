@@ -8,7 +8,9 @@ import styles from '../terms.module.scss';
 
 export const EnTermsOfService: FC = () => (
   <>
-    <h1 className={styles.mb24}>Terms of Service</h1>
+    <h1 className={styles.mb24} data-test-id="termsOfService">
+      Terms of Service
+    </h1>
     <p className={styles.big}>
       Welcome to{' '}
       <Button theme="inverse" href="https://quipuswap.com/" external>

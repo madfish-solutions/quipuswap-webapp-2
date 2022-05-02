@@ -36,7 +36,7 @@ export const useLayoutViewModel = () => {
    */
   useEffect(() => {
     uiStore.setColorThemeMode(colorThemeMode);
-    amplitudeService.setProps('color_theme', colorThemeMode);
+    amplitudeService.setUserProps('color_theme', colorThemeMode);
   }, [uiStore, colorThemeMode]);
 
   useEffect(() => {
