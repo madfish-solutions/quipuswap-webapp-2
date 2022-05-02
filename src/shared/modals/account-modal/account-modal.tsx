@@ -55,6 +55,7 @@ export const AccountModal: FC = () => {
       title="Account"
       isOpen={accountInfoModalOpen}
       onRequestClose={closeAccountInfoModal}
+      data-test-id="connectWalletModal"
     >
       <div className={styles.row}>
         <div className={styles.addr} title={accountPkh}>
@@ -65,11 +66,12 @@ export const AccountModal: FC = () => {
           theme="inverse"
           className={styles.buttonCopy}
           control={copied ? <CheckMark className={styles.icon} /> : <Copy className={styles.icon} />}
+          data-test-id="copyButton"
         >
           {copied ? 'Copied' : 'Copy'}
         </Button>
       </div>
-      <Button className={styles.button} theme="secondary" onClick={handleLogout}>
+      <Button className={styles.button} theme="secondary" onClick={handleLogout} data-test-id="buttonLogOut">
         Log Out
       </Button>
     </Modal>

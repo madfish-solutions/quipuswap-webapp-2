@@ -8,7 +8,7 @@ import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import styles from './ModalCell.module.scss';
 
 interface TokenCellProps {
@@ -53,11 +53,13 @@ export const TokenCell: FC<TokenCellProps> = ({
   return (
     <div tabIndex={tabIndex} onClick={onClick} onKeyUp={handleKeyUp} className={compoundClassName}>
       <div className={styles.splitRow}>
-        <TokensLogos firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
+        <TokensLogosDeprecated firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
         <div className={cx(styles.mleft8, styles.tokenBody)}>
-          <div className={styles.joinRow}>
-            <h6>{tokenSymbol}</h6>
-            {tokenType && !isTezosToken && <Bage className={styles.bage} text={getTokenTypeTitle(tokenType)} />}
+          <div className={styles.joinRow} data-test-id={tokenSymbol}>
+            <h6 data-test-id="tokenSymbol">{tokenSymbol}</h6>
+            <span>
+              {tokenType && !isTezosToken && <Bage className={styles.bage} text={getTokenTypeTitle(tokenType)} />}
+            </span>
           </div>
 
           <span className={cx(styles.caption)}>{tokenName}</span>

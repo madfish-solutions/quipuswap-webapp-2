@@ -17,7 +17,9 @@ export const EnPrivacyPolicy: FC = () => {
 
   return (
     <div className={themeClass[colorThemeMode]}>
-      <h1 className={styles.mb24}>Privacy Policy</h1>
+      <h1 className={styles.mb24} data-test-id="privacyPolicyTitle">
+        Privacy Policy
+      </h1>
       <p className={styles.big}>
         This privacy policy (“Policy”) describes how <span className={styles.list}>Madfish Solutions</span> “Company”,
         “we”, “our”, or “us”) collects, uses, shares, and stores personal information of users of its website:{' '}

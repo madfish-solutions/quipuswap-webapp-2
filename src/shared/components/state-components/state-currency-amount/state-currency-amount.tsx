@@ -1,19 +1,19 @@
-import { FC, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
+import { EPPROXIMATILY_SIGN } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-import { DataTestAttribute } from 'tests/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
 import styles from './state-currency-amount.module.scss';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amountClassName?: string;
   amount: Nullable<BigNumber.Value>;
@@ -29,6 +29,10 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, Da
   dollarEquivalentOnly?: boolean;
 }
 
+interface CurrencyProps extends HTMLProps<HTMLDivElement> {
+  children?: ReactNode;
+}
+
 const sizeClass = {
   extraLarge: styles.extraLarge,
   large: styles.large,
@@ -40,9 +44,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const EPPROXIMATILY_SIGN = '~';
-
-export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
+export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
+  <span className={styles.currency} {...props}>
+    {children}
+  </span>
+);
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -60,8 +66,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   aliternativeView,
   approximately,
   noSpace,
-  testId,
-  dollarEquivalentOnly
+  dollarEquivalentOnly,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -87,10 +93,10 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
   const content = (
-    <span className={wrapClassName}>
+    <span className={wrapClassName} {...props}>
       {approximately && EPPROXIMATILY_SIGN}
 
-      {isLeftVisible && <Currency>{currency}</Currency>}
+      {isLeftVisible && <Currency data-test-id="leftVisibleCurrency">{currency}</Currency>}
 
       <StateWrapper
         isLoading={wrapIsLoading}
@@ -98,12 +104,12 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={testId} className={wrapAmountClassName} title={title}>
+        <span data-test-id="amount" className={wrapAmountClassName} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency>{currency}</Currency>}
+      {isRightVisible && <Currency data-test-id="rightVisibleCurrency">{currency}</Currency>}
     </span>
   );
 
@@ -112,7 +118,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
       {!dollarEquivalentOnly ? content : null}
       <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
     </div>

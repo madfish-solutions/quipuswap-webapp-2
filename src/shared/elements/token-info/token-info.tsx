@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { TokensLogos } from '@shared/components';
+import { TokensLogosDeprecated } from '@shared/components';
 import { getTokenName, getTokenSymbol, prepareTokenLogo } from '@shared/helpers';
 import { Token } from '@shared/types';
 
@@ -28,7 +28,7 @@ export const TokenInfo: FC<Props> = ({ token, className }) => {
 
   return (
     <div className={compoundClassName}>
-      <TokensLogos firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
+      <TokensLogosDeprecated firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
       <div>
         <h6>{tokenSymbol}</h6>
         <span className={styles.tokenName}>{tokenName}</span>

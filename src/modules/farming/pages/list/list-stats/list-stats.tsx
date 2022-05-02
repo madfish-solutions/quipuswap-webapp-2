@@ -11,10 +11,10 @@ export const ListStats: FC = observer(() => {
   const { stats } = useListStatsViewModel();
 
   return (
-    <div className={styles.listStats}>
+    <div className={styles.listStats} data-test-id="farmingListStats">
       <Slider>
-        {stats.map(({ title, amount, tooltip, testId }) => (
-          <TopStats title={title} amount={amount} key={title} tooltip={tooltip} testId={testId} />
+        {stats.map(({ title, amount, tooltip }) => (
+          <TopStats title={title} amount={amount} key={title} tooltip={tooltip} />
         ))}
       </Slider>
     </div>

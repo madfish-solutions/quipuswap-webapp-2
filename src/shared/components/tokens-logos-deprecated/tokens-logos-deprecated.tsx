@@ -7,7 +7,7 @@ import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
 import { TokenLogo } from '../token-logo';
-import s from './tokens-logos.module.scss';
+import s from './tokens-logos-deprecated.module.scss';
 
 interface TokensLogosPropsAbstraction {
   firstTokenIcon: Nullable<string>;
@@ -30,7 +30,10 @@ interface FillTokensLogosProps extends TokensLogosPropsAbstraction {
 
 export type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
-export const TokensLogos: FC<TokensLogosProps> = props => {
+/**
+ * @deprecated
+ */
+export const TokensLogosDeprecated: FC<TokensLogosProps> = props => {
   const { firstTokenIcon, firstTokenSymbol, secondTokenIcon, secondTokenSymbol, className, imageClassName, loading } =
     props;
 

@@ -32,7 +32,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   };
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="sidebar">
       <div className={styles.wallet}>
         {IS_NETWORK_MAINNET && <DonationButton className={styles.button} />}
         <ConnectWalletButton className={styles.button} />
@@ -46,6 +46,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
           external
           theme="clean"
           onClick={handleMadfishClick}
+          data-test-id="madFishLogoButton"
         >
           <Madfish />
         </Button>

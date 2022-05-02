@@ -20,19 +20,33 @@ interface OpportunityCardProps {
   };
 }
 
-export const OpportunityCard: FC<OpportunityCardProps> = ({ id, className, Icon, title, description, button }) => {
-  const props = button.href ? { href: button.href, external: button.external } : {};
+export const OpportunityCard: FC<OpportunityCardProps> = ({
+  id,
+  className,
+  Icon,
+  title,
+  description,
+  button,
+  ...props
+}) => {
+  const buttonProps = button.href ? { href: button.href, external: button.external } : {};
 
   const handleOpportunityClick = () => {
     amplitudeService.logEvent('HOME_OPPORTUNITY_CLICK', { id });
   };
 
   return (
-    <Card className={className} contentClassName={s.content}>
+    <Card className={className} contentClassName={s.content} data-test-id="QSOpportunityCard">
       <Icon className={s.icon} />
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
-      <Button {...props} disabled={!!button.disabled} className={s.button} onClick={handleOpportunityClick}>
+      <Button
+        {...buttonProps}
+        {...props}
+        disabled={!!button.disabled}
+        className={s.button}
+        onClick={handleOpportunityClick}
+      >
         {button.label}
       </Button>
     </Card>

@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Card, StateCurrencyAmount, StatusLabel } from '@shared/components';
+import { Card, StateCurrencyAmount, StatusLabel, ListItemCardCell } from '@shared/components';
 import {
   getDollarEquivalent,
   getTimeLockDescription,
@@ -16,7 +16,7 @@ import {
 import { isNewFarming } from '../../../../helpers/is-new-farming';
 import { FarmingItem } from '../../../../interfaces';
 import { NewLabel } from '../../../item/components/new-label';
-import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
+import { RewardTarget, TokensLogosAndSymbols } from '../../components';
 import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
 
@@ -86,7 +86,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
   return (
-    <Link to={selectLink}>
+    <Link to={selectLink} data-test-id={`farming-item-${id}`}>
       <Card className={cx(styles.card, themeClass[colorThemeMode])}>
         <div className={styles.container}>
           <div className={styles.top}>
@@ -102,11 +102,15 @@ export const FarmingListItem: FC<FarmingItem> = ({
               <div className={styles.tagsWithTooltip}>
                 {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
                 {shouldShowWithdrawalFee && (
-                  <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+                  <StatusLabel
+                    label={`${withdrawalFeeLabel}% UNLOCK FEE`}
+                    status={stakeStatus}
+                    data-test-id="withdrawalFeeLabel"
+                  />
                 )}
               </div>
 
-              <StatusLabel status={stakeStatus} filled />
+              <StatusLabel status={stakeStatus} filled data-test-id="stakeStatus" />
 
               {isNew && <NewLabel />}
             </div>
@@ -120,6 +124,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={tvlTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="TVL"
                 >
                   <StateCurrencyAmount
                     amount={tvl}
@@ -134,6 +139,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={aprTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="APR"
                 >
                   <StateCurrencyAmount amount={apr} currency="%" isError={!apr} amountDecimals={2} />
                 </ListItemCardCell>
@@ -143,6 +149,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                   tooltip={apyTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
+                  data-test-id="APY"
                 >
                   <StateCurrencyAmount amount={apy} currency="%" isError={!apr} amountDecimals={2} />
                 </ListItemCardCell>
@@ -161,6 +168,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                       dollarEquivalent={myDepositDollarEquivalent}
                       isError={!depositBalance}
                       dollarEquivalentOnly
+                      data-test-id="yourDeposit"
                     />
                   </ListItemCardCell>
 
@@ -169,6 +177,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                     tooltip={yourEarnedTooltipTranslation}
                     cellNameClassName={styles.CardCellHeader}
                     cardCellClassName={styles.cardCell}
+                    data-test-id="yourEarned"
                   >
                     <StateCurrencyAmount
                       amount={earnBalance}

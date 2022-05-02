@@ -38,10 +38,14 @@ export const VotingRewardItem: FC<RewardItemProps> = ({ amount, description, cur
   return (
     <div className={cx(modeClass[colorThemeMode], styles.reward)}>
       <div className={styles.rewardContent}>
-        <span className={styles.rewardHeader}>{description}</span>
+        <span className={styles.rewardHeader} data-test-id="description">
+          {description}
+        </span>
         <span className={styles.rewardAmount}>
-          {content}
-          <span className={styles.rewardCurrency}>{currency}</span>
+          <span data-test-id="amount">{content}</span>
+          <span className={styles.rewardCurrency} data-test-id="currency">
+            {currency}
+          </span>
         </span>
       </div>
       <VotingReward /> {/* TODO: Rename */}
