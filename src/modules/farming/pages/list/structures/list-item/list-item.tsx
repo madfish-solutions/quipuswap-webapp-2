@@ -73,7 +73,11 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
   const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExchangeRate);
 
-  const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
+  const isAllowUserData = Boolean(
+    (myBalance && !myBalance.isZero()) ||
+      (depositBalance && !depositBalance.isZero) ||
+      (earnBalance && !earnBalance.isZero())
+  );
 
   const timeLockLabel = getTimeLockDescription(timelock);
   const shouldShowLockPeriod = !!Number(timelock);
