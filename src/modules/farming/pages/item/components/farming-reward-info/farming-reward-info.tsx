@@ -8,7 +8,6 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getBakerName, getTokenSymbol } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
-import { FarmingItemPendingReward } from '@tests/farming';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
@@ -59,14 +58,13 @@ export const FarmingRewardInfo: FC = observer(() => {
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
       disabled={!isHarvestAvailable}
-      rewardButtonAttributeTestId={FarmingItemPendingReward.HARVEST_BUTTON}
-      pendingRewardAttributeTestId={FarmingItemPendingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
       <FarmingStatsItem
         itemName={t('farm|Your Share')}
         loading={farmingLoading}
         tooltipContent={t('farm|yourShareTooltip')}
+        data-test-id="yourShare"
       >
         <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
           {({ depositBalance, stakedToken }) => (
@@ -87,6 +85,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           itemName={t('farm|Your delegate')}
           loading={delegatesLoading}
           tooltipContent={t('farm|yourDelegateTooltip')}
+          data-test-id="yourDelegate"
         >
           <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
@@ -108,6 +107,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           itemName={t('farm|Lock period ends in')}
           loading={farmingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
+          data-test-id="lockPeriodEndsIn"
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}

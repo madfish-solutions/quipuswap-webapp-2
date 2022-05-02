@@ -46,6 +46,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
           className: styles.header
         }}
         contentClassName={styles.content}
+        data-test-id="liquidityPageTokenSelect"
       >
         {isAddTabActive ? (
           <AddLiquidityForm
@@ -70,6 +71,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
           )
         }}
         contentClassName={styles.LiquidityDetails}
+        data-test-id="poolDetails"
       >
         <LiquidityDetails dex={dex} tokenA={tokenA} tokenB={tokenB} />
       </Card>

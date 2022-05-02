@@ -21,12 +21,12 @@ const defaultSlippagePercentage = {
   [SlippageType.TRADING]: DEFAULT_TRADING_SLIPPAGE_PERCENTAGE
 };
 
-export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip, type }) => {
+export const Slippage: FC<Props> = ({ error, onChange, slippage, title, tooltip, type, ...props }) => {
   const handleChange = (newValue: Nullable<string>) =>
     onChange(new BigNumber(newValue ?? defaultSlippagePercentage[type]));
 
   return (
-    <div>
+    <div {...props}>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{title}</span>
         <Tooltip content={tooltip} />

@@ -21,7 +21,7 @@ export const LogoButton: FC<LogoButtonProps> = ({ href }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <Link className={cx(modeClass[colorThemeMode], s.logo)} to={href}>
+    <Link className={cx(modeClass[colorThemeMode], s.logo)} to={href} data-test-id="quipuSwapLogoButton">
       <LogoSmall className={s.logoImg} />
       <Logo className={s.logoText} />
     </Link>

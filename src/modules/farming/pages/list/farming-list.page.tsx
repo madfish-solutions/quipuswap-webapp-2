@@ -17,7 +17,7 @@ export const FarmsListPage = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="farmingListPageTitle">{title}</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
         <FarmingRewardsList />

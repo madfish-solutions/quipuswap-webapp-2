@@ -22,7 +22,7 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
     <Fragment>
       <TestnetAlert />
 
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="votingPageTitle">{title}</PageTitle>
 
       <VotingStats className={s.votingStats} />
 

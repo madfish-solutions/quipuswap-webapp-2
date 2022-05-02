@@ -16,11 +16,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const CardCell: FC<Props> = ({ header, className, children }) => {
+export const CardCell: FC<Props> = ({ header, className, children, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(className, styles.root, modeClass[colorThemeMode])}>
+    <div className={cx(className, styles.root, modeClass[colorThemeMode])} {...props}>
       <h6 className={styles.header}>{header}</h6>
       {children}
     </div>

@@ -49,14 +49,19 @@ export const Header: FC<HeaderProps> = ({ className }) => {
 
   return (
     <div className={styles.wrapper}>
-      <header className={cx(styles.root, modeClass[colorThemeMode], className)}>
+      <header className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="header">
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
 
         <QPToken className={styles.qpToken} id="desktop" />
         <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
-        <Button theme="quaternary" className={styles.menuButton} onClick={() => setIsMenuOpened(!isMenuOpened)}>
+        <Button
+          theme="quaternary"
+          className={styles.menuButton}
+          onClick={() => setIsMenuOpened(!isMenuOpened)}
+          data-test-id="menuButton"
+        >
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}
         </Button>
       </header>

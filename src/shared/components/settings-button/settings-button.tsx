@@ -21,8 +21,14 @@ export const SettingsButton: FC<Props> = ({ className, colored }) => {
   };
 
   return (
-    <Button className={className} textClassName={styles.flex} theme="quaternary" onClick={handleSettingsClick}>
-      <SettingsIcon />
+    <Button
+      className={className}
+      textClassName={styles.flex}
+      theme="quaternary"
+      onClick={handleSettingsClick}
+      data-test-id="settingsButton"
+    >
+      <SettingsIcon colored={colored} />
     </Button>
   );
 };

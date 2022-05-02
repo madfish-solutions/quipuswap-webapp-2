@@ -17,7 +17,7 @@ interface Props {
   onFocus?: () => void;
 }
 
-export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, icon }) => {
+export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, icon, ...props }) => {
   if (link.target) {
     return (
       <a
@@ -28,6 +28,7 @@ export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, ico
         rel="noreferrer noopener"
         onFocus={onFocus}
         onClick={onClick}
+        {...props}
       >
         <span className={styles.name}>
           {icon}
@@ -47,6 +48,7 @@ export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, ico
       target={link.target}
       onFocus={onFocus}
       onClick={onClick}
+      {...props}
     >
       {icon}
       {link.label}
