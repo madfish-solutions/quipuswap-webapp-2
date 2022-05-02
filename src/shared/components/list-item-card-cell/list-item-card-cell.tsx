@@ -4,7 +4,7 @@ import { CardCell, Tooltip } from '@shared/components';
 
 interface Props {
   cellName: string;
-  tooltip: string;
+  tooltip?: string;
   cellNameClassName: string;
   cardCellClassName: string;
 }
@@ -24,7 +24,7 @@ export const ListItemCardCell: FC<Props> = ({
           <span className={cellNameClassName} data-test-id="cellName">
             {cellName}
           </span>
-          <Tooltip content={tooltip} />
+          {tooltip && <Tooltip content={tooltip} />}
         </>
       }
       className={cardCellClassName}

@@ -49,9 +49,27 @@ export const DEFAULT_DECIMALS = 6;
 export const LP_TOKEN_DECIMALS = 6;
 //#endregion
 
+//#region strings
+export const EMPTY_STRING = '';
+export const ZERO_LENGTH = 0;
+//#endregion
+
+//#region arrays
+export const FISRT_INDEX = 0;
+export const ONE_ITEM_LENGTH = 1;
+//#endregion
+
 //#region default value for token search
 export const DEFAULT_TOKEN_ID = 0;
 export const DEFAULT_SEARCH_VALUE = '';
+//#endregion
+
+//#region signs
+export const DOLLAR = '$';
+export const PERCENT = '%';
+export const SLASH = '/';
+export const EPPROXIMATILY_SIGN = '~';
+export const EPPROXIMATILY_EQUAL_SIGN = '≈';
 //#endregion
 
 //TODO: assort mix

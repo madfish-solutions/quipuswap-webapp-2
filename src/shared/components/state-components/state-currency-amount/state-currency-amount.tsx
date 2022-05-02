@@ -3,6 +3,7 @@ import { FC, HTMLProps, ReactNode, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
+import { EPPROXIMATILY_SIGN } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -47,8 +48,6 @@ export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
     {children}
   </span>
 );
-
-const EPPROXIMATILY_SIGN = '~';
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,

@@ -28,6 +28,9 @@ interface FillProps extends PropsAbstraction {
 
 type Props = FixedProps | FillProps;
 
+/**
+ * @deprecated
+ */
 export const TokensLogosAndSymbols: FC<Props> = props => {
   const { tokenA, tokenB, className, imageClassName, loading } = props;
 

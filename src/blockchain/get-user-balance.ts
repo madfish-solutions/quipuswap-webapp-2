@@ -14,7 +14,7 @@ export const getUserBalance = async (
   account: string,
   contractAddress: string,
   type: Standard = Standard.Fa12,
-  tokenId?: number
+  tokenId?: number | string
 ) => {
   const newTezos = getReadOnlyTezos(tezos);
 

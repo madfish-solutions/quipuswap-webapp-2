@@ -69,6 +69,10 @@ export interface Token {
   metadata: TokenMetadata;
 }
 
+export interface RawToken extends Omit<Token, 'fa2TokenId'> {
+  fa2TokenId?: string;
+}
+
 export interface TokenWithQSNetworkType extends Token {
   network?: QSNets;
 }

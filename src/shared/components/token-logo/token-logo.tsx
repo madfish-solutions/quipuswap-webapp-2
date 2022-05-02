@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 
+import { isExist, prepareTokenLogo } from '@shared/helpers';
 import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
 import s from './token-logo.module.scss';
 
 interface PropsAbstraction {
-  src: string;
+  src: Nullable<string>;
   tokenSymbol?: Nullable<string>;
 }
 
@@ -22,8 +23,12 @@ interface PropsFill extends PropsAbstraction {
 
 type Props = PropsFixed | PropsFill;
 
-export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = 24 }) => {
+const DEFAULT_SIZE = 24;
+
+export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = DEFAULT_SIZE }) => {
   const [loadError, setLoadError] = useState(false);
+
+  const url = prepareTokenLogo(src);
 
   const handleLoadError = () => setLoadError(true);
 
@@ -31,12 +36,12 @@ export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size 
 
   const layoutBasedProps = layout === 'fill' ? { layout: 'fill' } : { layout: 'fixed', width: size, height: size };
 
-  return loadError ? (
-    <FallbackLogo className={s.image} />
+  return loadError || !isExist(url) ? (
+    <FallbackLogo size={size} className={s.image} />
   ) : (
     <img
       onError={handleLoadError}
-      src={src}
+      src={url}
       alt={`${tokenSymbol}`}
       className={s.image}
       style={{ ...layoutBasedProps }}

@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Button, Card, StateCurrencyAmount, StatusLabel, Tooltip } from '@shared/components';
+import { Button, Card, ListItemCardCell, StateCurrencyAmount, StatusLabel, Tooltip } from '@shared/components';
 import {
   getDollarEquivalent,
   getTimeLockDescription,
@@ -15,7 +15,7 @@ import {
 import { isNewFarming } from '../../../../helpers/is-new-farming';
 import { FarmingItem } from '../../../../interfaces';
 import { NewLabel } from '../../../item/components/new-label';
-import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
+import { RewardTarget, TokensLogosAndSymbols } from '../../components';
 import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
 

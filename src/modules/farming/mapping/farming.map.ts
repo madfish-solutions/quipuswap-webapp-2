@@ -1,8 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_DECIMALS } from '@config/constants';
 import { fromDecimals, getTokensName, isExist, multipliedIfPossible } from '@shared/helpers';
-import { balanceMap } from '@shared/mapping';
+import { balanceMap, mapBackendToken } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import {
@@ -16,16 +15,6 @@ import {
 
 const DEFAULT_MAP_BN_DECIMALS = 0;
 const FEES_PERCENTAGE_PRECISION = 16;
-
-const mapFarmingToken = (raw: Token, isLp?: boolean, newSymbol?: string): Token => ({
-  ...raw,
-  fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId),
-  metadata: {
-    ...raw.metadata,
-    decimals: isLp ? DEFAULT_DECIMALS : raw.metadata.decimals,
-    symbol: newSymbol ?? raw.metadata.symbol
-  }
-});
 
 function mapRawBigNumber(raw: BigNumber.Value, decimals?: number): BigNumber;
 function mapRawBigNumber(raw: Undefined<BigNumber.Value>, decimals?: number): Undefined<BigNumber>;
@@ -43,8 +32,8 @@ const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
 };
 
 export const mapFarmingItem = (raw: RawFarmingItem): FarmingItem => {
-  const stakedToken = mapFarmingToken(raw.stakedToken, Boolean(raw.tokenB), getTokensName(raw.tokenA, raw.tokenB));
-  const rewardToken = mapFarmingToken(raw.rewardToken);
+  const stakedToken = mapBackendToken(raw.stakedToken, Boolean(raw.tokenB), getTokensName(raw.tokenA, raw.tokenB));
+  const rewardToken = mapBackendToken(raw.rewardToken);
 
   const myBalance = nullableBalanceMap(raw.myBalance, stakedToken);
   const depositBalance = nullableBalanceMap(raw.depositBalance, stakedToken);
@@ -57,8 +46,8 @@ export const mapFarmingItem = (raw: RawFarmingItem): FarmingItem => {
     depositBalance,
     earnBalance,
     id: new BigNumber(raw.id),
-    tokenA: mapFarmingToken(raw.tokenA),
-    tokenB: raw.tokenB ? mapFarmingToken(raw.tokenB) : undefined,
+    tokenA: mapBackendToken(raw.tokenA),
+    tokenB: raw.tokenB ? mapBackendToken(raw.tokenB) : undefined,
     stakedToken,
     rewardToken,
     tvlInUsd: mapRawBigNumber(raw.tvlInUsd),

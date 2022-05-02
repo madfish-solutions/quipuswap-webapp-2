@@ -22,7 +22,7 @@ import { Undefined, Token } from '@shared/types';
 import { Button } from '../button';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
@@ -174,7 +174,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
                 textClassName={s.item4Inner}
                 data-test-id="changeToken"
               >
-                <TokensLogos
+                <TokensLogosDeprecated
                   firstTokenIcon={
                     token
                       ? prepareTokenLogo(token.metadata?.thumbnailUri)
