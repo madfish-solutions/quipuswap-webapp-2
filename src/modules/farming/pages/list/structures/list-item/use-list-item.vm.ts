@@ -1,10 +1,10 @@
 import { useTranslation } from '@translation';
+
 export const useListItemViewModal = () => {
   const { t } = useTranslation(['farm']);
 
   return {
     translation: {
-      fullCardTooltipTranslation: t('farm|fullCardTooltip'),
       tokenContractTranslation: t('farm|tokenContract'),
       farmingContractTranslation: t('farm|farmingContract'),
       tvlTranslation: t('farm|tvl'),
