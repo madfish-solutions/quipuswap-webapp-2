@@ -26,6 +26,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   aliternativeView?: Nullable<string>;
   approximately?: boolean;
   noSpace?: boolean;
+  dollarEquivalentOnly?: boolean;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -65,6 +66,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   aliternativeView,
   approximately,
   noSpace,
+  dollarEquivalentOnly,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -117,7 +119,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
-      {content}
+      {!dollarEquivalentOnly ? content : null}
       <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
     </div>
   );
