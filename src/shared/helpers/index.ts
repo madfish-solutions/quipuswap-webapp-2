@@ -40,4 +40,5 @@ export * from './is-asset-equal';
 export * from './handle-search-token';
 export * from './hash';
 export * from './get-random-id';
-export * from './is-dev';
+export * from './is-prod-domain';
+export * from './is-prod';
