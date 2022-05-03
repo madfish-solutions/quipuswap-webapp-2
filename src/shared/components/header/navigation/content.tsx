@@ -15,7 +15,7 @@ import {
 import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
 
-import { isProd } from '../../../helpers/is-prod';
+import { isDev } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -59,7 +59,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
     status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />,
-    hide: isProd()
+    hide: !isDev()
   },
   {
     id: 'Farming',
