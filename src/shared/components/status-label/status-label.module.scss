@@ -16,24 +16,27 @@
   font-weight: bold;
 
   border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $support-info;
+  background: inherit;
 }
 
-.light {
-  .filled {
-    color: $text-inverse;
-  }
-  .bordered {
-    background-color: $ui-01;
-    color: $text-03;
-  }
+.filled {
+  border-color: $text-03;
+  color: $text-inverse;
 }
 
-.dark {
-  .filled {
-    color: $text-inverse;
-  }
-  .bordered {
-    background-color: $ui-07;
-    color: $text-03;
-  }
+.active .filled {
+  border-color: $text-03;
+  background: $brand-01;
+  color: $text-inverse;
+}
+
+.pending .filled {
+  background: $brand-02;
+}
+
+.disabled .filled {
+  background: $ui-05;
 }

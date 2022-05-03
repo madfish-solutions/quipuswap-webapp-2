@@ -6,11 +6,11 @@
 }
 
 .card.light:hover {
-  background: $skeleton-light;
+  background: $hover-light-row;
 }
 
 .card.dark:hover {
-  background: $skeleton-dark;
+  background: $hover-dark-row;
 }
 
 .card > div {
