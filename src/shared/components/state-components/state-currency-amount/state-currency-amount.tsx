@@ -120,7 +120,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
       {!dollarEquivalentOnly ? content : null}
-      <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
+      <StateDollarEquivalent dollarEquivalent={dollarEquivalent} className={styles.dollarEquivalentOnly} />
     </div>
   );
 };
