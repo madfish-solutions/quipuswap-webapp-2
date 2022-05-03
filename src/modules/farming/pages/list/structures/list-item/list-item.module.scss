@@ -124,11 +124,11 @@
   align-items: center;
   margin-top: 8px;
   flex-wrap: wrap;
+  margin-right: 100%;
 }
 
 .activeStatus {
-  margin-right: 100%;
-  order: -1;
+  margin-top: 8px;
 }
 
 .light {
@@ -169,8 +169,12 @@
     margin-top: 0;
   }
 
-  .activeStatus {
+  .tags {
     margin-right: 0;
+  }
+
+  .activeStatus {
+    margin-top: 0;
   }
 }
 
