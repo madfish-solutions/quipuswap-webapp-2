@@ -110,7 +110,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
                 )}
               </div>
 
-              <StatusLabel status={stakeStatus} filled data-test-id="stakeStatus" />
+              <StatusLabel status={stakeStatus} className={styles.activeStatus} filled data-test-id="stakeStatus" />
 
               {isNew && <NewLabel />}
             </div>

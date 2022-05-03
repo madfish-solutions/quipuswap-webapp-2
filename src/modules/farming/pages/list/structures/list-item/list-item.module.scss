@@ -37,7 +37,6 @@
   align-items: center;
   column-gap: 8px;
   grid-column: 1 / 2;
-  margin-top: 8px;
 }
 
 .iconWithStatusLabel {
@@ -53,7 +52,6 @@
 
 .rewardTarget {
   flex: 1;
-  margin-left: 16px;
 }
 
 .stats {
@@ -123,7 +121,14 @@
 .tags {
   display: flex;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 0;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  width: 105px;
+}
+
+.activeStatus {
+  margin-top: 8px;
 }
 
 .light {
@@ -151,6 +156,17 @@
     &::before {
       background-color: $text-02;
     }
+  }
+}
+
+@include media(">phone") {
+  .tags {
+    width: auto;
+    column-gap: 8px;
+  }
+
+  .activeStatus {
+    margin-top: 0;
   }
 }
 
@@ -213,8 +229,10 @@
 
 @include media("<Ltablet") {
   .top {
-    display: block;
+    flex-direction: column;
+    align-items: flex-start;
   }
+
   .rewardTarget {
     margin-top: 8px;
   }
@@ -277,6 +295,14 @@
       transform: translateY(-50%);
       margin-left: -28px;
     }
+  }
+
+  .rewardTarget {
+    margin-left: 16px;
+  }
+
+  .tags {
+    margin-top: 0;
   }
 
   .button {
