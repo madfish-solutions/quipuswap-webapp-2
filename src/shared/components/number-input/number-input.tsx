@@ -37,6 +37,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           className={s.button}
           onMouseDown={onIncrementClick}
           disabled={disabled || !onIncrementClick}
+          data-test-id="topArrowButton"
         >
           <TopArrow className={s.icon} />
         </button>
@@ -45,6 +46,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           className={s.button}
           onMouseDown={onDecrementClick}
           disabled={disabled || !onDecrementClick}
+          data-test-id="botArrowButton"
         >
           <BotArrow className={s.icon} />
         </button>

@@ -1,4 +1,4 @@
-import { isLoading } from './is-logging';
+import { isDev } from '../helpers';
 
 export const LCERROR = '\x1b[31m%s\x1b[0m'; //red
 export const LCWARN = '\x1b[33m%s\x1b[0m'; //yellow
@@ -9,7 +9,7 @@ export class Console {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   static log(...args) {
-    if (!isLoading()) {
+    if (!isDev()) {
       return;
     }
     // eslint-disable-next-line
@@ -19,7 +19,7 @@ export class Console {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   static success(...args) {
-    if (!isLoading()) {
+    if (!isDev()) {
       return;
     }
     // eslint-disable-next-line
@@ -29,7 +29,7 @@ export class Console {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   static warn(...args) {
-    if (!isLoading()) {
+    if (!isDev()) {
       return;
     }
     // eslint-disable-next-line
@@ -39,7 +39,7 @@ export class Console {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   static info(...args) {
-    if (!isLoading()) {
+    if (!isDev()) {
       return;
     }
     // eslint-disable-next-line
@@ -47,7 +47,7 @@ export class Console {
   }
 
   static error(error: Error | unknown) {
-    if (!isLoading()) {
+    if (!isDev()) {
       return;
     }
     // eslint-disable-next-line

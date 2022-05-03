@@ -28,6 +28,7 @@ export const Socials: FC<SocialsProps> = ({ id, className }) => {
           title={label}
           className={styles.link}
           onClick={() => handleSocialClick(label)}
+          data-test-id={`socialButton-${label}`}
         >
           <Icon className={styles.icon} id={id} />
         </Button>

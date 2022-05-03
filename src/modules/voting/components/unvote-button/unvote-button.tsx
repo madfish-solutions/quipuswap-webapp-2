@@ -88,6 +88,7 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
       theme="secondary"
       disabled={isButtonDisabled}
       loading={isSubmitting}
+      data-test-id="unvoteButton"
     >
       {isVoteTab ? 'Unvote' : 'Remove veto'}
     </Button>

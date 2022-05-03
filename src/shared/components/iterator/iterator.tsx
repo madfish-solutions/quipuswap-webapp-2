@@ -14,8 +14,6 @@ interface IteratorProps<T> {
 
 type IteratorComponent = <T>(props: IteratorProps<T>) => ReactElement<T> | ReactElement;
 
-const Div: FC<{ className?: string }> = ({ children, className }) => <div className={className}>{children}</div>;
-
 export const Iterator: IteratorComponent = ({ data, keyFn, render, fallback, isGrouped, wrapperClassName }) => {
   if (isExist(fallback) && isEmptyArray(data)) {
     return fallback;
@@ -23,13 +21,9 @@ export const Iterator: IteratorComponent = ({ data, keyFn, render, fallback, isG
 
   const Render = render;
 
-  const Wrapper = isGrouped ? Div : Fragment;
+  const content = data.map((_data, index) => (
+    <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />
+  ));
 
-  return (
-    <Wrapper className={wrapperClassName}>
-      {data.map((_data, index) => (
-        <Render key={keyFn ? keyFn(_data) : index} {..._data} />
-      ))}
-    </Wrapper>
-  );
+  return <Fragment>{isGrouped ? <div className={wrapperClassName}>{content}</div> : content}</Fragment>;
 };

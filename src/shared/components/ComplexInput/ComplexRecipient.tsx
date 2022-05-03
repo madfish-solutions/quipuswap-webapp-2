@@ -64,7 +64,7 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
   return (
     <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
       {label && (
-        <label htmlFor={id} className={s.label}>
+        <label htmlFor={id} className={s.label} data-test-id="recipientTitle">
           {label}
         </label>
       )}
@@ -83,7 +83,13 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
           />
           {'readText' in navigator.clipboard && (
             <div className={s.paste}>
-              <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn}>
+              <Button
+                disabled={readOnly}
+                onClick={handlePaste}
+                theme="inverse"
+                className={s.btn}
+                data-test-id="pasteButton"
+              >
                 {t('common|Paste')}
               </Button>
             </div>

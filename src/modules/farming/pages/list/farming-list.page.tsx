@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
 import { EmptyFarmingList, FarmingListSkeleton } from './components';
 import { FarmingRewardsList } from './components/farming-rewards-list';
 import styles from './farming-list.page.module.scss';
-import { Iterator } from './helpers';
 import { ListStats } from './list-stats/list-stats';
 import { FarmingListItem } from './structures';
 import { ListFilter } from './structures/list-filter';
@@ -17,7 +16,7 @@ export const FarmsListPage = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="farmingListPageTitle">{title}</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
         <FarmingRewardsList />

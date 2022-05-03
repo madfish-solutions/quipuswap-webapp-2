@@ -139,6 +139,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
                 disabled={isSelectDisabled(values)}
                 className={s.modalButton}
                 theme="primary"
+                data-test-id="buttonSelect"
               >
                 Select
               </Button>
@@ -156,6 +157,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
                 onRequestClose(e);
               }
             }}
+            data-test-id="modalYourPositions"
             {...props}
           >
             <Field name={PMFormField.FIRST_TOKEN} initialValue={notSelectable1}>

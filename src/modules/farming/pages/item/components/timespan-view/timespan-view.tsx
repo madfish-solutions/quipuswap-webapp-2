@@ -56,7 +56,7 @@ export const TimespanView = ({
   ];
 
   return (
-    <span className={cx(styles.root, modeClass[colorThemeMode], className)}>
+    <span className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="timespanView">
       {viewParts.map(({ periodName, amount }) => (
         <Fragment key={periodName}>
           <span className={cx(styles.amountName, amountClassName)}>{formatValue(amount, shouldShow)}</span>

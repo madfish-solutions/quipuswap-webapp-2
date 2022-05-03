@@ -10,9 +10,11 @@ export interface SectionProps {
   className?: string;
 }
 
-export const Section: FC<SectionProps> = ({ header, description, className, children }) => (
-  <section className={cx(s.root, className)}>
-    <h2 className={s.header}>{header}</h2>
+export const Section: FC<SectionProps> = ({ header, description, className, children, ...props }) => (
+  <section className={cx(s.root, className)} {...props}>
+    <h2 className={s.header} data-test-id="sectionHeader">
+      {header}
+    </h2>
     <p className={s.description}>{description}</p>
     {children}
   </section>

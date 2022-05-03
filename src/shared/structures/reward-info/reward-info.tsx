@@ -29,8 +29,6 @@ interface Props {
   disabled?: boolean;
   buttonUp?: boolean;
   details?: ReactNode;
-  rewardButtonAttributeTestId: string;
-  pendingRewardAttributeTestId: string;
 }
 
 const ZERO_REWARDS = 0;
@@ -48,8 +46,6 @@ export const RewardInfo: FC<Props> = ({
   totalPendingRewards,
   buttonUp,
   details,
-  rewardButtonAttributeTestId,
-  pendingRewardAttributeTestId,
   children
 }) => {
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
@@ -75,6 +71,7 @@ export const RewardInfo: FC<Props> = ({
       contentClassName={styles.p0}
       header={header}
       footer={isDetailsOpen && details}
+      data-test-id="farmingListPendingRewards"
     >
       <div className={containerClassName}>
         <PendingRewards
@@ -82,7 +79,6 @@ export const RewardInfo: FC<Props> = ({
           claimablePendingRewards={claimablePendingRewards}
           totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
-          testId={pendingRewardAttributeTestId}
           amountDecimals={amountDecimals}
           currency={currency}
         />
@@ -91,7 +87,7 @@ export const RewardInfo: FC<Props> = ({
           <div className={buttonContainerClassName}>
             <ConnectWalletOrDoSomething>
               <Button
-                testId={rewardButtonAttributeTestId}
+                data-test-id="rewardButtonAttribute"
                 className={styles.button}
                 onClick={onButtonClick}
                 disabled={isButtonDisabled}
@@ -107,6 +103,7 @@ export const RewardInfo: FC<Props> = ({
               theme="inverse"
               icon={<ArrowSign rotation={isDetailsOpen} />}
               onClick={toggle}
+              data-test-id="rewardInfoHarvestAllButton"
             >
               {detailsButtonTransaction}
             </Button>

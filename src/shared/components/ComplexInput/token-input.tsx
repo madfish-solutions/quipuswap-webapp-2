@@ -22,7 +22,7 @@ import { Button } from '../button';
 import { DashPlug } from '../dash-plug';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogos } from '../tokens-logos';
+import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { ComplexError } from './ComplexError';
 import styles from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
@@ -155,7 +155,7 @@ export const TokenInput: FC<Props> = ({
 
   return (
     <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
-      <label htmlFor={id} className={styles.label}>
+      <label htmlFor={id} className={styles.label} data-test-id="tokenInputLabel">
         {label}
       </label>
       <div className={styles.background}>
@@ -180,16 +180,17 @@ export const TokenInput: FC<Props> = ({
               theme="quaternary"
               className={cx(styles.item4, styles.frozen)}
               textClassName={styles.item4Inner}
+              data-test-id="tokenInputSelectButton"
             >
               {isBothTokensExist ? (
-                <TokensLogos
+                <TokensLogosDeprecated
                   firstTokenIcon={firstTokenIcon}
                   firstTokenSymbol={firstTokenSymbol}
                   secondTokenIcon={secondTokenIcon}
                   secondTokenSymbol={secondTokenSymbol}
                 />
               ) : (
-                <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
               )}
               <h6 className={styles.token}>{tokenLabel}</h6>
             </Button>

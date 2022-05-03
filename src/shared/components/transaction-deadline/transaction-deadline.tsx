@@ -17,14 +17,14 @@ interface Props {
   onChange: (newValue: BigNumber) => void;
 }
 
-export const TransactionDeadline: FC<Props> = ({ error, onChange, value }) => {
+export const TransactionDeadline: FC<Props> = ({ error, onChange, value, ...props }) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
     onChange(new BigNumber(newValue ? newValue : DEFAULT_DEADLINE_MINS));
 
   return (
-    <div>
+    <div {...props}>
       <label htmlFor="deadline" className={styles.inputLabel}>
         <span>{t('common|Transaction deadline')}</span>
         <Tooltip

@@ -16,7 +16,7 @@ export const FarmingItemPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{getTitle()}</PageTitle>
+      <PageTitle data-test-id="farmingItemPageTitle">{getTitle()}</PageTitle>
       <FarmingRewardInfo />
       {isYouves && <YouvesCard />}
       <StickyBlock>

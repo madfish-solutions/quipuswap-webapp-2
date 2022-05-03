@@ -38,32 +38,28 @@ export const DexDashboard: FC = () => {
 
   const desktopContentClassName = IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? s.content : cx(s.content, s.testnet);
 
+  const content = (
+    <DexDashboardInner
+      volume24={null}
+      totalLiquidity={null}
+      xtzUsdQuote={null}
+      transactionsCount24h={null}
+      totalSupply={totalSupply}
+      loading={false}
+    />
+  );
+
   return (
     <Section
       header={t('home|DEX Dashboard')}
       description={t('home|The short overview of the most relevant DEX information.')}
+      data-test-id="dexDashboardSection"
     >
-      <Card className={s.mobile} contentClassName={s.mobContent}>
-        <Slider className={s.mobSlider}>
-          <DexDashboardInner
-            volume24={null}
-            totalLiquidity={null}
-            xtzUsdQuote={null}
-            transactionsCount24h={null}
-            totalSupply={totalSupply}
-            loading={false}
-          />
-        </Slider>
+      <Card className={s.mobile} contentClassName={s.mobContent} data-test-id="DEXDashboardMobile">
+        <Slider className={s.mobSlider}>{content}</Slider>
       </Card>
-      <Card className={s.desktop} contentClassName={desktopContentClassName}>
-        <DexDashboardInner
-          volume24={'888888'}
-          totalLiquidity={'888888'}
-          xtzUsdQuote={'888888'}
-          transactionsCount24h={888888}
-          totalSupply={totalSupply}
-          loading={false}
-        />
+      <Card className={s.desktop} contentClassName={desktopContentClassName} data-test-id="DEXDashboardDesktop">
+        {content}
       </Card>
     </Section>
   );

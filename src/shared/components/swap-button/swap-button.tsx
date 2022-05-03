@@ -27,7 +27,7 @@ export const SwapButton: React.FC<SwapButtonProps> = ({ onClick }) => {
   );
 
   return (
-    <Button theme="quaternary" className={compoundClassName} onClick={handleRotate}>
+    <Button theme="quaternary" className={compoundClassName} onClick={handleRotate} data-test-id="swapButton">
       <SwapIcon id="swap" className={styles.svg} />
     </Button>
   );

@@ -6,6 +6,7 @@ import { isNewsWithLink, News } from '../content';
 
 interface NewsCardProps {
   news: News;
+  index: number;
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export const NewsCard: FC<NewsCardProps> = ({ news, className }) => {
           target={news.external ? '_blank' : '_self'}
           rel="noreferrer noopener"
           onClick={() => handleNewsClick(news.url)}
+          data-test-id={`news-${news.id}`}
         >
           {ImageComponent}
         </a>

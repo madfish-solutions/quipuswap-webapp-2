@@ -16,7 +16,9 @@ const getConfirmationMessage = (timelock: Nullable<number>, withdrawalFee: Undef
   const { days, hours } = parseTimelock(timelock);
   const persent = withdrawalFee.toFixed();
 
-  return i18n.t('farm|confirmationUnstake', { days, hours, persent });
+  return withdrawalFee.isZero()
+    ? i18n.t('farm|confirmationUnstakeZero', { days, hours })
+    : i18n.t('farm|confirmationUnstake', { days, hours, persent });
 };
 
 export const useUnstakeConfirmationPopup = () => {

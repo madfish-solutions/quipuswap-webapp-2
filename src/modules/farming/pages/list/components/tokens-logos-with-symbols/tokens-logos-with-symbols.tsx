@@ -28,6 +28,9 @@ interface FillProps extends PropsAbstraction {
 
 type Props = FixedProps | FillProps;
 
+/**
+ * @deprecated
+ */
 export const TokensLogosAndSymbols: FC<Props> = props => {
   const { tokenA, tokenB, className, imageClassName, loading } = props;
 
@@ -47,7 +50,7 @@ export const TokensLogosAndSymbols: FC<Props> = props => {
   const symbols = isTokenPair ? getTokensPairName(tokenA, tokenB) : firstTokenSymbol;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-test-id="tokenLogoAndSymbol">
       <div className={compoundClassName}>
         <div className={cx(styles.imageWrapper, imageClassName)}>
           {isExist(firstTokenIcon) && !loading ? (
