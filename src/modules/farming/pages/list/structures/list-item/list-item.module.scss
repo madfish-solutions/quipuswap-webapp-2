@@ -124,7 +124,7 @@
   align-items: center;
   margin-top: 8px;
   flex-wrap: wrap;
-  margin-right: 100%;
+  column-gap: 8px;
 }
 
 .activeStatus {
@@ -167,10 +167,6 @@
 
   .tagsWithTooltip {
     margin-top: 0;
-  }
-
-  .tags {
-    margin-right: 0;
   }
 
   .activeStatus {
