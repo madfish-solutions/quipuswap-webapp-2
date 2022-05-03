@@ -18,7 +18,7 @@
   display: none;
 }
 
-@include media('>Lphone') {
+@include media('>phone') {
   .logoImg {
     display: none;
   }

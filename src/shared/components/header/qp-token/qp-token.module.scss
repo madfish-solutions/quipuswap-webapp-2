@@ -7,7 +7,7 @@
 }
 
 .price {
-  padding: 0 8px 0 0;
+  padding: 0 8px;
   font-size: 0.857rem;
   font-weight: 700;
 }
@@ -18,10 +18,4 @@
 
 .dark {
   color: $text-inverse;
-}
-
-@include media('>phone') {
-  .price {
-    padding: 0 8px;
-  }
 }
