@@ -58,7 +58,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Stableswap,
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="new" className={styles.navigationStatus} />,
+    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />,
     hide: isProd()
   },
   {
