@@ -39,4 +39,4 @@ export * from './local-search-sort-symbol';
 export * from './is-asset-equal';
 export * from './handle-search-token';
 export * from './hash';
-export * from './get-random-number';
+export * from './get-random-id';

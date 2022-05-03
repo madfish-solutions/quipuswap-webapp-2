@@ -1,14 +1,14 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useRef } from 'react';
 
 import { ColorThemeContext } from '@providers/color-theme-context';
-import { getRandomNumber } from '@shared/helpers';
+import { getRandomId } from '@shared/helpers';
 import { IconProps } from '@shared/types';
 
 export const ExternalLink: FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
+  const randomId = useRef(getRandomId());
 
-  const randomId = getRandomNumber().toString();
-  const fill = `url(#${randomId})`;
+  const fill = `url(#${randomId.current})`;
 
   return (
     <svg
@@ -24,7 +24,7 @@ export const ExternalLink: FC<IconProps> = ({ className }) => {
         fill={fill}
       />
       <defs>
-        <linearGradient id={randomId} x1="3" y1="3" x2="23.1331" y2="5.83122" gradientUnits="userSpaceOnUse">
+        <linearGradient id={randomId.current} x1="3" y1="3" x2="23.1331" y2="5.83122" gradientUnits="userSpaceOnUse">
           <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
