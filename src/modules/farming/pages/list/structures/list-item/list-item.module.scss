@@ -37,6 +37,7 @@
   align-items: center;
   column-gap: 8px;
   grid-column: 1 / 2;
+  margin-top: 8px;
 }
 
 .iconWithStatusLabel {
@@ -121,14 +122,13 @@
 .tags {
   display: flex;
   align-items: center;
-  column-gap: 0;
   margin-top: 8px;
   flex-wrap: wrap;
-  width: 105px;
 }
 
 .activeStatus {
-  margin-top: 8px;
+  margin-right: 100%;
+  order: -1;
 }
 
 .light {
@@ -165,8 +165,12 @@
     column-gap: 8px;
   }
 
-  .activeStatus {
+  .tagsWithTooltip {
     margin-top: 0;
+  }
+
+  .activeStatus {
+    margin-right: 0;
   }
 }
 
