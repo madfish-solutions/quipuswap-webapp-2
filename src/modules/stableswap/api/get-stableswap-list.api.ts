@@ -1,9 +1,6 @@
-import { LIST } from '@config/constants';
-import { STABLESWAP_API_URL } from '@config/enviroment';
+import { STABLESWAP_LIST_API_URL } from '@config/constants';
 
 import { StableswapListResponse } from '../types';
-
-const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 
 export const getStableswapListApi = async () => {
   const response = await fetch(STABLESWAP_LIST_API_URL);

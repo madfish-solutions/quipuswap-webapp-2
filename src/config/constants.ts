@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { QSNets } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -80,6 +80,9 @@ export const SKIP = -1;
 //#region API
 export const LIST = 'list';
 export const STATS = 'stats';
+
+export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
+export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 //#endregion
 
 //TODO: assort mix

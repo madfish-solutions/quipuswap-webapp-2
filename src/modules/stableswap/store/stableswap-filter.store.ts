@@ -28,9 +28,9 @@ export class StableswapFilterStore extends BaseFilterStore {
     }
 
     if (this.search) {
-      localList = localList.filter(({ tokensInfo }) => {
-        return tokensInfo.map(({ token }) => this.tokenMatchesSearch(token)).some(Boolean);
-      });
+      localList = localList.filter(({ tokensInfo }) =>
+        tokensInfo.map(({ token }) => this.tokenMatchesSearch(token)).some(Boolean)
+      );
     }
 
     return sortStableswapList(localList, this.sortField, this.sortDirection);

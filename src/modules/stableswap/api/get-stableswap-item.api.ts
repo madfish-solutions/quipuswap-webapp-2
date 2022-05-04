@@ -1,12 +1,9 @@
 import BigNumber from 'bignumber.js';
 
-import { LIST } from '@config/constants';
-import { STABLESWAP_API_URL } from '@config/enviroment';
+import { STABLESWAP_LIST_API_URL } from '@config/constants';
 import { Nullable } from '@shared/types';
 
 import { StableswapItemResponse } from '../types';
-
-const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 
 export const getStableswapItemApi = async (poolId: Nullable<BigNumber>) => {
   if (!poolId) {
