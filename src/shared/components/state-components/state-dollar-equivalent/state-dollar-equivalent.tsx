@@ -16,6 +16,7 @@ const USD_DECIMALS_AMOUNT = 2;
 
 export interface StateDollarEquivalentProps extends Partial<StateWrapperProps> {
   dollarEquivalent: Nullable<BigNumber.Value>;
+  className?: string;
 }
 
 const modeClass = {
@@ -30,7 +31,8 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
   isLoading,
   loaderFallback,
   isError,
-  errorFallback
+  errorFallback,
+  className
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -43,7 +45,7 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
   const title = dollarEquivalent ? new BigNumber(dollarEquivalent).toFixed() : undefined;
 
   return (
-    <span className={cx(styles.dollarEquivalent, modeClass[colorThemeMode])}>
+    <span className={cx(styles.dollarEquivalent, modeClass[colorThemeMode], className)}>
       <span className={styles.nowrap}>{APPROXIMATELY_EQUAL_DOLLAR}</span>
       <span className={styles.dollarEquivalentInner} title={title}>
         <StateWrapper
