@@ -3,8 +3,7 @@ import { useEffect } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useStableswapListStore } from '../hooks';
-import { useGetStableswapList, useGetStableswapStats } from '../loaders';
+import { useStableswapListStore, useGetStableswapList, useGetStableswapStats } from '../hooks';
 
 export const useStableswapLiquidityPageViewModel = () => {
   const stableswapListStore = useStableswapListStore();

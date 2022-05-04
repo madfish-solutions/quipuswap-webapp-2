@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
-import { Sorter } from '@modules/stableswap/helpers';
+import { Sorter } from '@modules/stableswap/components';
 import { Card, Input, NumberInput, Switcher } from '@shared/components';
 import { Search } from '@shared/svg';
 

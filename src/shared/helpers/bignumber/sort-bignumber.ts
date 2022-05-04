@@ -10,6 +10,8 @@ export enum SortDirection {
   DESC = 'DESC'
 }
 
+export const isDirrectOrder = (sortDirection: SortDirection) => sortDirection === SortDirection.ASC;
+
 export const sortBigNumber = (
   first: Nullable<BigNumber>,
   second: Nullable<BigNumber>,
@@ -24,7 +26,7 @@ export const sortBigNumber = (
   }
 
   const isFirstBigger = first.isGreaterThan(second);
-  const isSortedAsc = sortDirection === SortDirection.ASC;
+  const isSortedAsc = isDirrectOrder(sortDirection);
 
   if ((isSortedAsc && isFirstBigger) || (!isSortedAsc && !isFirstBigger)) {
     return SWAP;

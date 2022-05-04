@@ -2,7 +2,6 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { DEFAULT_TOKEN_ID, STEP } from '@config/constants';
-import { RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
 import { includesCaseInsensitive, isEmptyString, isNull, isZeroTokenId, SortDirection } from '../helpers';
@@ -20,7 +19,7 @@ export class BaseFilterStore {
   tokenId: Nullable<BigNumber> = null;
   sortDirection: SortDirection = SortDirection.DESC;
 
-  constructor(protected rootStore: RootStore) {
+  constructor() {
     makeObservable(this, {
       search: observable,
       tokenId: observable,

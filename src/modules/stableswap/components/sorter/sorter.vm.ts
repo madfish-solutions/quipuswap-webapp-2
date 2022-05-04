@@ -1,7 +1,8 @@
 import { useStableswapFilterStore } from '@modules/stableswap/hooks';
+import { isDirrectOrder } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { SortDirection, SortFieldItem, SortField } from './sorter.types';
+import { SortFieldItem, SortField } from './sorter.types';
 
 export const useSorterViewModel = () => {
   const { t } = useTranslation(['farm', 'common']);
@@ -30,7 +31,7 @@ export const useSorterViewModel = () => {
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = sortDirection === SortDirection.ASC;
+  const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   return {
     sortingValue,

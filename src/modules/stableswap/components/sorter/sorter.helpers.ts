@@ -19,9 +19,7 @@ const sortStableswap = (
   second: StableswapItem,
   sortField: SortField,
   sortDirection: SortDirection
-) => {
-  return stableswapSorts[sortField](first, second, sortDirection);
-};
+) => stableswapSorts[sortField](first, second, sortDirection);
 
 export const sortStableswapList = (list: Array<StableswapItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {

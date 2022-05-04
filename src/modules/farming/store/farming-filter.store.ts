@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { isExist } from '@shared/helpers';
-import { BaseFilterStore, RootStore } from '@shared/store';
+import { BaseFilterStore } from '@shared/store';
 import { ActiveStatus } from '@shared/types';
 
 import { FarmingItem } from '../interfaces';
@@ -13,8 +13,8 @@ export class FarmingFilterStore extends BaseFilterStore {
 
   sortField: SortField = SortField.ID;
 
-  constructor(protected rootStore: RootStore) {
-    super(rootStore);
+  constructor() {
+    super();
 
     makeObservable(this, {
       stakedOnly: observable,

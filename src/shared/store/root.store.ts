@@ -75,14 +75,14 @@ export class RootStore {
   async createStableswapFilterStore() {
     if (isNull(this.stableswapFilterStore)) {
       const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
-      this.stableswapFilterStore = new StableswapFilterStore(this);
+      this.stableswapFilterStore = new StableswapFilterStore();
     }
   }
 
   async createFarmingFilterStore() {
     if (isNull(this.farmingFilterStore)) {
       const { FarmingFilterStore } = await import('@modules/farming/store/farming-filter.store');
-      this.farmingFilterStore = new FarmingFilterStore(this);
+      this.farmingFilterStore = new FarmingFilterStore();
     }
   }
 

@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useStableswapItemStore } from '../hooks';
+import { useStableswapItemStore } from '../store';
 
 export const useGetStableswapItem = () => {
   const { showErrorToast } = useToasts();
@@ -14,13 +14,15 @@ export const useGetStableswapItem = () => {
 
   const getStableswapItem = useCallback(
     async (poolId: BigNumber) => {
-      if (isReady) {
-        try {
-          stableswapItemStore.setPoolId(poolId);
-          stableswapItemStore.itemStore.load();
-        } catch (error) {
-          showErrorToast(error as Error);
-        }
+      if (!isReady) {
+        return;
+      }
+
+      try {
+        stableswapItemStore.setPoolId(poolId);
+        await stableswapItemStore.itemStore.load();
+      } catch (error) {
+        showErrorToast(error as Error);
       }
     },
     [isReady, showErrorToast, stableswapItemStore]

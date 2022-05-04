@@ -46,9 +46,8 @@ const farmingSorts = {
   [SortField.EARNED]: sortByEarned
 };
 
-const sortFarming = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) => {
-  return farmingSorts[sortField](first, second, sortDirection);
-};
+const sortFarming = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) =>
+  farmingSorts[sortField](first, second, sortDirection);
 
 export const sortFarmingList = (list: Array<FarmingItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {

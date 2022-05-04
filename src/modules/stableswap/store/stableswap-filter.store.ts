@@ -1,16 +1,16 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { BaseFilterStore, RootStore } from '@shared/store';
+import { BaseFilterStore } from '@shared/store';
 
-import { sortStableswapList, SortField } from '../helpers';
+import { sortStableswapList, SortField } from '../components';
 import { StableswapItem } from '../types';
 
 export class StableswapFilterStore extends BaseFilterStore {
   whitelistedOnly = true;
   sortField: SortField = SortField.ID;
 
-  constructor(protected rootStore: RootStore) {
-    super(rootStore);
+  constructor() {
+    super();
 
     makeObservable(this, {
       whitelistedOnly: observable,
