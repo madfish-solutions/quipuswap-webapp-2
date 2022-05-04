@@ -3,21 +3,17 @@ import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection 
 
 import { SortField } from './sorter.types';
 
-const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.id, second.id, sortDirection);
-};
+const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.id, second.id, sortDirection);
 
-const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.apr, second.apr, sortDirection);
-};
+const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.apr, second.apr, sortDirection);
 
-const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.apy, second.apy, sortDirection);
-};
+const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.apy, second.apy, sortDirection);
 
-const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
-};
+const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const sortByBalance = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);

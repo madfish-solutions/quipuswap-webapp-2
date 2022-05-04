@@ -1,6 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 
 import { getUserBalance } from '@blockchain';
+import { LIST } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS, FARMING_API_URL } from '@config/enviroment';
 import { bigNumberToString, isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -8,7 +9,7 @@ import { Nullable } from '@shared/types';
 import { getUserFarmBalances } from '../helpers';
 import { FarmingContractStorageWrapper, RawFarmingItem, FarmingListResponse } from '../interfaces';
 
-const FARMING_LIST_API_URL = `${FARMING_API_URL}/list`;
+const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 
 const farmingListFetch = async () => {
   const response = await fetch(FARMING_LIST_API_URL);

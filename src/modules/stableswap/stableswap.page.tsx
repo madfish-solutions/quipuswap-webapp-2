@@ -16,6 +16,8 @@ enum StableswapRoutes {
 
 export const StableswapPage: FC = () => {
   const { isInitialazied } = useStableswapPageViewModel();
+  // eslint-disable-next-line no-console
+  console.log(isInitialazied);
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<></>}>

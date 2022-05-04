@@ -77,6 +77,11 @@ export const SWAP = 1;
 export const SKIP = -1;
 //#endregion
 
+//#region API
+export const LIST = 'list';
+export const STATS = 'stats';
+//#endregion
+
 //TODO: assort mix
 //#region mix
 export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];

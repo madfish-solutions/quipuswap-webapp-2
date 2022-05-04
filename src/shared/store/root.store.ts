@@ -57,6 +57,7 @@ export class RootStore {
   setTezos(tezos: Nullable<TezosToolkit>) {
     this.tezos = tezos;
   }
+
   async createStableswapListStore() {
     if (isNull(this.stableswapListStore)) {
       const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');

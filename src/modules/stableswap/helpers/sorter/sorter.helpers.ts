@@ -3,13 +3,11 @@ import { cloneArray, isNull, sortBigNumber } from '@shared/helpers';
 
 import { SortDirection, SortField } from './sorter.types';
 
-const sortById = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.id, second.id, sortDirection);
-};
+const sortById = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.id, second.id, sortDirection);
 
-const sortByTvl = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
-};
+const sortByTvl = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const stableswapSorts = {
   [SortField.ID]: sortById,
