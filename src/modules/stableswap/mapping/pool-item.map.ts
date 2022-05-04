@@ -29,6 +29,7 @@ export const poolItemMapper = (item: RawStableswapItem): StableswapItem => {
     totalLpSupply: new BigNumber(totalLpSupply),
     contractAddress,
     poolContractUrl,
+    stableswapItemUrl: id,
     isWhitelisted,
     tokensInfo: readyTokensInfo,
     ...readyFeeBN
