@@ -27,13 +27,7 @@ interface Props extends StableswapItem {
   className?: string;
 }
 
-export const PoolCard: FC<Props> = ({
-  tokensInfo,
-  tvlInUsd,
-  isWhitelisted,
-  liquidityProvidersFee,
-  poolContractUrl
-}) => {
+export const PoolCard: FC<Props> = ({ tokensInfo, tvlInUsd, isWhitelisted, liquidityProvidersFee, id }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const { whitelistedTag, translation } = usePoolCardViewModel();
@@ -91,7 +85,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={poolContractUrl}>
+        <Button className={styles.button} href={id.toFixed()}>
           {selectTranslation}
         </Button>
       </div>

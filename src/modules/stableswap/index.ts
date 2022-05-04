@@ -1,1 +1,1 @@
-export * from './stableswap-liquidity';
+export * from './stableswap.page';
