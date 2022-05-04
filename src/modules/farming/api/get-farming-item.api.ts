@@ -1,12 +1,9 @@
 import BigNumber from 'bignumber.js';
 
-import { LIST } from '@config/constants';
-import { FARMING_API_URL } from '@config/enviroment';
+import { FARMING_LIST_API_URL } from '@config/constants';
 import { Nullable } from '@shared/types';
 
 import { FarmingItemResponse } from '../interfaces';
-
-const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 
 export const getFarmingItemApi = async (farmingId: Nullable<BigNumber>) => {
   if (!farmingId) {
