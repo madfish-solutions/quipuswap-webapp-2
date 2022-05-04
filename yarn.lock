@@ -15,6 +15,19 @@
     libsodium-wrappers "0.7.8"
     qrcode-generator "1.4.4"
 
+"@airgap/beacon-sdk@^2.3.13":
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/@airgap/beacon-sdk/-/beacon-sdk-2.3.13.tgz#b6dd21b87396895583926086cc0c6e75928db90b"
+  integrity sha512-yA6yFQ3YPKvb3TEWiNmhwf1OmhbB6Jf/u/pfA5Aj4bAcoOopy2FVkep/MUVDKzcJZQIh4EvJq7MTn/306cIFYw==
+  dependencies:
+    "@types/chrome" "0.0.115"
+    "@types/libsodium-wrappers" "0.7.7"
+    axios "0.21.1"
+    bignumber.js "9.0.0"
+    bs58check "2.1.2"
+    libsodium-wrappers "0.7.8"
+    qrcode-generator "1.4.4"
+
 "@amplitude/analytics-connector@1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@amplitude/analytics-connector/-/analytics-connector-1.4.1.tgz#eb8e693f0fcc5c095a5949c84be9be84af642833"
