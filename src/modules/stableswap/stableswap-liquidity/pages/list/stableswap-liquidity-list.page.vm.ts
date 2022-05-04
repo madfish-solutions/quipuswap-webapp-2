@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useStableswapListStore, useGetStableswapList, useGetStableswapStats } from '../hooks';
+import { useStableswapListStore, useGetStableswapList, useGetStableswapStats } from '../../../hooks';
 
 export const useStableswapLiquidityPageViewModel = () => {
   const stableswapListStore = useStableswapListStore();
@@ -15,7 +15,7 @@ export const useStableswapLiquidityPageViewModel = () => {
   const title = t('common|Stableswap Liquidity');
 
   /*
-   Load data
+    Load data
   */
   useEffect(() => {
     if (isReady) {

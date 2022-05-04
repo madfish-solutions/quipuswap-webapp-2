@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite';
 import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
 import { ListFilter, PoolCard } from './components';
-import styles from './stableswap-liquidity.page.module.scss';
-import { useStableswapLiquidityPageViewModel } from './stableswap-liquidity.page.vm';
+import styles from './stableswap-liquidity-list.page.module.scss';
+import { useStableswapLiquidityPageViewModel } from './stableswap-liquidity-list.page.vm';
 
-export const StableswapLiquidityPage: FC = observer(() => {
+export const StableswapLiquidityListPage: FC = observer(() => {
   const { isLoading, list, title } = useStableswapLiquidityPageViewModel();
 
   return (

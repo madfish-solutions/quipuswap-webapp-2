@@ -17,6 +17,7 @@ export interface StableswapItem {
   totalLpSupply: BigNumber;
   tvlInUsd: BigNumber;
   poolContractUrl: string;
+  stableswapItemUrl: string;
   isWhitelisted: boolean;
   liquidityProvidersFee: BigNumber;
   stakersFee: BigNumber;

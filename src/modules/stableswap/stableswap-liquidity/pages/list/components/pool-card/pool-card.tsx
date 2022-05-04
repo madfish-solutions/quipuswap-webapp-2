@@ -32,7 +32,7 @@ export const PoolCard: FC<Props> = ({
   tvlInUsd,
   isWhitelisted,
   liquidityProvidersFee,
-  poolContractUrl
+  stableswapItemUrl
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -91,7 +91,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={poolContractUrl}>
+        <Button className={styles.button} href={stableswapItemUrl}>
           {selectTranslation}
         </Button>
       </div>
