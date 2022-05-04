@@ -1,0 +1,105 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.filterCard {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+
+  padding: 8px 24px 24px;
+  margin-bottom: 32px;
+
+  overflow: visible;
+}
+
+.cardContent {
+  display: grid;
+  width: 100%;
+  grid-template-rows: repeat(4, 1fr);
+  align-items: center;
+  column-gap: 24px;
+}
+
+.searchInput {
+  width: 100%;
+}
+
+.switcherContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  flex: 1;
+  span {
+    color: $text-03;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.sorterContainer {
+  grid-row: 1 / 2;
+  justify-self: flex-end;
+}
+
+.switcherTranslation {
+  min-width: max-content;
+}
+
+@include media(">Lphone") {
+  .cardContent {
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .searchInput {
+    grid-row: 2 / 3;
+  }
+
+  .numberInput {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+
+  .switcherWhitelistedOnly {
+    grid-row: 3 / 4;
+  }
+
+  .sorterContainer {
+    grid-column: 2 / 3;
+  }
+}
+
+@include media(">Ltablet") {
+  .cardContent {
+    grid-template-rows: none;
+    grid-template-columns: 2fr 1fr min-content 1fr 1fr;
+  }
+
+  .filterCard {
+    padding: 0 16px 16px;
+  }
+
+  .searchInput {
+    grid-column: 1 / 2;
+  }
+
+  .numberInput {
+    grid-column: 2 / 3;
+  }
+
+  .switcherWhitelistedOnly {
+    grid-column: 3 / 4;
+  }
+
+  .sorterContainer {
+    grid-column: 5 / 6;
+  }
+
+  .searchInput,
+  .numberInput,
+  .switcherWhitelistedOnly,
+  .sorterContainer {
+    grid-row: none;
+  }
+}

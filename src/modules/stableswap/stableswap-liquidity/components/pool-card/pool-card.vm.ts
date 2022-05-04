@@ -18,7 +18,7 @@ export const usePoolCardViewModel = () => {
     whitelistedTag,
     translation: {
       totalValueTranslation: t('common|totalValue'),
-      liquidityProvidersFeeTranslation: t('stableSwap|liquidityProvidersFee'),
+      liquidityProvidersFeeTranslation: t('stableswap|liquidityProvidersFee'),
       selectTranslation: t('common|select'),
       valueTranslation: t('common|value')
     }

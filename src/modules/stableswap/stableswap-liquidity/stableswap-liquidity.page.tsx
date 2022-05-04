@@ -1,42 +1,24 @@
 import { FC } from 'react';
 
-import { Iterator, PageTitle, TestnetAlert } from '@shared/components';
+import { observer } from 'mobx-react-lite';
 
-import mockRawPoolInfo from '../.mock/raw-pool-info.json';
-import { poolItemMapper } from '../mapping';
-import { PoolCard } from './components';
+import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+
+import { ListFilter, PoolCard } from './components';
 import styles from './stableswap-liquidity.page.module.scss';
+import { useStableswapLiquidityPageViewModel } from './stableswap-liquidity.page.vm';
 
-const MOCK_DATA = poolItemMapper(mockRawPoolInfo);
+export const StableswapLiquidityPage: FC = observer(() => {
+  const { isLoading, list, title } = useStableswapLiquidityPageViewModel();
 
-const mockData = [
-  {
-    tvlInUsd: MOCK_DATA.tvlInUsd,
-    liquidityProvidersFee: MOCK_DATA.liquidityProvidersFee,
-    tokensInfo: MOCK_DATA.tokensInfo,
-    poolContractUrl: MOCK_DATA.poolContractUrl,
-    isWhitelisted: true
-  },
-  {
-    tvlInUsd: MOCK_DATA.tvlInUsd,
-    liquidityProvidersFee: MOCK_DATA.liquidityProvidersFee,
-    tokensInfo: MOCK_DATA.tokensInfo,
-    poolContractUrl: MOCK_DATA.poolContractUrl,
-    isWhitelisted: true
-  },
-  {
-    tvlInUsd: MOCK_DATA.tvlInUsd,
-    liquidityProvidersFee: MOCK_DATA.liquidityProvidersFee,
-    tokensInfo: MOCK_DATA.tokensInfo,
-    poolContractUrl: MOCK_DATA.poolContractUrl,
-    isWhitelisted: true
-  }
-];
-
-export const StableswapLiquidityPage: FC = () => (
-  <>
-    <TestnetAlert />
-    <PageTitle>Stableswap Liquidity</PageTitle>
-    <Iterator render={PoolCard} data={mockData} isGrouped wrapperClassName={styles.poolsList} />
-  </>
-);
+  return (
+    <>
+      <TestnetAlert />
+      <PageTitle>{title}</PageTitle>
+      <ListFilter />
+      <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
+        <Iterator render={PoolCard} data={list ?? []} isGrouped wrapperClassName={styles.poolsList} />
+      </StateWrapper>
+    </>
+  );
+});

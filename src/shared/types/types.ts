@@ -213,3 +213,12 @@ export enum LastUsedConnectionKey {
   TEMPLE = 'TEMPLE',
   BEACON = 'BEACON'
 }
+
+export interface BlockInfoWrap {
+  blockInfo: BlockInfo;
+}
+export interface BlockInfo {
+  level: number;
+  hash: string;
+  timestamp: string;
+}

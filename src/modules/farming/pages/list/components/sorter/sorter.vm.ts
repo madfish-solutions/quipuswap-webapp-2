@@ -1,9 +1,9 @@
 import { useFarmingFilterStore } from '@modules/farming/hooks';
-import { isNull } from '@shared/helpers';
+import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { SortDirection, SortFieldItem, SortField } from './sorter.types';
+import { SortFieldItem, SortField } from './sorter.types';
 
 export const useSorterViewModel = () => {
   const { t } = useTranslation(['farm', 'common']);
@@ -42,7 +42,7 @@ export const useSorterViewModel = () => {
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = sortDirection === SortDirection.ASC;
+  const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   return {
     sortingValue,
