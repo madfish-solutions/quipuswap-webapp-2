@@ -71,7 +71,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
-    label: <Trans ns="common">Coinflip</Trans>, ///
+    label: <Trans ns="common">Coinflip</Trans>,
     Icon: GameIcon
   },
   {
