@@ -3,14 +3,21 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Button, CandidateButton, Card, DetailsCardCell, StateCurrencyAmount, StatusLabel } from '@shared/components';
+import {
+  Button,
+  CandidateButton,
+  Card,
+  DetailsCardCell,
+  StateCurrencyAmount,
+  StatePercentage,
+  StatusLabel
+} from '@shared/components';
 import { ExternalLink } from '@shared/svg/external-link';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
 import { StateData } from '../state-data';
-import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
 import styles from './farming-details.module.scss';
 import { useFarmingDetailsViewModel } from './use-farming-details.vm';
