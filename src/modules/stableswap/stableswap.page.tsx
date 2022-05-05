@@ -34,7 +34,6 @@ export const StableswapPage: FC = () => {
           element={<Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />}
         />
 
-        <Route path={StableswapRoutes.liquidityTab} element={<StableswapLiquidityListPage />} />
         <Route path={StableswapRoutes.liquidityTabPoolId} element={<StableswapLiquidityItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
