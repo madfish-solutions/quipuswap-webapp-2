@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { getTokenSymbol, isExist, isUndefined } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
 import { useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
 
@@ -15,6 +16,7 @@ export const useStableswapLiquidityItemPageViewModel = () => {
   const stableswapItemStore = useStableswapItemStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const { getStableswapItem } = useGetStableswapItem();
+  const { t } = useTranslation();
 
   const poolId = params.poolId;
 
@@ -33,7 +35,7 @@ export const useStableswapLiquidityItemPageViewModel = () => {
     if (isExist(stableswapItem)) {
       const title = stableswapItem.tokensInfo.map(({ token }) => getTokenSymbol(token));
 
-      return `Liquidity ${title.join('/')}`;
+      return `${t('liquidity|Liquidity')} ${title.join('/')}`;
     }
   };
 
