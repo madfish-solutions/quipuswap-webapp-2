@@ -91,7 +91,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={stableswapItemUrl}>
+        <Button className={styles.button} href={`add/${stableswapItemUrl}`}>
           {selectTranslation}
         </Button>
       </div>
