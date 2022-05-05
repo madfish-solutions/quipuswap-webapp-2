@@ -8,31 +8,39 @@ export const GameIcon: FC<IconProps> = ({ id, className }) => {
 
   return (
     <svg width={24} height={24} fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      <circle cx={17} cy={13} r={2} stroke="url(#a)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-      <path
-        d="M6 7.75h12A3.25 3.25 0 0 1 21.25 11v7.334a2.915 2.915 0 0 1-5.558 1.233l-.474-1.016a2.75 2.75 0 0 0-2.492-1.587h-1.452a2.75 2.75 0 0 0-2.492 1.587l-.474 1.016a2.916 2.916 0 0 1-5.558-1.233V11A3.25 3.25 0 0 1 6 7.75Z"
+      <circle
+        cx={17}
+        cy={13}
+        r={2}
         stroke={`url(#GameIcon-${id}paint0_linear)`}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="m12.044 7.517-.035-2 1.982-1.034-.035-2"
+        d="M2.75 11A3.25 3.25 0 0 1 6 7.75h12A3.25 3.25 0 0 1 21.25 11v7.334a2.915 2.915 0 0 1-5.558 1.233l-.474-1.016a2.75 2.75 0 0 0-2.492-1.587h-1.452a2.75 2.75 0 0 0-2.492 1.587l-.474 1.016a2.916 2.916 0 0 1-5.558-1.233V11Z"
         stroke={`url(#GameIcon-${id}paint1_linear)`}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M7 14.88v-4"
+        d="m12.044 7.517-.035-2 1.982-1.034-.035-2"
         stroke={`url(#GameIcon-${id}paint2_linear)`}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M5 12.88h4"
+        d="M7 14.88v-4"
         stroke={`url(#GameIcon-${id}paint3_linear)`}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 12.88h4"
+        stroke={`url(#GameIcon-${id}paint4_linear)`}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
