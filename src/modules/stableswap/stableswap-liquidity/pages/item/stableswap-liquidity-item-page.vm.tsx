@@ -33,9 +33,9 @@ export const useStableswapLiquidityItemPageViewModel = () => {
 
   const getTitle = () => {
     if (isExist(stableswapItem)) {
-      const title = stableswapItem.tokensInfo.map(({ token }) => getTokenSymbol(token));
+      const tokenSymbols = stableswapItem.tokensInfo.map(({ token }) => getTokenSymbol(token));
 
-      return `${t('liquidity|Liquidity')} ${title.join('/')}`;
+      return `${t('liquidity|Liquidity')} ${tokenSymbols.join('/')}`;
     }
   };
 
