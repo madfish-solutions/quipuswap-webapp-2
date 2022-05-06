@@ -14,6 +14,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
+import { Tabs } from '../../../../../stableswap.page';
 import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
@@ -91,7 +92,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={`add/${stableswapItemUrl}`}>
+        <Button className={styles.button} href={`${Tabs.add}/${stableswapItemUrl}`}>
           {selectTranslation}
         </Button>
       </div>
