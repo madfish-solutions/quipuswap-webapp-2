@@ -1,8 +1,15 @@
 .backArrow {
   transform: rotate(90deg);
   margin-right: 0;
+  text-align: center;
 }
 
 .arrowButton {
   margin-right: 0;
+}
+
+.block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -10,11 +10,11 @@ export const FarmingRewardHeader: FC = () => {
   const { t } = useTranslation(['farm']);
 
   return (
-    <>
+    <div className={styles.block}>
       <Button href="/farming" theme="quaternary" icon className={styles.arrowButton} data-test-id="backTTListButton">
         <ArrowDown className={styles.backArrow} />
       </Button>
       <span>{t('farm|Back to the list')}</span>
-    </>
+    </div>
   );
 };
