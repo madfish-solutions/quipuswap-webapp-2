@@ -1,8 +1,7 @@
 import { FC, useContext } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-
 import { DOLLAR, PERCENT } from '@config/constants';
+import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
   Button,
@@ -18,19 +17,14 @@ import {
 import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
-import { PreparedTokenData } from './types';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props {
-  tvlInUsd: BigNumber;
-  isWhitelisted: boolean;
-  liquidityProvidersFee: BigNumber;
-  poolContractUrl: string;
-  tokensInfo: Array<PreparedTokenData>;
+interface Props extends StableswapItem {
+  className?: string;
 }
 
 export const PoolCard: FC<Props> = ({
@@ -38,7 +32,7 @@ export const PoolCard: FC<Props> = ({
   tvlInUsd,
   isWhitelisted,
   liquidityProvidersFee,
-  poolContractUrl
+  stableswapItemUrl
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -97,7 +91,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={poolContractUrl}>
+        <Button className={styles.button} href={stableswapItemUrl}>
           {selectTranslation}
         </Button>
       </div>

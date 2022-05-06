@@ -1,48 +1,19 @@
-import BigNumber from 'bignumber.js';
-
 import { FarmingItem } from '@modules/farming/interfaces';
-import { cloneArray, isNull, multipliedIfPossible } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { SortDirection, SortField } from './sorter.types';
+import { SortField } from './sorter.types';
 
-const SWAP = 1;
-const SKIP = -1;
+const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.id, second.id, sortDirection);
 
-const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, sortDirection: SortDirection) => {
-  if (isNull(first)) {
-    return SWAP;
-  }
+const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.apr, second.apr, sortDirection);
 
-  if (isNull(second)) {
-    return SKIP;
-  }
+const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.apy, second.apy, sortDirection);
 
-  const isFirstBigger = first.isGreaterThan(second);
-  const isSortedAsc = sortDirection === SortDirection.ASC;
-
-  if ((isSortedAsc && isFirstBigger) || (!isSortedAsc && !isFirstBigger)) {
-    return SWAP;
-  }
-
-  return SKIP;
-};
-
-const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.id, second.id, sortDirection);
-};
-
-const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.apr, second.apr, sortDirection);
-};
-
-const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.apy, second.apy, sortDirection);
-};
-
-const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
-  return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
-};
+const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+  sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const sortByBalance = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);
@@ -75,9 +46,8 @@ const farmingSorts = {
   [SortField.EARNED]: sortByEarned
 };
 
-const sortFarming = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) => {
-  return farmingSorts[sortField](first, second, sortDirection);
-};
+const sortFarming = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) =>
+  farmingSorts[sortField](first, second, sortDirection);
 
 export const sortFarmingList = (list: Array<FarmingItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {

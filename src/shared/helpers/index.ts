@@ -42,3 +42,5 @@ export * from './hash';
 export * from './get-random-id';
 export * from './is-prod-domain';
 export * from './is-prod';
+export * from './is-zero-token-id';
+export * from './includes-case-insensitive';

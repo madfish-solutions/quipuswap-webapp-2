@@ -58,6 +58,16 @@ export const FARMING_API_URLS: Record<QSNets, string> = {
 export const FARMING_API_URL = FARMING_API_URLS[NETWORK_ID];
 //#endregion FARMING_API
 
+//#region STABLESWAP_API
+export const STABLESWAP_API_URLS: Record<QSNets, string> = {
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_STABLESWAP_API_URL!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_STABLESWAP_API_URL!,
+  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_STABLESWAP_API_URL!
+};
+
+export const STABLESWAP_API_URL = STABLESWAP_API_URLS[NETWORK_ID];
+//#endregion STABLESWAP_API
+
 //#region RPC_URLS
 export const RPC_URLS: Record<QSNets, string> = {
   [QSNets.mainnet]: process.env.REACT_APP_MAINNET_RPC_URL!,

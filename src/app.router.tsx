@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { CoinflipPage } from '@modules/coinflip';
 import { PageNotFoundPage } from '@modules/errors';
 import { FarmingPage } from '@modules/farming';
 import { HomePage } from '@modules/home';
@@ -21,7 +22,8 @@ export enum AppRootRoutes {
   Send = '/send',
   Farming = '/farming',
   Voting = '/voting',
-  Stableswap = '/stableswap'
+  Stableswap = '/stableswap',
+  Coinflip = '/coinflip'
 }
 
 export const AppRouter: FC = () => (
@@ -35,6 +37,7 @@ export const AppRouter: FC = () => (
     <Route path={`${AppRootRoutes.Stableswap}/*`} element={<StableswapPage />} />
     <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingPage />} />
     <Route path={`${AppRootRoutes.Voting}/*`} element={<VotingPage />} />
+    <Route path={`${AppRootRoutes.Coinflip}/*`} element={<CoinflipPage />} />
 
     <Route path={AppRootRoutes.PrivacyPolicy} element={<PrivacyPolicyPage />} />
     <Route path={AppRootRoutes.TermsOfService} element={<TermsOfServicePage />} />

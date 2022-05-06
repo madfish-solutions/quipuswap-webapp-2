@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { QSNets } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -70,6 +70,22 @@ export const PERCENT = '%';
 export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
+//#endregion
+
+//#region sort
+export const SWAP = 1;
+export const SKIP = -1;
+//#endregion
+
+//#region API
+export const LIST = 'list';
+export const STATS = 'stats';
+
+export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
+export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
+
+export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
+export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 //#endregion
 
 //TODO: assort mix

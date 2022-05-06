@@ -20,18 +20,18 @@ export const useListFilterViewModel = () => {
     return farmingFilterStore.setActiveOnly(state);
   };
 
-  const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e)) {
+  const onSearchChange = (event: FormEvent<HTMLInputElement>) => {
+    if (isNull(event)) {
       return;
     }
-    farmingFilterStore.onSearchChange((e.target as HTMLInputElement).value);
+    farmingFilterStore.onSearchChange((event.target as HTMLInputElement).value);
   };
 
-  const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e) || isNull(e.target)) {
+  const onTokenIdChange = (event: FormEvent<HTMLInputElement>) => {
+    if (isNull(event) || isNull(event.target)) {
       return;
     }
-    farmingFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
+    farmingFilterStore.onTokenIdChange((event.target as HTMLInputElement).value);
   };
 
   const handleIncrement = () => {

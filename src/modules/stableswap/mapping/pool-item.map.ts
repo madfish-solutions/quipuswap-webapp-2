@@ -1,12 +1,11 @@
 import { BigNumber } from 'bignumber.js';
 
 import { mapBackendToken } from '@shared/mapping';
-import { RawToken } from '@shared/types';
 
-import mock from '../.mock/raw-pool-info.json';
+import { RawStableswapItem, StableswapItem } from '../types';
 
-export const poolItemMapper = (item: typeof mock) => {
-  const { tvlInUsd, tokensInfo, contractAddress, id, totalLpSupply, fees, poolContractUrl } = item;
+export const poolItemMapper = (item: RawStableswapItem): StableswapItem => {
+  const { tvlInUsd, tokensInfo, contractAddress, id, totalLpSupply, fees, poolContractUrl, isWhitelisted } = item;
 
   const readyFeeBN = {
     liquidityProvidersFee: new BigNumber(fees.liquidityProvidersFee),
@@ -17,9 +16,10 @@ export const poolItemMapper = (item: typeof mock) => {
 
   const readyTokensInfo = tokensInfo.map(info => {
     return {
-      token: mapBackendToken(info.token as RawToken), // TODO: remove cast
+      token: mapBackendToken(info.token),
       reserves: new BigNumber(info.reserves),
-      exchangeRate: new BigNumber(info.exchangeRate)
+      exchangeRate: new BigNumber(info.exchangeRate),
+      reservesInUsd: new BigNumber(info.reserves).multipliedBy(info.exchangeRate)
     };
   });
 
@@ -29,6 +29,8 @@ export const poolItemMapper = (item: typeof mock) => {
     totalLpSupply: new BigNumber(totalLpSupply),
     contractAddress,
     poolContractUrl,
+    stableswapItemUrl: id,
+    isWhitelisted,
     tokensInfo: readyTokensInfo,
     ...readyFeeBN
   };
