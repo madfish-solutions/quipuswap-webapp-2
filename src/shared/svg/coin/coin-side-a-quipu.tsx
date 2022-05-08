@@ -4,8 +4,8 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideAIcon: FC<IconProps> = ({ className, ...props }) => {
-  const { getId } = useSvgHelper('CoinSideAIcon');
+export const CoinSideAQuipuIcon: FC<IconProps> = ({ className, size, ...props }) => {
+  const { getId } = useSvgHelper('CoinSideAQuipuIcon');
 
   return (
     <svg
@@ -14,6 +14,8 @@ export const CoinSideAIcon: FC<IconProps> = ({ className, ...props }) => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       x={0}
       y={0}
+      width={size}
+      height={size}
       viewBox="0 0 700 700"
       style={{
         // @ts-ignore
