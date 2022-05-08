@@ -16,12 +16,12 @@ export const CoinSideAQuipuIcon: FC<IconProps> = ({ className, size, ...props })
       y={0}
       width={size}
       height={size}
-      viewBox="0 0 700 700"
       style={{
         // @ts-ignore
         enableBackground: 'new 0 0 700 700'
       }}
       xmlSpace="preserve"
+      className={className}
       {...props}
     >
       <style>

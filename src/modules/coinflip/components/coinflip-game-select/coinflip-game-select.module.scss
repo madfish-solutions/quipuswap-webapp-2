@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  position: relative;
+}
+
+.icon {
+  margin: 40px;
+}
+
+.selected {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}

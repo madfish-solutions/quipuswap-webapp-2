@@ -1,16 +1,40 @@
 import { FC } from 'react';
 
-import { CoinSideAQuipuIcon, CoinSideBIcon } from '@shared/svg';
+import { Button } from '@shared/components';
+import { CoinSelectedIcon, CoinSideAQuipuIcon, CoinSideBIcon } from '@shared/svg';
 import { CoinSideATezosIcon } from '@shared/svg/coin/coin-side-a-tezos';
 
-export const CoinflipGameSelect: FC = () => {
-  return (
-    <>
-      <h1>coinflip-game select</h1>
+import styles from './coinflip-game-select.module.scss';
 
-      <CoinSideAQuipuIcon size={64} />
-      <CoinSideBIcon size={64} />
-      <CoinSideATezosIcon size={64} />
-    </>
+const COIN_SIZE = 88;
+
+export const CoinflipGameSelect: FC = () => {
+  const isTez = true;
+
+  const handleSelectSizeA = () => {
+    // eslint-disable-next-line no-console
+    console.log('a');
+  };
+
+  const handleSelectSizeB = () => {
+    // eslint-disable-next-line no-console
+    console.log('b');
+  };
+
+  return (
+    <div className={styles.root}>
+      <Button onClick={handleSelectSizeA} theme="clean" className={styles.button}>
+        {isTez ? (
+          <CoinSideATezosIcon size={COIN_SIZE} className={styles.icon} />
+        ) : (
+          <CoinSideAQuipuIcon size={COIN_SIZE} className={styles.icon} />
+        )}
+      </Button>
+
+      <Button onClick={handleSelectSizeB} theme="clean" className={styles.button}>
+        <CoinSelectedIcon size={COIN_SIZE} className={styles.selected} />
+        <CoinSideBIcon size={COIN_SIZE} className={styles.icon} />
+      </Button>
+    </div>
   );
 };

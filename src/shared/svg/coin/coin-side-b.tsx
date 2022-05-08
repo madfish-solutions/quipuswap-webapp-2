@@ -21,6 +21,7 @@ export const CoinSideBIcon: FC<IconProps> = ({ className, size, ...props }) => {
         enableBackground: 'new 0 0 700 700'
       }}
       xmlSpace="preserve"
+      className={className}
       {...props}
     >
       <style>

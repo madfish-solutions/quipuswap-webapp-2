@@ -9,7 +9,9 @@ export const CoinflipPage: FC = () => {
     <>
       <TestnetAlert />
       <PageTitle>Game</PageTitle>
-      <CoinflipGame />
+      <div style={{ width: '50%' }}>
+        <CoinflipGame />
+      </div>
     </>
   );
 };
