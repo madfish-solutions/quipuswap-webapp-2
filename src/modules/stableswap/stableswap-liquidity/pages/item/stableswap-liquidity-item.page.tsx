@@ -4,8 +4,9 @@ import { observer } from 'mobx-react-lite';
 
 import { PageTitle, TestnetAlert } from '@shared/components';
 
-import { Details } from './components';
+import { Details, StableswapFormTabsCard } from './components';
 import { useStableswapLiquidityItemPageViewModel } from './stableswap-liquidity-item-page.vm';
+import styles from './stableswap-liquidity-item.page.module.scss';
 
 export const StableswapLiquidityItemPage: FC = observer(() => {
   const { getTitle } = useStableswapLiquidityItemPageViewModel();
@@ -14,7 +15,10 @@ export const StableswapLiquidityItemPage: FC = observer(() => {
     <>
       <TestnetAlert />
       <PageTitle>{getTitle()}</PageTitle>
-      <Details />
+      <div className={styles.container}>
+        <StableswapFormTabsCard />
+        <Details />
+      </div>
     </>
   );
 });

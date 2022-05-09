@@ -7,6 +7,7 @@ import { Nullable } from '@shared/types';
 import { getStableswapItemApi } from '../api';
 import { poolItemMapper } from '../mapping';
 import { IRawStableswapItem, StableswapItem } from '../types';
+import { StableswapFormTabs } from '../types/stableswap';
 
 export class StableswapItemStore {
   poolId: Nullable<BigNumber> = null;
@@ -16,6 +17,8 @@ export class StableswapItemStore {
     async () => await getStableswapItemApi(this.poolId),
     poolItemMapper
   );
+
+  currentTab: StableswapFormTabs = StableswapFormTabs.add;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {});
@@ -27,5 +30,9 @@ export class StableswapItemStore {
 
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
+  }
+
+  setTab(tab: StableswapFormTabs) {
+    this.currentTab = tab;
   }
 }

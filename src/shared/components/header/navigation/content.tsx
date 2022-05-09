@@ -10,7 +10,8 @@ import {
   LiquidityIcon,
   MoreIcon,
   StableswapIcon,
-  SwapIcon
+  SwapIcon,
+  GameIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { Trans } from '@translation';
@@ -66,6 +67,12 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Farming,
     label: <Trans ns="common">Farming</Trans>,
     Icon: FarmIcon
+  },
+  {
+    id: 'Coinflip',
+    to: AppRootRoutes.Coinflip,
+    label: <Trans ns="common">Game</Trans>,
+    Icon: GameIcon
   },
   {
     id: 'Analytics',

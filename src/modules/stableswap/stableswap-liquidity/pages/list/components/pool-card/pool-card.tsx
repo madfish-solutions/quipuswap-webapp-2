@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 
 import { DOLLAR, PERCENT } from '@config/constants';
-import { StableswapItem } from '@modules/stableswap/types';
+import { StableswapFormTabs, StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
   Button,
@@ -91,7 +91,7 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={stableswapItemUrl}>
+        <Button className={styles.button} href={`${StableswapFormTabs.add}/${stableswapItemUrl}`}>
           {selectTranslation}
         </Button>
       </div>
