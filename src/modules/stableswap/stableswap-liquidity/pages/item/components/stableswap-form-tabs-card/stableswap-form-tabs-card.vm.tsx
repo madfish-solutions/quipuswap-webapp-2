@@ -22,11 +22,13 @@ export const useStableswapFormTabsCardViewModel = () => {
   const { itemStore, currentTab } = stableswapItemStore;
   const { data: stableswapItem } = itemStore;
 
-  const isAddForm = stableswapItemStore.currentTab === StableswapFormTabs.add;
+  const isAddForm = currentTab === StableswapFormTabs.add;
 
   const changeTabHandle = (tab: StableswapFormTabs) => {
     stableswapItemStore.setTab(tab);
-    navigate(`/stableswap/liquidity/${tab}/${stableswapItem?.id}`);
+    const url = `/stableswap/liquidity/${tab}/${stableswapItem?.id}`;
+
+    navigate(url);
   };
 
   return {

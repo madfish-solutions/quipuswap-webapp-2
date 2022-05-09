@@ -29,7 +29,7 @@ export const StableswapFormTabsCard: FC = observer(() => {
         className: styles.header
       }}
       contentClassName={styles.content}
-      data-test-id="farmingFromTabsCard"
+      data-test-id="stableswapFromTabsCard"
     >
       {isAddForm ? <div>ADD LIQ TAB</div> : <div>REMOVE LIQ TAB</div>}
     </Card>

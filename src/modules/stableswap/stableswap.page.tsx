@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
@@ -19,15 +20,18 @@ enum StableswapRoutes {
   liquidityTabPoolId = '/liquidity/:tab/:poolId'
 }
 
-export const StableswapPage: FC = () => {
+export const StableswapPage: FC = observer(() => {
   const location = useLocation();
 
   const { isInitialazied } = useStableswapPageViewModel();
 
   const locationParts = location.pathname.split('/').filter(part => part);
   const tab = locationParts[locationParts.length - ONE];
+  const isAddOrRemoveInUrl = locationParts.some(
+    part => part === StableswapFormTabs.add || part === StableswapFormTabs.remove
+  );
 
-  if (!isUndefined(tab) && parseInt(tab) && !locationParts.includes(StableswapFormTabs.add)) {
+  if (!isUndefined(tab) && parseInt(tab) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
@@ -54,4 +58,4 @@ export const StableswapPage: FC = () => {
       </Routes>
     </StateWrapper>
   );
-};
+});

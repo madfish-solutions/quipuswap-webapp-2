@@ -6,8 +6,7 @@ import { Nullable } from '@shared/types';
 
 import { getStableswapItemApi } from '../api';
 import { poolItemMapper } from '../mapping';
-import { IRawStableswapItem, StableswapItem } from '../types';
-import { StableswapFormTabs } from '../types/stableswap';
+import { IRawStableswapItem, StableswapItem, StableswapFormTabs } from '../types';
 
 export class StableswapItemStore {
   poolId: Nullable<BigNumber> = null;
