@@ -30,8 +30,9 @@ export const StableswapPage: FC = () => {
 
   const locationParts = location.pathname.split('/').filter(part => part);
   const tab = locationParts[locationParts.length - ONE];
+  const isAddOrRemoveInUrl = locationParts.some(part => part === Tabs.add || part === Tabs.remove);
 
-  if (!isUndefined(tab) && parseInt(tab) && !locationParts.includes(Tabs.add)) {
+  if (!isUndefined(tab) && parseInt(tab) && !isAddOrRemoveInUrl) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${tab}`} />;
   } else if (tab === Tabs.add || tab === Tabs.remove) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />;
