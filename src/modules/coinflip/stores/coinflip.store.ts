@@ -39,6 +39,7 @@ const DEFAULT_COINFLIP_GAME: CoinflipGame = {
 export class CoinflipStore {
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
   tokenBalance: Nullable<BigNumber> = null;
+
   game: CoinflipGame = DEFAULT_COINFLIP_GAME;
 
   constructor(private rootStore: RootStore) {
@@ -72,10 +73,16 @@ export class CoinflipStore {
 
   setToken(token: TokenToPlay) {
     this.tokenToPlay = token;
+    this.tokenBalance = null;
+    // TODO: get new balance
   }
 
   setBalance(balance: Nullable<BigNumber>) {
     this.tokenBalance = balance;
+  }
+
+  setCoinSide(coinSide: CoinSide) {
+    this.game.coinSide = coinSide;
   }
 
   setInput(input: string) {

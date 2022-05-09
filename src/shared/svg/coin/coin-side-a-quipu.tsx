@@ -14,6 +14,7 @@ export const CoinSideAQuipuIcon: FC<IconProps> = ({ className, size, ...props })
       xmlnsXlink="http://www.w3.org/1999/xlink"
       x={0}
       y={0}
+      viewBox="0 0 700 700"
       width={size}
       height={size}
       style={{

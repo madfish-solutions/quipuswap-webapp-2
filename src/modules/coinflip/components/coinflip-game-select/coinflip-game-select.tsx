@@ -4,35 +4,36 @@ import { Button } from '@shared/components';
 import { CoinSelectedIcon, CoinSideAQuipuIcon, CoinSideBIcon } from '@shared/svg';
 import { CoinSideATezosIcon } from '@shared/svg/coin/coin-side-a-tezos';
 
+import { CoinSide, TokenToPlay } from '../../stores';
 import styles from './coinflip-game-select.module.scss';
 
 const COIN_SIZE = 88;
 
-export const CoinflipGameSelect: FC = () => {
-  const isTez = true;
+interface Props {
+  tokenToPlay: TokenToPlay;
+  coinSide: Nullable<CoinSide>;
+  handleSelectCoinSide: (coinSide: CoinSide) => void;
+}
 
-  const handleSelectSizeA = () => {
-    // eslint-disable-next-line no-console
-    console.log('a');
-  };
+export const CoinflipGameSelect: FC<Props> = ({ tokenToPlay, coinSide, handleSelectCoinSide }) => {
+  const iSelectedSideA = coinSide === CoinSide.A;
+  const iSelectedSideB = coinSide === CoinSide.B;
 
-  const handleSelectSizeB = () => {
-    // eslint-disable-next-line no-console
-    console.log('b');
-  };
+  const handleSelectSideA = () => handleSelectCoinSide(CoinSide.A);
+  const handleSelectSideB = () => handleSelectCoinSide(CoinSide.B);
+
+  const isTez = tokenToPlay === TokenToPlay.Tezos;
+  const CoinSideA = isTez ? CoinSideATezosIcon : CoinSideAQuipuIcon;
 
   return (
     <div className={styles.root}>
-      <Button onClick={handleSelectSizeA} theme="clean" className={styles.button}>
-        {isTez ? (
-          <CoinSideATezosIcon size={COIN_SIZE} className={styles.icon} />
-        ) : (
-          <CoinSideAQuipuIcon size={COIN_SIZE} className={styles.icon} />
-        )}
+      <Button onClick={handleSelectSideA} theme="clean" className={styles.button}>
+        {iSelectedSideA && <CoinSelectedIcon size={COIN_SIZE} className={styles.selected} />}
+        <CoinSideA size={COIN_SIZE} className={styles.icon} />
       </Button>
 
-      <Button onClick={handleSelectSizeB} theme="clean" className={styles.button}>
-        <CoinSelectedIcon size={COIN_SIZE} className={styles.selected} />
+      <Button onClick={handleSelectSideB} theme="clean" className={styles.button}>
+        {iSelectedSideB && <CoinSelectedIcon size={COIN_SIZE} className={styles.selected} />}
         <CoinSideBIcon size={COIN_SIZE} className={styles.icon} />
       </Button>
     </div>
