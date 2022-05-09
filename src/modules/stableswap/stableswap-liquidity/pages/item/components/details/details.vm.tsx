@@ -28,12 +28,6 @@ export const useDetailsVievModel = () => {
 
     return {
       ...item,
-      id: item.id.toFixed(),
-      totalLpSupply: item.totalLpSupply.toFixed(),
-      liquidityProvidersFee: item.liquidityProvidersFee.toFixed(),
-      stakersFee: item.stakersFee.toFixed(),
-      interfaceFee: item.interfaceFee.toFixed(),
-      devFee: item.devFee.toFixed(),
       CardCellClassName,
       isLoading,
       tokensLockedData

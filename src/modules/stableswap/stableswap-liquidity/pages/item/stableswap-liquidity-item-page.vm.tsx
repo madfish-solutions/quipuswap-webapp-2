@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { getTokenSymbol, isExist, isUndefined } from '@shared/helpers';
+import { getSymbolsString, isExist, isUndefined } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
@@ -33,7 +33,7 @@ export const useStableswapLiquidityItemPageViewModel = () => {
 
   const getTitle = () => {
     if (isExist(stableswapItem)) {
-      const tokenSymbols = stableswapItem.tokensInfo.map(({ token }) => getTokenSymbol(token));
+      const tokenSymbols = stableswapItem.tokensInfo.map(({ token }) => getSymbolsString(token));
 
       return `${t('liquidity|Liquidity')} ${tokenSymbols.join('/')}`;
     }

@@ -3,7 +3,8 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
-import { useTranslation } from '@translation';
+
+import { useTokenLockedViewModel } from './token-locked.vm';
 
 export interface TokenLockedProps {
   className: string;
@@ -13,10 +14,10 @@ export interface TokenLockedProps {
 }
 
 export const TokenLocked: FC<TokenLockedProps> = ({ className, amount, isLoading, tokenSymbol }) => {
-  const { t } = useTranslation();
+  const cellName = useTokenLockedViewModel(tokenSymbol);
 
   return (
-    <DetailsCardCell cellName={t('stableswap|Token {{tokenSymbol}} locked', { tokenSymbol })} className={className}>
+    <DetailsCardCell cellName={cellName} className={className}>
       <StateCurrencyAmount isLoading={isLoading} currency={tokenSymbol} amount={amount} />
     </DetailsCardCell>
   );

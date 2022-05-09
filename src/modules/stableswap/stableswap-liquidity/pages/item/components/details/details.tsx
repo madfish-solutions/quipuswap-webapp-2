@@ -105,6 +105,16 @@ export const Details: FC = observer(() => {
         >
           {t('liquidity|Pair Contract')}
         </Button>
+        <Button
+          className={cx(commonContainerStyles.detailsButton, styles.detailsButton)}
+          theme="inverse"
+          href={poolContractUrl}
+          external
+          icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
+          data-test-id="stableswapContractButton"
+        >
+          {t('liquidity|Pair Contract')}
+        </Button>
       </div>
     </Card>
   );
