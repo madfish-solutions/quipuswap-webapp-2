@@ -9,5 +9,10 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setCoinSide(coinSide);
   };
 
-  return { tokenToPlay, tokenBalance, game, handleSelectCoinSide };
+  const handleFormSubmit = () => {
+    // eslint-disable-next-line no-console
+    console.log('submit');
+  };
+
+  return { tokenToPlay, tokenBalance, game, token: coinflipStore.token, handleSelectCoinSide, handleFormSubmit };
 };
