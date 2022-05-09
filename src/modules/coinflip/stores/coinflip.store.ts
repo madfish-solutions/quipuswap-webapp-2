@@ -41,7 +41,7 @@ export class CoinflipStore {
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
   tokenBalance: Nullable<BigNumber> = null;
 
-  game: CoinflipGame = DEFAULT_COINFLIP_GAME;
+  game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -75,14 +75,8 @@ export class CoinflipStore {
 
   get token(): Token {
     if (this.tokenToPlay === TokenToPlay.Tezos) {
-      // eslint-disable-next-line no-console
-      console.log('1');
-
       return TEZOS_TOKEN;
     }
-
-    // eslint-disable-next-line no-console
-    console.log('2');
 
     return DEFAULT_TOKEN;
   }
@@ -90,7 +84,7 @@ export class CoinflipStore {
   setToken(token: TokenToPlay) {
     this.tokenToPlay = token;
     this.tokenBalance = null;
-    // TODO: get new balance
+    this.game = { ...DEFAULT_COINFLIP_GAME };
   }
 
   setBalance(balance: Nullable<BigNumber>) {

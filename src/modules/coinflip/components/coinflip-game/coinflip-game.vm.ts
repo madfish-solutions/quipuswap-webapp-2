@@ -3,7 +3,7 @@ import { CoinSide } from '../../stores';
 
 export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { tokenToPlay, tokenBalance, game } = coinflipStore;
+  const { tokenToPlay, tokenBalance, game, token } = coinflipStore;
 
   const handleSelectCoinSide = (coinSide: CoinSide) => {
     coinflipStore.setCoinSide(coinSide);
@@ -14,5 +14,5 @@ export const useCoinflipGameViewModel = () => {
     console.log('submit');
   };
 
-  return { tokenToPlay, tokenBalance, game, token: coinflipStore.token, handleSelectCoinSide, handleFormSubmit };
+  return { tokenToPlay, tokenBalance, game, token, handleSelectCoinSide, handleFormSubmit };
 };
