@@ -1,19 +1,20 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { action, makeObservable, observable } from 'mobx';
 
+import { CoinflipStore as ICoinflipStore } from '@modules/coinflip';
 import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
 import {
-  StableswapListStore as IStableswapListStore,
+  StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
-  StableswapFilterStore as IStableswapFilterStore
+  StableswapListStore as IStableswapListStore
 } from '@modules/stableswap/store';
 
-import { isNull } from '../helpers';
-import { Nullable } from '../types/types';
+import { isExist, isNull } from '../helpers';
+import { Nullable } from '../types';
 import { AuthStore } from './auth.store';
 import { SettingsStore } from './settings.store';
 import { UiStore } from './ui.store';
@@ -31,6 +32,8 @@ export class RootStore {
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
+  coinflipStore: Nullable<ICoinflipStore> = null;
+
   tezos: Nullable<TezosToolkit> = null;
 
   constructor() {
@@ -46,11 +49,13 @@ export class RootStore {
       farmingListStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
+      coinflipStore: observable,
 
       setTezos: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,
-      createFarmingItemStore: action
+      createFarmingItemStore: action,
+      createCoinflipStore: action
     });
   }
 
@@ -98,5 +103,13 @@ export class RootStore {
       const { FarmingItemStore } = await import('@modules/farming/store/farming-item.store');
       this.farmingItemStore = new FarmingItemStore(this);
     }
+  }
+
+  async createCoinflipStore() {
+    if (isExist(this.coinflipStore)) {
+      return;
+    }
+    const { CoinflipStore } = await import('@modules/coinflip');
+    this.coinflipStore = new CoinflipStore(this);
   }
 }
