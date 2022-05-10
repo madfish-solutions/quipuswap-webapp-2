@@ -1,0 +1,54 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rootWithRightColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card {
+}
+
+.rightCard {
+  align-items: flex-end;
+}
+
+.right {
+  align-self: flex-end;
+}
+
+.light {
+  border-top: 1px solid $ui-03;
+}
+
+.dark {
+  border-top: 1px solid $ui-06;
+}
+
+@include media(">Lphone") {
+  .root {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    flex-basis: 50%;
+    flex-shrink: 0;
+  }
+
+  .light {
+    border-left: 1px solid $ui-03;
+  }
+  
+  .dark {
+    border-left: 1px solid $ui-06;
+  }
+}
