@@ -43,7 +43,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {IS_NETWORK_MAINNET && HIDE_ANALYTICS ? (
+      {IS_NETWORK_MAINNET && !HIDE_ANALYTICS ? (
         <>
           <DashboardCard
             className={cx(styles.card, modeClass[colorThemeMode])}
