@@ -8,6 +8,7 @@ import { getSymbolsString, isExist, isUndefined } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
+import { extractTokens } from '../list/components/pool-card/pool-card.helpers';
 
 export const useStableswapLiquidityItemPageViewModel = () => {
   const params = useParams();
@@ -33,9 +34,10 @@ export const useStableswapLiquidityItemPageViewModel = () => {
 
   const getTitle = () => {
     if (isExist(stableswapItem)) {
-      const tokenSymbols = stableswapItem.tokensInfo.map(({ token }) => getSymbolsString(token));
+      const { tokensInfo } = stableswapItem;
+      const tokenSymbols = getSymbolsString(extractTokens(tokensInfo));
 
-      return `${t('liquidity|Liquidity')} ${tokenSymbols.join('/')}`;
+      return `${t('liquidity|Liquidity')} ${tokenSymbols}`;
     }
   };
 
