@@ -4,9 +4,10 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
-import { getLastElement, isUndefined } from '@shared/helpers';
+import { isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
+import { getLastRouterTabsAndCheckForAddOrRemove } from './helpers';
 import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
@@ -22,17 +23,15 @@ enum StableswapRoutes {
 }
 
 export const StableswapPage: FC = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { isInitialazied } = useStableswapPageViewModel();
 
-  const locationParts = location.pathname.split('/').filter(part => part);
-  const tab = getLastElement(locationParts);
-  const isAddOrRemoveInUrl = locationParts.some(part => part === Tabs.add || part === Tabs.remove);
+  const { lastTab, isAddOrRemoveInUrl, isLastTabAddOrRemove } = getLastRouterTabsAndCheckForAddOrRemove(pathname);
 
-  if (!isUndefined(tab) && parseInt(tab) && !isAddOrRemoveInUrl) {
-    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${tab}`} />;
-  } else if (tab === Tabs.add || tab === Tabs.remove) {
+  if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
+    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${lastTab}`} />;
+  } else if (isLastTabAddOrRemove) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />;
   }
 
