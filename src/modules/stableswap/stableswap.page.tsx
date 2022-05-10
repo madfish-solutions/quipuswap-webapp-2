@@ -4,13 +4,11 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
-import { isUndefined } from '@shared/helpers';
+import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
 import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
-
-const ONE = 1;
 
 export enum Tabs {
   add = 'add',
@@ -29,7 +27,7 @@ export const StableswapPage: FC = () => {
   const { isInitialazied } = useStableswapPageViewModel();
 
   const locationParts = location.pathname.split('/').filter(part => part);
-  const tab = locationParts[locationParts.length - ONE];
+  const tab = getLastElement(locationParts);
   const isAddOrRemoveInUrl = locationParts.some(part => part === Tabs.add || part === Tabs.remove);
 
   if (!isUndefined(tab) && parseInt(tab) && !isAddOrRemoveInUrl) {
