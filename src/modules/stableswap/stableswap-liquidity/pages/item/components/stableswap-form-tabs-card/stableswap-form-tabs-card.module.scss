@@ -1,0 +1,23 @@
+@import '@styles/_variables';
+
+.svg {
+  margin: 8px auto;
+}
+
+.switcherContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  flex: 1;
+  margin-top: 24px;
+  span {
+    color: $text-03;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.switcherTranslation {
+  min-width: max-content;
+}

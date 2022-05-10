@@ -5,5 +5,7 @@
   "Interface Fee": "Interface Fee",
   "QUIPU Stakers Fee": "QUIPU Stakers Fee",
   "Dev Fee": "Dev Fee",
-  "Token {{tokenSymbol}} locked": "Token {{tokenSymbol}} locked"
+  "Token {{tokenSymbol}} locked": "Token {{tokenSymbol}} locked",
+  "Add all coins in a balanced proportion": "Add all coins in a balanced proportion",
+  "Remove all coins in a balanced proportion": "Remove all coins in a balanced proportion"
 }
