@@ -7,6 +7,7 @@ interface IteratorProps<T> {
   render: FC<T>;
   data: Array<T>;
   fallback?: ReactElement;
+  separator?: ReactElement;
   isGrouped?: boolean;
   wrapperClassName?: string;
   keyFn?: (item: T) => Undefined<string | number>;
@@ -14,16 +15,33 @@ interface IteratorProps<T> {
 
 type IteratorComponent = <T>(props: IteratorProps<T>) => ReactElement<T> | ReactElement;
 
-export const Iterator: IteratorComponent = ({ data, keyFn, render, fallback, isGrouped, wrapperClassName }) => {
+export const Iterator: IteratorComponent = ({
+  data,
+  keyFn,
+  render,
+  fallback,
+  separator,
+  isGrouped,
+  wrapperClassName
+}) => {
   if (isExist(fallback) && isEmptyArray(data)) {
     return fallback;
   }
 
   const Render = render;
 
-  const content = data.map((_data, index) => (
-    <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />
-  ));
+  const content = data.map((_data, index) => {
+    if (index === data.length - 1) {
+      return <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />;
+    }
+
+    return (
+      <>
+        <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />
+        {separator}
+      </>
+    );
+  });
 
   return <Fragment>{isGrouped ? <div className={wrapperClassName}>{content}</div> : content}</Fragment>;
 };

@@ -2,72 +2,27 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
-import { Button, ConnectWalletOrDoSomething, Switcher, TokenInput, Tooltip } from '@shared/components';
+import { Button, ConnectWalletOrDoSomething, Iterator, Switcher, TokenInput, Tooltip } from '@shared/components';
 import { noopMap } from '@shared/mapping';
 import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import styles from '../stableswap-form-tabs-card.module.scss';
+import { useAddLiqFormViewModel } from './add-liq-form.vm';
 
 export const AddLiqForm: FC = () => {
   const { t } = useTranslation();
 
-  const inputAmount = '100000';
-  const userTokenBalance = '100000';
-  const stakedTokenDecimals = 8;
-  const label = t('common|Input');
-  const disabled = false;
-  const isSubmitting = false;
-
-  const handleInputAmountChange = noopMap;
+  const { disabled, isSubmitting, data } = useAddLiqFormViewModel();
 
   return (
     <>
-      <TokenInput
-        id="stableswap-input"
-        label={label}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={label}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={label}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={label}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
+      <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
-        <Switcher value={true} onClick={handleInputAmountChange} />
+        <Switcher value={true} onClick={noopMap} />
         <span className={styles.switcherTranslation}>{t('stableswap|Add all coins in a balanced proportion')}</span>
-        <Tooltip content={label} />
+        <Tooltip content="Tooltip" />
       </div>
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
