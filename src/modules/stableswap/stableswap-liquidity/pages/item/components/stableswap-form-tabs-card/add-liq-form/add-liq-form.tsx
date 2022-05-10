@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { Button, ConnectWalletOrDoSomething, Iterator, Switcher, TokenInput, Tooltip } from '@shared/components';
 import { noopMap } from '@shared/mapping';
@@ -11,7 +12,7 @@ import { useTranslation } from '@translation';
 import styles from '../stableswap-form-tabs-card.module.scss';
 import { useAddLiqFormViewModel } from './add-liq-form.vm';
 
-export const AddLiqForm: FC = () => {
+export const AddLiqForm: FC = observer(() => {
   const { t } = useTranslation();
 
   const { disabled, isSubmitting, data } = useAddLiqFormViewModel();
@@ -39,4 +40,4 @@ export const AddLiqForm: FC = () => {
       </div>
     </>
   );
-};
+});

@@ -9,6 +9,8 @@ import { useTranslation } from '@translation';
 
 import { useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
 
+const ZERO_LENGTH = 0;
+
 export const useStableswapLiquidityItemPageViewModel = () => {
   const params = useParams();
   const dAppReady = useReady();
@@ -21,12 +23,21 @@ export const useStableswapLiquidityItemPageViewModel = () => {
   const poolId = params.poolId;
 
   useEffect(() => {
-    if ((!dAppReady || isUndefined(poolId)) && prevAccountPkhRef.current === accountPkh) {
-      return;
-    }
-    void getStableswapItem(new BigNumber(`${poolId}`));
-    prevAccountPkhRef.current = accountPkh;
-  }, [getStableswapItem, dAppReady, poolId, accountPkh]);
+    const loadItem = async () => {
+      if ((!dAppReady || isUndefined(poolId)) && prevAccountPkhRef.current === accountPkh) {
+        return;
+      }
+
+      await getStableswapItem(new BigNumber(`${poolId}`));
+
+      const length = stableswapItemStore.item?.tokensInfo.length ?? ZERO_LENGTH;
+
+      stableswapItemStore.initInputAmounts(length);
+      prevAccountPkhRef.current = accountPkh;
+    };
+
+    void loadItem();
+  }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore]);
 
   const { itemStore } = stableswapItemStore;
   const { data: stableswapItem } = itemStore;
