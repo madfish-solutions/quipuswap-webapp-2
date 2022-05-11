@@ -12,7 +12,7 @@ describe('DEX Dashboard section', () => {
     // cy.get('[aria-describedby="tippy-7"]')
     // .should('be.visible')
   });
-  it.skip('Should_DisplayStatisticInfo_When_PageIsLoaded', () => {
+  it('Should_DisplayStatisticInfo_When_PageIsLoaded', () => {
     // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="TVL"] [data-test-id="amount"]')
     //     .should('exist')
     // cy.get('[data-test-id="DEXDashboardDesktop"] [data-test-id="dailyVolume"] [data-test-id="amount"]')

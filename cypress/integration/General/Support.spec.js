@@ -1,17 +1,24 @@
 /// <reference types="cypress" />
 
-describe('Theme Switcher', () => {
-  it('Should_ChangeBackgroundColour_When_ClickingOnSun', () => {
-    // Go to home page
+describe('Support section', () => {
+  it('Should_OpenPopup_When_ClickingOnSupport', () => {
+    // Go to the home page
     cy.visit('/');
-    // click on the theme swithcer sun, check if theme is white
+    // click on the Support
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="lightButton"]').click();
-    cy.get('[data-test-id="header"]').should('have.css', 'background-color', 'rgb(250, 250, 252)');
+    cy.get('[data-test-id="menu"] [data-test-id="donationButton"]').click();
+    // Support popup should opened
+    cy.get('h5').should('contain', 'Donate');
+    cy.get(
+      '[data-test-id="modalCard"] [data-test-id="connectButton"], [data-test-id="modalCard"] [data-test-id="donateButton"]'
+    ).should('exist');
+    cy.get('[data-test-id="modalCard"] [data-test-id="closeButton"]').click();
   });
-  it('Should_ChangeBackgroundColour_When_ClickingOnMoon', () => {
-    // click on the theme swithcer moon, check if theme is black
-    cy.get('[data-test-id="menu"] [data-test-id="darkButton"]').click();
-    cy.get('[data-test-id="header"]').should('have.css', 'background-color', 'rgb(20, 23, 30)');
+  it('Should_OpenPopup_When_ClickingOnConnectWallet', () => {
+    cy.visit('/');
+    //connect wallet popup should opened
+    cy.get('[data-test-id="header"] [data-test-id="connectButton"]').click();
+    cy.get('h5').should('contain', 'Connect wallet');
+    cy.get('[data-test-id="modalCard"] [data-test-id="closeButton"]').click();
   });
 });

@@ -3,7 +3,7 @@
 describe('QuipuSwap Opportunities section', () => {
   it('Should_RedirectToSwapPage_When_ClickingOnStartTradingButton', () => {
     cy.visit('/');
-
+    cy.get('[data-test-id="acceptCookieButton"]').click();
     //'Start Trading' button should lead to the swap page, tez, quipu tokens are selected
     cy.get('[data-test-id="QSOpportunitiesSection"] [data-test-id="QSOpportunitiesButton-0"]').click();
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="changeToken"]').should(
@@ -19,7 +19,7 @@ describe('QuipuSwap Opportunities section', () => {
 
   it('Should_RedirectToLiquidityPage_When_ClickingOnAddLiquidityButton', () => {
     cy.visit('/');
-
+    cy.get('[data-test-id="acceptCookieButton"]').click();
     //'Add Liquidity button on the home page leads to the Liquidity page, tez, quipu token are selected
     cy.get('[data-test-id="QSOpportunitiesSection"] [data-test-id="QSOpportunitiesButton-2"]').click();
     cy.get(
@@ -32,6 +32,7 @@ describe('QuipuSwap Opportunities section', () => {
 
   it('Should_RedirectToFarmingPage_When_ClickingOnStartFarmingButton', () => {
     cy.visit('/');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.get('[data-test-id="QSOpportunitiesSection"] [data-test-id="QSOpportunitiesButton-1"]').click();
     cy.get('[data-test-id="farmingListPageTitle"]').should('contain', 'Farming');
   });
