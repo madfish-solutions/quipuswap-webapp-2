@@ -1,53 +1,74 @@
 @import '@styles/variables';
 @import '@styles/breakpoints';
 
-.root {
+.root, .rootWithRightColumn {
   display: flex;
+  padding: 0;
+}
+
+.root {
   flex-direction: column;
-  align-items: center;
+
+  .light {
+    border-top: .5px solid $ui-03;
+  }
+
+  .dark {
+    border-top: .5px solid $ui-06;
+  }
 }
 
 .rootWithRightColumn {
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
+  flex-wrap: wrap;
+
+  & > :nth-child(n) > :nth-child(n) {
+    align-items: flex-start;
+  }
+
+  .flexEndRightElement {
+    & > :nth-child(n) {
+      align-items: flex-end;
+    }
+  }
+}
+
+.rootCard {
+  min-width: 320px;
 }
 
 .card {
+  flex-basis: 100%;
+  flex-shrink: 0;
 }
 
 .rightCard {
-  align-items: flex-end;
-}
-.right {
-  align-self: flex-end;
-}
-
-.light {
-  border-top: 1px solid $ui-03;
-}
-
-.dark {
-  border-top: 1px solid $ui-06;
+  flex-basis: 50%;
 }
 
 @include media(">Lphone") {
   .root {
-    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+  }
+
+  .light {
+    border: .5px solid $ui-03;
+  }
+
+  .dark {
+    border: .5px solid $ui-06;
+  }
+
+  .rootWithRightColumn {
+    & > :nth-child(n) > :nth-child(n) {
+      align-items: center;
+    }
   }
 
   .card {
     flex-basis: 50%;
     flex-shrink: 0;
-  }
-
-  .light {
-    border-left: 1px solid $ui-03;
-  }
-  
-  .dark {
-    border-left: 1px solid $ui-06;
   }
 }
