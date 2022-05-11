@@ -427,7 +427,14 @@ export const useAddLiquidityService = (
   };
 
   const investTezosToToken = async () => {
-    if (!tezos || !accountPkh || isUndefined(dex) || !tokenA || !tokenB || !estimatedTezos) {
+    if (
+      !isExist(tezos) ||
+      !isExist(accountPkh) ||
+      isUndefined(dex) ||
+      !isExist(tokenA) ||
+      !isExist(tokenB) ||
+      !isExist(estimatedTezos)
+    ) {
       return;
     }
 
@@ -439,18 +446,20 @@ export const useAddLiquidityService = (
 
     const tezTokenInputUsd = Number(getDollarEquivalent(tezTokenInput, exchangeRates[TEZOS_TOKEN.contractAddress]));
     const notTezTokenInputUsd = Number(getDollarEquivalent(notTezTokenInput, exchangeRates[getTokenSlug(notTezToken)]));
-    const fixedTokenAPoll = Number(fromDecimals(tokenAPool!, tokenA).toFixed());
-    const fixedTokenBPoll = Number(fromDecimals(tokenBPool!, tokenB).toFixed());
-    const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
-    const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
 
     const shouldAddLiquidity =
       !isNull(dex) &&
-      pairInfo &&
-      pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) &&
-      pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
+      !isNull(tokenAPool) &&
+      !isNull(tokenBPool) &&
+      tokenAPool.gt(EMPTY_POOL_AMOUNT) &&
+      tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
+      const fixedTokenAPoll = Number(fromDecimals(tokenAPool, tokenA).toFixed());
+      const fixedTokenBPoll = Number(fromDecimals(tokenBPool, tokenB).toFixed());
+      const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
+      const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
+
       const logData = {
         liquidity: {
           type: 'TEZOS_TO_TOKEN',
@@ -504,12 +513,7 @@ export const useAddLiquidityService = (
           tezValue: Number(tezValue.toFixed()),
           tezTokenInputUsd,
           notTezTokenInputUsd,
-          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd,
-          fixedTokenAPoll,
-          fixedTokenBPoll,
-          fixedTokenAPollUds,
-          fixedTokenBPollUds,
-          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd
         }
       };
 
