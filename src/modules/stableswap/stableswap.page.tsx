@@ -4,10 +4,10 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
-import { isUndefined } from '@shared/helpers';
+import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
-import { getLastRouterTabsAndCheckForAddOrRemove } from './helpers';
+import { checkForAddOrRemoveInUrlParts, checkTabForAddOrRemove, getRouterParts } from './helpers';
 import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
@@ -16,7 +16,7 @@ export enum Tabs {
   remove = 'remove'
 }
 
-enum StableswapRoutes {
+export enum StableswapRoutes {
   root = '/',
   liquidity = '/liquidity/',
   liquidityTabPoolId = '/liquidity/:tab/:poolId'
@@ -27,11 +27,15 @@ export const StableswapPage: FC = () => {
 
   const { isInitialazied } = useStableswapPageViewModel();
 
-  const { lastTab, isAddOrRemoveInUrl, isLastTabAddOrRemove } = getLastRouterTabsAndCheckForAddOrRemove(pathname);
+  const routerParts = getRouterParts(pathname);
+  const lastTab = getLastElement(routerParts);
+
+  const isAddOrRemoveInUrl = checkForAddOrRemoveInUrlParts(routerParts);
+  const isTabAddOrRemove = checkTabForAddOrRemove(pathname);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${lastTab}`} />;
-  } else if (isLastTabAddOrRemove) {
+  } else if (isTabAddOrRemove) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />;
   }
 

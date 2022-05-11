@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -14,7 +15,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
-import { Tabs } from '../../../../../stableswap.page';
+import { StableswapRoutes, Tabs } from '../../../../../stableswap.page';
 import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
@@ -92,7 +93,10 @@ export const PoolCard: FC<Props> = ({
           />
         </ListItemCardCell>
 
-        <Button className={styles.button} href={`${Tabs.add}/${stableswapItemUrl}`}>
+        <Button
+          className={styles.button}
+          href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${stableswapItemUrl}`}
+        >
           {selectTranslation}
         </Button>
       </div>
