@@ -30,7 +30,7 @@ export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = f
         available && onClick(id);
       }}
       disabled={disabled}
-      {...props} /////////
+      {...props}
     >
       <Icon className={styles.icon} />
       <span>{label}</span>

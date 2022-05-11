@@ -13,6 +13,13 @@
   font-weight: 600;
   line-height: 1.14;
 }
+
+.dollarEquivalentOnly {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.14;
+}
+
 .currency {
   color: $text-03;
 }
@@ -43,13 +50,21 @@
 .small {
   font-size: 1rem;
 }
-@include media('>Ltablet') {
+
+.noSpace {
+  column-gap: 0;
+  .inner {
+    margin-left: 0;
+  }
+}
+
+@include media(">Ltablet") {
   .extraLarge {
     font-size: 1.857rem;
     line-height: 1.4;
   }
 }
-@include media('>desktop') {
+@include media(">desktop") {
   .extraLarge {
     font-size: 2.286rem;
     line-height: 1.5;

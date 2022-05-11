@@ -115,9 +115,7 @@ export const unvoteOrRemoveVeto = async (
 ) => {
   try {
     const { params, text: updateToastText } = await unvoteOrUnveto(tab, tezos, dex, baker);
-
     const op = await batchify(tezos.wallet.batch([]), params).send();
-
     await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
   } catch (e) {
@@ -127,8 +125,6 @@ export const unvoteOrRemoveVeto = async (
 
 export const submitForm = async ({ tezos, values, dex, tab, confirmOperation }: SubmitProps) => {
   const { params, text: updateToastText } = await getBatchParamsAndToastText(tab, tezos, dex, values);
-
   const op = await batchify(tezos.wallet.batch([]), params).send();
-
-  return await confirmOperation(op.opHash, { message: updateToastText });
+  await confirmOperation(op.opHash, { message: updateToastText });
 };

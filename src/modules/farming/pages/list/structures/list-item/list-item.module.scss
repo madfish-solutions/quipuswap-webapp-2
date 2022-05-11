@@ -5,21 +5,22 @@
   padding: 24px;
 }
 
+.card.light:hover {
+  background: $hover-light-row;
+}
+
+.card.dark:hover {
+  background: $hover-dark-row;
+}
+
 .card > div {
   padding-top: 0;
 }
 
-.container {
+.top {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  row-gap: 24px;
-}
-
-.left {
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .itemLeftHeader {
@@ -51,7 +52,7 @@
 }
 
 .rewardTarget {
-  margin-top: 16px;
+  flex: 1;
 }
 
 .stats {
@@ -118,16 +119,16 @@
   row-gap: 12px;
 }
 
-.right {
+.tags {
   display: flex;
-  flex-direction: column;
-  row-gap: 40px;
-  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  column-gap: 8px;
 }
 
-.links {
-  display: flex;
-  column-gap: 24px;
+.activeStatus {
+  margin-top: 8px;
 }
 
 .light {
@@ -158,6 +159,21 @@
   }
 }
 
+@include media(">phone") {
+  .tags {
+    width: auto;
+    column-gap: 8px;
+  }
+
+  .tagsWithTooltip {
+    margin-top: 0;
+  }
+
+  .activeStatus {
+    margin-top: 0;
+  }
+}
+
 @include media(">phone", "<Lphone") {
   .stats {
     flex-direction: column;
@@ -172,10 +188,6 @@
   .stakeStats,
   .userData {
     row-gap: 16px;
-  }
-
-  .right {
-    align-items: flex-end;
   }
 
   .button {
@@ -200,10 +212,6 @@
     row-gap: 16px;
   }
 
-  .right {
-    align-items: flex-end;
-  }
-
   .button {
     width: 160px;
   }
@@ -223,16 +231,18 @@
   }
 }
 
+@include media("<Ltablet") {
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rewardTarget {
+    margin-top: 8px;
+  }
+}
+
 @include media(">tablet", "<Ltablet") {
-  .container {
-    flex-direction: row;
-    row-gap: 24px;
-  }
-
-  .left {
-    width: calc(100% - 260px);
-  }
-
   .stats {
     margin-top: 16px;
     flex-direction: row;
@@ -251,29 +261,12 @@
     row-gap: 16px;
   }
 
-  .right {
-    align-items: flex-end;
-  }
-
   .button {
     width: 160px;
   }
 }
 
 @include media(">=Ltablet") {
-  .container {
-    flex-direction: row;
-    row-gap: 24px;
-  }
-
-  .rewardTarget {
-    margin-top: 0px;
-  }
-
-  .left {
-    width: calc(100% - 260px);
-  }
-
   .stats {
     flex-direction: row;
     justify-content: flex-start;
@@ -308,8 +301,12 @@
     }
   }
 
-  .right {
-    align-items: flex-end;
+  .rewardTarget {
+    margin-left: 16px;
+  }
+
+  .tags {
+    margin-top: 0;
   }
 
   .button {

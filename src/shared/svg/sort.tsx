@@ -4,10 +4,10 @@ import { ColorThemeContext } from '@providers/color-theme-context';
 import { IconProps } from '@shared/types';
 
 interface Props extends IconProps {
-  rotate?: boolean;
+  rotation?: boolean;
 }
 
-export const Sort: FC<Props> = ({ className, rotate }) => {
+export const Sort: FC<Props> = ({ className, rotation }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
@@ -15,7 +15,7 @@ export const Sort: FC<Props> = ({ className, rotate }) => {
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      transform={rotate ? 'rotate(180 0 0)' : undefined}
+      transform={rotation ? 'rotate(180 0 0)' : undefined}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

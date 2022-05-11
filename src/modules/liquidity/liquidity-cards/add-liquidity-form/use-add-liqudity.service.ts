@@ -9,22 +9,28 @@ import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { NETWORK_ID } from '@config/enviroment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
+import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { useConfirmOperation } from '@shared/dapp';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,
+  fromDecimals,
   getAddLiquidityMessage,
+  getDollarEquivalent,
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
+  getTokenSlug,
   getTokenSymbol,
   isExist,
   isNull,
+  isTokenFa2,
   isUndefined,
   toDecimals
 } from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { Nullable, Optional, Undefined, Token } from '@shared/types';
+import { amplitudeService } from '@shared/services';
+import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import {
   addLiquidityTez,
@@ -32,13 +38,35 @@ import {
   addPairTokenToToken,
   initializeLiquidityTez
 } from '../blockchain/send-transaction';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
+import { calculatePoolAmount, checkIsPoolNotExists, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
 const EMPTY_BALANCE_AMOUNT = 0;
+
+export const getPairId = (
+  dex: Optional<FoundDex>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  pairInfo: Optional<PairInfo>,
+  isPoolNotExists: boolean
+) => {
+  if (!dex || isPoolNotExists) {
+    return null;
+  }
+
+  if (pairInfo?.id) {
+    return pairInfo?.id?.toFixed();
+  }
+
+  if ((tokenA && isTokenFa2(tokenA)) || (tokenB && isTokenFa2(tokenB))) {
+    return '0';
+  }
+
+  return null;
+};
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
@@ -50,10 +78,11 @@ export const useAddLiquidityService = (
   const tezos = useTezos();
   const estimatedTezos = useEstimationToolkit();
   const accountPkh = useAccountPkh();
+  const exchangeRates = useNewExchangeRates();
   const {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
-  const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, updatePairInfo, tokenAPool, tokenBPool } = usePairInfo(dex, tokenA, tokenB);
   const {
     tokenBalance: tokenABalance,
     updateTokenBalance: updateTokenABalance,
@@ -110,12 +139,12 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = _pairInfo;
+    const { tokenAPool: _tokenAPool, tokenBPool: _tokenBPool, tokenA: pairTokenA } = _pairInfo;
 
     const isTokensOrderValid =
       _tokenA.contractAddress === pairTokenA.contractAddress && _tokenA.fa2TokenId === pairTokenA.fa2TokenId;
-    const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
-    const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
+    const validTokenAPool = isTokensOrderValid ? _tokenAPool : _tokenBPool;
+    const validTokenBPool = isTokensOrderValid ? _tokenBPool : _tokenAPool;
 
     const tokenBAmount = calculatePoolAmount(tokenABN, _tokenA, _tokenB, validTokenAPool, validTokenBPool);
 
@@ -263,6 +292,8 @@ export const useAddLiquidityService = (
     );
   };
 
+  // TODO: Refactor this
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const investTokenToToken = async () => {
     if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
       return;
@@ -273,6 +304,13 @@ export const useAddLiquidityService = (
     const pairTokenB = isRevert ? tokenA : tokenB;
     const pairInputA = isRevert ? tokenBInput : tokenAInput;
     const pairInputB = isRevert ? tokenAInput : tokenBInput;
+
+    const tokenAInputUsd = Number(getDollarEquivalent(tokenAPool, exchangeRates[getTokenSlug(tokenA)]));
+    const tokenBInputUsd = Number(getDollarEquivalent(tokenBPool, exchangeRates[getTokenSlug(tokenB)]));
+    const fixedTokenAPoll = Number(fromDecimals(tokenAPool!, tokenA).toFixed());
+    const fixedTokenBPoll = Number(fromDecimals(tokenBPool!, tokenB).toFixed());
+    const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
+    const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
 
     if (isPoolNotExist) {
       const addPairTokenToTokenOperation = await addPairTokenToToken(
@@ -291,37 +329,95 @@ export const useAddLiquidityService = (
 
         const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenASymbol, tokenBSymbol);
 
-        await confirmOperation(addPairTokenToTokenOperation.opHash, {
-          message: initializeLiquidityMessage
-        });
+        const logData = {
+          liquidity: {
+            type: 'TOKEN_TO_TOKEN',
+            tokenASymbol,
+            tokenBSymbol,
+            tokenASlug: getTokenSlug(pairTokenA),
+            tokenBSlug: getTokenSlug(pairTokenB),
+            pairInputA: Number(pairInputA),
+            pairInputB: Number(pairInputB),
+            tokenAInputUsd,
+            tokenBInputUsd,
+            fixedTokenAPoll,
+            fixedTokenBPoll,
+            fixedTokenAPollUds,
+            fixedTokenBPollUds,
+            tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+          }
+        };
+
+        try {
+          amplitudeService.logEvent('LIQUIDITY_INIT', logData);
+          await confirmOperation(addPairTokenToTokenOperation.opHash, {
+            message: initializeLiquidityMessage
+          });
+          amplitudeService.logEvent('LIQUIDITY_INIT_SUCCESS', logData);
+        } catch (error) {
+          amplitudeService.logEvent('LIQUIDITY_INIT_FAILED', { ...logData, error });
+        }
       }
     } else {
       if (!pairInfo || !pairInfo.id) {
         throw new UnexpectedEmptyValueError('PairInfo');
       }
-      const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
-        tezos,
-        accountPkh,
-        dex,
-        pairInfo.id,
-        pairInputA,
-        pairTokenA,
-        pairTokenB,
-        pairInfo.totalSupply,
-        pairInfo.tokenAPool,
-        pairInfo.tokenBPool,
-        transactionDeadline,
-        liquiditySlippage
-      );
 
-      const tokenASymbol = getTokenSymbol(pairTokenA);
-      const tokenBSymbol = getTokenSymbol(pairTokenB);
+      const logData = {
+        liquidity: {
+          type: 'TOKEN_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, pairTokenA, pairTokenB, pairInfo, false),
+          tokenASlug: getTokenSlug(pairTokenA),
+          tokenBSlug: getTokenSlug(pairTokenB),
+          tokenASymbol: getTokenSymbol(pairTokenA),
+          tokenBSymbol: getTokenSymbol(pairTokenB),
+          pairInputA: Number(pairInputA),
+          pairInputB: Number(pairInputB),
+          totalSupply: Number(pairInfo.totalSupply.toFixed()),
+          tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
+          tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
+          transactionDeadline: Number(transactionDeadline.toFixed()),
+          liquiditySlippage: Number(liquiditySlippage.toFixed()),
+          tokenAInputUsd,
+          tokenBInputUsd,
+          fixedTokenAPoll,
+          fixedTokenBPoll,
+          fixedTokenAPollUds,
+          fixedTokenBPollUds,
+          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+        }
+      };
 
-      const addLiquidityMessage = getAddLiquidityMessage(tokenASymbol, tokenBSymbol);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_ADD', logData);
+        const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
+          tezos,
+          accountPkh,
+          dex,
+          pairInfo.id,
+          pairInputA,
+          pairTokenA,
+          pairTokenB,
+          pairInfo.totalSupply,
+          pairInfo.tokenAPool,
+          pairInfo.tokenBPool,
+          transactionDeadline,
+          liquiditySlippage
+        );
 
-      await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
-        message: addLiquidityMessage
-      });
+        const tokenASymbol = getTokenSymbol(pairTokenA);
+        const tokenBSymbol = getTokenSymbol(pairTokenB);
+
+        const addLiquidityMessage = getAddLiquidityMessage(tokenASymbol, tokenBSymbol);
+
+        await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
+          message: addLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_ADD_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_ADD_FAILED', { ...logData, error });
+      }
     }
 
     setLastEditedInput(null);
@@ -331,7 +427,14 @@ export const useAddLiquidityService = (
   };
 
   const investTezosToToken = async () => {
-    if (!tezos || !accountPkh || isUndefined(dex) || !tokenA || !tokenB || !estimatedTezos) {
+    if (
+      !isExist(tezos) ||
+      !isExist(accountPkh) ||
+      isUndefined(dex) ||
+      !isExist(tokenA) ||
+      !isExist(tokenB) ||
+      !isExist(estimatedTezos)
+    ) {
       return;
     }
 
@@ -341,22 +444,57 @@ export const useAddLiquidityService = (
     const tezTokenBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
+    const tezTokenInputUsd = Number(getDollarEquivalent(tezTokenInput, exchangeRates[TEZOS_TOKEN.contractAddress]));
+    const notTezTokenInputUsd = Number(getDollarEquivalent(notTezTokenInput, exchangeRates[getTokenSlug(notTezToken)]));
+
     const shouldAddLiquidity =
       !isNull(dex) &&
-      pairInfo &&
-      pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) &&
-      pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
+      !isNull(tokenAPool) &&
+      !isNull(tokenBPool) &&
+      tokenAPool.gt(EMPTY_POOL_AMOUNT) &&
+      tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
+      const fixedTokenAPoll = Number(fromDecimals(tokenAPool, tokenA).toFixed());
+      const fixedTokenBPoll = Number(fromDecimals(tokenBPool, tokenB).toFixed());
+      const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
+      const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
 
-      const notTezTokenSymbol = getTokenSymbol(notTezToken);
+      const logData = {
+        liquidity: {
+          type: 'TEZOS_TO_TOKEN',
+          contract: dex.contract.address,
+          contractPairId: getPairId(dex, tokenA, tokenB, pairInfo, false),
+          tokenSlug: getTokenSlug(notTezToken),
+          tokenSymbol: getTokenSymbol(notTezToken),
+          tezTokenInput: Number(tezTokenInput),
+          notTezTokenInput: Number(notTezTokenInput),
+          tezTokenInputUsd,
+          notTezTokenInputUsd,
+          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd,
+          fixedTokenAPoll,
+          fixedTokenBPoll,
+          fixedTokenAPollUds,
+          fixedTokenBPollUds,
+          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+        }
+      };
 
-      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_ADD', logData);
+        const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
 
-      await confirmOperation(addLiquidityTezOperation.opHash, {
-        message: addLiquidityMessage
-      });
+        const notTezTokenSymbol = getTokenSymbol(notTezToken);
+
+        const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+
+        await confirmOperation(addLiquidityTezOperation.opHash, {
+          message: addLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_ADD_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_ADD_FAILED', logData);
+      }
     } else {
       const token: QuipuswapSdkToken = {
         contract: notTezToken.contractAddress,
@@ -365,21 +503,41 @@ export const useAddLiquidityService = (
       const notTezTokenBN = new BigNumber(notTezTokenInput);
       const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
 
-      const initializeLiquidityTezOperation = await initializeLiquidityTez(
-        tezos,
-        NETWORK_ID,
-        token,
-        tokenBValue,
-        tezValue
-      );
+      const logData = {
+        liquidity: {
+          type: 'TEZOS_TO_TOKEN',
+          tokenSlug: getTokenSlug(notTezToken),
+          tokenSymbol: getTokenSymbol(notTezToken),
+          notTezTokenInput,
+          tokenBValue: Number(tokenBValue.toFixed()),
+          tezValue: Number(tezValue.toFixed()),
+          tezTokenInputUsd,
+          notTezTokenInputUsd,
+          liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd
+        }
+      };
 
-      const notTezTokenSymbol = getTokenSymbol(notTezToken);
+      try {
+        amplitudeService.logEvent('LIQUIDITY_INIT', logData);
+        const initializeLiquidityTezOperation = await initializeLiquidityTez(
+          tezos,
+          NETWORK_ID,
+          token,
+          tokenBValue,
+          tezValue
+        );
 
-      const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+        const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      await confirmOperation(initializeLiquidityTezOperation.opHash, {
-        message: initializeLiquidityMessage
-      });
+        const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN_SYMBOL, notTezTokenSymbol);
+
+        await confirmOperation(initializeLiquidityTezOperation.opHash, {
+          message: initializeLiquidityMessage
+        });
+        amplitudeService.logEvent('LIQUIDITY_INIT_SUCCESS', logData);
+      } catch (error) {
+        amplitudeService.logEvent('LIQUIDITY_INIT_FAILED', { ...logData, error });
+      }
     }
 
     setLastEditedInput(null);

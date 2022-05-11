@@ -6,15 +6,15 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
-import { APP_NAME, networksBaseUrls, NETWORK_ID } from '@config/enviroment';
+import { APP_NAME, NETWORK_ID, networksBaseUrls } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
-  ReadOnlySigner,
   beaconWallet,
   connectWalletBeacon,
   connectWalletTemple,
   getTempleWalletState,
   michelEncoder,
+  ReadOnlySigner,
   rpcClients
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';

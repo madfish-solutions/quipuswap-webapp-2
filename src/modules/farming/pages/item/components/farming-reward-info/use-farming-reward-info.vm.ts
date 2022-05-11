@@ -2,23 +2,27 @@ import { useCallback } from 'react';
 
 import { NO_TIMELOCK_VALUE } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
-import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@modules/farming/helpers';
-import { useFarmingItemStore, useDoHarvestAndRestake } from '@modules/farming/hooks';
-import { useDoHarvest } from '@modules/farming/hooks/blockchain/use-do-harvest';
-import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, isTokenEqual } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 
+import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
+import {
+  useFarmingItemStore,
+  useDoHarvestAndRestake,
+  useHarvestConfirmationPopup,
+  useDoHarvest,
+  useGetFarmingItem
+} from '../../../../hooks';
 import { canDelegate, makeBaker } from '../../helpers';
-import { useHarvestConfirmationPopup } from './use-harvest-confirmation-popup';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const confirmationPopup = useHarvestConfirmationPopup();
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem, selectedBaker } = farmingItemStore;
+  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -38,22 +42,28 @@ export const useFarmingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
 
   const doSimpleHarvest = useCallback(async () => {
-    await doHarvest(farmingItem);
+    await doHarvest(defined(farmingItem));
 
     await delayedGetFarmingItem(defined(farmingItem).id);
   }, [delayedGetFarmingItem, doHarvest, farmingItem]);
 
   const handleHarvest = async () => {
+    amplitudeService.logEvent('HARVEST_CLICK');
     const pendingRewardsOnCurrentBlock = await farmingItemStore.getPendingRewardsOnCurrentBlock();
 
     if (isTokenEqual(defined(farmingItem).rewardToken, DEFAULT_TOKEN)) {
       const yesCallback = async () => {
-        await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock, selectedBaker);
-
+        amplitudeService.logEvent('HARVEST_YES_CLICK');
+        await doHarvestAndRestake(farmingItem, pendingRewardsOnCurrentBlock);
         await delayedGetFarmingItem(defined(farmingItem).id);
       };
 
-      confirmationPopup(yesCallback, doSimpleHarvest);
+      const noCallback = async () => {
+        amplitudeService.logEvent('HARVEST_NO_CLICK');
+        await doSimpleHarvest();
+      };
+
+      confirmationPopup(yesCallback, noCallback);
     } else {
       await doSimpleHarvest();
     }

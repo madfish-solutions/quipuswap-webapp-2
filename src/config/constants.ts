@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { QSNets } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -49,9 +49,43 @@ export const DEFAULT_DECIMALS = 6;
 export const LP_TOKEN_DECIMALS = 6;
 //#endregion
 
+//#region strings
+export const EMPTY_STRING = '';
+export const ZERO_LENGTH = 0;
+//#endregion
+
+//#region arrays
+export const FISRT_INDEX = 0;
+export const ONE_ITEM_LENGTH = 1;
+//#endregion
+
 //#region default value for token search
 export const DEFAULT_TOKEN_ID = 0;
 export const DEFAULT_SEARCH_VALUE = '';
+//#endregion
+
+//#region signs
+export const DOLLAR = '$';
+export const PERCENT = '%';
+export const SLASH = '/';
+export const EPPROXIMATILY_SIGN = '~';
+export const EPPROXIMATILY_EQUAL_SIGN = '≈';
+//#endregion
+
+//#region sort
+export const SWAP = 1;
+export const SKIP = -1;
+//#endregion
+
+//#region API
+export const LIST = 'list';
+export const STATS = 'stats';
+
+export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
+export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
+
+export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
+export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 //#endregion
 
 //TODO: assort mix
@@ -60,6 +94,7 @@ export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
 export const TAB_INDEX = 0;
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
+export const ZERO_AMOUNT = 0;
 
 export const USD_DECIMALS = 2;
 
@@ -83,9 +118,14 @@ export const FIRST_TWO_DIGITS_NUMBER = 10;
 const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
   [QSNets.hangzhounet]: 16,
   [QSNets.mainnet]: 3,
-  [QSNets.ithacanet]: 7
+  [QSNets.ithacanet]: 8
 };
 
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
+
+const PERCENTAGE = 100;
+export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
+
+export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 
 //#endregion

@@ -1,0 +1,51 @@
+@import "@styles/variables";
+
+.wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.root {
+  position: relative;
+  z-index: 1;
+}
+
+.root::before {
+  transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  top: -62px;
+  left: -62px;
+  z-index: -1;
+  width: 124px;
+  height: 124px;
+}
+
+.light.root::before {
+  background: $ui-07;
+}
+
+.dark.root::before {
+  background: $ui-01;
+}
+
+.light.root {
+  .text {
+    color: $support-warning;
+  }
+}
+
+.dark.root {
+  .text {
+    color: $support-info;
+  }
+}
+
+.text {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  transform: rotate(45deg);
+  font-weight: bold;
+}

@@ -3,6 +3,7 @@ import { FC, HTMLProps, ReactNode, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
+import { EPPROXIMATILY_SIGN } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -14,6 +15,7 @@ import styles from './state-currency-amount.module.scss';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
+  amountClassName?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
@@ -22,6 +24,9 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
+  approximately?: boolean;
+  noSpace?: boolean;
+  dollarEquivalentOnly?: boolean;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -47,6 +52,7 @@ export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
+  amountClassName,
   labelSize = 'small',
   amount,
   currency,
@@ -58,6 +64,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   errorFallback,
   amountDecimals,
   aliternativeView,
+  approximately,
+  noSpace,
+  dollarEquivalentOnly,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -67,8 +76,10 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
     { [styles.isLeftCurrency]: isLeftCurrency },
     sizeClass[labelSize],
     modeClass[colorThemeMode],
+    { [styles.noSpace]: noSpace },
     className
   );
+  const wrapAmountClassName = cx(styles.inner, amountClassName);
 
   const wrapIsLoading = isLoading ?? (!isExist(amount) || amount === '');
   const wrapLoaderFallback = loaderFallback ?? <DashPlug />;
@@ -83,6 +94,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const content = (
     <span className={wrapClassName} {...props}>
+      {approximately && EPPROXIMATILY_SIGN}
+
       {isLeftVisible && <Currency data-test-id="leftVisibleCurrency">{currency}</Currency>}
 
       <StateWrapper
@@ -91,7 +104,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id="amount" className={styles.inner} title={title}>
+        <span data-test-id="amount" className={wrapAmountClassName} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
@@ -106,8 +119,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
-      {content}
-      <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
+      {!dollarEquivalentOnly ? content : null}
+      <StateDollarEquivalent dollarEquivalent={dollarEquivalent} className={styles.dollarEquivalentOnly} />
     </div>
   );
 };

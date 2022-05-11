@@ -3,7 +3,11 @@ import { FC, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { IconProps } from '@shared/types';
 
-export const FallbackLogo: FC<IconProps> = ({ className }) => {
+interface Props extends IconProps {
+  size?: number;
+}
+
+export const FallbackLogo: FC<Props> = ({ className, size }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const topColor = colorThemeMode === ColorModes.Dark ? '#14171E' : '#A1A4B1';
@@ -11,11 +15,12 @@ export const FallbackLogo: FC<IconProps> = ({ className }) => {
 
   return (
     <svg
-      width="128"
-      height="128"
+      width="48"
+      height="48"
       viewBox="0 0 128 128"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{ width: size, height: size }}
       className={className}
     >
       <path

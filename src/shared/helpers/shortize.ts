@@ -1,6 +1,7 @@
+import { FISRT_INDEX } from '@config/constants';
+
 const LEFT_LENGTH = 7;
 const RIGHT_LENGTH = 4;
-const FISRT_INDEX = 0;
 export const shortize = (str: string, length?: number) => {
   if (!str) {
     return '';

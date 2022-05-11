@@ -1,23 +1,42 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
-import { useFarmingListStore } from '@modules/farming/hooks';
-import { useDoHarvestAll } from '@modules/farming/hooks/blockchain/use-do-harvest-all';
-import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
-import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
+import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
+import {
+  useDoHarvestAll,
+  useGetFarmingList,
+  useGetFarmingStats,
+  useFarmingListStore,
+  useDoHarvestAllAndRestake,
+  useHarvestConfirmationPopup
+} from '../../../../hooks';
+
 export const useFarmingRewardsListViewModel = () => {
-  const { t } = useTranslation(['farm']);
+  const confirmationPopup = useHarvestConfirmationPopup();
+  const { t } = useTranslation();
 
   const farmingListStore = useFarmingListStore();
   const { delayedGetFarmingList } = useGetFarmingList();
   const { delayedGetFarmingStats } = useGetFarmingStats();
   const { doHarvestAll } = useDoHarvestAll();
+  const { doHarvestAllAndRestake } = useDoHarvestAllAndRestake();
+
+  const yesCallback = useCallback(async () => {
+    amplitudeService.logEvent('HARVEST_ALL_YES_CLICK');
+    await doHarvestAllAndRestake(farmingListStore.listStore.data);
+    await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
+  }, [delayedGetFarmingList, delayedGetFarmingStats, doHarvestAllAndRestake, farmingListStore.listStore.data]);
+
+  const noCallback = useCallback(async () => {
+    amplitudeService.logEvent('HARVEST_ALL_NO_CLICK');
+    await doHarvestAll(farmingListStore.listStore.data);
+    await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
+  }, [delayedGetFarmingList, delayedGetFarmingStats, doHarvestAll, farmingListStore.listStore.data]);
 
   const handleHarvestAll = async () => {
-    await doHarvestAll(farmingListStore.listStore.data);
-
-    await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
+    amplitudeService.logEvent('HARVEST_ALL_CLICK');
+    confirmationPopup(yesCallback, noCallback);
   };
 
   useEffect(() => {

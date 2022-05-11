@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';

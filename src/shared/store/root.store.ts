@@ -6,6 +6,11 @@ import {
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
+import {
+  StableswapListStore as IStableswapListStore,
+  StableswapItemStore as IStableswapItemStore,
+  StableswapFilterStore as IStableswapFilterStore
+} from '@modules/stableswap/store';
 
 import { isNull } from '../helpers';
 import { Nullable } from '../types/types';
@@ -21,6 +26,10 @@ export class RootStore {
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
+
+  stableswapListStore: Nullable<IStableswapListStore> = null;
+  stableswapItemStore: Nullable<IStableswapItemStore> = null;
+  stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   tezos: Nullable<TezosToolkit> = null;
 
@@ -49,10 +58,31 @@ export class RootStore {
     this.tezos = tezos;
   }
 
+  async createStableswapListStore() {
+    if (isNull(this.stableswapListStore)) {
+      const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');
+      this.stableswapListStore = new StableswapListStore(this);
+    }
+  }
+
+  async createStableswapItemStore() {
+    if (isNull(this.stableswapItemStore)) {
+      const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
+      this.stableswapItemStore = new StableswapItemStore(this);
+    }
+  }
+
+  async createStableswapFilterStore() {
+    if (isNull(this.stableswapFilterStore)) {
+      const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
+      this.stableswapFilterStore = new StableswapFilterStore();
+    }
+  }
+
   async createFarmingFilterStore() {
     if (isNull(this.farmingFilterStore)) {
       const { FarmingFilterStore } = await import('@modules/farming/store/farming-filter.store');
-      this.farmingFilterStore = new FarmingFilterStore(this);
+      this.farmingFilterStore = new FarmingFilterStore();
     }
   }
 

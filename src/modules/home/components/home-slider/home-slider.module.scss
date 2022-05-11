@@ -85,7 +85,6 @@
 @include media('>Ltablet') {
   .root {
     padding-top: 24px;
-    padding-bottom: 24px;
 
     :global(.slick-slide) {
       position: relative;

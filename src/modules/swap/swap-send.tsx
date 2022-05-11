@@ -67,6 +67,16 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
+  const exchangeRates = useNewExchangeRates();
+  const {
+    dexRoute,
+    onInputAmountChange,
+    onOutputAmountChange,
+    onSwapPairChange,
+    inputAmount: calculatedInputAmount,
+    outputAmount: calculatedOutputAmount,
+    resetCalculations
+  } = useSwapCalculations();
   const {
     errors,
     values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient },
@@ -77,7 +87,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction);
+  } = useSwapFormik(initialAction, dexRoute, exchangeRates);
   const navigate = useNavigate();
   const params = useParams();
   const { t } = useTranslation(['swap']);
@@ -98,15 +108,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     { id: SwapTabAction.SEND, label: t('swap|Send') }
   ];
 
-  const {
-    dexRoute,
-    onInputAmountChange,
-    onOutputAmountChange,
-    onSwapPairChange,
-    inputAmount: calculatedInputAmount,
-    outputAmount: calculatedOutputAmount,
-    resetCalculations
-  } = useSwapCalculations();
   const prevCalculatedInputAmountRef = useRef(calculatedInputAmount);
   const prevCalculatedOutputAmountRef = useRef(calculatedOutputAmount);
 
@@ -147,17 +148,14 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const onTokensSelected = useCallback(
     (_inputToken: Token, _outputToken: Token) => {
       updateSwapLimits(_inputToken, _outputToken);
-      const newRoute = `/swap/${getTokenPairSlug(_inputToken, _outputToken)}`;
+      const newRoute = `/${action}/${getTokenPairSlug(_inputToken, _outputToken)}`;
 
-      // if (router.asPath !== newRoute) {
       navigate(newRoute);
-      // }
     },
-    [navigate, updateSwapLimits]
+    [action, navigate, updateSwapLimits]
   );
 
   const { balances, updateBalance } = useBalances();
-  const exchangeRates = useNewExchangeRates();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();

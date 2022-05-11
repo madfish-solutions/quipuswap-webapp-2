@@ -1,7 +1,9 @@
+import { SVGProps } from 'react';
+
 import { FoundDex } from '@quipuswap/sdk';
 import { BigNumber } from 'bignumber.js';
 
-export interface IconProps {
+export interface IconProps extends SVGProps<SVGSVGElement> {
   id?: string;
   className?: string;
 }
@@ -65,6 +67,10 @@ export interface Token {
   fa2TokenId?: number;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;
+}
+
+export interface RawToken extends Omit<Token, 'fa2TokenId'> {
+  fa2TokenId?: string;
 }
 
 export interface TokenWithQSNetworkType extends Token {
@@ -206,4 +212,13 @@ export interface SortTokensContractsType {
 export enum LastUsedConnectionKey {
   TEMPLE = 'TEMPLE',
   BEACON = 'BEACON'
+}
+
+export interface BlockInfoWrap {
+  blockInfo: BlockInfo;
+}
+export interface BlockInfo {
+  level: number;
+  hash: string;
+  timestamp: string;
 }

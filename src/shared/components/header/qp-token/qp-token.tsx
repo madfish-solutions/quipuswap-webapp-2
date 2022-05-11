@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo } from 'react';
+import { FC, useContext, useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -8,6 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { QuipuToken } from '@shared/svg';
 
+import { amplitudeService } from '../../../services';
 import styles from './qp-token.module.scss';
 
 const modeClass = {
@@ -28,21 +29,26 @@ export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
 
   const price = useMemo(() => {
     if (!exchangeRates) {
-      return new BigNumber(NaN);
+      return '???';
     }
     const rawExchangeRate = exchangeRates.find(
       ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress
     )?.exchangeRate;
+    if (!rawExchangeRate) {
+      return '???';
+    }
 
-    return new BigNumber(rawExchangeRate || NaN);
+    return new BigNumber(rawExchangeRate).toFixed(DEFAULT_PRECISION);
   }, [exchangeRates]);
+
+  useEffect(() => {
+    amplitudeService.setUserProps('quipu_price', price);
+  }, [price]);
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <QuipuToken id={id} />
-      <span className={styles.price} data-test-id="quipuTokenPrice">
-        $ {price.isNaN() ? '???' : price.toFixed(DEFAULT_PRECISION)}
-      </span>
+      <span className={styles.price}>$ {price}</span>
     </div>
   );
 };

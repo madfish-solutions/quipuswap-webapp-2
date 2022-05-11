@@ -19,6 +19,7 @@
   border-radius: 8px;
   letter-spacing: 0.5px;
   transition: color $colorChangeAnimationTime;
+  word-break: break-word;
 }
 .primary,
 .secondary,

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
-import { Nullable, WhitelistedBaker } from '@shared/types';
+import { Nullable } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -18,11 +18,7 @@ export const useDoHarvestAndRestake = () => {
   const { t } = useTranslation();
 
   const doHarvestAndRestake = useCallback(
-    async (
-      farmingItem: Nullable<FarmingItem>,
-      rewardsInToken: Nullable<BigNumber>,
-      selectedBaker: Nullable<WhitelistedBaker>
-    ) => {
+    async (farmingItem: Nullable<FarmingItem>, rewardsInToken: Nullable<BigNumber>) => {
       try {
         const farmingIntemDefined = defined(farmingItem);
 
@@ -31,7 +27,6 @@ export const useDoHarvestAndRestake = () => {
           farmingIntemDefined.id,
           defined(rootStore.authStore.accountPkh),
           defined(rewardsInToken),
-          defined(selectedBaker).address,
           farmingIntemDefined.rewardToken
         );
 

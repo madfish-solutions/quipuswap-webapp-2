@@ -13,6 +13,7 @@ import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
 import { WalletButton } from './wallet-button';
@@ -45,21 +46,29 @@ export const WalletModal: FC = () => {
         }
         closeAccountInfoModal();
         closeConnectWalletModal();
+        amplitudeService.logEvent('CONNECT_WALLET_SUCCESS', { walletType });
+        amplitudeService.setUserProps('wallet_type', walletType);
       } catch (err) {
         if (err instanceof NoTempleWallet) {
           openInstallTempleWalletModal();
-        } else {
-          const authenticationWasRejected =
-            err instanceof NotGrantedTempleWalletError || err instanceof AbortedBeaconError;
-          if (!authenticationWasRejected) {
-            const errorMessage = t('common|errorWhileConnectingWallet', {
-              walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
-              error: (err as Error).message
-            });
+          amplitudeService.logEvent('CONNECT_WALLET_FAILED', { reason: 'NO_TEMPLE_WALLET', err });
 
-            showErrorToast(errorMessage);
-          }
+          return;
         }
+        const authenticationWasRejected =
+          err instanceof NotGrantedTempleWalletError || err instanceof AbortedBeaconError;
+        if (!authenticationWasRejected) {
+          const errorMessage = t('common|errorWhileConnectingWallet', {
+            walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
+            error: (err as Error).message
+          });
+
+          showErrorToast(errorMessage);
+          amplitudeService.logEvent('CONNECT_WALLET_FAILED', { reason: 'NOT_GRANTED', err });
+
+          return;
+        }
+        amplitudeService.logEvent('CONNECT_WALLET_FAILED', { reason: 'OTHER', err });
       }
     },
     [

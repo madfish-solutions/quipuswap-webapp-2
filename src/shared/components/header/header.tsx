@@ -13,6 +13,7 @@ import { LogoButton } from '../logo-button';
 import { SettingsButton } from '../settings-button';
 import styles from './header.module.scss';
 import { Menu } from './menu';
+import { QPToken } from './qp-token';
 
 interface HeaderProps {
   className?: string;
@@ -51,6 +52,8 @@ export const Header: FC<HeaderProps> = ({ className }) => {
       <header className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="header">
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
+
+        <QPToken className={styles.qpToken} id="desktop" />
         <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
         <Button

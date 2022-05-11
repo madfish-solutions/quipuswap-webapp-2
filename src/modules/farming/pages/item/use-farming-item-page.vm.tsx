@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
+import { YOUVES_FARMINGS } from '@config/config';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
@@ -24,7 +25,7 @@ export const useFarmingItemPageViewModel = () => {
 
   const rawStakeId = params.farmId;
   /*
-   Load data
+    Load data
   */
   useEffect(() => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
@@ -59,5 +60,7 @@ export const useFarmingItemPageViewModel = () => {
     return <DashPlug animation={true} className={styles.titleLoader} zoom={1.45} />;
   };
 
-  return { isLoading, farmingItem, getTitle };
+  const isYouves = YOUVES_FARMINGS.includes(`${farmingItem?.id}`);
+
+  return { isLoading, farmingItem, getTitle, isYouves };
 };

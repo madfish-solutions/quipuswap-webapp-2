@@ -1,4 +1,3 @@
-export * from './background';
 export * from './beacon';
 export * from './close-icon';
 export * from './logo-small-monochrome';
@@ -45,3 +44,9 @@ export * from './external-link';
 export * from './check-mark';
 export * from './copy';
 export * from './settings-icon';
+export * from './arrow-sign';
+export * from './stableswap-icon';
+export * from './analytics-icon';
+export * from './feedback-icon';
+export * from './youves-icon';
+export * from './game-icon';
