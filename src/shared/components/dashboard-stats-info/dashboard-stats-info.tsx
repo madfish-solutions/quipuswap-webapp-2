@@ -14,7 +14,7 @@ const TWO = 2;
 interface Props {
   header?: string;
   cards: ReactElement[];
-  countOfRightElements?: string;
+  countOfRightElements?: number;
 }
 
 const modeClass = {
@@ -29,7 +29,7 @@ export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZE
   const contentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
   const cardClassName = cx(styles.card, modeClass[colorThemeMode]);
 
-  const elementsFlexBasis50 = Number(countOfRightElements) * TWO;
+  const elementsFlexBasis50 = countOfRightElements * TWO;
 
   return (
     <Card

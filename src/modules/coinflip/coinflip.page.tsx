@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import { DashboardCard } from '@modules/home/components/dex-dashboard/dashboard-card';
-import { PageTitle, TestnetAlert, DashboardStatsInfo } from '@shared/components';
+import { PageTitle, TestnetAlert, DashboardStatsInfo, DashboardCard } from '@shared/components';
 
 import styles from './coinflip.page.module.scss';
 
@@ -39,7 +38,7 @@ export const CoinflipPage: FC = () => {
           />,
           <DashboardCard size="large" volume="123" label="Games count" hideTooltip className={styles.dashboardCard} />
         ]}
-        countOfRightElements="1"
+        countOfRightElements={1}
       />
     </>
   );

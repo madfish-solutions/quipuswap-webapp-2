@@ -10,7 +10,7 @@ export const UseDashboardStatsInfoViewModel = () => {
   };
 
   const isFlexEndRightElement = (index: number, elementsCount: number): boolean => {
-    return !isEven(index) && index < elementsCount;
+    return !isEven(index) && isRightElement(index, elementsCount);
   };
 
   const computedClassName = (rightCardValue: boolean, flexEndValue: boolean) => {
