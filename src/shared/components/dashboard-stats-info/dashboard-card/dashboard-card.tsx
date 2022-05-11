@@ -8,7 +8,7 @@ import { Nullable } from '@shared/types/types';
 
 import styles from './dashboard-card.module.scss';
 
-export interface DashboardCardProps {
+interface DashboardCardProps {
   volume: Nullable<string>;
   size?: 'large' | 'extraLarge';
   label: ReactNode;

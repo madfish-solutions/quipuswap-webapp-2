@@ -6,13 +6,15 @@ import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 
 import { Card } from '../card';
 import styles from './dashboard-stats-info.module.scss';
+import { UseDashboardStatsInfoViewModel } from './use-dashboard-stats-info.vm';
 
 const ZERO = 0;
 const TWO = 2;
 
 interface Props {
+  header?: string;
   cards: ReactElement[];
-  countOfRightElements?: number;
+  countOfRightElements?: string;
 }
 
 const modeClass = {
@@ -20,14 +22,19 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZERO }) => {
+export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZERO, header }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { isRightElement, isFlexEndRightElement, computedClassName } = UseDashboardStatsInfoViewModel();
+
   const contentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
+  const cardClassName = cx(styles.card, modeClass[colorThemeMode]);
+
+  const elementsFlexBasis50 = Number(countOfRightElements) * TWO;
 
   return (
     <Card
       header={{
-        content: 'Game Info'
+        content: header
       }}
       contentClassName={contentClassName}
       className={styles.rootCard}
@@ -35,12 +42,11 @@ export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZE
       {cards.map((card: ReactElement, index: number) => (
         <div
           className={cx(
-            styles.card,
-            {
-              [styles.rightCard]: index < countOfRightElements * TWO,
-              [styles.flexEndRightElement]: index % TWO !== ZERO && index < countOfRightElements * TWO
-            },
-            modeClass[colorThemeMode]
+            cardClassName,
+            computedClassName(
+              isRightElement(index, elementsFlexBasis50),
+              isFlexEndRightElement(index, elementsFlexBasis50)
+            )
           )}
         >
           {card}

@@ -9,13 +9,14 @@ export const CoinflipPage: FC = () => {
       <TestnetAlert />
       <PageTitle>Game</PageTitle>
       <DashboardStatsInfo
+        header="Game Info"
         cards={[
           <DashboardCard size="large" volume="1000" label="Bank" currency="QUIPU" />,
           <DashboardCard size="large" volume="1.99" label="Payout coefficient" currency="X" />,
           <DashboardCard size="large" volume="1000" label="Total wins" currency="QUIPU" />,
           <DashboardCard size="large" volume="123" label="Games count" />
         ]}
-        countOfRightElements={1}
+        countOfRightElements="1"
       />
     </>
   );
