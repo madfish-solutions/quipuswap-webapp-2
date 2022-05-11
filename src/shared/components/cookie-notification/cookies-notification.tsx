@@ -33,7 +33,7 @@ export const CookiesNotification: FC = observer(() => {
             What for?
           </Link>
         </p>
-        <Button className={styles.button} onClick={handleApproveClick}>
+        <Button className={styles.button} onClick={handleApproveClick} data-test-id="acceptCookieButton">
           {t('common|Accept')}
         </Button>
       </div>
