@@ -8,12 +8,12 @@ import { Details } from './components';
 import { useStableswapLiquidityItemPageViewModel } from './stableswap-liquidity-item-page.vm';
 
 export const StableswapLiquidityItemPage: FC = observer(() => {
-  const { getTitle } = useStableswapLiquidityItemPageViewModel();
+  const { title } = useStableswapLiquidityItemPageViewModel();
 
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{getTitle()}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <Details />
     </>
   );

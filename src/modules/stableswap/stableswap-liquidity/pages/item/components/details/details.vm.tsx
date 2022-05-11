@@ -5,50 +5,47 @@ import { getTokenSymbol, isExist } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
 import { useStableswapItemStore } from '../../../../../hooks';
-import { TokenLockedProps } from '../token-locked';
 import styles from './details.module.scss';
 
 export const useDetailsVievModel = () => {
   const dAppReady = useReady();
   const { itemStore } = useStableswapItemStore();
-
   const { data: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
 
   const isLoading = isDataLoading || !isDataInitialized || !dAppReady;
-  const CardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
-  let tokensLockedData: Array<TokenLockedProps> = [];
+  const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
   if (isExist(item)) {
-    tokensLockedData = item.tokensInfo.map(({ token, reserves }) => ({
+    const tokensLockedData = item.tokensInfo.map(({ token, reserves }) => ({
       tokenSymbol: getTokenSymbol(token),
       amount: reserves,
-      className: CardCellClassName,
+      className: cardCellClassName,
       isLoading
     }));
 
     return {
       ...item,
-      CardCellClassName,
+      cardCellClassName,
       isLoading,
       tokensLockedData
     };
   }
 
   return {
+    isLoading,
+    cardCellClassName,
     id: null,
-    contractAddress: null,
     tokensInfo: null,
     totalLpSupply: null,
     tvlInUsd: null,
-    poolContractUrl: undefined,
+    contractAddress: null,
     stableswapItemUrl: null,
     isWhitelisted: null,
     liquidityProvidersFee: null,
     stakersFee: null,
     interfaceFee: null,
+    poolContractUrl: undefined,
     devFee: null,
-    CardCellClassName,
-    isLoading,
-    tokensLockedData
+    tokensLockedData: []
   };
 };

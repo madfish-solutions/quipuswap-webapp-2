@@ -33,7 +33,7 @@ export const Details: FC = observer(() => {
     stakersFee,
     devFee,
     poolContractUrl,
-    CardCellClassName,
+    cardCellClassName,
     isLoading,
     tokensLockedData
   } = useDetailsVievModel();
@@ -46,7 +46,7 @@ export const Details: FC = observer(() => {
       contentClassName={commonContainerStyles.content}
       data-test-id="stableswapDetails"
     >
-      <DetailsCardCell cellName={t('common|Pair Address')} className={CardCellClassName} data-test-id="pairAddress">
+      <DetailsCardCell cellName={t('common|Pair Address')} className={cardCellClassName} data-test-id="pairAddress">
         <StateWrapper
           isLoading={isLoading}
           loaderFallback={<DashPlug />}
@@ -56,7 +56,7 @@ export const Details: FC = observer(() => {
           {contractAddress && <ContractHashWithCopy contractAddress={contractAddress} />}
         </StateWrapper>
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('common|Pair ID')} className={CardCellClassName} data-test-id="pairId">
+      <DetailsCardCell cellName={t('common|Pair ID')} className={cardCellClassName} data-test-id="pairId">
         <StateCurrencyAmount isLoading={isLoading} amount={id} />
       </DetailsCardCell>
 
@@ -64,33 +64,33 @@ export const Details: FC = observer(() => {
 
       <DetailsCardCell
         cellName={t('stableswap|Total LP Supply')}
-        className={CardCellClassName}
+        className={cardCellClassName}
         data-test-id="totalLpSupply"
       >
         <StateCurrencyAmount isLoading={isLoading} amount={totalLpSupply} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|liquidityProvidersFee')}
-        className={CardCellClassName}
+        className={cardCellClassName}
         data-test-id="liquidityProvidersFee"
       >
         <StatePercentage isLoading={isLoading} value={liquidityProvidersFee} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|Interface Fee')}
-        className={CardCellClassName}
+        className={cardCellClassName}
         data-test-id="interfaceFee"
       >
         <StatePercentage isLoading={isLoading} value={interfaceFee} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|QUIPU Stakers Fee')}
-        className={CardCellClassName}
+        className={cardCellClassName}
         data-test-id="quipuStakersFee"
       >
         <StatePercentage isLoading={isLoading} value={stakersFee} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('stableswap|Dev Fee')} className={CardCellClassName} data-test-id="devFee">
+      <DetailsCardCell cellName={t('stableswap|Dev Fee')} className={cardCellClassName} data-test-id="devFee">
         <StatePercentage isLoading={isLoading} value={devFee} />
       </DetailsCardCell>
 
