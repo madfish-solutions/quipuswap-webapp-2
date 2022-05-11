@@ -1,7 +1,9 @@
 import { FC } from 'react';
 
+import { DashboardCard } from '@modules/home/components/dex-dashboard/dashboard-card';
 import { PageTitle, TestnetAlert, DashboardStatsInfo } from '@shared/components';
-import { DashboardCard } from '@shared/components/dashboard-stats-info/dashboard-card';
+
+import styles from './coinflip.page.module.scss';
 
 export const CoinflipPage: FC = () => {
   return (
@@ -11,10 +13,31 @@ export const CoinflipPage: FC = () => {
       <DashboardStatsInfo
         header="Game Info"
         cards={[
-          <DashboardCard size="large" volume="1000" label="Bank" currency="QUIPU" />,
-          <DashboardCard size="large" volume="1.99" label="Payout coefficient" currency="X" />,
-          <DashboardCard size="large" volume="1000" label="Total wins" currency="QUIPU" />,
-          <DashboardCard size="large" volume="123" label="Games count" />
+          <DashboardCard
+            size="large"
+            volume="1000"
+            label="Bank"
+            currency="QUIPU"
+            hideTooltip
+            className={styles.dashboardCard}
+          />,
+          <DashboardCard
+            size="large"
+            volume="1.99"
+            label="Payout coefficient"
+            currency="X"
+            hideTooltip
+            className={styles.dashboardCard}
+          />,
+          <DashboardCard
+            size="large"
+            volume="1000"
+            label="Total wins"
+            currency="QUIPU"
+            hideTooltip
+            className={styles.dashboardCard}
+          />,
+          <DashboardCard size="large" volume="123" label="Games count" hideTooltip className={styles.dashboardCard} />
         ]}
         countOfRightElements="1"
       />

@@ -33,9 +33,13 @@ export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZE
 
   return (
     <Card
-      header={{
-        content: header
-      }}
+      header={
+        header
+          ? {
+              content: header
+            }
+          : undefined
+      }
       contentClassName={contentClassName}
       className={styles.rootCard}
     >
