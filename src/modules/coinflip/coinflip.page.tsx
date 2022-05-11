@@ -3,12 +3,14 @@ import { FC } from 'react';
 import { PageTitle, TestnetAlert, DashboardStatsInfo, DashboardCard } from '@shared/components';
 
 import styles from './coinflip.page.module.scss';
+import { CoinsSelector } from './components/coins-selector';
 
 export const CoinflipPage: FC = () => {
   return (
     <>
       <TestnetAlert />
       <PageTitle>Game</PageTitle>
+      <CoinsSelector />
       <DashboardStatsInfo
         header="Game Info"
         cards={[
