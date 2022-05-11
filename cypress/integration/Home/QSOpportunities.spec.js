@@ -32,8 +32,6 @@ describe('QuipuSwap Opportunities section', () => {
 
   it('Should_RedirectToFarmingPage_When_ClickingOnStartFarmingButton', () => {
     cy.visit('/');
-
-    //'Start Farming' button on the home page leads to the Farming page
     cy.get('[data-test-id="QSOpportunitiesSection"] [data-test-id="QSOpportunitiesButton-1"]').click();
     cy.get('[data-test-id="farmingListPageTitle"]').should('contain', 'Farming');
   });

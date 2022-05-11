@@ -2,7 +2,6 @@
 
 describe('Analytics', () => {
   // Test it when analytics will work
-
   it.skip('Should_RedirectToSwapPage_When_ClickingOnPairs', () => {
     // Go to the home page
     cy.visit('/');

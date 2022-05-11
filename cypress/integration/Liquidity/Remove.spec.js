@@ -11,11 +11,9 @@ describe('Form exists', () => {
     // Check if Title 'Pool Details' ok
     cy.get('[data-test-id="poolDetails"] [data-test-id="headerContent"]').should('contain', 'Pool Details');
   });
-
   it('Should_DisplayPageTitle_When_OpenedRLiquidityPage', () => {
     cy.get('[data-test-id="liquidityPageTitle"]').should('contain', 'Liquidity');
   });
-
   it('Should_HaveTezQuipuPair_When_PageIsLoaded', () => {
     cy.get(
       '[data-test-id="liquidityPageTokenSelect"] [data-test-id="positionSelectInput"] [data-test-id="selectLPButton"]'

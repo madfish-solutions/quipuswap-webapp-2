@@ -11,6 +11,7 @@ describe('Privacy Police', () => {
     cy.get('[data-test-id="privacyPolicyTitle"]').should('contain', 'Privacy Policy');
     cy.url().should('contain', '/privacy-policy');
   });
+
   it('Should_RedirectToTherms_When_ClickingOnTherms', () => {
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="buttonMore"]').click();
