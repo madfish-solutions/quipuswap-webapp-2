@@ -5,11 +5,11 @@ import cx from 'classnames';
 
 import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { DashboardCard } from '@shared/components/dashboard-card';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
 import { useTranslation } from '@translation';
 
-import { DashboardCard } from './dashboard-card';
 import styles from './dex-dashboard.module.scss';
 
 interface DexDashboardInnerProps {
