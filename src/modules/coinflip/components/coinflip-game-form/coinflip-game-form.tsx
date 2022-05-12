@@ -8,40 +8,31 @@ import commonStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-game-form.module.scss';
+import { useCoinflipGameFormViewModel } from './use-coinflip-game-form.vm';
 
 interface Props {
   handleSubmit: Noop;
-  amountInput: string;
   amountBalance: Nullable<BigNumber>;
   token: Token;
   onAmountInputChange: (amountInput: string) => void;
 }
 
-export const CoinflipGameForm: FC<Props> = ({
-  handleSubmit,
-  amountInput,
-  amountBalance,
-  token,
-  onAmountInputChange
-}) => {
+export const CoinflipGameForm: FC<Props> = ({ handleSubmit, amountBalance, token, onAmountInputChange }) => {
   const { t } = useTranslation(['common', 'coinflip']);
-
-  const inputAmountError = undefined;
-  const balance = amountBalance ? amountBalance.toFixed() : null;
-  const disabled = false;
-  const isSubmitting = false;
+  const { inputAmountError, balance, disabled, isSubmitting, handleFormSubmit, inputAmount, handleInputAmountChange } =
+    useCoinflipGameFormViewModel(amountBalance, handleSubmit, onAmountInputChange);
 
   return (
-    <form onSubmit={handleSubmit} data-test-id="coinflip-form" className={styles.root}>
+    <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
       <TokenInput
         id="coinflip-form-amount"
         label={t('common|Amount')}
-        value={amountInput}
+        value={inputAmount}
         balance={balance}
         error={inputAmountError}
         decimals={token.metadata.decimals}
         tokenA={token}
-        onInputChange={onAmountInputChange}
+        onInputChange={handleInputAmountChange}
       />
       <div className={commonStyles.buttons}>
         <ConnectWalletOrDoSomething>

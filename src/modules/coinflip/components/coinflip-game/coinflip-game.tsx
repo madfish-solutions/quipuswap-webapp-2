@@ -28,7 +28,6 @@ export const CoinflipGame: FC = observer(() => {
       />
       <CoinflipGameForm
         token={token}
-        amountInput={game.input}
         amountBalance={tokenBalance}
         onAmountInputChange={handleAmountInputChange}
         handleSubmit={handleFormSubmit}

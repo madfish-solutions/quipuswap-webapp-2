@@ -7,7 +7,12 @@ export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
   const { tokenToPlay, game, token } = coinflipStore;
 
-  const tokenBalance = useTokenBalance(token);
+  const tokenBalance = useTokenBalance(token) ?? null;
+
+  const handleSubmit = () => {
+    // eslint-disable-next-line no-console
+    console.log('submit');
+  };
 
   const handleSelectCoinSide = (coinSide: CoinSide) => {
     coinflipStore.setCoinSide(coinSide);
@@ -17,18 +22,13 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setInput(amountInput);
   };
 
-  const handleFormSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('submit');
-  };
-
   return {
     tokenToPlay,
-    tokenBalance: tokenBalance ?? null,
+    tokenBalance,
     game,
     token,
     handleSelectCoinSide,
     handleAmountInputChange,
-    handleFormSubmit
+    handleFormSubmit: handleSubmit
   };
 };
