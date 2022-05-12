@@ -39,14 +39,12 @@ const DEFAULT_COINFLIP_GAME: CoinflipGame = {
 
 export class CoinflipStore {
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
-  tokenBalance: Nullable<BigNumber> = null;
 
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
-      tokenBalance: observable,
       game: observable,
 
       gameAmount: computed,
@@ -54,7 +52,6 @@ export class CoinflipStore {
       token: computed,
 
       setToken: action,
-      setBalance: action,
       setInput: action
     });
   }
@@ -83,12 +80,7 @@ export class CoinflipStore {
 
   setToken(token: TokenToPlay) {
     this.tokenToPlay = token;
-    this.tokenBalance = null;
     this.game = { ...DEFAULT_COINFLIP_GAME };
-  }
-
-  setBalance(balance: Nullable<BigNumber>) {
-    this.tokenBalance = balance;
   }
 
   setCoinSide(coinSide: CoinSide) {

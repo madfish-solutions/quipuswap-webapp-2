@@ -1,9 +1,13 @@
+import { useTokenBalance } from '@shared/hooks';
+
 import { useCoinflipStore } from '../../hooks';
 import { CoinSide } from '../../stores';
 
 export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { tokenToPlay, tokenBalance, game, token } = coinflipStore;
+  const { tokenToPlay, game, token } = coinflipStore;
+
+  const tokenBalance = useTokenBalance(token);
 
   const handleSelectCoinSide = (coinSide: CoinSide) => {
     coinflipStore.setCoinSide(coinSide);
@@ -14,5 +18,5 @@ export const useCoinflipGameViewModel = () => {
     console.log('submit');
   };
 
-  return { tokenToPlay, tokenBalance, game, token, handleSelectCoinSide, handleFormSubmit };
+  return { tokenToPlay, tokenBalance: tokenBalance ?? null, game, token, handleSelectCoinSide, handleFormSubmit };
 };

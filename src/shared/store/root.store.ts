@@ -17,12 +17,14 @@ import { isExist, isNull } from '../helpers';
 import { Nullable } from '../types';
 import { AuthStore } from './auth.store';
 import { SettingsStore } from './settings.store';
+import { TokensBalancesStore } from './tokens-balances.store';
 import { UiStore } from './ui.store';
 
 export class RootStore {
   authStore: AuthStore;
   uiStore: UiStore;
   settingsStore: SettingsStore;
+  tokensBalancesStore: TokensBalancesStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
@@ -40,6 +42,7 @@ export class RootStore {
     this.authStore = new AuthStore(this);
     this.uiStore = new UiStore(this);
     this.settingsStore = new SettingsStore(this);
+    this.tokensBalancesStore = new TokensBalancesStore(this);
 
     makeObservable(this, {
       tezos: observable,
