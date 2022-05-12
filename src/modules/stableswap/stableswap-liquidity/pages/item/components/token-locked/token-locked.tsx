@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 
-import { useTokenLockedViewModel } from './token-locked.vm';
+import { useTokenLockedViewModel } from './use-token-locked.vm';
 
 export interface TokenLockedProps {
   className: string;

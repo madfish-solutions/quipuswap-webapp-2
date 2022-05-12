@@ -9,7 +9,7 @@ import styles from '@styles/CommonContainer.module.scss';
 import { FormHeader } from '../form-header';
 import { AddLiqForm } from './add-liq-form';
 import { RemoveLiqForm } from './remove-liq-form';
-import { TabsContent, useStableswapFormTabsCardViewModel } from './stableswap-form-tabs-card.vm';
+import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 
 export const StableswapFormTabsCard: FC = observer(() => {
   const { isAddForm, currentTab, stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel();

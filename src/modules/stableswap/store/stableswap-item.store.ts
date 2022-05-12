@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Nullable, Undefined } from '@shared/types';
+import { Nullable } from '@shared/types';
 
 import { getStableswapItemApi } from '../api';
 import { poolItemMapper } from '../mapping';
@@ -18,18 +18,14 @@ export class StableswapItemStore {
   );
 
   currentTab: StableswapFormTabs = StableswapFormTabs.add;
-  inputAmounts: Array<string> = [];
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       poolId: observable,
       currentTab: observable,
-      inputAmounts: observable,
 
-      initInputAmounts: action,
       setPoolId: action,
       setTab: action,
-      setInputAmount: action,
 
       item: computed
     });
@@ -39,23 +35,11 @@ export class StableswapItemStore {
     return this.itemStore.data;
   }
 
-  initInputAmounts(length: number) {
-    this.inputAmounts = Array(length).fill('');
-  }
-
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
   }
 
   setTab(tab: StableswapFormTabs) {
     this.currentTab = tab;
-  }
-
-  setInputAmount(amount: string, index: number) {
-    this.inputAmounts[index] = amount;
-  }
-
-  getInputAmount(index: number): Undefined<string> {
-    return this.inputAmounts[index];
   }
 }

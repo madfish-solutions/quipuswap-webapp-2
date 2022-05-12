@@ -7,7 +7,7 @@ import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { getSymbolsString, isExist, isUndefined } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
+import { useGetStableswapItem, useStableswapItemFormStore, useStableswapItemStore } from '../../../hooks';
 
 const ZERO_LENGTH = 0;
 
@@ -16,6 +16,7 @@ export const useStableswapLiquidityItemPageViewModel = () => {
   const dAppReady = useReady();
   const accountPkh = useAccountPkh();
   const stableswapItemStore = useStableswapItemStore();
+  const stableswapItemFormStore = useStableswapItemFormStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const { getStableswapItem } = useGetStableswapItem();
   const { t } = useTranslation();
@@ -32,12 +33,12 @@ export const useStableswapLiquidityItemPageViewModel = () => {
 
       const length = stableswapItemStore.item?.tokensInfo.length ?? ZERO_LENGTH;
 
-      stableswapItemStore.initInputAmounts(length);
+      stableswapItemFormStore.initInputAmounts(length);
       prevAccountPkhRef.current = accountPkh;
     };
 
     void loadItem();
-  }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore]);
+  }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore]);
 
   const { itemStore } = stableswapItemStore;
   const { data: stableswapItem } = itemStore;

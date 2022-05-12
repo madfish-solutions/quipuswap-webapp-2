@@ -13,10 +13,12 @@ export const useStableswapPageViewModel = () => {
         if (
           isNull(rootStore.stableswapListStore) ||
           isNull(rootStore.stableswapItemStore) ||
+          isNull(rootStore.stableswapItemFormStore) ||
           isNull(rootStore.stableswapFilterStore)
         ) {
           await rootStore.createStableswapListStore();
           await rootStore.createStableswapItemStore();
+          await rootStore.createStableswapItemFormStore();
           await rootStore.createStableswapFilterStore();
         }
       } finally {

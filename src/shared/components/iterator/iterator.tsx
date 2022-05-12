@@ -1,6 +1,6 @@
 import { FC, Fragment, ReactElement } from 'react';
 
-import { isEmptyArray, isExist } from '@shared/helpers';
+import { isEmptyArray, isExist, isLastElementIndex } from '@shared/helpers';
 import { Undefined } from '@shared/types';
 
 interface IteratorProps<T> {
@@ -31,7 +31,7 @@ export const Iterator: IteratorComponent = ({
   const Render = render;
 
   const content = data.map((_data, index) => {
-    if (index === data.length - 1) {
+    if (isLastElementIndex(index, data)) {
       return <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />;
     }
 

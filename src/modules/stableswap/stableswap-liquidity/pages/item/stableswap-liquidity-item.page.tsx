@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 
 import { Details, StableswapFormTabsCard } from './components';
-import { useStableswapLiquidityItemPageViewModel } from './stableswap-liquidity-item-page.vm';
+import { useStableswapLiquidityItemPageViewModel } from './use-stableswap-liquidity-item-page.vm';
 
 export const StableswapLiquidityItemPage: FC = observer(() => {
   const { getTitle } = useStableswapLiquidityItemPageViewModel();

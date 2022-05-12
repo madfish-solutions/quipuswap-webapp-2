@@ -9,7 +9,8 @@ import {
 import {
   StableswapListStore as IStableswapListStore,
   StableswapItemStore as IStableswapItemStore,
-  StableswapFilterStore as IStableswapFilterStore
+  StableswapFilterStore as IStableswapFilterStore,
+  StableswapItemFormStore as IStableswapItemFormStore
 } from '@modules/stableswap/store';
 
 import { isNull } from '../helpers';
@@ -29,6 +30,7 @@ export class RootStore {
 
   stableswapListStore: Nullable<IStableswapListStore> = null;
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
+  stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   tezos: Nullable<TezosToolkit> = null;
@@ -69,6 +71,13 @@ export class RootStore {
     if (isNull(this.stableswapItemStore)) {
       const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
       this.stableswapItemStore = new StableswapItemStore(this);
+    }
+  }
+
+  async createStableswapItemFormStore() {
+    if (isNull(this.stableswapItemFormStore)) {
+      const { StableswapItemFormStore } = await import('@modules/stableswap/store/stableswap-item-form.store');
+      this.stableswapItemFormStore = new StableswapItemFormStore(this);
     }
   }
 

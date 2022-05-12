@@ -20,7 +20,7 @@ import { useTranslation } from '@translation';
 
 import { TokenLocked } from '../token-locked';
 import styles from './details.module.scss';
-import { useDetailsVievModel } from './details.vm';
+import { useDetailsVievModel } from './use-details.vm';
 
 export const Details: FC = observer(() => {
   const { t } = useTranslation();
