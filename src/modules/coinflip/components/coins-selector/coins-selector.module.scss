@@ -1,13 +1,6 @@
 @import '@styles/variables';
 @import '@styles/breakpoints';
 
-.root {
-  display: flex;
-  padding: 8px;
-  border: 2px solid $text-01;
-  border-radius: 44px;
-}
-
 .card {
   margin-bottom: 32px;
 }

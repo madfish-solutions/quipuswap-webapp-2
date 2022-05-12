@@ -7,12 +7,12 @@ import { XtzToken } from '@shared/svg/xtz-token';
 import { ButtonsSelector } from '../buttons-selector';
 import styles from './coins-selector.module.scss';
 
-const INITIAL_ACTIVE_ID = 0;
+const INITIAL_ACTIVE_ID = 'xtz';
 
 export const CoinsSelector: FC = () => {
-  const [activeId, setActiveId] = useState<number>(INITIAL_ACTIVE_ID);
+  const [activeId, setActiveId] = useState<string | number>(INITIAL_ACTIVE_ID);
 
-  const handleActiveIdChange = (activeButtonId: number): void => {
+  const handleActiveIdChange = (activeButtonId: number | string): void => {
     setActiveId(activeButtonId);
   };
 
@@ -24,24 +24,22 @@ export const CoinsSelector: FC = () => {
       contentClassName={styles.cardContent}
       className={styles.card}
     >
-      <div className={styles.root}>
-        <ButtonsSelector
-          buttons={[
-            {
-              id: 0,
-              label: 'xtz',
-              Icon: XtzToken
-            },
-            {
-              id: 1,
-              label: 'quipu',
-              Icon: QuipuToken
-            }
-          ]}
-          activeId={activeId}
-          onChangeId={handleActiveIdChange}
-        />
-      </div>
+      <ButtonsSelector
+        buttons={[
+          {
+            id: 'xtz',
+            label: 'xtz',
+            Icon: XtzToken
+          },
+          {
+            id: 'quipu',
+            label: 'quipu',
+            Icon: QuipuToken
+          }
+        ]}
+        activeId={activeId}
+        onChange={handleActiveIdChange}
+      />
     </Card>
   );
 };

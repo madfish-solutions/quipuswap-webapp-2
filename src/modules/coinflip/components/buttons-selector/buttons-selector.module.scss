@@ -1,12 +1,20 @@
 @import '@styles/variables';
 @import '@styles/breakpoints';
 
+.root {
+  display: flex;
+  padding: 8px;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 44px;
+}
+
 .buttonWrapper {
   display: flex;
   align-items: center;
   padding: 8px 16px 8px 8px;
-  background: linear-gradient($ui-07, $ui-07) padding-box, $brand-02 border-box;
-  border: 2px solid $text-02;
+  border-width: 2px;
+  border-style: solid;
   border-radius: 44px;
   margin-left: 16px;
 
@@ -24,13 +32,48 @@
   font-weight: 600;
   text-transform: uppercase;
   line-height: 24px;
-  color: $ui-01;
   margin-left: 8px;
 }
 
 .token {
   width: 32px;
   height: 32px;
+}
+
+.light {
+  &.root {
+    border-color: $ui-03;
+  }
+
+  &.buttonWrapper {
+    background: linear-gradient($ui-01, $ui-01) padding-box, $brand-01 border-box;
+  }
+
+  &.notActiveButton {
+    border-color: $ui-04;
+  }
+
+  &.label {
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.root {
+    border-color: $text-01;
+  }
+
+  &.buttonWrapper {
+    background: linear-gradient($ui-07, $ui-07) padding-box, $brand-02 border-box;
+  }
+
+  &.notActiveButton {
+    border-color: $text-02;
+  }
+
+  &.label {
+    color: $text-inverse;
+  }
 }
 
 @include media('>Lphone') {
