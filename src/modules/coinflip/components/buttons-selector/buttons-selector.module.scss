@@ -1,0 +1,45 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px 8px 8px;
+  background: linear-gradient($ui-07, $ui-07) padding-box, $brand-02 border-box;
+  border: 2px solid $text-02;
+  border-radius: 44px;
+  margin-left: 16px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.activeButton {
+  border-color: transparent;
+}
+
+.label {
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 24px;
+  color: $ui-01;
+  margin-left: 8px;
+}
+
+.token {
+  width: 32px;
+  height: 32px;
+}
+
+@include media('>Lphone') {
+  .buttonWrapper {
+    margin-left: 24px;
+  }
+
+  .token {
+    width: 48px;
+    height: 48px;
+  }
+}
