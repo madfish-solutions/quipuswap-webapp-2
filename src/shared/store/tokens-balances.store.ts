@@ -19,9 +19,19 @@ export class TokensBalancesStore {
     makeObservable(this, {
       tokensBalances: observable,
 
+      setBalance: action,
       subscribe: action,
-      unsubscribe: action
+      unsubscribe: action,
+      clearBalances: action
     });
+  }
+
+  setBalance(token: Token, balance: Nullable<BigNumber>) {
+    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+    if (!tokenBalance) {
+      return;
+    }
+    tokenBalance.balance = balance;
   }
 
   subscribe(token: Token) {
@@ -58,5 +68,11 @@ export class TokensBalancesStore {
     }
 
     return tokenBalance.balance;
+  }
+
+  clearBalances() {
+    this.tokensBalances.forEach(tokenBalance => {
+      tokenBalance.balance = null;
+    });
   }
 }
