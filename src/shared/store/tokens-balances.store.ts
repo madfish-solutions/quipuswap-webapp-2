@@ -1,6 +1,8 @@
+import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
+import { getUserTokenBalance } from '@blockchain';
 import { getRandomId, isEmptyArray, isTokenEqual } from '@shared/helpers';
 
 import { Token } from '../types';
@@ -74,5 +76,22 @@ export class TokensBalancesStore {
     this.tokensBalances.forEach(tokenBalance => {
       tokenBalance.balance = null;
     });
+  }
+
+  async loadTokenBalance(tezos: TezosToolkit, accountPkh: string, token: Token) {
+    const balance = await getUserTokenBalance(tezos, accountPkh, token);
+    this.setBalance(token, balance);
+  }
+
+  async loadBalances(tezos: Nullable<TezosToolkit>, accountPkh: Nullable<string>) {
+    if (!tezos || !accountPkh) {
+      this.clearBalances();
+
+      return null;
+    }
+
+    return await Promise.all(
+      this.tokensBalances.map(async ({ token }) => this.loadTokenBalance(tezos, accountPkh, token))
+    );
   }
 }
