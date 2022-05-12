@@ -1,1 +1,1 @@
-export const isEqual = (firstArg: number | string, secondArg: number | string): boolean => firstArg === secondArg;
+export const isEqual: <T>(a: T, b: T) => boolean = (a, b) => a === b;

@@ -4,7 +4,7 @@ import { isEven } from '@shared/helpers/is-even';
 
 import styles from './dashboard-stats-info.module.scss';
 
-export const UseDashboardStatsInfoViewModel = () => {
+export const useDashboardStatsInfoViewModel = () => {
   const isRightElement = (index: number, elementsCount: number): boolean => {
     return index < elementsCount;
   };

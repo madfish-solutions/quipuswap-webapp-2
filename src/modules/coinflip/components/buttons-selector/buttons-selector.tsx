@@ -1,4 +1,4 @@
-import { FC, useContext, FunctionComponent } from 'react';
+import { FC, useContext, FunctionComponent, ReactNode } from 'react';
 
 import cx from 'classnames';
 
@@ -6,12 +6,12 @@ import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { IconProps } from '@shared/types';
 
 import styles from './buttons-selector.module.scss';
-import { UseButtonsSelectorViewModel } from './buttons-selector.vm';
+import { useButtonsSelectorViewModel } from './buttons-selector.vm';
 
 interface Props {
   buttons: Array<{
     id: number | string;
-    label: string;
+    label: ReactNode;
     Icon: FunctionComponent<IconProps>;
   }>;
   activeId: number | string;
@@ -25,7 +25,7 @@ const modeClass = {
 
 export const ButtonsSelector: FC<Props> = ({ buttons, activeId, onChange }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { computedClassName } = UseButtonsSelectorViewModel();
+  const { computedClassName } = useButtonsSelectorViewModel();
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode])}>
@@ -36,7 +36,7 @@ export const ButtonsSelector: FC<Props> = ({ buttons, activeId, onChange }) => {
           className={cx(styles.buttonWrapper, modeClass[colorThemeMode], computedClassName(id, activeId))}
         >
           <Icon className={styles.token} />
-          <p className={cx(styles.label, modeClass[colorThemeMode])}>{label}</p>
+          <span className={cx(styles.label, modeClass[colorThemeMode])}>{label}</span>
         </button>
       ))}
     </div>
