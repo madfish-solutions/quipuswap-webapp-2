@@ -13,10 +13,22 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setCoinSide(coinSide);
   };
 
+  const handleAmountInputChange = (amountInput: string) => {
+    coinflipStore.setInput(amountInput);
+  };
+
   const handleFormSubmit = () => {
     // eslint-disable-next-line no-console
     console.log('submit');
   };
 
-  return { tokenToPlay, tokenBalance: tokenBalance ?? null, game, token, handleSelectCoinSide, handleFormSubmit };
+  return {
+    tokenToPlay,
+    tokenBalance: tokenBalance ?? null,
+    game,
+    token,
+    handleSelectCoinSide,
+    handleAmountInputChange,
+    handleFormSubmit
+  };
 };

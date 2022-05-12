@@ -14,15 +14,17 @@ interface Props {
   amountInput: string;
   amountBalance: Nullable<BigNumber>;
   token: Token;
+  onAmountInputChange: (amountInput: string) => void;
 }
 
-export const CoinflipGameForm: FC<Props> = ({ handleSubmit, amountInput, amountBalance, token }) => {
+export const CoinflipGameForm: FC<Props> = ({
+  handleSubmit,
+  amountInput,
+  amountBalance,
+  token,
+  onAmountInputChange
+}) => {
   const { t } = useTranslation(['common', 'coinflip']);
-
-  const handleInputAmountChange = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log('value', value);
-  };
 
   const inputAmountError = undefined;
   const balance = amountBalance ? amountBalance.toFixed() : null;
@@ -39,7 +41,7 @@ export const CoinflipGameForm: FC<Props> = ({ handleSubmit, amountInput, amountB
         error={inputAmountError}
         decimals={token.metadata.decimals}
         tokenA={token}
-        onInputChange={handleInputAmountChange}
+        onInputChange={onAmountInputChange}
       />
       <div className={commonStyles.buttons}>
         <ConnectWalletOrDoSomething>

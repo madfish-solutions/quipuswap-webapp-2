@@ -11,7 +11,8 @@ import { useCoinflipGameViewModel } from './coinflip-game.vm';
 
 export const CoinflipGame: FC = observer(() => {
   const { t } = useTranslation(['coinflip']);
-  const { tokenToPlay, tokenBalance, game, token, handleSelectCoinSide, handleFormSubmit } = useCoinflipGameViewModel();
+  const { tokenToPlay, tokenBalance, game, token, handleSelectCoinSide, handleAmountInputChange, handleFormSubmit } =
+    useCoinflipGameViewModel();
 
   return (
     <Card
@@ -26,10 +27,11 @@ export const CoinflipGame: FC = observer(() => {
         handleSelectCoinSide={handleSelectCoinSide}
       />
       <CoinflipGameForm
-        handleSubmit={handleFormSubmit}
         token={token}
         amountInput={game.input}
         amountBalance={tokenBalance}
+        onAmountInputChange={handleAmountInputChange}
+        handleSubmit={handleFormSubmit}
       />
     </Card>
   );
