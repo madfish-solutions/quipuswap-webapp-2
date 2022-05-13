@@ -6,7 +6,6 @@ import { Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { CoinflipGameForm } from '../coinflip-game-form';
-import { CoinflipGameSelect } from '../coinflip-game-select';
 import { useCoinflipGameViewModel } from './coinflip-game.vm';
 
 export const CoinflipGame: FC = observer(() => {
@@ -21,14 +20,12 @@ export const CoinflipGame: FC = observer(() => {
       }}
       data-test-id="farmingDetails"
     >
-      <CoinflipGameSelect
-        tokenToPlay={tokenToPlay}
-        coinSide={game.coinSide}
-        handleSelectCoinSide={handleSelectCoinSide}
-      />
       <CoinflipGameForm
         token={token}
         amountBalance={tokenBalance}
+        tokenToPlay={tokenToPlay}
+        coinSide={game.coinSide}
+        onCoinSideSelect={handleSelectCoinSide}
         onAmountInputChange={handleAmountInputChange}
         handleSubmit={handleFormSubmit}
       />

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { getRandomId, isEmptyArray, isTokenEqual } from '@shared/helpers';
+import { fromDecimals, getRandomId, isEmptyArray, isTokenEqual } from '@shared/helpers';
 
 import { Token } from '../types';
 import { RootStore } from './root.store';
@@ -33,7 +33,7 @@ export class TokensBalancesStore {
     if (!tokenBalance) {
       return;
     }
-    tokenBalance.balance = balance;
+    tokenBalance.balance = balance ? fromDecimals(balance, token) : null;
   }
 
   subscribe(token: Token) {

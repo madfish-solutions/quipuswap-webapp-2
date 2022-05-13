@@ -1,1 +1,1 @@
-export * from './flip.api'
+export * from './flip.api';

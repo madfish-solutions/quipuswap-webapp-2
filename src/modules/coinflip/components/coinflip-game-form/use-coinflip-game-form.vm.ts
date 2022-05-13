@@ -1,26 +1,32 @@
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
-import { object } from 'yup';
+import { object, string } from 'yup';
 
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators/balance-amount-schema';
 
+import { CoinSide } from '../../stores';
+
 export enum FormFields {
+  coinSide = 'coinSide',
   inputAmount = 'inputAmount'
 }
 
 const getValidation = (balance: Nullable<BigNumber>) =>
   object().shape({
-    [FormFields.inputAmount]: balanceAmountSchema(balance).required('Value is required')
+    [FormFields.coinSide]: string().required('Coin Side is required'),
+    [FormFields.inputAmount]: balanceAmountSchema(balance).required('Amount is required')
   });
 
 export const useCoinflipGameFormViewModel = (
   tokenBalance: Nullable<BigNumber>,
   handleSubmit: Noop,
-  onAmountInputChange: (amountInput: string) => void
+  onAmountInputChange: (amountInput: string) => void,
+  onCoinSideSelect: (coinSide: CoinSide) => void
 ) => {
   const formik = useFormik({
     initialValues: {
+      [FormFields.coinSide]: '',
       [FormFields.inputAmount]: ''
     },
     validationSchema: getValidation(tokenBalance),
@@ -37,6 +43,16 @@ export const useCoinflipGameFormViewModel = (
       ? formik.errors[FormFields.inputAmount]
       : undefined;
 
+  const handleCoinSideSelect = (value: CoinSide) => {
+    onCoinSideSelect(value);
+    formik.setFieldValue(FormFields.coinSide, value);
+  };
+
+  const coinSideError =
+    formik.errors[FormFields.coinSide] && formik.touched[FormFields.coinSide]
+      ? formik.errors[FormFields.coinSide]
+      : undefined;
+
   const balance = tokenBalance ? tokenBalance.toFixed() : null;
   const disabled = false;
   const isSubmitting = false;
@@ -49,6 +65,8 @@ export const useCoinflipGameFormViewModel = (
     disabled,
     isSubmitting,
     balance,
-    handleInputAmountChange
+    coinSideError,
+    handleInputAmountChange,
+    handleCoinSideSelect
   };
 };

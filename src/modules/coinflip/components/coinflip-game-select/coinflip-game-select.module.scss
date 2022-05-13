@@ -1,4 +1,4 @@
-.root {
+.buttons {
   display: flex;
   justify-content: center;
 }
@@ -15,4 +15,13 @@
   position: absolute;
   top: 40px;
   left: 40px;
+}
+
+.error {
+  margin-top: -24px;
+  text-align: center;
+  font-size: 0.857rem;
+  line-height: 1.33;
+  padding-top: 8px;
+  color: #EF0000;
 }
