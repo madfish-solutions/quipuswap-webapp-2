@@ -3,22 +3,21 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { operationAmountSchema } from '@modules/farming/pages/item/helpers';
+import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
 export const useAddLiqFormValidation = (userBalance: Array<BigNumber>) => {
   return useMemo(() => {
-    const inputAmountSchemas = userBalance.map(operationAmountSchema);
+    const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(operationAmountSchema);
 
-    const shape: Record<string, NumberAsStringSchema> = {};
+    const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => [
+      getInputSlugByIndex(index),
+      item.required('Value is required')
+    ]);
 
-    let key = '';
-    inputAmountSchemas.forEach((inputAmountSchema, index) => {
-      key = getInputSlugByIndex(index);
-      shape[key] = inputAmountSchema.required('Value is required');
-    });
+    const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape(shape);
   }, [userBalance]);

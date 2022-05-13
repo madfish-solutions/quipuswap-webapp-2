@@ -14,7 +14,7 @@ import { StableswapFormTabs } from './types';
 
 const ONE = 1;
 
-enum StableswapRoutes {
+export enum StableswapRoutes {
   root = '/',
   liquidity = '/liquidity/',
   liquidityTabPoolId = '/liquidity/:tab/:poolId'

@@ -4,9 +4,8 @@ import { FormikHelpers, useFormik } from 'formik';
 import { isNull, isEmptyString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { calculateTokensInputs, getFormikInitialValues } from '../../../../../../helpers';
+import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { getInputSlugByIndex } from './../../../../../../helpers/get-input-slug-by-index';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 interface AddLiqFormValues {
@@ -20,10 +19,13 @@ export const useAddLiqFormViewModel = () => {
   const stableswapItemFormStore = useStableswapItemFormStore();
   const item = stableswapItemStore.item;
 
+  //#region mock data
+  //TODO: remove mockdata implement real one
   const label = t('common|Input');
   const disabled = false;
   const isSubmitting = false;
   const balance = '100000';
+  //#endregion mock data
 
   const validationSchema = useAddLiqFormValidation(Array(item?.tokensInfo.length ?? 0).fill(new BigNumber(balance)));
 

@@ -1,17 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 
-import { StableswapFormTabs } from '@modules/stableswap/types';
+import { AppRootRoutes } from '@app.router';
+import { i18n } from '@translation';
 
 import { useStableswapItemStore } from '../../../../../hooks';
+import { StableswapRoutes } from '../../../../../stableswap.page';
+import { StableswapFormTabs } from '../../../../../types';
 
 export const TabsContent = [
   {
     id: StableswapFormTabs.add,
-    label: 'Add'
+    label: i18n.t('common|Add')
   },
   {
     id: StableswapFormTabs.remove,
-    label: 'Remove'
+    label: i18n.t('common|Remove')
   }
 ];
 
@@ -26,7 +29,7 @@ export const useStableswapFormTabsCardViewModel = () => {
 
   const changeTabHandle = (tab: StableswapFormTabs) => {
     stableswapItemStore.setTab(tab);
-    const url = `/stableswap/liquidity/${tab}/${stableswapItem?.id}`;
+    const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${tab}/${stableswapItem?.id}`;
 
     navigate(url);
   };

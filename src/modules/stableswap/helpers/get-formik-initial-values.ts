@@ -1,14 +1,11 @@
 import { getInputSlugByIndex } from './get-input-slug-by-index';
 
+const FORMIK_INITIAL_VALUE = '';
+
 export const getFormikInitialValues = (length: number) => {
-  const inputsIds: Record<string, string> = {};
+  const inputsIds: Array<Array<string>> = Array(length)
+    .fill(FORMIK_INITIAL_VALUE)
+    .map((item, index) => [getInputSlugByIndex(index), item]);
 
-  let key = '';
-  for (let index = 0; index < length; index++) {
-    key = getInputSlugByIndex(index);
-
-    inputsIds[key] = '';
-  }
-
-  return inputsIds;
+  return Object.fromEntries(inputsIds);
 };

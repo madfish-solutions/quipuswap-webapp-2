@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { object } from 'yup';
 
+import { operationAmountSchema } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { operationAmountSchema } from '../../../helpers';
 import { UnstakeFormFields } from './unstake-form.interface';
 
 export const useUnstakeFormValidation = (stakedBalance: Nullable<BigNumber>) =>

@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { AppRootRoutes } from '@app.router';
+import { StableswapRoutes } from '@modules/stableswap';
 import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
 import { useTranslation } from '@translation';
@@ -12,7 +14,7 @@ export const FormHeader: FC = () => {
   return (
     <div className={styles.root}>
       <Button
-        href="/stableswap/liquidity"
+        href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`}
         theme="quaternary"
         icon
         className={styles.arrowButton}

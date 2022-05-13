@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
+import { operationAmountSchema } from '@shared/helpers';
 import { ActiveStatus, Nullable, Undefined } from '@shared/types';
 
-import { operationAmountSchema } from '../../../helpers';
 import { StakeFormFields } from './stake-form.interface';
 import { useFarmingStatusValidation } from './use-farming-status.validation';
 
