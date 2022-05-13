@@ -1,14 +1,13 @@
 import BigNumber from 'bignumber.js';
 
-const FIRST_RESERVES = 0;
-
 export const calculateTokensInputs = (
   inputAmount: BigNumber,
   inputAmountIndex: number,
   totalLpSupply: BigNumber,
   reserves: BigNumber[]
 ) => {
-  const shares_in = inputAmount.multipliedBy(totalLpSupply).dividedBy(reserves[FIRST_RESERVES]);
+  const inputAmountReserves = reserves[inputAmountIndex];
+  const shares_in = inputAmount.multipliedBy(totalLpSupply).dividedBy(inputAmountReserves);
 
   const outAmounts = [];
 
