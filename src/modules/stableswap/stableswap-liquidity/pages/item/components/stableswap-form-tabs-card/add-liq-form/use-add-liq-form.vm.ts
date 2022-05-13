@@ -8,6 +8,9 @@ import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } fr
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
+const DEFAULT_LENGTH = 0;
+const DEFAULT_FORKIK_VALUE = '';
+
 interface AddLiqFormValues {
   [key: string]: string;
 }
@@ -27,7 +30,9 @@ export const useAddLiqFormViewModel = () => {
   const balance = '100000';
   //#endregion mock data
 
-  const validationSchema = useAddLiqFormValidation(Array(item?.tokensInfo.length ?? 0).fill(new BigNumber(balance)));
+  const validationSchema = useAddLiqFormValidation(
+    Array(item?.tokensInfo.length ?? DEFAULT_LENGTH).fill(new BigNumber(balance))
+  );
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
@@ -38,7 +43,7 @@ export const useAddLiqFormViewModel = () => {
 
   const formik = useFormik({
     validationSchema,
-    initialValues: getFormikInitialValues(item?.tokensInfo.length ?? 0),
+    initialValues: getFormikInitialValues(item?.tokensInfo.length ?? DEFAULT_LENGTH),
     onSubmit: handleSubmit
   });
 
@@ -63,7 +68,7 @@ export const useAddLiqFormViewModel = () => {
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
       if (isEmptyString(inputAmount)) {
-        tokensInfo.forEach((_, i) => stableswapItemFormStore.setInputAmount('', i));
+        tokensInfo.forEach((_, i) => stableswapItemFormStore.setInputAmount(DEFAULT_FORKIK_VALUE, i));
       } else {
         const valueBN = new BigNumber(inputAmount);
 
