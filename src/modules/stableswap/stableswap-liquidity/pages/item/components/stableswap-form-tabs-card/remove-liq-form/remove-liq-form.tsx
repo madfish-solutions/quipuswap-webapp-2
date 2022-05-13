@@ -1,85 +1,47 @@
 import { FC } from 'react';
 
-import cx from 'classnames';
-
-import { DEFAULT_TOKEN } from '@config/tokens';
-import { TokenInput, Switcher, Tooltip, ConnectWalletOrDoSomething, Button } from '@shared/components';
-import { noopMap } from '@shared/mapping';
+import { TokenInput, ConnectWalletOrDoSomething, Button, Iterator } from '@shared/components';
 import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import styles from '../stableswap-form-tabs-card.module.scss';
+import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 
 export const RemoveLiqForm: FC = () => {
   const { t } = useTranslation();
 
-  const inputAmount = '100000';
+  const { data, lpValue, lpError, lpToken, labelOutput, handleLpInputChange, handleSubmit } =
+    useRemoveLiqFormViewModel();
+
   const userTokenBalance = '100000';
   const stakedTokenDecimals = 8;
-  const outputLabel = t('common|Output');
-  const inputLabel = t('common|Input');
   const disabled = false;
   const isSubmitting = false;
 
-  const handleInputAmountChange = noopMap;
-
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <TokenInput
         id="stableswap-input"
-        label={inputLabel}
-        value={inputAmount}
+        label={labelOutput}
+        value={lpValue}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
+        tokenA={lpToken}
+        error={lpError}
+        onInputChange={handleLpInputChange}
       />
+
       <ArrowDown className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
+
+      <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
+
+      {/* <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
         <Switcher value={true} onClick={handleInputAmountChange} />
         <span className={styles.switcherTranslation}>{t('stableswap|Remove all coins in a balanced proportion')}</span>
-        <Tooltip content={outputLabel} />
-      </div>
+        <Tooltip content={labelOutput} />
+      </div> */}
+
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
@@ -93,6 +55,6 @@ export const RemoveLiqForm: FC = () => {
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
-    </>
+    </form>
   );
 };
