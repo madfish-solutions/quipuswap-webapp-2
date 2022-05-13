@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
+import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
@@ -16,7 +17,7 @@ import {
 } from '@shared/components';
 
 import { StableswapRoutes, Tabs } from '../../../../../stableswap.page';
-import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
+import { preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
 

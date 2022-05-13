@@ -15,6 +15,7 @@ interface DashboardCardProps {
   label: ReactNode;
   currency?: string;
   tooltip?: string;
+  hideTooltip?: boolean;
   className?: string;
   loading?: boolean;
 }
@@ -30,6 +31,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   label,
   currency,
   tooltip,
+  hideTooltip,
   className,
   loading = false,
   ...props
@@ -39,7 +41,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])} {...props}>
       <h4 className={styles.header}>
-        {label} <Tooltip content={tooltip} />
+        {label} {!hideTooltip && <Tooltip content={tooltip} />}
       </h4>
       <StateCurrencyAmount
         className={styles.currencyAmount}

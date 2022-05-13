@@ -7,7 +7,7 @@ import { StateWrapper } from '@shared/components';
 import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
-import { checkForAddOrRemoveInUrlParts, checkTabForAddOrRemove, getRouterParts } from './helpers';
+import { checkForAddOrRemoveInUrlParts, getRouterParts } from './helpers';
 import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
@@ -18,8 +18,7 @@ export enum Tabs {
 
 export enum StableswapRoutes {
   root = '/',
-  liquidity = '/liquidity/',
-  liquidityTabPoolId = '/liquidity/:tab/:poolId'
+  liquidity = '/liquidity/'
 }
 
 export const StableswapPage: FC = () => {
@@ -31,12 +30,9 @@ export const StableswapPage: FC = () => {
   const lastTab = getLastElement(routerParts);
 
   const isAddOrRemoveInUrl = checkForAddOrRemoveInUrlParts(routerParts);
-  const isTabAddOrRemove = checkTabForAddOrRemove(pathname);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${lastTab}`} />;
-  } else if (isTabAddOrRemove) {
-    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />;
   }
 
   return (
@@ -49,7 +45,8 @@ export const StableswapPage: FC = () => {
 
         <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
 
-        <Route path={StableswapRoutes.liquidityTabPoolId} element={<StableswapLiquidityItemPage />} />
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityItemPage />} />
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>
