@@ -1,0 +1,9 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.vertical {
+  display: flex;
+  row-gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
+}

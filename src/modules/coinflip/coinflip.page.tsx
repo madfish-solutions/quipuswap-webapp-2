@@ -12,7 +12,11 @@ export const CoinflipPage: FC = () => {
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
+
       <PageTitle>Game</PageTitle>
+
+      <CoinflipTokenSelector />
+
       <DashboardStatsInfo
         header="Game Info"
         cards={[
@@ -44,8 +48,8 @@ export const CoinflipPage: FC = () => {
         ]}
         countOfRightElements={1}
       />
-      <CoinflipTokenSelector />
-      <div style={{ width: '50%' }}>
+
+      <div style={{ width: '50%', marginTop: 24 }}>
         <CoinflipGame />
       </div>
     </StateWrapper>

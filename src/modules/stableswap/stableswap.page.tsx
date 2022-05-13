@@ -6,13 +6,13 @@ import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
 
 import { PageNotFoundPage } from '../errors';
-import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity';
+import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
 enum StableswapRoutes {
   root = '/',
   liquidity = '/liquidity/',
-  liquidityItem = '/liquidity/:id'
+  liquidityItem = '/liquidity/:poolId'
 }
 
 export const StableswapPage: FC = () => {

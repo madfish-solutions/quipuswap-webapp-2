@@ -2,21 +2,19 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Button, Card } from '@shared/components';
+import { Card } from '@shared/components';
+import { QuipuToken } from '@shared/svg';
+import { XtzToken } from '@shared/svg/xtz-token';
 import { useTranslation } from '@translation';
 
 import { TokenToPlay } from '../../stores';
+import { ButtonsSelector } from '../buttons-selector';
 import styles from './coinflip-token-selector.module.scss';
 import { useTokenSelectorViewModel } from './coinflip-token-selector.vm';
 
 export const CoinflipTokenSelector: FC = observer(() => {
   const { t } = useTranslation(['coinflip']);
-  const { tokenToPlay, token, handleSelectToken } = useTokenSelectorViewModel();
-  // eslint-disable-next-line no-console
-  console.log('q', tokenToPlay, token);
-
-  const isTez = tokenToPlay === TokenToPlay.Tezos;
-  const isQuipu = tokenToPlay === TokenToPlay.Quipu;
+  const { tokenToPlay, handleSelectToken } = useTokenSelectorViewModel();
 
   return (
     <Card
@@ -27,12 +25,22 @@ export const CoinflipTokenSelector: FC = observer(() => {
       data-test-id="CoinflipTokenSelector"
     >
       <div className={styles.content}>
-        <Button onClick={() => handleSelectToken(TokenToPlay.Tezos)} theme={isTez ? 'primary' : 'secondary'}>
-          Tezos
-        </Button>
-        <Button onClick={() => handleSelectToken(TokenToPlay.Quipu)} theme={isQuipu ? 'primary' : 'secondary'}>
-          Quipu
-        </Button>
+        <ButtonsSelector
+          buttons={[
+            {
+              id: TokenToPlay.Tezos,
+              label: TokenToPlay.Tezos,
+              Icon: XtzToken
+            },
+            {
+              id: TokenToPlay.Quipu,
+              label: TokenToPlay.Quipu,
+              Icon: QuipuToken
+            }
+          ]}
+          activeId={tokenToPlay}
+          onChange={handleSelectToken}
+        />
       </div>
     </Card>
   );
