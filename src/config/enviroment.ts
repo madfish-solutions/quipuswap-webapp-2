@@ -1,4 +1,6 @@
 // import { defined } from '@shared/helpers';
+import BigNumber from 'bignumber.js';
+
 import { QSNets } from '@shared/types';
 
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY!;
@@ -76,6 +78,7 @@ const COIN_FLIP_CONTRACTS_ADDRESSES: Record<QSNets, string> = {
 };
 
 export const COIN_FLIP_CONTRACT_ADDRESS = COIN_FLIP_CONTRACTS_ADDRESSES[NETWORK_ID];
+export const COIN_FLIP_COEFFICIENT = new BigNumber('1.9');
 //#endregion COIN_FLIP_CONTRACTS
 
 //#region RPC_URLS

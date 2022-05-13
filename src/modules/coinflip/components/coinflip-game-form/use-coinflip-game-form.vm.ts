@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 
+import { bigNumberToString } from '@shared/helpers';
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators/balance-amount-schema';
 
@@ -23,6 +24,7 @@ const getValidation = (balance: Nullable<BigNumber>) =>
 export const useCoinflipGameFormViewModel = (
   tokenToPlay: TokenToPlay,
   tokenBalance: Nullable<BigNumber>,
+  payout: Nullable<BigNumber>,
   handleSubmit: Noop,
   onAmountInputChange: (amountInput: string) => void,
   onCoinSideSelect: (coinSide: CoinSide) => void
@@ -66,8 +68,11 @@ export const useCoinflipGameFormViewModel = (
   const disabled = false;
   const isSubmitting = false;
 
+  const payoutAmount = payout ? bigNumberToString(payout) : '';
+
   return {
     tokenBalance,
+    payoutAmount,
     inputAmountError,
     handleFormSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],

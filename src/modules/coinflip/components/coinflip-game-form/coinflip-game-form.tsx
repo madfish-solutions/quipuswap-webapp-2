@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { Noop, Token } from '@shared/types';
@@ -14,6 +15,7 @@ import { useCoinflipGameFormViewModel } from './use-coinflip-game-form.vm';
 
 interface Props {
   token: Token;
+  payout: Nullable<BigNumber>;
   amountBalance: Nullable<BigNumber>;
   tokenToPlay: TokenToPlay;
   coinSide: Nullable<CoinSide>;
@@ -25,6 +27,7 @@ interface Props {
 export const CoinflipGameForm: FC<Props> = ({
   handleSubmit,
   amountBalance,
+  payout,
   token,
   onAmountInputChange,
   tokenToPlay,
@@ -39,10 +42,18 @@ export const CoinflipGameForm: FC<Props> = ({
     isSubmitting,
     handleFormSubmit,
     inputAmount,
+    payoutAmount,
     coinSideError,
     handleInputAmountChange,
     handleCoinSideSelect
-  } = useCoinflipGameFormViewModel(tokenToPlay, amountBalance, handleSubmit, onAmountInputChange, onCoinSideSelect);
+  } = useCoinflipGameFormViewModel(
+    tokenToPlay,
+    amountBalance,
+    payout,
+    handleSubmit,
+    onAmountInputChange,
+    onCoinSideSelect
+  );
 
   return (
     <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
@@ -61,6 +72,15 @@ export const CoinflipGameForm: FC<Props> = ({
         decimals={token.metadata.decimals}
         tokenA={token}
         onInputChange={handleInputAmountChange}
+      />
+      <TokenInput
+        id="coinflip-form-payout"
+        label={t('common|Payout')}
+        value={payoutAmount}
+        balance={null}
+        decimals={token.metadata.decimals}
+        tokenA={token}
+        onInputChange={noop}
       />
       <div className={commonStyles.buttons}>
         <ConnectWalletOrDoSomething>

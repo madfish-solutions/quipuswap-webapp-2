@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { COIN_FLIP_COEFFICIENT } from '@config/enviroment';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -16,16 +17,6 @@ export enum CoinSide {
   A = 'A',
   B = 'B'
 }
-
-export interface TokenInfo {
-  amount: Nullable<BigNumber>;
-  usd: Nullable<BigNumber>;
-}
-
-const DEFAULT_TOKEN_INFO: TokenInfo = {
-  amount: null,
-  usd: null
-};
 
 export interface CoinflipGame {
   coinSide: Nullable<CoinSide>;
@@ -47,8 +38,7 @@ export class CoinflipStore {
       tokenToPlay: observable,
       game: observable,
 
-      gameAmount: computed,
-      gamePayout: computed,
+      payout: computed,
       token: computed,
 
       setToken: action,
@@ -56,18 +46,8 @@ export class CoinflipStore {
     });
   }
 
-  /*
-  TODO
-   */
-  get gameAmount(): TokenInfo {
-    return DEFAULT_TOKEN_INFO;
-  }
-
-  /*
-  TODO
-   */
-  get gamePayout(): TokenInfo {
-    return DEFAULT_TOKEN_INFO;
+  get payout(): Nullable<BigNumber> {
+    return this.game.input ? this.game.input.times(COIN_FLIP_COEFFICIENT) : null;
   }
 
   get token(): Token {
