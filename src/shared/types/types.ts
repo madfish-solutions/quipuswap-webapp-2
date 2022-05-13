@@ -1,5 +1,6 @@
 import { SVGProps } from 'react';
 
+import { NetworkType } from '@airgap/beacon-sdk';
 import { FoundDex } from '@quipuswap/sdk';
 import { BigNumber } from 'bignumber.js';
 
@@ -12,11 +13,10 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export enum QSNets {
-  mainnet = 'mainnet',
-  hangzhounet = 'hangzhounet',
-  ithacanet = 'ithacanet'
-}
+export type SupportedNetworks = Extract<
+  NetworkType,
+  NetworkType.MAINNET | NetworkType.HANGZHOUNET | NetworkType.ITHACANET
+>;
 
 export enum QSNetworkType {
   MAIN = 'MAIN',
@@ -39,7 +39,7 @@ export enum Standard {
   Fa2 = 'FA2'
 }
 export interface QSNetwork {
-  id: QSNets;
+  id: SupportedNetworks;
   connectType: ConnectType;
   name: string;
   type: QSNetworkType;
@@ -74,7 +74,7 @@ export interface RawToken extends Omit<Token, 'fa2TokenId'> {
 }
 
 export interface TokenWithQSNetworkType extends Token {
-  network?: QSNets;
+  network?: SupportedNetworks;
 }
 
 export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;

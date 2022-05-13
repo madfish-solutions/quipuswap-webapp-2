@@ -10,9 +10,9 @@ import { getContract } from '@shared/dapp';
 import { InvalidTokensListError } from '@shared/errors';
 import {
   Nullable,
-  QSNets,
   QSNetwork,
   Standard,
+  SupportedNetworks,
   Token,
   TokenId,
   TokenPair,
@@ -30,7 +30,7 @@ interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2Tok
   isWhitelisted?: Nullable<boolean>;
 }
 
-export const getSavedTokens = (networkId?: QSNets) => {
+export const getSavedTokens = (networkId?: SupportedNetworks) => {
   const allRawTokens: Array<RawTokenWithQSNetworkType> = JSON.parse(
     window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]'
   );

@@ -1,9 +1,9 @@
-import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@shared/types';
+import { QSNetwork, SupportedNetworks, TokenWithQSNetworkType } from '@shared/types';
 
 import { isExist } from '../type-checks';
 
 export interface TokenWithRequiredNetwork extends TokenWithQSNetworkType {
-  network: QSNets;
+  network: SupportedNetworks;
 }
 
 export const localSearchToken = (

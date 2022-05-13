@@ -1,29 +1,31 @@
-import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
+//TODO: fix this shit(some strange thing with versions)
+import { NetworkType } from '@taquito/beacon-wallet/node_modules/@airgap/beacon-sdk/dist/cjs/types/beacon/NetworkType';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { IS_NETWORK_MAINNET, NETWORK } from '@config/config';
 import { APP_NAME, BASE_URL, NETWORK_ID } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoBeaconWallet, WalletNotConnected } from '@shared/errors';
-import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@shared/types';
+import { ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';
 
-import { toBeaconNetworkType } from '../network';
 import { ReadOnlySigner } from '../readonly-signer';
 import { isDefaultConnectType } from './is-default-connect-type';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
 
+const getPreferredNetwork = () => {
+  if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
+    return NetworkType.MAINNET;
+  }
+
+  return NETWORK_ID as NetworkType | undefined;
+};
+
 export const beaconWallet = new BeaconWallet({
   name: APP_NAME,
   iconUrl: `${BASE_URL}/favicon.ico`,
-  preferredNetwork: (() => {
-    if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
-      return toBeaconNetworkType(QSNets.mainnet);
-    }
-
-    return toBeaconNetworkType(NETWORK_ID);
-  })()
+  preferredNetwork: getPreferredNetwork()
 });
 
 export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: QSNetwork) => {
@@ -38,7 +40,7 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
     }
     const network =
       isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET
-        ? { type: toBeaconNetworkType(qsNetwork.id) }
+        ? ({ type: qsNetwork.id } as { type: NetworkType })
         : {
             type: NetworkType.CUSTOM,
             name: qsNetwork.name,
