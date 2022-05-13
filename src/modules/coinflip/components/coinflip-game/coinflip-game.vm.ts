@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { useTokenBalance } from '@shared/hooks';
 
 import { useCoinflipStore } from '../../hooks';
@@ -11,7 +13,9 @@ export const useCoinflipGameViewModel = () => {
 
   const handleSubmit = () => {
     // eslint-disable-next-line no-console
-    console.log('submit');
+    console.log('submit', { ...game });
+    // TODO
+    // flipApi();
   };
 
   const handleSelectCoinSide = (coinSide: CoinSide) => {
@@ -19,7 +23,8 @@ export const useCoinflipGameViewModel = () => {
   };
 
   const handleAmountInputChange = (amountInput: string) => {
-    coinflipStore.setInput(amountInput);
+    const input = new BigNumber(amountInput);
+    coinflipStore.setInput(!input.isNaN() ? input : null);
   };
 
   return {

@@ -29,12 +29,12 @@ const DEFAULT_TOKEN_INFO: TokenInfo = {
 
 export interface CoinflipGame {
   coinSide: Nullable<CoinSide>;
-  input: string;
+  input: Nullable<BigNumber>;
 }
 
 const DEFAULT_COINFLIP_GAME: CoinflipGame = {
   coinSide: null,
-  input: ''
+  input: null
 };
 
 export class CoinflipStore {
@@ -87,7 +87,7 @@ export class CoinflipStore {
     this.game.coinSide = coinSide;
   }
 
-  setInput(input: string) {
+  setInput(input: Nullable<BigNumber>) {
     this.game.input = input;
   }
 }
