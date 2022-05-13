@@ -21,7 +21,7 @@ export const useGetFarmingList = () => {
       try {
         await listStore.load();
       } catch (error) {
-        showErrorToast(error as Error);
+        showErrorToast('Error: Server is unavailable');
       }
     }
     // We need it only for dependency for loading list based on it.

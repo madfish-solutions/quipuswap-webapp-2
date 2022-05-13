@@ -18,7 +18,7 @@ export const useGetFarmingStats = () => {
         //TODO
         await farmingListStore?.statsStore.load();
       } catch (error) {
-        showErrorToast(error as Error);
+        showErrorToast('Error: Server is unavailable');
       }
     }
   }, [isReady, showErrorToast, farmingListStore?.statsStore]);
