@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
@@ -5,7 +7,7 @@ import { object, string } from 'yup';
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators/balance-amount-schema';
 
-import { CoinSide } from '../../stores';
+import { CoinSide, TokenToPlay } from '../../stores';
 
 export enum FormFields {
   coinSide = 'coinSide',
@@ -19,6 +21,7 @@ const getValidation = (balance: Nullable<BigNumber>) =>
   });
 
 export const useCoinflipGameFormViewModel = (
+  tokenToPlay: TokenToPlay,
   tokenBalance: Nullable<BigNumber>,
   handleSubmit: Noop,
   onAmountInputChange: (amountInput: string) => void,
@@ -32,6 +35,12 @@ export const useCoinflipGameFormViewModel = (
     validationSchema: getValidation(tokenBalance),
     onSubmit: handleSubmit
   });
+
+  useEffect(() => {
+    formik.resetForm();
+    // Skip formik dependency
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenToPlay]);
 
   const handleInputAmountChange = (value: string) => {
     onAmountInputChange(value);

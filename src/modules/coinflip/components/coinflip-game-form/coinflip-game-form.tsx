@@ -42,7 +42,7 @@ export const CoinflipGameForm: FC<Props> = ({
     coinSideError,
     handleInputAmountChange,
     handleCoinSideSelect
-  } = useCoinflipGameFormViewModel(amountBalance, handleSubmit, onAmountInputChange, onCoinSideSelect);
+  } = useCoinflipGameFormViewModel(tokenToPlay, amountBalance, handleSubmit, onAmountInputChange, onCoinSideSelect);
 
   return (
     <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
