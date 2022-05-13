@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { getSymbolsString, isExist, isUndefined } from '@shared/helpers';
-import { useTranslation } from '@translation';
+import { isUndefined } from '@shared/helpers';
 
-import { useGetStableswapItem, useStableswapItemFormStore, useStableswapItemStore } from '../../../hooks';
+import { getStableswapTitle } from '../../../helpers';
+import { useStableswapItemFormStore, useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
 
 const ZERO_LENGTH = 0;
 
@@ -15,11 +15,12 @@ export const useStableswapLiquidityItemPageViewModel = () => {
   const params = useParams();
   const dAppReady = useReady();
   const accountPkh = useAccountPkh();
-  const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const { getStableswapItem } = useGetStableswapItem();
-  const { t } = useTranslation();
+  const stableswapItemStore = useStableswapItemStore();
+  const { itemStore } = stableswapItemStore;
+  const { data: stableswapItem } = itemStore;
 
   const poolId = params.poolId;
 
@@ -40,16 +41,7 @@ export const useStableswapLiquidityItemPageViewModel = () => {
     void loadItem();
   }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore]);
 
-  const { itemStore } = stableswapItemStore;
-  const { data: stableswapItem } = itemStore;
+  const title = getStableswapTitle(stableswapItem);
 
-  const getTitle = () => {
-    if (isExist(stableswapItem)) {
-      const tokenSymbols = stableswapItem.tokensInfo.map(({ token }) => getSymbolsString(token));
-
-      return `${t('liquidity|Liquidity')} ${tokenSymbols.join('/')}`;
-    }
-  };
-
-  return { getTitle };
+  return { title };
 };

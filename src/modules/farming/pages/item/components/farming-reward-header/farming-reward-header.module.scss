@@ -1,4 +1,11 @@
+.root {
+  display: flex;
+  align-items: center;
+}
+
 .backArrow {
+  display: flex;
+  align-items: center;
   transform: rotate(90deg);
   margin-right: 0;
 }

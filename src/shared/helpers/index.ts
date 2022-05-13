@@ -45,3 +45,4 @@ export * from './is-prod';
 export * from './is-zero-token-id';
 export * from './includes-case-insensitive';
 export * from './operation-amount-schema';
+export * from './is-equal';

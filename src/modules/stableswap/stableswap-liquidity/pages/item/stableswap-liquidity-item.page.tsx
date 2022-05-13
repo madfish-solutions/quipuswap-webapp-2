@@ -8,16 +8,17 @@ import { Details, StableswapFormTabsCard } from './components';
 import { useStableswapLiquidityItemPageViewModel } from './use-stableswap-liquidity-item-page.vm';
 
 export const StableswapLiquidityItemPage: FC = observer(() => {
-  const { getTitle } = useStableswapLiquidityItemPageViewModel();
+  const { title } = useStableswapLiquidityItemPageViewModel();
 
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{getTitle()}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <StickyBlock>
         <StableswapFormTabsCard />
         <Details />
       </StickyBlock>
+      <Details />
     </>
   );
 });
