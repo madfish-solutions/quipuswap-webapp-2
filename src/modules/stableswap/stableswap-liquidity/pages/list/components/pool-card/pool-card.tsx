@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 
 import { DOLLAR, PERCENT } from '@config/constants';
+import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
@@ -14,7 +15,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
-import { extractTokens, preparePoolAmounts } from './pool-card.helpers';
+import { preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
 
