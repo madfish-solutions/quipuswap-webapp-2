@@ -18,7 +18,6 @@ export const StableswapLiquidityItemPage: FC = observer(() => {
         <StableswapFormTabsCard />
         <Details />
       </StickyBlock>
-      <Details />
     </>
   );
 });
