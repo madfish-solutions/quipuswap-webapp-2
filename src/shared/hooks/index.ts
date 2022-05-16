@@ -9,3 +9,6 @@ export * from './use-on-block';
 export const useUpdateOnBlockSWR = useUpdateOnBlockSWR_;
 export * from './use-dex-graph';
 export * from './use-loading.decorator';
+export * from './use-svg-helper';
+export * from './use-tokens-balances-store';
+export * from './use-token-balance';

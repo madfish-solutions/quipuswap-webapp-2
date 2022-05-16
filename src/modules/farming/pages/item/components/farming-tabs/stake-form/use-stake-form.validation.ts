@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
 import { ActiveStatus, Nullable, Undefined } from '@shared/types';
+import { balanceAmountSchema } from '@shared/validators/balance-amount-schema';
 
-import { operationAmountSchema } from '../../../helpers';
 import { StakeFormFields } from './stake-form.interface';
 import { useFarmingStatusValidation } from './use-farming-status.validation';
 
@@ -17,7 +17,7 @@ export const useStakeFormValidation = (
   const farmStatusSchema = useFarmingStatusValidation(farmStatus);
 
   return useMemo(() => {
-    const inputAmountSchema = operationAmountSchema(userBalance);
+    const inputAmountSchema = balanceAmountSchema(userBalance);
 
     const bakerSchema = canDelegate ? yup.string().required('Baker is required') : yup.string();
 
