@@ -1,4 +1,4 @@
-import { CoinSideAQuipuIcon, CoinSideATezosIcon } from '@shared/svg';
+import { CoinSideAQuipuIcon, CoinSideATezosIcon, CoinSideBQuipuIcon, CoinSideBTezosIcon } from '@shared/svg';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
@@ -16,7 +16,9 @@ export const useCoinflipGameSelectViewModel = ({
   const handleSelectSideB = () => handleSelectCoinSide(CoinSide.B);
 
   const isTez = tokenToPlay === TokenToPlay.Tezos;
-  const CoinSideA = isTez ? CoinSideATezosIcon : CoinSideAQuipuIcon;
+  const CoinSideAIcon = isTez ? CoinSideATezosIcon : CoinSideAQuipuIcon;
+
+  const CoinSideBIcon = isTez ? CoinSideBTezosIcon : CoinSideBQuipuIcon;
 
   return {
     error,
@@ -24,6 +26,7 @@ export const useCoinflipGameSelectViewModel = ({
     iSelectedSideB,
     handleSelectSideA,
     handleSelectSideB,
-    CoinSideA
+    CoinSideAIcon,
+    CoinSideBIcon
   };
 };

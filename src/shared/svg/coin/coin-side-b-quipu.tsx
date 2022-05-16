@@ -4,7 +4,7 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideBIcon: FC<IconProps> = ({ className, size, ...props }) => {
+export const CoinSideBQuipuIcon: FC<IconProps> = ({ size, ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideBIcon');
 
   return (
@@ -21,7 +21,6 @@ export const CoinSideBIcon: FC<IconProps> = ({ className, size, ...props }) => {
         enableBackground: 'new 0 0 700 700'
       }}
       xmlSpace="preserve"
-      className={className}
       {...props}
     >
       <style>
