@@ -114,5 +114,7 @@
   "whiteListed": "Whitelisted",
   "totalValue": "Total Value",
   "value": "Value",
-  "Explore": "Explore"
+  "Explore": "Explore",
+  "Payout": "Payout",
+  "Pool Details": "Pool Details"
 }

@@ -7,6 +7,7 @@ import { BigNumber } from 'bignumber.js';
 export interface IconProps extends SVGProps<SVGSVGElement> {
   id?: string;
   className?: string;
+  size?: number;
 }
 
 export type Undefined<T> = T | undefined;

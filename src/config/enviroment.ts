@@ -1,5 +1,5 @@
-// import { defined } from '@shared/helpers';
 import { NetworkType } from '@airgap/beacon-sdk';
+import BigNumber from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
@@ -69,6 +69,17 @@ export const STABLESWAP_API_URLS: Record<SupportedNetworks, string> = {
 
 export const STABLESWAP_API_URL = STABLESWAP_API_URLS[NETWORK_ID];
 //#endregion STABLESWAP_API
+
+//#region COIN_FLIP_CONTRACTS
+const COIN_FLIP_CONTRACTS_ADDRESSES: Record<SupportedNetworks, string> = {
+  [NetworkType.MAINNET]: process.env.REACT_APP_MAINNET_COIN_FLIP_CONTRACT!,
+  [NetworkType.HANGZHOUNET]: process.env.REACT_APP_HANGZHOUNET_COIN_FLIP_CONTRACT!,
+  [NetworkType.ITHACANET]: process.env.REACT_APP_ITHACANET_COIN_FLIP_CONTRACT!
+};
+
+export const COIN_FLIP_CONTRACT_ADDRESS = COIN_FLIP_CONTRACTS_ADDRESSES[NETWORK_ID];
+export const COIN_FLIP_COEFFICIENT = new BigNumber('1.9');
+//#endregion COIN_FLIP_CONTRACTS
 
 //#region RPC_URLS
 export const RPC_URLS: Record<SupportedNetworks, string> = {
