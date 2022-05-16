@@ -72,6 +72,7 @@ export const CoinflipGameForm: FC<Props> = ({
         decimals={token.metadata.decimals}
         tokenA={token}
         onInputChange={handleInputAmountChange}
+        className={styles.input}
       />
       <TokenInput
         id="coinflip-form-payout"
@@ -81,6 +82,7 @@ export const CoinflipGameForm: FC<Props> = ({
         decimals={token.metadata.decimals}
         tokenA={token}
         onInputChange={noop}
+        className={styles.input}
       />
       <div className={commonStyles.buttons}>
         <ConnectWalletOrDoSomething>
