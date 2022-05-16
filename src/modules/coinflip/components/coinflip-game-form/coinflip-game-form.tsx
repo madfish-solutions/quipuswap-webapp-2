@@ -34,7 +34,7 @@ export const CoinflipGameForm: FC<Props> = ({
   coinSide,
   onCoinSideSelect
 }) => {
-  const { t } = useTranslation(['common', 'coinflip']);
+  const { t } = useTranslation();
   const {
     inputAmountError,
     balance,
