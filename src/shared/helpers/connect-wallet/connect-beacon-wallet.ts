@@ -1,6 +1,5 @@
+import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
-//TODO: fix this shit(some strange thing with versions)
-import { NetworkType } from '@taquito/beacon-wallet/node_modules/@airgap/beacon-sdk/dist/cjs/types/beacon/NetworkType';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { IS_NETWORK_MAINNET, NETWORK } from '@config/config';
@@ -19,7 +18,7 @@ const getPreferredNetwork = () => {
     return NetworkType.MAINNET;
   }
 
-  return NETWORK_ID as NetworkType | undefined;
+  return NETWORK_ID;
 };
 
 export const beaconWallet = new BeaconWallet({
