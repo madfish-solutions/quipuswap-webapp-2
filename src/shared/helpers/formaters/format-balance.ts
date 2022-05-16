@@ -14,7 +14,7 @@ const ZERO_STRING_LENGTH = 2;
 const SIGN_PASS = 0;
 const POINT = '.';
 
-const getLastElement = (value: string) => {
+export const getLastElement = <T>(value: string | Array<T>) => {
   return value[value.length - ONE_ELEMENT];
 };
 
