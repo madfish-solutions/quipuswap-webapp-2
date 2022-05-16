@@ -7,9 +7,11 @@
     "plugin:sonarjs/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
-  "plugins": ["@typescript-eslint", "react-hooks", "import", "prettier", "sonarjs"],
+  "plugins": ["@typescript-eslint", "react-hooks", "import", "prettier", "sonarjs", "sort-keys-fix", "sort-imports-es6-autofix"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
@@ -73,6 +75,34 @@
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/require-array-sort-compare": "error",
     "@typescript-eslint/ban-ts-comment": "warn",
-    "no-restricted-imports": "error"
+    "no-restricted-imports": "error",
+    "sort-keys": "warn",
+    "sort-vars": "warn",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "sort-keys-fix/sort-keys-fix": "error",
+    "react/react-in-jsx-scope": "off",
+    "sort-imports": ["warn", {
+      "ignoreCase": true,
+      "ignoreDeclarationSort": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+      "allowSeparatedGroups": true
+    }],
+    "sort-imports-es6-autofix/sort-imports-es6": ["warn", {
+      "ignoreCase": true,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+    }],
+    "react/jsx-sort-props": [2, {
+      "callbacksLast": true,
+      "shorthandFirst": true,
+      "shorthandLast": false,
+      "multiline": "ignore",
+      "ignoreCase": true,
+      "noSortAlphabetically": false,
+      "reservedFirst": false,
+      "locale": "auto"
+    }]
   }
 }
