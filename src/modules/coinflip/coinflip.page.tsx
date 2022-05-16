@@ -49,7 +49,7 @@ export const CoinflipPage: FC = () => {
         countOfRightElements={1}
       />
 
-      <div style={{ width: '50%', marginTop: 24 }}>
+      <div className={styles.game}>
         <CoinflipGame />
       </div>
     </StateWrapper>
