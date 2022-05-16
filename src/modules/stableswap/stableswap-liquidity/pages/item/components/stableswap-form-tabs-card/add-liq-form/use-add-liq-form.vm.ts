@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, isEmptyString } from '@shared/helpers';
+import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
@@ -9,7 +9,6 @@ import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
-const DEFAULT_FORKIK_VALUE = '';
 
 interface AddLiqFormValues {
   [key: string]: string;
@@ -67,19 +66,12 @@ export const useAddLiqFormViewModel = () => {
     const handleInputChange = (inputAmount: string) => {
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
-      if (isEmptyString(inputAmount)) {
-        tokensInfo.forEach((_, i) => stableswapItemFormStore.setInputAmount(DEFAULT_FORKIK_VALUE, i));
-      } else {
-        const valueBN = new BigNumber(inputAmount);
+      tokensInfo.forEach((_, i) => {
+        const amount = calculateTokensInputs(inputAmount, index, totalLpSupply, reservesAll, i);
+        stableswapItemFormStore.setInputAmount(amount, i);
+        formikValues[getInputSlugByIndex(i)] = amount ? amount.toFixed() : '';
+      });
 
-        const outAmounts = calculateTokensInputs(valueBN, index, totalLpSupply, reservesAll);
-
-        outAmounts.forEach((amount, i) => {
-          stableswapItemFormStore.setInputAmount(amount, i);
-
-          formikValues[getInputSlugByIndex(i)] = amount;
-        });
-      }
       formik.setValues(formikValues);
     };
 
