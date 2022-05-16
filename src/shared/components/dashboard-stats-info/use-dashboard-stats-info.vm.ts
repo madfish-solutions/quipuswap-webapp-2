@@ -14,7 +14,11 @@ export const useDashboardStatsInfoViewModel = () => {
   };
 
   const computedClassName = (rightCardValue: boolean, flexEndValue: boolean) => {
-    return cx({ [styles.rightCard]: rightCardValue, [styles.flexEndRightElement]: flexEndValue });
+    return cx({
+      [styles.leftCard]: rightCardValue && !flexEndValue,
+      [styles.rightCard]: rightCardValue && flexEndValue,
+      [styles.flexEndRightElement]: flexEndValue
+    });
   };
 
   return { isRightElement, isFlexEndRightElement, computedClassName };
