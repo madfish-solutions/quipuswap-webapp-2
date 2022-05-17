@@ -42,6 +42,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
   const volume24h = isExist(volume24) && isExist(xtzUsdQuote) ? calculateRateAmount(volume24, xtzUsdQuote) : null;
   const transactions24h = transactionsCount24h?.toString() ?? null;
   const totalSupplyAmount = totalSupply ? totalSupply.toString() : null;
+  const isTotalSupplyExist = !isExist(totalSupply);
 
   return (
     <>
@@ -80,11 +81,11 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
               <DashboardCard
                 className={cx(styles.card, modeClass[colorThemeMode])}
                 size="extraLarge"
-                volume={totalSupply ? totalSupply.toString() : null}
+                volume={totalSupplyAmount}
                 tooltip={t('home|The current number of available QUIPU tokens.')}
                 label={t('home|Total supply')}
                 currency="QUIPU"
-                loading={totalSupply === undefined}
+                loading={isTotalSupplyExist}
                 data-test-id="totalSupply"
               />
             ]}
@@ -98,7 +99,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
           tooltip={t('home|The current number of available QUIPU tokens.')}
           label={t('home|Total supply')}
           currency="QUIPU"
-          loading={totalSupply === undefined}
+          loading={isTotalSupplyExist}
           data-test-id="totalSupply"
         />
       )}
