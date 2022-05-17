@@ -7,7 +7,6 @@ import { isEmptyArray, isLastElementIndex, toArray } from './arrays';
 import { shortize } from './shortize';
 import { isExist } from './type-checks';
 
-// eslint-disable-next-line  @typescript-eslint/no-type-alias
 type isAddress = boolean;
 type RawOrMappedToken = RawToken | Token;
 
