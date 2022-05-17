@@ -1,38 +1,24 @@
 import { FC } from 'react';
 
 import { Button } from '@shared/components';
-import { CoinSelectedIcon, CoinSideAQuipuIcon, CoinSideBIcon } from '@shared/svg';
-import { CoinSideATezosIcon } from '@shared/svg/coin/coin-side-a-tezos';
-import { Optional } from '@shared/types';
+import { CoinSelectedIcon } from '@shared/svg';
 
-import { CoinSide, TokenToPlay } from '../../stores';
 import styles from './coinflip-game-select.module.scss';
+import { CoinflipGameSelectProps } from './coinflip-game-select.props';
+import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
 
 const COIN_SIZE = 88;
 
-interface Props {
-  tokenToPlay: TokenToPlay;
-  coinSide: Nullable<CoinSide>;
-  error: Optional<string>;
-  handleSelectCoinSide: (coinSide: CoinSide) => void;
-}
-
-export const CoinflipGameSelect: FC<Props> = ({ tokenToPlay, coinSide, error, handleSelectCoinSide }) => {
-  const iSelectedSideA = coinSide === CoinSide.A;
-  const iSelectedSideB = coinSide === CoinSide.B;
-
-  const handleSelectSideA = () => handleSelectCoinSide(CoinSide.A);
-  const handleSelectSideB = () => handleSelectCoinSide(CoinSide.B);
-
-  const isTez = tokenToPlay === TokenToPlay.Tezos;
-  const CoinSideA = isTez ? CoinSideATezosIcon : CoinSideAQuipuIcon;
+export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
+  const { error, iSelectedSideA, iSelectedSideB, handleSelectSideA, handleSelectSideB, CoinSideAIcon, CoinSideBIcon } =
+    useCoinflipGameSelectViewModel(props);
 
   return (
     <div className={styles.root}>
       <div className={styles.buttons}>
         <Button onClick={handleSelectSideA} theme="clean" className={styles.button}>
           {iSelectedSideA && <CoinSelectedIcon size={COIN_SIZE} className={styles.selected} />}
-          <CoinSideA size={COIN_SIZE} className={styles.icon} />
+          <CoinSideAIcon size={COIN_SIZE} className={styles.icon} />
         </Button>
 
         <Button onClick={handleSelectSideB} theme="clean" className={styles.button}>
