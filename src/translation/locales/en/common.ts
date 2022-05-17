@@ -123,6 +123,7 @@ export const common = {
   select: 'Select',
   whiteListed: 'Whitelisted',
   totalValue: 'Total Value',
+  Payout: 'Payout',
   value: 'Value',
   Explore: 'Explore',
   'Pool Details': 'Pool Details'

@@ -1,4 +1,6 @@
 // import { defined } from '@shared/helpers';
+import BigNumber from 'bignumber.js';
+
 import { QSNets } from '@shared/types';
 
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY!;
@@ -67,6 +69,17 @@ export const STABLESWAP_API_URLS: Record<QSNets, string> = {
 
 export const STABLESWAP_API_URL = STABLESWAP_API_URLS[NETWORK_ID];
 //#endregion STABLESWAP_API
+
+//#region COIN_FLIP_CONTRACTS
+const COIN_FLIP_CONTRACTS_ADDRESSES: Record<QSNets, string> = {
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_COIN_FLIP_CONTRACT!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_COIN_FLIP_CONTRACT!,
+  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_COIN_FLIP_CONTRACT!
+};
+
+export const COIN_FLIP_CONTRACT_ADDRESS = COIN_FLIP_CONTRACTS_ADDRESSES[NETWORK_ID];
+export const COIN_FLIP_COEFFICIENT = new BigNumber('1.9');
+//#endregion COIN_FLIP_CONTRACTS
 
 //#region RPC_URLS
 export const RPC_URLS: Record<QSNets, string> = {
