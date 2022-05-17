@@ -11,7 +11,6 @@ export type NumberInputProps = {
   theme?: keyof typeof themeClass;
   onIncrementClick?: () => void;
   onDecrementClick?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-type-alias
 } & InputProps;
 
 const themeClass: { small: string; medium: string } = {

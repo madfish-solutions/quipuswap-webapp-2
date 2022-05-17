@@ -52,9 +52,7 @@ export interface StakeParams {
   is_v1_lp: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type StakedToken = ContractToken;
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type RewardToken = ContractToken;
 
 export type ContractToken = FA12Token | FA2Token;

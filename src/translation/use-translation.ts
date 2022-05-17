@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
 import { isExist } from '@shared/helpers';
 
 import { en as enLocal } from './locales';

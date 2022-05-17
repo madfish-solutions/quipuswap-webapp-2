@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
 type StringKey<Type> = string & keyof Type;
 
 type TrimLeft<T extends string> = T extends ` ${infer Rest}` ? TrimLeft<Rest> : T;
