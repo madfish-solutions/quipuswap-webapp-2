@@ -1,13 +1,15 @@
+import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { RootStore } from '@shared/store';
-import { Undefined } from '@shared/types';
 
 export class StableswapItemFormStore {
-  inputAmounts: Array<string> = [];
+  lpInputAmount = '';
+  inputAmounts: Array<Nullable<BigNumber>> = [];
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
+      lpInputAmount: observable,
       inputAmounts: observable,
 
       initInputAmounts: action,
@@ -16,14 +18,13 @@ export class StableswapItemFormStore {
   }
 
   initInputAmounts(length: number) {
-    this.inputAmounts = Array(length).fill('');
+    this.inputAmounts = Array(length).fill(null);
   }
 
-  setInputAmount(amount: string, index: number) {
+  setLpInputAmount(amount: string) {
+    this.lpInputAmount = amount;
+  }
+  setInputAmount(amount: Nullable<BigNumber>, index: number) {
     this.inputAmounts[index] = amount;
-  }
-
-  getInputAmount(index: number): Undefined<string> {
-    return this.inputAmounts[index];
   }
 }

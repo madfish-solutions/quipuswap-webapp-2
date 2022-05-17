@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, isEmptyString } from '@shared/helpers';
+import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
@@ -9,7 +9,7 @@ import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
-const DEFAULT_FORKIK_VALUE = '';
+const DEFAULT_FORMIK_VALUE = 0;
 
 interface AddLiqFormValues {
   [key: string]: string;
@@ -67,30 +67,30 @@ export const useAddLiqFormViewModel = () => {
     const handleInputChange = (inputAmount: string) => {
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
-      if (isEmptyString(inputAmount)) {
-        tokensInfo.forEach((_, i) => stableswapItemFormStore.setInputAmount(DEFAULT_FORKIK_VALUE, i));
-      } else {
-        const valueBN = new BigNumber(inputAmount);
+      let outputReserve: BigNumber;
+      let outputAmount: Nullable<BigNumber>;
+      const inputReserve: BigNumber = reservesAll[index];
 
-        const outAmounts = calculateTokensInputs(valueBN, index, totalLpSupply, reservesAll);
+      tokensInfo.forEach((_, i) => {
+        outputReserve = reservesAll[i];
+        outputAmount = calculateTokensInputs(inputAmount, inputReserve, totalLpSupply, outputReserve);
 
-        outAmounts.forEach((amount, i) => {
-          stableswapItemFormStore.setInputAmount(amount, i);
+        stableswapItemFormStore.setInputAmount(outputAmount, i);
 
-          formikValues[getInputSlugByIndex(i)] = amount;
-        });
-      }
+        formikValues[getInputSlugByIndex(i)] = outputAmount ? outputAmount.toFixed() : DEFAULT_FORMIK_VALUE;
+      });
+
       formik.setValues(formikValues);
     };
 
     return {
       label,
-      value: formik.values[currentInputSlug],
       balance,
       decimals,
-      error: formik.errors[currentInputSlug],
       tokenA: token,
       id: currentInputSlug,
+      value: formik.values[currentInputSlug],
+      error: formik.errors[currentInputSlug],
       onInputChange: handleInputChange
     };
   });
