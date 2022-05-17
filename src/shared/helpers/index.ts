@@ -21,7 +21,6 @@ export * from './get-token-appellation';
 export * from './is-tez-included';
 export * from './is-whitelisted-token';
 export * from './make-interval';
-export * from './network';
 export * from './parse-number';
 export * from './parse-timelock';
 export * from './prepare-number-as-string';

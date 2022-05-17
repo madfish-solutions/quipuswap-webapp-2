@@ -1,13 +1,13 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 
-import { QSNets } from '@shared/types';
+import { SupportedNetworks } from '@shared/types';
 
 import { ReadOnlySigner } from '../readonly-signer';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
 
-export const getTempleWalletState = async (wallet: TempleWallet, networkId: QSNets) => {
+export const getTempleWalletState = async (wallet: TempleWallet, networkId: SupportedNetworks) => {
   const tezos = new TezosToolkit(rpcClients[networkId]);
   tezos.setWalletProvider(wallet);
   tezos.setPackerProvider(michelEncoder);
