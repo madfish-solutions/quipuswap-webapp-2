@@ -3,8 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '@shared/components';
-import { QuipuToken } from '@shared/svg';
-import { XtzToken } from '@shared/svg/xtz-token';
+import { QuipuToken, XtzToken } from '@shared/svg';
 import { useTranslation } from '@translation';
 
 import { TokenToPlay } from '../../stores';
@@ -13,7 +12,7 @@ import styles from './coinflip-token-selector.module.scss';
 import { useTokenSelectorViewModel } from './coinflip-token-selector.vm';
 
 export const CoinflipTokenSelector: FC = observer(() => {
-  const { t } = useTranslation(['coinflip']);
+  const { t } = useTranslation();
   const { tokenToPlay, handleSelectToken } = useTokenSelectorViewModel();
 
   return (
