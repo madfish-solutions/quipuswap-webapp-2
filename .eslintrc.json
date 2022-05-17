@@ -94,7 +94,7 @@
       "ignoreMemberSort": false,
       "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
     }],
-    "react/jsx-sort-props": [2, {
+    "react/jsx-sort-props": ["warn", {
       "callbacksLast": true,
       "shorthandFirst": true,
       "shorthandLast": false,
