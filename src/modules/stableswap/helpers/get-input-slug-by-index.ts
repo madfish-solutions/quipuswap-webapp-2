@@ -1,3 +1,1 @@
-export const getInputSlugByIndex = (index: number) => {
-  return `stableswap-input-${index}`;
-};
+export const getInputSlugByIndex = (index: number) => `stableswap-input-${index}`;

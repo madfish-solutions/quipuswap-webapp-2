@@ -36,10 +36,10 @@ export const Iterator: IteratorComponent = ({
     }
 
     return (
-      <>
-        <Render key={keyFn ? keyFn(_data) : index} {..._data} data-test-id={`hello${index}`} />
+      <Fragment key={keyFn ? keyFn(_data) : index}>
+        <Render {..._data} data-test-id={`hello${index}`} />
         {separator}
-      </>
+      </Fragment>
     );
   });
 
