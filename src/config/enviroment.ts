@@ -68,6 +68,16 @@ export const STABLESWAP_API_URLS: Record<QSNets, string> = {
 export const STABLESWAP_API_URL = STABLESWAP_API_URLS[NETWORK_ID];
 //#endregion STABLESWAP_API
 
+//#region COINFLIP_CONTRACTS
+const COINFLIP_CONTRACTS_ADDRESSES: Record<QSNets, string> = {
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_COINFLIP_CONTRACT!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_COINFLIP_CONTRACT!,
+  [QSNets.ithacanet]: process.env.REACT_APP_ITHACANET_COINFLIP_CONTRACT!
+};
+
+export const COINFLIP_CONTRACT_ADDRESS = COINFLIP_CONTRACTS_ADDRESSES[NETWORK_ID];
+//#endregion COINFLIP_CONTRACTS
+
 //#region RPC_URLS
 export const RPC_URLS: Record<QSNets, string> = {
   [QSNets.mainnet]: process.env.REACT_APP_MAINNET_RPC_URL!,

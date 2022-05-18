@@ -3,13 +3,17 @@ import { FC } from 'react';
 import { PageTitle, TestnetAlert, DashboardStatsInfo, DashboardCard } from '@shared/components';
 
 import styles from './coinflip.page.module.scss';
+import { CoinflipRewardInfo } from './components/coinflip-reward-info';
 import { CoinsSelector } from './components/coins-selector';
+
+// TODO: Game title localization
 
 export const CoinflipPage: FC = () => {
   return (
     <>
       <TestnetAlert />
       <PageTitle>Game</PageTitle>
+      <CoinflipRewardInfo />
       <CoinsSelector />
       <DashboardStatsInfo
         header="Game Info"

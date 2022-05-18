@@ -1,0 +1,88 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.card {
+  margin-bottom: 32px;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.viewDetailsButton {
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+}
+
+.yourWinnigns {
+  margin-bottom: 24px;
+}
+
+.yourGamesStats {
+  align-items: flex-start;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+}
+
+.amount {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.light {
+  &.amount {
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.amount {
+    color: $text-inverse;
+  }
+}
+
+@include media('>670px') {
+  .yourGamesStats {
+    align-items: flex-end;
+  }
+
+  .wrapper {
+    width: auto;
+    min-height: 132px;
+    align-items: flex-end;
+  }
+
+  .viewDetailsButton {
+    margin: 0;
+  }
+
+  .cardContent {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .yourWinnigns {
+    margin-bottom: 0;
+  }
+
+  .amount {
+    font-size: 24px;
+  }
+}
