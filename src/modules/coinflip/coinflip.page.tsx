@@ -1,20 +1,26 @@
 import { FC } from 'react';
 
-import { PageTitle, TestnetAlert, DashboardStatsInfo, DashboardCard } from '@shared/components';
+import { PageTitle, TestnetAlert, StateWrapper, DashboardStatsInfo, DashboardCard } from '@shared/components';
 
+import { useCoinflipPageViewModel } from './coinflip-page.vm';
 import styles from './coinflip.page.module.scss';
+import { CoinflipGame, CoinflipTokenSelector } from './components';
 import { CoinflipRewardInfo } from './components/coinflip-reward-info';
-import { CoinsSelector } from './components/coins-selector';
 
 // TODO: Game title localization
 
 export const CoinflipPage: FC = () => {
+  const { isInitialized } = useCoinflipPageViewModel();
+
   return (
-    <>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
+
       <PageTitle>Game</PageTitle>
       <CoinflipRewardInfo />
-      <CoinsSelector />
+
+      <CoinflipTokenSelector />
+
       <DashboardStatsInfo
         header="Game Info"
         cards={[
@@ -46,6 +52,10 @@ export const CoinflipPage: FC = () => {
         ]}
         countOfRightElements={1}
       />
-    </>
+
+      <div className={styles.game}>
+        <CoinflipGame />
+      </div>
+    </StateWrapper>
   );
 };

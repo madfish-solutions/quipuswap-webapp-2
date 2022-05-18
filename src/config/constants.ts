@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { NetworkType } from '@airgap/beacon-sdk';
 import { BigNumber } from 'bignumber.js';
 
-import { QSNets } from '@shared/types';
+import { SupportedNetworks } from '@shared/types';
 
 import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 
@@ -115,10 +116,10 @@ export const EMPTY_POOL_AMOUNT = 0;
 
 export const FIRST_TWO_DIGITS_NUMBER = 10;
 
-const FARM_ID_FOR_RESTAKE_MAP: Record<QSNets, number> = {
-  [QSNets.hangzhounet]: 16,
-  [QSNets.mainnet]: 3,
-  [QSNets.ithacanet]: 8
+const FARM_ID_FOR_RESTAKE_MAP: Record<SupportedNetworks, number> = {
+  [NetworkType.HANGZHOUNET]: 16,
+  [NetworkType.MAINNET]: 3,
+  [NetworkType.ITHACANET]: 8
 };
 
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];

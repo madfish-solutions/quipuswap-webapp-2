@@ -50,3 +50,5 @@ export * from './analytics-icon';
 export * from './feedback-icon';
 export * from './youves-icon';
 export * from './game-icon';
+export * from './coin';
+export * from './xtz-token';

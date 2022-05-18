@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
@@ -17,7 +18,7 @@ import {
   ReadOnlySigner,
   rpcClients
 } from '@shared/helpers';
-import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
+import { LastUsedConnectionKey, Nullable, SupportedNetworks, QSNetwork } from '@shared/types';
 
 export interface DAppType {
   connectionType: Nullable<LastUsedConnectionKey>;
@@ -28,10 +29,10 @@ export interface DAppType {
   isLoading: boolean;
 }
 
-export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
-  [QSNets.mainnet]: new TezosToolkit(rpcClients.mainnet),
-  [QSNets.hangzhounet]: new TezosToolkit(rpcClients.hangzhounet),
-  [QSNets.ithacanet]: new TezosToolkit(rpcClients.ithacanet)
+export const fallbackToolkits: Record<SupportedNetworks, TezosToolkit> = {
+  [NetworkType.MAINNET]: new TezosToolkit(rpcClients.mainnet),
+  [NetworkType.HANGZHOUNET]: new TezosToolkit(rpcClients.hangzhounet),
+  [NetworkType.ITHACANET]: new TezosToolkit(rpcClients.ithacanet)
 };
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));

@@ -58,13 +58,6 @@
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/no-use-before-define": "error",
-    "@typescript-eslint/no-type-alias": ["error", {
-      "allowAliases": "in-unions",
-      "allowTupleTypes": "always",
-      "allowGenerics": "always",
-      "allowLiterals": "in-unions-and-intersections",
-      "allowCallbacks": "always"
-    }],
     "@typescript-eslint/no-this-alias": "error",
     "@typescript-eslint/no-require-imports": "error",
     "@typescript-eslint/no-magic-numbers": "warn",
