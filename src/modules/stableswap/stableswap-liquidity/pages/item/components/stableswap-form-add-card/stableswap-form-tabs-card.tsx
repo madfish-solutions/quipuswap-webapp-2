@@ -34,7 +34,7 @@ export const StableswapFormTabsCard: FC<Props> = observer(({ tabActiveId, childr
             className={styles.tabs}
           />
         ),
-        button: <SettingsButton />,
+        button: <SettingsButton colored />,
         className: styles.header
       }}
       contentClassName={styles.content}
