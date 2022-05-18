@@ -37,6 +37,7 @@ export const common = {
   'Lambda View contract(optional)': 'Lambda View contract(optional)',
   'e.g. Kscwf2r3...': 'e.g. Kscwf2r3...',
   Add: 'Add',
+  Remove: 'Remove',
   'Sell Price': 'Sell Price',
   'The amount of token B you receive for 1 token A, according to the current exchange rate.':
     'The amount of token B you receive for 1 token A, according to the current exchange rate.',
@@ -126,5 +127,7 @@ export const common = {
   Payout: 'Payout',
   value: 'Value',
   Explore: 'Explore',
-  'Pool Details': 'Pool Details'
+  'Pool Details': 'Pool Details',
+  Input: 'Input',
+  Output: 'Output'
 } as const;

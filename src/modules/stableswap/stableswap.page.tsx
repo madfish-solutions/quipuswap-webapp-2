@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
@@ -8,7 +9,11 @@ import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
 import { checkForAddOrRemoveInUrlParts, getRouterParts } from './helpers';
-import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
+import {
+  StableswapLiquidityListPage,
+  StableswapLiquidityAddItemPage,
+  StableswapLiquidityRemoveItemPage
+} from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
 export enum Tabs {
@@ -21,7 +26,7 @@ export enum StableswapRoutes {
   liquidity = '/liquidity/'
 }
 
-export const StableswapPage: FC = () => {
+export const StableswapPage: FC = observer(() => {
   const { pathname } = useLocation();
 
   const { isInitialazied } = useStableswapPageViewModel();
@@ -45,11 +50,14 @@ export const StableswapPage: FC = () => {
 
         <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
 
-        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityItemPage />} />
-        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityItemPage />} />
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`${StableswapRoutes.liquidity}${Tabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
+        />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>
     </StateWrapper>
   );
-};
+});

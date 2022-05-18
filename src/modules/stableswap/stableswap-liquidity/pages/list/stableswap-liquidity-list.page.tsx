@@ -6,7 +6,7 @@ import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/compone
 
 import { ListFilter, PoolCard } from './components';
 import styles from './stableswap-liquidity-list.page.module.scss';
-import { useStableswapLiquidityPageViewModel } from './stableswap-liquidity-list.page.vm';
+import { useStableswapLiquidityPageViewModel } from './use-stableswap-liquidity-list.page.vm';
 
 export const StableswapLiquidityListPage: FC = observer(() => {
   const { isLoading, list, title } = useStableswapLiquidityPageViewModel();

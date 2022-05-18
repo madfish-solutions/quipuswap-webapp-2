@@ -72,7 +72,6 @@ export const PoolCard: FC<Props> = ({
 
           <ListItemCardCell
             cellName={liquidityProvidersFeeTranslation}
-            // tooltip={tvlTooltipTranslation}
             cellNameClassName={styles.cardCellHeader}
             cardCellClassName={styles.cardCell}
           >

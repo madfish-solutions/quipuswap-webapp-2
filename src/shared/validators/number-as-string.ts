@@ -5,7 +5,7 @@ import { formatBalance, prepareNumberAsString } from '@shared/helpers';
 import { Optional } from '@shared/types';
 import { i18n } from '@translation';
 
-type NumberAsStringSchema = StringSchema<string | undefined, Record<string, unknown>, string | undefined>;
+export type NumberAsStringSchema = StringSchema<string | undefined, Record<string, unknown>, string | undefined>;
 
 interface RangeBoundary {
   value: BigNumber.Value;
