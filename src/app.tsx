@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 
 import { AppRouter } from '@app.router';
+import { UserBalancesSubscription } from '@blockchain';
 
 import { Layout } from './layout';
 
@@ -10,6 +11,7 @@ export const App = observer(() => {
   return (
     <Layout>
       <AppRouter />
+      <UserBalancesSubscription />
     </Layout>
   );
 });

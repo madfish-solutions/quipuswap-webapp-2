@@ -23,7 +23,7 @@ export const AddLiqForm: FC = observer(() => {
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
         {/* Mock data */}
         <Switcher value={true} disabled={true} onClick={noopMap} />
-        <span className={styles.switcherTranslation}>{t('stableswap|Add all coins in a balanced proportion')}</span>
+        <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionAdd')}</span>
         <Tooltip content="Tooltip" />
       </div>
       <div className={stylesCommonContainer.buttons}>

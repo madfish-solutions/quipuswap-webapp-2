@@ -8,14 +8,14 @@ import { IconProps } from '@shared/types';
 import styles from './buttons-selector.module.scss';
 import { useButtonsSelectorViewModel } from './buttons-selector.vm';
 
-interface Props {
+interface Props<T = string> {
   buttons: Array<{
-    id: number | string;
+    id: T;
     label: ReactNode;
     Icon: FunctionComponent<IconProps>;
   }>;
-  activeId: number | string;
-  onChange: (id: number | string) => void;
+  activeId: T;
+  onChange: (id: T) => void;
 }
 
 const modeClass = {

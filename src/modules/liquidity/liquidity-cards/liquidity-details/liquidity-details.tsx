@@ -67,8 +67,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
       <DetailsCardCell
         cellName={t('common|Pair Address')}
         tooltipContent={t(
-          'common|Address of the share(LP) token contract. Along with pair id(if any)it can be used to find the LP token in your wallet.',
-          { tokenASymbol, tokenBSymbol }
+          'common|Address of the share(LP) token contract. Along with pair id(if any)it can be used to find the LP token in your wallet.'
         )}
         className={styles.LiquidityDetails_CardCell}
         data-test-id="pairAddress"

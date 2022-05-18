@@ -2,7 +2,7 @@ import { findDex, FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { FACTORIES } from '@config/config';
-import { Nullable, QSNets, Token } from '@shared/types';
+import { Nullable, SupportedNetworks, Token } from '@shared/types';
 
 import { findNotTezToken } from '../../liquidity-cards/helpers';
 
@@ -13,7 +13,7 @@ export const loadTezDex = async ({
   tokenB
 }: {
   tezos: TezosToolkit;
-  networkId: QSNets;
+  networkId: SupportedNetworks;
   tokenA: Token;
   tokenB: Token;
 }): Promise<Nullable<FoundDex>> => {

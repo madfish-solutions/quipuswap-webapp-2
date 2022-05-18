@@ -1,4 +1,6 @@
-import { QSNets, WhitelistedBaker } from '@shared/types';
+import { NetworkType } from '@airgap/beacon-sdk';
+
+import { SupportedNetworks, WhitelistedBaker } from '@shared/types';
 
 import { NETWORK_ID } from './enviroment';
 
@@ -68,10 +70,10 @@ export const ITHACANET_BAKERS: WhitelistedBaker[] = [
   }
 ];
 
-const dummyBakers: Record<QSNets, string> = {
-  [QSNets.mainnet]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
-  [QSNets.hangzhounet]: HANGZHOUNET_BAKERS[0].address,
-  [QSNets.ithacanet]: ITHACANET_BAKERS[0].address
+const dummyBakers: Record<SupportedNetworks, string> = {
+  [NetworkType.MAINNET]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
+  [NetworkType.HANGZHOUNET]: HANGZHOUNET_BAKERS[0].address,
+  [NetworkType.ITHACANET]: ITHACANET_BAKERS[0].address
 };
 
 export const DUMMY_BAKER = dummyBakers[NETWORK_ID];

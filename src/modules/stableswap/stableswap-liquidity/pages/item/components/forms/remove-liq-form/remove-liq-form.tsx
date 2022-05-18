@@ -77,7 +77,7 @@ export const RemoveLiqForm: FC = () => {
       />
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
         <Switcher value={true} onClick={handleInputAmountChange} />
-        <span className={styles.switcherTranslation}>{t('stableswap|Remove all coins in a balanced proportion')}</span>
+        <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
         <Tooltip content={outputLabel} />
       </div>
       <div className={stylesCommonContainer.buttons}>
