@@ -10,7 +10,7 @@ import { FormHeader } from '../form-header';
 import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 
 interface Props {
-  tabActiveId: string;
+  tabActiveId: StableswapFormTabs;
 }
 
 export const StableswapFormTabsCard: FC<Props> = observer(({ tabActiveId, children }) => {

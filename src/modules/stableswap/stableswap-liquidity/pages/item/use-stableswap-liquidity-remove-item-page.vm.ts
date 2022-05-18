@@ -8,7 +8,6 @@ import { isUndefined } from '@shared/helpers';
 
 import { getStableswapTitle } from '../../../helpers';
 import { useStableswapItemFormStore, useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
-import { StableswapFormTabs } from '../../../types';
 
 const ZERO_LENGTH = 0;
 
@@ -43,7 +42,6 @@ export const useStableswapLiquidityRemoveItemPageViewModel = () => {
   }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore]);
 
   const title = getStableswapTitle(stableswapItem);
-  const tabActiveId = StableswapFormTabs.remove;
 
-  return { title, tabActiveId };
+  return { title };
 };
