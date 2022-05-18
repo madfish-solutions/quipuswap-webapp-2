@@ -5,8 +5,8 @@ describe('Form exists', () => {
     // Go to the Voting page from home page
     cy.visit('/');
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-3"]').click();
-
+    cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-More"]').click();
+    cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-More_Voting"]').click();
     // Check if Title 'Voting Details' ok
     cy.get('[data-test-id="votingDetails"] [data-test-id="headerContent"]').should('contain', 'Voting Details');
     cy.get('[data-test-id="votingDetails"] [data-test-id="delegatedTo"] [data-test-id="cellName"]').should(
@@ -14,17 +14,12 @@ describe('Form exists', () => {
       'Delegated To'
     );
   });
+
   it('Should_DisplayPageTitle_When_PageIsLoaded', () => {
     cy.get('[data-test-id="votingPageTitle"]').should('contain', 'Voting TEZ / QUIPU');
   });
-  // it('Should_DisplayRewardsSection_When_PageIsLoaded',() =>{
-  //     cy.get(' [data-test-id="votingStats"] [data-test-id="description"]')
-  //         .should('contain','Your Claimable Rewards')
-  //     cy.get('[data-test-id="votingStats"] [data-test-id="yourLP"] [data-test-id="contentValue"]')
-  //         .should('contain','_')
-  //     cy.get('[data-test-id="votingStats"] [data-test-id="yourVotes"] [data-test-id="contentValue"]')
-  //         .should('contain','_')
-  //     cy.get('[data-test-id="votingStats"] [data-test-id="yourVetos"] [data-test-id="contentValue"]')
-  //         .should('contain','_')
-  // })
+
+  it('Should_DisplayRewardsSection_When_PageIsLoaded', () => {
+    cy.get('[data-test-id="votingStats"] [data-test-id="description"]').should('contain', 'Your Claimable Rewards');
+  });
 });

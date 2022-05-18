@@ -12,7 +12,6 @@ describe('Send', () => {
     cy.get('[title="Send"]').should('contain', 'Send');
   });
   // Check if From/to tez/quipu
-
   it('Should_DisplayTezInFromForm_When_PageIsLoaded', () => {
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="changeToken"]').should(
       'contain',
@@ -25,9 +24,7 @@ describe('Send', () => {
       'QUIPU'
     );
   });
-
   //field recepient address exists
-
   it('Should_HaveFieldRecepientAddress_When_SendTabIsLoaded', () => {
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="recipientTitle"]').should(
       'contain',

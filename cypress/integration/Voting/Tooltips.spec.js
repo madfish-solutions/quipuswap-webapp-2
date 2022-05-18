@@ -3,6 +3,7 @@
 describe('Tooltips', () => {
   it('Should_DisplayTooltips_When_HowerMouseOverTheTooltipIcons', () => {
     cy.visit('/voting/vote/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
 
     cy.get('[data-test-id="votingStats"] [data-test-id="yourLP"] [data-test-id="tooltip"]').trigger('focus');
     cy.get('[aria-describedby="tippy-1"]').should('be.visible');

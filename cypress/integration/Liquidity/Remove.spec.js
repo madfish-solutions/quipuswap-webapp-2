@@ -5,7 +5,7 @@ describe('Form exists', () => {
     // Go to the remove page from home page
     cy.visit('/');
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-2"]').click();
+    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
     cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="cardTab-1"]').click();
 
     // Check if Title 'Pool Details' ok

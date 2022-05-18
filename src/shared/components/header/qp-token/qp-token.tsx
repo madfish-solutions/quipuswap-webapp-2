@@ -48,7 +48,9 @@ export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <QuipuToken id={id} />
-      <span className={styles.price}>$ {price}</span>
+      <span className={styles.price} data-test-id="quipuTokenPrice">
+        $ {price}
+      </span>
     </div>
   );
 };
