@@ -9,7 +9,11 @@ import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
 import { checkForAddOrRemoveInUrlParts, getRouterParts } from './helpers';
-import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
+import {
+  StableswapLiquidityListPage,
+  StableswapLiquidityAddItemPage,
+  StableswapLiquidityRemoveItemPage
+} from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
 export enum Tabs {
@@ -46,8 +50,11 @@ export const StableswapPage: FC = observer(() => {
 
         <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
 
-        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityItemPage />} />
-        <Route path={`${StableswapRoutes.liquidity}${Tabs.remove}/:poolId`} element={<StableswapLiquidityItemPage />} />
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`${StableswapRoutes.liquidity}${Tabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
+        />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>

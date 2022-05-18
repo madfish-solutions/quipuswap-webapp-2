@@ -22,13 +22,10 @@ export const useStableswapFormTabsCardViewModel = () => {
   const stableswapItemStore = useStableswapItemStore();
   const navigate = useNavigate();
 
-  const { itemStore, currentTab } = stableswapItemStore;
+  const { itemStore } = stableswapItemStore;
   const { data: stableswapItem } = itemStore;
 
-  const isAddForm = currentTab === StableswapFormTabs.add;
-
   const changeTabHandle = (tab: StableswapFormTabs) => {
-    stableswapItemStore.setTab(tab);
     const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${tab}/${stableswapItem?.id}`;
 
     navigate(url);
@@ -36,8 +33,6 @@ export const useStableswapFormTabsCardViewModel = () => {
 
   return {
     stableswapItem,
-    currentTab,
-    isAddForm,
     changeTabHandle
   };
 };

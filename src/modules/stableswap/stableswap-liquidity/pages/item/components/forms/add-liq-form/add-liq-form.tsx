@@ -9,7 +9,7 @@ import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from '../stableswap-form-tabs-card.module.scss';
+import styles from '../forms.module.scss';
 import { useAddLiqFormViewModel } from './use-add-liq-form.vm';
 
 export const AddLiqForm: FC = observer(() => {

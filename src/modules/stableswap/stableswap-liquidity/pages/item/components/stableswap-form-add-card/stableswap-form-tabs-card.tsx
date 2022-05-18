@@ -7,12 +7,14 @@ import { Card, SettingsButton, Skeleton, Tabs } from '@shared/components';
 import styles from '@styles/CommonContainer.module.scss';
 
 import { FormHeader } from '../form-header';
-import { AddLiqForm } from './add-liq-form';
-import { RemoveLiqForm } from './remove-liq-form';
 import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 
-export const StableswapFormTabsCard: FC = observer(() => {
-  const { isAddForm, currentTab, stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel();
+interface Props {
+  tabActiveId: string;
+}
+
+export const StableswapFormTabsCard: FC<Props> = observer(({ tabActiveId, children }) => {
+  const { stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel();
 
   if (!stableswapItem) {
     return <Skeleton className={styles.Skeleton} />;
@@ -27,7 +29,7 @@ export const StableswapFormTabsCard: FC = observer(() => {
         content: (
           <Tabs
             values={TabsContent}
-            activeId={currentTab}
+            activeId={tabActiveId}
             setActiveId={id => changeTabHandle(id as StableswapFormTabs)}
             className={styles.tabs}
           />
@@ -38,7 +40,7 @@ export const StableswapFormTabsCard: FC = observer(() => {
       contentClassName={styles.content}
       data-test-id="stableswapFromTabsCard"
     >
-      {isAddForm ? <AddLiqForm /> : <RemoveLiqForm />}
+      {children}
     </Card>
   );
 });

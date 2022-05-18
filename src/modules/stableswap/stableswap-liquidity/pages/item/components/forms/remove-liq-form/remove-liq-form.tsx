@@ -9,7 +9,7 @@ import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from '../stableswap-form-tabs-card.module.scss';
+import styles from '../forms.module.scss';
 
 export const RemoveLiqForm: FC = () => {
   const { t } = useTranslation();
