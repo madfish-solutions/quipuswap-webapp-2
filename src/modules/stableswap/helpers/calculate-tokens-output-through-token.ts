@@ -1,24 +1,20 @@
 import BigNumber from 'bignumber.js';
 
-import { isEmptyString } from '@shared/helpers';
-
 export const calculateTokensOutputsThrougToken = (
-  input: string,
-  inputAmountIndex: number,
+  input: BigNumber,
+  inputAmountReserves: BigNumber,
   totalLpSupply: BigNumber,
-  reserves: BigNumber[],
-  currentIndex: number
+  outReserve: BigNumber
 ) => {
-  if (isEmptyString(input)) {
-    return null;
+  if (input.isNaN()) {
+    return { lpValue: null, tokenValue: null };
   }
 
   const inputAmount = new BigNumber(input);
 
-  const inputAmountReserves = reserves[inputAmountIndex];
   const shares_in = inputAmount.multipliedBy(totalLpSupply).dividedBy(inputAmountReserves);
 
-  const currentReserves = reserves[currentIndex];
+  const tokenValue = shares_in.multipliedBy(outReserve).dividedBy(totalLpSupply);
 
-  return shares_in.multipliedBy(currentReserves).dividedBy(totalLpSupply);
+  return { lpValue: shares_in, tokenValue };
 };

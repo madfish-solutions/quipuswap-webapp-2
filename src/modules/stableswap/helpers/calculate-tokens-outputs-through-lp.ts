@@ -1,14 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-import { isEmptyString } from '@shared/helpers';
-
 export const calculateTokensOutputsThroughLp = (
-  lpInput: string,
+  lpInput: BigNumber,
   totalSupply: BigNumber,
   reserves: Array<BigNumber>
-) => {
-  if (isEmptyString(lpInput)) {
-    return [];
+): Array<Nullable<BigNumber>> => {
+  if (lpInput.isNaN()) {
+    return Array(reserves.length).fill(null);
   }
 
   const lpInputBN = new BigNumber(lpInput);

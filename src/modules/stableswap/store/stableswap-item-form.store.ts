@@ -21,7 +21,7 @@ export class StableswapItemFormStore {
     this.inputAmounts = Array(length).fill(null);
   }
 
-  setLpInputAmount(amount: BigNumber) {
+  setLpInputAmount(amount: Nullable<BigNumber>) {
     this.lpInputAmount = amount;
   }
   setInputAmount(amount: Nullable<BigNumber>, index: number) {

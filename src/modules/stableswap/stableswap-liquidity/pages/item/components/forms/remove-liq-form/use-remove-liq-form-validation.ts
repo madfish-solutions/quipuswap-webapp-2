@@ -7,6 +7,7 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
+import { LP_INPUT_KEY } from './constants';
 
 export const useRemoveLiqFormValidation = (userLpBalance: BigNumber, userTokenBalance: Array<BigNumber>) => {
   return useMemo(() => {
@@ -21,7 +22,7 @@ export const useRemoveLiqFormValidation = (userLpBalance: BigNumber, userTokenBa
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape({
-      'lp-input': lpInputShema,
+      [LP_INPUT_KEY]: lpInputShema.required('Value is required'),
       ...shape
     });
   }, [userLpBalance, userTokenBalance]);

@@ -1,26 +1,28 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull } from '@shared/helpers';
+import { isNull, prepareNumberAsString } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import {
-  calculateTokensInputs,
   calculateTokensOutputsThroughLp,
+  calculateTokensOutputsThrougToken,
   getFormikInitialValues,
-  getInputSlugByIndex
+  getFormikInitialValuesRemoveForm,
+  getInputSlugByIndex,
+  prepareFormikValue
 } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import { LP_INPUT_KEY } from './constants';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
-const ONE = 1;
 const ZERO = 0;
 
 const LP_TOKEN = {
   type: Standard.Fa2,
-  contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
+  contractAddress: '',
   fa2TokenId: 0,
   isWhitelisted: true,
   metadata: {
@@ -31,7 +33,7 @@ const LP_TOKEN = {
   }
 };
 
-interface AddLiqFormValues {
+interface RemoveLiqFormValues {
   [key: string]: string;
 }
 
@@ -49,14 +51,15 @@ export const useRemoveLiqFormViewModel = () => {
   const disabled = false;
   const isSubmitting = false;
   const balance = new BigNumber('10000');
+  const lpBalance = new BigNumber('1000001');
   //#endregion mock data
 
-  const inputsCount = item && item.tokensInfo.length + ONE;
+  const inputsCount = (item && item.tokensInfo.length) ?? ZERO;
   const userBalances = Array(inputsCount ?? ZERO).fill(balance);
 
-  const validationSchema = useRemoveLiqFormValidation(balance, userBalances);
+  const validationSchema = useRemoveLiqFormValidation(lpBalance, userBalances);
 
-  const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
+  const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
     actions.setSubmitting(true);
 
     formik.resetForm();
@@ -65,21 +68,19 @@ export const useRemoveLiqFormViewModel = () => {
 
   const formik = useFormik({
     validationSchema,
-    initialValues: {
-      'lp-input': '',
-      ...getFormikInitialValues(inputsCount ?? ZERO)
-    },
+    initialValues: getFormikInitialValuesRemoveForm(inputsCount),
     onSubmit: handleSubmit
   });
 
-  const lpValue = formik.values['lp-input'];
-  const lpError = formik.errors['lp-input'];
+  const lpInputValue = formik.values[LP_INPUT_KEY];
+  const lpError = formik.errors[LP_INPUT_KEY];
 
   if (isNull(item)) {
     return {
       data: [],
-      lpValue,
+      lpInputValue,
       lpError,
+      lpBalance: lpBalance.toFixed(),
       disabled,
       labelInput,
       labelOutput,
@@ -94,38 +95,62 @@ export const useRemoveLiqFormViewModel = () => {
   const reservesAll = tokensInfo.map(({ reserves }) => reserves);
 
   const handleLpInputChange = (inputAmount: string) => {
-    stableswapItemFormStore.setLpInputAmount(new BigNumber(inputAmount));
-    formik.setFieldValue('lp-input', inputAmount);
+    const preparedLpInput = prepareNumberAsString(inputAmount);
+    const inputAmountBN = new BigNumber(preparedLpInput);
     const formikValues = getFormikInitialValues(tokensInfo.length);
-    const out = calculateTokensOutputsThroughLp(inputAmount, totalLpSupply, reservesAll);
-    out.forEach((amount, i) => {
-      stableswapItemFormStore.setInputAmount(amount, i);
 
-      formikValues[getInputSlugByIndex(i)] = amount;
+    const tokenOutputs = calculateTokensOutputsThroughLp(inputAmountBN, totalLpSupply, reservesAll);
+    tokenOutputs.forEach((amount, indexOfTokenInput) => {
+      stableswapItemFormStore.setInputAmount(amount, indexOfTokenInput);
+
+      formikValues[getInputSlugByIndex(indexOfTokenInput)] = prepareFormikValue(amount);
     });
+
+    formikValues[LP_INPUT_KEY] = inputAmount;
+
     formik.setValues(formikValues);
+    stableswapItemFormStore.setLpInputAmount(inputAmountBN);
   };
 
-  const data = tokensInfo.map((info, index) => {
+  const data = tokensInfo.map((info, indexOfCurrentInput) => {
     const token = info.token;
     const decimals = info.token.metadata.decimals;
-    const currentInputSlug = getInputSlugByIndex(index);
+    const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
     const label = labelOutput;
 
     const handleInputChange = (inputAmount: string) => {
+      const preparedTokenInput = prepareNumberAsString(inputAmount);
+
+      const inputAmountBN = new BigNumber(preparedTokenInput);
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
       let outputReserve: BigNumber;
-      let outputAmount: Nullable<BigNumber>;
-      const inputReserve: BigNumber = reservesAll[index];
+      const inputReserve: BigNumber = reservesAll[indexOfCurrentInput];
 
-      tokensInfo.forEach((_, i) => {
-        outputReserve = reservesAll[i];
-        outputAmount = calculateTokensInputs(inputAmount, inputReserve, totalLpSupply, outputReserve);
-        stableswapItemFormStore.setInputAmount(outputAmount, i);
+      tokensInfo.forEach((_, indexOfCalculatedInput) => {
+        if (indexOfCurrentInput === indexOfCalculatedInput) {
+          return;
+        }
 
-        formikValues[getInputSlugByIndex(i)] = outputAmount;
+        outputReserve = reservesAll[indexOfCalculatedInput];
+
+        const { lpValue, tokenValue } = calculateTokensOutputsThrougToken(
+          inputAmountBN,
+          inputReserve,
+          totalLpSupply,
+          outputReserve
+        );
+
+        formikValues[LP_INPUT_KEY] = prepareFormikValue(lpValue);
+        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = prepareFormikValue(tokenValue);
+
+        stableswapItemFormStore.setLpInputAmount(lpValue);
+        stableswapItemFormStore.setInputAmount(tokenValue, indexOfCalculatedInput);
       });
+
+      formikValues[getInputSlugByIndex(indexOfCurrentInput)] = inputAmount;
+
+      stableswapItemFormStore.setInputAmount(inputAmountBN, indexOfCurrentInput);
       formik.setValues(formikValues);
     };
 
@@ -143,13 +168,14 @@ export const useRemoveLiqFormViewModel = () => {
 
   return {
     data,
-    lpValue,
+    lpInputValue,
     lpError,
     disabled,
     labelInput,
     labelOutput,
     isSubmitting,
     lpToken: LP_TOKEN,
+    lpBalance: lpBalance.toFixed(),
     handleLpInputChange,
     handleSubmit: formik.handleSubmit
   };
