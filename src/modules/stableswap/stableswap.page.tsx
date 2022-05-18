@@ -5,41 +5,39 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
-import { isUndefined } from '@shared/helpers';
+import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
-import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity/pages';
+import { checkForAddOrRemoveInUrlParts, getRouterParts } from './helpers';
+import {
+  StableswapLiquidityListPage,
+  StableswapLiquidityAddItemPage,
+  StableswapLiquidityRemoveItemPage
+} from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
-import { StableswapFormTabs } from './types';
 
-const ONE = 1;
+export enum Tabs {
+  add = 'add',
+  remove = 'remove'
+}
 
 export enum StableswapRoutes {
   root = '/',
-  liquidity = '/liquidity/',
-  liquidityTabPoolId = '/liquidity/:tab/:poolId'
+  liquidity = '/liquidity/'
 }
 
 export const StableswapPage: FC = observer(() => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { isInitialazied } = useStableswapPageViewModel();
 
-  const locationParts = location.pathname.split('/').filter(part => part);
-  const tab = locationParts[locationParts.length - ONE];
-  const isAddOrRemoveInUrl = locationParts.some(
-    part => part === StableswapFormTabs.add || part === StableswapFormTabs.remove
-  );
+  const routerParts = getRouterParts(pathname);
+  const lastTab = getLastElement(routerParts);
 
-  if (!isUndefined(tab) && parseInt(tab) && !isAddOrRemoveInUrl) {
-    return (
-      <Navigate
-        replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${StableswapFormTabs.add}/${tab}`}
-      />
-    );
-  } else if (tab === StableswapFormTabs.add || tab === StableswapFormTabs.remove) {
-    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />;
+  const isAddOrRemoveInUrl = checkForAddOrRemoveInUrlParts(routerParts);
+
+  if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
+    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${lastTab}`} />;
   }
 
   return (
@@ -52,7 +50,11 @@ export const StableswapPage: FC = observer(() => {
 
         <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
 
-        <Route path={StableswapRoutes.liquidityTabPoolId} element={<StableswapLiquidityItemPage />} />
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`${StableswapRoutes.liquidity}${Tabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
+        />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>

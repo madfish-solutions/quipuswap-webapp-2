@@ -1,5 +1,6 @@
 import { useEffect, FC, useState } from 'react';
 
+import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -11,7 +12,6 @@ import { Card } from '@shared/components/card';
 import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
 import { fromDecimals } from '@shared/helpers';
-import { QSNets } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Section } from '../section';
@@ -27,7 +27,7 @@ export const DexDashboard: FC = () => {
   useEffect(() => {
     const asyncLoad = async () => {
       // TODO: change after deploy token to testnet
-      const tezos = new TezosToolkit(RPC_URLS[QSNets.mainnet]);
+      const tezos = new TezosToolkit(RPC_URLS[NetworkType.MAINNET]);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       // @ts-ignore
       const rawTotalSupply = await contract?.token_info.get(ZERO);

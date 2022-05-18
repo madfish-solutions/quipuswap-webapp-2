@@ -8,6 +8,10 @@
   font-size: 14px;
 }
 
+.game {
+  margin-top: 24px;
+}
+
 @include media('>Lphone') {
   .dashboardCard > :nth-child(1) {
     font-size: 16px;
@@ -15,5 +19,9 @@
 
   .dashboardCard > :nth-child(2) {
     font-size: 18px;
+  }
+
+  .game {
+    width: 50%;
   }
 }

@@ -1,2 +1,2 @@
 export * from './details';
-export * from './stableswap-form-tabs-card';
+export * from './stableswap-form-add-card';

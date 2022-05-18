@@ -1,29 +1,24 @@
 import BigNumber from 'bignumber.js';
 
-export const calculateTokensOutputsThroughToken = (
-  inputAmount: BigNumber,
+import { isEmptyString } from '@shared/helpers';
+
+export const calculateTokensOutputsThrougToken = (
+  input: string,
   inputAmountIndex: number,
   totalLpSupply: BigNumber,
-  reserves: BigNumber[]
+  reserves: BigNumber[],
+  currentIndex: number
 ) => {
-  const inputAmountReserves: BigNumber = reserves[inputAmountIndex];
-  const sharesOut: BigNumber = inputAmount.multipliedBy(totalLpSupply).dividedBy(inputAmountReserves);
-
-  const outAmounts: Array<string> = [];
-
-  let outAmount: BigNumber;
-  let reserve: BigNumber;
-
-  for (let index = 0; index < reserves.length; index++) {
-    if (inputAmountIndex === index) {
-      outAmounts.push(inputAmount.toFixed());
-    } else {
-      reserve = reserves[index];
-      outAmount = sharesOut.multipliedBy(reserve).dividedBy(totalLpSupply);
-
-      outAmounts.push(outAmount.toFixed());
-    }
+  if (isEmptyString(input)) {
+    return null;
   }
 
-  return outAmounts;
+  const inputAmount = new BigNumber(input);
+
+  const inputAmountReserves = reserves[inputAmountIndex];
+  const shares_in = inputAmount.multipliedBy(totalLpSupply).dividedBy(inputAmountReserves);
+
+  const currentReserves = reserves[currentIndex];
+
+  return shares_in.multipliedBy(currentReserves).dividedBy(totalLpSupply);
 };

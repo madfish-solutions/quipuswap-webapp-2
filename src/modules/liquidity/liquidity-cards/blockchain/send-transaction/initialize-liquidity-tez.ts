@@ -3,13 +3,13 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@config/config';
-import { QSNets } from '@shared/types';
+import { SupportedNetworks } from '@shared/types';
 
 const FIRST_FACTORY_INDEX = 0;
 
 export const initializeLiquidityTez = async (
   tezos: TezosToolkit,
-  networkId: QSNets,
+  networkId: SupportedNetworks,
   token: Token,
   tokenValue: BigNumber,
   tezValue: BigNumber

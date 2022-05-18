@@ -4,7 +4,7 @@ import { action, makeObservable, observable } from 'mobx';
 import { RootStore } from '@shared/store';
 
 export class StableswapItemFormStore {
-  lpInputAmount = '';
+  lpInputAmount: Nullable<BigNumber> = null;
   inputAmounts: Array<Nullable<BigNumber>> = [];
 
   constructor(private rootStore: RootStore) {
@@ -21,7 +21,7 @@ export class StableswapItemFormStore {
     this.inputAmounts = Array(length).fill(null);
   }
 
-  setLpInputAmount(amount: string) {
+  setLpInputAmount(amount: BigNumber) {
     this.lpInputAmount = amount;
   }
   setInputAmount(amount: Nullable<BigNumber>, index: number) {
