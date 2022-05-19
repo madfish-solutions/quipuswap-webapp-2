@@ -1,4 +1,5 @@
 export const stableswap = {
+  tvl: 'TVL',
   liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
   'Total LP Supply': 'Total LP Supply',
@@ -7,5 +8,7 @@ export const stableswap = {
   'Dev Fee': 'Dev Fee',
   'Token {{tokenSymbol}} locked': 'Token {{tokenSymbol}} locked',
   balancedProportionAdd: 'Add all coins in a balanced proportion',
-  balancedProportionRemove: 'Remove all coins in a balanced proportion'
+  balancedProportionRemove: 'Remove all coins in a balanced proportion',
+  createPool: 'Create Pool',
+  createOwnPool: 'Can’t Find appropriate pool? Create Own!'
 } as const;
