@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
+import { useAccountPkh } from '@providers/use-dapp';
 import { isNull, prepareNumberAsString } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Standard } from '@shared/types';
@@ -39,6 +40,7 @@ interface RemoveLiqFormValues {
 
 export const useRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
+  const accountPkh = useAccountPkh();
 
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
@@ -52,8 +54,10 @@ export const useRemoveLiqFormViewModel = () => {
   const isSubmitting = false;
   const balance = new BigNumber('10000');
   const lpBalance = new BigNumber('1000001');
+  const lpExchangeRate = '1.5';
   //#endregion mock data
 
+  const shouldShowBalanceButtons = !isNull(accountPkh);
   const inputsCount = (item && item.tokensInfo.length) ?? ZERO;
   const userBalances = Array(inputsCount ?? ZERO).fill(balance);
 
@@ -80,12 +84,14 @@ export const useRemoveLiqFormViewModel = () => {
       data: [],
       lpInputValue,
       lpError,
-      lpBalance: lpBalance.toFixed(),
       disabled,
       labelInput,
       labelOutput,
       isSubmitting,
+      lpExchangeRate,
+      shouldShowBalanceButtons,
       lpToken: LP_TOKEN,
+      lpBalance: lpBalance.toFixed(),
       handleLpInputChange: noopMap,
       handleSubmit: formik.handleSubmit
     };
@@ -113,8 +119,8 @@ export const useRemoveLiqFormViewModel = () => {
   };
 
   const data = tokensInfo.map((info, indexOfCurrentInput) => {
-    const token = info.token;
-    const decimals = info.token.metadata.decimals;
+    const { token, exchangeRate } = info;
+    const decimals = token.metadata.decimals;
     const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
     const label = labelOutput;
 
@@ -156,9 +162,11 @@ export const useRemoveLiqFormViewModel = () => {
     return {
       label,
       decimals,
+      shouldShowBalanceButtons,
       tokenA: token,
       id: currentInputSlug,
       balance: balance.toFixed(),
+      exchangeRate: exchangeRate.toFixed(),
       value: formik.values[currentInputSlug],
       error: formik.errors[currentInputSlug],
       onInputChange: handleInputChange
@@ -173,6 +181,8 @@ export const useRemoveLiqFormViewModel = () => {
     labelInput,
     labelOutput,
     isSubmitting,
+    lpExchangeRate,
+    shouldShowBalanceButtons,
     lpToken: LP_TOKEN,
     lpBalance: lpBalance.toFixed(),
     handleLpInputChange,

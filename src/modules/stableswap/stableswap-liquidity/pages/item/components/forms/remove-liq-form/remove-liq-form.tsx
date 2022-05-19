@@ -14,8 +14,18 @@ import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 export const RemoveLiqForm: FC = () => {
   const { t } = useTranslation();
 
-  const { data, lpBalance, lpInputValue, lpError, lpToken, labelOutput, handleLpInputChange, handleSubmit } =
-    useRemoveLiqFormViewModel();
+  const {
+    data,
+    lpBalance,
+    lpInputValue,
+    lpError,
+    lpToken,
+    lpExchangeRate,
+    shouldShowBalanceButtons,
+    labelOutput,
+    handleLpInputChange,
+    handleSubmit
+  } = useRemoveLiqFormViewModel();
 
   const stakedTokenDecimals = 8;
   const disabled = false;
@@ -25,12 +35,14 @@ export const RemoveLiqForm: FC = () => {
     <form onSubmit={handleSubmit}>
       <TokenInput
         id="stableswap-input"
+        error={lpError}
         label={labelOutput}
+        tokenA={lpToken}
         value={lpInputValue}
         balance={lpBalance}
+        exchangeRate={lpExchangeRate}
         decimals={stakedTokenDecimals}
-        tokenA={lpToken}
-        error={lpError}
+        shouldShowBalanceButtons={shouldShowBalanceButtons}
         onInputChange={handleLpInputChange}
       />
 
