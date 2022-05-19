@@ -6,8 +6,8 @@ interface ComplexErrorProps {
   error?: string;
 }
 
-export const ComplexError: FC<ComplexErrorProps> = ({ error }) => (
-  <div className={s.errorContainer}>
+export const ComplexError: FC<ComplexErrorProps> = ({ error, ...props }) => (
+  <div className={s.errorContainer} {...props}>
     <p className={s.errorLabel}>{error}</p>
   </div>
 );

@@ -461,13 +461,17 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           )}
           <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
-            <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />
+            <ComplexError
+              error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })}
+              data-test-id="noRouteFound"
+            />
           </div>
           <div className={cx({ [complexInputStyles.error]: shouldShowPriceImpactWarning })}>
             <ComplexError
               error={t('swap|priceImpactWarning', {
                 priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
               })}
+              data-test-id="shouldShowPriceImpactWarning"
             />
           </div>
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
