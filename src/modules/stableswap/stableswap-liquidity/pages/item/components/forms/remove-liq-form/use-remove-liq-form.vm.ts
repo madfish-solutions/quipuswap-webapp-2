@@ -124,7 +124,6 @@ export const useRemoveLiqFormViewModel = () => {
       const inputAmountBN = new BigNumber(preparedTokenInput);
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
-      let outputReserve: BigNumber;
       const inputReserve: BigNumber = reservesAll[indexOfCurrentInput];
 
       tokensInfo.forEach((_, indexOfCalculatedInput) => {
@@ -132,7 +131,7 @@ export const useRemoveLiqFormViewModel = () => {
           return;
         }
 
-        outputReserve = reservesAll[indexOfCalculatedInput];
+        const outputReserve = reservesAll[indexOfCalculatedInput];
 
         const { lpValue, tokenValue } = calculateTokensOutputsThrougToken(
           inputAmountBN,
