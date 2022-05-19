@@ -1,0 +1,193 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+@import "@styles/text";
+
+@mixin theme($focused, $background, $shape, $price, $hover-fallback) {
+  &:not(.readOnly) {
+    .input {
+      caret-color: $hover-fallback;
+    }
+    &.focused .background {
+      background: $focused;
+    }
+  }
+  .background {
+    background: $background;
+  }
+  .shape {
+    background: $shape;
+  }
+  .input {
+    color: $price;
+  }
+
+}
+
+.label {
+  display: inline-block;
+  font-weight: 600;
+  line-height: 1.14;
+  color: $text-03;
+  margin-bottom: 8px;
+}
+
+.label2 {
+  font-weight: bold;
+  font-size: 0.857rem;
+  line-height: 1.33;
+  color: $text-03;
+}
+
+.shape {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 15px;
+  width: 100%;
+  margin: 0px;
+}
+
+.dangerContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+  order: 1;
+}
+
+.dollarEquivalent {
+  order: 2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+
+.balance {
+  margin: 8px 0;
+  order: 3;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  width: 100%;
+  order: 4;
+  flex-grow: 0;
+  flex-basis: 100%;
+}
+.selector {
+  order: 1;
+  &:disabled:hover {
+    cursor: default;
+  }
+  &.frozen {
+    pointer-events: none;
+  }
+}
+
+.selectorInner {
+  display: flex;
+  align-items: center;
+
+  column-gap: 4px;
+  &:disabled:hover {
+    cursor: default;
+  }
+}
+
+.input {
+  min-width: 10px;
+  background: transparent;
+  outline: none;
+  border: none;
+  font-family: $font;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.714rem;
+  line-height: 1.33;
+}
+
+.background {
+  padding: 1px;
+  border-radius: 9px;
+}
+.error {
+  .background {
+    background: $support-error !important;
+  }
+}
+
+.light {
+  @include theme($brand-01, $ui-03, $ui-02, $text-01, $hover-primary-01-fallback);
+}
+.dark {
+  @include theme($brand-02, $text-02, $ui-06, $text-inverse, $hover-primary-02-fallback);
+}
+.readOnly {
+  .input {
+    color: $text-03;
+  }
+}
+
+.scaffoldingPercentSelector {
+  height: 16px;
+}
+
+@include media(">tablet") {
+
+  .shape {
+    justify-content: space-between;
+  }
+  .dollarEquivalent {
+    order: 1;
+    flex-grow: 1;
+    flex-basis: 50%;
+    overflow: hidden;
+    line-height: unset;
+    max-width: 50%;
+  }
+  .unitem1 {
+    max-width: 100%;
+  }
+  .balance {
+    max-width: calc(50% - 16px);
+    width: 100%;
+    margin: 0;
+    order: 2;
+    flex-grow: 1;
+    flex-basis: unset;
+    overflow: hidden;
+    white-space: nowrap;
+    justify-content: flex-end;
+  }
+  .item {
+    margin-top: 8px;
+    order: 3;
+    flex-grow: 1;
+    flex-basis: 20%;
+  }
+  .selector {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    order: 4;
+    flex-basis: content;
+  }
+  .dangerContainer {
+    order: 4;
+    margin-left: 6px;
+  }
+  .recipient {
+    min-height: 26px;
+    line-height: 1.4;
+  }
+  .btn {
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}

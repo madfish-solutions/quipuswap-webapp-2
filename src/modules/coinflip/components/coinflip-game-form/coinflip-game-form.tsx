@@ -70,7 +70,7 @@ export const CoinflipGameForm: FC<Props> = ({
         balance={balance}
         error={inputAmountError}
         decimals={token.metadata.decimals}
-        tokenA={token}
+        tokens={token}
         onInputChange={handleInputAmountChange}
         className={styles.input}
       />
@@ -80,7 +80,7 @@ export const CoinflipGameForm: FC<Props> = ({
         value={payoutAmount}
         balance={null}
         decimals={token.metadata.decimals}
-        tokenA={token}
+        tokens={token}
         onInputChange={noop}
         className={styles.input}
       />

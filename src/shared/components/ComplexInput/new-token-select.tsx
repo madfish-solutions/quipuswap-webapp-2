@@ -20,13 +20,13 @@ import { Shevron } from '@shared/svg';
 import { Undefined, Token } from '@shared/types';
 
 import { Button } from '../button';
+import { ComplexError } from '../complex-error';
+import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { TokensModal } from '../TokensModal';
-import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
-import { PercentSelector } from './PercentSelector';
 
 interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   className?: string;

@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
+import { isExist } from '@shared/helpers';
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -25,6 +26,7 @@ export const UnstakeForm: FC = observer(() => {
   if (!farmingItem) {
     return null;
   }
+  const tokens = [farmingItem.tokenA, farmingItem.tokenB].filter(isExist);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -35,8 +37,7 @@ export const UnstakeForm: FC = observer(() => {
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
         error={inputAmountError}
-        tokenA={farmingItem.tokenA}
-        tokenB={farmingItem.tokenB}
+        tokens={tokens}
         onInputChange={handleInputAmountChange}
       />
       <div className={s.buttons}>

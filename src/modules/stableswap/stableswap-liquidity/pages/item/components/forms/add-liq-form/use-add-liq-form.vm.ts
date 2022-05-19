@@ -81,7 +81,7 @@ export const useAddLiqFormViewModel = () => {
       balance,
       decimals,
       error: formik.errors[currentInputSlug],
-      tokenA: token,
+      tokens: token,
       id: currentInputSlug,
       onInputChange: handleInputChange
     };

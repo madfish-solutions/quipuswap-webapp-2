@@ -12,6 +12,7 @@ import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   Button,
   Card,
+  ComplexError,
   ComplexRecipient,
   ConnectWalletButton,
   PageTitle,
@@ -21,7 +22,6 @@ import {
   Tabs,
   TestnetAlert
 } from '@shared/components';
-import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
 import complexInputStyles from '@shared/components/ComplexInput/ComplexInput.module.scss';
 import { NewTokenSelect } from '@shared/components/ComplexInput/new-token-select';
 import {

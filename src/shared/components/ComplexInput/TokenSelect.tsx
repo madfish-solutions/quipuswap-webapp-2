@@ -20,14 +20,14 @@ import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Button } from '../button';
+import { ComplexError } from '../complex-error';
 import { DashPlug } from '../dash-plug';
+import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { TokensModal } from '../TokensModal';
-import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
-import { PercentSelector } from './PercentSelector';
 
 const DEFAULT_EXCHANGE_RATE = 0;
 
