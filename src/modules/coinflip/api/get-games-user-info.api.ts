@@ -1,17 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_TOKEN } from '@config/tokens';
-import { Token } from '@shared/types';
 
-interface TokenWon {
-  token: Token;
-  amount: BigNumber;
-}
-
-interface GameUserInfo {
-  gamesCount: BigNumber;
-  tokensWon: Array<TokenWon>;
-}
+import { GameUserInfo } from '../types';
 
 export const getGameUserInfoApi = async (): Promise<GameUserInfo> => {
   const gamesCount = new BigNumber(5);

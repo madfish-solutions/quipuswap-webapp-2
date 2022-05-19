@@ -223,3 +223,7 @@ export interface BlockInfo {
   hash: string;
   timestamp: string;
 }
+
+export type NullableField<T> = {
+  [P in keyof T]: Nullable<T[P]>;
+};

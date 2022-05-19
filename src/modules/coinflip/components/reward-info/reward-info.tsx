@@ -1,9 +1,10 @@
 import { FC, useContext, ReactNode } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
-import { Button, Card, Tooltip } from '@shared/components';
+import { Button, Card, StateCurrencyAmount, Tooltip } from '@shared/components';
 import { ArrowSign } from '@shared/svg';
 
 import { YourWinningsReward } from '../your-winnigs';
@@ -16,8 +17,8 @@ const modeClass = {
 };
 
 interface Props {
-  userReward: number;
-  gamesCount: number;
+  userReward: Nullable<BigNumber>;
+  gamesCount: Nullable<BigNumber>;
   rewardTooltip: string;
   yourGamesTooltip: string;
   currency: string;
@@ -50,7 +51,9 @@ export const RewardInfo: FC<Props> = ({
             <span>Your Games</span>
             <Tooltip content={yourGamesTooltip} />
           </div>
-          <div className={cx(styles.amount, modeClass[colorThemeMode])}>{gamesCount}</div>
+          <div className={cx(styles.amount, modeClass[colorThemeMode])}>
+            <StateCurrencyAmount amount={gamesCount} />
+          </div>
         </div>
         {details && showDetails && (
           <Button

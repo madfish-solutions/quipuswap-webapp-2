@@ -3,8 +3,13 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { COIN_FLIP_COEFFICIENT } from '@config/enviroment';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { RootStore } from '@shared/store';
+import { isNull } from '@shared/helpers';
+import { noopMap } from '@shared/mapping';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
+
+import { getGameUserInfoApi } from '../api';
+import { GameUserInfo } from '../types';
 
 export enum TokenToPlay {
   Tezos = 'XTZ',
@@ -13,6 +18,7 @@ export enum TokenToPlay {
 
 const DEFAULT_TOKEN_TO_PLAY = TokenToPlay.Quipu;
 
+// TODO: Rename to obverse / reverse
 export enum CoinSide {
   A = 'A',
   B = 'B'
@@ -33,6 +39,12 @@ export class CoinflipStore {
 
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
+  readonly gamesUserInfoStore = new LoadingErrorData<Nullable<GameUserInfo>, Nullable<GameUserInfo>>(
+    null,
+    async () => await this.getGameUserInfo(),
+    noopMap
+  );
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
@@ -44,6 +56,21 @@ export class CoinflipStore {
       setToken: action,
       setInput: action
     });
+  }
+
+  get gameUserInfo() {
+    return this.gamesUserInfoStore.data;
+  }
+
+  get userReward() {
+    if (isNull(this.gameUserInfo)) {
+      return null;
+    }
+
+    return this.gameUserInfo.tokensWon.reduce((accm, curr) => {
+      // TODO: multiply by exchange rate
+      return accm.plus(curr.amount);
+    }, new BigNumber(0));
   }
 
   get payout(): Nullable<BigNumber> {
@@ -69,5 +96,9 @@ export class CoinflipStore {
 
   setInput(input: Nullable<BigNumber>) {
     this.game.input = input;
+  }
+
+  private async getGameUserInfo() {
+    return await getGameUserInfoApi();
   }
 }

@@ -1,18 +1,22 @@
 import { FC } from 'react';
 
-import { RewardTokensList } from '@modules/farming/pages/list/components/reward-tokens-list';
+import { observer } from 'mobx-react-lite';
 
+import { GameUserInfo } from '../game-user-info';
 import { RewardInfo } from '../reward-info';
+import { useCoinflipRewardInfoViewModel } from './use-coinflip-reward-info.vm';
 
-export const CoinflipRewardInfo: FC = () => {
+export const CoinflipRewardInfo: FC = observer(() => {
+  const { userReward, gamesCount, tokensWon } = useCoinflipRewardInfoViewModel();
+
   return (
     <RewardInfo
-      userReward={1000}
-      gamesCount={100}
+      userReward={userReward}
+      gamesCount={gamesCount}
       rewardTooltip="Reward Tooltip"
       yourGamesTooltip="Your Games Tooltip"
       currency="$"
-      details={<RewardTokensList />}
+      details={<GameUserInfo tokensWon={tokensWon} />}
     />
   );
-};
+});
