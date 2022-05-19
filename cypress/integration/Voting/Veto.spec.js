@@ -8,16 +8,18 @@ describe('Veto', () => {
   });
   it('Should_BeElectedVetoTab_When_ClickingOnVetoTab', () => {
     // check if Veto tab is selected
-
     cy.get('[data-test-id="votingTokenSelect"] [data-test-id="cardTab-1"]').should('contain', 'Veto');
   });
+
   it('Should_BeTezQuipuInTheField_When_PageIsLoaded', () => {
     cy.get(
       '[data-test-id="votingTokenSelect"] [data-test-id="positionSelectInput"] [data-test-id="selectLPButton"]'
     ).should('contain', 'TEZ / QUIPU');
   });
-  // it('Should_HaveTitleVeto_When_PageIsLoaded', () => {
-  //     cy.get('.ComplexInput_label__HWhH_')
-  // //         .should('contain','Veto')
-  // })
+
+  it('Should_HaveSelectedVeto_When_PageIsLoaded', () => {
+    cy.get('[data-test-id="votingTokenSelect"] [data-test-id="cardTab-1"]')
+      .click()
+      .should('have.css', 'color', 'rgb(139, 144, 160)');
+  });
 });

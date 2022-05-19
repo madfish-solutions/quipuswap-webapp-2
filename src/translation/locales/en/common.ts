@@ -129,5 +129,6 @@ export const common = {
   Explore: 'Explore',
   'Pool Details': 'Pool Details',
   Input: 'Input',
-  Output: 'Output'
+  Output: 'Output',
+  Back: 'Back'
 } as const;

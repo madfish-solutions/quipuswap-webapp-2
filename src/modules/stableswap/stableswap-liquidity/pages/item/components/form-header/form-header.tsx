@@ -22,7 +22,7 @@ export const FormHeader: FC = () => {
       >
         <ArrowDown className={styles.backArrow} />
       </Button>
-      <span>{t('farm|Back to the list')}</span>
+      <span>{t('common|Back')}</span>
     </div>
   );
 };
