@@ -59,21 +59,22 @@ export const useAddLiqFormViewModel = () => {
   const { tokensInfo, totalLpSupply } = item;
   const reservesAll = tokensInfo.map(({ reserves }) => reserves);
 
-  const data = tokensInfo.map((info, index) => {
+  const data = tokensInfo.map((info, indexOfCurrentInput) => {
     const token = info.token;
     const decimals = info.token.metadata.decimals;
-    const currentInputSlug = getInputSlugByIndex(index);
+    const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
 
     const handleInputChange = (inputAmount: string) => {
       const formikValues = getFormikInitialValues(tokensInfo.length);
 
-      const inputReserve: BigNumber = reservesAll[index];
-      let outputReserve: BigNumber;
-      tokensInfo.forEach((_, i) => {
-        outputReserve = reservesAll[i];
+      const inputReserve: BigNumber = reservesAll[indexOfCurrentInput];
+
+      tokensInfo.forEach((_, indexOfCalculatedInput) => {
+        const outputReserve = reservesAll[indexOfCalculatedInput];
         const amount = calculateTokensInputs(inputAmount, inputReserve, totalLpSupply, outputReserve);
-        stableswapItemFormStore.setInputAmount(amount, i);
-        formikValues[getInputSlugByIndex(i)] = amount ? amount.toFixed() : DEFAULT_FORMIK_VALUE;
+
+        stableswapItemFormStore.setInputAmount(amount, indexOfCalculatedInput);
+        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = amount ? amount.toFixed() : DEFAULT_FORMIK_VALUE;
       });
 
       formik.setValues(formikValues);
