@@ -54,7 +54,9 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
-
+/*
+ *@deprecated
+ */
 export const TokenSelect: FC<TokenSelectProps> = ({
   className,
   balance = null,

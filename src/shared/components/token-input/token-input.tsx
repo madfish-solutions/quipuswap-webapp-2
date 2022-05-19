@@ -6,6 +6,7 @@ import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
 import { isExist, isNull } from '@shared/helpers';
+import { Shevron } from '@shared/svg';
 
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
@@ -28,7 +29,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   id,
   className,
   label,
-  tokens,
+  tokens = [],
   exchangeRate = null,
   value,
   balance,
@@ -75,7 +76,14 @@ export const TokenInput: FC<TokenInputProps> = ({
   const showPercentSelector = !hidePercentSelector && !readOnly;
 
   return (
-    <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
+    <div
+      className={compoundClassName}
+      onClick={focusInput}
+      onKeyPress={focusInput}
+      role="button"
+      tabIndex={0}
+      data-test-id="tokenInputContainer"
+    >
       <label htmlFor={id} className={styles.label} data-test-id="tokenInputLabel">
         {label}
       </label>
@@ -85,6 +93,16 @@ export const TokenInput: FC<TokenInputProps> = ({
             {!isNull(exchangeRate) && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
+            {/* {showBuyButton && token && (
+                <Button
+                  href={`/swap/tez-${getTokenSlug(token)}`}
+                  theme="quaternary"
+                  className={s.actionButton}
+                  textClassName={s.actionButtonText}
+                >
+                  {t('common|Buy')}
+                </Button>
+              )} */}
             {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}
           </div>
           <input
@@ -110,6 +128,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             >
               <TokensLogos tokens={tokens} />
               <TokensSymbols tokens={tokens} />
+              {Boolean(onSelectorClick) && <Shevron />}
             </Button>
           </div>
         </div>

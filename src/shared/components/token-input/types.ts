@@ -6,14 +6,14 @@ type Tokens = Token | Array<Token>;
 
 export interface TokenInputViewModelProps {
   value: string;
-  tokens: Tokens;
+  tokens?: Tokens;
   exchangeRate?: Nullable<BigNumber.Value>;
   decimals: number;
   onInputChange: (value: string) => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
-  id: string;
+  id?: string;
   className?: string;
 
   label: string;
