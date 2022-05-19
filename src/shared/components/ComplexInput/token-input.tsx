@@ -70,15 +70,13 @@ export const TokenInput: FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const accountPkh = useAccountPkh();
 
-  const dollarEquivalent = useMemo(
-    () =>
-      exchangeRate
-        ? new BigNumber(value ? value.toString() : DEFAULT_EXCHANGE_RATE)
-            .multipliedBy(new BigNumber(exchangeRate))
-            .toString()
-        : '',
-    [exchangeRate, value]
-  );
+  const dollarEquivalent = useMemo(() => {
+    if (isExist(exchangeRate)) {
+      const valueBN = new BigNumber(value ? value.toString() : DEFAULT_EXCHANGE_RATE);
+
+      return valueBN.isNaN() ? '0' : valueBN.multipliedBy(new BigNumber(exchangeRate)).toFixed();
+    }
+  }, [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [styles.focused]: isFocused, [styles.error]: !!error },
