@@ -75,13 +75,12 @@ export const useAddLiqFormViewModel = () => {
 
       const inputAmountReserve = reservesAll[indexOfCurrentInput];
 
-      let outputAmountReserve: BigNumber;
       tokensInfo.forEach((_, indexOfCalculatedInput) => {
         if (indexOfCurrentInput === indexOfCalculatedInput) {
           return;
         }
 
-        outputAmountReserve = reservesAll[indexOfCalculatedInput];
+        const outputAmountReserve = reservesAll[indexOfCalculatedInput];
 
         const amount = calculateTokensInputs(inputAmountBN, inputAmountReserve, totalLpSupply, outputAmountReserve);
         stableswapItemFormStore.setInputAmount(amount, indexOfCalculatedInput);
