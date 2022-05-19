@@ -8,6 +8,8 @@ import { getInputSlugByIndex } from './get-input-slug-by-index';
 
 const EMPTY_STRING = '';
 
+export const prepareFormikValue = (value: Nullable<BigNumber>) => (isNull(value) ? EMPTY_STRING : value.toFixed());
+
 const createFormikValues = (values: Array<string>): FormikValues => {
   const mapLikeFormikValues = values.map((value, index) => [getInputSlugByIndex(index), value]);
 
@@ -28,4 +30,12 @@ export const getFormikInitialValuesRemoveForm = (length: number): FormikValues =
   return values;
 };
 
-export const prepareFormikValue = (value: Nullable<BigNumber>) => (isNull(value) ? EMPTY_STRING : value.toFixed());
+export const setFormikValuesRemoveForm = (
+  formikValues: FormikValues,
+  lpInputAmount: Nullable<BigNumber>,
+  tokenInputAmount: Nullable<BigNumber>,
+  indexOfTokenInputAmount: number
+): void => {
+  formikValues[LP_INPUT_KEY] = prepareFormikValue(lpInputAmount);
+  formikValues[getInputSlugByIndex(indexOfTokenInputAmount)] = prepareFormikValue(tokenInputAmount);
+};

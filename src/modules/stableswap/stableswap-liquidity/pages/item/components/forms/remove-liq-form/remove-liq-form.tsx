@@ -21,13 +21,13 @@ export const RemoveLiqForm: FC = () => {
     lpError,
     lpToken,
     lpExchangeRate,
+    lpDecimals,
     shouldShowBalanceButtons,
     labelOutput,
     handleLpInputChange,
     handleSubmit
   } = useRemoveLiqFormViewModel();
 
-  const stakedTokenDecimals = 8;
   const disabled = false;
   const isSubmitting = false;
 
@@ -41,7 +41,7 @@ export const RemoveLiqForm: FC = () => {
         value={lpInputValue}
         balance={lpBalance}
         exchangeRate={lpExchangeRate}
-        decimals={stakedTokenDecimals}
+        decimals={lpDecimals}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onInputChange={handleLpInputChange}
       />

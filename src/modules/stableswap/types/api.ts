@@ -25,6 +25,7 @@ export interface RawStableswapItem {
   tvlInUsd: string;
   poolContractUrl: string;
   isWhitelisted: boolean;
+  lpToken: RawToken;
 }
 
 export interface RawStableswapFees {

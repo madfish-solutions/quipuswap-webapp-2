@@ -14,6 +14,7 @@ export class StableswapItemFormStore {
 
       initInputAmounts: action,
       setInputAmount: action,
+      setLpAndTokenInputAmounts: action,
       clearStore: action
     });
   }
@@ -28,6 +29,11 @@ export class StableswapItemFormStore {
 
   setInputAmount(amount: Nullable<BigNumber>, index: number) {
     this.inputAmounts[index] = amount;
+  }
+
+  setLpAndTokenInputAmounts(lpValue: Nullable<BigNumber>, tokenValue: Nullable<BigNumber>, index: number) {
+    this.setLpInputAmount(lpValue);
+    this.setInputAmount(tokenValue, index);
   }
 
   clearStore() {

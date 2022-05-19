@@ -1,23 +1,21 @@
 import BigNumber from 'bignumber.js';
 
+import { StableswapTokensInfo } from '../types';
+
 export const calculateTokensOutputsThroughLp = (
   lpInput: BigNumber,
   totalSupply: BigNumber,
-  reserves: Array<BigNumber>
+  tokensInfo: Array<StableswapTokensInfo>
 ): Array<Nullable<BigNumber>> => {
   if (lpInput.isNaN()) {
-    return Array(reserves.length).fill(null);
+    return Array(tokensInfo.length).fill(null);
   }
 
   const lpInputBN = new BigNumber(lpInput);
 
-  const tokenOutputs: Array<BigNumber> = [];
-
-  let tokenOutput: BigNumber;
-  for (const reserve of reserves) {
-    tokenOutput = lpInputBN.multipliedBy(reserve).dividedBy(totalSupply);
-    tokenOutputs.push(tokenOutput);
-  }
+  const tokenOutputs: Array<BigNumber> = tokensInfo.map(({ reserves }) =>
+    lpInputBN.multipliedBy(reserves).dividedBy(totalSupply)
+  );
 
   return tokenOutputs;
 };

@@ -1,10 +1,12 @@
+import { useEffect } from 'react';
+
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
+import { DEFAULT_DECIMALS } from '@config/constants';
 import { useAccountPkh } from '@providers/use-dapp';
-import { isNull, prepareNumberAsString } from '@shared/helpers';
+import { isNull } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
-import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import {
@@ -13,26 +15,15 @@ import {
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
   getInputSlugByIndex,
-  prepareFormikValue
+  prepareFormikValue,
+  setFormikValuesRemoveForm,
+  prepareInputAmountAsBN
 } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { LP_INPUT_KEY } from './constants';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
-const ZERO = 0;
-
-const LP_TOKEN = {
-  type: Standard.Fa2,
-  contractAddress: '',
-  fa2TokenId: 0,
-  isWhitelisted: true,
-  metadata: {
-    decimals: 6,
-    symbol: 'LP TOKEN',
-    name: 'LP Governance Token',
-    thumbnailUri: ''
-  }
-};
+const DEFAULT_LENGTH = 0;
 
 interface RemoveLiqFormValues {
   [key: string]: string;
@@ -58,8 +49,8 @@ export const useRemoveLiqFormViewModel = () => {
   //#endregion mock data
 
   const shouldShowBalanceButtons = !isNull(accountPkh);
-  const inputsCount = (item && item.tokensInfo.length) ?? ZERO;
-  const userBalances = Array(inputsCount ?? ZERO).fill(balance);
+  const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
+  const userBalances = Array(inputsCount ?? DEFAULT_LENGTH).fill(balance);
 
   const validationSchema = useRemoveLiqFormValidation(lpBalance, userBalances);
 
@@ -79,6 +70,10 @@ export const useRemoveLiqFormViewModel = () => {
   const lpInputValue = formik.values[LP_INPUT_KEY];
   const lpError = formik.errors[LP_INPUT_KEY];
 
+  useEffect(() => {
+    return () => stableswapItemFormStore.clearStore();
+  }, [stableswapItemFormStore]);
+
   if (isNull(item)) {
     return {
       data: [],
@@ -90,22 +85,62 @@ export const useRemoveLiqFormViewModel = () => {
       isSubmitting,
       lpExchangeRate,
       shouldShowBalanceButtons,
-      lpToken: LP_TOKEN,
+      lpToken: null,
+      lpDecimals: DEFAULT_DECIMALS,
       lpBalance: lpBalance.toFixed(),
       handleLpInputChange: noopMap,
       handleSubmit: formik.handleSubmit
     };
   }
 
-  const { tokensInfo, totalLpSupply } = item;
-  const reservesAll = tokensInfo.map(({ reserves }) => reserves);
+  const { tokensInfo, totalLpSupply, lpToken } = item;
+
+  const data = tokensInfo.map(({ token, exchangeRate, reserves: currentReserve }, indexOfCurrentInput) => {
+    const decimals = token.metadata.decimals;
+    const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
+
+    const handleInputChange = (inputAmount: string) => {
+      const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+      const formikValues = getFormikInitialValues(tokensInfo.length);
+
+      tokensInfo.forEach(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
+        if (indexOfCurrentInput !== indexOfCalculatedInput) {
+          const { lpValue, tokenValue } = calculateTokensOutputsThrougToken(
+            inputAmountBN,
+            currentReserve,
+            totalLpSupply,
+            calculatedReserve
+          );
+
+          setFormikValuesRemoveForm(formikValues, lpValue, tokenValue, indexOfCalculatedInput);
+          stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, tokenValue, indexOfCalculatedInput);
+        }
+      });
+
+      formikValues[currentInputSlug] = inputAmount;
+      stableswapItemFormStore.setInputAmount(inputAmountBN, indexOfCurrentInput);
+      formik.setValues(formikValues);
+    };
+
+    return {
+      decimals,
+      shouldShowBalanceButtons,
+      tokenA: token,
+      label: labelOutput,
+      id: currentInputSlug,
+      balance: balance.toFixed(),
+      exchangeRate: exchangeRate.toFixed(),
+      value: formik.values[currentInputSlug],
+      error: formik.errors[currentInputSlug],
+      onInputChange: handleInputChange
+    };
+  });
 
   const handleLpInputChange = (inputAmount: string) => {
-    const preparedLpInput = prepareNumberAsString(inputAmount);
-    const inputAmountBN = new BigNumber(preparedLpInput);
+    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
     const formikValues = getFormikInitialValues(tokensInfo.length);
 
-    const tokenOutputs = calculateTokensOutputsThroughLp(inputAmountBN, totalLpSupply, reservesAll);
+    const tokenOutputs = calculateTokensOutputsThroughLp(inputAmountBN, totalLpSupply, tokensInfo);
     tokenOutputs.forEach((amount, indexOfTokenInput) => {
       stableswapItemFormStore.setInputAmount(amount, indexOfTokenInput);
 
@@ -118,63 +153,9 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.setLpInputAmount(inputAmountBN);
   };
 
-  const data = tokensInfo.map((info, indexOfCurrentInput) => {
-    const { token, exchangeRate } = info;
-    const decimals = token.metadata.decimals;
-    const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
-    const label = labelOutput;
-
-    const handleInputChange = (inputAmount: string) => {
-      const preparedTokenInput = prepareNumberAsString(inputAmount);
-
-      const inputAmountBN = new BigNumber(preparedTokenInput);
-      const formikValues = getFormikInitialValues(tokensInfo.length);
-
-      const inputReserve: BigNumber = reservesAll[indexOfCurrentInput];
-
-      tokensInfo.forEach((_, indexOfCalculatedInput) => {
-        if (indexOfCurrentInput === indexOfCalculatedInput) {
-          return;
-        }
-
-        const outputReserve = reservesAll[indexOfCalculatedInput];
-
-        const { lpValue, tokenValue } = calculateTokensOutputsThrougToken(
-          inputAmountBN,
-          inputReserve,
-          totalLpSupply,
-          outputReserve
-        );
-
-        formikValues[LP_INPUT_KEY] = prepareFormikValue(lpValue);
-        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = prepareFormikValue(tokenValue);
-
-        stableswapItemFormStore.setLpInputAmount(lpValue);
-        stableswapItemFormStore.setInputAmount(tokenValue, indexOfCalculatedInput);
-      });
-
-      formikValues[getInputSlugByIndex(indexOfCurrentInput)] = inputAmount;
-
-      stableswapItemFormStore.setInputAmount(inputAmountBN, indexOfCurrentInput);
-      formik.setValues(formikValues);
-    };
-
-    return {
-      label,
-      decimals,
-      shouldShowBalanceButtons,
-      tokenA: token,
-      id: currentInputSlug,
-      balance: balance.toFixed(),
-      exchangeRate: exchangeRate.toFixed(),
-      value: formik.values[currentInputSlug],
-      error: formik.errors[currentInputSlug],
-      onInputChange: handleInputChange
-    };
-  });
-
   return {
     data,
+    lpToken,
     lpInputValue,
     lpError,
     disabled,
@@ -183,7 +164,7 @@ export const useRemoveLiqFormViewModel = () => {
     isSubmitting,
     lpExchangeRate,
     shouldShowBalanceButtons,
-    lpToken: LP_TOKEN,
+    lpDecimals: lpToken.metadata.decimals,
     lpBalance: lpBalance.toFixed(),
     handleLpInputChange,
     handleSubmit: formik.handleSubmit
