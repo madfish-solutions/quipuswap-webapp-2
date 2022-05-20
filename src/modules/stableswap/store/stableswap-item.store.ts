@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import { makeObservable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
@@ -18,7 +18,13 @@ export class StableswapItemStore {
   );
 
   constructor(private rootStore: RootStore) {
-    makeObservable(this, {});
+    makeObservable(this, {
+      poolId: observable,
+
+      setPoolId: action,
+
+      item: computed
+    });
   }
 
   get item() {

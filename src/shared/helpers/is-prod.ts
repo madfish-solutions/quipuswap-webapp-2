@@ -10,7 +10,7 @@ export const isProd = () => {
 
     return !!localStorage.getItem(IS_PROD_KEY);
   } catch (_) {
-    return false;
+    return true;
   }
 };
 

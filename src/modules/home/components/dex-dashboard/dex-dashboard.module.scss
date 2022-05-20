@@ -6,6 +6,7 @@
 }
 
 .mobSlider {
+  padding: 0;
   :global(.slick-dots) {
     bottom: -31px;
   }
@@ -84,9 +85,6 @@
   .content {
     grid-template-columns: repeat(4, 1fr);
 
-    &.testnet {
-      grid-template-columns: repeat(2, 1fr);
-    }
 
     .card {
       &:nth-child(1), &:nth-child(3) {

@@ -9,7 +9,7 @@ import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { fromDecimals } from '@shared/helpers';
 import { UseToasts } from '@shared/hooks';
-import { VoterType, QSNets, Nullable, TokenPair } from '@shared/types';
+import { VoterType, Nullable, TokenPair, SupportedNetworks } from '@shared/types';
 
 export interface HandleTokenPairSelectReturnType {
   tokenPair: TokenPair;
@@ -24,7 +24,7 @@ export const handleTokenPairSelect = async (
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  networkId: QSNets
+  networkId: SupportedNetworks
 ): Promise<Nullable<HandleTokenPairSelectReturnType>> => {
   const result: HandleTokenPairSelectReturnType = {} as HandleTokenPairSelectReturnType;
 

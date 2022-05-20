@@ -58,10 +58,13 @@ export const WalletModal: FC = () => {
         const authenticationWasRejected =
           err instanceof NotGrantedTempleWalletError || err instanceof AbortedBeaconError;
         if (!authenticationWasRejected) {
-          const errorMessage = t('common|errorWhileConnectingWallet', {
-            walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
-            error: (err as Error).message
-          });
+          const errorMessage = t(
+            'common|errorWhileConnectingWallet'
+            // { check what this message sholud do
+            //   walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
+            //   error: (err as Error).message
+            // }
+          );
 
           showErrorToast(errorMessage);
           amplitudeService.logEvent('CONNECT_WALLET_FAILED', { reason: 'NOT_GRANTED', err });

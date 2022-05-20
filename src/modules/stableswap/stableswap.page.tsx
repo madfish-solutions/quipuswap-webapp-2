@@ -1,35 +1,63 @@
 import { FC } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
+import { getLastElement, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../errors';
-import { StableswapLiquidityListPage, StableswapLiquidityItemPage } from './stableswap-liquidity';
+import { checkForAddOrRemoveInUrlParts, getRouterParts } from './helpers';
+import {
+  StableswapLiquidityListPage,
+  StableswapLiquidityAddItemPage,
+  StableswapLiquidityRemoveItemPage
+} from './stableswap-liquidity/pages';
 import { useStableswapPageViewModel } from './stableswap.page.vm';
 
-enum StableswapRoutes {
-  root = '/',
-  liquidity = '/liquidity/',
-  liquidityItem = '/liquidity/:id'
+export enum Tabs {
+  add = 'add',
+  remove = 'remove'
 }
 
-export const StableswapPage: FC = () => {
+export enum StableswapRoutes {
+  root = '/',
+  liquidity = '/liquidity/'
+}
+
+export const StableswapPage: FC = observer(() => {
+  const { pathname } = useLocation();
+
   const { isInitialazied } = useStableswapPageViewModel();
+
+  const routerParts = getRouterParts(pathname);
+  const lastTab = getLastElement(routerParts);
+
+  const isAddOrRemoveInUrl = checkForAddOrRemoveInUrlParts(routerParts);
+
+  if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
+    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${lastTab}`} />;
+  }
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<></>}>
       <Routes>
-        <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
-        <Route path={StableswapRoutes.liquidityItem} element={<StableswapLiquidityItemPage />} />
         <Route
           path={StableswapRoutes.root}
           element={<Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`} />}
+        />
+
+        <Route path={StableswapRoutes.liquidity} element={<StableswapLiquidityListPage />} />
+
+        <Route path={`${StableswapRoutes.liquidity}${Tabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`${StableswapRoutes.liquidity}${Tabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
         />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>
     </StateWrapper>
   );
-};
+});

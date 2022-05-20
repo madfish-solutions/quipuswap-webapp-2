@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-type-alias */
 import { FC, ReactNode, useContext, useState } from 'react';
 
 import cx from 'classnames';
@@ -47,7 +45,7 @@ export const Modal: FC<ModalProps> = ({
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [start, setStart] = useState<any>();
+  const [start, setStart] = useState<EventTarget>();
 
   return (
     <ReactModal

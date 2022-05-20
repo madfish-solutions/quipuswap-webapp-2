@@ -1,27 +1,31 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { action, makeObservable, observable } from 'mobx';
 
+import { CoinflipStore as ICoinflipStore } from '@modules/coinflip';
 import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
 import {
-  StableswapListStore as IStableswapListStore,
+  StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
-  StableswapFilterStore as IStableswapFilterStore
+  StableswapItemFormStore as IStableswapItemFormStore,
+  StableswapListStore as IStableswapListStore
 } from '@modules/stableswap/store';
 
-import { isNull } from '../helpers';
-import { Nullable } from '../types/types';
+import { isExist, isNull } from '../helpers';
+import { Nullable } from '../types';
 import { AuthStore } from './auth.store';
 import { SettingsStore } from './settings.store';
+import { TokensBalancesStore } from './tokens-balances.store';
 import { UiStore } from './ui.store';
 
 export class RootStore {
   authStore: AuthStore;
   uiStore: UiStore;
   settingsStore: SettingsStore;
+  tokensBalancesStore: TokensBalancesStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
@@ -29,7 +33,10 @@ export class RootStore {
 
   stableswapListStore: Nullable<IStableswapListStore> = null;
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
+  stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
+
+  coinflipStore: Nullable<ICoinflipStore> = null;
 
   tezos: Nullable<TezosToolkit> = null;
 
@@ -37,6 +44,7 @@ export class RootStore {
     this.authStore = new AuthStore(this);
     this.uiStore = new UiStore(this);
     this.settingsStore = new SettingsStore(this);
+    this.tokensBalancesStore = new TokensBalancesStore(this);
 
     makeObservable(this, {
       tezos: observable,
@@ -46,11 +54,13 @@ export class RootStore {
       farmingListStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
+      coinflipStore: observable,
 
       setTezos: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,
-      createFarmingItemStore: action
+      createFarmingItemStore: action,
+      createCoinflipStore: action
     });
   }
 
@@ -69,6 +79,13 @@ export class RootStore {
     if (isNull(this.stableswapItemStore)) {
       const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
       this.stableswapItemStore = new StableswapItemStore(this);
+    }
+  }
+
+  async createStableswapItemFormStore() {
+    if (isNull(this.stableswapItemFormStore)) {
+      const { StableswapItemFormStore } = await import('@modules/stableswap/store/stableswap-item-form.store');
+      this.stableswapItemFormStore = new StableswapItemFormStore(this);
     }
   }
 
@@ -98,5 +115,13 @@ export class RootStore {
       const { FarmingItemStore } = await import('@modules/farming/store/farming-item.store');
       this.farmingItemStore = new FarmingItemStore(this);
     }
+  }
+
+  async createCoinflipStore() {
+    if (isExist(this.coinflipStore)) {
+      return;
+    }
+    const { CoinflipStore } = await import('@modules/coinflip');
+    this.coinflipStore = new CoinflipStore(this);
   }
 }

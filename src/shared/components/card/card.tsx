@@ -16,6 +16,12 @@ interface Props extends HTMLProps<HTMLDivElement> {
     status?: ActiveStatus;
     className?: string;
   };
+  subheader?: {
+    content: ReactNode;
+    button?: ReactNode;
+    status?: ActiveStatus;
+    className?: string;
+  };
   additional?: ReactNode;
   footer?: ReactNode;
   contentClassName?: string;
@@ -30,6 +36,7 @@ const modeClass = {
 export const Card: FC<Props> = ({
   className,
   header,
+  subheader,
   additional,
   footer,
   children,
@@ -54,6 +61,17 @@ export const Card: FC<Props> = ({
             </span>
           </span>
           {header.button}
+        </div>
+      )}
+      {subheader && (
+        <div className={cx(styles.header, subheader.className)}>
+          <span data-test-id="headerContent">{subheader.content}</span>
+          <span data-test-id="statusLabelCard">
+            <span data-test-id="statusLabel">
+              {subheader.status ? <StatusLabel filled status={subheader.status} /> : null}
+            </span>
+          </span>
+          {subheader.button}
         </div>
       )}
       {additional && <div className={styles.additional}>{additional}</div>}
