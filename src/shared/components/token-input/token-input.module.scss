@@ -7,20 +7,23 @@
     .input {
       caret-color: $hover-fallback;
     }
+
     &.focused .background {
       background: $focused;
     }
   }
+
   .background {
     background: $background;
   }
+
   .shape {
     background: $shape;
   }
+
   .input {
     color: $price;
   }
-
 }
 
 .label {
@@ -79,11 +82,13 @@
   flex-grow: 0;
   flex-basis: 100%;
 }
+
 .selector {
   order: 1;
   &:disabled:hover {
     cursor: default;
   }
+
   &.frozen {
     pointer-events: none;
   }
@@ -115,6 +120,7 @@
   padding: 1px;
   border-radius: 9px;
 }
+
 .error {
   .background {
     background: $support-error !important;
@@ -124,9 +130,11 @@
 .light {
   @include theme($brand-01, $ui-03, $ui-02, $text-01, $hover-primary-01-fallback);
 }
+
 .dark {
   @include theme($brand-02, $text-02, $ui-06, $text-inverse, $hover-primary-02-fallback);
 }
+
 .readOnly {
   .input {
     color: $text-03;
@@ -138,10 +146,10 @@
 }
 
 @include media(">tablet") {
-
   .shape {
     justify-content: space-between;
   }
+
   .dollarEquivalent {
     order: 1;
     flex-grow: 1;
@@ -150,9 +158,7 @@
     line-height: unset;
     max-width: 50%;
   }
-  .unitem1 {
-    max-width: 100%;
-  }
+
   .balance {
     max-width: calc(50% - 16px);
     width: 100%;
@@ -164,12 +170,14 @@
     white-space: nowrap;
     justify-content: flex-end;
   }
+
   .item {
     margin-top: 8px;
     order: 3;
     flex-grow: 1;
     flex-basis: 20%;
   }
+
   .selector {
     display: flex;
     align-items: center;
@@ -177,17 +185,9 @@
     order: 4;
     flex-basis: content;
   }
+
   .dangerContainer {
     order: 4;
     margin-left: 6px;
-  }
-  .recipient {
-    min-height: 26px;
-    line-height: 1.4;
-  }
-  .btn {
-    &:not(:last-child) {
-      margin-right: 8px;
-    }
   }
 }

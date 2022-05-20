@@ -93,16 +93,6 @@ export const TokenInput: FC<TokenInputProps> = ({
             {!isNull(exchangeRate) && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
-            {/* {showBuyButton && token && (
-                <Button
-                  href={`/swap/tez-${getTokenSlug(token)}`}
-                  theme="quaternary"
-                  className={s.actionButton}
-                  textClassName={s.actionButtonText}
-                >
-                  {t('common|Buy')}
-                </Button>
-              )} */}
             {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}
           </div>
           <input
