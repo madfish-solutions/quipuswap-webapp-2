@@ -73,7 +73,7 @@ export const TokenInput: FC<TokenInputProps> = ({
 
   const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: Boolean(onSelectorClick) });
 
-  const showPercentSelector = !hidePercentSelector && !readOnly;
+  const showPercentSelector = !hidePercentSelector && isFormReady;
 
   return (
     <div
