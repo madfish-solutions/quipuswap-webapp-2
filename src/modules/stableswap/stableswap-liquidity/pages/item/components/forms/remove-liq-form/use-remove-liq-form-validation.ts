@@ -7,7 +7,7 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
-import { LP_INPUT_KEY } from './constants';
+import { LP_INPUT_KEY } from '../../stable-lp-input';
 
 export const useRemoveLiqFormValidation = (userLpBalance: BigNumber, userTokenBalance: Array<BigNumber>) => {
   return useMemo(() => {

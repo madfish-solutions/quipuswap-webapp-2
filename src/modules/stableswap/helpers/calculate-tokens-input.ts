@@ -1,16 +1,20 @@
 import BigNumber from 'bignumber.js';
 
+import { isNull } from '@shared/helpers';
+
+import { calculateLpValue } from './calculate-lp-value';
+
 export const calculateTokensInputs = (
-  inputAmount: BigNumber,
+  inputAmount: Nullable<BigNumber>,
   inputAmountReserve: BigNumber,
   totalLpSupply: BigNumber,
   outputAmountReserve: BigNumber
 ) => {
-  if (inputAmount.isNaN()) {
+  if (isNull(inputAmount)) {
     return null;
   }
 
-  const shares_in = inputAmount.multipliedBy(totalLpSupply).dividedBy(inputAmountReserve);
+  const lpValue = calculateLpValue(inputAmount, inputAmountReserve, totalLpSupply);
 
-  return shares_in.multipliedBy(outputAmountReserve).dividedBy(totalLpSupply);
+  return lpValue?.multipliedBy(outputAmountReserve).dividedBy(totalLpSupply) ?? null;
 };

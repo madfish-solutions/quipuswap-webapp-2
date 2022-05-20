@@ -2,59 +2,45 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { TokenInput, ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip } from '@shared/components';
+import { ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip } from '@shared/components';
+import { isNull } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { StableLpInput } from '../../stable-lp-input';
+import { StableTokenInput } from '../../stable-token-input';
 import styles from '../forms.module.scss';
 import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 
 export const RemoveLiqForm: FC = () => {
   const { t } = useTranslation();
 
-  const {
-    data,
-    lpBalance,
-    lpInputValue,
-    lpError,
-    lpToken,
-    lpExchangeRate,
-    lpDecimals,
-    shouldShowBalanceButtons,
-    labelOutput,
-    handleLpInputChange,
-    handleSubmit
-  } = useRemoveLiqFormViewModel();
+  const removeLiqFormViewModel = useRemoveLiqFormViewModel();
+
+  if (isNull(removeLiqFormViewModel)) {
+    return null;
+  }
+
+  const { data, formik, lpBalance, handleSubmit } = removeLiqFormViewModel;
 
   const disabled = false;
   const isSubmitting = false;
 
   return (
     <form onSubmit={handleSubmit}>
-      <TokenInput
-        id="stableswap-input"
-        error={lpError}
-        label={labelOutput}
-        tokenA={lpToken}
-        value={lpInputValue}
-        balance={lpBalance}
-        exchangeRate={lpExchangeRate}
-        decimals={lpDecimals}
-        shouldShowBalanceButtons={shouldShowBalanceButtons}
-        onInputChange={handleLpInputChange}
-      />
+      <StableLpInput formik={formik} balance={lpBalance} />
 
       <ArrowDown className={styles.svg} />
 
-      <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
+      <Iterator render={StableTokenInput} data={data} separator={<Plus className={styles.svg} />} />
 
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
         {/* Mock data */}
         <Switcher value={true} disabled={true} onClick={noopMap} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
-        <Tooltip content={labelOutput} />
+        <Tooltip content="Tooltip" />
       </div>
 
       <div className={stylesCommonContainer.buttons}>

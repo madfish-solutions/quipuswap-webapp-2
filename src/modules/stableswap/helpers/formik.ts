@@ -3,7 +3,7 @@ import { FormikValues } from 'formik';
 
 import { isNull } from '@shared/helpers';
 
-import { LP_INPUT_KEY } from '../stableswap-liquidity/pages/item/components/forms';
+import { LP_INPUT_KEY } from '../stableswap-liquidity/pages/item/components/stable-lp-input';
 import { getInputSlugByIndex } from './get-input-slug-by-index';
 
 const EMPTY_STRING = '';

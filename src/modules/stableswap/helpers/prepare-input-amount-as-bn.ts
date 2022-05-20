@@ -2,8 +2,10 @@ import { BigNumber } from 'bignumber.js';
 
 import { prepareNumberAsString } from '@shared/helpers';
 
-export const prepareInputAmountAsBN = (inputAmount: string) => {
+export const prepareInputAmountAsBN = (inputAmount: string): Nullable<BigNumber> => {
   const preparedTokenInput = prepareNumberAsString(inputAmount);
 
-  return new BigNumber(preparedTokenInput);
+  const tokenInputBN = new BigNumber(preparedTokenInput);
+
+  return tokenInputBN.isNaN() ? null : tokenInputBN;
 };

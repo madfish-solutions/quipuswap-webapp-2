@@ -1,13 +1,15 @@
 import BigNumber from 'bignumber.js';
 
+import { isNull } from '@shared/helpers';
+
 import { StableswapTokensInfo } from '../types';
 
-export const calculateTokensOutputsThroughLp = (
-  lpInput: BigNumber,
+export const calculateOutputWithLp = (
+  lpInput: Nullable<BigNumber>,
   totalSupply: BigNumber,
   tokensInfo: Array<StableswapTokensInfo>
 ): Array<Nullable<BigNumber>> => {
-  if (lpInput.isNaN()) {
+  if (isNull(lpInput)) {
     return Array(tokensInfo.length).fill(null);
   }
 

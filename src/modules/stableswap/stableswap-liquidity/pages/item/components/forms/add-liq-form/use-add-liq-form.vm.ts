@@ -3,47 +3,26 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { useAccountPkh } from '@providers/use-dapp';
-import { isNull } from '@shared/helpers';
-import { useTranslation } from '@translation';
+import { hasFormikError, isNull } from '@shared/helpers';
 
-import {
-  calculateTokensInputs,
-  getFormikInitialValues,
-  getInputSlugByIndex,
-  prepareFormikValue,
-  prepareInputAmountAsBN
-} from '../../../../../../helpers';
+import { getFormikInitialValues } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
+const BALANCE = '100000';
+const BALANCE_BN = new BigNumber(BALANCE);
 
 interface AddLiqFormValues {
   [key: string]: string;
 }
 
 export const useAddLiqFormViewModel = () => {
-  const accountPkh = useAccountPkh();
-  const { t } = useTranslation();
-
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const item = stableswapItemStore.item;
 
-  //#region mock data
-  //TODO: remove mockdata implement real one
-  const label = t('common|Input');
-  const disabled = false;
-  const isSubmitting = false;
-  const balance = '100000';
-  //#endregion mock data
-
-  const shouldShowBalanceButtons = !isNull(accountPkh);
-
-  const validationSchema = useAddLiqFormValidation(
-    Array(item?.tokensInfo.length ?? DEFAULT_LENGTH).fill(new BigNumber(balance))
-  );
+  const validationSchema = useAddLiqFormValidation(Array(item?.tokensInfo.length ?? DEFAULT_LENGTH).fill(BALANCE_BN));
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
@@ -63,49 +42,19 @@ export const useAddLiqFormViewModel = () => {
   }, [stableswapItemFormStore]);
 
   if (isNull(item)) {
-    return {
-      data: [],
-      disabled,
-      isSubmitting,
-      handleSubmit: formik.handleSubmit
-    };
+    return null;
   }
 
-  const { tokensInfo, totalLpSupply } = item;
+  const { tokensInfo } = item;
 
-  const data = tokensInfo.map(({ token, exchangeRate, reserves: currentReserve }, indexOfCurrentInput) => {
-    const decimals = token.metadata.decimals;
-    const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
+  const isSubmitting = formik.isSubmitting;
+  const disabled = isSubmitting || hasFormikError(formik.errors);
 
-    const handleInputChange = (inputAmount: string) => {
-      const inputAmountBN = prepareInputAmountAsBN(inputAmount);
-      const formikValues = getFormikInitialValues(tokensInfo.length);
-
-      tokensInfo.forEach(({ reserves: calculatedtReserve }, indexOfCalculatedInput) => {
-        if (indexOfCurrentInput !== indexOfCalculatedInput) {
-          const amount = calculateTokensInputs(inputAmountBN, currentReserve, totalLpSupply, calculatedtReserve);
-
-          formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = prepareFormikValue(amount);
-          stableswapItemFormStore.setInputAmount(amount, indexOfCalculatedInput);
-        }
-      });
-
-      formikValues[currentInputSlug] = inputAmount;
-
-      formik.setValues(formikValues);
-    };
-
+  const data = tokensInfo.map((_, index) => {
     return {
-      label,
-      balance,
-      decimals,
-      shouldShowBalanceButtons,
-      tokenA: token,
-      id: currentInputSlug,
-      exchangeRate: exchangeRate.toFixed(),
-      value: formik.values[currentInputSlug],
-      error: formik.errors[currentInputSlug],
-      onInputChange: handleInputChange
+      index,
+      formik,
+      balance: BALANCE
     };
   });
 
