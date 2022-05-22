@@ -1,8 +1,9 @@
-import { FC, useContext, ReactNode } from 'react';
+import { useContext, ReactNode } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { CFC } from '@shared/types';
 
 import styles from './card-cell.module.scss';
 
@@ -16,7 +17,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const CardCell: FC<Props> = ({ header, className, children, ...props }) => {
+export const CardCell: CFC<Props> = ({ header, className, children, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

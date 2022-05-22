@@ -17,11 +17,7 @@ export const isAddressBelongsToBaker = async (address: string) => {
     const response = await fetch(`${TZKT_API_DELEGATE_URL}/${address}`);
     const data = await response.json();
 
-    if (data?.type == BAKER_TYPE) {
-      return true;
-    }
-
-    return false;
+    return data?.type === BAKER_TYPE;
   } catch (err) {
     return false;
   }

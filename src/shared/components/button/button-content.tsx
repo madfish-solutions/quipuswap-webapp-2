@@ -3,19 +3,14 @@ import React from 'react';
 import cx from 'classnames';
 
 import { LogoSmallMonochrome } from '@shared/svg';
+import { CFC } from '@shared/types';
 
 import { ButtonProps } from './button';
 import styles from './button.module.scss';
 
 type ButtonContentProps = Pick<ButtonProps, 'theme' | 'innerClassName' | 'textClassName' | 'loading'>;
 
-export const ButtonContent: React.FC<ButtonContentProps> = ({
-  children,
-  theme,
-  innerClassName,
-  textClassName,
-  loading
-}) => {
+export const ButtonContent: CFC<ButtonContentProps> = ({ children, theme, innerClassName, textClassName, loading }) => {
   if (loading) {
     return theme === 'secondary' ? (
       <span className={cx(styles.inner, innerClassName)}>

@@ -6,10 +6,9 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getDollarEquivalent, getTokenSlug, getTokenSymbol } from '@shared/helpers';
-import { useToasts } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { Nullable } from '@shared/types';
-import { useConfirmOperation } from '@shared/utils';
+import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { useRewards, useTokensPair } from '../helpers/voting.provider';
 

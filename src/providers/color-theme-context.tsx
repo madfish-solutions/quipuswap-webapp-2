@@ -1,8 +1,9 @@
-import { FC, createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 import { noop } from 'rxjs';
 
 import { COLOR_MODE_STORAGE_KEY } from '@config/localstorage';
+import { CFC } from '@shared/types';
 
 export enum ColorModes {
   Light = 'light',
@@ -59,7 +60,7 @@ export const defaultDataContext: ColorThemeContextValue = {
 
 export const ColorThemeContext = createContext<ColorThemeContextValue>(defaultDataContext);
 
-export const ColorThemeProvider: FC = ({ children }) => {
+export const ColorThemeProvider: CFC = ({ children }) => {
   const [colorThemeMode, setColorThemeMode] = useState(ColorModes.Dark);
   const [themeColors, setThemeColors] = useState(themeColorsObj.dark);
 
