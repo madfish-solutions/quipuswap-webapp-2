@@ -8,7 +8,7 @@ import { Standard, Token } from '@shared/types';
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
 });
-
+//test
 export const getUserBalance = async (
   tezos: TezosToolkit,
   account: string,
