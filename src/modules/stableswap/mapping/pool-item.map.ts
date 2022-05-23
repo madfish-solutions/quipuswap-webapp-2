@@ -5,7 +5,8 @@ import { mapBackendToken } from '@shared/mapping';
 import { RawStableswapItem, StableswapItem } from '../types';
 
 export const poolItemMapper = (item: RawStableswapItem): StableswapItem => {
-  const { tvlInUsd, tokensInfo, contractAddress, id, totalLpSupply, fees, poolContractUrl, isWhitelisted } = item;
+  const { tvlInUsd, tokensInfo, contractAddress, id, totalLpSupply, fees, poolContractUrl, isWhitelisted, lpToken } =
+    item;
 
   const readyFeeBN = {
     liquidityProvidersFee: new BigNumber(fees.liquidityProvidersFee),
@@ -23,6 +24,8 @@ export const poolItemMapper = (item: RawStableswapItem): StableswapItem => {
     };
   });
 
+  const readyLpToken = mapBackendToken(lpToken);
+
   return {
     id: new BigNumber(id),
     tvlInUsd: new BigNumber(tvlInUsd),
@@ -32,6 +35,7 @@ export const poolItemMapper = (item: RawStableswapItem): StableswapItem => {
     stableswapItemUrl: id,
     isWhitelisted,
     tokensInfo: readyTokensInfo,
+    lpToken: readyLpToken,
     ...readyFeeBN
   };
 };
