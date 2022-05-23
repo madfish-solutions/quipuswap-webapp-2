@@ -32,7 +32,7 @@ export const RemoveLiqForm: FC = () => {
         value={inputAmount}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
+        tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
       <ArrowDown className={styles.svg} />
@@ -42,7 +42,7 @@ export const RemoveLiqForm: FC = () => {
         value={inputAmount}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
+        tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
       <Plus className={styles.svg} />
@@ -52,7 +52,7 @@ export const RemoveLiqForm: FC = () => {
         value={inputAmount}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
+        tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
       <Plus className={styles.svg} />
@@ -62,7 +62,7 @@ export const RemoveLiqForm: FC = () => {
         value={inputAmount}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
+        tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
       <Plus className={styles.svg} />
@@ -72,7 +72,7 @@ export const RemoveLiqForm: FC = () => {
         value={inputAmount}
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
+        tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>

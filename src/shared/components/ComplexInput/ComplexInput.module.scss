@@ -158,18 +158,7 @@
     max-height: fit-content;
   }
 }
-.errorContainer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height $animationTime;
-}
-.errorLabel {
-  font-size: 0.857rem;
-  line-height: 1.33;
-  padding-top: 8px;
-  display: inline-block;
-  color: $support-error;
-}
+
 .balanceSkeleton {
   width: 48px;
   height: 0.857rem * 1.33;
