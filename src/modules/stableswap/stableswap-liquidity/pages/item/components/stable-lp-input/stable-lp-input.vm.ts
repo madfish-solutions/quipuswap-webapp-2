@@ -1,6 +1,6 @@
 import { LP_INPUT_KEY } from '@config/constants';
 import { useAccountPkh } from '@providers/use-dapp';
-import { isNull } from '@shared/helpers';
+import { isNull, multipliedIfPossible } from '@shared/helpers';
 import { IFormik } from '@shared/types';
 
 import { useStableswapItemStore } from '../../../../../hooks';
@@ -17,11 +17,17 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
 
   const { lpToken } = item;
 
-  const { decimals } = lpToken.metadata;
-
   const value = formik.values[LP_INPUT_KEY];
   const error = formik.errors[LP_INPUT_KEY];
   const hiddenPercentSelector = !Boolean(accountPkh);
+  //TODO: Calculate lp exchangeRate on backend
+  const dollarEquivalent = multipliedIfPossible(formik.values[LP_INPUT_KEY], null);
 
-  return { value, error, lpToken, decimals, hiddenPercentSelector };
+  return {
+    value,
+    error,
+    lpToken,
+    dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
+    hiddenPercentSelector
+  };
 };

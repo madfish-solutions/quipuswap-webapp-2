@@ -4,7 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { hasFormikError, isNull, toFixed } from '@shared/helpers';
+import { isNull, isTokenEqual, hasFormikError, toFixed } from '@shared/helpers';
+import { BalanceToken, useTokensBalances } from '@shared/hooks';
+import { Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import {
   calculateLpValue,
@@ -14,17 +17,16 @@ import {
   prepareInputAmountAsBN
 } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { useTranslation } from './../../../../../../../../translation/use-translation';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
-// Mock
-const BALANCE = '100000';
-const BALANCE_BN = new BigNumber(BALANCE);
 
 interface AddLiqFormValues {
   [key: string]: string;
 }
+
+const findBalanceToken = (balances: Array<BalanceToken>, token: Token) =>
+  balances.find(value => isTokenEqual(value.token, token));
 
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
@@ -32,9 +34,15 @@ export const useAddLiqFormViewModel = () => {
   const stableswapItemFormStore = useStableswapItemFormStore();
   const item = stableswapItemStore.item;
 
-  const userBalances = Array(item?.tokensInfo.length ?? DEFAULT_LENGTH).fill(BALANCE_BN);
+  const balances = useTokensBalances(item?.tokensInfo.map(({ token }) => token));
 
-  const validationSchema = useAddLiqFormValidation(userBalances);
+  const validationSchema = useAddLiqFormValidation(
+    (item?.tokensInfo ?? []).map(({ token }) => {
+      const balanceWrapper = findBalanceToken(balances, token);
+
+      return balanceWrapper?.balance ?? null;
+    })
+  );
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
@@ -93,12 +101,14 @@ export const useAddLiqFormViewModel = () => {
     formik.setValues(formikValues);
   };
 
-  const data = tokensInfo.map(({ reserves }, index) => {
+  const data = tokensInfo.map(({ reserves, token }, index) => {
+    const balance = findBalanceToken(balances, token)?.balance;
+
     return {
       index,
       label,
       formik,
-      balance: BALANCE,
+      balance: balance,
       onInputChange: handleInputChange(reserves, index)
     };
   });

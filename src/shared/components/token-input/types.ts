@@ -7,8 +7,6 @@ type Tokens = Token | Array<Token>;
 export interface TokenInputViewModelProps {
   value: string;
   tokens?: Tokens;
-  exchangeRate?: Nullable<BigNumber.Value>;
-  decimals: number;
   balance: Optional<BigNumber.Value>;
   readOnly?: boolean;
   hiddenPercentSelector?: boolean;
@@ -20,6 +18,6 @@ export interface TokenInputProps extends TokenInputViewModelProps {
   className?: string;
   label: string;
   error?: string;
-  tokensLoading?: boolean;
+  dollarEquivalent?: Optional<BigNumber.Value>;
   onSelectorClick?: () => void;
 }

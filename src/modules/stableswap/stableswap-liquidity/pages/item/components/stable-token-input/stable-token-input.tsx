@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 
 import { TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import { IFormik } from '@shared/types';
+import { IFormik, Optional } from '@shared/types';
 
 import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 import { useStableTokenInputViewModel } from './stable-token-input.vm';
@@ -14,7 +15,7 @@ interface Props {
   formik: IFormik<RemoveLiqFormValues>;
   label: string;
   className?: string;
-  balance?: string;
+  balance?: Optional<BigNumber.Value>;
   onInputChange: (value: string) => void;
 }
 
@@ -25,7 +26,7 @@ export const StableTokenInput: FC<Props> = observer(({ formik, index, label, bal
     return null;
   }
 
-  const { inputSlug, value, error, token, decimals, hiddenPercentSelector } = outputComponentViewModel;
+  const { inputSlug, value, error, token, hiddenPercentSelector, dollarEquivalent } = outputComponentViewModel;
 
   return (
     <TokenInput
@@ -34,9 +35,9 @@ export const StableTokenInput: FC<Props> = observer(({ formik, index, label, bal
       label={label}
       id={inputSlug}
       value={value}
+      dollarEquivalent={dollarEquivalent}
       onInputChange={onInputChange}
       balance={balance}
-      decimals={decimals}
       error={error}
       hiddenPercentSelector={hiddenPercentSelector}
     />

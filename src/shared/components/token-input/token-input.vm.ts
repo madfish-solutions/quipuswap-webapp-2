@@ -2,20 +2,15 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import {
-  getMessageNotWhitelistedTokenPair,
-  getTokenInputAmountCap,
-  isExist,
-  multipliedIfPossible
-} from '@shared/helpers';
+import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap, isExist } from '@shared/helpers';
 
 import { TokenInputViewModelProps } from './types';
 
 export const useTokenInputViewModel = ({
   value,
-  exchangeRate,
+
   tokens,
-  decimals,
+
   balance,
   readOnly,
   hiddenPercentSelector,
@@ -36,17 +31,14 @@ export const useTokenInputViewModel = ({
     inputRef?.current?.focus();
   };
 
-  const dollarEquivalent = useMemo(() => multipliedIfPossible(value, exchangeRate), [exchangeRate, value]);
-
   const notWhitelistedMessage = useMemo(() => getMessageNotWhitelistedTokenPair(tokens), [tokens]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     onInputChange(event.target.value);
   };
 
-  const handlePercentageSelect = (newValue: string) => {
-    const _value = new BigNumber(newValue).decimalPlaces(decimals).toFixed();
-    onInputChange(_value);
+  const handlePercentageSelect = (result: string) => {
+    onInputChange(new BigNumber(result).toFixed());
   };
 
   const amountCap = !Array.isArray(tokens) ? getTokenInputAmountCap(tokens) : undefined;
@@ -56,7 +48,6 @@ export const useTokenInputViewModel = ({
   return {
     isFocused,
     inputRef,
-    dollarEquivalent,
     notWhitelistedMessage,
 
     isFormReady,

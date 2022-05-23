@@ -25,7 +25,7 @@ export const getMessageNotWhitelistedTokenPair = (_tokens: Tokens): Nullable<str
   const tokens = toArray(_tokens).filter(isExist);
   const notWhitelistedTokens = tokens.filter(token => !isWhitelisted(token));
 
-  if (!isEmptyArray(notWhitelistedTokens)) {
+  if (isEmptyArray(notWhitelistedTokens)) {
     return null;
   } else if (isSingleElement(notWhitelistedTokens)) {
     return getMessageNotWhitelistedToken(getFirstElement(notWhitelistedTokens));

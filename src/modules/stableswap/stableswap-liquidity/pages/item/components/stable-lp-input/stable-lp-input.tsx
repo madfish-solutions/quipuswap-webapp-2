@@ -25,7 +25,7 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
     return null;
   }
 
-  const { value, error, lpToken, decimals, hiddenPercentSelector } = outputComponentViewModel;
+  const { value, error, lpToken, dollarEquivalent, hiddenPercentSelector } = outputComponentViewModel;
 
   return (
     <TokenInput
@@ -34,9 +34,9 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
       label={label}
       id={LP_INPUT_KEY}
       value={value}
+      dollarEquivalent={dollarEquivalent}
       onInputChange={onInputChange}
       balance={balance}
-      decimals={decimals}
       error={error}
       hiddenPercentSelector={hiddenPercentSelector}
     />

@@ -12,7 +12,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
   className?: string;
   amount?: BigNumber;
   balance?: BigNumber;
-  exchangeRate?: BigNumber;
   label: string;
   error?: string;
   selectable?: boolean;
@@ -29,7 +28,6 @@ export const TokenSelect: FC<Props> = ({
   amount,
   balance,
   label,
-  exchangeRate,
   error,
   onAmountChange,
   onTokenChange,
@@ -48,8 +46,6 @@ export const TokenSelect: FC<Props> = ({
     handleTokenChange
   } = useTokenSelectViewModel({ amount, onAmountChange, onTokenChange });
 
-  const tokenDecimals = token?.metadata.decimals ?? 0;
-
   return (
     <div {...props}>
       <TokensModal
@@ -63,9 +59,7 @@ export const TokenSelect: FC<Props> = ({
         label={label}
         balance={balance}
         value={localAmount}
-        exchangeRate={exchangeRate}
         tokens={token}
-        decimals={tokenDecimals}
         onInputChange={handleAmountChange}
         onSelectorClick={openTokenModal}
       />

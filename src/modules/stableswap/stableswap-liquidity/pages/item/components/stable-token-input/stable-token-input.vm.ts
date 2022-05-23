@@ -1,5 +1,5 @@
 import { useAccountPkh } from '@providers/use-dapp';
-import { isNull } from '@shared/helpers';
+import { isNull, multipliedIfPossible } from '@shared/helpers';
 import { IFormik } from '@shared/types';
 
 import { getInputSlugByIndex } from '../../../../../helpers';
@@ -18,12 +18,20 @@ export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues
   const { tokensInfo } = item;
 
   const token = tokensInfo[index].token;
-  const { decimals } = token.metadata;
+  const exchangeRate = tokensInfo[index].exchangeRate;
 
   const inputSlug = getInputSlugByIndex(index);
   const value = formik.values[inputSlug];
   const error = formik.errors[inputSlug];
   const hiddenPercentSelector = !Boolean(accountPkh);
+  const dollarEquivalent = multipliedIfPossible(formik.values[inputSlug], exchangeRate.toFixed());
 
-  return { inputSlug, value, error, token, decimals, hiddenPercentSelector };
+  return {
+    inputSlug,
+    value,
+    error,
+    token,
+    hiddenPercentSelector,
+    dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent
+  };
 };

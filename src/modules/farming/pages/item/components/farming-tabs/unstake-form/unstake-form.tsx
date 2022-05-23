@@ -18,7 +18,6 @@ export const UnstakeForm: FC = observer(() => {
     userTokenBalance,
     inputAmountError,
     farmingItem,
-    stakedTokenDecimals,
     disabled,
     handleInputAmountChange
   } = useUnstakeFormViewModel();
@@ -35,7 +34,6 @@ export const UnstakeForm: FC = observer(() => {
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         error={inputAmountError}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
