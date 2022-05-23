@@ -36,15 +36,24 @@ const fixValue = (value: string, decimals: number) => {
 
 export const numberAsString = (value: string, decimals: number) => {
   if (isEmptyString(value)) {
-    return [EMPTY_STRING, EMPTY_STRING];
+    return {
+      realValue: EMPTY_STRING,
+      fixedValue: EMPTY_STRING
+    };
   }
 
   const lastChar = getLastChar(value);
   const fixedValue = fixValue(value, decimals);
 
   if (SEPARATORS.includes(lastChar)) {
-    return [fixedValue, `${fixedValue}${lastChar}`];
+    return {
+      realValue: `${fixedValue}${lastChar}`,
+      fixedValue
+    };
   } else {
-    return [fixedValue, fixedValue];
+    return {
+      realValue: fixedValue,
+      fixedValue
+    };
   }
 };

@@ -61,7 +61,7 @@ export const useUnstakeFormViewModel = () => {
 
   const handleInputAmountChange = (value: string) => {
     const decimals = defined(farmingItem).stakedToken.metadata.decimals;
-    const [fixedValue, realValue] = numberAsString(value, decimals);
+    const { fixedValue, realValue } = numberAsString(value, decimals);
     farmingItemStore.setInputAmount(fixedValue);
     formik.setFieldValue(UnstakeFormFields.inputAmount, realValue);
   };
