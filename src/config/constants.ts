@@ -57,7 +57,6 @@ export const ZERO_LENGTH = 0;
 
 //#region arrays
 export const FISRT_INDEX = 0;
-export const ONE_ITEM_LENGTH = 1;
 //#endregion
 
 //#region default value for token search

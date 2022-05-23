@@ -2,7 +2,12 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap, multipliedIfPossible } from '@shared/helpers';
+import {
+  getMessageNotWhitelistedTokenPair,
+  getTokenInputAmountCap,
+  isExist,
+  multipliedIfPossible
+} from '@shared/helpers';
 
 import { TokenInputViewModelProps } from './types';
 
@@ -11,6 +16,9 @@ export const useTokenInputViewModel = ({
   exchangeRate,
   tokens,
   decimals,
+  balance,
+  readOnly,
+  hiddenPercentSelector,
   onInputChange
 }: TokenInputViewModelProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -42,12 +50,17 @@ export const useTokenInputViewModel = ({
   };
 
   const amountCap = !Array.isArray(tokens) ? getTokenInputAmountCap(tokens) : undefined;
+  const isFormReady = isExist(balance) && !readOnly;
+  const showPercentSelector = !hiddenPercentSelector && isFormReady;
 
   return {
     isFocused,
     inputRef,
     dollarEquivalent,
     notWhitelistedMessage,
+
+    isFormReady,
+    showPercentSelector,
 
     amountCap,
 

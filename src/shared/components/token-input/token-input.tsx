@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
-import { isExist, isNull } from '@shared/helpers';
+import { isNull } from '@shared/helpers';
 import { Shevron } from '@shared/svg';
 
 import { Button } from '../button';
@@ -34,7 +34,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   value,
   balance,
   decimals,
-  hidePercentSelector,
+  hiddenPercentSelector,
   error,
   readOnly,
   onInputChange,
@@ -46,6 +46,9 @@ export const TokenInput: FC<TokenInputProps> = ({
     inputRef,
     dollarEquivalent,
     notWhitelistedMessage,
+
+    isFormReady,
+    showPercentSelector,
 
     amountCap,
 
@@ -60,10 +63,11 @@ export const TokenInput: FC<TokenInputProps> = ({
     exchangeRate,
     tokens,
     decimals,
+    balance,
+    readOnly,
+    hiddenPercentSelector,
     onInputChange
   });
-
-  const isFormReady = isExist(balance) && !readOnly;
 
   const compoundClassName = cx(
     { [styles.focused]: isFocused, [styles.error]: !!error, [styles.readOnly]: !isFormReady },
@@ -72,8 +76,6 @@ export const TokenInput: FC<TokenInputProps> = ({
   );
 
   const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: Boolean(onSelectorClick) });
-
-  const showPercentSelector = !hidePercentSelector && isFormReady;
 
   return (
     <div

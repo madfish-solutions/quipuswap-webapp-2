@@ -9,20 +9,16 @@ export interface TokenInputViewModelProps {
   tokens?: Tokens;
   exchangeRate?: Nullable<BigNumber.Value>;
   decimals: number;
+  balance: Optional<BigNumber.Value>;
+  readOnly?: boolean;
+  hiddenPercentSelector?: boolean;
   onInputChange: (value: string) => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
   id?: string;
   className?: string;
-
   label: string;
-
-  balance: Optional<BigNumber.Value>;
-  readOnly?: boolean;
-
-  hidePercentSelector?: boolean;
-
   error?: string;
   tokensLoading?: boolean;
   onSelectorClick?: () => void;

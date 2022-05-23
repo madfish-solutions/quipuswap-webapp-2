@@ -23,7 +23,7 @@ interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   onTokenChange: (token: Token) => void;
 }
 
-export const _TokenSelect: FC<NewTokenSelectProps> = ({
+export const TokenSelect: FC<NewTokenSelectProps> = ({
   id,
   className,
   amount,
