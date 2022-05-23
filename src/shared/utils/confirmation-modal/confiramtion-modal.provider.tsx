@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { CFC } from '@shared/types';
 
 import { ConfirmationModal } from './confirmation-modal';
 import { ConfirmationModalConstateProvider } from './use-confirmation-modal';
 
-export const ConfirmationModalProvider: FC = ({ children }) => {
+export const ConfirmationModalProvider: CFC = ({ children }) => {
   return (
     <ConfirmationModalConstateProvider>
       {children}

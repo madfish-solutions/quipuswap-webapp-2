@@ -1,9 +1,8 @@
-import { FC } from 'react';
-
 import { observer } from 'mobx-react-lite';
 
 import { StableswapFormTabs } from '@modules/stableswap/types';
 import { Card, SettingsButton, Skeleton, Tabs } from '@shared/components';
+import { CFC } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
 import { FormHeader } from '../form-header';
@@ -13,7 +12,7 @@ interface Props {
   tabActiveId: StableswapFormTabs;
 }
 
-export const StableswapFormTabsCard: FC<Props> = observer(({ tabActiveId, children }) => {
+export const StableswapFormTabsCard: CFC<Props> = observer(({ tabActiveId, children }) => {
   const { stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel();
 
   if (!stableswapItem) {

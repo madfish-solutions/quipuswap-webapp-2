@@ -12,9 +12,10 @@ import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@shared/helpers';
 import { isEqualTokenPairs } from '@shared/helpers/token-pair';
-import { useOnBlock, useToasts } from '@shared/hooks';
+import { useOnBlock } from '@shared/hooks';
 import { useExchangeRates } from '@shared/hooks/use-exchange-rate';
 import { Nullable, VoterType, Token, TokenPair } from '@shared/types';
+import { useToasts } from '@shared/utils';
 
 import { getVoteVetoBalances } from './get-voting-balance';
 import { handleTokenPairSelect, HandleTokenPairSelectReturnType } from './handle-token-pair-select';

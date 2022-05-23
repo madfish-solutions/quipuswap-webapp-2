@@ -1,4 +1,4 @@
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, FormEvent, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -53,8 +53,8 @@ export const AssetInput: FC<AssetInputProps> = ({
   };
 
   const handleChange = useCallback(
-    evt => {
-      let val = getOnlyDecimals(evt.target.value);
+    (event: FormEvent<HTMLInputElement>) => {
+      let val = getOnlyDecimals((event.target as HTMLInputElement).value);
       let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
       if (indexOfDot !== -1 && val.length - indexOfDot > assetDecimals + 1) {

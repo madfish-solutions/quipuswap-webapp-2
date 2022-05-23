@@ -1,11 +1,11 @@
-import { FC, useContext, KeyboardEvent } from 'react';
+import { useContext, KeyboardEvent } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Bage } from '@shared/elements';
 import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
-import { Standard } from '@shared/types';
+import { CFC, Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
@@ -26,7 +26,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const TokenCell: FC<TokenCellProps> = ({
+export const TokenCell: CFC<TokenCellProps> = ({
   onClick,
   tabIndex,
   children,
