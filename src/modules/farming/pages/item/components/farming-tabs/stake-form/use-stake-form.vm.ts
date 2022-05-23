@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useFormik } from 'formik';
