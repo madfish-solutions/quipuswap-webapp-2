@@ -3,10 +3,20 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull } from '@shared/helpers';
+import { LP_INPUT_KEY } from '@config/constants';
+import { isNull, toFixed } from '@shared/helpers';
 
-import { getFormikInitialValuesRemoveForm } from '../../../../../../helpers';
+import {
+  calculateLpValue,
+  calculateOutputWithLp,
+  calculateOutputWithToken,
+  getFormikInitialValues,
+  getFormikInitialValuesRemoveForm,
+  getInputSlugByIndex,
+  prepareInputAmountAsBN
+} from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import { useTranslation } from './../../../../../../../../translation/use-translation';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -24,6 +34,7 @@ const LP_BALANCE_BN = new BigNumber(LP_BALANCE);
 export const useRemoveLiqFormViewModel = () => {
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
+  const { t } = useTranslation();
   const item = stableswapItemStore.item;
 
   //#region mock data
@@ -33,7 +44,7 @@ export const useRemoveLiqFormViewModel = () => {
   //#endregion mock data
 
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
-  const userBalances = Array(inputsCount ?? DEFAULT_LENGTH).fill(BALANCE_BN);
+  const userBalances = Array(inputsCount).fill(BALANCE_BN);
 
   const validationSchema = useRemoveLiqFormValidation(LP_BALANCE_BN, userBalances);
 
@@ -58,22 +69,73 @@ export const useRemoveLiqFormViewModel = () => {
     return null;
   }
 
-  const { tokensInfo } = item;
+  const labelInput = t('common|Input');
+  const labelOutput = t('common|Output');
+  const tooltip = t('common|Success');
 
-  const data = tokensInfo.map((_, index) => {
+  const { tokensInfo, totalLpSupply } = item;
+
+  const formikValues = getFormikInitialValues(tokensInfo.length);
+
+  const setValues = (lpValue: Nullable<BigNumber>, calculatedValues: Array<Nullable<BigNumber>>) => {
+    formik.setValues(formikValues);
+    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+  };
+
+  const data = tokensInfo.map(({ reserves }, index) => {
     return {
       index,
       formik,
-      balance: BALANCE
+      label: labelInput,
+      balance: BALANCE,
+      onInputChange: (inputAmount: string) => {
+        formikValues[getInputSlugByIndex(index)] = inputAmount;
+        const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+        const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+
+        formikValues[LP_INPUT_KEY] = toFixed(lpValue);
+
+        const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
+          if (index === indexOfCalculatedInput) {
+            return inputAmountBN;
+          }
+
+          return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
+        });
+
+        calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+          if (index !== indexOfCalculatedInput) {
+            formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+          }
+        });
+
+        setValues(lpValue, calculatedValues);
+      }
     };
   });
 
+  const handleLpInputChange = (inputAmount: string) => {
+    formikValues[LP_INPUT_KEY] = inputAmount;
+
+    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+    const tokenOutputs = calculateOutputWithLp(inputAmountBN, totalLpSupply, tokensInfo);
+
+    tokenOutputs.forEach((amount, indexOfTokenInput) => {
+      formikValues[getInputSlugByIndex(indexOfTokenInput)] = toFixed(amount);
+    });
+
+    setValues(inputAmountBN, tokenOutputs);
+  };
+
   return {
     data,
-    disabled,
-    isSubmitting,
     formik,
+    tooltip,
+    disabled,
+    labelOutput,
+    isSubmitting,
     lpBalance: LP_BALANCE,
+    handleLpInputChange,
     handleSubmit: formik.handleSubmit
   };
 };

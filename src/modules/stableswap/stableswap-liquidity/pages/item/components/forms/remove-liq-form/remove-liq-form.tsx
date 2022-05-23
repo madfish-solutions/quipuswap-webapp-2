@@ -23,14 +23,14 @@ export const RemoveLiqForm: FC = () => {
     return null;
   }
 
-  const { data, formik, lpBalance, handleSubmit } = removeLiqFormViewModel;
+  const { data, formik, lpBalance, labelOutput, tooltip, handleSubmit, handleLpInputChange } = removeLiqFormViewModel;
 
   const disabled = false;
   const isSubmitting = false;
 
   return (
     <form onSubmit={handleSubmit}>
-      <StableLpInput formik={formik} balance={lpBalance} />
+      <StableLpInput formik={formik} label={labelOutput} balance={lpBalance} onInputChange={handleLpInputChange} />
 
       <ArrowDown className={styles.svg} />
 
@@ -40,7 +40,7 @@ export const RemoveLiqForm: FC = () => {
         {/* Mock data */}
         <Switcher value={true} disabled={true} onClick={noopMap} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
-        <Tooltip content="Tooltip" />
+        <Tooltip content={tooltip} />
       </div>
 
       <div className={stylesCommonContainer.buttons}>

@@ -1,5 +1,5 @@
 import { FormikErrors } from 'formik';
 
-const ZERO_ERRORS = 0;
+import { isEmptyArray } from '../arrays';
 
-export const hasFormikError = <T>(errors: FormikErrors<T>): boolean => Object.keys(errors).length > ZERO_ERRORS;
+export const hasFormikError = <T>(errors: FormikErrors<T>): boolean => !isEmptyArray(Object.keys(errors));

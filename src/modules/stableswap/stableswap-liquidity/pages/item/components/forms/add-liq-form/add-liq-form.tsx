@@ -23,7 +23,7 @@ export const AddLiqForm: FC = observer(() => {
     return null;
   }
 
-  const { data, disabled, isSubmitting, handleSubmit } = addLiqFormViewModel;
+  const { data, disabled, isSubmitting, tooltip, handleSubmit } = addLiqFormViewModel;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -32,7 +32,7 @@ export const AddLiqForm: FC = observer(() => {
         {/* Mock data */}
         <Switcher value={true} disabled={true} onClick={noopMap} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionAdd')}</span>
-        <Tooltip content="Tooltip" />
+        <Tooltip content={tooltip} />
       </div>
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>

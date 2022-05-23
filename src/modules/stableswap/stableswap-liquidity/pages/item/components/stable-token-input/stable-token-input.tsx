@@ -10,21 +10,22 @@ import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-for
 import { useStableTokenInputViewModel } from './stable-token-input.vm';
 
 interface Props {
-  className?: string;
   index: number;
   formik: IFormik<RemoveLiqFormValues>;
+  label: string;
+  className?: string;
   balance?: string;
+  onInputChange: (value: string) => void;
 }
 
-export const StableTokenInput: FC<Props> = observer(({ formik, index, balance, className }) => {
+export const StableTokenInput: FC<Props> = observer(({ formik, index, label, balance, className, onInputChange }) => {
   const outputComponentViewModel = useStableTokenInputViewModel(formik, index);
 
   if (isNull(outputComponentViewModel)) {
     return null;
   }
 
-  const { inputSlug, label, value, error, token, decimals, shouldShowBalanceButtons, handleInputChange } =
-    outputComponentViewModel;
+  const { inputSlug, value, error, token, decimals, shouldShowBalanceButtons } = outputComponentViewModel;
 
   return (
     <TokenInput
@@ -33,7 +34,7 @@ export const StableTokenInput: FC<Props> = observer(({ formik, index, balance, c
       label={label}
       id={inputSlug}
       value={value}
-      onInputChange={handleInputChange}
+      onInputChange={onInputChange}
       balance={balance}
       decimals={decimals}
       error={error}

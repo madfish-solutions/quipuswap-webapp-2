@@ -1,14 +1,8 @@
-import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { isNull } from '@shared/helpers';
+import { EMPTY_STRING, LP_INPUT_KEY } from '@config/constants';
 
-import { LP_INPUT_KEY } from '../stableswap-liquidity/pages/item/components/stable-lp-input';
 import { getInputSlugByIndex } from './get-input-slug-by-index';
-
-const EMPTY_STRING = '';
-
-export const prepareFormikValue = (value: Nullable<BigNumber>) => (isNull(value) ? EMPTY_STRING : value.toFixed());
 
 const createFormikValues = (values: Array<string>): FormikValues => {
   const mapLikeFormikValues = values.map((value, index) => [getInputSlugByIndex(index), value]);
@@ -28,14 +22,4 @@ export const getFormikInitialValuesRemoveForm = (length: number): FormikValues =
   values[LP_INPUT_KEY] = EMPTY_STRING;
 
   return values;
-};
-
-export const setFormikValuesRemoveForm = (
-  formikValues: FormikValues,
-  lpInputAmount: Nullable<BigNumber>,
-  tokenInputAmount: Nullable<BigNumber>,
-  indexOfTokenInputAmount: number
-): void => {
-  formikValues[LP_INPUT_KEY] = prepareFormikValue(lpInputAmount);
-  formikValues[getInputSlugByIndex(indexOfTokenInputAmount)] = prepareFormikValue(tokenInputAmount);
 };

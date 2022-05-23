@@ -53,6 +53,7 @@ export const LP_TOKEN_DECIMALS = 6;
 //#region strings
 export const EMPTY_STRING = '';
 export const ZERO_LENGTH = 0;
+export const LP_INPUT_KEY = 'lp-input';
 //#endregion
 
 //#region arrays

@@ -43,6 +43,6 @@ export class StableswapItemFormStore {
 
   clearStore() {
     this.lpInputAmount = null;
-    this.inputAmounts = this.inputAmounts.map(_ => null);
+    this.inputAmounts = this.inputAmounts.map(() => null);
   }
 }

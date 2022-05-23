@@ -3,11 +3,11 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
+import { LP_INPUT_KEY } from '@config/constants';
 import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
-import { LP_INPUT_KEY } from '../../stable-lp-input';
 
 export const useRemoveLiqFormValidation = (userLpBalance: BigNumber, userTokenBalance: Array<BigNumber>) => {
   return useMemo(() => {
