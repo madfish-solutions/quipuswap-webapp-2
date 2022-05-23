@@ -23,7 +23,7 @@ export const useTokensBalances = (tokens: Optional<Array<Token>>): Array<Balance
   }, [isExist(tokens)]);
 
   useEffect(() => {
-    if (wrapTokens) {
+    if (isExist(wrapTokens)) {
       const subscriptionList = wrapTokens.map(token => {
         const subscription = tokensBalancesStore.subscribe(token);
 
