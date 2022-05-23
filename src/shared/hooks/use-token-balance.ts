@@ -1,73 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { getFirstElement, isExist, isSingleElement, toArray } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
-type Tokens = Token | Array<Token>;
-export interface BalanceToken {
-  balance: Optional<BigNumber>;
-  token: Token;
-}
-
-//TODO: remove tezos and accountPkh it`s already in store
-//TODO: move list of balance logic to store
-export function useTokenBalance(tokens: Optional<Token>): Optional<BigNumber>;
-export function useTokenBalance(tokens: Optional<Array<Token>>): Array<BalanceToken>;
-
-export function useTokenBalance(tokens: Optional<Tokens>) {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+export const useTokenBalance = (token: Optional<Token>): Optional<BigNumber> => {
   const tokensBalancesStore = useTokensBalancesStore();
-  const [wrapTokens, setWrapTokens] = useState<Nullable<Array<Token>>>(null);
 
   useEffect(() => {
-    const cleanTokens = toArray(tokens).filter(Boolean) as Array<Token>;
-    setWrapTokens(cleanTokens);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExist(tokens)]);
+    if (token) {
+      const subscription = tokensBalancesStore.subscribe(token);
 
-  useEffect(() => {
-    if (wrapTokens) {
-      const subscriptionList = wrapTokens.map(token => {
-        const subscription = tokensBalancesStore.subscribe(token);
-
-        if (tezos && accountPkh) {
-          void tokensBalancesStore.loadTokenBalance(tezos, accountPkh, token);
-        }
-
-        return {
-          token,
-          subscription
-        };
-      });
+      void tokensBalancesStore.loadTokenBalance(token);
 
       return () => {
-        subscriptionList.forEach(({ token, subscription }) => tokensBalancesStore.unsubscribe(token, subscription));
+        tokensBalancesStore.unsubscribe(token, subscription);
       };
     }
-  }, [accountPkh, tezos, tokensBalancesStore, wrapTokens]);
+  }, [token, tokensBalancesStore]);
 
-  if (isExist(wrapTokens) && isSingleElement(wrapTokens)) {
-    const token = getFirstElement(wrapTokens);
-
-    return tokensBalancesStore.getBalance(token);
-  }
-
-  if (Array.isArray(wrapTokens)) {
-    return wrapTokens.map(token => {
-      const balance = tokensBalancesStore.getBalance(token);
-
-      return {
-        balance,
-        token
-      };
-    });
-  }
-
-  return [];
-}
+  return tokensBalancesStore.getBalance(token);
+};

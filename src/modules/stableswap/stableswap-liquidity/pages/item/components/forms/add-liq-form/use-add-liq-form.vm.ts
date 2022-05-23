@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { isNull, isTokenEqual, multipliedIfPossible, prepareNumberAsString } from '@shared/helpers';
-import { BalanceToken, useTokenBalance } from '@shared/hooks';
+import { BalanceToken, useTokensBalances } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -33,7 +33,7 @@ export const useAddLiqFormViewModel = () => {
   const isSubmitting = false;
   //#endregion mock data
 
-  const balances = useTokenBalance(item?.tokensInfo.map(({ token }) => token));
+  const balances = useTokensBalances(item?.tokensInfo.map(({ token }) => token));
 
   const validationSchema = useAddLiqFormValidation(
     (item?.tokensInfo ?? []).map(({ token }) => {
