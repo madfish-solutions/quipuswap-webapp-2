@@ -31,7 +31,7 @@ export const useAddLiqFormViewModel = () => {
   //#endregion mock data
 
   const balances = useTokenBalance(item?.tokensInfo.map(({ token }) => token));
-  console.log(balances);
+
   const validationSchema = useAddLiqFormValidation(
     (item?.tokensInfo ?? []).map(({ token }) => {
       const balanceWrapper = defined(balances).find(value => isTokenEqual(value.token, token));

@@ -1,7 +1,6 @@
 @import "@styles/variables";
 
 .errorContainer {
-  max-height: 0;
   overflow: hidden;
   transition: max-height $animationTime;
 }

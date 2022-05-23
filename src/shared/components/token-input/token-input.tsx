@@ -87,7 +87,7 @@ export const TokenInput: FC<TokenInputProps> = ({
       <div className={styles.background}>
         <div className={styles.shape}>
           <div className={cx(styles.dollarEquivalent, styles.label2)}>
-            <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />
+            {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
             {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}
