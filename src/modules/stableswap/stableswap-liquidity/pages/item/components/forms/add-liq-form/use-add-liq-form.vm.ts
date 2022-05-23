@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, prepareNumberAsString } from '@shared/helpers';
+import { defined, isNull, isTokenEqual, multipliedIfPossible, prepareNumberAsString } from '@shared/helpers';
+import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
@@ -26,11 +28,16 @@ export const useAddLiqFormViewModel = () => {
   const label = t('common|Input');
   const disabled = false;
   const isSubmitting = false;
-  const balance = '100000';
   //#endregion mock data
 
+  const balances = useTokenBalance(item?.tokensInfo.map(({ token }) => token));
+  console.log(balances);
   const validationSchema = useAddLiqFormValidation(
-    Array(item?.tokensInfo.length ?? DEFAULT_LENGTH).fill(new BigNumber(balance))
+    (item?.tokensInfo ?? []).map(({ token }) => {
+      const balanceWrapper = defined(balances).find(value => isTokenEqual(value.token, token));
+
+      return balanceWrapper?.balance ?? null;
+    })
   );
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
@@ -61,7 +68,6 @@ export const useAddLiqFormViewModel = () => {
   const data = tokensInfo.map((info, indexOfCurrentInput) => {
     const { token, exchangeRate } = info;
 
-    const decimals = info.token.metadata.decimals;
     const currentInputSlug = getInputSlugByIndex(indexOfCurrentInput);
 
     const handleInputChange = (inputAmount: string) => {
@@ -88,13 +94,16 @@ export const useAddLiqFormViewModel = () => {
       formik.setValues(formikValues);
     };
 
+    const balance = defined(balances).find(value => isTokenEqual(value.token, token))?.balance;
+
+    const dollarEquivalent = multipliedIfPossible(formik.values[currentInputSlug], exchangeRate.toFixed());
+
     return {
       label,
       balance,
-      decimals,
       tokens: token,
       id: currentInputSlug,
-      exchangeRate: exchangeRate.toFixed(),
+      dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
       value: formik.values[currentInputSlug],
       error: formik.errors[currentInputSlug],
       onInputChange: handleInputChange

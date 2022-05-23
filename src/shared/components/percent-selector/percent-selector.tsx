@@ -20,6 +20,7 @@ const MIN_SELECTABLE_VALUE = 0;
 const multipliedByPercent = (value: Nullable<BigNumber.Value>, percent: number) =>
   formatIntegerWithDecimals(new BigNumber(value || '0').times(percent).toFixed());
 
+//TODO: Remove value, make function (coefficient) => calulate(coefficient)
 export const PercentSelector: FC<PercentSelectorProps> = ({ handleBalance, value, amountCap = DEFAULT_INPUT_CAP }) => {
   const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25));
   const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5));

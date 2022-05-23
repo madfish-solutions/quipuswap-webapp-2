@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
-import { isExist, isNull } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { Shevron } from '@shared/svg';
 
 import { Button } from '../button';
@@ -29,11 +29,10 @@ export const TokenInput: FC<TokenInputProps> = ({
   id,
   className,
   label,
+  dollarEquivalent,
   tokens = [],
-  exchangeRate = null,
   value,
   balance,
-  decimals,
   hidePercentSelector,
   error,
   readOnly,
@@ -44,7 +43,6 @@ export const TokenInput: FC<TokenInputProps> = ({
   const {
     isFocused,
     inputRef,
-    dollarEquivalent,
     notWhitelistedMessage,
 
     amountCap,
@@ -57,9 +55,7 @@ export const TokenInput: FC<TokenInputProps> = ({
     handlePercentageSelect
   } = useTokenInputViewModel({
     value,
-    exchangeRate,
     tokens,
-    decimals,
     onInputChange
   });
 
@@ -90,7 +86,7 @@ export const TokenInput: FC<TokenInputProps> = ({
       <div className={styles.background}>
         <div className={styles.shape}>
           <div className={cx(styles.dollarEquivalent, styles.label2)}>
-            {!isNull(exchangeRate) && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
+            <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />
           </div>
           <div className={styles.balance}>
             {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}

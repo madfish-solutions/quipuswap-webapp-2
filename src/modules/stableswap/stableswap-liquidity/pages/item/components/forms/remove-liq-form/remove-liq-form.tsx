@@ -16,7 +16,6 @@ export const RemoveLiqForm: FC = () => {
 
   const inputAmount = '100000';
   const userTokenBalance = '100000';
-  const stakedTokenDecimals = 8;
   const outputLabel = t('common|Output');
   const inputLabel = t('common|Input');
   const disabled = false;
@@ -31,7 +30,6 @@ export const RemoveLiqForm: FC = () => {
         label={inputLabel}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
@@ -41,7 +39,6 @@ export const RemoveLiqForm: FC = () => {
         label={outputLabel}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
@@ -51,7 +48,6 @@ export const RemoveLiqForm: FC = () => {
         label={outputLabel}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
@@ -61,7 +57,6 @@ export const RemoveLiqForm: FC = () => {
         label={outputLabel}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
@@ -71,7 +66,6 @@ export const RemoveLiqForm: FC = () => {
         label={outputLabel}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         tokens={DEFAULT_TOKEN}
         onInputChange={handleInputAmountChange}
       />
