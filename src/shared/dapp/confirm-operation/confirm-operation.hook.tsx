@@ -2,7 +2,7 @@ import { OperationEntry } from '@taquito/rpc';
 
 import { useTezos } from '@providers/use-dapp';
 import { defined } from '@shared/helpers';
-import { useToasts } from '@shared/hooks';
+import { useToasts } from '@shared/utils';
 
 import { confirmOperation } from './confirm-operation.service';
 import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';

@@ -1,9 +1,10 @@
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 
 import cx from 'classnames';
 import ReactSlider from 'react-slick';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { CFC } from '@shared/types';
 
 import { Card } from '../card';
 import styles from './slider.module.scss';
@@ -42,7 +43,7 @@ interface Props {
   className?: string;
 }
 
-export const Slider: FC<Props> = ({ className, children }) => {
+export const Slider: CFC<Props> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
