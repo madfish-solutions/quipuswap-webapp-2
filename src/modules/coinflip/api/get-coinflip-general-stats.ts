@@ -1,19 +1,18 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { DEFAULT_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
 import { isEqual } from '@shared/helpers';
 
-import { COINFLIP_CONTRACT_DECIMALS } from '../components/dashboard-general-stats-info/use-coinflip-dashboard-stats.vm';
-import { CoinflipStorage } from '../interfaces/coinflip-contract.interface';
 import { DashboardGeneralStats } from '../interfaces/dashboard-general-stats.interface';
+import { CoinflipStorage } from './coinflip-contract.interface';
 
 enum TOKEN_ASSETS {
   QUIPU = 0,
   TEZOS = 1
 }
-
-const QUIPU_TOKEN_ADDRESS_ITHACANET = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c';
 
 interface GeneralStatsInterface {
   bank: BigNumber;
@@ -27,7 +26,7 @@ export const getCoinflipGeneralStats = async (
   contractAddress: string,
   tokenAddress: string
 ): Promise<Nullable<DashboardGeneralStats>> => {
-  const tokenAsset = isEqual(tokenAddress, QUIPU_TOKEN_ADDRESS_ITHACANET) ? TOKEN_ASSETS.QUIPU : TOKEN_ASSETS.TEZOS;
+  const tokenAsset = isEqual(tokenAddress, DEFAULT_TOKEN.contractAddress) ? TOKEN_ASSETS.QUIPU : TOKEN_ASSETS.TEZOS;
   const storage = await getStorageInfo<CoinflipStorage>(tezos, contractAddress);
   const generalStats = (await storage.id_to_asset.get<GeneralStatsInterface>(tokenAsset)) ?? null;
 

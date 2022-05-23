@@ -1,10 +1,6 @@
 @import '@styles/breakpoints';
 
-.dashboardCard > :nth-child(1) {
-  font-size: 14px;
-}
-
-.dashboardCard > :nth-child(2) {
+.dashboardCard > :nth-child(n) {
   font-size: 14px;
 }
 
