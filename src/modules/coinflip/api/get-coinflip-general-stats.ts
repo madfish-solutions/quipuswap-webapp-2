@@ -13,7 +13,7 @@ enum TOKEN_ASSETS {
   TEZOS = 1
 }
 
-const QUIPU_TOKEN_ADDRESS_ITHACANET = 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb';
+const QUIPU_TOKEN_ADDRESS_ITHACANET = 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c';
 
 interface GeneralStatsInterface {
   bank: BigNumber;
