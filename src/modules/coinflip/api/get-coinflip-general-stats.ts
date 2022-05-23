@@ -8,8 +8,10 @@ import { COINFLIP_CONTRACT_DECIMALS } from '../components/dashboard-general-stat
 import { CoinflipStorage } from '../interfaces/coinflip-contract.interface';
 import { DashboardGeneralStats } from '../interfaces/dashboard-general-stats.interface';
 
-const TEZOS_TOKEN_ASSET = 0;
-const QUIPU_TOKEN_ASSET = 1;
+enum TOKEN_ASSETS {
+  QUIPU = 0,
+  TEZOS = 1
+}
 
 const QUIPU_TOKEN_ADDRESS_ITHACANET = 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb';
 
@@ -25,7 +27,7 @@ export const getCoinflipGeneralStats = async (
   contractAddress: string,
   tokenAddress: string
 ): Promise<Nullable<DashboardGeneralStats>> => {
-  const tokenAsset = isEqual(tokenAddress, QUIPU_TOKEN_ADDRESS_ITHACANET) ? QUIPU_TOKEN_ASSET : TEZOS_TOKEN_ASSET;
+  const tokenAsset = isEqual(tokenAddress, QUIPU_TOKEN_ADDRESS_ITHACANET) ? TOKEN_ASSETS.QUIPU : TOKEN_ASSETS.TEZOS;
   const storage = await getStorageInfo<CoinflipStorage>(tezos, contractAddress);
   const generalStats = (await storage.id_to_asset.get<GeneralStatsInterface>(tokenAsset)) ?? null;
 
