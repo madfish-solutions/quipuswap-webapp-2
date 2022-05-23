@@ -2,6 +2,8 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { AppRootRoutes } from '@app.router';
+import { StableswapRoutes, Tabs } from '@modules/stableswap/stableswap.page';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { Button, Card, StateCurrencyAmount } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -27,7 +29,9 @@ export const CreateNewPool: FC = () => {
         <div className={cx(styles.poolCreateDescription, modeClass[colorThemeMode])}>
           {t('stableswap|createOwnPool')}
         </div>
-        <Button className={styles.button}>{t('stableswap|createPool')}</Button>
+        <Button className={styles.button} href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}`}>
+          {t('stableswap|createPool')}
+        </Button>
       </div>
     </Card>
   );
