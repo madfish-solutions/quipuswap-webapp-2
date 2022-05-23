@@ -19,7 +19,6 @@ export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues
 
   const token = tokensInfo[index].token;
   const exchangeRate = tokensInfo[index].exchangeRate;
-  const { decimals } = token.metadata;
 
   const inputSlug = getInputSlugByIndex(index);
   const value = formik.values[inputSlug];
@@ -27,5 +26,12 @@ export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues
   const hiddenPercentSelector = !Boolean(accountPkh);
   const dollarEquivalent = multipliedIfPossible(formik.values[inputSlug], exchangeRate.toFixed());
 
-  return { inputSlug, value, error, token, decimals, hiddenPercentSelector, dollarEquivalent };
+  return {
+    inputSlug,
+    value,
+    error,
+    token,
+    hiddenPercentSelector,
+    dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent
+  };
 };
