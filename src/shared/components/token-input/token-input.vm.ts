@@ -38,8 +38,7 @@ export const useTokenInputViewModel = ({
   };
 
   const handlePercentageSelect = (result: string) => {
-    const _value = new BigNumber(result).toFixed();
-    onInputChange(_value);
+    onInputChange(new BigNumber(result).toFixed());
   };
 
   const amountCap = !Array.isArray(tokens) ? getTokenInputAmountCap(tokens) : undefined;
