@@ -21,7 +21,7 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
 
   const value = formik.values[LP_INPUT_KEY];
   const error = formik.errors[LP_INPUT_KEY];
-  const hiddenPercentSelector = Boolean(accountPkh);
+  const hiddenPercentSelector = !Boolean(accountPkh);
 
   return { value, error, lpToken, decimals, hiddenPercentSelector };
 };

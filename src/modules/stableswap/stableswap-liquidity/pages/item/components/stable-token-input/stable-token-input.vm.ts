@@ -23,7 +23,7 @@ export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues
   const inputSlug = getInputSlugByIndex(index);
   const value = formik.values[inputSlug];
   const error = formik.errors[inputSlug];
-  const hiddenPercentSelector = Boolean(accountPkh);
+  const hiddenPercentSelector = !Boolean(accountPkh);
 
   return { inputSlug, value, error, token, decimals, hiddenPercentSelector };
 };
