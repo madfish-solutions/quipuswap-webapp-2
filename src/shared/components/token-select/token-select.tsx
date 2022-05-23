@@ -8,7 +8,7 @@ import { TokenInput } from '../token-input';
 import { TokensModal } from '../TokensModal';
 import { useTokenSelectViewModel } from './token-select.vm';
 
-interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
+interface Props extends HTMLProps<HTMLDivElement> {
   className?: string;
   amount?: BigNumber;
   balance?: BigNumber;
@@ -23,7 +23,7 @@ interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   onTokenChange: (token: Token) => void;
 }
 
-export const TokenSelect: FC<NewTokenSelectProps> = ({
+export const TokenSelect: FC<Props> = ({
   id,
   className,
   amount,
