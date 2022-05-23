@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
