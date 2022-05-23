@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Button, Card, ConnectWalletOrDoSomething, PendingRewards } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { ArrowSign } from '@shared/svg';
-import { Nullable } from '@shared/types';
+import { CFC, Nullable } from '@shared/types';
 
 import styles from './reward-info.module.scss';
 import { useRewardInfoViewModel } from './reward-info.vm';
@@ -33,7 +33,7 @@ interface Props {
 
 const ZERO_REWARDS = 0;
 
-export const RewardInfo: FC<Props> = ({
+export const RewardInfo: CFC<Props> = ({
   dollarEquivalent,
   amountDecimals,
   className,

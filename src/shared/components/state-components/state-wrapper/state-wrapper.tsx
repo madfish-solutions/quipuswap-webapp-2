@@ -1,4 +1,6 @@
-import { FC, ReactElement, Suspense } from 'react';
+import { ReactElement, Suspense } from 'react';
+
+import { CFC } from '@shared/types';
 
 import { ErrorBoundary } from './error-boundary/error-boundary';
 
@@ -9,7 +11,7 @@ export interface StateWrapperProps {
   errorFallback?: ReactElement;
 }
 
-export const StateWrapper: FC<StateWrapperProps> = ({
+export const StateWrapper: CFC<StateWrapperProps> = ({
   children,
   isLoading,
   loaderFallback,

@@ -58,7 +58,6 @@ export const LP_INPUT_KEY = 'lp-input';
 
 //#region arrays
 export const FISRT_INDEX = 0;
-export const ONE_ITEM_LENGTH = 1;
 //#endregion
 
 //#region default value for token search

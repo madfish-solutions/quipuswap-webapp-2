@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { EPPROXIMATILY_SIGN } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { Nullable, Optional } from '@shared/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
@@ -16,17 +16,17 @@ import styles from './state-currency-amount.module.scss';
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amountClassName?: string;
-  amount: Nullable<BigNumber.Value>;
+  amount: Optional<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
-  aliternativeView?: Nullable<string>;
   approximately?: boolean;
   noSpace?: boolean;
   dollarEquivalentOnly?: boolean;
+  testId?: string;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -63,10 +63,10 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView,
   approximately,
   noSpace,
   dollarEquivalentOnly,
+  testId = 'amount',
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -104,8 +104,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id="amount" className={wrapAmountClassName} title={title}>
-          {aliternativeView ?? formattedAmount}
+        <span data-test-id={testId} className={wrapAmountClassName} title={title}>
+          {formattedAmount}
         </span>
       </StateWrapper>
 

@@ -25,12 +25,12 @@ export const StableTokenInput: FC<Props> = observer(({ formik, index, label, bal
     return null;
   }
 
-  const { inputSlug, value, error, token, decimals, shouldShowBalanceButtons } = outputComponentViewModel;
+  const { inputSlug, value, error, token, decimals, hiddenPercentSelector } = outputComponentViewModel;
 
   return (
     <TokenInput
       className={className}
-      tokenA={token}
+      tokens={token}
       label={label}
       id={inputSlug}
       value={value}
@@ -38,7 +38,7 @@ export const StableTokenInput: FC<Props> = observer(({ formik, index, label, bal
       balance={balance}
       decimals={decimals}
       error={error}
-      shouldShowBalanceButtons={shouldShowBalanceButtons}
+      hiddenPercentSelector={hiddenPercentSelector}
     />
   );
 });

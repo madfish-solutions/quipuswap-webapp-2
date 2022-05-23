@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -6,6 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DashPlug, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { CFC } from '@shared/types';
 
 import styles from './farming-stats-item.module.scss';
 
@@ -20,7 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({
+export const FarmingStatsItem: CFC<FarmingStatsItemProps> = ({
   itemName,
   children,
   loading,

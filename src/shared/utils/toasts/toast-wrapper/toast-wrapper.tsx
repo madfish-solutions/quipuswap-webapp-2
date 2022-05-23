@@ -1,7 +1,7 @@
-import { FC, ReactNode, useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { ToastContainer, ToastContentProps, TypeOptions } from 'react-toastify';
+import { ToastContainer, ToastContent, ToastContentProps, TypeOptions } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -43,7 +43,7 @@ export const ToastWrapper: FC = () => {
   );
 };
 
-export const toastContent = (children: ReactNode, type?: TypeOptions | null) => {
+export const toastContent = (children: ToastContent, type?: TypeOptions | null) => {
   let icon;
 
   if (type && type !== 'default') {

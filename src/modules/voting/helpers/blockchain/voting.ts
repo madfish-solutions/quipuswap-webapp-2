@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { toDecimals } from '@shared/helpers';
-import { UseToasts } from '@shared/hooks';
 import { VoteFormValues } from '@shared/types';
+import { UseToasts } from '@shared/utils';
 import { useConfirmOperation } from '@shared/utils/confirm-operation';
 
 interface SubmitProps {

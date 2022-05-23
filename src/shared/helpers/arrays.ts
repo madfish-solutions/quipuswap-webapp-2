@@ -1,3 +1,5 @@
+import { FISRT_INDEX } from '@config/constants';
+
 import { Nullable } from '../types/types';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
@@ -21,7 +23,11 @@ export const cloneArray = <T>(array: Array<T>): Array<T> => array.slice();
 export const isFoundIndex = (index: number) => index !== -1;
 
 export const isEmptyArray = (array: Nullable<unknown[]>) => (array ? array.length === 0 : true);
+export const isSingleElement = (array: Nullable<unknown[]>) => (array ? array.length === 1 : true);
 
 export const isLastElementIndex = (index: number, array: unknown[]) => index === array.length - 1;
+export const isFirstElementIndex = (index: number) => index === FISRT_INDEX;
+
+export const getFirstElement = <T>(array: T[]): T => array[FISRT_INDEX];
 
 export const toArray = <T>(entity: T | Array<T>): Array<T> => (Array.isArray(entity) ? entity : [entity]);

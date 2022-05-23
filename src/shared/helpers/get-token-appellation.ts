@@ -1,9 +1,9 @@
-import { EMPTY_STRING, FISRT_INDEX, ONE_ITEM_LENGTH, SLASH } from '@config/constants';
+import { EMPTY_STRING, FISRT_INDEX, SLASH } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { Nullable, Optional, RawToken, Token, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
 
-import { isEmptyArray, isLastElementIndex, toArray } from './arrays';
+import { isEmptyArray, isLastElementIndex, isSingleElement, toArray } from './arrays';
 import { shortize } from './shortize';
 import { isExist } from './type-checks';
 
@@ -127,7 +127,7 @@ export const getSymbolsString = (tokens: RawOrMappedToken | Array<RawOrMappedTok
     return EMPTY_STRING;
   }
 
-  if (clearTokens.length === ONE_ITEM_LENGTH) {
+  if (isSingleElement(clearTokens)) {
     return getTokenSymbol(clearTokens[FISRT_INDEX], sliceAmount);
   }
 

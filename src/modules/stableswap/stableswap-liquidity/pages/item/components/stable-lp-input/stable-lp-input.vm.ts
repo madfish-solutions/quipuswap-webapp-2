@@ -21,7 +21,7 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
 
   const value = formik.values[LP_INPUT_KEY];
   const error = formik.errors[LP_INPUT_KEY];
-  const shouldShowBalanceButtons = Boolean(accountPkh);
+  const hiddenPercentSelector = Boolean(accountPkh);
 
-  return { value, error, lpToken, decimals, shouldShowBalanceButtons };
+  return { value, error, lpToken, decimals, hiddenPercentSelector };
 };

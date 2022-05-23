@@ -25,12 +25,12 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
     return null;
   }
 
-  const { value, error, lpToken, decimals, shouldShowBalanceButtons } = outputComponentViewModel;
+  const { value, error, lpToken, decimals, hiddenPercentSelector } = outputComponentViewModel;
 
   return (
     <TokenInput
       className={className}
-      tokenA={lpToken}
+      tokens={lpToken}
       label={label}
       id={LP_INPUT_KEY}
       value={value}
@@ -38,7 +38,7 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
       balance={balance}
       decimals={decimals}
       error={error}
-      shouldShowBalanceButtons={shouldShowBalanceButtons}
+      hiddenPercentSelector={hiddenPercentSelector}
     />
   );
 });
