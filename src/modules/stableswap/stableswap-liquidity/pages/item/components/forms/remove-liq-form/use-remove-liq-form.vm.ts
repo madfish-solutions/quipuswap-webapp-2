@@ -5,6 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
 import { isNull, toFixed } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
 import {
   calculateLpValue,
@@ -16,7 +17,6 @@ import {
   prepareInputAmountAsBN
 } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { useTranslation } from './../../../../../../../../translation/use-translation';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -82,35 +82,39 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
   };
 
+  const handleInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
+    formikValues[getInputSlugByIndex(index)] = inputAmount;
+    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+    const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+
+    formikValues[LP_INPUT_KEY] = toFixed(lpValue);
+
+    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
+      if (index === indexOfCalculatedInput) {
+        return inputAmountBN;
+      }
+
+      return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
+    });
+
+    calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+      if (indexOfCalculatedInput !== index) {
+        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+      }
+    });
+
+    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+
+    formik.setValues(formikValues);
+  };
+
   const data = tokensInfo.map(({ reserves }, index) => {
     return {
       index,
       formik,
       label: labelInput,
       balance: BALANCE,
-      onInputChange: (inputAmount: string) => {
-        formikValues[getInputSlugByIndex(index)] = inputAmount;
-        const inputAmountBN = prepareInputAmountAsBN(inputAmount);
-        const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-
-        formikValues[LP_INPUT_KEY] = toFixed(lpValue);
-
-        const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
-          if (index === indexOfCalculatedInput) {
-            return inputAmountBN;
-          }
-
-          return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
-        });
-
-        calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-          if (index !== indexOfCalculatedInput) {
-            formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
-          }
-        });
-
-        setValues(lpValue, calculatedValues);
-      }
+      onInputChange: handleInputChange(reserves, index)
     };
   });
 
