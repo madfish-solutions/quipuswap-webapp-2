@@ -9,11 +9,15 @@ import { Optional, Token } from '@shared/types';
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
 type Tokens = Token | Array<Token>;
+export interface BalanceToken {
+  balance: Optional<BigNumber>;
+  token: Token;
+}
 
 //TODO: remove tezos and accountPkh it`s already in store
 //TODO: move list of balance logic to store
 export function useTokenBalance(tokens: Optional<Token>): Optional<BigNumber>;
-export function useTokenBalance(tokens: Optional<Array<Token>>): Array<{ balance: Optional<BigNumber>; token: Token }>;
+export function useTokenBalance(tokens: Optional<Array<Token>>): Array<BalanceToken>;
 
 export function useTokenBalance(tokens: Optional<Tokens>) {
   const tezos = useTezos();

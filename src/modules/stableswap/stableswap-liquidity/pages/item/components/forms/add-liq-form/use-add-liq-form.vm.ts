@@ -1,8 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { defined, isNull, isTokenEqual, multipliedIfPossible, prepareNumberAsString } from '@shared/helpers';
-import { useTokenBalance } from '@shared/hooks';
+import { isNull, isTokenEqual, multipliedIfPossible, prepareNumberAsString } from '@shared/helpers';
+import { BalanceToken, useTokenBalance } from '@shared/hooks';
+import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { calculateTokensInputs, getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
@@ -14,6 +15,9 @@ const DEFAULT_LENGTH = 0;
 interface AddLiqFormValues {
   [key: string]: string;
 }
+
+const findBalanceToken = (balances: Array<BalanceToken>, token: Token) =>
+  balances.find(value => isTokenEqual(value.token, token));
 
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
@@ -33,7 +37,7 @@ export const useAddLiqFormViewModel = () => {
 
   const validationSchema = useAddLiqFormValidation(
     (item?.tokensInfo ?? []).map(({ token }) => {
-      const balanceWrapper = defined(balances).find(value => isTokenEqual(value.token, token));
+      const balanceWrapper = findBalanceToken(balances, token);
 
       return balanceWrapper?.balance ?? null;
     })
@@ -93,7 +97,7 @@ export const useAddLiqFormViewModel = () => {
       formik.setValues(formikValues);
     };
 
-    const balance = defined(balances).find(value => isTokenEqual(value.token, token))?.balance;
+    const balance = findBalanceToken(balances, token)?.balance;
 
     const dollarEquivalent = multipliedIfPossible(formik.values[currentInputSlug], exchangeRate.toFixed());
 
