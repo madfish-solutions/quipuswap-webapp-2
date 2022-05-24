@@ -1,3 +1,3 @@
 export * from './pool-card';
 export * from './list-filter';
-export * from './create-new-pool';
+export * from './stableswap-liquidity-general-stats';

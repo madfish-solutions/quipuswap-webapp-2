@@ -1,0 +1,19 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.dashboardStatsInfoMB {
+  margin-bottom: 64px;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+@include media('>tablet') {
+  .cardContent {
+    flex-direction: row;
+  }
+}
