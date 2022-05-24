@@ -25,6 +25,7 @@ import { SwapTabAction, Token, TokenMetadata, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { useSwapCalculations } from './hooks/use-swap-calculations';
+import { useSwapCalculationsV2 } from './hooks/use-swap-calculations-v2';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
 import { useSwapLimits } from './providers/swap-limits-provider';
@@ -43,21 +44,13 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) => {
   const exchangeRates = useNewExchangeRates();
 
-  const {
-    dexRoute,
-    onInputAmountChange,
-    onOutputAmountChange,
-    onSwapPairChange,
-    inputAmount: calculatedInputAmount,
-    outputAmount: calculatedOutputAmount,
-    resetCalculations
-  } = useSwapCalculations();
+  const swapV1 = useSwapCalculations();
   // eslint-disable-next-line no-console
-  console.log('1.dexRoute', dexRoute);
-  //
-  // const {} = useSwapCalculationsV2();
-  // // eslint-disable-next-line no-console
-  // console.log('1.dexRoute', dexRoute);
+  console.log('>>>>>>>1.dexRoute', swapV1.dexRoute);
+
+  const swapV2 = useSwapCalculationsV2();
+  // eslint-disable-next-line no-console
+  console.log('>>>>>>>2.dexRoute', swapV2.dexRoute);
 
   const {
     errors,
@@ -69,7 +62,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, dexRoute, exchangeRates);
+  } = useSwapFormik(initialAction, swapV1.dexRoute, exchangeRates);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -91,32 +84,24 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     { id: SwapTabAction.SEND, label: t('swap|Send') }
   ];
 
-  const prevCalculatedInputAmountRef = useRef(calculatedInputAmount);
-  const prevCalculatedOutputAmountRef = useRef(calculatedOutputAmount);
+  const prevCalculatedInputAmountRef = useRef(swapV1.inputAmount);
+  const prevCalculatedOutputAmountRef = useRef(swapV1.outputAmount);
 
   useEffect(() => {
-    if (!amountsAreEqual(calculatedInputAmount, prevCalculatedInputAmountRef.current)) {
-      setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(() => {
+    if (!amountsAreEqual(swapV1.inputAmount, prevCalculatedInputAmountRef.current)) {
+      setFieldValue(SwapField.INPUT_AMOUNT, swapV1.inputAmount).then(() => {
         validateField(SwapField.INPUT_AMOUNT);
-        if (calculatedInputAmount) {
+        if (swapV1.inputAmount) {
           setFieldTouched(SwapField.INPUT_AMOUNT, true);
         }
       });
-      prevCalculatedInputAmountRef.current = calculatedInputAmount;
+      prevCalculatedInputAmountRef.current = swapV1.inputAmount;
     }
-    if (!amountsAreEqual(calculatedOutputAmount, prevCalculatedOutputAmountRef.current)) {
-      setFieldValue(SwapField.OUTPUT_AMOUNT, calculatedOutputAmount);
-      prevCalculatedOutputAmountRef.current = calculatedOutputAmount;
+    if (!amountsAreEqual(swapV1.outputAmount, prevCalculatedOutputAmountRef.current)) {
+      setFieldValue(SwapField.OUTPUT_AMOUNT, swapV1.outputAmount);
+      prevCalculatedOutputAmountRef.current = swapV1.outputAmount;
     }
-  }, [
-    calculatedInputAmount,
-    calculatedOutputAmount,
-    inputAmount,
-    outputAmount,
-    setFieldValue,
-    setFieldTouched,
-    validateField
-  ]);
+  }, [swapV1, inputAmount, outputAmount, setFieldValue, setFieldTouched, validateField]);
 
   const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken,
@@ -124,7 +109,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputAmount,
     outputAmount,
     slippageTolerance: tradingSlippage,
-    dexRoute,
+    dexRoute: swapV1.dexRoute,
     recipient
   });
 
@@ -201,12 +186,16 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
         updateBalance(newOutputToken).catch(console.error);
       }
       setValues(prevValues => ({ ...prevValues, ...valuesToChange }));
-      onSwapPairChange({
+      swapV1.onSwapPairChange({
+        inputToken: valuesToChange[SwapField.INPUT_TOKEN] ?? inputToken,
+        outputToken: valuesToChange[SwapField.OUTPUT_TOKEN] ?? outputToken
+      });
+      swapV2.onSwapPairChange({
         inputToken: valuesToChange[SwapField.INPUT_TOKEN] ?? inputToken,
         outputToken: valuesToChange[SwapField.OUTPUT_TOKEN] ?? outputToken
       });
     }
-  }, [initialFrom, initialTo, setValues, tokens, onSwapPairChange, inputToken, outputToken, updateBalance]);
+  }, [initialFrom, initialTo, setValues, tokens, swapV1, swapV2, inputToken, outputToken, updateBalance]);
 
   useEffect(() => {
     if (inputToken && outputToken) {
@@ -226,10 +215,11 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
         }));
         // eslint-disable-next-line no-console
         Promise.all([updateBalance(newInputToken), updateBalance(newOutputToken)]).catch(console.error);
-        onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+        swapV1.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+        swapV2.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
       }
     }
-  }, [setValues, inputToken, outputToken, tokens, onSwapPairChange, updateBalance]);
+  }, [setValues, inputToken, outputToken, tokens, swapV1, swapV2, updateBalance]);
 
   useEffect(() => {
     if (prevDexGraphRef.current !== dexGraph && inputToken && outputToken) {
@@ -244,8 +234,9 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched(SwapField.INPUT_AMOUNT, false);
     setFieldTouched(SwapField.OUTPUT_AMOUNT, false);
     setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
-    resetCalculations();
-  }, [resetCalculations, setFieldTouched, setValues]);
+    swapV1.resetCalculations();
+    swapV2.resetCalculations();
+  }, [swapV1, swapV2, setFieldTouched, setValues]);
 
   const handleSubmit = async () => {
     await submitForm();
@@ -284,13 +275,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.INPUT_AMOUNT, true);
     setFieldValue(SwapField.INPUT_AMOUNT, newAmount, true);
-    onInputAmountChange(newAmount);
+    swapV1.onInputAmountChange(newAmount);
+    swapV2.onInputAmountChange(newAmount);
   };
   const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
     setFieldValue(SwapField.OUTPUT_AMOUNT, newAmount, true);
-    onOutputAmountChange(newAmount);
+    swapV1.onOutputAmountChange(newAmount);
+    swapV2.onOutputAmountChange(newAmount);
   };
 
   const handleSomeTokenChange = (
@@ -314,7 +307,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     }
     const newInputToken = fieldName === SwapField.INPUT_TOKEN ? newToken : inputToken;
     const newOutputToken = fieldName === SwapField.OUTPUT_TOKEN ? newToken : outputToken;
-    onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+    swapV1.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+    swapV2.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
     if (newInputToken && newOutputToken) {
       onTokensSelected(newInputToken, newOutputToken);
     }
@@ -334,8 +328,10 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
       outputToken: inputToken,
       inputAmount: outputAmount
     }));
-    onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
-    onInputAmountChange(outputAmount);
+    swapV1.onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
+    swapV2.onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
+    swapV1.onInputAmountChange(outputAmount);
+    swapV2.onInputAmountChange(outputAmount);
     if (inputToken && outputToken) {
       onTokensSelected(outputToken, inputToken);
     }
@@ -374,7 +370,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
-  const noRouteFound = !dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
+  const noRouteFound = !swapV1.dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return {
@@ -385,7 +381,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,
-    dexRoute,
+    dexRoute: swapV1.dexRoute,
     handleInputAmountChange,
     handleInputTokenChange,
     handleOutputAmountChange,
