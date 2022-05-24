@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
@@ -391,11 +390,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
-  console.log({ dexRoute });
-  console.log({ inputToken });
-  console.log({ outputToken });
-  console.log({ inputAmount });
-  console.log({ outputAmount });
   const noRouteFound = !dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
