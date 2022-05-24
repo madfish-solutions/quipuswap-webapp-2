@@ -37,9 +37,6 @@ export const DashboardStatsInfo: FC<Props> = ({
   const rootContentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
   const cardClassName = cx(styles.card, modeClass[colorThemeMode]);
 
-  const cardComponentClassName = cx(styles.rootCard, className);
-  const contentCardComponentClassName = cx(rootContentClassName, contentClassName);
-
   const elementsFlexBasis50 = countOfRightElements * TWO;
 
   return (
@@ -51,8 +48,8 @@ export const DashboardStatsInfo: FC<Props> = ({
             }
           : undefined
       }
-      contentClassName={contentCardComponentClassName}
-      className={cardComponentClassName}
+      contentClassName={cx(rootContentClassName, contentClassName)}
+      className={cx(styles.rootCard, className)}
     >
       {cards.map((card: ReactElement, index: number) => (
         <div
