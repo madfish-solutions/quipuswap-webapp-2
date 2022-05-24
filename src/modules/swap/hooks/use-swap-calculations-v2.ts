@@ -23,13 +23,15 @@ interface SwapPair {
   outputToken?: Token;
 }
 
-export const useSwapCalculations = () => {
+export const useSwapCalculationsV2 = () => {
   const { dexGraph } = useDexGraph();
 
   const [inputAmount, setInputAmount] = useState<BigNumber>();
   const [outputAmount, setOutputAmount] = useState<BigNumber>();
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({});
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
+  // eslint-disable-next-line no-console
+  console.log('1.dexRoute', dexRoute);
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
   const prevDexGraphRef = useRef<DexGraph>();
 
