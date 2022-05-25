@@ -68,6 +68,7 @@ export const STABLESWAP_API_URLS: Record<SupportedNetworks, string> = {
 };
 
 export const STABLESWAP_API_URL = STABLESWAP_API_URLS[NETWORK_ID];
+export const STABLESWAP_REFERRAL = process.env.REACT_APP_STABLESWAP_REFERRAL!;
 //#endregion STABLESWAP_API
 
 //#region COIN_FLIP_CONTRACTS

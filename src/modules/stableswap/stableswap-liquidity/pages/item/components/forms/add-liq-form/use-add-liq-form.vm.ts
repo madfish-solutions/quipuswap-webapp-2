@@ -47,7 +47,7 @@ export const useAddLiqFormViewModel = () => {
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
-    addStableswapLiquidity();
+    await addStableswapLiquidity();
     formik.resetForm();
     actions.setSubmitting(false);
   };

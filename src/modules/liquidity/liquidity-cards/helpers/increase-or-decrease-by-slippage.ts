@@ -1,17 +1,18 @@
 import BigNumber from 'bignumber.js';
 
+import { decreaseBySlippage, increaseBySlippage } from '@shared/helpers';
+
 import { LiquiditySlippageType } from '../../slippage-info';
-import { decreaseBySlippage } from './decrease-by-slippage';
-import { increaseBySlippage } from './increase-by-slippage';
 
 export const increaseOrDecreaseBySlippage = (
   liquidityType: LiquiditySlippageType,
   tokenAmount: BigNumber,
+  decimals: number,
   slippage: BigNumber
 ) => {
   if (liquidityType === LiquiditySlippageType.ADD) {
-    return increaseBySlippage(tokenAmount, slippage);
+    return increaseBySlippage(tokenAmount, decimals, slippage);
   }
 
-  return decreaseBySlippage(tokenAmount, slippage);
+  return decreaseBySlippage(tokenAmount, decimals, slippage);
 };

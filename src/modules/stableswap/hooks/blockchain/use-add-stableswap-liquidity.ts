@@ -4,16 +4,18 @@ import BigNumber from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { isNull, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, isNull, toDecimals } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { Token } from '@shared/types';
+import { AmountToken } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
+import { useTranslation } from '@translation';
 
 import { addStableswapLiquidityApi } from '../../api';
-import { decreaseBySlippage, getStableswapDeadline } from '../../helpers';
+import { getStableswapDeadline } from '../../helpers';
 import { useStableswapItemStore, useStableswapItemFormStore } from '../store';
 
 export const useAddStableswapLiquidity = () => {
+  const { t } = useTranslation();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
 
@@ -24,7 +26,7 @@ export const useAddStableswapLiquidity = () => {
   const accountPkh = useAccountPkh();
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
-  const item = stableswapItemStore.item;
+  const { item } = stableswapItemStore;
   const { lpInputAmount, inputAmounts } = stableswapItemFormStore;
 
   const addStableswapLiquidity = useCallback(async () => {
@@ -42,9 +44,9 @@ export const useAddStableswapLiquidity = () => {
     const deadline = getStableswapDeadline(transactionDeadline);
     const lpInputAmountFixed = decreaseBySlippage(lpInputAmount, decimals, liquiditySlippage);
 
-    const tokensAndAmounts: Array<{ token: Token; amount: BigNumber }> = item.tokensInfo.map(({ token }, index) => {
+    const tokensAndAmounts: Array<AmountToken> = item.tokensInfo.map(({ token }, index) => {
       const _amount = inputAmounts[index];
-      const amount = isNull(_amount) ? new BigNumber('0') : toDecimals(_amount, token.metadata.decimals);
+      const amount = isNull(_amount) ? new BigNumber('0') : toDecimals(_amount, token);
 
       return { token, amount };
     });
@@ -59,7 +61,7 @@ export const useAddStableswapLiquidity = () => {
         accountPkh
       );
 
-      await confirmOperation(operation.opHash, { message: 'Liquidity has been successfully added' });
+      await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
     } catch (error) {
       showErrorToast(error as Error);
     }
@@ -69,9 +71,10 @@ export const useAddStableswapLiquidity = () => {
     lpInputAmount,
     inputAmounts,
     accountPkh,
-    liquiditySlippage,
     transactionDeadline,
+    liquiditySlippage,
     confirmOperation,
+    t,
     showErrorToast
   ]);
 

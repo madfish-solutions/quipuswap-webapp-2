@@ -128,7 +128,6 @@ const PERCENTAGE = 100;
 export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
 
 export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
-export const DEFAULT_STABLESWAP_REFERRAL = 'tz1MnmtP4uAcgMpeZN6JtyziXeFqqwQG6yn6';
 export const DEFAULT_POOL_ID = 0;
 
 //#endregion

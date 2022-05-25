@@ -3,6 +3,7 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 
+import { DEFAULT_DECIMALS } from '@config/constants';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
@@ -35,8 +36,11 @@ export const SlippageInfo: FC<Props> = observer(({ liquidityType, tokenAInput, t
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
   const tokenBBN = new BigNumber(tokenBInput ? tokenBInput : DEFAULT_INVESTED_VALUE);
 
-  const maxInvestedOrReceivedA = increaseOrDecreaseBySlippage(liquidityType, tokenABN, liquiditySlippage);
-  const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, liquiditySlippage);
+  const decimalsA = (tokenA && tokenA.metadata.decimals) ?? DEFAULT_DECIMALS;
+  const decimalsB = (tokenB && tokenB.metadata.decimals) ?? DEFAULT_DECIMALS;
+
+  const maxInvestedOrReceivedA = increaseOrDecreaseBySlippage(liquidityType, tokenABN, decimalsA, liquiditySlippage);
+  const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, decimalsB, liquiditySlippage);
 
   const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
   const DEFAULT_STABLE_TOKEN = DEFAULT_TOKEN;

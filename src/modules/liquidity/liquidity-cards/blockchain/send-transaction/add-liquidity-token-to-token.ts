@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { batchOperations } from '@shared/dapp';
-import { getBlockchainTimestamp, toDecimals } from '@shared/helpers';
+import { getBlockchainTimestamp, increaseBySlippage } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { increaseBySlippage, getTokensResetAndUpdateOperators } from '../../helpers';
+import { getTokensResetAndUpdateOperators } from '../../helpers';
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -31,15 +31,15 @@ export const addLiquidityTokenToToken = async (
 
   const { address: dexAddress } = dex.contract;
   const { decimals: decimalsA } = tokenA.metadata;
+  const { decimals: decimalsB } = tokenB.metadata;
 
-  const tokenABN = new BigNumber(tokenAInput);
-  const tokenAAmount = toDecimals(tokenABN, decimalsA);
+  const tokenAAmount = new BigNumber(tokenAInput);
 
   const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
+  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply);
 
-  const withDecimalsA = increaseBySlippage(tokenAAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withDecimalsB = increaseBySlippage(tokenBAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withDecimalsA = increaseBySlippage(tokenAAmount, decimalsA, slippagePercentage);
+  const withDecimalsB = increaseBySlippage(tokenBAmount, decimalsB, slippagePercentage);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);

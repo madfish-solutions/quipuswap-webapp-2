@@ -7,5 +7,6 @@ export const stableswap = {
   'Dev Fee': 'Dev Fee',
   'Token {{tokenSymbol}} locked': 'Token {{tokenSymbol}} locked',
   balancedProportionAdd: 'Add all coins in a balanced proportion',
-  balancedProportionRemove: 'Remove all coins in a balanced proportion'
+  balancedProportionRemove: 'Remove all coins in a balanced proportion',
+  sucessfullyAdded: 'Liquidity has been successfully added'
 } as const;
