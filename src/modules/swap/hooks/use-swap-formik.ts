@@ -1,6 +1,3 @@
-import { BigNumber } from 'bignumber.js';
-import { useFormik } from 'formik';
-
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
@@ -18,6 +15,8 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { DexPair, SwapTabAction } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
+import { BigNumber } from 'bignumber.js';
+import { useFormik } from 'formik';
 
 import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';

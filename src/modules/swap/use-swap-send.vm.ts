@@ -46,11 +46,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const swapV1 = useSwapCalculations();
   // eslint-disable-next-line no-console
-  console.log('>>>>>>>1.dexRoute', swapV1.dexRoute);
+  // console.log('>>>>>>>1.dexRoute', swapV1.dexRoute);
 
   const swapV2 = useSwapCalculationsV2();
   // eslint-disable-next-line no-console
-  console.log('>>>>>>>2.dexRoute', swapV2.dexRoute);
+  console.log('>>>>>>>2.swapV2', {
+    bestTrade: swapV2.bestTrade,
+    inputAmount: swapV2.inputAmount?.toFixed(),
+    outputAmount: swapV2.outputAmount?.toFixed()
+  });
 
   const {
     errors,
@@ -276,14 +280,14 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched(SwapField.INPUT_AMOUNT, true);
     setFieldValue(SwapField.INPUT_AMOUNT, newAmount, true);
     swapV1.onInputAmountChange(newAmount);
-    swapV2.onInputAmountChange(newAmount);
+    swapV2.onInputAmountChange(newAmount ?? null);
   };
   const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
     setFieldValue(SwapField.OUTPUT_AMOUNT, newAmount, true);
     swapV1.onOutputAmountChange(newAmount);
-    swapV2.onOutputAmountChange(newAmount);
+    swapV2.onOutputAmountChange(newAmount ?? null);
   };
 
   const handleSomeTokenChange = (
@@ -331,7 +335,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     swapV1.onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
     swapV2.onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
     swapV1.onInputAmountChange(outputAmount);
-    swapV2.onInputAmountChange(outputAmount);
+    swapV2.onInputAmountChange(outputAmount ?? null);
     if (inputToken && outputToken) {
       onTokensSelected(outputToken, inputToken);
     }

@@ -14,7 +14,7 @@
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
   },
-  "ignorePatterns": ["graphql.ts"],
+  "ignorePatterns": ["graphql.ts", "**/swap-router-sdk/**/*"],
   "settings": {
     "import/resolver": {
       "typescript": {}
