@@ -10,6 +10,7 @@ export const common = {
   Portfolio: 'Portfolio',
   Governance: 'Governance',
   Stableswap: 'Stableswap',
+  'Temple Extension': 'Temple Extension',
   'Stableswap Liquidity': 'Stableswap Liquidity',
   Feedback: 'Feedback',
   Analytics: 'Analytics',
