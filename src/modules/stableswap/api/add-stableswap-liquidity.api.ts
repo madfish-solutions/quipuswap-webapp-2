@@ -2,7 +2,7 @@ import { TezosToolkit, MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
-import { DEFAULT_POOL_ID } from '@config/constants';
+import { DEFAULT_POOL_ID, DEFAULT_STABLESWAP_REFERRAL } from '@config/constants';
 import { Token } from '@shared/types';
 
 export const addStableswapLiquidityApi = async (
@@ -14,6 +14,7 @@ export const addStableswapLiquidityApi = async (
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
+  const receiverFixed = accountPkh === receiver ? null : receiver;
   const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
 
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();
@@ -25,7 +26,7 @@ export const addStableswapLiquidityApi = async (
   }
 
   const swableswapLiquidityParams = stableswapPoolContract.methods
-    .invest(DEFAULT_POOL_ID, shares, michelsonAmounts, deadline, receiver, null)
+    .invest(DEFAULT_POOL_ID, shares, michelsonAmounts, deadline, receiverFixed, DEFAULT_STABLESWAP_REFERRAL)
     .toTransferParams();
 
   return await withApproveApiForManyTokens(tezos, stableswapPoolContractAddress, tokensAndAmounts, accountPkh, [
