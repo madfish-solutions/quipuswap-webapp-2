@@ -2,14 +2,14 @@ import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { isTezosToken } from '@shared/helpers';
+import { isTezosToken, toArray } from '@shared/helpers';
 import { Standard, Token } from '@shared/types';
 
 import { getAllowance } from './get-allowance';
 
 const RESET_AMOUNT = 0;
 
-const withFA12ApproveApi = async (
+const getFA12ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token,
@@ -22,14 +22,12 @@ const withFA12ApproveApi = async (
   const resetAllowanceParams = tokenContract.methods.approve(contractAddress, RESET_AMOUNT).toTransferParams();
   const setAllowanceParams = tokenContract.methods.approve(contractAddress, amount).toTransferParams();
 
-  const operationsParams = currentAllowance.isGreaterThan(RESET_AMOUNT)
+  return currentAllowance.isGreaterThan(RESET_AMOUNT)
     ? [resetAllowanceParams, setAllowanceParams, ...operationParams]
     : [setAllowanceParams, ...operationParams];
-
-  return await batchify(tezos.wallet.batch([]), operationsParams).send();
 };
 
-const withFA2ApproveApi = async (
+const getFA2ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token,
@@ -60,7 +58,54 @@ const withFA2ApproveApi = async (
     ])
     .toTransferParams();
 
-  return await batchify(tezos.wallet.batch([]), [addOperatorParams, ...operationParams, removeOperatorParams]).send();
+  return [addOperatorParams, ...operationParams, removeOperatorParams];
+};
+
+const getApproveParams = async (
+  tezos: TezosToolkit,
+  contractAddress: string,
+  token: Token,
+  accountPkh: string,
+  amount: BigNumber.Value,
+  operationParams: TransferParams[]
+) => {
+  if (token.type === Standard.Fa12) {
+    return await getFA12ApproveParams(tezos, contractAddress, token, accountPkh, amount, operationParams);
+  }
+
+  return await getFA2ApproveParams(tezos, contractAddress, token, accountPkh, operationParams);
+};
+
+const withFA12ApproveApi = async (
+  tezos: TezosToolkit,
+  contractAddress: string,
+  token: Token,
+  accountPkh: string,
+  amount: BigNumber.Value,
+  operationParams: TransferParams[]
+) => {
+  const operationsParams = await getFA12ApproveParams(
+    tezos,
+    contractAddress,
+    token,
+    accountPkh,
+    amount,
+    operationParams
+  );
+
+  return await batchify(tezos.wallet.batch([]), operationsParams).send();
+};
+
+const withFA2ApproveApi = async (
+  tezos: TezosToolkit,
+  contractAddress: string,
+  token: Token,
+  accountPkh: string,
+  operationParams: TransferParams[]
+) => {
+  const operationsParams = await getFA2ApproveParams(tezos, contractAddress, token, accountPkh, operationParams);
+
+  return await batchify(tezos.wallet.batch([]), operationsParams).send();
 };
 
 export const withApproveApi = async (
@@ -80,4 +125,20 @@ export const withApproveApi = async (
   }
 
   return await withFA2ApproveApi(tezos, contractAddress, token, accountPkh, operationParams);
+};
+export const withApproveApiForManyTokens = async (
+  tezos: TezosToolkit,
+  contractAddress: string,
+  tokensAndAmounts: { token: Token; amount: BigNumber } | Array<{ token: Token; amount: BigNumber }>,
+  accountPkh: string,
+  operationParams: TransferParams[]
+) => {
+  const tokensAndAmountsArray = toArray(tokensAndAmounts);
+
+  let accumParams: TransferParams[] = operationParams;
+  for (const { token, amount } of tokensAndAmountsArray) {
+    accumParams = await getApproveParams(tezos, contractAddress, token, accountPkh, amount, accumParams);
+  }
+
+  return await batchify(tezos.wallet.batch([]), accumParams).send();
 };
