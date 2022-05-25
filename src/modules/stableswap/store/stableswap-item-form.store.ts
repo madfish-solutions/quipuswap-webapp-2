@@ -6,17 +6,20 @@ import { RootStore } from '@shared/store';
 export class StableswapItemFormStore {
   lpInputAmount: Nullable<BigNumber> = null;
   inputAmounts: Array<Nullable<BigNumber>> = [];
+  isBalancedProportion = true;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       lpInputAmount: observable,
       inputAmounts: observable,
+      isBalancedProportion: observable,
 
       initInputAmounts: action,
       setInputAmount: action,
       setLpInputAmount: action,
       setLpAndTokenInputAmounts: action,
-      clearStore: action
+      clearStore: action,
+      setIsBalancedProportion: action
     });
   }
 
@@ -44,5 +47,9 @@ export class StableswapItemFormStore {
   clearStore() {
     this.lpInputAmount = null;
     this.inputAmounts = this.inputAmounts.map(() => null);
+  }
+
+  setIsBalancedProportion(state: boolean) {
+    this.isBalancedProportion = state;
   }
 }

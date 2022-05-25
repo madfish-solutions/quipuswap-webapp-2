@@ -75,7 +75,15 @@ export const useAddLiqFormViewModel = () => {
   const isSubmitting = formik.isSubmitting;
   const disabled = isSubmitting || hasFormikError(formik.errors);
 
-  const handleInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
+  const handleImbalancedInputChange = (index: number) => (inputAmount: string) => {
+    const formikKey = getInputSlugByIndex(index);
+    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+
+    formik.setFieldValue(formikKey, inputAmount);
+    stableswapItemFormStore.setInputAmount(inputAmountBN, index);
+  };
+
+  const handleBalancedInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
     formikValues[getInputSlugByIndex(index)] = inputAmount;
     const inputAmountBN = prepareInputAmountAsBN(inputAmount);
     const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
@@ -101,6 +109,11 @@ export const useAddLiqFormViewModel = () => {
     formik.setValues(formikValues);
   };
 
+  const handleInputChange = (reserves: BigNumber, index: number) =>
+    stableswapItemFormStore.isBalancedProportion
+      ? handleBalancedInputChange(reserves, index)
+      : handleImbalancedInputChange(index);
+
   const data = tokensInfo.map(({ reserves, token }, index) => {
     const balance = findBalanceToken(balances, token)?.balance;
 
@@ -113,11 +126,17 @@ export const useAddLiqFormViewModel = () => {
     };
   });
 
+  const handleSwitcherClick = (state: boolean) => {
+    return stableswapItemFormStore.setIsBalancedProportion(state);
+  };
+
   return {
     data,
     tooltip,
     disabled,
     isSubmitting,
+    switcherValue: stableswapItemFormStore.isBalancedProportion,
+    handleSwitcherClick,
     handleSubmit: formik.handleSubmit
   };
 };
