@@ -1,6 +1,6 @@
-import { FC } from 'react';
-
 import cx from 'classnames';
+
+import { CFC } from '@shared/types';
 
 import styles from './card.module.scss';
 
@@ -8,6 +8,6 @@ interface CardContentProps {
   className?: string;
 }
 
-export const CardContent: FC<CardContentProps> = ({ className, children }) => (
+export const CardContent: CFC<CardContentProps> = ({ className, children }) => (
   <div className={cx(styles.content, className)}>{children}</div>
 );

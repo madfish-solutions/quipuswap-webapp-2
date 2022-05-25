@@ -6,7 +6,6 @@ import { ALL_NETWORKS, NETWORK } from '@config/config';
 import { useChangeNetwork } from '@providers/use-dapp';
 
 import { amplitudeService } from '../../services';
-import { Nullable } from '../../types';
 import { SelectUI } from '../select-ui';
 
 interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
@@ -19,11 +18,13 @@ export const NetworkSelect: FC<NetworkSelectProps> = ({ menuPlacement, className
   const selectValues = useMemo(() => ALL_NETWORKS.map(el => ({ value: el.id, label: el.name })), []);
 
   const handleSwitchNetwork = useCallback(
-    ({ value, label }): Nullable<void> => {
+    //TODO: types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ({ value, label }: any): void => {
       const selectedNetwork = ALL_NETWORKS.find(network => network.id === value && network.name === label);
       amplitudeService.logEvent('SELECT_NETWORK', { selectedNetwork });
       if (!selectedNetwork || selectedNetwork.disabled) {
-        return null;
+        return;
       }
       changeNetwork(selectedNetwork);
     },

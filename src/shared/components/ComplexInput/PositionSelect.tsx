@@ -12,13 +12,13 @@ import { Nullable, Token, TokenPair } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Button } from '../button';
+import { ComplexError } from '../complex-error';
 import { LoadableTokenPairName } from '../loadable-token-pair-name';
+import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
-import { ComplexError } from './ComplexError';
 import s from './ComplexInput.module.scss';
-import { PercentSelector } from './PercentSelector';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
@@ -93,7 +93,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const isTokensLoading = tokensUpdating?.isTokenChanging;
 
-  const notWhitelistedMessage = getMessageNotWhitelistedTokenPair(token1, token2);
+  const notWhitelistedMessage = getMessageNotWhitelistedTokenPair([token1, token2]);
 
   const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
   const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;

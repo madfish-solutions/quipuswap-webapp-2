@@ -1,11 +1,10 @@
-import { FC } from 'react';
-
+import { CFC } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { ErrorBoundaryInner } from './error-boundary-inner';
 import { ErrorBoundaryProps } from './error-boundary.types';
 
-export const ErrorBoundary: FC<ErrorBoundaryProps> = ({ isError, fallback, children }) => {
+export const ErrorBoundary: CFC<ErrorBoundaryProps> = ({ isError, fallback, children }) => {
   const { showErrorToast } = useToasts();
 
   return (

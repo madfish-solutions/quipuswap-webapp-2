@@ -2,84 +2,47 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
-import { TokenInput, Switcher, Tooltip, ConnectWalletOrDoSomething, Button } from '@shared/components';
+import { ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip } from '@shared/components';
+import { isNull } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { StableLpInput } from '../../stable-lp-input';
+import { StableTokenInput } from '../../stable-token-input';
 import styles from '../forms.module.scss';
+import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 
 export const RemoveLiqForm: FC = () => {
   const { t } = useTranslation();
 
-  const inputAmount = '100000';
-  const userTokenBalance = '100000';
-  const stakedTokenDecimals = 8;
-  const outputLabel = t('common|Output');
-  const inputLabel = t('common|Input');
+  const removeLiqFormViewModel = useRemoveLiqFormViewModel();
+
+  if (isNull(removeLiqFormViewModel)) {
+    return null;
+  }
+
+  const { data, formik, lpBalance, labelOutput, tooltip, handleSubmit, handleLpInputChange } = removeLiqFormViewModel;
+
   const disabled = false;
   const isSubmitting = false;
 
-  const handleInputAmountChange = noopMap;
-
   return (
-    <>
-      <TokenInput
-        id="stableswap-input"
-        label={inputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
+    <form onSubmit={handleSubmit}>
+      <StableLpInput formik={formik} label={labelOutput} balance={lpBalance} onInputChange={handleLpInputChange} />
+
       <ArrowDown className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
-      <Plus className={styles.svg} />
-      <TokenInput
-        id="stableswap-input"
-        label={outputLabel}
-        value={inputAmount}
-        balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
-        tokenA={DEFAULT_TOKEN}
-        onInputChange={handleInputAmountChange}
-      />
+
+      <Iterator render={StableTokenInput} data={data} separator={<Plus className={styles.svg} />} />
+
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
-        <Switcher value={true} onClick={handleInputAmountChange} />
+        {/* Mock data */}
+        <Switcher value={true} disabled={true} onClick={noopMap} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
-        <Tooltip content={outputLabel} />
+        <Tooltip content={tooltip} />
       </div>
+
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
@@ -93,6 +56,6 @@ export const RemoveLiqForm: FC = () => {
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
-    </>
+    </form>
   );
 };

@@ -53,11 +53,11 @@ export const LP_TOKEN_DECIMALS = 6;
 //#region strings
 export const EMPTY_STRING = '';
 export const ZERO_LENGTH = 0;
+export const LP_INPUT_KEY = 'lp-input';
 //#endregion
 
 //#region arrays
 export const FISRT_INDEX = 0;
-export const ONE_ITEM_LENGTH = 1;
 //#endregion
 
 //#region default value for token search

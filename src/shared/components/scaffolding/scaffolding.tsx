@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { CFC } from '@shared/types';
 
 interface ScaffoldingProps {
   className?: string;
@@ -7,7 +7,7 @@ interface ScaffoldingProps {
   showChild: boolean;
 }
 
-export const Scaffolding: FC<ScaffoldingProps> = ({ className, showChild, children, width, height }) => {
+export const Scaffolding: CFC<ScaffoldingProps> = ({ className, showChild, children, width, height }) => {
   if (showChild) {
     return <>{children}</>;
   }

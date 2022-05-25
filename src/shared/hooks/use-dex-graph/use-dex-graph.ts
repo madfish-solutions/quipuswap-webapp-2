@@ -5,9 +5,9 @@ import constate from 'constate';
 import { DEX_POOL_URL } from '@config/enviroment';
 import { useTokens } from '@providers/dapp-tokens';
 import { Nullable } from '@shared/types';
+import { useToasts } from '@shared/utils';
 
 import { amplitudeService } from '../../services';
-import { useToasts } from '../use-toasts';
 import { useWebSocket } from '../use-web-socket';
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
 import { RawDexPool, RawDexPoolsResponse, RawDexType } from './use-dex-graph.types';

@@ -8,7 +8,7 @@ import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
-export const useAddLiqFormValidation = (userBalance: Array<BigNumber>) => {
+export const useAddLiqFormValidation = (userBalance: Array<Nullable<BigNumber>>) => {
   return useMemo(() => {
     const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(operationAmountSchema);
 

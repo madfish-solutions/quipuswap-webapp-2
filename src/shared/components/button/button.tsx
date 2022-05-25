@@ -1,10 +1,11 @@
-import { FC, ForwardRefExoticComponent, HTMLProps, ReactNode, RefAttributes, useContext } from 'react';
+import { ForwardRefExoticComponent, HTMLProps, ReactNode, RefAttributes, useContext } from 'react';
 
 import cx from 'classnames';
 import { Link, LinkProps } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isUndefined } from '@shared/helpers/type-checks';
+import { CFC } from '@shared/types';
 
 import { ButtonContent } from './button-content';
 import styles from './button.module.scss';
@@ -37,7 +38,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Button: FC<ButtonProps> = ({
+export const Button: CFC<ButtonProps> = ({
   loading,
   type = 'button',
   theme = 'primary',
