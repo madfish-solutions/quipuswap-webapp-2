@@ -17,7 +17,7 @@ import {
   isExist,
   getFormikError,
   getTokenPairSlug,
-  prepareNumberAsString
+  numberAsString
 } from '@shared/helpers';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
 
@@ -92,8 +92,10 @@ export const useStakeFormViewModel = () => {
   const disabled = formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmStatusError);
 
   const handleInputAmountChange = (value: string) => {
-    farmingItemStore.setInputAmount(prepareNumberAsString(value));
-    formik.setFieldValue(StakeFormFields.inputAmount, value);
+    const decimals = defined(farmingItem).stakedToken.metadata.decimals;
+    const { fixedValue, realValue } = numberAsString(value, decimals);
+    farmingItemStore.setInputAmount(fixedValue);
+    formik.setFieldValue(StakeFormFields.inputAmount, realValue);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {

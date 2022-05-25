@@ -47,3 +47,4 @@ export * from './operation-amount-schema';
 export * from './is-equal';
 export * from './decrease-by-slippage';
 export * from './increase-by-slippage';
+export * from './number-as-string';
