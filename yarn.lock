@@ -18,17 +18,6 @@
     "@airgap/beacon-types" "^3.1.0"
     "@airgap/beacon-ui" "^3.1.0"
 
-"@airgap/beacon-core@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-core/-/beacon-core-3.0.0.tgz#3f1558769ad356af1d060f4043c4433142255087"
-  integrity sha512-zC79n3yzXWlGPkPq1DKPWLV/gZnLB6oeE+NToftgIB+4Grn5+ojliOfIL4WnYus8uQrYuhp7wOyri9HCnwco0A==
-  dependencies:
-    "@airgap/beacon-types" "^3.0.0"
-    "@airgap/beacon-utils" "^3.0.0"
-    "@types/libsodium-wrappers" "0.7.9"
-    bs58check "2.1.2"
-    libsodium-wrappers "0.7.9"
-
 "@airgap/beacon-core@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@airgap/beacon-core/-/beacon-core-3.1.0.tgz#16b838d3104d44a53590f08dcd88fe891130a949"
@@ -40,18 +29,7 @@
     bs58check "2.1.2"
     libsodium-wrappers "0.7.9"
 
-"@airgap/beacon-dapp@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-dapp/-/beacon-dapp-3.0.0.tgz#cc2ec629827d8f60dd534b0646203172d0bce1aa"
-  integrity sha512-WVZIfOWwZPhFu9/0G2u3dHEemt5flTIW8HFiVU3lMFN4KTMNFnJCbPikpVpUdDvS8nAjH5XF8fo7ddNOmvTk5w==
-  dependencies:
-    "@airgap/beacon-core" "^3.0.0"
-    "@airgap/beacon-transport-matrix" "^3.0.0"
-    "@airgap/beacon-transport-postmessage" "^3.0.0"
-    "@airgap/beacon-ui" "^3.0.0"
-    qrcode-generator "1.4.4"
-
-"@airgap/beacon-dapp@^3.1.0":
+"@airgap/beacon-dapp@^3.0.0", "@airgap/beacon-dapp@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@airgap/beacon-dapp/-/beacon-dapp-3.1.0.tgz#45c1300d3b930af761e9b8361d80ae95816c28b0"
   integrity sha512-/EIP0QlEu34BwkO8fTv9uPLIDsK0cqCx9A9Koc4Ez7EzHsvuolw3x8E6aIsF3/GLDTQWxc9E7iQ1CkWhX9kHRg==
@@ -78,15 +56,6 @@
     "@airgap/beacon-utils" "^3.1.0"
     "@airgap/beacon-wallet" "^3.1.0"
 
-"@airgap/beacon-transport-matrix@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-transport-matrix/-/beacon-transport-matrix-3.0.0.tgz#3a194a4dc5c79387a4d8b86d3408348f88e8c257"
-  integrity sha512-oGOmD7SPlA/u3jYGOpon7oyVugTH9wt/N4BNsZJNMEIPwMYqAIG08iAEeIe9rNcDzjueoSAUQZBGnX3ee9uwgw==
-  dependencies:
-    "@airgap/beacon-core" "^3.0.0"
-    "@airgap/beacon-utils" "^3.0.0"
-    axios "0.24.0"
-
 "@airgap/beacon-transport-matrix@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@airgap/beacon-transport-matrix/-/beacon-transport-matrix-3.1.0.tgz#18e88ac932091434b517f6541208afc1f4ce8468"
@@ -95,17 +64,6 @@
     "@airgap/beacon-core" "^3.1.0"
     "@airgap/beacon-utils" "^3.1.0"
     axios "0.24.0"
-
-"@airgap/beacon-transport-postmessage@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-transport-postmessage/-/beacon-transport-postmessage-3.0.0.tgz#ecece4726cfd04948821d81df1a1e8277efb8dec"
-  integrity sha512-sF698z1fUL15Qks4k0Z/LLJH/gqueOfQeQ8cWxNhvdqMcX7FlhVI1iYJroI2w6TtDH7XGBcWQwDwCUw58OZQbQ==
-  dependencies:
-    "@airgap/beacon-core" "^3.0.0"
-    "@airgap/beacon-types" "^3.0.0"
-    "@airgap/beacon-utils" "^3.0.0"
-    "@types/libsodium-wrappers" "0.7.9"
-    libsodium-wrappers "0.7.9"
 
 "@airgap/beacon-transport-postmessage@^3.1.0":
   version "3.1.0"
@@ -118,29 +76,12 @@
     "@types/libsodium-wrappers" "0.7.9"
     libsodium-wrappers "0.7.9"
 
-"@airgap/beacon-types@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-types/-/beacon-types-3.0.0.tgz#e97af9577922652018cb0c83484c01dda5519c52"
-  integrity sha512-P81xglSWbotIZbftLFMNTOTtaOrzWKz9PCr45UC2lFTMGq5MsEVQho0ssIjytSp6M/hAHW/01hUNfKDdgooHhw==
-  dependencies:
-    "@types/chrome" "0.0.163"
-
 "@airgap/beacon-types@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@airgap/beacon-types/-/beacon-types-3.1.0.tgz#c45526af10c384935269b13c72df111f5edf46f5"
   integrity sha512-/Vl6CyUXVvsZURn4Ajvmi1mM9i6W7JNzo0lkKw2U1yhaVd6RwVtyIv7PQqCOuOIBdaMHBGWLZ+DMtYTMdY//6A==
   dependencies:
     "@types/chrome" "0.0.163"
-
-"@airgap/beacon-ui@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-ui/-/beacon-ui-3.0.0.tgz#327e6bd699d6624da4206fbe093f0d88bbda0398"
-  integrity sha512-+uGJp5wWYteZtjLzo9vsIG6GNzZkyBnaU5o7ybtr0A3YbSlFBNbm2IpNIxJ5vtxwN6g3fK/yef1iPvXa1Ezwdg==
-  dependencies:
-    "@airgap/beacon-core" "^3.0.0"
-    "@airgap/beacon-transport-postmessage" "^3.0.0"
-    "@airgap/beacon-types" "^3.0.0"
-    "@airgap/beacon-utils" "^3.0.0"
 
 "@airgap/beacon-ui@^3.1.0":
   version "3.1.0"
@@ -151,15 +92,6 @@
     "@airgap/beacon-transport-postmessage" "^3.1.0"
     "@airgap/beacon-types" "^3.1.0"
     "@airgap/beacon-utils" "^3.1.0"
-
-"@airgap/beacon-utils@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@airgap/beacon-utils/-/beacon-utils-3.0.0.tgz#1ac5b0cabf3157e96cc593d6b7aee91c8e9ca665"
-  integrity sha512-hjynz2qufs6yTQXj870bRnhc3v2V0osnzjy4AfkbTXC2D96E34PQt9ao1eGK75vWThJv3uw1Yham2vpBiXyzzg==
-  dependencies:
-    "@types/libsodium-wrappers" "0.7.9"
-    bs58check "2.1.2"
-    libsodium-wrappers "0.7.9"
 
 "@airgap/beacon-utils@^3.1.0":
   version "3.1.0"
