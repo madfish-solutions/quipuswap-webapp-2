@@ -19,7 +19,7 @@ import { Beacon, Temple } from './content';
 import { WalletButton } from './wallet-button';
 import styles from './wallet-modal.module.scss';
 
-const INSTALL_TEMPLE = 'Install Temple';
+const INSTALL_TEMPLE = 'Temple extension';
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
