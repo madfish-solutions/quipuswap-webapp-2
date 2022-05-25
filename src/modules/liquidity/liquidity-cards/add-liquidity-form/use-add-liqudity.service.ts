@@ -307,10 +307,6 @@ export const useAddLiquidityService = (
 
     const tokenAInputUsd = Number(getDollarEquivalent(tokenAPool, exchangeRates[getTokenSlug(tokenA)]));
     const tokenBInputUsd = Number(getDollarEquivalent(tokenBPool, exchangeRates[getTokenSlug(tokenB)]));
-    const fixedTokenAPoll = Number(fromDecimals(tokenAPool!, tokenA).toFixed());
-    const fixedTokenBPoll = Number(fromDecimals(tokenBPool!, tokenB).toFixed());
-    const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
-    const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
 
     if (isPoolNotExist) {
       const addPairTokenToTokenOperation = await addPairTokenToToken(
@@ -339,12 +335,7 @@ export const useAddLiquidityService = (
             pairInputA: Number(pairInputA),
             pairInputB: Number(pairInputB),
             tokenAInputUsd,
-            tokenBInputUsd,
-            fixedTokenAPoll,
-            fixedTokenBPoll,
-            fixedTokenAPollUds,
-            fixedTokenBPollUds,
-            tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+            tokenBInputUsd
           }
         };
 
@@ -380,12 +371,7 @@ export const useAddLiquidityService = (
           transactionDeadline: Number(transactionDeadline.toFixed()),
           liquiditySlippage: Number(liquiditySlippage.toFixed()),
           tokenAInputUsd,
-          tokenBInputUsd,
-          fixedTokenAPoll,
-          fixedTokenBPoll,
-          fixedTokenAPollUds,
-          fixedTokenBPollUds,
-          tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
+          tokenBInputUsd
         }
       };
 
