@@ -107,3 +107,4 @@ const COINFLIP_CONTRACTS: Record<SupportedNetworks, string> = {
 export const DEFAULT_COINFLIP_CONTRACT = COINFLIP_CONTRACTS[NETWORK_ID];
 
 export const COINFLIP_CONTRACT_DECIMALS = 1e18;
+export const COINFLIP_TOKEN_DECIMALS = 1e6;
