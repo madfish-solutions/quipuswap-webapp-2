@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-import BigNumber from 'bignumber.js';
-
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { decreaseBySlippage, isNull, toDecimals } from '@shared/helpers';
@@ -12,6 +10,7 @@ import { useTranslation } from '@translation';
 
 import { addStableswapLiquidityApi } from '../../api';
 import { getStableswapDeadline } from '../../helpers';
+import { tokensAndAmountsMapper } from '../../mapping/tokens-and-amounts.map';
 import { useStableswapItemStore, useStableswapItemFormStore } from '../store';
 
 export const useAddStableswapLiquidity = () => {
@@ -24,38 +23,30 @@ export const useAddStableswapLiquidity = () => {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
-  const stableswapItemStore = useStableswapItemStore();
-  const stableswapItemFormStore = useStableswapItemFormStore();
-  const { item } = stableswapItemStore;
-  const { lpInputAmount, inputAmounts } = stableswapItemFormStore;
+  const { item } = useStableswapItemStore();
+  const { lpInputAmount, inputAmounts } = useStableswapItemFormStore();
 
   const addStableswapLiquidity = useCallback(async () => {
     if (isNull(tezos) || isNull(item) || isNull(lpInputAmount) || isNull(inputAmounts) || isNull(accountPkh)) {
       return;
     }
 
-    const {
-      lpToken: {
-        metadata: { decimals }
-      },
-      contractAddress
-    } = item;
+    const { lpToken, contractAddress, tokensInfo } = item;
+
+    const tokens = tokensInfo.map(({ token }) => token);
 
     const deadline = getStableswapDeadline(transactionDeadline);
-    const lpInputAmountFixed = decreaseBySlippage(lpInputAmount, decimals, liquiditySlippage);
 
-    const tokensAndAmounts: Array<AmountToken> = item.tokensInfo.map(({ token }, index) => {
-      const _amount = inputAmounts[index];
-      const amount = isNull(_amount) ? new BigNumber('0') : toDecimals(_amount, token);
+    const lpInputAmountAtom = toDecimals(lpInputAmount, lpToken);
+    const lpInputAmountAtomWithSlippage = decreaseBySlippage(lpInputAmountAtom, liquiditySlippage);
 
-      return { token, amount };
-    });
+    const tokensAndAmounts: Array<AmountToken> = tokensAndAmountsMapper(tokens, inputAmounts);
 
     try {
       const operation = await addStableswapLiquidityApi(
         tezos,
         contractAddress,
-        lpInputAmountFixed,
+        lpInputAmountAtomWithSlippage,
         tokensAndAmounts,
         deadline,
         accountPkh

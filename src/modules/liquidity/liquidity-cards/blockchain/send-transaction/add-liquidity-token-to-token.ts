@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { batchOperations } from '@shared/dapp';
-import { getBlockchainTimestamp, increaseBySlippage } from '@shared/helpers';
+import { getBlockchainTimestamp, increaseBySlippage, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers';
@@ -30,20 +30,20 @@ export const addLiquidityTokenToToken = async (
   const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
   const { address: dexAddress } = dex.contract;
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
 
   const tokenAAmount = new BigNumber(tokenAInput);
 
-  const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply);
+  const shares = tokenAAmount.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
+  const tokenBAmount = shares.multipliedBy(tokenBPool).dividedBy(totalSupply);
+  const aTokemAtom = toDecimals(tokenAAmount, tokenA);
+  const bTokemAtom = toDecimals(tokenAAmount, tokenB);
 
-  const withDecimalsA = increaseBySlippage(tokenAAmount, decimalsA, slippagePercentage);
-  const withDecimalsB = increaseBySlippage(tokenBAmount, decimalsB, slippagePercentage);
+  const withSlippageA = increaseBySlippage(aTokemAtom, slippagePercentage);
+  const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
-  const investParams = dex.contract.methods.invest(id, shares, withDecimalsA, withDecimalsB, transactionDeadline);
+  const investParams = dex.contract.methods.invest(id, shares, withSlippageA, withSlippageB, transactionDeadline);
 
   return await (
     await batchOperations(tezos, [

@@ -26,17 +26,16 @@ export const removeLiquidityTokenToToken = async (
     .toNumber();
   const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
-
   const lpTokenBN = new BigNumber(lpTokenInput);
   const tokenAOutputBN = new BigNumber(tokenAOutput);
   const tokenBOutputBN = new BigNumber(tokenBOutput);
 
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+  const aTokenAtom = toDecimals(tokenAOutputBN, tokenA);
+  const bTokenAtom = toDecimals(tokenBOutputBN, tokenB);
 
-  const withSlippageA = decreaseBySlippage(tokenAOutputBN, decimalsA, slippagePercentage);
-  const withSlippageB = decreaseBySlippage(tokenBOutputBN, decimalsB, slippagePercentage);
+  const withSlippageA = decreaseBySlippage(aTokenAtom, slippagePercentage);
+  const withSlippageB = decreaseBySlippage(bTokenAtom, slippagePercentage);
 
   const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 

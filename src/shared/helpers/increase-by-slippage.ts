@@ -1,13 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { PERCENTAGE_BN } from '@config/constants';
-
-import { toDecimals } from './bignumber';
+import { PERCENTAGE_100 } from '@config/constants';
 
 const BASE_BN = new BigNumber('1');
 
-export const increaseBySlippage = (amount: BigNumber, decimals: number, slippagePercentage: BigNumber) => {
-  const fixedSlippage = BASE_BN.plus(slippagePercentage.dividedBy(PERCENTAGE_BN));
+export const increaseBySlippage = (amount: BigNumber, slippagePercentage: BigNumber) => {
+  const fixedSlippage = BASE_BN.plus(slippagePercentage.dividedBy(PERCENTAGE_100));
 
-  return toDecimals(amount, decimals).multipliedBy(fixedSlippage).decimalPlaces(decimals, BigNumber.ROUND_DOWN);
+  return amount.multipliedBy(fixedSlippage).integerValue(BigNumber.ROUND_DOWN);
 };

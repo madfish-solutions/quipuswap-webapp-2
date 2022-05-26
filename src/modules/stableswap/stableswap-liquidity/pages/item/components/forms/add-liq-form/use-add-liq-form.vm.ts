@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, isTokenEqual, hasFormikError, toFixed } from '@shared/helpers';
+import { isNull, isTokenEqual, hasFormikError, toFixed, placeDecimals } from '@shared/helpers';
 import { BalanceToken, useTokensBalances } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -81,7 +81,7 @@ export const useAddLiqFormViewModel = () => {
     const inputAmountBN = prepareInputAmountAsBN(inputAmount);
 
     const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-    const fixedLpValue = lpValue && lpValue.decimalPlaces(lpToken.metadata.decimals, BigNumber.ROUND_DOWN);
+    const fixedLpValue = lpValue && placeDecimals(lpValue, lpToken);
 
     formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
 
@@ -92,7 +92,7 @@ export const useAddLiqFormViewModel = () => {
 
       const result = calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve);
 
-      return result?.decimalPlaces(token.metadata.decimals) ?? null;
+      return result && placeDecimals(result, token);
     });
 
     calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {

@@ -48,3 +48,4 @@ export * from './is-equal';
 export * from './decrease-by-slippage';
 export * from './increase-by-slippage';
 export * from './number-as-string';
+export * from './get-token-decimals';
