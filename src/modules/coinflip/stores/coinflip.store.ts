@@ -1,8 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { DEFAULT_COINFLIP_CONTRACT } from '@config/config';
+import { DEFAULT_COINFLIP_CONTRACT, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { fromDecimals } from '@shared/helpers';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
@@ -49,7 +50,6 @@ export class CoinflipStore {
     makeObservable(this, {
       tokenToPlay: observable,
       game: observable,
-      generalStats: observable,
 
       payout: computed,
       token: computed,
@@ -60,7 +60,11 @@ export class CoinflipStore {
   }
 
   get payout(): Nullable<BigNumber> {
-    return this.game.input ? this.game.input.times(Number(this.generalStats.data.payoutCoefficient)) : null;
+    return this.game.input && this.generalStats.data.payoutCoefficient
+      ? this.game.input.times(
+          Number(fromDecimals(this.generalStats.data.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
+        )
+      : null;
   }
 
   get token(): Token {

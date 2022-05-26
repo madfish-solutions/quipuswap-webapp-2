@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
-import { Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { useCoinflipStore } from './stores';
 
-export const useCoinflipGeneralStats = (token: Nullable<Token>) => {
+export const useCoinflipGeneralStats = () => {
   const conflipStore = useCoinflipStore();
+  const { token } = conflipStore;
   const { showErrorToast } = useToasts();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useCoinflipGeneralStats = (token: Nullable<Token>) => {
     } catch (error) {
       showErrorToast(error as Error);
     }
-  }, [conflipStore?.generalStats, showErrorToast]);
+  }, [conflipStore?.generalStats, showErrorToast, token]);
 
   return { isLoading: !!conflipStore?.generalStats.isLoading };
 };
