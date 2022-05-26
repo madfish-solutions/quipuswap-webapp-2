@@ -1,15 +1,19 @@
-import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
-import { bigNumberToString, fromDecimals } from '@shared/helpers';
-
+import { GeneralStatsInterface } from '../api/types';
 import { DashboardGeneralStats } from '../interfaces';
 
-export const generalStatsMapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats) => {
-  return {
-    bank: bank ? bigNumberToString(fromDecimals(bank, COINFLIP_TOKEN_DECIMALS)) : null,
-    gamesCount: gamesCount ? bigNumberToString(gamesCount) : null,
-    payoutCoefficient: payoutCoefficient
-      ? bigNumberToString(fromDecimals(payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
-      : null,
-    totalWins: totalWins ? bigNumberToString(totalWins) : null
-  };
+export const DEFAULT_GENERAL_STATS: DashboardGeneralStats = {
+  bank: null,
+  gamesCount: null,
+  payoutCoefficient: null,
+  totalWins: null
+};
+
+export const generalStatsMapping = (stats: Nullable<GeneralStatsInterface>): DashboardGeneralStats => {
+  if (!stats) {
+    return DEFAULT_GENERAL_STATS;
+  }
+
+  const { bank, games_count: gamesCount, payout_quot_f: payoutCoefficient, total_won_amt: totalWins } = stats;
+
+  return { bank, gamesCount, payoutCoefficient, totalWins };
 };

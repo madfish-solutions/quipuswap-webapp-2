@@ -2,19 +2,17 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { DashboardCard, DashboardStatsInfo } from '@shared/components';
 
 import styles from './coinflip-dashboard-stats.module.scss';
+import { useCoinflipDashboardStatsViewModel } from './use-coinflip-dashboard-stats.vm';
 
 interface Props {
   isLoading: boolean;
 }
 
 export const CoinflipDashboardStatsInfo: FC<Props> = observer(({ isLoading }) => {
-  const coinflipStore = useCoinflipStore();
-  const { generalStats, tokenToPlay } = coinflipStore;
-  const { bank, gamesCount, payoutCoefficient, totalWins } = generalStats;
+  const { bank, gamesCount, payoutCoefficient, totalWins, tokenToPlay } = useCoinflipDashboardStatsViewModel();
 
   return (
     <DashboardStatsInfo
