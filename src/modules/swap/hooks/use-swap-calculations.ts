@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { BigNumber } from 'bignumber.js';
+
 import {
   amountsAreEqual,
   DexGraph,
@@ -13,7 +15,6 @@ import {
 } from '@shared/helpers';
 import { useDexGraph } from '@shared/hooks';
 import { DexPair, Token, Undefined } from '@shared/types';
-import { BigNumber } from 'bignumber.js';
 
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
