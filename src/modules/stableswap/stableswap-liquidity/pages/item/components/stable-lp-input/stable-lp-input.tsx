@@ -13,12 +13,13 @@ import { useStableLpInputViewModel } from './stable-lp-input.vm';
 interface Props {
   formik: IFormik<RemoveLiqFormValues>;
   label: string;
+  disabled?: boolean;
   balance?: string;
   className?: string;
   onInputChange: (value: string) => void;
 }
 
-export const StableLpInput: FC<Props> = observer(({ formik, label, balance, className, onInputChange }) => {
+export const StableLpInput: FC<Props> = observer(({ formik, label, disabled, balance, className, onInputChange }) => {
   const outputComponentViewModel = useStableLpInputViewModel(formik);
 
   if (isNull(outputComponentViewModel)) {
@@ -38,6 +39,7 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
       onInputChange={onInputChange}
       balance={balance}
       error={error}
+      disabled={disabled}
       hiddenPercentSelector={hiddenPercentSelector}
     />
   );

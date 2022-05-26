@@ -32,8 +32,9 @@ export const TokenInput: FC<TokenInputProps> = ({
   tokens = [],
   value,
   balance,
-  hiddenPercentSelector,
   error,
+  disabled,
+  hiddenPercentSelector,
   readOnly,
   onInputChange,
   onSelectorClick
@@ -100,7 +101,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             ref={inputRef}
             value={value}
             autoComplete="off"
-            disabled={!isFormReady}
+            disabled={!isFormReady || disabled}
             onChange={handleInputChange}
           />
           <div className={styles.dangerContainer}>

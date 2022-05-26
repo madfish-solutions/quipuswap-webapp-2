@@ -4,19 +4,22 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, toFixed } from '@shared/helpers';
+import { fromDecimals, isNull, toFixed } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import {
   calculateLpValue,
   calculateOutputWithLp,
   calculateOutputWithToken,
+  extractTokens,
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
   getInputSlugByIndex,
   prepareInputAmountAsBN
 } from '../../../../../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import { createAmountsMichelsonMap } from './create-amounts-map';
+import { useCalcTokenAmountView } from './use-calc-token-amount-view';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -32,16 +35,12 @@ const BALANCE_BN = new BigNumber(BALANCE);
 const LP_BALANCE_BN = new BigNumber(LP_BALANCE);
 
 export const useRemoveLiqFormViewModel = () => {
+  const { calcTokenAmountView } = useCalcTokenAmountView();
+
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const { t } = useTranslation();
   const item = stableswapItemStore.item;
-
-  //#region mock data
-  //TODO: remove mockdata implement real one
-  const disabled = false;
-  const isSubmitting = false;
-  //#endregion mock data
 
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
   const userBalances = Array(inputsCount).fill(BALANCE_BN);
@@ -82,7 +81,7 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
   };
 
-  const handleInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
+  const handleBalancedInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
     formikValues[getInputSlugByIndex(index)] = inputAmount;
     const inputAmountBN = prepareInputAmountAsBN(inputAmount);
     const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
@@ -108,11 +107,32 @@ export const useRemoveLiqFormViewModel = () => {
     formik.setValues(formikValues);
   };
 
+  const calculateShares = async (index: number, inputAmount: string) => {
+    const tokens = extractTokens(item.tokensInfo);
+    const map = createAmountsMichelsonMap(formik.values, tokens, index, inputAmount);
+    const shares = await calcTokenAmountView(map);
+    const fixedShares = fromDecimals(shares, item.lpToken);
+
+    return fixedShares.toFixed();
+  };
+
+  const handleImbalancedInputChange = (index: number) => async (inputAmount: string) => {
+    formik.setFieldValue(getInputSlugByIndex(index), inputAmount);
+
+    const shares = await calculateShares(index, inputAmount);
+    formik.setFieldValue(LP_INPUT_KEY, shares);
+  };
+
+  const handleInputChange = (reserves: BigNumber, index: number) =>
+    stableswapItemFormStore.isBalancedProportion
+      ? handleBalancedInputChange(reserves, index)
+      : handleImbalancedInputChange(index);
+
   const data = tokensInfo.map(({ reserves }, index) => {
     return {
       index,
       formik,
-      label: labelInput,
+      label: labelOutput,
       balance: BALANCE,
       onInputChange: handleInputChange(reserves, index)
     };
@@ -131,14 +151,20 @@ export const useRemoveLiqFormViewModel = () => {
     setValues(inputAmountBN, tokenOutputs);
   };
 
+  const handleSwitcherClick = (state: boolean) => {
+    return stableswapItemFormStore.setIsBalancedProportion(state);
+  };
+
   return {
     data,
     formik,
     tooltip,
-    disabled,
-    labelOutput,
-    isSubmitting,
+    labelInput,
+    isSubmitting: formik.isSubmitting,
     lpBalance: LP_BALANCE,
+    switcherValue: stableswapItemFormStore.isBalancedProportion,
+    isLpInputDisabled: stableswapItemFormStore.isBalancedProportion,
+    handleSwitcherClick,
     handleLpInputChange,
     handleSubmit: formik.handleSubmit
   };
