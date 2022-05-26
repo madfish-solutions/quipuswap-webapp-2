@@ -1,5 +1,4 @@
 import { NetworkType } from '@airgap/beacon-sdk';
-import BigNumber from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
@@ -78,7 +77,6 @@ const COIN_FLIP_CONTRACTS_ADDRESSES: Record<SupportedNetworks, string> = {
 };
 
 export const COIN_FLIP_CONTRACT_ADDRESS = COIN_FLIP_CONTRACTS_ADDRESSES[NETWORK_ID];
-export const COIN_FLIP_COEFFICIENT = new BigNumber('1.9');
 //#endregion COIN_FLIP_CONTRACTS
 
 //#region RPC_URLS
