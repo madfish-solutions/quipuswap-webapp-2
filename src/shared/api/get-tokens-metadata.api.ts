@@ -1,6 +1,10 @@
-import { QSNetwork } from '@shared/types';
+import { NETWORK } from '@config/config';
+import { TEZOS_TOKEN } from '@config/tokens';
 
-interface RawTokenMetadata {
+import { isTezosToken } from '../helpers';
+import { TokenAddress } from '../types';
+
+export interface RawTokenMetadata {
   token_id?: string;
   name: string;
   symbol: string;
@@ -8,12 +12,15 @@ interface RawTokenMetadata {
   thumbnailUri: string;
 }
 
-export const getTokenMetadata = async (
-  network: QSNetwork,
-  address: string,
-  tokenId?: number
-): Promise<RawTokenMetadata | null> => {
-  const data = await fetch(`${network.metadata}/${address}/${tokenId || 0}`)
+export const getTokenMetadata = async ({
+  contractAddress,
+  fa2TokenId
+}: TokenAddress): Promise<RawTokenMetadata | null> => {
+  if (isTezosToken({ contractAddress })) {
+    return TEZOS_TOKEN.metadata;
+  }
+
+  const data = await fetch(`${NETWORK.metadata}/${contractAddress}/${fa2TokenId || 0}`)
     .then(async res => res.json())
     .catch(() => null);
 

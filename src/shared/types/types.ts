@@ -62,10 +62,13 @@ export interface TokenPair {
   dex?: Nullable<FoundDex>;
 }
 
-export interface Token {
-  type: Standard;
+export interface TokenAddress {
   contractAddress: string;
-  fa2TokenId?: number;
+  fa2TokenId?: number | string;
+}
+
+export interface Token extends TokenAddress {
+  type: Standard;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;
 }

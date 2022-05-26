@@ -1,6 +1,6 @@
 import { EMPTY_STRING, FISRT_INDEX, SLASH } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
-import { Nullable, Optional, RawToken, Token, TokenMetadata } from '@shared/types';
+import { Nullable, Optional, RawToken, Token, TokenAddress, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
 
 import { isEmptyArray, isLastElementIndex, isSingleElement, toArray } from './arrays';
@@ -53,7 +53,7 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: RawOrMappedToken) =>
+export const isTezosToken = (token: TokenAddress) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;

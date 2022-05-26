@@ -1,25 +1,70 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { getTokenSlug } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { useTokens } from '@shared/hooks';
+import { DexPair, DexPairType, Token } from '@shared/types';
 import { BigNumber } from 'bignumber.js';
 
 import {
+  DexTypeEnum,
   getBestTradeExactInput,
   getBestTradeExactOutput,
   getTradeInputAmount,
   getTradeOutputAmount,
   Trade,
+  TradeOperation,
   useAllRoutePairs,
   useRoutePairsCombinations
 } from '../../../libs/swap-router-sdk';
+import { RoutePair } from '../../../libs/swap-router-sdk/interface/route-pair.interface';
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
-  inputToken?: Token;
-  outputToken?: Token;
+  inputToken: Nullable<Token>;
+  outputToken: Nullable<Token>;
 }
+
+const mapDexType = (dexType: DexTypeEnum): DexPairType => {
+  switch (dexType) {
+    case DexTypeEnum.QuipuSwap:
+      return DexPairType.TokenToXtz;
+    case DexTypeEnum.QuipuSwapTokenToTokenDex:
+      return DexPairType.TokenToToken;
+    default:
+      throw new Error('Unsupported dex type');
+  }
+};
+
+export const getDexSlug = ({ dexAddress, dexId }: RoutePair) =>
+  dexId ? `${dexAddress}_${dexId.toFixed()}` : dexAddress;
+
+const mapTradeToDexPair = (operation: TradeOperation): DexPair => {
+  const { aTokenPool, bTokenPool, dexType } = operation;
+
+  return {
+    token1Pool: aTokenPool,
+    token2Pool: bTokenPool,
+    // @ts-ignore
+    token1: null, // Token
+    // @ts-ignore
+    token2: null, // Token
+    id: getDexSlug(operation),
+    type: mapDexType(dexType)
+  };
+};
+
+const mapTradeToDexPairs = (trade: Nullable<Trade>): DexPair[] => (trade ? trade.map(mapTradeToDexPair) : []);
+
+const getTokenSlugsFromRoutePair = (pairs: RoutePair[]) => {
+  const tokens: { [key: string]: boolean } = {};
+  pairs.forEach(({ aTokenSlug, bTokenSlug }) => {
+    tokens[aTokenSlug] = true;
+    tokens[bTokenSlug] = true;
+  });
+
+  return Object.keys(tokens);
+};
 
 export const useSwapCalculationsV2 = () => {
   const allRoutePairs = useAllRoutePairs(TEZOS_DEXES_API_URL);
@@ -28,9 +73,17 @@ export const useSwapCalculationsV2 = () => {
     [allRoutePairs.data]
   );
 
-  const [bestTrade, setBestTrade] = useState<Nullable<Trade>>();
+  const tokensSlugs = getTokenSlugsFromRoutePair(filteredRoutePairs);
+  useTokens(tokensSlugs);
 
-  const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({});
+  const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
+  const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
+
+  useEffect(() => {
+    setDexRoute(mapTradeToDexPairs(bestTrade));
+  }, [bestTrade]);
+
+  const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
   const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);
   const [outputAmount, setOutputAmount] = useState<Nullable<BigNumber>>(null);
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
@@ -85,7 +138,7 @@ export const useSwapCalculationsV2 = () => {
   };
 
   return {
-    bestTrade,
+    dexRoute,
     onInputAmountChange,
     onOutputAmountChange,
     onSwapPairChange,
