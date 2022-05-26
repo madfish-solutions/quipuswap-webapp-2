@@ -1,7 +1,6 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
 import { isEqual } from '@shared/helpers';
@@ -10,8 +9,8 @@ import { DashboardGeneralStats } from '../interfaces/dashboard-general-stats.int
 import { CoinflipStorage } from './coinflip-contract.interface';
 
 enum TOKEN_ASSETS {
-  QUIPU = 0,
-  TEZOS = 1
+  TEZOS = 0,
+  QUIPU = 1
 }
 
 interface GeneralStatsInterface {
@@ -34,8 +33,7 @@ export const getCoinflipGeneralStats = async (
     return null;
   }
 
-  const { bank, games_count: gamesCount, payout_quot_f, total_won_amt: totalWins } = generalStats;
-  const payoutCoefficient = payout_quot_f.div(COINFLIP_CONTRACT_DECIMALS);
+  const { bank, games_count: gamesCount, payout_quot_f: payoutCoefficient, total_won_amt: totalWins } = generalStats;
 
   return { bank, gamesCount, payoutCoefficient, totalWins };
 };
