@@ -1,3 +1,5 @@
+import { isNull } from '@shared/helpers';
+
 import { GeneralStatsInterface } from '../api/types';
 import { DashboardGeneralStats } from '../interfaces';
 
@@ -9,7 +11,7 @@ export const DEFAULT_GENERAL_STATS: DashboardGeneralStats = {
 };
 
 export const generalStatsMapping = (stats: Nullable<GeneralStatsInterface>): DashboardGeneralStats => {
-  if (!stats) {
+  if (isNull(stats)) {
     return DEFAULT_GENERAL_STATS;
   }
 

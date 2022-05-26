@@ -6,7 +6,7 @@ import { useCoinflipStore } from './stores';
 
 export const useCoinflipGeneralStats = () => {
   const conflipStore = useCoinflipStore();
-  const { token } = conflipStore;
+  const token = conflipStore?.token;
   const { showErrorToast } = useToasts();
 
   useEffect(() => {
@@ -17,5 +17,5 @@ export const useCoinflipGeneralStats = () => {
     }
   }, [conflipStore?.generalStats, showErrorToast, token]);
 
-  return { isLoading: !!conflipStore?.generalStats.isLoading };
+  return { isLoading: Boolean(conflipStore?.generalStats.isLoading) };
 };

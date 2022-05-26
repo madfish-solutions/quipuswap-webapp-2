@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
-import { isEqual } from '@shared/helpers';
+import { isEqual, isNull } from '@shared/helpers';
 
 import { DashboardGeneralStats } from '../interfaces/dashboard-general-stats.interface';
 import { CoinflipStorage } from './types';
@@ -29,7 +29,7 @@ export const getCoinflipGeneralStats = async (
   const storage = await getStorageInfo<CoinflipStorage>(tezos, contractAddress);
   const generalStats = (await storage.id_to_asset.get<GeneralStatsInterface>(tokenAsset)) ?? null;
 
-  if (!generalStats) {
+  if (isNull(generalStats)) {
     return null;
   }
 

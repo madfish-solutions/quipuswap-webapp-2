@@ -12,7 +12,7 @@ import { useCoinflipGeneralStats } from './hooks';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
-  const { t } = useTranslation('coinflip');
+  const { t } = useTranslation();
   const { isLoading } = useCoinflipGeneralStats();
 
   return (
