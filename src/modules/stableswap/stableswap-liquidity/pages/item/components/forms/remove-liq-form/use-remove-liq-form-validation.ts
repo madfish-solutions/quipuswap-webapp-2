@@ -19,7 +19,7 @@ export const useRemoveLiqFormValidation = (
     const lpInputShema = operationAmountSchema(userLpBalance);
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      const schema = isBalancedProportion ? item : item.required('Value is required');
+      const schema = isBalancedProportion ? item.required('Value is required') : item;
 
       return [getInputSlugByIndex(index), schema];
     });
