@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { BigNumber } from 'bignumber.js';
+
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { decreaseBySlippage, isNull, toDecimals } from '@shared/helpers';
@@ -38,7 +40,9 @@ export const useAddStableswapLiquidity = () => {
     const deadline = getStableswapDeadline(transactionDeadline);
 
     const lpInputAmountAtom = toDecimals(lpInputAmount, lpToken);
-    const lpInputAmountAtomWithSlippage = decreaseBySlippage(lpInputAmountAtom, liquiditySlippage);
+    const lpInputAmountAtomWithSlippage = decreaseBySlippage(lpInputAmountAtom, liquiditySlippage).integerValue(
+      BigNumber.ROUND_DOWN
+    );
 
     const tokensAndAmounts: Array<AmountToken> = tokensAndAmountsMapper(tokens, inputAmounts);
 

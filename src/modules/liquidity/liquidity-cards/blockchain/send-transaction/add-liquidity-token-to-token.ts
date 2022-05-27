@@ -38,8 +38,8 @@ export const addLiquidityTokenToToken = async (
   const aTokemAtom = toDecimals(tokenAAmount, tokenA);
   const bTokemAtom = toDecimals(tokenAAmount, tokenB);
 
-  const withSlippageA = increaseBySlippage(aTokemAtom, slippagePercentage);
-  const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage);
+  const withSlippageA = increaseBySlippage(aTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);

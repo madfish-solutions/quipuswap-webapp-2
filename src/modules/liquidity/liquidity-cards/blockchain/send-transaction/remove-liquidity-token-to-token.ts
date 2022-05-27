@@ -34,8 +34,8 @@ export const removeLiquidityTokenToToken = async (
   const aTokenAtom = toDecimals(tokenAOutputBN, tokenA);
   const bTokenAtom = toDecimals(tokenBOutputBN, tokenB);
 
-  const withSlippageA = decreaseBySlippage(aTokenAtom, slippagePercentage);
-  const withSlippageB = decreaseBySlippage(bTokenAtom, slippagePercentage);
+  const withSlippageA = decreaseBySlippage(aTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(bTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 
