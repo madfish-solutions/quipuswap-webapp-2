@@ -176,7 +176,7 @@ export const useRemoveLiqFormViewModel = () => {
     isSubmitting: formik.isSubmitting,
     lpBalance,
     switcherValue: stableswapItemFormStore.isBalancedProportion,
-    isLpInputDisabled: stableswapItemFormStore.isBalancedProportion,
+    isLpInputDisabled: !stableswapItemFormStore.isBalancedProportion,
     handleSwitcherClick,
     handleLpInputChange,
     handleSubmit: formik.handleSubmit

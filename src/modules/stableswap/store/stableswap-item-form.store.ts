@@ -6,7 +6,7 @@ import { RootStore } from '@shared/store';
 export class StableswapItemFormStore {
   lpInputAmount: Nullable<BigNumber> = null;
   inputAmounts: Array<Nullable<BigNumber>> = [];
-  isBalancedProportion = false;
+  isBalancedProportion = true;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
