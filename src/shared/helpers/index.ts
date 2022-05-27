@@ -46,3 +46,4 @@ export * from './includes-case-insensitive';
 export * from './operation-amount-schema';
 export * from './is-equal';
 export * from './number-as-string';
+export * from './find-balance-token';

@@ -16,7 +16,7 @@ export const useRemoveLiqFormValidation = (userLpBalance: BigNumber, userTokenBa
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => [
       getInputSlugByIndex(index),
-      item.required('Value is required')
+      item
     ]);
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
