@@ -13,7 +13,7 @@ export const useTokens = (tokenSlugs: Optional<string[]>) => {
   useEffect(() => {
     (async () => {
       if (!tokenSlugs) {
-        return false;
+        return;
       }
       const promises = tokenSlugs
         .filter(tokenSlug => !tokensStore.getToken(tokenSlug))

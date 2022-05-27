@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getTokenSlug } from '@shared/helpers';
 import { useTokens, useTokensStore } from '@shared/hooks';
 import { TokensMap } from '@shared/store/tokens.store';
-import { DexPair, DexPairType, Optional, Token } from '@shared/types';
+import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
 import { BigNumber } from 'bignumber.js';
 
 import {
@@ -17,7 +17,6 @@ import {
   useAllRoutePairs,
   useRoutePairsCombinations
 } from '../../../libs/swap-router-sdk';
-import { RoutePair } from '../../../libs/swap-router-sdk/interface/route-pair.interface';
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
@@ -80,12 +79,17 @@ const mapTradeToDexPairs = (trade: Nullable<Trade>, tokens: TokensMap): DexPair[
       })
     : [];
 
-const getTokenSlugsFromRoutePair = (pairs: RoutePair[]) => {
-  const tokens: { [key: string]: boolean } = {};
-  pairs.forEach(({ aTokenSlug, bTokenSlug }) => {
-    tokens[aTokenSlug] = true;
-    tokens[bTokenSlug] = true;
-  });
+const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
+  if (!trade) {
+    return [];
+  }
+
+  const tokens: BooleanMap = trade.reduce((acc, { aTokenSlug, bTokenSlug }) => {
+    acc[aTokenSlug] = true;
+    acc[bTokenSlug] = true;
+
+    return acc;
+  }, {} as BooleanMap);
 
   return Object.keys(tokens);
 };
@@ -99,19 +103,21 @@ export const useSwapCalculationsV2 = () => {
 
   const { tokens } = useTokensStore();
 
-  const tokensSlugs = getTokenSlugsFromRoutePair(filteredRoutePairs);
-  useTokens(tokensSlugs);
-
   const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
+  // eslint-disable-next-line no-console
+  console.log('bestTrade', bestTrade);
+
+  const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
+  // eslint-disable-next-line no-console
+  console.log('tokensSlugs', tokensSlugs);
+  useTokens(tokensSlugs);
 
   useEffect(() => {
     try {
       setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
-    } catch (error) {
+    } catch (_) {
       setDexRoute([]);
-      // eslint-disable-next-line no-console
-      console.log('error', error);
     }
   }, [bestTrade, tokens]);
 
