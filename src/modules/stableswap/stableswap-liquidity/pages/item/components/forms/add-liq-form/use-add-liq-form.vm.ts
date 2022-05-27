@@ -4,9 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, isTokenEqual, hasFormikError, toFixed, fromDecimals } from '@shared/helpers';
-import { BalanceToken, useTokensBalances } from '@shared/hooks';
-import { Token } from '@shared/types';
+import { isNull, hasFormikError, toFixed, fromDecimals, placeDecimals } from '@shared/helpers';
+import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
@@ -18,7 +17,13 @@ import {
   getInputSlugByIndex,
   prepareInputAmountAsBN
 } from '../../../../../../helpers';
-import { useCalcTokenAmountView, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import {
+  useAddStableswapLiquidity,
+  useCalcTokenAmountView,
+  useStableswapItemFormStore,
+  useStableswapItemStore
+} from '../../../../../../hooks';
+import { StableswapItem } from './../../../../../../types/mapped-api';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -28,32 +33,29 @@ export interface AddLiqFormValues {
   [key: string]: string;
 }
 
-const findBalanceToken = (balances: Array<BalanceToken>, token: Token) =>
-  balances.find(value => isTokenEqual(value.token, token));
+const useAddLiqFormBalances = (item: Nullable<StableswapItem>) => {
+  const tokens = extractTokens(item?.tokensInfo ?? []);
+
+  const tokensAndBalances = useTokensBalances(tokens);
+
+  return tokensAndBalances.map(tokenAndBalance => tokenAndBalance.balance ?? null);
+};
 
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { calcTokenAmountView } = useCalcTokenAmountView(IS_DEPOSIT);
+  const { addStableswapLiquidity } = useAddStableswapLiquidity();
+
   const { item } = useStableswapItemStore();
-  const {
-    isBalancedProportion,
-    clearStore,
-    setLpAndTokenInputAmount,
-    setLpAndTokenInputAmounts,
-    setIsBalancedProportion
-  } = useStableswapItemFormStore();
+  const formStore = useStableswapItemFormStore();
+  const userBalances = useAddLiqFormBalances(item);
 
-  const balances = useTokensBalances(item?.tokensInfo.map(({ token }) => token));
-  const userBalances = (item?.tokensInfo ?? []).map(({ token }) => {
-    const balanceWrapper = findBalanceToken(balances, token);
-
-    return balanceWrapper?.balance ?? null;
-  });
-
-  const validationSchema = useAddLiqFormValidation(userBalances, isBalancedProportion);
+  const validationSchema = useAddLiqFormValidation(userBalances, formStore.isBalancedProportion);
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
+
+    await addStableswapLiquidity();
 
     formik.resetForm();
     actions.setSubmitting(false);
@@ -66,8 +68,8 @@ export const useAddLiqFormViewModel = () => {
   });
 
   useEffect(() => {
-    return () => clearStore();
-  }, [clearStore]);
+    return () => formStore.clearStore();
+  }, [formStore]);
 
   if (isNull(item)) {
     return null;
@@ -75,23 +77,21 @@ export const useAddLiqFormViewModel = () => {
 
   const label = t('common|Input');
   const tooltip = t('common|Success');
+  const isSubmitting = formik.isSubmitting;
+  const disabled = isSubmitting || hasFormikError(formik.errors);
 
   const { tokensInfo, totalLpSupply, lpToken } = item;
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
-
-  const isSubmitting = formik.isSubmitting;
-  const disabled = isSubmitting || hasFormikError(formik.errors);
 
   const calculateShares = async (index: number, inputAmount: string) => {
     const tokens = extractTokens(tokensInfo);
     const map = createAmountsMichelsonMap(formik.values, tokens, index, inputAmount);
     const shares = await calcTokenAmountView(map);
 
-    // eslint-disable-next-line no-console
-    console.log('fixedShares', fromDecimals(shares, lpToken).toFixed());
+    const fixedShares = fromDecimals(shares, lpToken);
 
-    return fromDecimals(shares, lpToken);
+    return placeDecimals(fixedShares, lpToken);
   };
 
   const handleImbalancedInputChange = (index: number) => async (inputAmount: string) => {
@@ -100,22 +100,26 @@ export const useAddLiqFormViewModel = () => {
     const shares = await calculateShares(index, inputAmount);
 
     formik.setFieldValue(formikKey, inputAmount);
-    setLpAndTokenInputAmount(shares, inputAmountBN, index);
+    formStore.setLpAndTokenInputAmount(shares, inputAmountBN, index);
   };
 
   const handleBalancedInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
     formikValues[getInputSlugByIndex(index)] = inputAmount;
     const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+
     const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+    const fixedLpValue = lpValue && placeDecimals(lpValue, lpToken);
 
-    formikValues[LP_INPUT_KEY] = toFixed(lpValue);
+    formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
 
-    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
+    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
       if (index === indexOfCalculatedInput) {
         return inputAmountBN;
       }
 
-      return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
+      const result = calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve);
+
+      return result && placeDecimals(result, token, BigNumber.ROUND_UP);
     });
 
     calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
@@ -124,36 +128,32 @@ export const useAddLiqFormViewModel = () => {
       }
     });
 
-    setLpAndTokenInputAmounts(lpValue, calculatedValues);
+    formStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
 
     formik.setValues(formikValues);
   };
 
   const handleInputChange = (reserves: BigNumber, index: number) =>
-    isBalancedProportion ? handleBalancedInputChange(reserves, index) : handleImbalancedInputChange(index);
+    formStore.isBalancedProportion ? handleBalancedInputChange(reserves, index) : handleImbalancedInputChange(index);
 
-  const data = tokensInfo.map(({ reserves, token }, index) => {
-    const balance = findBalanceToken(balances, token)?.balance;
-
+  const data = tokensInfo.map(({ reserves }, index) => {
     return {
       index,
       label,
       formik,
-      balance: balance,
+      balance: userBalances[index],
       onInputChange: handleInputChange(reserves, index)
     };
   });
 
-  const handleSwitcherClick = (state: boolean) => {
-    return setIsBalancedProportion(state);
-  };
+  const handleSwitcherClick = (state: boolean) => formStore.setIsBalancedProportion(state);
 
   return {
     data,
     tooltip,
     disabled,
     isSubmitting,
-    switcherValue: isBalancedProportion,
+    switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
     handleSubmit: formik.handleSubmit
   };

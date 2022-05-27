@@ -3,10 +3,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@config/constants';
-import { getBlockchainTimestamp, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, getBlockchainTimestamp, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { decreaseBySlippage, getOrderedTokensAmounts } from '../../helpers';
+import { getOrderedTokensAmounts } from '../../helpers';
 
 export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -26,19 +26,16 @@ export const removeLiquidityTokenToToken = async (
     .toNumber();
   const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
-
   const lpTokenBN = new BigNumber(lpTokenInput);
   const tokenAOutputBN = new BigNumber(tokenAOutput);
   const tokenBOutputBN = new BigNumber(tokenBOutput);
 
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
-  const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
-  const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
+  const aTokenAtom = toDecimals(tokenAOutputBN, tokenA);
+  const bTokenAtom = toDecimals(tokenBOutputBN, tokenB);
 
-  const withSlippageA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withSlippageB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageA = decreaseBySlippage(aTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(bTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 

@@ -10,7 +10,7 @@ import { useAuthStore } from '@shared/hooks';
 
 import { useStableswapItemStore } from './store';
 
-export const useCalcTokenAmountView = (isDeposit: boolean) => {
+export const useCalcTokenAmountView = (isDeposit = false) => {
   const { item } = useStableswapItemStore();
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
