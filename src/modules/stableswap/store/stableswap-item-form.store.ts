@@ -4,19 +4,19 @@ import { action, makeObservable, observable } from 'mobx';
 import { RootStore } from '@shared/store';
 
 export class StableswapItemFormStore {
-  lpInputAmount: Nullable<BigNumber> = null;
-  inputAmounts: Array<Nullable<BigNumber>> = [];
+  shares: Nullable<BigNumber> = null;
+  inputAmounts: Array<BigNumber> = [];
   isBalancedProportion = true;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      lpInputAmount: observable,
+      shares: observable,
       inputAmounts: observable,
       isBalancedProportion: observable,
 
       initInputAmounts: action,
       setInputAmount: action,
-      setLpInputAmount: action,
+      setShares: action,
       setLpAndTokenInputAmount: action,
       setLpAndTokenInputAmounts: action,
       clearStore: action,
@@ -25,34 +25,34 @@ export class StableswapItemFormStore {
   }
 
   initInputAmounts(length: number) {
-    this.inputAmounts = Array(length).fill(null);
+    this.inputAmounts = Array(length).fill(new BigNumber('0'));
   }
 
-  setLpInputAmount(amount: Nullable<BigNumber>) {
-    this.lpInputAmount = amount;
+  setShares(shares: BigNumber) {
+    this.shares = shares;
   }
 
-  setInputAmount(amount: Nullable<BigNumber>, index: number) {
+  setInputAmount(amount: BigNumber, index: number) {
     this.inputAmounts[index] = amount;
   }
 
-  setInputAmounts(tokenValues: Array<Nullable<BigNumber>>) {
+  setInputAmounts(tokenValues: Array<BigNumber>) {
     this.inputAmounts = tokenValues;
   }
 
-  setLpAndTokenInputAmount(lpValue: Nullable<BigNumber>, tokenValue: Nullable<BigNumber>, indexOfTokenValue: number) {
-    this.setLpInputAmount(lpValue);
+  setLpAndTokenInputAmount(shares: BigNumber, tokenValue: BigNumber, indexOfTokenValue: number) {
+    this.setShares(shares);
     this.setInputAmount(tokenValue, indexOfTokenValue);
   }
 
-  setLpAndTokenInputAmounts(lpValue: Nullable<BigNumber>, tokenValues: Array<Nullable<BigNumber>>) {
-    this.setLpInputAmount(lpValue);
+  setLpAndTokenInputAmounts(lpValue: BigNumber, tokenValues: Array<BigNumber>) {
+    this.setShares(lpValue);
     this.setInputAmounts(tokenValues);
   }
 
   clearStore() {
-    this.lpInputAmount = null;
-    this.inputAmounts = this.inputAmounts.map(() => null);
+    this.shares = null;
+    this.inputAmounts = [];
   }
 
   setIsBalancedProportion(state: boolean) {
