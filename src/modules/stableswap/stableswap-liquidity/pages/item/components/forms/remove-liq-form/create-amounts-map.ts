@@ -19,12 +19,13 @@ export const createAmountsMichelsonMap = (
   Object.entries(values).forEach(([inputSlug, value]) => {
     if (inputSlug !== LP_INPUT_KEY) {
       const inputIndex = getIndexByInputSlug(inputSlug);
-      let amount = inputIndex === index.toString() ? inputAmount : value;
+      let amount = inputIndex === index ? inputAmount : value;
 
       if (isEmptyString(amount)) {
         amount = '0';
       }
-      const fixedAmount = toDecimals(new BigNumber(amount), tokens[index]);
+
+      const fixedAmount = toDecimals(new BigNumber(amount), tokens[inputIndex]);
       map.set(new BigNumber(inputIndex), fixedAmount);
     }
   });
