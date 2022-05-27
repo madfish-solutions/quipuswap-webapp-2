@@ -4,3 +4,4 @@ export * from './from-decimals';
 export * from './to-decimals';
 export * from './sort-bignumber';
 export * from './to-fixed';
+export * from './place-decimals';
