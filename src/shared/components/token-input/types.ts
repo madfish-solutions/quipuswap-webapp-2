@@ -9,6 +9,7 @@ export interface TokenInputViewModelProps {
   tokens?: Tokens;
   balance: Optional<BigNumber.Value>;
   readOnly?: boolean;
+  disabled?: boolean;
   hiddenPercentSelector?: boolean;
   onInputChange: (value: string) => void;
 }

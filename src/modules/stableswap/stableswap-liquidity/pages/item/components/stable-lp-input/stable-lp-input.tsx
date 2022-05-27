@@ -1,11 +1,12 @@
 import { FC } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 
 import { LP_INPUT_KEY } from '@config/constants';
 import { TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import { IFormik } from '@shared/types';
+import { IFormik, Optional } from '@shared/types';
 
 import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 import { useStableLpInputViewModel } from './stable-lp-input.vm';
@@ -13,12 +14,13 @@ import { useStableLpInputViewModel } from './stable-lp-input.vm';
 interface Props {
   formik: IFormik<RemoveLiqFormValues>;
   label: string;
-  balance?: string;
+  disabled?: boolean;
+  balance?: Optional<BigNumber.Value>;
   className?: string;
   onInputChange: (value: string) => void;
 }
 
-export const StableLpInput: FC<Props> = observer(({ formik, label, balance, className, onInputChange }) => {
+export const StableLpInput: FC<Props> = observer(({ formik, label, disabled, balance, className, onInputChange }) => {
   const outputComponentViewModel = useStableLpInputViewModel(formik);
 
   if (isNull(outputComponentViewModel)) {
@@ -38,6 +40,7 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, balance, clas
       onInputChange={onInputChange}
       balance={balance}
       error={error}
+      disabled={disabled}
       hiddenPercentSelector={hiddenPercentSelector}
     />
   );

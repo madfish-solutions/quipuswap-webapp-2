@@ -4,9 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, isTokenEqual, hasFormikError, toFixed, placeDecimals } from '@shared/helpers';
-import { BalanceToken, useTokensBalances } from '@shared/hooks';
-import { Token } from '@shared/types';
+import { isNull, hasFormikError, toFixed, findBalanceToken, placeDecimals } from '@shared/helpers';
+import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
@@ -24,9 +23,6 @@ const DEFAULT_LENGTH = 0;
 interface AddLiqFormValues {
   [key: string]: string;
 }
-
-const findBalanceToken = (balances: Array<BalanceToken>, token: Token) =>
-  balances.find(value => isTokenEqual(value.token, token));
 
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
@@ -113,7 +109,7 @@ export const useAddLiqFormViewModel = () => {
       index,
       label,
       formik,
-      balance: balance,
+      balance,
       onInputChange: handleInputChange(reserves, index)
     };
   });
