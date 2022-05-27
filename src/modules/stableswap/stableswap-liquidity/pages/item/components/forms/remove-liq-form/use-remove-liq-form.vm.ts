@@ -25,18 +25,22 @@ import { useCalcTokenAmountView } from './use-calc-token-amount-view';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
-
+const ZERO = new BigNumber('0');
 export interface RemoveLiqFormValues {
   [key: string]: string;
 }
 
-const useRemoveLiqFormBalances = (item: Nullable<StableswapItem>) => {
-  const lpBalance = useTokenBalance(item?.lpToken) ?? new BigNumber('0');
+const useHelper = (item: Nullable<StableswapItem>) => {
+  const lpBalance = useTokenBalance(item?.lpToken);
   const balanceTokens = useTokensBalances(extractTokens(item?.tokensInfo ?? []));
+  const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
+  const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
 
   return {
     lpBalance,
-    balanceTokens
+    balanceTokens,
+    lockeds,
+    inputsCount
   };
 };
 
@@ -48,12 +52,13 @@ export const useRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { item } = stableswapItemStore;
 
-  const { lpBalance, balanceTokens } = useRemoveLiqFormBalances(item);
+  const { lpBalance, balanceTokens, lockeds, inputsCount } = useHelper(item);
 
-  const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
-  const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
-
-  const validationSchema = useRemoveLiqFormValidation(lpBalance, lockeds);
+  const validationSchema = useRemoveLiqFormValidation(
+    lpBalance ?? ZERO,
+    lockeds,
+    stableswapItemFormStore.isBalancedProportion
+  );
 
   const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
     actions.setSubmitting(true);
