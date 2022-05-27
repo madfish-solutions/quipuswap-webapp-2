@@ -1,11 +1,10 @@
-import { TezosToolkit } from '@taquito/taquito';
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { fromDecimals, getRandomId, isEmptyArray, isTokenEqual } from '@shared/helpers';
+import { fromDecimals, getRandomId, isEmptyArray, isExist, isTokenEqual } from '@shared/helpers';
 
-import { Token } from '../types';
+import { Optional, Token } from '../types';
 import { RootStore } from './root.store';
 
 interface TokenBalance {
@@ -63,13 +62,12 @@ export class TokensBalancesStore {
     }
   }
 
-  getBalance(token: Token) {
-    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
-    if (!tokenBalance) {
-      return undefined;
-    }
+  getBalance(token: Optional<Token>) {
+    if (isExist(token)) {
+      const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
 
-    return tokenBalance.balance;
+      return tokenBalance?.balance;
+    }
   }
 
   clearBalances() {
@@ -78,20 +76,20 @@ export class TokensBalancesStore {
     });
   }
 
-  async loadTokenBalance(tezos: TezosToolkit, accountPkh: string, token: Token) {
-    const balance = await getUserTokenBalance(tezos, accountPkh, token);
-    this.setBalance(token, balance);
+  async loadTokenBalance(token: Token) {
+    if (this.rootStore.authStore.accountPkh && this.rootStore.tezos) {
+      const balance = await getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, token);
+      this.setBalance(token, balance);
+    }
   }
 
-  async loadBalances(tezos: Nullable<TezosToolkit>, accountPkh: Nullable<string>) {
-    if (!tezos || !accountPkh) {
+  async loadBalances() {
+    if (!this.rootStore.authStore.accountPkh || !this.rootStore.tezos) {
       this.clearBalances();
 
       return null;
     }
 
-    return await Promise.all(
-      this.tokensBalances.map(async ({ token }) => this.loadTokenBalance(tezos, accountPkh, token))
-    );
+    return await Promise.all(this.tokensBalances.map(async ({ token }) => this.loadTokenBalance(token)));
   }
 }

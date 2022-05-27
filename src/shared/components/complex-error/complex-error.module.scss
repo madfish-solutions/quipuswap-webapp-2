@@ -1,0 +1,14 @@
+@import "@styles/variables";
+
+.errorContainer {
+  overflow: hidden;
+  transition: max-height $animationTime;
+}
+
+.errorLabel {
+  font-size: 0.857rem;
+  line-height: 1.33;
+  padding-top: 8px;
+  display: inline-block;
+  color: $support-error;
+}

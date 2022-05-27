@@ -1,7 +1,5 @@
-import { FC } from 'react';
-
 import { isExist } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { CFC, Nullable } from '@shared/types';
 
 import { CardCell } from '../card-cell';
 import { Tooltip } from '../tooltip';
@@ -12,7 +10,7 @@ interface DetailsCardCellProps {
   className: string;
 }
 
-export const DetailsCardCell: FC<DetailsCardCellProps> = ({
+export const DetailsCardCell: CFC<DetailsCardCellProps> = ({
   children,
   cellName,
   tooltipContent,

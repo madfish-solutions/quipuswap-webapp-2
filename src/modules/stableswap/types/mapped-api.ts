@@ -23,6 +23,7 @@ export interface StableswapItem {
   stakersFee: BigNumber;
   interfaceFee: BigNumber;
   devFee: BigNumber;
+  lpToken: Token;
 }
 
 export interface StableswapTokensInfo {

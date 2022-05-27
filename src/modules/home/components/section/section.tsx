@@ -1,6 +1,6 @@
-import { FC } from 'react';
-
 import cx from 'classnames';
+
+import { CFC } from '@shared/types';
 
 import s from './section.module.scss';
 
@@ -10,7 +10,7 @@ export interface SectionProps {
   className?: string;
 }
 
-export const Section: FC<SectionProps> = ({ header, description, className, children, ...props }) => (
+export const Section: CFC<SectionProps> = ({ header, description, className, children, ...props }) => (
   <section className={cx(s.root, className)} {...props}>
     <h2 className={s.header} data-test-id="sectionHeader">
       {header}

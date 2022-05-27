@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useToasts } from './use-toasts';
+import { useToasts } from '@shared/utils';
 
 export const useLoadingDecorator = <T>(func: () => Promise<T>): [boolean, () => Promise<T>] => {
   const { showErrorToast } = useToasts();
