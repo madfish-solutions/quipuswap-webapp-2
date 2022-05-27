@@ -59,7 +59,7 @@ const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Tok
       }
     : {
         ...dex,
-        id: dexId?.toNumber() ?? DEFAULT_DEX_ID,
+        id: dexId?.toNumber?.() ?? DEFAULT_DEX_ID,
         type: _type
       };
 };
