@@ -32,17 +32,16 @@ export const addLiquidityTokenToToken = async (
   const { address: dexAddress } = dex.contract;
 
   const tokenAAmount = new BigNumber(tokenAInput);
-
-  const shares = tokenAAmount.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
-  const tokenBAmount = shares.multipliedBy(tokenBPool).dividedBy(totalSupply);
   const aTokemAtom = toDecimals(tokenAAmount, tokenA);
-  const bTokemAtom = toDecimals(tokenAAmount, tokenB);
+
+  const shares = aTokemAtom.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
+  const bTokemAtom = shares.multipliedBy(tokenBPool).dividedBy(totalSupply).integerValue(BigNumber.ROUND_UP);
 
   const withSlippageA = increaseBySlippage(aTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
   const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
-    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
+    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, aTokemAtom, bTokemAtom);
   const investParams = dex.contract.methods.invest(id, shares, withSlippageA, withSlippageB, transactionDeadline);
 
   return await (
