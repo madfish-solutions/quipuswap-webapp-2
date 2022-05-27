@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { LP_INPUT_KEY } from '@config/constants';
 import { isNull, hasFormikError, toFixed, placeDecimals } from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -88,16 +87,17 @@ export const useAddLiqFormViewModel = () => {
     const inputAmountBN = new BigNumber(inputAmount);
 
     const shares = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-    const fixedLpValue = placeDecimals(shares, lpToken);
 
-    formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
+    const fixedShares = placeDecimals(shares, lpToken);
+    // eslint-disable-next-line no-console
+    console.log('fixedShares', fixedShares.toFixed());
 
     const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
       if (index === indexOfCalculatedInput) {
         return inputAmountBN;
       }
 
-      const result = calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve);
+      const result = calculateOutputWithToken(fixedShares, totalLpSupply, calculatedReserve);
 
       return placeDecimals(result, token, BigNumber.ROUND_UP);
     });
@@ -108,7 +108,7 @@ export const useAddLiqFormViewModel = () => {
       }
     });
 
-    formStore.setLpAndTokenInputAmounts(shares, calculatedValues);
+    formStore.setInputAmounts(calculatedValues);
 
     formik.setValues(formikValues);
   };

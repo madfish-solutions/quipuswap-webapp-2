@@ -20,6 +20,7 @@ export class StableswapItemFormStore {
       setLpAndTokenInputAmount: action,
       setLpAndTokenInputAmounts: action,
       clearStore: action,
+      setInputAmounts: action,
       setIsBalancedProportion: action
     });
   }
