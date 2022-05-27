@@ -223,3 +223,8 @@ export interface BlockInfo {
   hash: string;
   timestamp: string;
 }
+
+export interface AmountToken {
+  token: Token;
+  amount: BigNumber;
+}

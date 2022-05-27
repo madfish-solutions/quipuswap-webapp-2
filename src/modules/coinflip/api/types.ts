@@ -13,3 +13,10 @@ export interface CoinflipStorage {
   network_fee: BigNumber;
   server: string;
 }
+
+export interface GeneralStatsInterface {
+  bank: BigNumber;
+  games_count: BigNumber;
+  payout_quot_f: BigNumber;
+  total_won_amt: BigNumber;
+}

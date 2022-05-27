@@ -2,17 +2,17 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { DashboardCard, DashboardStatsInfo } from '@shared/components';
 
 import styles from './coinflip-dashboard-stats.module.scss';
 import { useCoinflipDashboardStatsViewModel } from './use-coinflip-dashboard-stats.vm';
 
-export const CoinflipDashboardStatsInfo: FC = observer(() => {
-  const coinflipStore = useCoinflipStore();
-  const { token } = coinflipStore;
-  const { generalStats, isLoading, currency } = useCoinflipDashboardStatsViewModel(token);
-  const { bank, gamesCount, payoutCoefficient, totalWins } = generalStats;
+interface Props {
+  isLoading: boolean;
+}
+
+export const CoinflipDashboardStatsInfo: FC<Props> = observer(({ isLoading }) => {
+  const { bank, gamesCount, payoutCoefficient, totalWins, tokenToPlay } = useCoinflipDashboardStatsViewModel();
 
   return (
     <DashboardStatsInfo
@@ -22,7 +22,7 @@ export const CoinflipDashboardStatsInfo: FC = observer(() => {
           size="large"
           volume={bank}
           label="Bank"
-          currency={currency}
+          currency={tokenToPlay}
           loading={isLoading}
           hideTooltip
           className={styles.dashboardCard}
@@ -40,7 +40,7 @@ export const CoinflipDashboardStatsInfo: FC = observer(() => {
           size="large"
           volume={totalWins}
           label="Total wins"
-          currency={currency}
+          currency={tokenToPlay}
           loading={isLoading}
           hideTooltip
           className={styles.dashboardCard}
