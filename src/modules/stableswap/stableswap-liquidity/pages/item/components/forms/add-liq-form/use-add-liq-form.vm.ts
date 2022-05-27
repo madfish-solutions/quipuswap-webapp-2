@@ -87,10 +87,7 @@ export const useAddLiqFormViewModel = () => {
     const inputAmountBN = new BigNumber(inputAmount);
 
     const shares = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-
     const fixedShares = placeDecimals(shares, lpToken);
-    // eslint-disable-next-line no-console
-    console.log('fixedShares', fixedShares.toFixed());
 
     const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
       if (index === indexOfCalculatedInput) {
