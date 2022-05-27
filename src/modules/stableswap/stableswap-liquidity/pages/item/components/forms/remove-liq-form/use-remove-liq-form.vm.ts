@@ -32,7 +32,10 @@ export interface RemoveLiqFormValues {
 
 const useHelper = (item: Nullable<StableswapItem>) => {
   const lpBalance = useTokenBalance(item?.lpToken);
-  const balanceTokens = useTokensBalances(extractTokens(item?.tokensInfo ?? []));
+
+  const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;
+  const balanceTokens = useTokensBalances(tokens);
+
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
 
