@@ -4,6 +4,8 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { isTezosToken } from '../helpers';
 import { TokenAddress } from '../types';
 
+const DEFAULT_TOKEN_ID = 0;
+
 export interface RawTokenMetadata {
   token_id?: string;
   name: string;
@@ -20,13 +22,9 @@ export const getTokenMetadata = async ({
     return TEZOS_TOKEN.metadata;
   }
 
-  const data = await fetch(`${NETWORK.metadata}/${contractAddress}/${fa2TokenId || 0}`)
+  const data = await fetch(`${NETWORK.metadata}/${contractAddress}/${fa2TokenId || DEFAULT_TOKEN_ID}`)
     .then(async res => res.json())
     .catch(() => null);
 
-  if (data?.message) {
-    return null;
-  }
-
-  return data;
+  return data?.message ? null : data;
 };

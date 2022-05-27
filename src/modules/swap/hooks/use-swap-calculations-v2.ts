@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { getTokenSlug } from '@shared/helpers';
-import { useTokens } from '@shared/hooks';
-import { DexPair, DexPairType, Token } from '@shared/types';
+import { useTokens, useTokensStore } from '@shared/hooks';
+import { TokensMap } from '@shared/store/tokens.store';
+import { DexPair, DexPairType, Optional, Token } from '@shared/types';
 import { BigNumber } from 'bignumber.js';
 
 import {
@@ -21,8 +22,8 @@ import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
-  inputToken: Nullable<Token>;
-  outputToken: Nullable<Token>;
+  inputToken: Optional<Token>;
+  outputToken: Optional<Token>;
 }
 
 const mapDexType = (dexType: DexTypeEnum): DexPairType => {
@@ -36,25 +37,48 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
   }
 };
 
-export const getDexSlug = ({ dexAddress, dexId }: RoutePair) =>
-  dexId ? `${dexAddress}_${dexId.toFixed()}` : dexAddress;
+const DEFAULT_DEX_ID = 0;
 
-const mapTradeToDexPair = (operation: TradeOperation): DexPair => {
-  const { aTokenPool, bTokenPool, dexType } = operation;
+const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Token): DexPair => {
+  const { aTokenPool, bTokenPool, dexType, dexAddress, dexId } = operation;
 
-  return {
+  const dex = {
     token1Pool: aTokenPool,
     token2Pool: bTokenPool,
-    // @ts-ignore
-    token1: null, // Token
-    // @ts-ignore
-    token2: null, // Token
-    id: getDexSlug(operation),
-    type: mapDexType(dexType)
+    token1,
+    token2
   };
+
+  const _type = mapDexType(dexType);
+
+  return _type === DexPairType.TokenToXtz
+    ? {
+        ...dex,
+        id: dexAddress,
+        type: _type
+      }
+    : {
+        ...dex,
+        id: dexId?.toNumber() ?? DEFAULT_DEX_ID,
+        type: _type
+      };
 };
 
-const mapTradeToDexPairs = (trade: Nullable<Trade>): DexPair[] => (trade ? trade.map(mapTradeToDexPair) : []);
+const mapTradeToDexPairs = (trade: Nullable<Trade>, tokens: TokensMap): DexPair[] =>
+  trade
+    ? trade.map(operation => {
+        const token1 = tokens[operation.aTokenSlug];
+        const token2 = tokens[operation.bTokenSlug];
+        if (!token1) {
+          throw new Error(`No Token Metadata of ${token1}`);
+        }
+        if (!token2) {
+          throw new Error(`No Token Metadata of ${token2}`);
+        }
+
+        return mapTradeToDexPair(operation, token1, token2);
+      })
+    : [];
 
 const getTokenSlugsFromRoutePair = (pairs: RoutePair[]) => {
   const tokens: { [key: string]: boolean } = {};
@@ -73,6 +97,8 @@ export const useSwapCalculationsV2 = () => {
     [allRoutePairs.data]
   );
 
+  const { tokens } = useTokensStore();
+
   const tokensSlugs = getTokenSlugsFromRoutePair(filteredRoutePairs);
   useTokens(tokensSlugs);
 
@@ -80,8 +106,14 @@ export const useSwapCalculationsV2 = () => {
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
 
   useEffect(() => {
-    setDexRoute(mapTradeToDexPairs(bestTrade));
-  }, [bestTrade]);
+    try {
+      setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
+    } catch (error) {
+      setDexRoute([]);
+      // eslint-disable-next-line no-console
+      console.log('error', error);
+    }
+  }, [bestTrade, tokens]);
 
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
   const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);

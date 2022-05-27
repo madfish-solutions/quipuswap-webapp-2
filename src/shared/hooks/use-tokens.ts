@@ -28,15 +28,7 @@ export const useTokens = (tokenSlugs: Optional<string[]>) => {
             tokensStore.setToken(tokenSlug, token);
           }
         });
-      Promise.all(promises)
-        .then(() => {
-          // eslint-disable-next-line no-console
-          console.log('!!!!!!!! ok');
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.log('!!!!!!!! error', error);
-        });
+      await Promise.all(promises);
     })();
   }, [tokenSlugs, tokensStore]);
 };

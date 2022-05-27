@@ -64,7 +64,7 @@ export interface TokenPair {
 
 export interface TokenAddress {
   contractAddress: string;
-  fa2TokenId?: number | string;
+  fa2TokenId?: number;
 }
 
 export interface Token extends TokenAddress {
