@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
 import { StableswapItem } from '@modules/stableswap/types';
-import { findBalanceToken, fromDecimals, isNull, toFixed } from '@shared/helpers';
+import { findBalanceToken, fromDecimals, isNull, numberAsString, placeDecimals, toFixed } from '@shared/helpers';
 import { useTokenBalance, useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -19,7 +19,11 @@ import {
   getInputSlugByIndex,
   prepareInputAmountAsBN
 } from '../../../../../../helpers';
-import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import {
+  useRemoveStableswapLiquidity,
+  useStableswapItemFormStore,
+  useStableswapItemStore
+} from '../../../../../../hooks';
 import { createAmountsMichelsonMap } from './create-amounts-map';
 import { useCalcTokenAmountView } from './use-calc-token-amount-view';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
@@ -49,7 +53,7 @@ const useHelper = (item: Nullable<StableswapItem>) => {
 
 export const useRemoveLiqFormViewModel = () => {
   const { calcTokenAmountView } = useCalcTokenAmountView();
-
+  const { removeStableswapLiquidity } = useRemoveStableswapLiquidity();
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const { t } = useTranslation();
@@ -65,7 +69,7 @@ export const useRemoveLiqFormViewModel = () => {
 
   const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
     actions.setSubmitting(true);
-
+    await removeStableswapLiquidity();
     formik.resetForm();
     actions.setSubmitting(false);
   };
@@ -97,30 +101,38 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
   };
 
-  const handleBalancedInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
-    formikValues[getInputSlugByIndex(index)] = inputAmount;
-    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
-    const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+  const handleBalancedInputChange = (reserves: BigNumber, index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    formikValues[LP_INPUT_KEY] = toFixed(lpValue);
+    return (inputAmount: string) => {
+      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const inputAmountBN = new BigNumber(fixedValue ?? '0');
 
-    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
-      if (index === indexOfCalculatedInput) {
-        return inputAmountBN;
-      }
+      formikValues[getInputSlugByIndex(index)] = realValue;
+      const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
 
-      return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
-    });
+      formikValues[LP_INPUT_KEY] = toFixed(lpValue);
 
-    calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-      if (indexOfCalculatedInput !== index) {
-        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
-      }
-    });
+      const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
+        if (index === indexOfCalculatedInput) {
+          return inputAmountBN;
+        }
+        const result = calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
 
-    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+        return result && placeDecimals(result, token, BigNumber.ROUND_UP);
+      });
 
-    formik.setValues(formikValues);
+      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+        if (indexOfCalculatedInput !== index) {
+          formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+        }
+      });
+
+      stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+
+      formik.setValues(formikValues);
+    };
   };
 
   const calculateShares = async (index: number, inputAmount: string) => {

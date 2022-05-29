@@ -10,6 +10,7 @@ export const stableswap = {
   balancedProportionAdd: 'Add all coins in a balanced proportion',
   balancedProportionRemove: 'Remove all coins in a balanced proportion',
   sucessfullyAdded: 'Liquidity has been successfully added',
+  sucessfullyRemoved: 'Liquidity has been successfully removed',
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!'
 } as const;
