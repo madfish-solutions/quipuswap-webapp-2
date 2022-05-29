@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
@@ -45,7 +44,7 @@ export const useRemoveStableswapLiquidity = () => {
       BigNumber.ROUND_DOWN
     );
     const tokensAndAmounts: Array<AmountToken> = tokensAndAmountsMapper(tokens, inputAmounts);
-    console.log({ tokensAndAmounts });
+
     try {
       const operation = await removeStableswapLiquidityApi(
         tezos,

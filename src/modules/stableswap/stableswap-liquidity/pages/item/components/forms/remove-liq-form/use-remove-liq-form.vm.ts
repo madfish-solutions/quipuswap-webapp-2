@@ -5,8 +5,17 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
 import { StableswapItem } from '@modules/stableswap/types';
-import { findBalanceToken, fromDecimals, isNull, numberAsString, placeDecimals, toFixed } from '@shared/helpers';
+import {
+  findBalanceToken,
+  fromDecimals,
+  isEmptyString,
+  isNull,
+  numberAsString,
+  placeDecimals,
+  toFixed
+} from '@shared/helpers';
 import { useTokenBalance, useTokensBalances } from '@shared/hooks';
+import { Optional, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import {
@@ -33,8 +42,15 @@ const ZERO = new BigNumber('0');
 export interface RemoveLiqFormValues {
   [key: string]: string;
 }
+function saveEmptyStringBigNumber(candidate: string, replacer: null): Nullable<BigNumber>;
+function saveEmptyStringBigNumber(candidate: string, replacer: BigNumber): BigNumber;
+function saveEmptyStringBigNumber(candidate: string, replacer: undefined): Undefined<BigNumber>;
+function saveEmptyStringBigNumber(candidate: string, replacer: null | undefined): Optional<BigNumber>;
+function saveEmptyStringBigNumber(candidate: string, replacer: Optional<BigNumber>) {
+  return isEmptyString(candidate) ? replacer : new BigNumber(candidate);
+}
 
-const useHelper = (item: Nullable<StableswapItem>) => {
+const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedProportion: boolean) => {
   const lpBalance = useTokenBalance(item?.lpToken);
 
   const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;
@@ -43,11 +59,13 @@ const useHelper = (item: Nullable<StableswapItem>) => {
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
 
+  const validationSchema = useRemoveLiqFormValidation(lpBalance ?? ZERO, lockeds, isBalancedProportion);
+
   return {
     lpBalance,
     balanceTokens,
-    lockeds,
-    inputsCount
+    inputsCount,
+    validationSchema
   };
 };
 
@@ -59,11 +77,8 @@ export const useRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { item } = stableswapItemStore;
 
-  const { lpBalance, balanceTokens, lockeds, inputsCount } = useHelper(item);
-
-  const validationSchema = useRemoveLiqFormValidation(
-    lpBalance ?? ZERO,
-    lockeds,
+  const { lpBalance, balanceTokens, inputsCount, validationSchema } = useRemoveLiqFormService(
+    item,
     stableswapItemFormStore.isBalancedProportion
   );
 
@@ -71,6 +86,7 @@ export const useRemoveLiqFormViewModel = () => {
     actions.setSubmitting(true);
     await removeStableswapLiquidity();
     formik.resetForm();
+    stableswapItemFormStore.clearStore();
     actions.setSubmitting(false);
   };
 
@@ -107,11 +123,10 @@ export const useRemoveLiqFormViewModel = () => {
 
     return (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = new BigNumber(fixedValue ?? '0');
+      const inputAmountBN = saveEmptyStringBigNumber(fixedValue, null);
 
       formikValues[getInputSlugByIndex(index)] = realValue;
       const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-
       formikValues[LP_INPUT_KEY] = toFixed(lpValue);
 
       const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
@@ -128,7 +143,6 @@ export const useRemoveLiqFormViewModel = () => {
           formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
         }
       });
-
       stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
 
       formik.setValues(formikValues);
@@ -150,7 +164,7 @@ export const useRemoveLiqFormViewModel = () => {
     const shares = await calculateShares(index, inputAmount);
     formik.setFieldValue(LP_INPUT_KEY, shares);
 
-    stableswapItemFormStore.setInputAmount(new BigNumber(inputAmount), index);
+    stableswapItemFormStore.setInputAmount(saveEmptyStringBigNumber(inputAmount, new BigNumber('0')), index);
     stableswapItemFormStore.setLpInputAmount(new BigNumber(shares));
   };
 
