@@ -23,7 +23,7 @@ export const AddLiqForm: FC = observer(() => {
     return null;
   }
 
-  const { data, disabled, isSubmitting, tooltip, handleSubmit } = addLiqFormViewModel;
+  const { data, isSubmitting, tooltip, handleSubmit } = addLiqFormViewModel;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -39,7 +39,7 @@ export const AddLiqForm: FC = observer(() => {
           <Button
             type="submit"
             className={stylesCommonContainer.button}
-            disabled={disabled}
+            disabled={false}
             loading={isSubmitting}
             data-test-id="stableswapButton"
           >

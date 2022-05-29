@@ -8,5 +8,6 @@ export * from './extract-tokens';
 export * from './formik';
 export * from './get-input-slug-by-index';
 export * from './get-router-parts';
+export * from './get-stableswap-deadline';
 export * from './get-stableswap-title';
 export * from './prepare-input-amount-as-bn';
