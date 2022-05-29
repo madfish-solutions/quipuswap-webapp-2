@@ -4,7 +4,7 @@ import { getUserBalance } from '@blockchain';
 import { FARMING_LIST_API_URL } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
 import { bigNumberToString, isNull } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { Nullable, Standard } from '@shared/types';
 
 import { getUserFarmBalances } from '../helpers';
 import { FarmingContractStorageWrapper, RawFarmingItem, FarmingListResponse } from '../interfaces';
@@ -35,7 +35,7 @@ const injectBalance = async (list: Array<RawFarmingItem>, accountPkh: string, te
       const { stakedToken } = item;
       const { contractAddress, type, fa2TokenId } = stakedToken;
 
-      const balanceBN = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
+      const balanceBN = await getUserBalance(tezos, accountPkh, contractAddress, type as Standard, fa2TokenId);
 
       const balance = isNull(balanceBN) ? '0' : bigNumberToString(balanceBN);
 
