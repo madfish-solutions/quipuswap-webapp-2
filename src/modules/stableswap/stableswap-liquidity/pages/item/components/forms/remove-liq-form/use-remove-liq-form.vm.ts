@@ -108,7 +108,7 @@ export const useRemoveLiqFormViewModel = () => {
   const labelOutput = t('common|Output');
   const tooltip = t('common|Success');
 
-  const { tokensInfo, totalLpSupply } = item;
+  const { tokensInfo, totalLpSupply, lpToken } = item;
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
 
@@ -143,7 +143,9 @@ export const useRemoveLiqFormViewModel = () => {
           formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
         }
       });
-      stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+
+      const fixedLpValue = lpValue ? placeDecimals(lpValue, lpToken, BigNumber.ROUND_UP) : null;
+      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
 
       formik.setValues(formikValues);
     };

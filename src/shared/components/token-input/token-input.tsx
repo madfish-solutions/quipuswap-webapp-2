@@ -124,7 +124,7 @@ export const TokenInput: FC<TokenInputProps> = ({
       <Scaffolding showChild={showPercentSelector} className={styles.scaffoldingPercentSelector}>
         <PercentSelector amountCap={amountCap} value={balance} handleBalance={handlePercentageSelect} />
       </Scaffolding>
-      <ComplexError error={error} />
+      {error && <ComplexError error={error} />}
     </div>
   );
 };
