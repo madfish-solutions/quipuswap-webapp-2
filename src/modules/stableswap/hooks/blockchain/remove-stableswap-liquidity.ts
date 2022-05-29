@@ -62,9 +62,7 @@ export const useRemoveStableswapLiquidity = () => {
 
     if (isBalancedProportion) {
       const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => {
-        const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage)
-          .decimalPlaces(token.metadata.decimals)
-          .integerValue(BigNumber.ROUND_DOWN);
+        const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
         return {
           token,
@@ -113,9 +111,9 @@ export const useRemoveStableswapLiquidity = () => {
       } else {
         try {
           //TODO: validate!!!
-          const increasedLpInputAmountAtom = increaseBySlippage(lpInputAmountAtom, liquiditySlippage)
-            .decimalPlaces(lpToken.metadata.decimals)
-            .integerValue(BigNumber.ROUND_DOWN);
+          const increasedLpInputAmountAtom = increaseBySlippage(lpInputAmountAtom, liquiditySlippage).integerValue(
+            BigNumber.ROUND_DOWN
+          );
 
           const operation = await removeStableswapLiquidityImbalancedApi(
             tezos,
