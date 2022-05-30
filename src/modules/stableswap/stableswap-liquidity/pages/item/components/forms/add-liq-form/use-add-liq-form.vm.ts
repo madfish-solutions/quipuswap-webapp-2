@@ -91,9 +91,7 @@ export const useAddLiqFormViewModel = () => {
           return inputAmountBN;
         }
 
-        const result = calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve);
-
-        return result && placeDecimals(result, token, BigNumber.ROUND_UP);
+        return calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve, token);
       });
 
       calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {

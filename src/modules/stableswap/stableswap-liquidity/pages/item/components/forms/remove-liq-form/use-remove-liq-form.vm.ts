@@ -25,8 +25,7 @@ import {
   extractTokens,
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
-  getInputSlugByIndex,
-  prepareInputAmountAsBN
+  getInputSlugByIndex
 } from '../../../../../../helpers';
 import {
   useRemoveStableswapLiquidity,
@@ -133,9 +132,8 @@ export const useRemoveLiqFormViewModel = () => {
         if (index === indexOfCalculatedInput) {
           return inputAmountBN;
         }
-        const result = calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
 
-        return result && placeDecimals(result, token, BigNumber.ROUND_UP);
+        return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve, token);
       });
 
       calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
@@ -189,9 +187,11 @@ export const useRemoveLiqFormViewModel = () => {
   });
 
   const handleLpInputChange = (inputAmount: string) => {
-    formikValues[LP_INPUT_KEY] = inputAmount;
+    const { realValue, fixedValue } = numberAsString(inputAmount, lpToken.metadata.decimals);
 
-    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+    formikValues[LP_INPUT_KEY] = realValue;
+
+    const inputAmountBN = saveEmptyStringBigNumber(fixedValue, new BigNumber('0'));
     const tokenOutputs = calculateOutputWithLp(inputAmountBN, totalLpSupply, tokensInfo);
 
     tokenOutputs.forEach((amount, indexOfTokenInput) => {
