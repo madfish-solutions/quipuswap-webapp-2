@@ -19,7 +19,7 @@ export const useCoinFlip = () => {
   const { showErrorToast } = useToasts();
 
   const coinFlip = async () => {
-    if (isNull(input) || isNull(tezos) || isNull(accountPkh)) {
+    if (isNull(input) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
       return null;
     }
 
