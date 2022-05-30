@@ -8,14 +8,13 @@ import { StableswapItem } from '@modules/stableswap/types';
 import {
   findBalanceToken,
   fromDecimals,
-  isEmptyString,
   isNull,
   numberAsString,
   placeDecimals,
+  saveBigNumber,
   toFixed
 } from '@shared/helpers';
 import { useTokenBalance, useTokensBalances } from '@shared/hooks';
-import { Optional, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import {
@@ -40,13 +39,6 @@ const DEFAULT_LENGTH = 0;
 const ZERO = new BigNumber('0');
 export interface RemoveLiqFormValues {
   [key: string]: string;
-}
-function saveEmptyStringBigNumber(candidate: string, replacer: null): Nullable<BigNumber>;
-function saveEmptyStringBigNumber(candidate: string, replacer: BigNumber): BigNumber;
-function saveEmptyStringBigNumber(candidate: string, replacer: undefined): Undefined<BigNumber>;
-function saveEmptyStringBigNumber(candidate: string, replacer: null | undefined): Optional<BigNumber>;
-function saveEmptyStringBigNumber(candidate: string, replacer: Optional<BigNumber>) {
-  return isEmptyString(candidate) ? replacer : new BigNumber(candidate);
 }
 
 const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedProportion: boolean) => {
@@ -122,7 +114,7 @@ export const useRemoveLiqFormViewModel = () => {
 
     return (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = saveEmptyStringBigNumber(fixedValue, null);
+      const inputAmountBN = saveBigNumber(fixedValue, null);
 
       formikValues[getInputSlugByIndex(index)] = realValue;
       const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
@@ -164,7 +156,7 @@ export const useRemoveLiqFormViewModel = () => {
     const shares = await calculateShares(index, inputAmount);
     formik.setFieldValue(LP_INPUT_KEY, shares);
 
-    stableswapItemFormStore.setInputAmount(saveEmptyStringBigNumber(inputAmount, new BigNumber('0')), index);
+    stableswapItemFormStore.setInputAmount(saveBigNumber(inputAmount, new BigNumber('0')), index);
     stableswapItemFormStore.setLpInputAmount(new BigNumber(shares));
   };
 
@@ -191,7 +183,7 @@ export const useRemoveLiqFormViewModel = () => {
 
     formikValues[LP_INPUT_KEY] = realValue;
 
-    const inputAmountBN = saveEmptyStringBigNumber(fixedValue, new BigNumber('0'));
+    const inputAmountBN = saveBigNumber(fixedValue, new BigNumber('0'));
     const tokenOutputs = calculateOutputWithLp(inputAmountBN, totalLpSupply, tokensInfo);
 
     tokenOutputs.forEach((amount, indexOfTokenInput) => {
