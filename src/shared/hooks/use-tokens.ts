@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
 
-import { Optional } from '@shared/types';
+import { Optional, TokenAddress } from '@shared/types';
 
 import { getTokenMetadata } from '../api';
-import { getTokenAddress } from '../helpers';
+import { getTokenAddress, getTokenSlug, isString } from '../helpers';
 import { mapToken } from '../mapping/token.map';
 import { useTokensStore } from './use-tokens-store';
 
-export const useTokens = (tokenSlugs: Optional<string[]>) => {
+export const useTokens = (tokens: Optional<Array<TokenAddress | string>>) => {
   const tokensStore = useTokensStore();
 
   useEffect(() => {
     (async () => {
-      if (!tokenSlugs) {
+      if (!tokens || !tokens.length) {
         return;
       }
+      const tokenSlugs = tokens.map(tokenSlugOrAddress =>
+        isString(tokenSlugOrAddress) ? tokenSlugOrAddress : getTokenSlug(tokenSlugOrAddress)
+      );
       const promises = tokenSlugs
         .filter(tokenSlug => !tokensStore.getToken(tokenSlug))
         .map(async tokenSlug => {
@@ -30,5 +33,5 @@ export const useTokens = (tokenSlugs: Optional<string[]>) => {
         });
       await Promise.all(promises);
     })();
-  }, [tokenSlugs, tokensStore]);
+  }, [tokens, tokensStore]);
 };

@@ -16,7 +16,7 @@ export const useToken = (tokenSlugOrAddress: TokenAddress | string): Nullable<To
   useEffect(() => {
     (async () => {
       if (tokensStore.getToken(tokenSlug)) {
-        return false;
+        return;
       }
       const tokenMetaRaw = await getTokenMetadata(tokenAddress);
       if (tokenMetaRaw) {

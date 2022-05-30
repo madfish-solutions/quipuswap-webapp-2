@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { getTokenSlug } from '@shared/helpers';
-import { useTokens, useTokensStore } from '@shared/hooks';
-import { TokensMap } from '@shared/store/tokens.store';
-import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
 import { BigNumber } from 'bignumber.js';
 import {
   DexTypeEnum,
@@ -16,6 +12,12 @@ import {
   useAllRoutePairs,
   useRoutePairsCombinations
 } from 'swap-router-sdk';
+
+import { UnsupportedDexType } from '@shared/errors/unsupported-dex-type.error';
+import { getTokenSlug } from '@shared/helpers';
+import { useTokens, useTokensStore } from '@shared/hooks';
+import { TokensMap } from '@shared/store/tokens.store';
+import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
 
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
@@ -32,7 +34,7 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
     case DexTypeEnum.QuipuSwapTokenToTokenDex:
       return DexPairType.TokenToToken;
     default:
-      throw new Error('Unsupported dex type');
+      throw new UnsupportedDexType();
   }
 };
 
@@ -48,26 +50,22 @@ const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Tok
     token2
   };
 
-  const _type = mapDexType(dexType);
+  const type = mapDexType(dexType);
 
-  return _type === DexPairType.TokenToXtz
-    ? {
-        ...dex,
-        id: dexAddress,
-        type: _type
-      }
-    : {
-        ...dex,
-        id: dexId?.toNumber?.() ?? DEFAULT_DEX_ID,
-        type: _type
-      };
+  const id = type === DexPairType.TokenToXtz ? dexAddress : dexId?.toNumber?.() ?? DEFAULT_DEX_ID;
+
+  return {
+    ...dex,
+    id,
+    type
+  } as DexPair;
 };
 
 const mapTradeToDexPairs = (trade: Nullable<Trade>, tokens: TokensMap): DexPair[] =>
   trade
     ? trade.map(operation => {
-        const token1 = tokens[operation.aTokenSlug];
-        const token2 = tokens[operation.bTokenSlug];
+        const token1 = tokens.get(operation.aTokenSlug);
+        const token2 = tokens.get(operation.bTokenSlug);
         if (!token1) {
           throw new Error(`No Token Metadata of ${token1}`);
         }
