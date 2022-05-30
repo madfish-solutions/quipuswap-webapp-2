@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { BigNumber } from 'bignumber.js';
+
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import {
   fromDecimals,
@@ -15,7 +17,6 @@ import {
 } from '@shared/helpers';
 import { useDexGraph } from '@shared/hooks';
 import { DexPair, Token, Undefined } from '@shared/types';
-import { BigNumber } from 'bignumber.js';
 
 import { useSwapFee } from './use-swap-fee';
 

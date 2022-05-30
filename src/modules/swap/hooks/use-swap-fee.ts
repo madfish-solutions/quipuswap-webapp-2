@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { BigNumber } from 'bignumber.js';
+
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
@@ -7,7 +9,6 @@ import { defined, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } fro
 import { estimateSwapFee } from '@shared/helpers/swap';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { DexPair, Nullable, Token, Undefined } from '@shared/types';
-import { BigNumber } from 'bignumber.js';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
 
