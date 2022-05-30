@@ -1,30 +1,30 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_STRING } from '@config/constants';
+import { EMPTY_STRING, FISRT_INDEX } from '@config/constants';
 
 import { saveBigNumber } from '../bignumber';
 import { prepareNumberAsString } from '../prepare-number-as-string';
 import { getLastChar, isEmptyString } from '../strings';
 
+const ONE_CHAR = 1;
 const SEPARATORS = ['.', ','];
-const numbersRegExp = new RegExp('^[0-9]+$');
+const NUMBERS_REG_EXP = new RegExp('^[0-9]+$');
 
 const cleanUpValue = (value: string) => {
   let hasSeparator = false;
 
-  const newChars = [];
-
-  for (const char of value) {
+  const newChars = value.split('').filter(char => {
+    if (NUMBERS_REG_EXP.test(char)) {
+      return true;
+    }
     if (!hasSeparator && SEPARATORS.includes(char)) {
       hasSeparator = true;
 
-      newChars.push(char);
-    } else if (numbersRegExp.test(char)) {
-      newChars.push(char);
+      return true;
     }
-  }
+
+    return false;
+  });
 
   return newChars.join('');
 };
@@ -37,7 +37,7 @@ const fixValue = (value: string, decimals: number) => {
 
   const lastChar = getLastChar(preparedValue);
   const [integer, decimals_] = preparedValue.split('.');
-  const decimalsPart = decimals_?.slice(0, decimals) ?? '';
+  const decimalsPart = decimals_?.slice(FISRT_INDEX, decimals) ?? '';
 
   const dec = decimalsPart && saveBigNumber(decimalsPart, new BigNumber(0)).isZero();
 
@@ -46,7 +46,7 @@ const fixValue = (value: string, decimals: number) => {
     cleanValue = `${integer}${lastChar}`;
   } else if (dec) {
     const innerDecimalsPart =
-      decimalsPart.length !== decimals ? decimalsPart : `${decimalsPart.slice(0, decimals - 1)}1`;
+      decimalsPart.length !== decimals ? decimalsPart : `${decimalsPart.slice(FISRT_INDEX, decimals - ONE_CHAR)}1`;
     cleanValue = `${integer}.${innerDecimalsPart}`;
     fixedValue = new BigNumber(cleanValue);
   } else {

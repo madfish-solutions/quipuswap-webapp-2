@@ -73,10 +73,16 @@ const testCaseList = [
     decimals: 3
   },
   {
-    value: '0.35432323',
-    expectString: '0.3543',
-    expectBigNumber: new BigNumber(0.3543),
+    value: '0,15,1515,151515',
+    expectString: '0.1515',
+    expectBigNumber: new BigNumber(0.1515),
     decimals: 4
+  },
+  {
+    value: '0,3543.2323',
+    expectString: '0.354323',
+    expectBigNumber: new BigNumber(0.354323),
+    decimals: 6
   }
 ];
 
