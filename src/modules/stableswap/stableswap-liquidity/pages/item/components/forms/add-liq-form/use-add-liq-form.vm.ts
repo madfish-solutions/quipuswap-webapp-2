@@ -4,7 +4,15 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, hasFormikError, toFixed, findBalanceToken, placeDecimals, numberAsString } from '@shared/helpers';
+import {
+  isNull,
+  hasFormikError,
+  toFixed,
+  findBalanceToken,
+  placeDecimals,
+  numberAsString,
+  saveBigNumber
+} from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -78,7 +86,7 @@ export const useAddLiqFormViewModel = () => {
 
     return (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = new BigNumber(fixedValue);
+      const inputAmountBN = saveBigNumber(fixedValue, null);
       formikValues[getInputSlugByIndex(index)] = realValue;
 
       const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
