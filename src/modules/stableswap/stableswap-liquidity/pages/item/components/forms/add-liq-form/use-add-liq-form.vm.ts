@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, hasFormikError, toFixed, placeDecimals } from '@shared/helpers';
+import { isNull, hasFormikError, toFixed, placeDecimals, increaseBySlippage } from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useTranslation } from '@translation';
 
 import {
@@ -15,7 +16,7 @@ import {
   getInputSlugByIndex
 } from '../../../../../../helpers';
 import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { StableswapItem } from './../../../../../../types/mapped-api';
+import { StableswapItem } from '../../../../../../types';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -36,6 +37,9 @@ export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
+  const {
+    settings: { liquiditySlippage }
+  } = useSettingsStore();
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
   const userBalances = useAddLiqFormBalances(item);
@@ -94,9 +98,10 @@ export const useAddLiqFormViewModel = () => {
         return inputAmountBN;
       }
 
-      const result = calculateOutputWithToken(fixedShares, totalLpSupply, calculatedReserve);
+      const output = calculateOutputWithToken(fixedShares, totalLpSupply, calculatedReserve);
+      const outputWithSlippage = increaseBySlippage(output, liquiditySlippage);
 
-      return placeDecimals(result, token, BigNumber.ROUND_UP);
+      return placeDecimals(outputWithSlippage, token, BigNumber.ROUND_UP);
     });
 
     calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
