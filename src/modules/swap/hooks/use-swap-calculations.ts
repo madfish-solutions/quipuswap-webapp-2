@@ -92,7 +92,7 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
   return Object.keys(tokens);
 };
 
-export const useSwapCalculationsV2 = () => {
+export const useSwapCalculations = () => {
   const allRoutePairs = useAllRoutePairs(TEZOS_DEXES_API_URL);
   const filteredRoutePairs = useMemo(
     () => allRoutePairs.data.filter(routePair => KNOWN_DEX_TYPES.includes(routePair.dexType)),
@@ -103,12 +103,8 @@ export const useSwapCalculationsV2 = () => {
 
   const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
-  // eslint-disable-next-line no-console
-  console.log('bestTrade', bestTrade);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
-  // eslint-disable-next-line no-console
-  console.log('tokensSlugs', tokensSlugs);
   useTokens(tokensSlugs);
 
   useEffect(() => {
