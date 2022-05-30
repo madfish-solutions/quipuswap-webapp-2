@@ -1,4 +1,9 @@
 import BigNumber from 'bignumber.js';
 
-export const calculateLpValue = (inputAmount: BigNumber, reserve: BigNumber, totalLpSupply: BigNumber): BigNumber =>
-  inputAmount.multipliedBy(totalLpSupply).dividedBy(reserve);
+import { isNull } from '@shared/helpers';
+
+export const calculateShares = (
+  inputAmount: Nullable<BigNumber>,
+  reserve: BigNumber,
+  totalLpSupply: BigNumber
+): Nullable<BigNumber> => (isNull(inputAmount) ? null : inputAmount.multipliedBy(totalLpSupply).dividedBy(reserve));

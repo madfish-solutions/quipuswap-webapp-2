@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { isNull } from '@shared/helpers';
+import { multipliedIfPossible, isNull } from '@shared/helpers';
 
-import { calculateLpValue } from './calculate-lp-value';
+import { calculateShares } from './calculate-lp-value';
 
 export const calculateTokensInputs = (
   inputAmount: Nullable<BigNumber>,
@@ -14,7 +14,7 @@ export const calculateTokensInputs = (
     return null;
   }
 
-  const lpValue = calculateLpValue(inputAmount, inputAmountReserve, totalLpSupply);
+  const shares = calculateShares(inputAmount, inputAmountReserve, totalLpSupply);
 
-  return lpValue?.multipliedBy(outputAmountReserve).dividedBy(totalLpSupply) ?? null;
+  return multipliedIfPossible(shares, outputAmountReserve.dividedBy(totalLpSupply));
 };

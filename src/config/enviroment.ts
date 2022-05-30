@@ -1,4 +1,6 @@
 import { NetworkType } from '@airgap/beacon-sdk';
+import IthacaWhitelistTokens from 'tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
+import MainnetWhitelistTokens from 'tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { SupportedNetworks } from '@shared/types';
 
@@ -23,15 +25,15 @@ export const networksBaseUrls: Record<SupportedNetworks, string> = {
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
 //#endregion BASE_URL
 
-//#region TOKENS_URL
-const TOKENS_URL_MAP: Record<SupportedNetworks, string> = {
-  [NetworkType.MAINNET]: process.env.REACT_APP_MAINNET_TOKENS!,
-  [NetworkType.HANGZHOUNET]: process.env.REACT_APP_HANGZHOUNET_TOKENS!,
-  [NetworkType.ITHACANET]: process.env.REACT_APP_ITHACANET_TOKENS!
+//#region TOKENS
+const TOKENS_MAP = {
+  [NetworkType.MAINNET]: MainnetWhitelistTokens,
+  [NetworkType.HANGZHOUNET]: null,
+  [NetworkType.ITHACANET]: IthacaWhitelistTokens
 };
 
-export const TOKENS_URL = TOKENS_URL_MAP[NETWORK_ID];
-//#endregion TOKENS_URL
+export const TOKENS = TOKENS_MAP[NETWORK_ID];
+//#endregion TOKENS
 
 //#region READ_ONLY_SIGNER
 export const READ_ONLY_SIGNER_PK = process.env.REACT_APP_READ_ONLY_SIGNER_PK!;

@@ -7,7 +7,6 @@ import { noop } from 'rxjs';
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { useConfirmOperation } from '@shared/dapp';
 import {
   fromDecimals,
   toDecimals,
@@ -20,6 +19,7 @@ import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@shared/types';
+import { useConfirmOperation } from '@shared/utils';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { getPairId } from '../add-liquidity-form/use-add-liqudity.service';

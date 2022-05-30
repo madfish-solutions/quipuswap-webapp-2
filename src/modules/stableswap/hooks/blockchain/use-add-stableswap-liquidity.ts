@@ -4,9 +4,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, isNull, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, isExist, isNull, toDecimals } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { AmountToken } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -21,8 +20,8 @@ const IS_DEPOSIT = true;
 export const useAddStableswapLiquidity = () => {
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
-  const confirmOperation = useConfirmOperation();
   const { calcTokenAmountView } = useCalcTokenAmountView(IS_DEPOSIT);
+  const confirmOperation = useConfirmOperation();
 
   const { tezos } = useRootStore();
   const {
@@ -42,7 +41,7 @@ export const useAddStableswapLiquidity = () => {
   );
 
   const addStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(accountPkh)) {
+    if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(amount => isExist(amount))) {
       return;
     }
 
@@ -50,13 +49,12 @@ export const useAddStableswapLiquidity = () => {
 
     const tokens = extractTokens(tokensInfo);
     const amountsAtoms = inputAmounts.map((amount, index) =>
-      amount.isNaN() ? new BigNumber('0') : toDecimals(amount, tokens[index])
+      isNull(amount) ? new BigNumber('0') : toDecimals(amount, tokens[index])
     );
 
-    const tokensAndAmounts: Array<AmountToken> = tokensAndAmountsMapper(tokens, amountsAtoms);
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
 
     const shares = await calculateShares(amountsAtoms);
-
     const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const deadline = getStableswapDeadline(transactionDeadline);
@@ -78,8 +76,8 @@ export const useAddStableswapLiquidity = () => {
   }, [
     tezos,
     item,
-    inputAmounts,
     accountPkh,
+    inputAmounts,
     calculateShares,
     liquiditySlippage,
     transactionDeadline,

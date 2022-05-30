@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, hasFormikError, toFixed, placeDecimals, increaseBySlippage } from '@shared/helpers';
+import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
-import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useTranslation } from '@translation';
 
 import {
-  calculateLpValue,
   calculateOutputWithToken,
+  calculateShares,
   extractTokens,
   getFormikInitialValues,
   getInputSlugByIndex
@@ -37,9 +36,6 @@ export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
-  const {
-    settings: { liquiditySlippage }
-  } = useSettingsStore();
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
   const userBalances = useAddLiqFormBalances(item);
@@ -50,6 +46,7 @@ export const useAddLiqFormViewModel = () => {
     actions.setSubmitting(true);
 
     await addStableswapLiquidity();
+    formStore.clearStore();
 
     formik.resetForm();
     actions.setSubmitting(false);
@@ -86,33 +83,35 @@ export const useAddLiqFormViewModel = () => {
     formStore.setInputAmount(inputAmountBN, index);
   };
 
-  const handleBalancedInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
-    formikValues[getInputSlugByIndex(index)] = inputAmount;
-    const inputAmountBN = new BigNumber(inputAmount);
+  const handleBalancedInputChange = (reserves: BigNumber, index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    const shares = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-    const fixedShares = placeDecimals(shares, lpToken);
+    return (inputAmount: string) => {
+      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const inputAmountBN = saveBigNumber(fixedValue, null);
+      formikValues[getInputSlugByIndex(index)] = realValue;
 
-    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
-      if (index === indexOfCalculatedInput) {
-        return inputAmountBN;
-      }
+      const shares = calculateShares(inputAmountBN, reserves, totalLpSupply);
+      const fixedShares = shares && placeDecimals(shares, lpToken);
 
-      const output = calculateOutputWithToken(fixedShares, totalLpSupply, calculatedReserve);
-      const outputWithSlippage = increaseBySlippage(output, liquiditySlippage);
+      const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
+        if (index === indexOfCalculatedInput) {
+          return inputAmountBN;
+        }
 
-      return placeDecimals(outputWithSlippage, token, BigNumber.ROUND_UP);
-    });
+        return calculateOutputWithToken(fixedShares, totalLpSupply, calculatedReserve, token);
+      });
 
-    calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-      if (indexOfCalculatedInput !== index) {
-        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
-      }
-    });
+      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+        if (indexOfCalculatedInput !== index) {
+          formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+        }
+      });
 
-    formStore.setInputAmounts(calculatedValues);
-
-    formik.setValues(formikValues);
+      formik.setValues(formikValues);
+      formStore.setInputAmounts(calculatedValues);
+    };
   };
 
   const handleInputChange = (reserves: BigNumber, index: number) =>

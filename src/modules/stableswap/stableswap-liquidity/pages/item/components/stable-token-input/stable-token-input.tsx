@@ -16,30 +16,33 @@ interface Props {
   label: string;
   className?: string;
   balance?: Optional<BigNumber.Value>;
+  isRemove?: boolean;
   onInputChange: (value: string) => void;
 }
 
-export const StableTokenInput: FC<Props> = observer(({ formik, index, label, balance, className, onInputChange }) => {
-  const outputComponentViewModel = useStableTokenInputViewModel(formik, index);
+export const StableTokenInput: FC<Props> = observer(
+  ({ formik, index, label, balance, className, isRemove, onInputChange }) => {
+    const outputComponentViewModel = useStableTokenInputViewModel(formik, index, isRemove);
 
-  if (isNull(outputComponentViewModel)) {
-    return null;
+    if (isNull(outputComponentViewModel)) {
+      return null;
+    }
+
+    const { inputSlug, value, error, token, hiddenPercentSelector, dollarEquivalent } = outputComponentViewModel;
+
+    return (
+      <TokenInput
+        className={className}
+        tokens={token}
+        label={label}
+        id={inputSlug}
+        value={value}
+        dollarEquivalent={dollarEquivalent}
+        onInputChange={onInputChange}
+        balance={balance}
+        error={error}
+        hiddenPercentSelector={hiddenPercentSelector}
+      />
+    );
   }
-
-  const { inputSlug, value, error, token, hiddenPercentSelector, dollarEquivalent } = outputComponentViewModel;
-
-  return (
-    <TokenInput
-      className={className}
-      tokens={token}
-      label={label}
-      id={inputSlug}
-      value={value}
-      dollarEquivalent={dollarEquivalent}
-      onInputChange={onInputChange}
-      balance={balance}
-      error={error}
-      hiddenPercentSelector={hiddenPercentSelector}
-    />
-  );
-});
+);

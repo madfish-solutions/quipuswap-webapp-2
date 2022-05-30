@@ -70,8 +70,9 @@ export interface Token {
   metadata: TokenMetadata;
 }
 
-export interface RawToken extends Omit<Token, 'fa2TokenId'> {
-  fa2TokenId?: string;
+export interface RawToken extends Omit<Token, 'type' | 'isWhitelisted'> {
+  type: string;
+  isWhitelisted?: boolean;
 }
 
 export interface TokenWithQSNetworkType extends Token {

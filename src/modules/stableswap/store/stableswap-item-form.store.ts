@@ -5,7 +5,7 @@ import { RootStore } from '@shared/store';
 
 export class StableswapItemFormStore {
   shares: Nullable<BigNumber> = null;
-  inputAmounts: Array<BigNumber> = [];
+  inputAmounts: Array<Nullable<BigNumber>> = [];
   isBalancedProportion = true;
 
   constructor(private rootStore: RootStore) {
@@ -26,34 +26,34 @@ export class StableswapItemFormStore {
   }
 
   initInputAmounts(length: number) {
-    this.inputAmounts = Array(length).fill(new BigNumber('0'));
+    this.inputAmounts = Array(length).fill(null);
   }
 
-  setShares(shares: BigNumber) {
+  setShares(shares: Nullable<BigNumber>) {
     this.shares = shares;
   }
 
-  setInputAmount(amount: BigNumber, index: number) {
+  setInputAmount(amount: Nullable<BigNumber>, index: number) {
     this.inputAmounts[index] = amount;
   }
 
-  setInputAmounts(tokenValues: Array<BigNumber>) {
+  setInputAmounts(tokenValues: Array<Nullable<BigNumber>>) {
     this.inputAmounts = tokenValues;
   }
 
-  setLpAndTokenInputAmount(shares: BigNumber, tokenValue: BigNumber, indexOfTokenValue: number) {
+  setLpAndTokenInputAmount(shares: Nullable<BigNumber>, tokenValue: Nullable<BigNumber>, indexOfTokenValue: number) {
     this.setShares(shares);
     this.setInputAmount(tokenValue, indexOfTokenValue);
   }
 
-  setLpAndTokenInputAmounts(lpValue: BigNumber, tokenValues: Array<BigNumber>) {
+  setLpAndTokenInputAmounts(lpValue: Nullable<BigNumber>, tokenValues: Array<Nullable<BigNumber>>) {
     this.setShares(lpValue);
     this.setInputAmounts(tokenValues);
   }
 
   clearStore() {
     this.shares = null;
-    this.inputAmounts = [];
+    this.inputAmounts = this.inputAmounts.map(() => null);
   }
 
   setIsBalancedProportion(state: boolean) {

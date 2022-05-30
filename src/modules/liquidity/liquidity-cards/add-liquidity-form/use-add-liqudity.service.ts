@@ -10,7 +10,6 @@ import { NETWORK_ID } from '@config/enviroment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { useConfirmOperation } from '@shared/dapp';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,
@@ -31,6 +30,7 @@ import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
+import { useConfirmOperation } from '@shared/utils';
 
 import {
   addLiquidityTez,

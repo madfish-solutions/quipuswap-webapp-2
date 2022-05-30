@@ -5,7 +5,6 @@ import { Optional, Token } from '@shared/types';
 type Tokens = Token | Array<Token>;
 
 export interface TokenInputViewModelProps {
-  value: string;
   tokens?: Tokens;
   balance: Optional<BigNumber.Value>;
   readOnly?: boolean;
@@ -15,6 +14,7 @@ export interface TokenInputViewModelProps {
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
+  value: string;
   id?: string;
   className?: string;
   label: string;
