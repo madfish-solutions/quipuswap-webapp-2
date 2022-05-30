@@ -7,10 +7,7 @@ import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap, isExist } fr
 import { TokenInputViewModelProps } from './types';
 
 export const useTokenInputViewModel = ({
-  value,
-
   tokens,
-
   balance,
   readOnly,
   hiddenPercentSelector,
