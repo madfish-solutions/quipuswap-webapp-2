@@ -4,16 +4,16 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, hasFormikError, toFixed, findBalanceToken, placeDecimals } from '@shared/helpers';
+import { isNull, hasFormikError, toFixed, findBalanceToken, placeDecimals, numberAsString } from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
   calculateLpValue,
   calculateOutputWithToken,
+  extractTokens,
   getFormikInitialValues,
-  getInputSlugByIndex,
-  prepareInputAmountAsBN
+  getInputSlugByIndex
 } from '../../../../../../helpers';
 import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
@@ -72,34 +72,38 @@ export const useAddLiqFormViewModel = () => {
   const isSubmitting = formik.isSubmitting;
   const disabled = isSubmitting || hasFormikError(formik.errors);
 
-  const handleInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
-    formikValues[getInputSlugByIndex(index)] = inputAmount;
-    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
+  const handleInputChange = (reserves: BigNumber, index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
-    const fixedLpValue = lpValue && placeDecimals(lpValue, lpToken);
+    return (inputAmount: string) => {
+      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const inputAmountBN = new BigNumber(fixedValue);
+      formikValues[getInputSlugByIndex(index)] = realValue;
 
-    formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
+      const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+      const fixedLpValue = lpValue && placeDecimals(lpValue, lpToken);
 
-    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
-      if (index === indexOfCalculatedInput) {
-        return inputAmountBN;
-      }
+      formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
 
-      const result = calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve);
+      const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
+        if (index === indexOfCalculatedInput) {
+          return inputAmountBN;
+        }
 
-      return result && placeDecimals(result, token, BigNumber.ROUND_UP);
-    });
+        return calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve, token);
+      });
 
-    calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-      if (indexOfCalculatedInput !== index) {
-        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
-      }
-    });
+      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+        if (indexOfCalculatedInput !== index) {
+          formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+        }
+      });
 
-    stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
+      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
 
-    formik.setValues(formikValues);
+      formik.setValues(formikValues);
+    };
   };
 
   const data = tokensInfo.map(({ reserves, token }, index) => {
