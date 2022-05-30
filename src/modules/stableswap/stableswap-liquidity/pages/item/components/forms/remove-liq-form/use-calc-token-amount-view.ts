@@ -19,10 +19,11 @@ export const useCalcTokenAmountView = () => {
     async (amounts: MichelsonMap<BigNumber, BigNumber>) => {
       try {
         const contract = await getContract(defined(tezos), defined(item).contractAddress);
+        const poolId = defined(item).lpToken.fa2TokenId;
 
         return await contract.contractViews
           .calc_token_amount({
-            pool_id: defined(item).id,
+            pool_id: poolId,
             amounts: amounts,
             is_deposit: false
           })
