@@ -57,7 +57,6 @@ export const TokenInput: FC<TokenInputProps> = ({
     handleInputChange,
     handlePercentageSelect
   } = useTokenInputViewModel({
-    value,
     tokens,
     balance,
     readOnly,

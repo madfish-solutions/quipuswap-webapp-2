@@ -183,6 +183,7 @@ export const useRemoveLiqFormViewModel = () => {
       formik,
       label: labelOutput,
       balance,
+      isRemove: true,
       onInputChange: handleInputChange(reserves, index)
     };
   });
