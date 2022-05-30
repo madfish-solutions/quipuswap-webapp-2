@@ -5,7 +5,6 @@ import { useTokens, useTokensStore } from '@shared/hooks';
 import { TokensMap } from '@shared/store/tokens.store';
 import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
 import { BigNumber } from 'bignumber.js';
-
 import {
   DexTypeEnum,
   getBestTradeExactInput,
@@ -16,7 +15,8 @@ import {
   TradeOperation,
   useAllRoutePairs,
   useRoutePairsCombinations
-} from '../../../libs/swap-router-sdk';
+} from 'swap-router-sdk';
+
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 

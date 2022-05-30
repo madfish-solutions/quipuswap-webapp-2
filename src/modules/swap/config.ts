@@ -1,4 +1,4 @@
-import { DexTypeEnum } from '../../libs/swap-router-sdk';
+import { DexTypeEnum } from 'swap-router-sdk';
 
 export const ROUTING_FEE_ADDRESS = 'tz1XYSt74vwVWgixEXdiS4C5t3UvuExRRTZR';
 export const TEZOS_DEXES_API_URL = 'wss://tezos-dexes-api-mainnet.production.madservice.xyz';
