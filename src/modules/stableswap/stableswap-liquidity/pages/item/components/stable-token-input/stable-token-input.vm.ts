@@ -1,12 +1,16 @@
 import { useAccountPkh } from '@providers/use-dapp';
 import { isNull, multipliedIfPossible } from '@shared/helpers';
-import { IFormik } from '@shared/types';
+import { IFormik, Undefined } from '@shared/types';
 
 import { getInputSlugByIndex } from '../../../../../helpers';
 import { useStableswapItemStore } from '../../../../../hooks';
 import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 
-export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues>, index: number) => {
+export const useStableTokenInputViewModel = (
+  formik: IFormik<RemoveLiqFormValues>,
+  index: number,
+  isRemove: Undefined<boolean>
+) => {
   const accountPkh = useAccountPkh();
   const stableswapItemStore = useStableswapItemStore();
   const item = stableswapItemStore.item;
@@ -23,7 +27,7 @@ export const useStableTokenInputViewModel = (formik: IFormik<RemoveLiqFormValues
   const inputSlug = getInputSlugByIndex(index);
   const value = formik.values[inputSlug];
   const error = formik.errors[inputSlug];
-  const hiddenPercentSelector = !Boolean(accountPkh);
+  const hiddenPercentSelector = !Boolean(accountPkh) || isRemove;
   const dollarEquivalent = multipliedIfPossible(formik.values[inputSlug], exchangeRate.toFixed());
 
   return {

@@ -13,8 +13,8 @@ export const calculateOutputWithLp = (
     return tokensInfo.map(() => null);
   }
 
-  const tokenOutputs: Array<BigNumber> = tokensInfo.map(({ reserves }) =>
-    lpInput.multipliedBy(reserves).dividedBy(totalSupply)
+  const tokenOutputs: Array<BigNumber> = tokensInfo.map(({ reserves, token }) =>
+    lpInput.multipliedBy(reserves).dividedBy(totalSupply).decimalPlaces(token.metadata.decimals)
   );
 
   return tokenOutputs;

@@ -1,10 +1,16 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { COIN_FLIP_COEFFICIENT } from '@config/enviroment';
+import { DEFAULT_COINFLIP_CONTRACT, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { RootStore } from '@shared/store';
+import { fromDecimals } from '@shared/helpers';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
+
+import { getCoinflipGeneralStatsApi } from '../api';
+import { GeneralStatsInterface } from '../api/types';
+import { DashboardGeneralStats } from '../interfaces';
+import { DEFAULT_GENERAL_STATS, generalStatsMapping } from '../mapping';
 
 export enum TokenToPlay {
   Tezos = 'XTZ',
@@ -33,6 +39,13 @@ export class CoinflipStore {
 
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
+  readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
+    DEFAULT_GENERAL_STATS,
+    async () =>
+      await getCoinflipGeneralStatsApi(this.rootStore.tezos, DEFAULT_COINFLIP_CONTRACT, this.token.contractAddress),
+    generalStatsMapping
+  );
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
@@ -47,15 +60,15 @@ export class CoinflipStore {
   }
 
   get payout(): Nullable<BigNumber> {
-    return this.game.input ? this.game.input.times(COIN_FLIP_COEFFICIENT) : null;
+    return this.game.input && this.generalStats.data.payoutCoefficient
+      ? this.game.input.times(
+          Number(fromDecimals(this.generalStats.data.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
+        )
+      : null;
   }
 
   get token(): Token {
-    if (this.tokenToPlay === TokenToPlay.Tezos) {
-      return TEZOS_TOKEN;
-    }
-
-    return DEFAULT_TOKEN;
+    return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : DEFAULT_TOKEN;
   }
 
   setToken(token: TokenToPlay) {
