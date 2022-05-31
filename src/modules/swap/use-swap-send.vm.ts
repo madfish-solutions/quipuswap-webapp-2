@@ -104,7 +104,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputAmount: formik.inputAmount,
     outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
-    dexRoute: swap.dexRoute,
+    dexRoute,
+    trade,
     recipient: formik.recipient
   });
 
