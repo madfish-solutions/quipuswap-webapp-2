@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { useTokensBalances } from '@shared/hooks';
+import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import {
@@ -13,10 +13,13 @@ import {
   getFormikInitialValues,
   getInputSlugByIndex
 } from '../../../../../../helpers';
-import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { StableswapItem } from '../../../../../../types';
+import {
+  useAddStableswapLiquidity,
+  useStableswapItemFormStore,
+  useStableswapItemStore,
+  useTokensBalancesArray
+} from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
-import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 
 const DEFAULT_LENGTH = 0;
 
@@ -24,21 +27,13 @@ export interface AddLiqFormValues {
   [key: string]: string;
 }
 
-const useAddLiqFormBalances = (item: Nullable<StableswapItem>) => {
-  const tokens = extractTokens(item?.tokensInfo ?? []);
-
-  const tokensAndBalances = useTokensBalances(tokens);
-
-  return tokensAndBalances.map(tokenAndBalance => tokenAndBalance.balance ?? null);
-};
-
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
-  const userBalances = useAddLiqFormBalances(item);
+  const userBalances = useTokensBalancesArray(item);
 
   const validationSchema = useAddLiqFormValidation(userBalances, formStore.isBalancedProportion);
 

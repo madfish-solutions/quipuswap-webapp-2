@@ -41,7 +41,7 @@ export const useAddStableswapLiquidity = () => {
   );
 
   const addStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(amount => isExist(amount))) {
+    if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
       return;
     }
 

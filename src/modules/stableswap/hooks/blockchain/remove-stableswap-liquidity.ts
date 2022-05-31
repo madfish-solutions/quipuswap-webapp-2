@@ -49,13 +49,7 @@ export const useRemoveStableswapLiquidity = () => {
   const { shares, inputAmounts, isBalancedProportion } = useStableswapItemFormStore();
 
   const removeStableswapLiquidity = useCallback(async () => {
-    if (
-      isNull(tezos) ||
-      isNull(item) ||
-      isNull(shares) ||
-      isNull(accountPkh) ||
-      !inputAmounts.some(amount => isExist(amount))
-    ) {
+    if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
       return;
     }
     const { lpToken, contractAddress, tokensInfo } = item;

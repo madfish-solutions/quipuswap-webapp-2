@@ -33,9 +33,9 @@ export const createAmountsMichelsonMapFormikValues = (
   return map;
 };
 
-export const createAmountsMichelsonMap = (values: Array<BigNumber>) => {
-  const map = new MichelsonMap<BigNumber, BigNumber>();
-  values.forEach((value, index) => map.set(new BigNumber(index), value));
+export const createAmountsMichelsonMap = (values: Array<BigNumber>) =>
+  values.reduce((acc, value, index) => {
+    acc.set(new BigNumber(index), value);
 
-  return map;
-};
+    return acc;
+  }, new MichelsonMap<BigNumber, BigNumber>());
