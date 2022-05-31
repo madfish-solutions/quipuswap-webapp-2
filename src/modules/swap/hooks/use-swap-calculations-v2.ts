@@ -9,17 +9,18 @@ import {
   getTradeOutputAmount,
   Trade,
   TradeOperation,
-  useAllRoutePairs,
-  useRoutePairsCombinations
+  useAllRoutePairs
 } from 'swap-router-sdk';
 
 import { UnsupportedDexType } from '@shared/errors/unsupported-dex-type.error';
-import { getTokenSlug } from '@shared/helpers';
+import { fromDecimals, toDecimals } from '@shared/helpers';
 import { useTokens, useTokensStore } from '@shared/hooks';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { TokensMap } from '@shared/store/tokens.store';
 import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
 
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
+import { useRoutePairsCombinations, useTradeWithSlippageTolerance } from '../utils/swap-router-sdk-adapters';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
@@ -39,6 +40,7 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
 };
 
 const DEFAULT_DEX_ID = 0;
+const FALLBACK_DECIMALS = 0;
 
 const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Token): DexPair => {
   const { aTokenPool, bTokenPool, dexType, dexAddress, dexId } = operation;
@@ -100,15 +102,14 @@ export const useSwapCalculationsV2 = () => {
   );
 
   const { tokens } = useTokensStore();
+  const {
+    settings: { tradingSlippage }
+  } = useSettingsStore();
 
   const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
-  // eslint-disable-next-line no-console
-  console.log('bestTrade', bestTrade);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
-  // eslint-disable-next-line no-console
-  console.log('tokensSlugs', tokensSlugs);
   useTokens(tokensSlugs);
 
   useEffect(() => {
@@ -124,10 +125,13 @@ export const useSwapCalculationsV2 = () => {
   const [outputAmount, setOutputAmount] = useState<Nullable<BigNumber>>(null);
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
 
-  const routePairsCombinations = useRoutePairsCombinations(
-    inputToken ? getTokenSlug(inputToken) : undefined,
-    outputToken ? getTokenSlug(outputToken) : undefined,
-    filteredRoutePairs
+  const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, filteredRoutePairs);
+  const inputDecimals = inputToken?.metadata.decimals ?? FALLBACK_DECIMALS;
+  const outputDecimals = outputToken?.metadata.decimals ?? FALLBACK_DECIMALS;
+  const bestTradeWithSlippageTolerance = useTradeWithSlippageTolerance(
+    inputAmount && toDecimals(inputAmount, inputDecimals),
+    bestTrade,
+    tradingSlippage
   );
 
   const resetCalculations = () => {
@@ -143,11 +147,11 @@ export const useSwapCalculationsV2 = () => {
     }
     setInputAmount(newInputAmount);
 
-    const bestTradeExact = getBestTradeExactInput(newInputAmount, routePairsCombinations);
+    const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputDecimals), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
-    const output = getTradeOutputAmount(bestTradeExact) ?? null;
-    setOutputAmount(output);
+    const rawOutput = getTradeOutputAmount(bestTradeExact);
+    setOutputAmount(rawOutput ? fromDecimals(rawOutput, outputDecimals) : null);
   };
 
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
@@ -157,11 +161,11 @@ export const useSwapCalculationsV2 = () => {
     }
     setOutputAmount(newOutputAmount);
 
-    const bestTradeExact = getBestTradeExactOutput(newOutputAmount, routePairsCombinations);
+    const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputDecimals), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
-    const output = getTradeInputAmount(bestTradeExact) ?? null;
-    setOutputAmount(output);
+    const rawInput = getTradeInputAmount(bestTradeExact);
+    setInputAmount(rawInput ? fromDecimals(rawInput, inputDecimals) : null);
   };
 
   const onSwapPairChange = (newPair: SwapPair) => {
@@ -180,6 +184,7 @@ export const useSwapCalculationsV2 = () => {
     onSwapPairChange,
     inputAmount,
     outputAmount,
-    resetCalculations
+    resetCalculations,
+    trade: bestTradeWithSlippageTolerance
   };
 };

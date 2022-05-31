@@ -1,4 +1,3 @@
-import { batchify } from '@quipuswap/sdk';
 import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
@@ -51,7 +50,7 @@ const serialPromiseAll = async <T extends unknown[], U>(
 
 const defaultDeadlineTimespan = DEFAULT_DEADLINE_MINS * 60;
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
+const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
   const {
     deadlineTimespan = defaultDeadlineTimespan,
     inputToken,
@@ -219,14 +218,6 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
   );
 
   return addOperatorsParams.concat(swapsParams, removeOperatorsParams);
-};
-
-export const swap = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
-  const params = await getSwapTransferParams(tezos, accountPkh, swapParams);
-  const batch = tezos.wallet.batch([]);
-  batchify(batch, params);
-
-  return batch.send();
 };
 
 export const estimateSwapFee = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {

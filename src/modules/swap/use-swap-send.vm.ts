@@ -55,7 +55,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, swapV2.dexRoute, exchangeRates);
+  } = useSwapFormik(initialAction, swapV2.dexRoute, swapV2.trade, exchangeRates);
 
   const navigate = useNavigate();
   const params = useParams();
