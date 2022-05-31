@@ -7,12 +7,7 @@ import { Optional, Token } from '@shared/types';
 
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
-export interface BalanceToken {
-  balance: Optional<BigNumber>;
-  token: Token;
-}
-
-export const useTokensBalances = (tokens: Optional<Array<Token>>): Array<BalanceToken> => {
+export const useTokensBalancesOnly = (tokens: Optional<Array<Token>>): Array<Nullable<BigNumber>> => {
   const tokensBalancesStore = useTokensBalancesStore();
   const [wrapTokens, setWrapTokens] = useState<Nullable<Array<Token>>>(null);
 
@@ -42,14 +37,7 @@ export const useTokensBalances = (tokens: Optional<Array<Token>>): Array<Balance
   }, [wrapTokens, tokensBalancesStore]);
 
   if (isExist(wrapTokens)) {
-    return wrapTokens.map(token => {
-      const balance = tokensBalancesStore.getBalance(token);
-
-      return {
-        balance,
-        token
-      };
-    });
+    return wrapTokens.map(token => tokensBalancesStore.getBalance(token) ?? null);
   }
 
   return [];

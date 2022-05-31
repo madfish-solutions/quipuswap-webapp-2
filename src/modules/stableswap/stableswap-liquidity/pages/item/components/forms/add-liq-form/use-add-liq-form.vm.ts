@@ -17,7 +17,7 @@ import {
   useAddStableswapLiquidity,
   useStableswapItemFormStore,
   useStableswapItemStore,
-  useTokensBalancesArray
+  useStableswapTokensBalances
 } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
@@ -33,7 +33,7 @@ export const useAddLiqFormViewModel = () => {
 
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
-  const userBalances = useTokensBalancesArray(item);
+  const userBalances = useStableswapTokensBalances(item);
 
   const validationSchema = useAddLiqFormValidation(userBalances, formStore.isBalancedProportion);
 

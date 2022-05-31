@@ -14,7 +14,7 @@ import {
   saveBigNumber,
   toFixed
 } from '@shared/helpers';
-import { useTokenBalance, useTokensBalances } from '@shared/hooks';
+import { useTokenBalance, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
@@ -45,7 +45,7 @@ const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedPropo
   const lpBalance = useTokenBalance(item?.lpToken);
 
   const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;
-  const balanceTokens = useTokensBalances(tokens);
+  const balanceTokens = useTokensWithBalances(tokens);
 
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
