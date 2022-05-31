@@ -13,11 +13,10 @@
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
-    "eject": "react-scripts eject",
-    "postinstall": "husky install"
+    "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^3.1.0",
+    "@airgap/beacon-sdk": "3.0.0",
     "@craco/craco": "^6.4.3",
     "@quipuswap/sdk": "^3.0.0",
     "@taquito/beacon-wallet": "^12.1.1",
