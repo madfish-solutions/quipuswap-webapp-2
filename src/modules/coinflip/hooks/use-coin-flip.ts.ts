@@ -1,4 +1,3 @@
-import { withApproveApi } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage } from '@modules/coinflip/api/types';
@@ -10,6 +9,8 @@ import { getContract } from '@shared/dapp';
 import { isNull, isTezosToken, toDecimals } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
+import { betTokens } from '../api';
+
 export const useCoinFlip = () => {
   const { tezos } = useRootStore();
   const { game, token } = useCoinflipStore();
@@ -18,7 +19,7 @@ export const useCoinFlip = () => {
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
 
-  const coinFlip = async () => {
+  const handleCoinFlip = async () => {
     if (isNull(input) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
       return null;
     }
@@ -32,17 +33,13 @@ export const useCoinFlip = () => {
 
       const fee = isTezosToken(token) ? network_fee.plus(formattedAmount) : network_fee;
 
-      const userBet = contract.methods
-        .bet(tokenAsset, formattedAmount, coinSide)
-        .toTransferParams({ amount: Number(fee), mutez: true });
+      const operation = await betTokens(tezos, token, accountPkh, tokenAsset, formattedAmount, coinSide, fee);
 
-      const op = await withApproveApi(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, formattedAmount, [userBet]);
-
-      await confirmOperation(op.opHash, { message: 'Bet succesfull!' });
+      await confirmOperation(operation.opHash, { message: 'Bet succesfull!' });
     } catch (error) {
       showErrorToast(error as Error);
     }
   };
 
-  return { coinFlip };
+  return { handleCoinFlip };
 };

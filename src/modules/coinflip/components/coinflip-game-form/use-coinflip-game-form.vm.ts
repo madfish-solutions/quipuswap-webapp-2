@@ -30,7 +30,7 @@ export const useCoinflipGameFormViewModel = (
   onAmountInputChange: (amountInput: string) => void,
   onCoinSideSelect: (coinSide: CoinSide) => void
 ) => {
-  const { coinFlip } = useCoinFlip();
+  const { handleCoinFlip } = useCoinFlip();
   const formik = useFormik({
     initialValues: {
       [FormFields.coinSide]: '',
@@ -84,6 +84,6 @@ export const useCoinflipGameFormViewModel = (
     coinSideError,
     handleInputAmountChange,
     handleCoinSideSelect,
-    coinFlip
+    handleCoinFlip
   };
 };

@@ -1,3 +1,3 @@
 export * from './stores';
 export * from './use-coinflip-general-stats';
-export * from './use-coinflip';
+export * from './use-coin-flip.ts';
