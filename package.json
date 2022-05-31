@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3000 craco start",
@@ -99,7 +99,8 @@
     "husky": "^8.0.1",
     "prettier": "^2.6.2",
     "sass": "^1.52.1",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "jest": "^28.1.0"
   },
   "eslintConfig": {
     "extends": [

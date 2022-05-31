@@ -9,6 +9,7 @@ export function saveBigNumber(candidate: BigNumber.Value, replacer: null): Nulla
 export function saveBigNumber(candidate: BigNumber.Value, replacer: BigNumber): BigNumber;
 export function saveBigNumber(candidate: BigNumber.Value, replacer: undefined): Undefined<BigNumber>;
 export function saveBigNumber(candidate: BigNumber.Value, replacer: null | undefined): Optional<BigNumber>;
+export function saveBigNumber(candidate: Optional<BigNumber.Value>, replacer: null): Nullable<BigNumber>;
 export function saveBigNumber(candidate: Optional<BigNumber.Value>, replacer: null | undefined): Optional<BigNumber>;
 export function saveBigNumber(candidate: Optional<BigNumber.Value>, replacer: BigNumber): BigNumber;
 export function saveBigNumber(candidate: Optional<BigNumber.Value>, replacer: Optional<BigNumber>) {

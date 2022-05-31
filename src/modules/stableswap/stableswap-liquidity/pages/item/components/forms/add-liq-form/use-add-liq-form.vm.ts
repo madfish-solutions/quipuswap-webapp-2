@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -17,6 +16,7 @@ import {
 import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { StableswapItem } from '../../../../../../types';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
+import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 
 const DEFAULT_LENGTH = 0;
 
