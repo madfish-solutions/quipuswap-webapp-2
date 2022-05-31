@@ -22,5 +22,7 @@ export const liquidity = {
   'Liquidity Page': 'Liquidity Page',
   "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.":
     "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.",
-  Liquidity: 'Liquidity'
+  Liquidity: 'Liquidity',
+  invested: 'invested',
+  received: 'received'
 } as const;

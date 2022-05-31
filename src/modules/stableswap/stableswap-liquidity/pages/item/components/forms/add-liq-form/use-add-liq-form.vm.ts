@@ -4,19 +4,18 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isNull, isTokenEqual, hasFormikError, toFixed } from '@shared/helpers';
-import { BalanceToken, useTokensBalances } from '@shared/hooks';
-import { Token } from '@shared/types';
+import { isNull, hasFormikError, toFixed, findBalanceToken, placeDecimals, numberAsString } from '@shared/helpers';
+import { useTokensBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
   calculateLpValue,
   calculateOutputWithToken,
+  extractTokens,
   getFormikInitialValues,
-  getInputSlugByIndex,
-  prepareInputAmountAsBN
+  getInputSlugByIndex
 } from '../../../../../../helpers';
-import { useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -25,11 +24,9 @@ interface AddLiqFormValues {
   [key: string]: string;
 }
 
-const findBalanceToken = (balances: Array<BalanceToken>, token: Token) =>
-  balances.find(value => isTokenEqual(value.token, token));
-
 export const useAddLiqFormViewModel = () => {
   const { t } = useTranslation();
+  const { addStableswapLiquidity } = useAddStableswapLiquidity();
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const item = stableswapItemStore.item;
@@ -46,7 +43,7 @@ export const useAddLiqFormViewModel = () => {
 
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
     actions.setSubmitting(true);
-
+    await addStableswapLiquidity();
     formik.resetForm();
     actions.setSubmitting(false);
   };
@@ -68,37 +65,45 @@ export const useAddLiqFormViewModel = () => {
   const label = t('common|Input');
   const tooltip = t('common|Success');
 
-  const { tokensInfo, totalLpSupply } = item;
+  const { tokensInfo, totalLpSupply, lpToken } = item;
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
 
   const isSubmitting = formik.isSubmitting;
   const disabled = isSubmitting || hasFormikError(formik.errors);
 
-  const handleInputChange = (reserves: BigNumber, index: number) => (inputAmount: string) => {
-    formikValues[getInputSlugByIndex(index)] = inputAmount;
-    const inputAmountBN = prepareInputAmountAsBN(inputAmount);
-    const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+  const handleInputChange = (reserves: BigNumber, index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    formikValues[LP_INPUT_KEY] = toFixed(lpValue);
+    return (inputAmount: string) => {
+      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const inputAmountBN = new BigNumber(fixedValue);
+      formikValues[getInputSlugByIndex(index)] = realValue;
 
-    const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve }, indexOfCalculatedInput) => {
-      if (index === indexOfCalculatedInput) {
-        return inputAmountBN;
-      }
+      const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+      const fixedLpValue = lpValue && placeDecimals(lpValue, lpToken);
 
-      return calculateOutputWithToken(lpValue, totalLpSupply, calculatedReserve);
-    });
+      formikValues[LP_INPUT_KEY] = toFixed(fixedLpValue);
 
-    calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-      if (indexOfCalculatedInput !== index) {
-        formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
-      }
-    });
+      const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
+        if (index === indexOfCalculatedInput) {
+          return inputAmountBN;
+        }
 
-    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+        return calculateOutputWithToken(fixedLpValue, totalLpSupply, calculatedReserve, token);
+      });
 
-    formik.setValues(formikValues);
+      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
+        if (indexOfCalculatedInput !== index) {
+          formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
+        }
+      });
+
+      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
+
+      formik.setValues(formikValues);
+    };
   };
 
   const data = tokensInfo.map(({ reserves, token }, index) => {
@@ -108,7 +113,7 @@ export const useAddLiqFormViewModel = () => {
       index,
       label,
       formik,
-      balance: balance,
+      balance,
       onInputChange: handleInputChange(reserves, index)
     };
   });

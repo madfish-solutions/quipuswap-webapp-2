@@ -9,6 +9,7 @@ import { getTokenSymbol } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
 
@@ -31,6 +32,7 @@ export const SlippageInfo: FC<Props> = observer(({ liquidityType, tokenAInput, t
   const {
     settings: { liquiditySlippage }
   } = useSettingsStore();
+  const { t } = useTranslation();
 
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
   const tokenBBN = new BigNumber(tokenBInput ? tokenBInput : DEFAULT_INVESTED_VALUE);
@@ -38,7 +40,8 @@ export const SlippageInfo: FC<Props> = observer(({ liquidityType, tokenAInput, t
   const maxInvestedOrReceivedA = increaseOrDecreaseBySlippage(liquidityType, tokenABN, liquiditySlippage);
   const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, liquiditySlippage);
 
-  const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
+  const investedOrReceivedText =
+    liquidityType === LiquiditySlippageType.ADD ? t('liquidity|invested') : t('liquidity|received');
   const DEFAULT_STABLE_TOKEN = DEFAULT_TOKEN;
 
   return (

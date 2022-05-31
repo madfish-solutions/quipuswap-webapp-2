@@ -24,7 +24,7 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, TokenMetadata, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { useSwapCalculationsV2 } from './hooks/use-swap-calculations-v2';
+import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
 import { useSwapLimits } from './providers/swap-limits-provider';
@@ -43,11 +43,12 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) => {
   const exchangeRates = useNewExchangeRates();
 
-  const swapV2 = useSwapCalculationsV2();
+  const swap = useSwapCalculations();
+  const { dexRoute, trade } = swap;
 
   const {
     errors,
-    values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient },
+    values,
     isSubmitting,
     validateField,
     setValues,
@@ -55,7 +56,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, swapV2.dexRoute, swapV2.trade, exchangeRates);
+  } = useSwapFormik(initialAction, dexRoute, trade, exchangeRates);
+  const formik = values;
 
   const navigate = useNavigate();
   const params = useParams();
@@ -67,8 +69,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   } = useSettingsStore();
 
   const getRedirectionUrl = useCallback(
-    (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, action),
-    [action]
+    (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, formik.action),
+    [formik.action]
   );
   const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
 
@@ -77,50 +79,50 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     { id: SwapTabAction.SEND, label: t('swap|Send') }
   ];
 
-  const prevCalculatedInputAmountRef = useRef(swapV2.inputAmount);
-  const prevCalculatedOutputAmountRef = useRef(swapV2.outputAmount);
+  const prevCalculatedInputAmountRef = useRef(swap.inputAmount);
+  const prevCalculatedOutputAmountRef = useRef(swap.outputAmount);
 
   useEffect(() => {
-    if (!amountsAreEqual(swapV2.inputAmount, prevCalculatedInputAmountRef.current)) {
-      setFieldValue(SwapField.INPUT_AMOUNT, swapV2.inputAmount).then(() => {
+    if (!amountsAreEqual(swap.inputAmount, prevCalculatedInputAmountRef.current)) {
+      setFieldValue(SwapField.INPUT_AMOUNT, swap.inputAmount).then(() => {
         validateField(SwapField.INPUT_AMOUNT);
-        if (swapV2.inputAmount) {
+        if (swap.inputAmount) {
           setFieldTouched(SwapField.INPUT_AMOUNT, true);
         }
       });
-      prevCalculatedInputAmountRef.current = swapV2.inputAmount;
+      prevCalculatedInputAmountRef.current = swap.inputAmount;
     }
-    if (!amountsAreEqual(swapV2.outputAmount, prevCalculatedOutputAmountRef.current)) {
-      setFieldValue(SwapField.OUTPUT_AMOUNT, swapV2.outputAmount);
-      prevCalculatedOutputAmountRef.current = swapV2.outputAmount;
+    if (!amountsAreEqual(swap.outputAmount, prevCalculatedOutputAmountRef.current)) {
+      setFieldValue(SwapField.OUTPUT_AMOUNT, swap.outputAmount);
+      prevCalculatedOutputAmountRef.current = swap.outputAmount;
     }
-  }, [swapV2, inputAmount, outputAmount, setFieldValue, setFieldTouched, validateField]);
+  }, [swap, formik, setFieldValue, setFieldTouched, validateField]);
 
   const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
-    inputToken,
-    outputToken,
-    inputAmount,
-    outputAmount,
+    inputToken: formik.inputToken,
+    outputToken: formik.outputToken,
+    inputAmount: formik.inputAmount,
+    outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
-    dexRoute: swapV2.dexRoute,
-    recipient
+    dexRoute: swap.dexRoute,
+    recipient: formik.recipient
   });
 
   const onTokensSelected = useCallback(
     (_inputToken: Token, _outputToken: Token) => {
       updateSwapLimits(_inputToken, _outputToken);
-      const newRoute = `/${action}/${getTokenPairSlug(_inputToken, _outputToken)}`;
+      const newRoute = `/${formik.action}/${getTokenPairSlug(_inputToken, _outputToken)}`;
 
       navigate(newRoute);
     },
-    [action, navigate, updateSwapLimits]
+    [formik.action, navigate, updateSwapLimits]
   );
 
   const { balances, updateBalance } = useBalances();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
-  const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
+  const { label: currentTabLabel } = TabsContent.find(({ id }) => id === formik.action)!;
 
   const { dexGraph, dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
   const prevDexGraphRef = useRef<DexGraph>();
@@ -133,7 +135,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const updateSelectedTokensBalances = useCallback(() => {
     Promise.all(
-      [inputToken, outputToken].map(async token => {
+      [formik.inputToken, formik.outputToken].map(async token => {
         if (token) {
           try {
             await updateBalance(token);
@@ -144,7 +146,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
         }
       })
     );
-  }, [inputToken, outputToken, updateBalance]);
+  }, [formik.inputToken, formik.outputToken, updateBalance]);
 
   const refreshDexPoolsIfNecessary = () => {
     if (dataIsStale && !dexPoolsLoading) {
@@ -179,23 +181,24 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
         updateBalance(newOutputToken).catch(console.error);
       }
       setValues(prevValues => ({ ...prevValues, ...valuesToChange }));
-      swapV2.onSwapPairChange({
-        inputToken: valuesToChange[SwapField.INPUT_TOKEN] ?? inputToken,
-        outputToken: valuesToChange[SwapField.OUTPUT_TOKEN] ?? outputToken
+      swap.onSwapPairChange({
+        inputToken: valuesToChange[SwapField.INPUT_TOKEN] ?? formik.inputToken,
+        outputToken: valuesToChange[SwapField.OUTPUT_TOKEN] ?? formik.outputToken
       });
     }
-  }, [initialFrom, initialTo, setValues, tokens, swapV2, inputToken, outputToken, updateBalance]);
+  }, [initialFrom, initialTo, setValues, tokens, swap, formik.inputToken, formik.outputToken, updateBalance]);
 
   useEffect(() => {
-    if (inputToken && outputToken) {
-      const inputTokenSlug = getTokenSlug(inputToken);
-      const outputTokenSlug = getTokenSlug(outputToken);
+    if (formik.inputToken && formik.outputToken) {
+      const inputTokenSlug = getTokenSlug(formik.inputToken);
+      const outputTokenSlug = getTokenSlug(formik.outputToken);
       const newInputToken = tokens.find(token => inputTokenSlug === getTokenSlug(token));
       const newOutputToken = tokens.find(token => outputTokenSlug === getTokenSlug(token));
       if (
         newInputToken &&
         newOutputToken &&
-        (!tokensMetadataIsSame(inputToken, newInputToken) || !tokensMetadataIsSame(outputToken, newOutputToken))
+        (!tokensMetadataIsSame(formik.inputToken, newInputToken) ||
+          !tokensMetadataIsSame(formik.outputToken, newOutputToken))
       ) {
         setValues(prevValues => ({
           ...prevValues,
@@ -204,17 +207,17 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
         }));
         // eslint-disable-next-line no-console
         Promise.all([updateBalance(newInputToken), updateBalance(newOutputToken)]).catch(console.error);
-        swapV2.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+        swap.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
       }
     }
-  }, [setValues, inputToken, outputToken, tokens, swapV2, updateBalance]);
+  }, [setValues, formik.inputToken, formik.outputToken, tokens, swap, updateBalance]);
 
   useEffect(() => {
-    if (prevDexGraphRef.current !== dexGraph && inputToken && outputToken) {
-      updateSwapLimits(inputToken, outputToken);
+    if (prevDexGraphRef.current !== dexGraph && formik.inputToken && formik.outputToken) {
+      updateSwapLimits(formik.inputToken, formik.outputToken);
     }
     prevDexGraphRef.current = dexGraph;
-  }, [dexGraph, inputToken, outputToken, updateSwapLimits]);
+  }, [dexGraph, formik.inputToken, formik.outputToken, updateSwapLimits]);
 
   useOnBlock(tezos, updateSelectedTokensBalances);
 
@@ -222,8 +225,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched(SwapField.INPUT_AMOUNT, false);
     setFieldTouched(SwapField.OUTPUT_AMOUNT, false);
     setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
-    swapV2.resetCalculations();
-  }, [swapV2, setFieldTouched, setValues]);
+    swap.resetCalculations();
+  }, [swap, setFieldTouched, setValues]);
 
   const handleSubmit = async () => {
     await submitForm();
@@ -243,32 +246,32 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
       navigate(
         makeSwapOrSendRedirectionUrl(
           {
-            from: inputToken && getTokenSlug(inputToken),
-            to: outputToken && getTokenSlug(outputToken)
+            from: formik.inputToken && getTokenSlug(formik.inputToken),
+            to: formik.outputToken && getTokenSlug(formik.outputToken)
           },
           valuesToSet.action
         )
       );
     },
-    [setValues, navigate, inputToken, outputToken]
+    [setValues, navigate, formik.inputToken, formik.outputToken]
   );
 
   const blackListedTokens = useMemo(
-    () => [inputToken, outputToken].filter((x): x is Token => !!x),
-    [inputToken, outputToken]
+    () => [formik.inputToken, formik.outputToken].filter((x): x is Token => !!x),
+    [formik.inputToken, formik.outputToken]
   );
 
   const handleInputAmountChange = (newAmount: Undefined<BigNumber>) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.INPUT_AMOUNT, true);
     setFieldValue(SwapField.INPUT_AMOUNT, newAmount, true);
-    swapV2.onInputAmountChange(newAmount ?? null);
+    swap.onInputAmountChange(newAmount ?? null);
   };
   const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
     setFieldValue(SwapField.OUTPUT_AMOUNT, newAmount, true);
-    swapV2.onOutputAmountChange(newAmount ?? null);
+    swap.onOutputAmountChange(newAmount ?? null);
   };
 
   const handleSomeTokenChange = (
@@ -281,7 +284,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     const valuesToSet: Partial<SwapFormValues> = {
       [fieldName]: newToken
     };
-    const amount = amountFieldName === SwapField.INPUT_AMOUNT ? inputAmount : outputAmount;
+    const amount = amountFieldName === SwapField.INPUT_AMOUNT ? formik.inputAmount : formik.outputAmount;
     if (newToken && amount) {
       setFieldTouched(amountFieldName, true);
       valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
@@ -290,9 +293,9 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     if (newToken) {
       updateBalance(newToken);
     }
-    const newInputToken = fieldName === SwapField.INPUT_TOKEN ? newToken : inputToken;
-    const newOutputToken = fieldName === SwapField.OUTPUT_TOKEN ? newToken : outputToken;
-    swapV2.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+    const newInputToken = fieldName === SwapField.INPUT_TOKEN ? newToken : formik.inputToken;
+    const newOutputToken = fieldName === SwapField.OUTPUT_TOKEN ? newToken : formik.outputToken;
+    swap.onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
     if (newInputToken && newOutputToken) {
       onTokensSelected(newInputToken, newOutputToken);
     }
@@ -308,14 +311,14 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     refreshDexPoolsIfNecessary();
     setValues(prevState => ({
       ...prevState,
-      inputToken: outputToken,
-      outputToken: inputToken,
-      inputAmount: outputAmount
+      inputToken: formik.outputToken,
+      outputToken: formik.inputToken,
+      inputAmount: formik.outputAmount
     }));
-    swapV2.onSwapPairChange({ inputToken: outputToken, outputToken: inputToken });
-    swapV2.onInputAmountChange(outputAmount ?? null);
-    if (inputToken && outputToken) {
-      onTokensSelected(outputToken, inputToken);
+    swap.onSwapPairChange({ inputToken: formik.outputToken, outputToken: formik.inputToken });
+    swap.onInputAmountChange(formik.outputAmount ?? null);
+    if (formik.inputToken && formik.outputToken) {
+      onTokensSelected(formik.outputToken, formik.inputToken);
     }
   };
 
@@ -332,8 +335,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     [handleRecipientChange]
   );
 
-  const inputTokenSlug = inputToken && getTokenSlug(inputToken);
-  const outputTokenSlug = outputToken && getTokenSlug(outputToken);
+  const inputTokenSlug = formik.inputToken && getTokenSlug(formik.inputToken);
+  const outputTokenSlug = formik.outputToken && getTokenSlug(formik.outputToken);
   const inputTokenBalance = getBalanceByTokenSlug(inputTokenSlug, balances);
   const outputTokenBalance = getBalanceByTokenSlug(outputTokenSlug, balances);
 
@@ -351,19 +354,20 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
-  const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
-  const noRouteFound = !swapV2.dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
+  const title = `${t('swap|Swap')} ${getTokensOptionalPairName(formik.inputToken, formik.outputToken)}`;
+  const noRouteFound =
+    !swap.dexRoute && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return {
     accountPkh,
-    action,
+    action: formik.action,
     blackListedTokens,
     buyRate,
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,
-    dexRoute: swapV2.dexRoute,
+    dexRoute: swap.dexRoute,
     handleInputAmountChange,
     handleInputTokenChange,
     handleOutputAmountChange,
@@ -373,19 +377,19 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     handleSubmit,
     handleSwapButtonClick,
     handleTabSwitch,
-    inputAmount,
+    inputAmount: formik.inputAmount,
     inputExchangeRate,
-    inputToken,
+    inputToken: formik.inputToken,
     inputTokenBalance,
     isSubmitting,
     noRouteFound,
-    outputAmount,
+    outputAmount: formik.outputAmount,
     outputExchangeRate,
-    outputToken,
+    outputToken: formik.outputToken,
     outputTokenBalance,
     PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
-    recipient,
+    recipient: formik.recipient,
     refreshDexPools,
     sellRate,
     shouldShowPriceImpactWarning,

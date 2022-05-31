@@ -1,0 +1,56 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.createPool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.poolCreateDescription {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+  margin-bottom: 16px;
+}
+
+.button {
+  max-width: 280px;
+}
+
+.light {
+  &.poolCreateDescription {
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.poolCreateDescription {
+    color: $text-inverse;
+  }
+}
+
+@include media('>tablet') {
+  .createPool {
+    flex-direction: column;
+    height: 128px;
+  }
+
+  .button {
+    max-width: 160px;
+    margin-left: 24px;
+  }
+}
+
+@include media('>Ltablet') {
+  .createPool {
+    flex-direction: row;
+  }
+
+  .poolCreateDescription {
+    margin-bottom: 0;
+  }
+}

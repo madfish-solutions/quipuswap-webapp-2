@@ -94,7 +94,7 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
   return Object.keys(tokens);
 };
 
-export const useSwapCalculationsV2 = () => {
+export const useSwapCalculations = () => {
   const allRoutePairs = useAllRoutePairs(TEZOS_DEXES_API_URL);
   const filteredRoutePairs = useMemo(
     () => allRoutePairs.data.filter(routePair => KNOWN_DEX_TYPES.includes(routePair.dexType)),
