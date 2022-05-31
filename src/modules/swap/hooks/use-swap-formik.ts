@@ -69,8 +69,6 @@ export const useSwapFormik = (
     };
 
     try {
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify([dexRoute, trade], undefined, 2));
       amplitudeService.logEvent('SWAP_SEND', logData);
       const tradeTransferParams = await getTradeOpParams(trade!, accountPkh, tezos);
 
