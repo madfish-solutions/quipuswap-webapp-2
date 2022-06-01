@@ -179,7 +179,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
       currentToken = shouldSellToken1 ? token2 : token1;
     }
   );
-  if (ttdexSwapStepsParams.length > 0 && ttDexContract) {
+  if (!isEmptyArray(ttdexSwapStepsParams) && ttDexContract) {
     swapsParams.push(
       ttDexContract.methods
         .swap(
