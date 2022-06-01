@@ -8,17 +8,18 @@ import { NumberAsStringSchema } from '@shared/validators';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
-export const useAddLiqFormValidation = (userBalance: Array<Nullable<BigNumber>>) => {
+export const useAddLiqFormValidation = (userBalance: Array<Nullable<BigNumber>>, isBalancedProportion: boolean) => {
   return useMemo(() => {
     const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(operationAmountSchema);
 
-    const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => [
-      getInputSlugByIndex(index),
-      item.required('Value is required')
-    ]);
+    const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
+      const fixedItem = isBalancedProportion ? item.required('Value is required') : item;
+
+      return [getInputSlugByIndex(index), fixedItem];
+    });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape(shape);
-  }, [userBalance]);
+  }, [isBalancedProportion, userBalance]);
 };

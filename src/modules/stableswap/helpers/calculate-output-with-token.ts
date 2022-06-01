@@ -4,16 +4,16 @@ import { isNull } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 export const calculateOutputWithToken = (
-  lpValue: Nullable<BigNumber>,
+  shares: Nullable<BigNumber>,
   totalLpSupply: BigNumber,
   outReserve: BigNumber,
   token: Token
 ) => {
-  if (isNull(lpValue)) {
+  if (isNull(shares)) {
     return null;
   }
 
-  return lpValue
+  return shares
     .multipliedBy(outReserve)
     .dividedBy(totalLpSupply)
     .decimalPlaces(token.metadata.decimals, BigNumber.ROUND_DOWN);
