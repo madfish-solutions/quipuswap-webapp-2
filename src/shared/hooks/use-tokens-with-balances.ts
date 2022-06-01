@@ -12,7 +12,7 @@ export interface BalanceToken {
   token: Token;
 }
 
-export const useTokensBalances = (tokens: Optional<Array<Token>>): Array<BalanceToken> => {
+export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<BalanceToken> => {
   const tokensBalancesStore = useTokensBalancesStore();
   const [wrapTokens, setWrapTokens] = useState<Nullable<Array<Token>>>(null);
 

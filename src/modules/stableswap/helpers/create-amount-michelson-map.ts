@@ -5,10 +5,10 @@ import { LP_INPUT_KEY } from '@config/constants';
 import { isEmptyString, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { getIndexByInputSlug } from '../../../../../../helpers';
-import { RemoveLiqFormValues } from './use-remove-liq-form.vm';
+import { RemoveLiqFormValues } from '../stableswap-liquidity/pages/item/components';
+import { getIndexByInputSlug } from './get-input-slug-by-index';
 
-export const createAmountsMichelsonMap = (
+export const createAmountsMichelsonMapFormikValues = (
   values: RemoveLiqFormValues,
   tokens: Array<Token>,
   index: number,
@@ -32,3 +32,10 @@ export const createAmountsMichelsonMap = (
 
   return map;
 };
+
+export const createAmountsMichelsonMap = (values: Array<BigNumber>) =>
+  values.reduce((acc, value, index) => {
+    acc.set(new BigNumber(index), value);
+
+    return acc;
+  }, new MichelsonMap<BigNumber, BigNumber>());

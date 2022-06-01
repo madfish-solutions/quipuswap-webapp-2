@@ -1,7 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { DEFAULT_COINFLIP_CONTRACT, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { isNull, fromDecimals } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
@@ -24,8 +25,8 @@ const DEFAULT_TOKEN_TO_PLAY = TokenToPlay.Quipu;
 
 // TODO: Rename to obverse / reverse
 export enum CoinSide {
-  A = 'A',
-  B = 'B'
+  A = 'head',
+  B = 'tail'
 }
 
 export interface CoinflipGame {
@@ -52,7 +53,7 @@ export class CoinflipStore {
   readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
     DEFAULT_GENERAL_STATS,
     async () =>
-      await getCoinflipGeneralStatsApi(this.rootStore.tezos, DEFAULT_COINFLIP_CONTRACT, this.token.contractAddress),
+      await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token.contractAddress),
     generalStatsMapping
   );
 
