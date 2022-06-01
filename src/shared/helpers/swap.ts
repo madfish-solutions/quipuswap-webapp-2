@@ -6,6 +6,7 @@ import { DEFAULT_DEADLINE_MINS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { DexPair, Standard, TokenId } from '@shared/types';
 
+import { isEmptyArray } from './arrays';
 import { getBlockchainTimestamp } from './blockchain';
 import { getTokenOutput, isTokenToTezosDex, isTokenToTokenDex } from './dex';
 import {
