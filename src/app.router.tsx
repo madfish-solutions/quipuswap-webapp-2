@@ -8,7 +8,7 @@ import { FarmingPage } from '@modules/farming';
 import { HomePage } from '@modules/home';
 import { LiquidityPage } from '@modules/liquidity';
 import { PrivacyPolicyPage } from '@modules/privacy-policy';
-import { StableswapPage } from '@modules/stableswap/stableswap.page';
+import { StableswapPage } from '@modules/stableswap';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
 import { TermsOfServicePage } from '@modules/terms-of-service';
 import { VotingPage } from '@modules/voting';

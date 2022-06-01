@@ -1,61 +1,34 @@
 import { FC } from 'react';
 
-import { PageTitle, TestnetAlert, StateWrapper, DashboardStatsInfo, DashboardCard } from '@shared/components';
+import { observer } from 'mobx-react-lite';
+
+import { PageTitle, TestnetAlert, StateWrapper } from '@shared/components';
+import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
 import styles from './coinflip.page.module.scss';
-import { CoinflipGame, CoinflipTokenSelector } from './components';
-import { CoinflipRewardInfo } from './components/coinflip-reward-info';
-
+import { CoinflipGame, CoinflipTokenSelector, CoinflipDashboardStatsInfo } from './components';
 // TODO: Game title localization
+import { useCoinflipGeneralStats } from './hooks';
 
-export const CoinflipPage: FC = () => {
+export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
+  const { t } = useTranslation();
+  const { isLoading } = useCoinflipGeneralStats();
 
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
-      <PageTitle>Game</PageTitle>
-      <CoinflipRewardInfo />
+      <PageTitle>{t('coinflip|Game')}</PageTitle>
 
       <CoinflipTokenSelector />
 
-      <DashboardStatsInfo
-        header="Game Info"
-        cards={[
-          <DashboardCard
-            size="large"
-            volume="1000"
-            label="Bank"
-            currency="QUIPU"
-            hideTooltip
-            className={styles.dashboardCard}
-          />,
-          <DashboardCard
-            size="large"
-            volume="1.99"
-            label="Payout coefficient"
-            currency="X"
-            hideTooltip
-            className={styles.dashboardCard}
-          />,
-          <DashboardCard
-            size="large"
-            volume="1000"
-            label="Total wins"
-            currency="QUIPU"
-            hideTooltip
-            className={styles.dashboardCard}
-          />,
-          <DashboardCard size="large" volume="123" label="Games count" hideTooltip className={styles.dashboardCard} />
-        ]}
-        countOfRightElements={1}
-      />
+      <CoinflipDashboardStatsInfo isLoading={isLoading} />
 
       <div className={styles.game}>
         <CoinflipGame />
       </div>
     </StateWrapper>
   );
-};
+});

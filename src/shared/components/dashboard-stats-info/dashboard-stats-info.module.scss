@@ -8,7 +8,7 @@
 }
 
 .root {
-  flex-direction: column;
+  flex-wrap: wrap;
 
   .light {
     border-top: .5px solid $ui-03;
@@ -40,6 +40,7 @@
 }
 
 .card {
+  width: 100%;
   flex-basis: 100%;
   flex-shrink: 0;
   white-space: nowrap;
@@ -54,11 +55,6 @@
 }
 
 @include media(">Lphone") {
-  .root {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
   .leftCard {
     flex-basis: 50%;
   }

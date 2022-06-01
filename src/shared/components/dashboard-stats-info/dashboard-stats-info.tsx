@@ -15,6 +15,8 @@ interface Props {
   header?: string;
   cards: ReactElement[];
   countOfRightElements?: number;
+  contentClassName?: string;
+  className?: string;
 }
 
 const modeClass = {
@@ -22,11 +24,17 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZERO, header }) => {
+export const DashboardStatsInfo: FC<Props> = ({
+  cards,
+  countOfRightElements = ZERO,
+  header,
+  contentClassName,
+  className
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { isRightElement, isFlexEndRightElement, computedClassName } = useDashboardStatsInfoViewModel();
 
-  const contentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
+  const rootContentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
   const cardClassName = cx(styles.card, modeClass[colorThemeMode]);
 
   const elementsFlexBasis50 = countOfRightElements * TWO;
@@ -40,8 +48,8 @@ export const DashboardStatsInfo: FC<Props> = ({ cards, countOfRightElements = ZE
             }
           : undefined
       }
-      contentClassName={contentClassName}
-      className={styles.rootCard}
+      contentClassName={cx(rootContentClassName, contentClassName)}
+      className={cx(styles.rootCard, className)}
     >
       {cards.map((card: ReactElement, index: number) => (
         <div

@@ -6,10 +6,9 @@ import { useVotingDex, useVotingRouting } from '@modules/voting/helpers/voting.p
 import { useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getDollarEquivalent } from '@shared/helpers';
-import { useToasts } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { VoteFormValues } from '@shared/types';
-import { useConfirmOperation } from '@shared/utils';
+import { useToasts, useConfirmOperation } from '@shared/utils';
 
 const INDEX_OF_TOKEN_PAIR = 3;
 

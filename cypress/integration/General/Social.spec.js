@@ -4,7 +4,6 @@ describe('Social media links', () => {
   it('Should_RedirectToCorrectLink_When_ClickingOnSocial', () => {
     // Go to the home page
     cy.visit('/');
-
     // Find social media links and clicking on it
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="socialButton-Twitter"]').should(

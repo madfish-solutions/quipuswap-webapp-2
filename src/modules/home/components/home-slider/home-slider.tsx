@@ -1,9 +1,10 @@
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 
 import cx from 'classnames';
 import ReactSlider from 'react-slick';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { CFC } from '@shared/types';
 
 import styles from './home-slider.module.scss';
 
@@ -63,7 +64,7 @@ interface Props {
   className?: string;
 }
 
-export const HomeSlider: FC<Props> = ({ className, children }) => {
+export const HomeSlider: CFC<Props> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);

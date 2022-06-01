@@ -12,6 +12,7 @@ import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   Button,
   Card,
+  ComplexError,
   ComplexRecipient,
   ConnectWalletButton,
   PageTitle,
@@ -21,8 +22,6 @@ import {
   Tabs,
   TestnetAlert
 } from '@shared/components';
-import { ComplexError } from '@shared/components/ComplexInput/ComplexError';
-import complexInputStyles from '@shared/components/ComplexInput/ComplexInput.module.scss';
 import { NewTokenSelect } from '@shared/components/ComplexInput/new-token-select';
 import {
   amountsAreEqual,
@@ -460,16 +459,17 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
               error={touchedFieldsErrors.recipient}
             />
           )}
-          <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
-            <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />
-          </div>
-          <div className={cx({ [complexInputStyles.error]: shouldShowPriceImpactWarning })}>
+
+          {noRouteFound && <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />}
+
+          {shouldShowPriceImpactWarning && (
             <ComplexError
               error={t('swap|priceImpactWarning', {
                 priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
               })}
             />
-          </div>
+          )}
+
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
           {accountPkh && dataIsStale && !isSubmitting && (
             <Button

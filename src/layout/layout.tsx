@@ -1,11 +1,10 @@
-import { FC } from 'react';
-
 import cx from 'classnames';
 
 import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { Sidebar, Header, AmplitudeSubscription } from '@shared/components';
 import { CookiesNotification } from '@shared/components/cookie-notification';
 import { AccountModal, DonationModal, SettingsModal, WalletModal } from '@shared/modals';
+import { CFC } from '@shared/types';
 import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
 import styles from './layout.module.scss';
@@ -18,7 +17,7 @@ interface LayoutProps {
   className?: string;
 }
 
-export const Layout: FC<LayoutProps> = ({ title, description, image, className, children }) => {
+export const Layout: CFC<LayoutProps> = ({ title, description, image, className, children }) => {
   const { isComponentDidMount, isDarkTheme } = useLayoutViewModel();
 
   return (
@@ -41,7 +40,6 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
             <DonationModal />
             <WalletModal />
             <AccountModal />
-            <DonationModal />
             <AmplitudeSubscription />
             <SettingsModal />
           </ConfirmationModalProvider>

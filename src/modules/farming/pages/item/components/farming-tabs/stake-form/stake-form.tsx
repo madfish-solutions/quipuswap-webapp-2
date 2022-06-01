@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { isNull } from '@shared/helpers';
+import { isExist, isNull } from '@shared/helpers';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -21,7 +21,6 @@ export const StakeForm: FC = observer(() => {
     userTokenBalance,
     inputAmountError,
     farmingItem,
-    stakedTokenDecimals,
     bakerError,
     farmStatusError,
     disabled,
@@ -35,6 +34,8 @@ export const StakeForm: FC = observer(() => {
     return null;
   }
 
+  const tokens = [farmingItem.tokenA, farmingItem.tokenB].filter(isExist);
+
   return (
     <form onSubmit={handleSubmit}>
       <TokenInput
@@ -42,10 +43,8 @@ export const StakeForm: FC = observer(() => {
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakedTokenDecimals}
         error={inputAmountError}
-        tokenA={farmingItem.tokenA}
-        tokenB={farmingItem.tokenB}
+        tokens={tokens}
         onInputChange={handleInputAmountChange}
       />
       {shouldShowBakerInput && (

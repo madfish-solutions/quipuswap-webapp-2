@@ -1,6 +1,5 @@
-import { FC } from 'react';
-
 import { CardCell, Tooltip } from '@shared/components';
+import { CFC } from '@shared/types';
 
 interface Props {
   cellName: string;
@@ -9,7 +8,7 @@ interface Props {
   cardCellClassName: string;
 }
 
-export const ListItemCardCell: FC<Props> = ({
+export const ListItemCardCell: CFC<Props> = ({
   cellName,
   tooltip,
   cellNameClassName,

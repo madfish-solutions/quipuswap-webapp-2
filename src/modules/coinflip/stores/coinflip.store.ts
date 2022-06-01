@@ -1,14 +1,18 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { COIN_FLIP_COEFFICIENT } from '@config/enviroment';
+import { DEFAULT_COINFLIP_CONTRACT, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { isNull } from '@shared/helpers';
+import { isNull, fromDecimals } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
-import { LoadingErrorData, RootStore } from '@shared/store';
+import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
-import { getGameUserInfoApi } from '../api';
+import { getCoinflipGeneralStatsApi } from '../api';
+import { getGameUserInfoApi } from '../api/get-games-user-info.api';
+import { GeneralStatsInterface } from '../api/types';
+import { DashboardGeneralStats } from '../interfaces';
+import { DEFAULT_GENERAL_STATS, generalStatsMapping } from '../mapping';
 import { GameUserInfo } from '../types';
 
 export enum TokenToPlay {
@@ -45,6 +49,13 @@ export class CoinflipStore {
     noopMap
   );
 
+  readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
+    DEFAULT_GENERAL_STATS,
+    async () =>
+      await getCoinflipGeneralStatsApi(this.rootStore.tezos, DEFAULT_COINFLIP_CONTRACT, this.token.contractAddress),
+    generalStatsMapping
+  );
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
@@ -74,15 +85,15 @@ export class CoinflipStore {
   }
 
   get payout(): Nullable<BigNumber> {
-    return this.game.input ? this.game.input.times(COIN_FLIP_COEFFICIENT) : null;
+    return this.game.input && this.generalStats.data.payoutCoefficient
+      ? this.game.input.times(
+          Number(fromDecimals(this.generalStats.data.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
+        )
+      : null;
   }
 
   get token(): Token {
-    if (this.tokenToPlay === TokenToPlay.Tezos) {
-      return TEZOS_TOKEN;
-    }
-
-    return DEFAULT_TOKEN;
+    return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : DEFAULT_TOKEN;
   }
 
   setToken(token: TokenToPlay) {

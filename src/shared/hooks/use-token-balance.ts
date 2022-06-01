@@ -1,26 +1,25 @@
 import { useEffect } from 'react';
 
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { Token } from '@shared/types';
+import { BigNumber } from 'bignumber.js';
+
+import { Optional, Token } from '@shared/types';
 
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
-export const useTokenBalance = (token: Token) => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+export const useTokenBalance = (token: Optional<Token>): Optional<BigNumber> => {
   const tokensBalancesStore = useTokensBalancesStore();
 
   useEffect(() => {
-    const subscription = tokensBalancesStore.subscribe(token);
+    if (token) {
+      const subscription = tokensBalancesStore.subscribe(token);
 
-    if (tezos && accountPkh) {
-      void tokensBalancesStore.loadTokenBalance(tezos, accountPkh, token);
+      void tokensBalancesStore.loadTokenBalance(token);
+
+      return () => {
+        tokensBalancesStore.unsubscribe(token, subscription);
+      };
     }
-
-    return () => {
-      tokensBalancesStore.unsubscribe(token, subscription);
-    };
-  }, [accountPkh, tezos, token, tokensBalancesStore]);
+  }, [token, tokensBalancesStore]);
 
   return tokensBalancesStore.getBalance(token);
 };

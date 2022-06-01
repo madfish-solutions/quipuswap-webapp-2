@@ -9,6 +9,7 @@ import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 //#region time
 export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
+export const MS_IN_MINUTES = MS_IN_SECOND * SECONDS_IN_MINUTE;
 export const MINUTES_IN_HOUR = 60;
 export const HOURS_IN_DAY = 24;
 export const DAYS_IN_YEAR = 365;
@@ -53,11 +54,11 @@ export const LP_TOKEN_DECIMALS = 6;
 //#region strings
 export const EMPTY_STRING = '';
 export const ZERO_LENGTH = 0;
+export const LP_INPUT_KEY = 'lp-input';
 //#endregion
 
 //#region arrays
 export const FISRT_INDEX = 0;
-export const ONE_ITEM_LENGTH = 1;
 //#endregion
 
 //#region default value for token search
@@ -125,8 +126,9 @@ const FARM_ID_FOR_RESTAKE_MAP: Record<SupportedNetworks, number> = {
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
 
 const PERCENTAGE = 100;
-export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
+export const PERCENTAGE_100 = new BigNumber(PERCENTAGE);
 
 export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
+export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 //#endregion

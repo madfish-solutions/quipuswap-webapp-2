@@ -11,7 +11,7 @@ import { Shevron } from '@shared/svg';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { Button } from '../button';
-import { ComplexError } from './ComplexError';
+import { ComplexError } from '../complex-error';
 import s from './ComplexInput.module.scss';
 
 interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {

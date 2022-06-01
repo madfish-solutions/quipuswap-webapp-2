@@ -3,7 +3,7 @@ import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { fromDecimals, isExist, isNull, MakeInterval } from '@shared/helpers';
+import { fromDecimals, isExist, isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
@@ -45,7 +45,7 @@ export class FarmingItemStore {
 
   currentTab: FarmingFormTabs = FarmingFormTabs.stake;
 
-  inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
+  inputAmount: Nullable<BigNumber> = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
   pendingRewards: Nullable<BigNumber> = null;
@@ -122,8 +122,8 @@ export class FarmingItemStore {
     this.currentTab = tab;
   }
 
-  setInputAmount(inputAmount: BigNumber.Value) {
-    this.inputAmount = new BigNumber(inputAmount);
+  setInputAmount(inputAmount: Nullable<BigNumber.Value>) {
+    this.inputAmount = saveBigNumber(inputAmount, null);
   }
 
   setSelectedBaker(selectedBaker: Nullable<WhitelistedBaker>) {

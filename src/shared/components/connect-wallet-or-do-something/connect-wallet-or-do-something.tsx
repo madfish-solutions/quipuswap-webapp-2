@@ -1,13 +1,12 @@
-import { FC } from 'react';
-
 import cx from 'classnames';
 
 import { useAccountPkh } from '@providers/use-dapp';
+import { CFC } from '@shared/types';
 import CC from '@styles/CommonContainer.module.scss';
 
 import { ConnectWalletButton } from '../connect-wallet-button';
 
-export const ConnectWalletOrDoSomething: FC = ({ children }) => {
+export const ConnectWalletOrDoSomething: CFC = ({ children }) => {
   const accountPkh = useAccountPkh();
 
   if (accountPkh) {

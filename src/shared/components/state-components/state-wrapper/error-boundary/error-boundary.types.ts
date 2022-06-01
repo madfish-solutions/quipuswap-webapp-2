@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 export interface ErrorBoundaryProps {
   isError?: boolean;
@@ -7,4 +7,5 @@ export interface ErrorBoundaryProps {
 
 export interface ErrorBoundaryInnerProps extends ErrorBoundaryProps {
   showErrorToast: (err: string | Error) => void;
+  children?: ReactNode;
 }

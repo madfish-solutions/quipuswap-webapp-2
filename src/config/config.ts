@@ -97,3 +97,14 @@ export const NEW_FARMINGS = ['5', '6'];
 export const YOUVES_FARMINGS = ['5', '6'];
 // Link to the Youves site
 export const YOUVES_LINK = 'https://app.youves.com/earn';
+
+const COINFLIP_CONTRACTS: Record<SupportedNetworks, string> = {
+  [NetworkType.HANGZHOUNET]: '',
+  [NetworkType.MAINNET]: '',
+  [NetworkType.ITHACANET]: 'KT1LVVEjsveEKc9hGHmDxrADRuenxRafjixd'
+};
+
+export const DEFAULT_COINFLIP_CONTRACT = COINFLIP_CONTRACTS[NETWORK_ID];
+
+export const COINFLIP_CONTRACT_DECIMALS = 18;
+export const COINFLIP_TOKEN_DECIMALS = 6;

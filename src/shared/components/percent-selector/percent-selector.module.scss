@@ -1,0 +1,15 @@
+@import "@styles/_breakpoints";
+
+.controls {
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  column-gap: 16px;
+}
+
+@include media("<tablet") {
+  .controls {
+    column-gap: 8px;
+  }
+}

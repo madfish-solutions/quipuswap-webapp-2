@@ -8,8 +8,8 @@ import { FACTORIES } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { fromDecimals } from '@shared/helpers';
-import { UseToasts } from '@shared/hooks';
 import { VoterType, Nullable, TokenPair, SupportedNetworks } from '@shared/types';
+import { UseToasts } from '@shared/utils';
 
 export interface HandleTokenPairSelectReturnType {
   tokenPair: TokenPair;
