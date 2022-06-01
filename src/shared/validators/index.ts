@@ -8,3 +8,4 @@ export * from './validate-balance';
 export * from './required';
 export * from './validate-min-max-non-strict';
 export * from './number-as-string';
+export * from './balance-amount-schema';

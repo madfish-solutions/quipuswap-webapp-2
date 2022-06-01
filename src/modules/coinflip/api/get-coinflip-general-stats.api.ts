@@ -4,12 +4,8 @@ import { DEFAULT_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
 import { isEqual, isNull } from '@shared/helpers';
 
+import { TOKEN_ASSETS } from '../interfaces';
 import { CoinflipStorage, GeneralStatsInterface } from './types';
-
-enum TOKEN_ASSETS {
-  TEZOS = 0,
-  QUIPU = 1
-}
 
 export const getCoinflipGeneralStatsApi = async (
   tezos: Nullable<TezosToolkit>,
