@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 export interface CoinflipStorage {
   admin: string;
   asset_to_id: BigMapAbstraction;
-  gamer_stats: BigMapAbstraction;
+  gamers_stats: BigMapAbstraction;
   games: BigMapAbstraction;
   id_to_asset: BigMapAbstraction;
   assets_counter: BigNumber;
