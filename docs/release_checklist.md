@@ -17,11 +17,11 @@
 - [ ] Change the Production Branch of the [Mainnet](https://vercel.com/quipuswap-v2-ui/qs-ui/settings/git) in the Vercel
 
 ### Deploy
-- [ ] Commit actual version `X.X.X` in the file package.json to the version branch `vX.X.X` with commit message: `vX.X.X`
+- [ ] Commit actual version `X.X.X` in the file `package.json` with commit message: `vX.X.X`
 - [ ] **Verify features in the productions**
 - [ ] Wait for successful builds and tests
 
-### Settings
+### GitHub Settings
 - [ ] Protect the version branch `vX.X.X` for any feature changes in the [settings](https://github.com/madfish-solutions/quipuswap-webapp-2/settings/branches)
 
 ### Merge
@@ -35,6 +35,7 @@
 - [ ] [Create `X.X.X` release in Jira](https://quipuswap.atlassian.net/projects/QUIPU?selectedItem=com.atlassian.jira.jira-projects-plugin:release-page)
 - [ ] Add release version to [all tasks](https://quipuswap.atlassian.net/browse/QUIPU) in the `READY TO RELEASE` status
 - [ ] Move [all tasks](https://quipuswap.atlassian.net/browse/QUIPU) from the `READY TO RELEASE` status to the `DONE` status
+- [ ] [Release the `X.X.X` version in Jira](https://quipuswap.atlassian.net/projects/QUIPU?selectedItem=com.atlassian.jira.jira-projects-plugin:release-page)
 
 ### Slack finish
 - [ ] Write a message to the [channel](https://madfishgroup.slack.com/archives/C02QJG18M7W) about the successfully release
