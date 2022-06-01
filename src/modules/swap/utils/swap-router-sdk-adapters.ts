@@ -6,6 +6,7 @@ import {
 } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
+import { MAX_HOPS_COUNT } from '@config/constants';
 import { isTezosToken } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
@@ -23,7 +24,8 @@ export const useRoutePairsCombinations = (
   originalUseRoutePairsCombinations(
     inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
     outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
-    routePairs
+    routePairs,
+    MAX_HOPS_COUNT
   );
 
 export const useTradeWithSlippageTolerance = (
