@@ -3,7 +3,9 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
+import { StableswapRoutes, Tabs } from '@modules/stableswap';
 import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -30,7 +32,13 @@ interface Props extends StableswapItem {
   className?: string;
 }
 
-export const PoolCard: FC<Props> = ({ id, tokensInfo, tvlInUsd, isWhitelisted, liquidityProvidersFee }) => {
+export const PoolCard: FC<Props> = ({
+  tokensInfo,
+  tvlInUsd,
+  isWhitelisted,
+  liquidityProvidersFee,
+  stableswapItemUrl
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const { whitelistedTag, translation } = usePoolCardViewModel();
@@ -38,10 +46,8 @@ export const PoolCard: FC<Props> = ({ id, tokensInfo, tvlInUsd, isWhitelisted, l
   const { status, label } = whitelistedTag;
   const { totalValueTranslation, liquidityProvidersFeeTranslation, valueTranslation } = translation;
 
-  const selectLink = `${id}`;
-
   return (
-    <Link to={selectLink}>
+    <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${stableswapItemUrl}`}>
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.poolInfo}>
           <div className={styles.logoSymbols}>

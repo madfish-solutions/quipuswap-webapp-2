@@ -92,15 +92,13 @@
     }
   }
 
-  @include media('>525px') {
+  @include media('>Lphone') {
     .logoSymbols {
       flex-direction: row;
       align-items: center;
       gap: 16px;
     }
-  }
 
-  @include media('>Lphone') {
     .poolInfo {
       flex-direction: row;
       justify-content: space-between;
@@ -113,7 +111,7 @@
     }
   }
 
-  @include media('>680px') {
+  @include media('>tablet') {
     .poolStats {
       flex-direction: row;
       gap: 40px;
@@ -136,7 +134,7 @@
     }
   }
 
-  @include media('>980px') {
+  @include media('>Ltablet') {
     .stats {
       flex-direction: row;
     }
