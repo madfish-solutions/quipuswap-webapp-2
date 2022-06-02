@@ -4,6 +4,7 @@ import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'sw
 
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { SECONDS_IN_MINUTE } from '@config/constants';
+import { STABLESWAP_REFERRAL } from '@config/enviroment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
@@ -70,7 +71,7 @@ export const useSwapFormik = (
 
     try {
       amplitudeService.logEvent('SWAP_SEND', logData);
-      const tradeTransferParams = await getTradeOpParams(trade!, accountPkh, tezos);
+      const tradeTransferParams = await getTradeOpParams(trade!, accountPkh, tezos, STABLESWAP_REFERRAL, recipient);
 
       const walletParamsWithKind = tradeTransferParams.map(transferParams =>
         parseTransferParamsToParamsWithKind(transferParams)
