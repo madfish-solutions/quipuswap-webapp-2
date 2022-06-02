@@ -20,7 +20,7 @@ export const estimateSwapFee = async (
   tezos: TezosToolkit,
   accountPkh: string,
   trade: Trade,
-  _recipientPkh = accountPkh
+  _ = accountPkh
 ) => {
   const tradeTransferParams = await getTradeOpParams(trade, accountPkh, tezos, STABLESWAP_REFERRAL);
 
