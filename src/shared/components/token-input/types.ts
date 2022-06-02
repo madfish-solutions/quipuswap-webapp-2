@@ -6,15 +6,16 @@ type Tokens = Token | Array<Token>;
 
 export interface TokenInputViewModelProps {
   tokens?: Tokens;
-  balance: Optional<BigNumber.Value>;
   readOnly?: boolean;
   disabled?: boolean;
   hiddenPercentSelector?: boolean;
+  hiddenBalance?: boolean;
   onInputChange: (value: string) => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
   value: string;
+  balance: Optional<BigNumber.Value>;
   id?: string;
   className?: string;
   label: string;

@@ -35,6 +35,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   error,
   disabled,
   hiddenPercentSelector,
+  hiddenBalance,
   readOnly,
   onInputChange,
   onSelectorClick
@@ -46,8 +47,8 @@ export const TokenInput: FC<TokenInputProps> = ({
     notWhitelistedMessage,
 
     isFormReady,
-    showPercentSelector,
-
+    shownPercentSelector,
+    shownBalance,
     amountCap,
 
     focusInput,
@@ -58,9 +59,9 @@ export const TokenInput: FC<TokenInputProps> = ({
     handlePercentageSelect
   } = useTokenInputViewModel({
     tokens,
-    balance,
     readOnly,
     hiddenPercentSelector,
+    hiddenBalance,
     onInputChange
   });
 
@@ -90,7 +91,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
-            {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}
+            {shownBalance && <Balance balance={balance} colorMode={colorThemeMode} />}
           </div>
           <input
             id={id}
@@ -120,7 +121,7 @@ export const TokenInput: FC<TokenInputProps> = ({
           </div>
         </div>
       </div>
-      <Scaffolding showChild={showPercentSelector} className={styles.scaffoldingPercentSelector}>
+      <Scaffolding showChild={shownPercentSelector} className={styles.scaffoldingPercentSelector}>
         <PercentSelector amountCap={amountCap} value={balance} handleBalance={handlePercentageSelect} />
       </Scaffolding>
       {error && <ComplexError error={error} />}
