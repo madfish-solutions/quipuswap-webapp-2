@@ -49,7 +49,7 @@ export const FarmingRewardInfo: FC = observer(() => {
       claimablePendingRewards={myRewardInTokens}
       dollarEquivalent={myRewardInUsd}
       amountDecimals={rewardTokenDecimals}
-      className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
+      className={cx(styles.rewardInfo, modeClass[colorThemeMode])} //
       header={{
         content: <FarmingRewardHeader />,
         className: styles.rewardHeader
