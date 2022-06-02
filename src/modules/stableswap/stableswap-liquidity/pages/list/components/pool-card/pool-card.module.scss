@@ -143,6 +143,14 @@
   }
 }
 
+.card.light:hover {
+  background: $hover-light-row;
+}
+
+.card.dark:hover {
+  background: $hover-dark-row;
+}
+
 .light {
   @include poolCard($text-01);
 }

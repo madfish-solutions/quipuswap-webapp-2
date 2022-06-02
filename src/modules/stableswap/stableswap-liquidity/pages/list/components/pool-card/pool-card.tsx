@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { DOLLAR, PERCENT } from '@config/constants';
@@ -41,7 +42,7 @@ export const PoolCard: FC<Props> = ({ id, tokensInfo, tvlInUsd, isWhitelisted, l
 
   return (
     <Link to={selectLink}>
-      <Card className={modeClass[colorThemeMode]} contentClassName={styles.poolCard}>
+      <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.poolInfo}>
           <div className={styles.logoSymbols}>
             <TokensLogos className={styles.tokensLogos} tokens={extractTokens(tokensInfo)} width={48} />
