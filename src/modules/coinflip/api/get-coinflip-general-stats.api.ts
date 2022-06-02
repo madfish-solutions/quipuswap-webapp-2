@@ -15,6 +15,7 @@ export const getCoinflipGeneralStatsApi = async (
   if (isNull(tezos)) {
     return null;
   }
+
   const tokenAsset = isEqual(tokenAddress, DEFAULT_TOKEN.contractAddress) ? TOKEN_ASSETS.QUIPU : TOKEN_ASSETS.TEZOS;
   const storage = await getStorageInfo<CoinflipStorage>(tezos, contractAddress);
 
