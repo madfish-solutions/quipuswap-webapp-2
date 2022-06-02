@@ -16,12 +16,7 @@ export interface SwapParams {
 }
 
 // TODO: use recipient PKH
-export const estimateSwapFee = async (
-  tezos: TezosToolkit,
-  accountPkh: string,
-  trade: Trade,
-  _ = accountPkh
-) => {
+export const estimateSwapFee = async (tezos: TezosToolkit, accountPkh: string, trade: Trade, _ = accountPkh) => {
   const tradeTransferParams = await getTradeOpParams(trade, accountPkh, tezos, STABLESWAP_REFERRAL);
 
   const estimations = await tezos.estimate.batch(
