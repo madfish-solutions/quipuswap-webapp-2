@@ -2,6 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
+import { STABLESWAP_REFERRAL } from '@config/enviroment';
 import { DexPair, TokenId } from '@shared/types';
 
 export interface SwapParams {
@@ -21,7 +22,7 @@ export const estimateSwapFee = async (
   trade: Trade,
   _recipientPkh = accountPkh
 ) => {
-  const tradeTransferParams = await getTradeOpParams(trade, accountPkh, tezos);
+  const tradeTransferParams = await getTradeOpParams(trade, accountPkh, tezos, STABLESWAP_REFERRAL);
 
   const estimations = await tezos.estimate.batch(
     tradeTransferParams.map(params => ({
