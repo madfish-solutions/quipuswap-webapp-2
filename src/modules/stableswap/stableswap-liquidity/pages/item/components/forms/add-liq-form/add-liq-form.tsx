@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 
 import { Button, ConnectWalletOrDoSomething, Iterator, Switcher, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
 import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -23,14 +22,14 @@ export const AddLiqForm: FC = observer(() => {
     return null;
   }
 
-  const { data, isSubmitting, tooltip, handleSubmit } = addLiqFormViewModel;
+  const { data, disabled, isSubmitting, tooltip, switcherValue, handleSwitcherClick, handleSubmit } =
+    addLiqFormViewModel;
 
   return (
     <form onSubmit={handleSubmit}>
       <Iterator render={StableTokenInput} data={data} separator={<Plus className={styles.svg} />} />
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
-        {/* Mock data */}
-        <Switcher value={true} disabled={true} onClick={noopMap} />
+        <Switcher value={switcherValue} onClick={handleSwitcherClick} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionAdd')}</span>
         <Tooltip content={tooltip} />
       </div>
@@ -39,7 +38,7 @@ export const AddLiqForm: FC = observer(() => {
           <Button
             type="submit"
             className={stylesCommonContainer.button}
-            disabled={false}
+            disabled={disabled}
             loading={isSubmitting}
             data-test-id="stableswapButton"
           >

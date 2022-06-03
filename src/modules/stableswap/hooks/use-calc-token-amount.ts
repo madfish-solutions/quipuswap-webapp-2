@@ -8,9 +8,9 @@ import { getContract } from '@shared/dapp';
 import { defined } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 
-import { useStableswapItemStore } from '../../../../../../hooks';
+import { useStableswapItemStore } from './store';
 
-export const useCalcTokenAmountView = () => {
+export const useCalcTokenAmountView = (isDeposit = false) => {
   const { item } = useStableswapItemStore();
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
@@ -25,7 +25,7 @@ export const useCalcTokenAmountView = () => {
           .calc_token_amount({
             pool_id: poolId,
             amounts: amounts,
-            is_deposit: false
+            is_deposit: isDeposit
           })
           .executeView({ viewCaller: defined(accountPkh) });
       } catch (error) {
@@ -36,7 +36,7 @@ export const useCalcTokenAmountView = () => {
         return new BigNumber('0');
       }
     },
-    [item, tezos, accountPkh]
+    [tezos, item, isDeposit, accountPkh]
   );
 
   return { calcTokenAmountView };

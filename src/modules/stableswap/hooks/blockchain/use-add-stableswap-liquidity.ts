@@ -4,20 +4,23 @@ import { BigNumber } from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, isNull, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, isExist, isNull, toDecimals } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { AmountToken } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { addStableswapLiquidityApi } from '../../api';
-import { getStableswapDeadline } from '../../helpers';
-import { tokensAndAmountsMapper } from '../../mapping/tokens-and-amounts.map';
+import { extractTokens, getStableswapDeadline, createAmountsMichelsonMap } from '../../helpers';
+import { tokensAndAmountsMapper } from '../../mapping';
 import { useStableswapItemStore, useStableswapItemFormStore } from '../store';
+import { useCalcTokenAmountView } from '../use-calc-token-amount';
+
+const IS_DEPOSIT = true;
 
 export const useAddStableswapLiquidity = () => {
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
+  const { calcTokenAmountView } = useCalcTokenAmountView(IS_DEPOSIT);
   const confirmOperation = useConfirmOperation();
 
   const { tezos } = useRootStore();
@@ -26,31 +29,41 @@ export const useAddStableswapLiquidity = () => {
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const { item } = useStableswapItemStore();
-  const { lpInputAmount, inputAmounts } = useStableswapItemFormStore();
+  const { inputAmounts } = useStableswapItemFormStore();
+
+  const calculateShares = useCallback(
+    async (amounts: Array<BigNumber>) => {
+      const map = createAmountsMichelsonMap(amounts);
+
+      return await calcTokenAmountView(map);
+    },
+    [calcTokenAmountView]
+  );
 
   const addStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(lpInputAmount) || isNull(inputAmounts) || isNull(accountPkh)) {
+    if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
       return;
     }
 
-    const { lpToken, contractAddress, tokensInfo } = item;
+    const { contractAddress, tokensInfo } = item;
 
-    const tokens = tokensInfo.map(({ token }) => token);
-
-    const deadline = getStableswapDeadline(transactionDeadline);
-
-    const lpInputAmountAtom = toDecimals(lpInputAmount, lpToken);
-    const lpInputAmountAtomWithSlippage = decreaseBySlippage(lpInputAmountAtom, liquiditySlippage).integerValue(
-      BigNumber.ROUND_DOWN
+    const tokens = extractTokens(tokensInfo);
+    const amountsAtoms = inputAmounts.map((amount, index) =>
+      isNull(amount) ? new BigNumber('0') : toDecimals(amount, tokens[index])
     );
 
-    const tokensAndAmounts: Array<AmountToken> = tokensAndAmountsMapper(tokens, inputAmounts);
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
+
+    const shares = await calculateShares(amountsAtoms);
+    const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+
+    const deadline = getStableswapDeadline(transactionDeadline);
 
     try {
       const operation = await addStableswapLiquidityApi(
         tezos,
         contractAddress,
-        lpInputAmountAtomWithSlippage,
+        sharesWithSlippage,
         tokensAndAmounts,
         deadline,
         accountPkh
@@ -63,11 +76,11 @@ export const useAddStableswapLiquidity = () => {
   }, [
     tezos,
     item,
-    lpInputAmount,
-    inputAmounts,
     accountPkh,
-    transactionDeadline,
+    inputAmounts,
+    calculateShares,
     liquiditySlippage,
+    transactionDeadline,
     confirmOperation,
     t,
     showErrorToast

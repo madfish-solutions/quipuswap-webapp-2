@@ -5,16 +5,16 @@ import { isNull } from '@shared/helpers';
 import { StableswapTokensInfo } from '../types';
 
 export const calculateOutputWithLp = (
-  lpInput: Nullable<BigNumber>,
+  shares: BigNumber,
   totalSupply: BigNumber,
   tokensInfo: Array<StableswapTokensInfo>
 ): Array<Nullable<BigNumber>> => {
-  if (isNull(lpInput)) {
+  if (isNull(shares)) {
     return tokensInfo.map(() => null);
   }
 
   const tokenOutputs: Array<BigNumber> = tokensInfo.map(({ reserves, token }) =>
-    lpInput.multipliedBy(reserves).dividedBy(totalSupply).decimalPlaces(token.metadata.decimals)
+    shares.multipliedBy(reserves).dividedBy(totalSupply).decimalPlaces(token.metadata.decimals)
   );
 
   return tokenOutputs;

@@ -142,13 +142,19 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           )}
 
-          {noRouteFound && <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />}
+          {noRouteFound && (
+            <ComplexError
+              error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })}
+              data-test-id="noRouteFound"
+            />
+          )}
 
           {shouldShowPriceImpactWarning && (
             <ComplexError
               error={t('swap|priceImpactWarning', {
                 priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
               })}
+              data-test-id="shouldShowPriceImpactWarning"
             />
           )}
 
