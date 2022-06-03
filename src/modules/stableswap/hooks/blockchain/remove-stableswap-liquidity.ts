@@ -7,6 +7,7 @@ import {
   decreaseBySlippage,
   getFirstElement,
   increaseBySlippage,
+  isExist,
   isNull,
   isSingleElement,
   toDecimals
@@ -45,10 +46,10 @@ export const useRemoveStableswapLiquidity = () => {
   } = useSettingsStore();
   const { accountPkh } = useAuthStore();
   const { item } = useStableswapItemStore();
-  const { lpInputAmount, inputAmounts, isBalancedProportion } = useStableswapItemFormStore();
+  const { shares, inputAmounts, isBalancedProportion } = useStableswapItemFormStore();
 
   const removeStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(lpInputAmount) || isNull(inputAmounts) || isNull(accountPkh)) {
+    if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
       return;
     }
     const { lpToken, contractAddress, tokensInfo } = item;
@@ -56,7 +57,7 @@ export const useRemoveStableswapLiquidity = () => {
     const tokens = tokensInfo.map(({ token }) => token);
     const deadline = getStableswapDeadline(transactionDeadline);
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, inputAmounts);
-    const lpInputAmountAtom = toDecimals(lpInputAmount, lpToken);
+    const sharesAmountAtom = toDecimals(shares, lpToken);
 
     const message = t('stableswap|sucessfullyRemoved');
 
@@ -75,7 +76,7 @@ export const useRemoveStableswapLiquidity = () => {
           tezos,
           contractAddress,
           decreasedTokensAndAmounts,
-          lpInputAmountAtom,
+          sharesAmountAtom,
           deadline,
           accountPkh
         );
@@ -99,7 +100,7 @@ export const useRemoveStableswapLiquidity = () => {
             contractAddress,
             index,
             decreasedAmount,
-            lpInputAmountAtom,
+            sharesAmountAtom,
             deadline,
             accountPkh
           );
@@ -111,7 +112,7 @@ export const useRemoveStableswapLiquidity = () => {
       } else {
         try {
           //TODO: validate!!!
-          const increasedLpInputAmountAtom = increaseBySlippage(lpInputAmountAtom, liquiditySlippage).integerValue(
+          const increasedLpInputAmountAtom = increaseBySlippage(sharesAmountAtom, liquiditySlippage).integerValue(
             BigNumber.ROUND_DOWN
           );
 
@@ -137,7 +138,7 @@ export const useRemoveStableswapLiquidity = () => {
     isBalancedProportion,
     item,
     liquiditySlippage,
-    lpInputAmount,
+    shares,
     showErrorToast,
     t,
     tezos,

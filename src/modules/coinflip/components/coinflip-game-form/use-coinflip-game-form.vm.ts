@@ -4,9 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 
+import { useCoinFlip } from '@modules/coinflip/hooks';
 import { bigNumberToString } from '@shared/helpers';
 import { Noop, Nullable } from '@shared/types';
-import { balanceAmountSchema } from '@shared/validators/balance-amount-schema';
+import { balanceAmountSchema } from '@shared/validators';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 
@@ -29,6 +30,7 @@ export const useCoinflipGameFormViewModel = (
   onAmountInputChange: (amountInput: string) => void,
   onCoinSideSelect: (coinSide: CoinSide) => void
 ) => {
+  const { handleCoinFlip } = useCoinFlip();
   const formik = useFormik({
     initialValues: {
       [FormFields.coinSide]: '',
@@ -81,6 +83,7 @@ export const useCoinflipGameFormViewModel = (
     balance,
     coinSideError,
     handleInputAmountChange,
-    handleCoinSideSelect
+    handleCoinSideSelect,
+    handleCoinFlip
   };
 };
