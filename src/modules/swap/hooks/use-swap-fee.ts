@@ -8,6 +8,7 @@ import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
 import { defined, fromDecimals, getTokenSlug } from '@shared/helpers';
 import { estimateSwapFee } from '@shared/helpers/swap';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
@@ -23,12 +24,15 @@ interface SwapParams {
 export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
   const tezos = useEstimationToolkit();
+  const {
+    settings: { transactionDeadline }
+  } = useSettingsStore();
 
   const updateSwapFee = useCallback(
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
       if (senderPkh && inputToken && trade && inputAmount) {
         try {
-          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, trade, recipientPkh);
+          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, trade, recipientPkh, transactionDeadline);
 
           return fromDecimals(rawNewFee, TEZOS_TOKEN);
         } catch (error) {
@@ -39,7 +43,7 @@ export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapPa
 
       throw new SwapFeeNotEnoughParametersError();
     },
-    [trade, inputAmount, inputToken, tezos]
+    [trade, inputAmount, inputToken, tezos, transactionDeadline]
   );
 
   const tradeSWRKey =

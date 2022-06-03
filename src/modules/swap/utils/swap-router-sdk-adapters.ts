@@ -7,6 +7,7 @@ import {
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { MAX_HOPS_COUNT } from '@config/constants';
+import { WHITELISTED_POOLS } from '@config/whitelisted-pools';
 import { isTezosToken } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
@@ -25,6 +26,7 @@ export const useRoutePairsCombinations = (
     inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
     outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
     routePairs,
+    WHITELISTED_POOLS,
     MAX_HOPS_COUNT
   );
 

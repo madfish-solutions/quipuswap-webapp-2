@@ -71,7 +71,14 @@ export const useSwapFormik = (
 
     try {
       amplitudeService.logEvent('SWAP_SEND', logData);
-      const tradeTransferParams = await getTradeOpParams(trade!, accountPkh, tezos, STABLESWAP_REFERRAL);
+      const tradeTransferParams = await getTradeOpParams(
+        trade!,
+        accountPkh,
+        tezos,
+        STABLESWAP_REFERRAL,
+        recipient,
+        transactionDeadline.toNumber()
+      );
 
       const walletParamsWithKind = tradeTransferParams.map(transferParams =>
         parseTransferParamsToParamsWithKind(transferParams)
