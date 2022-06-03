@@ -1,139 +1,173 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-
 import {
-  amountsAreEqual,
-  DexGraph,
-  fromDecimals,
-  getRouteWithInput,
-  getRouteWithOutput,
-  getTokenInput,
-  getTokenOutput,
-  getTokenSlug,
-  toDecimals
-} from '@shared/helpers';
-import { useDexGraph } from '@shared/hooks';
-import { DexPair, Token, Undefined } from '@shared/types';
+  DexTypeEnum,
+  getBestTradeExactInput,
+  getBestTradeExactOutput,
+  getTradeInputAmount,
+  getTradeOutputAmount,
+  Trade,
+  TradeOperation,
+  useAllRoutePairs,
+  useRoutePairsCombinations
+} from 'swap-router-sdk';
 
+import { UnsupportedDexType } from '@shared/errors/unsupported-dex-type.error';
+import { getTokenSlug } from '@shared/helpers';
+import { useTokens, useTokensStore } from '@shared/hooks';
+import { TokensMap } from '@shared/store/tokens.store';
+import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
+
+import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
-  inputToken?: Token;
-  outputToken?: Token;
+  inputToken: Optional<Token>;
+  outputToken: Optional<Token>;
 }
 
+const mapDexType = (dexType: DexTypeEnum): DexPairType => {
+  switch (dexType) {
+    case DexTypeEnum.QuipuSwap:
+      return DexPairType.TokenToXtz;
+    case DexTypeEnum.QuipuSwapTokenToTokenDex:
+      return DexPairType.TokenToToken;
+    default:
+      throw new UnsupportedDexType();
+  }
+};
+
+const DEFAULT_DEX_ID = 0;
+
+const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Token): DexPair => {
+  const { aTokenPool, bTokenPool, dexType, dexAddress, dexId } = operation;
+
+  const dex = {
+    token1Pool: aTokenPool,
+    token2Pool: bTokenPool,
+    token1,
+    token2
+  };
+
+  const type = mapDexType(dexType);
+
+  const id = type === DexPairType.TokenToXtz ? dexAddress : dexId?.toNumber?.() ?? DEFAULT_DEX_ID;
+
+  return {
+    ...dex,
+    id,
+    type
+  } as DexPair;
+};
+
+const mapTradeToDexPairs = (trade: Nullable<Trade>, tokens: TokensMap): DexPair[] =>
+  trade
+    ? trade.map(operation => {
+        const token1 = tokens.get(operation.aTokenSlug);
+        const token2 = tokens.get(operation.bTokenSlug);
+        if (!token1) {
+          throw new Error(`No Token Metadata of ${token1}`);
+        }
+        if (!token2) {
+          throw new Error(`No Token Metadata of ${token2}`);
+        }
+
+        return mapTradeToDexPair(operation, token1, token2);
+      })
+    : [];
+
+const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
+  if (!trade) {
+    return [];
+  }
+
+  const tokens: BooleanMap = trade.reduce((acc, { aTokenSlug, bTokenSlug }) => {
+    acc[aTokenSlug] = true;
+    acc[bTokenSlug] = true;
+
+    return acc;
+  }, {} as BooleanMap);
+
+  return Object.keys(tokens);
+};
+
 export const useSwapCalculations = () => {
-  const { dexGraph } = useDexGraph();
+  const allRoutePairs = useAllRoutePairs(TEZOS_DEXES_API_URL);
+  const filteredRoutePairs = useMemo(
+    () => allRoutePairs.data.filter(routePair => KNOWN_DEX_TYPES.includes(routePair.dexType)),
+    [allRoutePairs.data]
+  );
 
-  const [inputAmount, setInputAmount] = useState<BigNumber>();
-  const [outputAmount, setOutputAmount] = useState<BigNumber>();
-  const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({});
-  const [dexRoute, setDexRoute] = useState<DexPair[]>();
+  const { tokens } = useTokensStore();
+
+  const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
+  const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
+
+  const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
+  useTokens(tokensSlugs);
+
+  useEffect(() => {
+    try {
+      setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
+    } catch (_) {
+      setDexRoute([]);
+    }
+  }, [bestTrade, tokens]);
+
+  const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
+  const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);
+  const [outputAmount, setOutputAmount] = useState<Nullable<BigNumber>>(null);
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
-  const prevDexGraphRef = useRef<DexGraph>();
 
-  const onInputPrequisitesChange = useCallback(
-    (newOutputAmount: Undefined<BigNumber>, { inputToken: newInputToken, outputToken: newOutputToken }: SwapPair) => {
-      if (newOutputAmount && newInputToken && newOutputToken) {
-        const rawNewOutputAmount = toDecimals(newOutputAmount, newOutputToken).integerValue(BigNumber.ROUND_FLOOR);
-        const route = getRouteWithOutput({
-          outputAmount: rawNewOutputAmount,
-          startTokenSlug: getTokenSlug(newInputToken),
-          endTokenSlug: getTokenSlug(newOutputToken),
-          graph: dexGraph
-        });
-        try {
-          setInputAmount(
-            route ? fromDecimals(getTokenInput(newOutputToken, rawNewOutputAmount, route), newInputToken) : undefined
-          );
-          setDexRoute(route);
-
-          return;
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        }
-      }
-      setDexRoute(undefined);
-      setInputAmount(undefined);
-    },
-    [dexGraph]
-  );
-
-  const onOutputPrequisitesChange = useCallback(
-    (newInputAmount: Undefined<BigNumber>, { inputToken: newInputToken, outputToken: newOutputToken }: SwapPair) => {
-      if (newInputAmount && newInputToken && newOutputToken) {
-        const rawNewInputAmount = toDecimals(newInputAmount, newInputToken).integerValue(BigNumber.ROUND_FLOOR);
-        const route = getRouteWithInput({
-          inputAmount: rawNewInputAmount,
-          startTokenSlug: getTokenSlug(newInputToken),
-          endTokenSlug: getTokenSlug(newOutputToken),
-          graph: dexGraph
-        });
-        try {
-          setDexRoute(route);
-          setOutputAmount(
-            route
-              ? fromDecimals(
-                  getTokenOutput({ inputAmount: rawNewInputAmount, inputToken: newInputToken, dexChain: route }),
-                  newOutputToken
-                )
-              : undefined
-          );
-
-          return;
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        }
-      }
-      setDexRoute(undefined);
-      setOutputAmount(undefined);
-    },
-    [dexGraph]
-  );
-
-  const onInputAmountChange = (newInputAmount: Undefined<BigNumber>) => {
-    if (!amountsAreEqual(newInputAmount, inputAmount)) {
-      setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
-      setInputAmount(newInputAmount);
-      onOutputPrequisitesChange(newInputAmount, { inputToken, outputToken });
-    }
-  };
-
-  const onOutputAmountChange = (newOutputAmount: Undefined<BigNumber>) => {
-    if (!amountsAreEqual(newOutputAmount, outputAmount)) {
-      setLastAmountFieldChanged(SwapField.OUTPUT_AMOUNT);
-      setOutputAmount(newOutputAmount);
-      onInputPrequisitesChange(newOutputAmount, { inputToken, outputToken });
-    }
-  };
-
-  const onSwapPairChange = useCallback(
-    (newPair: SwapPair) => {
-      setSwapPair(newPair);
-      if (lastAmountFieldChanged === SwapField.INPUT_AMOUNT) {
-        onOutputPrequisitesChange(inputAmount, newPair);
-      } else {
-        onInputPrequisitesChange(outputAmount, newPair);
-      }
-    },
-    [inputAmount, lastAmountFieldChanged, onInputPrequisitesChange, onOutputPrequisitesChange, outputAmount]
+  const routePairsCombinations = useRoutePairsCombinations(
+    inputToken ? getTokenSlug(inputToken) : undefined,
+    outputToken ? getTokenSlug(outputToken) : undefined,
+    filteredRoutePairs
   );
 
   const resetCalculations = () => {
-    setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
-    setInputAmount(undefined);
-    setOutputAmount(undefined);
+    setInputAmount(null);
+    setOutputAmount(null);
+    setBestTrade(null);
   };
 
-  useEffect(() => {
-    if (prevDexGraphRef.current !== dexGraph) {
-      onSwapPairChange({ inputToken, outputToken });
+  const onInputAmountChange = (newInputAmount: Nullable<BigNumber>) => {
+    setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
+    if (!newInputAmount || !routePairsCombinations.length) {
+      return resetCalculations();
     }
-    prevDexGraphRef.current = dexGraph;
-  }, [dexGraph, onSwapPairChange, inputToken, outputToken]);
+    setInputAmount(newInputAmount);
+
+    const bestTradeExact = getBestTradeExactInput(newInputAmount, routePairsCombinations);
+    setBestTrade(bestTradeExact);
+
+    const output = getTradeOutputAmount(bestTradeExact) ?? null;
+    setOutputAmount(output);
+  };
+
+  const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
+    setLastAmountFieldChanged(SwapField.OUTPUT_AMOUNT);
+    if (!newOutputAmount || !routePairsCombinations.length) {
+      return resetCalculations();
+    }
+    setOutputAmount(newOutputAmount);
+
+    const bestTradeExact = getBestTradeExactOutput(newOutputAmount, routePairsCombinations);
+    setBestTrade(bestTradeExact);
+
+    const output = getTradeInputAmount(bestTradeExact) ?? null;
+    setOutputAmount(output);
+  };
+
+  const onSwapPairChange = (newPair: SwapPair) => {
+    setSwapPair(newPair);
+    if (lastAmountFieldChanged === SwapField.INPUT_AMOUNT) {
+      onInputAmountChange(inputAmount);
+    } else {
+      onOutputAmountChange(outputAmount);
+    }
+  };
 
   return {
     dexRoute,

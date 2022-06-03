@@ -6,6 +6,7 @@ import { DEFAULT_DEADLINE_MINS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { DexPair, Standard, TokenId } from '@shared/types';
 
+import { isEmptyArray } from './arrays';
 import { getBlockchainTimestamp } from './blockchain';
 import { getTokenOutput, isTokenToTezosDex, isTokenToTokenDex } from './dex';
 import {
@@ -124,11 +125,11 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
         minOut = new BigNumber(1);
       }
 
-      if (prevDex && isTokenToTokenDex(prevDex)) {
+      if (prevDex && isTokenToTokenDex(prevDex) && ttDexContract) {
         if (isTokenToTezosDex(currentDex)) {
           const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
           swapsParams.push(
-            ttDexContract!.methods
+            ttDexContract.methods
               .swap(ttdexSwapStepsParams, ttdexSwapInput, currentDexInput, accountPkh, String(deadline))
               .toTransferParams({ storageLimit: 1000 })
           );
@@ -179,9 +180,9 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
       currentToken = shouldSellToken1 ? token2 : token1;
     }
   );
-  if (ttdexSwapStepsParams.length > 0) {
+  if (!isEmptyArray(ttdexSwapStepsParams) && ttDexContract) {
     swapsParams.push(
-      ttDexContract!.methods
+      ttDexContract.methods
         .swap(
           ttdexSwapStepsParams,
           ttdexSwapInput,

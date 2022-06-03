@@ -6,7 +6,6 @@ import { EXCHANGE_RATES_URL } from '@config/enviroment';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { getTokenSlug } from '@shared/helpers';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
-import { Standard } from '@shared/types';
 
 import { useTezos } from './use-dapp';
 
@@ -49,8 +48,7 @@ export const [NewExchangeRatesProvider, useNewExchangeRates] = constate(() => {
   return (oldExchangeRates ?? []).reduce<Record<string, BigNumber>>((acc, { tokenAddress, tokenId, exchangeRate }) => {
     const tokenSlug = getTokenSlug({
       contractAddress: tokenAddress,
-      fa2TokenId: tokenId,
-      type: tokenId === undefined ? Standard.Fa12 : Standard.Fa2
+      fa2TokenId: tokenId
     });
     if (tokenSlug !== getTokenSlug(TEZOS_TOKEN) || IS_NETWORK_MAINNET) {
       acc[tokenSlug] = new BigNumber(exchangeRate);
