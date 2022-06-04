@@ -9,6 +9,7 @@ const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 
 interface Props {
   className?: string;
+  labelClassName?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
   label: string;
@@ -17,7 +18,16 @@ interface Props {
   available?: boolean;
 }
 
-export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available, ...props }) => {
+export const WalletButton: FC<Props> = ({
+  id,
+  Icon,
+  label,
+  onClick,
+  disabled = false,
+  available,
+  labelClassName,
+  ...props
+}) => {
   return (
     <Button
       className={styles.button}
@@ -33,7 +43,7 @@ export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = f
       {...props}
     >
       <Icon className={styles.icon} />
-      <span>{label}</span>
+      <span className={labelClassName}>{label}</span>
     </Button>
   );
 };

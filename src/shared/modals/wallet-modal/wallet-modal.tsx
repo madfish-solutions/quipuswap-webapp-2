@@ -19,7 +19,7 @@ import { Beacon, Temple } from './content';
 import { WalletButton } from './wallet-button';
 import styles from './wallet-modal.module.scss';
 
-const INSTALL_TEMPLE = 'Install Temple';
+const INSTALL_TEMPLE = 'Install Temple Extension';
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
@@ -140,6 +140,7 @@ export const WalletModal: FC = () => {
           label={isTempleInstalled ? Temple.label : INSTALL_TEMPLE}
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
+          labelClassName={styles.label}
           data-test-id="templeWalletButton"
         />
         <WalletButton
