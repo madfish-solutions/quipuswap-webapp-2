@@ -20,7 +20,7 @@ export const usePoolCardViewModel = () => {
       totalValueTranslation: t('common|tvl'),
       liquidityProvidersFeeTranslation: t('stableswap|liquidityProvidersFee'),
       selectTranslation: t('common|select'),
-      valueTranslation: t('common|value')
+      valueTranslation: t('common|tokenValues')
     }
   };
 };

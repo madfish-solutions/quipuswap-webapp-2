@@ -126,7 +126,7 @@ export const common = {
   whiteListed: 'Whitelisted',
   tvl: 'TVL',
   Payout: 'Payout',
-  value: 'Token Values',
+  tokenValues: 'Token Values',
   Explore: 'Explore',
   'Pool Details': 'Pool Details',
   Input: 'Input',
