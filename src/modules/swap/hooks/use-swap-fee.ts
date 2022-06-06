@@ -11,6 +11,7 @@ import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
+import { getTradeSWRKey } from '../utils/get-trade-swr-key';
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
 
 interface SwapParams {
@@ -46,17 +47,16 @@ export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapPa
     [trade, inputAmount, inputToken, tezos, transactionDeadline]
   );
 
-  const tradeSWRKey =
-    trade
-      ?.map(
-        ({ aTokenSlug, bTokenSlug, aTokenAmount, bTokenAmount }) =>
-          `(${aTokenSlug},${bTokenSlug},${aTokenAmount.toFixed()},${bTokenAmount.toFixed()})`
-      )
-      .join(',') ?? null;
-
   return useUpdateOnBlockSWR(
     tezos,
-    ['swap-fee', accountPkh, recipient, tradeSWRKey, inputAmount?.toFixed(), inputToken && getTokenSlug(inputToken)],
+    [
+      'swap-fee',
+      accountPkh,
+      recipient,
+      trade && getTradeSWRKey(trade),
+      inputAmount?.toFixed(),
+      inputToken && getTokenSlug(inputToken)
+    ],
     updateSwapFee
   );
 };
