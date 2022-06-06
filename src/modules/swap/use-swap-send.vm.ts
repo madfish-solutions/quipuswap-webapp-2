@@ -84,19 +84,29 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   useEffect(() => {
     if (!amountsAreEqual(swap.inputAmount, prevCalculatedInputAmountRef.current)) {
-      setFieldValue(SwapField.INPUT_AMOUNT, swap.inputAmount).then(() => {
-        validateField(SwapField.INPUT_AMOUNT);
-        if (swap.inputAmount) {
-          setFieldTouched(SwapField.INPUT_AMOUNT, true);
-        }
-      });
+      setFieldValue(SwapField.INPUT_AMOUNT, swap.inputAmount);
       prevCalculatedInputAmountRef.current = swap.inputAmount;
     }
     if (!amountsAreEqual(swap.outputAmount, prevCalculatedOutputAmountRef.current)) {
       setFieldValue(SwapField.OUTPUT_AMOUNT, swap.outputAmount);
       prevCalculatedOutputAmountRef.current = swap.outputAmount;
     }
-  }, [swap, formik, setFieldValue, setFieldTouched, validateField]);
+  }, [swap, formik, setFieldValue]);
+
+  useEffect(() => {
+    validateField(SwapField.INPUT_AMOUNT).then(() => {
+      if (formik.inputAmount) {
+        setFieldTouched(SwapField.INPUT_AMOUNT, true);
+      }
+    });
+  }, [formik.inputAmount, validateField, setFieldTouched]);
+  useEffect(() => {
+    validateField(SwapField.OUTPUT_AMOUNT).then(() => {
+      if (formik.outputAmount) {
+        setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
+      }
+    });
+  }, [formik.outputAmount, validateField, setFieldTouched]);
 
   const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken: formik.inputToken,
