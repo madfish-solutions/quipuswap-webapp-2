@@ -5,7 +5,9 @@ import { useLocation } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import { isExist } from '../../../helpers';
 import { amplitudeService } from '../../../services';
+import { Undefined } from '../../../types';
 import { ButtonOrLink } from './components';
 import { isShow, NAVIGATION_DATA } from './content';
 import styles from './navigation.module.scss';
@@ -24,16 +26,19 @@ interface NavigationProps {
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const router = useLocation();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState(false);
+  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState<Record<string, boolean>>({ '1': false });
 
   const handleMenuClick = (url: string) => {
     amplitudeService.logEvent('MAIN_MENU_CLICK', { url });
   };
 
-  const handleMoreButtonClick = useCallback(
-    (event: MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      setIsInnerMenuOpened(!isInnerMenuOpened);
+  const handleToggleMenu = useCallback(
+    (event: Undefined<MouseEvent<HTMLAnchorElement>>, id: string, value?: boolean) => {
+      event?.preventDefault();
+      setIsInnerMenuOpened({
+        ...isInnerMenuOpened,
+        [id]: isExist(value) ? value : !isInnerMenuOpened[id]
+      });
     },
     [isInnerMenuOpened]
   );
@@ -54,7 +59,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               modeClass[colorThemeMode]
             )}
             icon={link.Icon ? <link.Icon className={styles.icon} id={iconId} /> : null}
-            onFocus={() => setIsInnerMenuOpened(false)}
+            onFocus={() => handleToggleMenu(undefined, link.id, false)}
             onClick={() => handleMenuClick(link.to ?? '')}
             data-test-id={`navigationButton-${link.id}`}
           />
@@ -62,12 +67,12 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
       }
       if (link.links) {
         result.push(
-          <div className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened })} key={link.id}>
+          <div className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened[link.id] })} key={link.id}>
             <ButtonOrLink
               key={link.id}
               link={link}
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
-              onClick={handleMoreButtonClick}
+              onClick={event => handleToggleMenu(event, link.id)}
               data-test-id={`secondaryNavigationButton-${link.id}`}
             />
             <span className={styles.linksInner}>
@@ -76,7 +81,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                   key={subLink.id}
                   link={subLink}
                   className={cx(styles.linkInner, modeClass[colorThemeMode])}
-                  onFocus={() => setIsInnerMenuOpened(true)}
+                  onFocus={() => handleToggleMenu(undefined, link.id, true)}
                   onClick={() => handleMenuClick(subLink.to ?? '')}
                   data-test-id={`secondaryNavigationButton-${subLink.id}`}
                 />
@@ -88,7 +93,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     });
 
     return result;
-  }, [colorThemeMode, handleMoreButtonClick, iconId, isInnerMenuOpened, router.pathname]);
+  }, [colorThemeMode, handleToggleMenu, iconId, isInnerMenuOpened, router.pathname]);
 
   return <nav className={cx(styles.root, className)}>{content}</nav>;
 };
