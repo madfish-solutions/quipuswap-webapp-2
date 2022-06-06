@@ -1,44 +1,39 @@
 import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
+import { Trade } from 'swap-router-sdk';
 
-import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
-import { defined, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@shared/helpers';
+import { defined, fromDecimals, getTokenSlug } from '@shared/helpers';
 import { estimateSwapFee } from '@shared/helpers/swap';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
-import { DexPair, Nullable, Token, Undefined } from '@shared/types';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { Nullable, Token, Undefined } from '@shared/types';
 
+import { getTradeSWRKey } from '../utils/get-trade-swr-key';
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
 
 interface SwapParams {
   inputToken: Undefined<Token>;
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
-  dexChain: Undefined<DexPair[]>;
-  slippageTolerance: Undefined<BigNumber>;
+  trade: Nullable<Trade>;
   recipient: Undefined<string>;
 }
 
-const WHOLE_ITEM_PERCENT = 100;
-
-export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageTolerance, recipient }: SwapParams) => {
+export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
   const tezos = useEstimationToolkit();
+  const {
+    settings: { transactionDeadline }
+  } = useSettingsStore();
 
   const updateSwapFee = useCallback(
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
-      if (senderPkh && inputToken && dexChain && inputAmount) {
+      if (senderPkh && inputToken && trade && inputAmount) {
         try {
-          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, {
-            inputToken,
-            inputAmount: toDecimals(inputAmount, inputToken),
-            dexChain,
-            recipient: recipientPkh,
-            slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
-            ttDexAddress: TOKEN_TO_TOKEN_DEX
-          });
+          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, trade, recipientPkh, transactionDeadline);
 
           return fromDecimals(rawNewFee, TEZOS_TOKEN);
         } catch (error) {
@@ -49,10 +44,8 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
 
       throw new SwapFeeNotEnoughParametersError();
     },
-    [dexChain, inputAmount, inputToken, slippageTolerance, tezos]
+    [trade, inputAmount, inputToken, tezos, transactionDeadline]
   );
-
-  const dexChainSWRKey = dexChain?.map(({ token1, token2 }) => getTokenPairSlug(token1, token2)).join(',') ?? null;
 
   return useUpdateOnBlockSWR(
     tezos,
@@ -60,10 +53,9 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
       'swap-fee',
       accountPkh,
       recipient,
-      dexChainSWRKey,
+      trade && getTradeSWRKey(trade),
       inputAmount?.toFixed(),
-      inputToken && getTokenSlug(inputToken),
-      slippageTolerance?.toFixed()
+      inputToken && getTokenSlug(inputToken)
     ],
     updateSwapFee
   );

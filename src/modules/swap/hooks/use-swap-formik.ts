@@ -1,22 +1,15 @@
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
+import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { SECONDS_IN_MINUTE } from '@config/constants';
+import { STABLESWAP_REFERRAL } from '@config/enviroment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import {
-  getRouteWithInput,
-  getTokenSlug,
-  getTokenSymbol,
-  toDecimals,
-  getSwapMessage,
-  getDollarEquivalent
-} from '@shared/helpers';
-import { swap } from '@shared/helpers/swap';
-import { useDexGraph } from '@shared/hooks';
+import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
-import { DexPair, SwapTabAction } from '@shared/types';
+import { DexPair, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { SwapField, SwapFormValues } from '../utils/types';
@@ -29,13 +22,13 @@ const initialErrors = {
 
 export const useSwapFormik = (
   initialAction = SwapTabAction.SWAP,
-  dexRoute: DexPair[] | undefined,
+  dexRoute: Undefined<DexPair[]>,
+  trade: Nullable<Trade>,
   exchangeRates: Record<string, BigNumber>
 ) => {
   const validationSchema = useValidationSchema();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const { dexGraph } = useDexGraph();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
 
@@ -53,8 +46,6 @@ export const useSwapFormik = (
     }
 
     const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
-
-    const rawInputAmount = toDecimals(inputAmount!, inputToken!);
 
     const inputTokenSlug = getTokenSlug(inputToken!);
     const outputTokenSlug = getTokenSlug(outputToken!);
@@ -80,20 +71,19 @@ export const useSwapFormik = (
 
     try {
       amplitudeService.logEvent('SWAP_SEND', logData);
-      const walletOperation = await swap(tezos, accountPkh, {
-        deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
-        inputAmount: rawInputAmount,
-        inputToken: inputToken!,
-        recipient: action === 'send' ? recipient : undefined,
-        slippageTolerance: tradingSlippage.div(100),
-        dexChain: getRouteWithInput({
-          startTokenSlug: getTokenSlug(inputToken!),
-          endTokenSlug: getTokenSlug(outputToken!),
-          graph: dexGraph,
-          inputAmount: rawInputAmount
-        })!,
-        ttDexAddress: TOKEN_TO_TOKEN_DEX
-      });
+      const tradeTransferParams = await getTradeOpParams(
+        trade!,
+        accountPkh,
+        tezos,
+        STABLESWAP_REFERRAL,
+        recipient,
+        transactionDeadline.toNumber()
+      );
+
+      const walletParamsWithKind = tradeTransferParams.map(transferParams =>
+        parseTransferParamsToParamsWithKind(transferParams)
+      );
+      const walletOperation = await tezos.wallet.batch(walletParamsWithKind).send();
 
       const inputTokenSymbol = getTokenSymbol(inputToken!);
       const outputTokenSymbol = getTokenSymbol(outputToken!);

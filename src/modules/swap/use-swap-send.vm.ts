@@ -44,7 +44,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const exchangeRates = useNewExchangeRates();
 
   const swap = useSwapCalculations();
-  const { dexRoute } = swap;
+  const { dexRoute, trade } = swap;
 
   const {
     errors,
@@ -56,7 +56,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, dexRoute, exchangeRates);
+  } = useSwapFormik(initialAction, dexRoute, trade, exchangeRates);
   const formik = values;
 
   const navigate = useNavigate();
@@ -104,7 +104,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputAmount: formik.inputAmount,
     outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
-    dexRoute: swap.dexRoute,
+    dexRoute,
+    trade,
     recipient: formik.recipient
   });
 
