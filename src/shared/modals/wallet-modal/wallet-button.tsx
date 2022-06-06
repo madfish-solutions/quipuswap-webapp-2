@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { Button } from '@shared/components';
 import { WalletType } from '@shared/types';
@@ -9,25 +9,15 @@ const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 
 interface Props {
   className?: string;
-  labelClassName?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
-  label: string;
+  label: string | ReactNode;
   onClick: (walletType: WalletType) => void;
   disabled?: boolean;
   available?: boolean;
 }
 
-export const WalletButton: FC<Props> = ({
-  id,
-  Icon,
-  label,
-  onClick,
-  disabled = false,
-  available,
-  labelClassName,
-  ...props
-}) => {
+export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available, ...props }) => {
   return (
     <Button
       className={styles.button}
@@ -43,7 +33,7 @@ export const WalletButton: FC<Props> = ({
       {...props}
     >
       <Icon className={styles.icon} />
-      <span className={labelClassName}>{label}</span>
+      <span>{label}</span>
     </Button>
   );
 };
