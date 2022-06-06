@@ -40,7 +40,6 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
 };
 
 const DEFAULT_DEX_ID = 0;
-const FALLBACK_DECIMALS = 0;
 
 const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Token): DexPair => {
   const { aTokenPool, bTokenPool, dexType, dexAddress, dexId } = operation;
@@ -126,10 +125,8 @@ export const useSwapCalculations = () => {
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
 
   const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, filteredRoutePairs);
-  const inputDecimals = inputToken?.metadata.decimals ?? FALLBACK_DECIMALS;
-  const outputDecimals = outputToken?.metadata.decimals ?? FALLBACK_DECIMALS;
   const bestTradeWithSlippageTolerance = useTradeWithSlippageTolerance(
-    inputAmount && toDecimals(inputAmount, inputDecimals),
+    inputAmount && toDecimals(inputAmount, inputToken),
     bestTrade,
     tradingSlippage
   );
@@ -147,11 +144,11 @@ export const useSwapCalculations = () => {
     }
     setInputAmount(newInputAmount);
 
-    const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputDecimals), routePairsCombinations);
+    const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
     const rawOutput = getTradeOutputAmount(bestTradeExact);
-    setOutputAmount(rawOutput ? fromDecimals(rawOutput, outputDecimals) : null);
+    setOutputAmount(rawOutput ? fromDecimals(rawOutput, outputToken) : null);
   };
 
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
@@ -161,11 +158,11 @@ export const useSwapCalculations = () => {
     }
     setOutputAmount(newOutputAmount);
 
-    const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputDecimals), routePairsCombinations);
+    const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
     const rawInput = getTradeInputAmount(bestTradeExact);
-    setInputAmount(rawInput ? fromDecimals(rawInput, inputDecimals) : null);
+    setInputAmount(rawInput ? fromDecimals(rawInput, inputToken) : null);
   };
 
   const onSwapPairChange = (newPair: SwapPair) => {
