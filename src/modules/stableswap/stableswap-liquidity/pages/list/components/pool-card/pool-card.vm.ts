@@ -17,10 +17,10 @@ export const usePoolCardViewModel = () => {
   return {
     whitelistedTag,
     translation: {
-      totalValueTranslation: t('common|totalValue'),
+      totalValueTranslation: t('common|tvl'),
       liquidityProvidersFeeTranslation: t('stableswap|liquidityProvidersFee'),
       selectTranslation: t('common|select'),
-      valueTranslation: t('common|value')
+      valueTranslation: t('common|tokenValues')
     }
   };
 };
