@@ -11,7 +11,7 @@ interface Props {
   className?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
-  label: string | ReactNode;
+  label: ReactNode;
   onClick: (walletType: WalletType) => void;
   disabled?: boolean;
   available?: boolean;

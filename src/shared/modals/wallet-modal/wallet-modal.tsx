@@ -139,10 +139,10 @@ export const WalletModal: FC = () => {
             isTempleInstalled ? (
               Temple.label
             ) : (
-              <div>
+              <>
                 Install Temple
                 <br /> Extension
-              </div>
+              </>
             )
           }
           onClick={handleConnectClick}
