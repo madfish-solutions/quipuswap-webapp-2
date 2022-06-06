@@ -19,9 +19,8 @@ import { Trans } from '@translation';
 import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
 
-interface LinkInterface {
+interface LinkInterfaceAbstract {
   id: string;
-  to?: string;
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
@@ -29,11 +28,19 @@ interface LinkInterface {
   hide?: boolean;
 }
 
-export interface NavigationDataProps extends LinkInterface {
-  links?: LinkInterface[];
+interface LinkInterface extends LinkInterfaceAbstract {
+  to: string;
 }
 
+export interface LinkMenuInterface extends LinkInterfaceAbstract {
+  links: LinkInterface[];
+}
+
+export type NavigationDataProps = LinkInterface | LinkMenuInterface;
+
 export const isShow = (nav: NavigationDataProps) => !nav.hide;
+export const isSingleItem = (nav: NavigationDataProps): nav is LinkInterface => 'to' in nav;
+export const isMenuItem = (nav: NavigationDataProps): nav is LinkMenuInterface => 'links' in nav;
 
 export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
@@ -56,11 +63,23 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   },
   {
     id: 'Stableswap',
-    to: AppRootRoutes.Stableswap,
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />,
-    hide: isProd()
+    hide: isProd(),
+    links: [
+      {
+        id: 'Stableswap_Farm',
+        to: AppRootRoutes.Stableswap,
+        label: <Trans ns="common">Farm</Trans>,
+        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+      },
+      {
+        id: 'Stableswap_Liquidity',
+        to: AppRootRoutes.Stableswap,
+        label: <Trans ns="common">Liquidity</Trans>,
+        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+      }
+    ]
   },
   {
     id: 'Farming',

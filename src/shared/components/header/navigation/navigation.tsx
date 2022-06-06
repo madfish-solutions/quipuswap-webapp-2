@@ -9,7 +9,7 @@ import { isExist } from '../../../helpers';
 import { amplitudeService } from '../../../services';
 import { Undefined } from '../../../types';
 import { ButtonOrLink } from './components';
-import { isShow, NAVIGATION_DATA } from './content';
+import { isMenuItem, isShow, isSingleItem, NAVIGATION_DATA } from './content';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
 
@@ -26,7 +26,7 @@ interface NavigationProps {
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const router = useLocation();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState<Record<string, boolean>>({ '1': false });
+  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState<Record<string, boolean>>({ Stableswap: true });
 
   const handleMenuClick = (url: string) => {
     amplitudeService.logEvent('MAIN_MENU_CLICK', { url });
@@ -46,7 +46,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const content = useMemo(() => {
     const result: ReactNode[] = [];
     NAVIGATION_DATA.filter(isShow).forEach(link => {
-      if (link.to) {
+      if (isSingleItem(link)) {
         result.push(
           <ButtonOrLink
             key={link.id}
@@ -65,12 +65,13 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
           />
         );
       }
-      if (link.links) {
+      if (isMenuItem(link)) {
         result.push(
           <div className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened[link.id] })} key={link.id}>
             <ButtonOrLink
               key={link.id}
               link={link}
+              icon={link.Icon ? <link.Icon className={styles.icon} id={iconId} /> : null}
               className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
               onClick={event => handleToggleMenu(event, link.id)}
               data-test-id={`secondaryNavigationButton-${link.id}`}

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Nullable } from '@shared/types';
 
 import { ExternalLink } from '../../../../svg';
-import { NavigationDataProps } from '../content';
+import { isSingleItem, NavigationDataProps } from '../content';
 import styles from './button-or-link.module.scss';
 
 interface Props {
@@ -18,11 +18,12 @@ interface Props {
 }
 
 export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, icon, ...props }) => {
+  const href = isSingleItem(link) ? link.to : '';
   if (link.target) {
     return (
       <a
         key={link.id}
-        href={link.to}
+        href={href}
         className={cx(styles.root, className)}
         target={link.target}
         rel="noreferrer noopener"
@@ -43,7 +44,7 @@ export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, ico
   return (
     <Link
       key={link.id}
-      to={link.to ?? ''}
+      to={href}
       className={className}
       target={link.target}
       onFocus={onFocus}
