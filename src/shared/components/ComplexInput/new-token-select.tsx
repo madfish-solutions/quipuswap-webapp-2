@@ -72,7 +72,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 
-  const amountStr = useMemo(() => (amount === undefined ? '' : new BigNumber(amount).toFixed()), [amount]);
+  const amountStr = useMemo(() => (isExist(amount) ? new BigNumber(amount).toFixed() : ''), [amount]);
   const tokenDecimals = token?.metadata.decimals;
 
   const [localAmount, setLocalAmount] = useState(amountStr);
