@@ -14,25 +14,25 @@ import {
   saveBigNumber,
   toFixed
 } from '@shared/helpers';
-import { useTokenBalance, useTokensBalances } from '@shared/hooks';
+import { useTokenBalance, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
-  calculateLpValue,
+  calculateShares as calculateLpValue,
   calculateOutputWithLp,
   calculateOutputWithToken,
   extractTokens,
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
-  getInputSlugByIndex
+  getInputSlugByIndex,
+  createAmountsMichelsonMapFormikValues
 } from '../../../../../../helpers';
 import {
   useRemoveStableswapLiquidity,
   useStableswapItemFormStore,
-  useStableswapItemStore
+  useStableswapItemStore,
+  useCalcTokenAmountView
 } from '../../../../../../hooks';
-import { createAmountsMichelsonMap } from './create-amounts-map';
-import { useCalcTokenAmountView } from './use-calc-token-amount-view';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
@@ -45,7 +45,7 @@ const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedPropo
   const lpBalance = useTokenBalance(item?.lpToken);
 
   const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;
-  const balanceTokens = useTokensBalances(tokens);
+  const balanceTokens = useTokensWithBalances(tokens);
 
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
@@ -143,7 +143,7 @@ export const useRemoveLiqFormViewModel = () => {
 
   const calculateShares = async (index: number, inputAmount: string) => {
     const tokens = extractTokens(item.tokensInfo);
-    const map = createAmountsMichelsonMap(formik.values, tokens, index, inputAmount);
+    const map = createAmountsMichelsonMapFormikValues(formik.values, tokens, index, inputAmount);
     const shares = await calcTokenAmountView(map);
     const fixedShares = fromDecimals(shares, item.lpToken);
 
@@ -157,7 +157,7 @@ export const useRemoveLiqFormViewModel = () => {
     formik.setFieldValue(LP_INPUT_KEY, shares);
 
     stableswapItemFormStore.setInputAmount(saveBigNumber(inputAmount, new BigNumber('0')), index);
-    stableswapItemFormStore.setLpInputAmount(new BigNumber(shares));
+    stableswapItemFormStore.setShares(new BigNumber(shares));
   };
 
   const handleInputChange = (reserves: BigNumber, index: number) =>

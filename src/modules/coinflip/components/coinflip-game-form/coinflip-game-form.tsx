@@ -45,7 +45,8 @@ export const CoinflipGameForm: FC<Props> = ({
     payoutAmount,
     coinSideError,
     handleInputAmountChange,
-    handleCoinSideSelect
+    handleCoinSideSelect,
+    handleCoinFlip
   } = useCoinflipGameFormViewModel(
     tokenToPlay,
     amountBalance,
@@ -86,6 +87,7 @@ export const CoinflipGameForm: FC<Props> = ({
         <ConnectWalletOrDoSomething>
           <Button
             type="submit"
+            onClick={handleCoinFlip}
             className={commonStyles.button}
             disabled={disabled}
             loading={isSubmitting}

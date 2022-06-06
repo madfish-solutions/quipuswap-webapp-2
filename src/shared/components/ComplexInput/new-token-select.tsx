@@ -163,6 +163,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
               autoComplete="off"
               onChange={handleAmountChange}
               placeholder={placeholder}
+              data-test-id="input"
             />
             <div className={s.dangerContainer}>
               {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
@@ -195,7 +196,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
             amountCap={getTokenInputAmountCap(token)}
           />
         </Scaffolding>
-        <ComplexError error={error} />
+        <ComplexError error={error} data-test-id="error" />
       </div>
     </div>
   );
