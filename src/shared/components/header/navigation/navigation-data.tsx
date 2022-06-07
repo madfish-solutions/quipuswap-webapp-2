@@ -32,6 +32,7 @@ interface LinkInterface {
 
 export interface LinkMenuInterface extends LinkInterface {
   links: LinkInterface[];
+  opened?: boolean;
 }
 
 export type NavigationDataProps = LinkInterface | LinkMenuInterface;
@@ -78,6 +79,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
     hide: isProd(),
+    opened: true,
     links: [
       {
         id: 'Stableswap_Farm',
@@ -174,3 +176,15 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     ]
   }
 ];
+
+export const DEFAULT_OPENED_MENU: Record<string, boolean> = NAVIGATION_DATA.filter(
+  menu => isMenuItem(menu) && menu.opened
+)
+  .map(({ id }) => id)
+  .reduce(
+    (acc, id) => ({
+      ...acc,
+      [id]: true
+    }),
+    {}
+  );

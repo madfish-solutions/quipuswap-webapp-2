@@ -9,7 +9,7 @@ import { isExist } from '../../../helpers';
 import { amplitudeService } from '../../../services';
 import { Undefined } from '../../../types';
 import { ButtonOrLink } from './components';
-import { isMenuItem, isShow, isSingleItem, NAVIGATION_DATA } from './content';
+import { DEFAULT_OPENED_MENU, isMenuItem, isShow, isSingleItem, NAVIGATION_DATA } from './navigation-data';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
 
@@ -26,7 +26,7 @@ interface NavigationProps {
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const router = useLocation();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState<Record<string, boolean>>({ Stableswap: true });
+  const [isInnerMenuOpened, setIsInnerMenuOpened] = useState<Record<string, boolean>>(DEFAULT_OPENED_MENU);
 
   const handleMenuClick = (url: string) => {
     amplitudeService.logEvent('MAIN_MENU_CLICK', { url });
@@ -35,10 +35,10 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const handleToggleMenu = useCallback(
     (event: Undefined<MouseEvent<HTMLAnchorElement>>, id: string, value?: boolean) => {
       event?.preventDefault();
-      setIsInnerMenuOpened({
-        ...isInnerMenuOpened,
+      setIsInnerMenuOpened(prevState => ({
+        ...prevState,
         [id]: isExist(value) ? value : !isInnerMenuOpened[id]
-      });
+      }));
     },
     [isInnerMenuOpened]
   );
