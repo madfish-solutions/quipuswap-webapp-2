@@ -18,6 +18,8 @@ interface TableProps<T extends object> {
   getCustomTableBodyProps?: TableBodyPropGetter<T>;
   getCustomRowProps?: RowPropGetter<T>;
   getCustomCellProps?: CellPropGetter<T>;
+  headerClassName?: string;
+  cellClassName?: string;
 }
 
 const defaultPropGetter = () => ({});
@@ -43,7 +45,9 @@ export const Table = <T extends object>({
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps(getCustomHeaderGroupProps)}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps(getCustomHeaderProps)}>{column.render('Header')}</th>
+              <th {...column.getHeaderProps(getCustomHeaderProps)} style={{ borderTop: 'none', padding: '4px 24px' }}>
+                {column.render('Header')}
+              </th>
             ))}
           </tr>
         ))}

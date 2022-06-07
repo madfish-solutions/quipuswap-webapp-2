@@ -40,7 +40,12 @@ export const RewardInfo: FC<Props> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <Card contentClassName={styles.cardContent} footer={isDetailsOpen && details} className={styles.card}>
+    <Card
+      contentClassName={styles.cardContent}
+      footer={isDetailsOpen && details}
+      className={styles.card}
+      footerClassName={styles.footer}
+    >
       <YourWinningsReward
         amount={userReward}
         rewardTooltip={rewardTooltip}
@@ -54,8 +59,8 @@ export const RewardInfo: FC<Props> = ({
             <span>Your Games</span>
             <Tooltip content={yourGamesTooltip} />
           </div>
-          <div className={cx(styles.amount, modeClass[colorThemeMode])}>
-            <StateCurrencyAmount amount={gamesCount} isLoading={isLoading} />
+          <div className={modeClass[colorThemeMode]}>
+            <StateCurrencyAmount amount={gamesCount} isLoading={isLoading} amountClassName={styles.amount} />
           </div>
         </div>
         {details && showDetails && (

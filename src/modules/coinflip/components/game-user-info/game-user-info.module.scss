@@ -1,13 +1,20 @@
+@import '@styles/variables';
+
 .table {
   width: 100%;
+  border-collapse: collapse;
 }
 
 .token {
   text-align: left;
+  border-top: 1px solid $text-03;
+  padding: 12px 0 16px 24px;
 }
 
 .amount {
   text-align: right;
+  border-top: 1px solid $text-03;
+  padding: 12px 24px;
   width: 100px;
   & > div {
     margin-left: auto;
