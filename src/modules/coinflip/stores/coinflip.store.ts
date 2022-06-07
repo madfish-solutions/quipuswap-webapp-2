@@ -116,7 +116,7 @@ export class CoinflipStore {
   private async getGamesCount() {
     return await getGamesCountByTokenApi(
       this.rootStore.tezos,
-      defined(this.rootStore.authStore.accountPkh, 'accountPkh'),
+      defined(this.rootStore.authStore.accountPkh),
       this.token
     );
   }

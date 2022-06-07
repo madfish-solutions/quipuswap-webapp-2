@@ -17,7 +17,7 @@ const modeClass = {
 };
 
 interface Props {
-  userReward: Nullable<BigNumber | string>;
+  userReward: Nullable<BigNumber>;
   gamesCount: Nullable<BigNumber>;
   rewardTooltip: string;
   yourGamesTooltip: string;

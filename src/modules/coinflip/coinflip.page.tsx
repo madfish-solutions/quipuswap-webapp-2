@@ -7,8 +7,7 @@ import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
 import styles from './coinflip.page.module.scss';
-import { CoinflipGame, CoinflipTokenSelector, CoinflipDashboardStatsInfo } from './components';
-import { CoinflipRewardInfo } from './components/coinflip-reward-info';
+import { CoinflipGame, CoinflipTokenSelector, CoinflipDashboardStatsInfo, CoinflipRewardInfo } from './components';
 import { useCoinflipGeneralStats, useGamesUserInfo } from './hooks';
 
 export const CoinflipPage: FC = observer(() => {

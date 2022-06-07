@@ -19,7 +19,7 @@ const modeClass = {
 };
 
 interface Props {
-  amount: Nullable<BigNumber | string>;
+  amount: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;

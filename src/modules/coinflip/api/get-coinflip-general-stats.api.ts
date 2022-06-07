@@ -4,7 +4,7 @@ import { getStorageInfo } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { getTokenAsset } from '../helpers/get-token-asset';
+import { getTokenAsset } from '../helpers';
 import { CoinflipStorage, GeneralStatsInterface } from './types';
 
 export const getCoinflipGeneralStatsApi = async (
