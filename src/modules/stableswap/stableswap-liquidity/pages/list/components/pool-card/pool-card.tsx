@@ -47,7 +47,7 @@ export const PoolCard: FC<Props> = ({
   const { totalValueTranslation, liquidityProvidersFeeTranslation, valueTranslation } = translation;
 
   return (
-    <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}/${stableswapItemUrl}`}>
+    <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${Tabs.add}/${stableswapItemUrl}`}>
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.poolInfo}>
           <div className={styles.logoSymbols}>

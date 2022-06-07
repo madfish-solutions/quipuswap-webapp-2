@@ -21,8 +21,8 @@ export const useStableswapLiquidityRouterViewModel = () => {
           await rootStore.createStableswapItemStore();
           await rootStore.createStableswapItemFormStore();
           await rootStore.createStableswapFilterStore();
-          setIsInitialazied(true);
         }
+        setIsInitialazied(true);
       } catch (_error) {
         setError(_error as Error);
       }

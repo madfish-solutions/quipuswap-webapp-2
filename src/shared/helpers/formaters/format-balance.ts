@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { bigNumberToString } from '../bignumber/big-number-to-string';
+import { bigNumberToString } from '../bignumber';
 import { FormatNumber } from './format-number';
 import { shortNumberWithLetters } from './short-number-with-letters';
 
@@ -14,9 +14,7 @@ const ZERO_STRING_LENGTH = 2;
 const SIGN_PASS = 0;
 const POINT = '.';
 
-export const getLastElement = <T>(value: string | Array<T>) => {
-  return value[value.length - ONE_ELEMENT];
-};
+export const getLastElement = <T>(value: string | Array<T>) => value[value.length - ONE_ELEMENT];
 
 const isZeroString = (value: string) => value === ZERO_STRING;
 

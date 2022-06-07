@@ -12,8 +12,10 @@
       "@images/*": ["./images/*"],
       "@tests/*": ["./tests/*"],
       "@translation": ["./translation"],
-      "@app.router": ["./app.router"],
-      "@layout": ["./layout"]
+      "@app.router": ["./app-root-routes.enum"],
+      "@layout": ["./layout"],
+      "@shared": ["./shared"],
+      "@modules": ["./modules"]
     }
   }
 }

@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
 import { CoinflipPage } from '@modules/coinflip';
 import { PageNotFoundPage } from '@modules/errors';
 import { FarmingPage } from '@modules/farming';
@@ -12,19 +13,6 @@ import { StableswapRouter } from '@modules/stableswap/stableswap.routing';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
 import { TermsOfServicePage } from '@modules/terms-of-service';
 import { VotingPage } from '@modules/voting';
-
-export enum AppRootRoutes {
-  Root = '/',
-  PrivacyPolicy = '/privacy-policy',
-  TermsOfService = '/terms-of-service',
-  Liquidity = '/liquidity',
-  Swap = '/swap',
-  Send = '/send',
-  Farming = '/farming',
-  Voting = '/voting',
-  Stableswap = '/stableswap',
-  Coinflip = '/coinflip'
-}
 
 export const AppRouter: FC = () => (
   <Routes>

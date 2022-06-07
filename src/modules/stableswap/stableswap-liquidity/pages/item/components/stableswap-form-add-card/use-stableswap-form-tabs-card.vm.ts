@@ -26,7 +26,7 @@ export const useStableswapFormTabsCardViewModel = () => {
   const { data: stableswapItem } = itemStore;
 
   const changeTabHandle = (tab: StableswapFormTabs) => {
-    const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${tab}/${stableswapItem?.id}`;
+    const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${tab}/${stableswapItem?.id}`;
 
     navigate(url);
   };
