@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { StableswapRoutes } from '@modules/stableswap';
 import { i18n } from '@translation';
 
 import { useStableswapItemStore } from '../../../../../hooks';
-import { StableswapRoutes } from '../../../../../stableswap.page';
 import { StableswapFormTabs } from '../../../../../types';
 
 export const TabsContent = [

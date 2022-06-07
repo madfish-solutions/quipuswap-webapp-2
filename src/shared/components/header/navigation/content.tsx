@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 import { AppRootRoutes } from '@app.router';
+import { StableswapRoutes } from '@modules/stableswap/stableswap.routing';
 import { StatusLabel } from '@shared/components/status-label';
 import {
   AnalyticsIcon,
@@ -19,28 +20,25 @@ import { Trans } from '@translation';
 import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
 
-interface LinkInterfaceAbstract {
+interface LinkInterface {
   id: string;
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
   status?: ReactNode;
   hide?: boolean;
-}
-
-interface LinkInterface extends LinkInterfaceAbstract {
   to: string;
 }
 
-export interface LinkMenuInterface extends LinkInterfaceAbstract {
+export interface LinkMenuInterface extends LinkInterface {
   links: LinkInterface[];
 }
 
 export type NavigationDataProps = LinkInterface | LinkMenuInterface;
 
 export const isShow = (nav: NavigationDataProps) => !nav.hide;
-export const isSingleItem = (nav: NavigationDataProps): nav is LinkInterface => 'to' in nav;
 export const isMenuItem = (nav: NavigationDataProps): nav is LinkMenuInterface => 'links' in nav;
+export const isSingleItem = (nav: NavigationDataProps): nav is LinkInterface => !isMenuItem(nav);
 
 export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
@@ -62,26 +60,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     Icon: LiquidityIcon
   },
   {
-    id: 'Stableswap',
-    label: <Trans ns="common">Stableswap</Trans>,
-    Icon: StableswapIcon,
-    hide: isProd(),
-    links: [
-      {
-        id: 'Stableswap_Farm',
-        to: AppRootRoutes.Stableswap,
-        label: <Trans ns="common">Farm</Trans>,
-        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
-      },
-      {
-        id: 'Stableswap_Liquidity',
-        to: AppRootRoutes.Stableswap,
-        label: <Trans ns="common">Liquidity</Trans>,
-        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
-      }
-    ]
-  },
-  {
     id: 'Farming',
     to: AppRootRoutes.Farming,
     label: <Trans ns="common">Farming</Trans>,
@@ -93,6 +71,27 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     label: <Trans ns="common">Game</Trans>,
     Icon: GameIcon,
     hide: isProd()
+  },
+  {
+    id: 'Stableswap',
+    to: AppRootRoutes.Stableswap,
+    label: <Trans ns="common">Stableswap</Trans>,
+    Icon: StableswapIcon,
+    hide: isProd(),
+    links: [
+      {
+        id: 'Stableswap_Farm',
+        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}`,
+        label: <Trans ns="common">Farm</Trans>,
+        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+      },
+      {
+        id: 'Stableswap_Liquidity',
+        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
+        label: <Trans ns="common">Liquidity</Trans>,
+        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+      }
+    ]
   },
   {
     id: 'Analytics',
@@ -124,6 +123,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'More',
     label: <Trans ns="common">More</Trans>,
     Icon: MoreIcon,
+    to: '',
     links: [
       {
         id: 'More_Voting',

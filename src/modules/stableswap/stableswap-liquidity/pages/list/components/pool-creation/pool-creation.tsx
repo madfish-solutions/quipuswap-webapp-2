@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { AppRootRoutes } from '@app.router';
-import { StableswapRoutes, Tabs } from '@modules/stableswap/stableswap.page';
+import { StableswapRoutes, Tabs } from '@modules/stableswap';
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { useTranslation } from '@translation';

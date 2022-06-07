@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 
-export const useStableswapPageViewModel = () => {
+export const useStableswapLiquidityRouterViewModel = () => {
   const [isInitialazied, setIsInitialazied] = useState(false);
+  const [error, setError] = useState<Nullable<Error>>(null);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -20,12 +21,13 @@ export const useStableswapPageViewModel = () => {
           await rootStore.createStableswapItemStore();
           await rootStore.createStableswapItemFormStore();
           await rootStore.createStableswapFilterStore();
+          setIsInitialazied(true);
         }
-      } finally {
-        setIsInitialazied(true);
+      } catch (_error) {
+        setError(_error as Error);
       }
     })();
   }, [rootStore]);
 
-  return { isInitialazied };
+  return { isInitialazied, error };
 };
