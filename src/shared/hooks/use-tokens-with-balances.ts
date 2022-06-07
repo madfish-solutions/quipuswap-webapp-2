@@ -5,6 +5,7 @@ import { BigNumber } from 'bignumber.js';
 import { isExist, toArray } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
+import { useAuthStore } from './use-auth-store';
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
 export interface BalanceToken {
@@ -14,6 +15,7 @@ export interface BalanceToken {
 
 export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<BalanceToken> => {
   const tokensBalancesStore = useTokensBalancesStore();
+  const { accountPkh } = useAuthStore();
   const [wrapTokens, setWrapTokens] = useState<Nullable<Array<Token>>>(null);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<Bal
         subscriptionList.forEach(({ token, subscription }) => tokensBalancesStore.unsubscribe(token, subscription));
       };
     }
-  }, [wrapTokens, tokensBalancesStore]);
+  }, [wrapTokens, tokensBalancesStore, accountPkh]);
 
   if (isExist(wrapTokens)) {
     return wrapTokens.map(token => {

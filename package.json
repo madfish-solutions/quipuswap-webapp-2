@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.0.15",
+  "version": "3.0.17",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3000 craco start",
