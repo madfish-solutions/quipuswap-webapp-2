@@ -8,19 +8,22 @@ import { useTranslation } from '@translation';
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
 import styles from './coinflip.page.module.scss';
 import { CoinflipGame, CoinflipTokenSelector, CoinflipDashboardStatsInfo } from './components';
-// TODO: Game title localization
-import { useCoinflipGeneralStats } from './hooks';
+import { CoinflipRewardInfo } from './components/coinflip-reward-info';
+import { useCoinflipGeneralStats, useGamesUserInfo } from './hooks';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
   const { t } = useTranslation();
   const { isLoading } = useCoinflipGeneralStats();
+  const { isLoadingGamesInfo } = useGamesUserInfo();
 
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
+
+      <CoinflipRewardInfo isLoading={isLoadingGamesInfo} />
 
       <CoinflipTokenSelector />
 

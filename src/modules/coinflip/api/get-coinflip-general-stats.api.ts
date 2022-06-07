@@ -1,21 +1,21 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
-import { isEqual, isNull } from '@shared/helpers';
+import { isNull } from '@shared/helpers';
+import { Token } from '@shared/types';
 
-import { TOKEN_ASSETS } from '../interfaces';
+import { getTokenAsset } from '../helpers/get-token-asset';
 import { CoinflipStorage, GeneralStatsInterface } from './types';
 
 export const getCoinflipGeneralStatsApi = async (
   tezos: Nullable<TezosToolkit>,
   contractAddress: string,
-  tokenAddress: string
+  token: Token
 ): Promise<Nullable<GeneralStatsInterface>> => {
   if (isNull(tezos)) {
     return null;
   }
-  const tokenAsset = isEqual(tokenAddress, DEFAULT_TOKEN.contractAddress) ? TOKEN_ASSETS.QUIPU : TOKEN_ASSETS.TEZOS;
+  const tokenAsset = getTokenAsset(token);
   const storage = await getStorageInfo<CoinflipStorage>(tezos, contractAddress);
 
   return (await storage.id_to_asset.get<GeneralStatsInterface>(tokenAsset)) ?? null;

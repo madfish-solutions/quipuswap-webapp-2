@@ -19,11 +19,12 @@ const modeClass = {
 };
 
 interface Props {
-  amount: Nullable<BigNumber>;
+  amount: Nullable<BigNumber | string>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
   rewardTooltip: string;
+  isLoading: boolean;
   className?: string;
 }
 
@@ -33,6 +34,7 @@ export const YourWinningsReward: FC<Props> = ({
   dollarEquivalent,
   amountDecimals = USD_DECIMALS,
   rewardTooltip,
+  isLoading,
   className
 }) => {
   const accountPkh = useAccountPkh();
@@ -55,6 +57,7 @@ export const YourWinningsReward: FC<Props> = ({
                 currency={currency}
                 dollarEquivalent={dollarEquivalent}
                 amountDecimals={amountDecimals}
+                isLoading={isLoading}
                 isLeftCurrency={currency === '$'}
               />
             </div>

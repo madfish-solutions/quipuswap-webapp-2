@@ -8,6 +8,6 @@ export interface TokenWon {
 }
 
 export interface GameUserInfo {
-  gamesCount: BigNumber;
-  tokensWon: Array<TokenWon>;
+  gamesCount: Nullable<BigNumber>;
+  tokensWon: Nullable<Array<TokenWon>>;
 }

@@ -1,21 +1,35 @@
+/* eslint-disable no-console */
+import { BigNumber } from 'bignumber.js';
+
 import { useCoinflipStore } from '@modules/coinflip/hooks';
-import { isNull } from '@shared/helpers';
+import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { getTokenSlug, isNull } from '@shared/helpers';
 
 const DEFAULT_USER_INFO = {
-  userReward: null,
+  tokensExchangeRateDollarEquivalent: '-',
   gamesCount: null,
   tokensWon: null
 };
 
 export const useCoinflipRewardInfoViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { gameUserInfo, userReward } = coinflipStore;
-
-  if (isNull(gameUserInfo)) {
-    return DEFAULT_USER_INFO;
-  }
-
+  const exchangeRate = useNewExchangeRates();
+  const { gameUserInfo } = coinflipStore;
   const { gamesCount, tokensWon } = gameUserInfo;
 
-  return { userReward, gamesCount, tokensWon };
+  if (isNull(gameUserInfo) || isNull(tokensWon)) {
+    return DEFAULT_USER_INFO;
+  }
+  const tokensExchangeRateDollarEquivalent = tokensWon.reduce((accum, curr) => {
+    const tokenSlug = getTokenSlug(curr.token);
+    const tokenExchangeRate = exchangeRate[tokenSlug];
+
+    return accum.plus(tokenExchangeRate);
+  }, new BigNumber(0));
+
+  return {
+    tokensExchangeRateDollarEquivalent,
+    gamesCount,
+    tokensWon
+  };
 };
