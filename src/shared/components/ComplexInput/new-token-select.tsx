@@ -79,10 +79,8 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (!focused) {
-      setLocalAmount(amountStr);
-    }
-  }, [focused, amountStr]);
+    setLocalAmount(amountStr);
+  }, [amountStr]);
 
   const dollarEquivalent = useMemo(
     () => exchangeRate && (amount ?? new BigNumber(0)).times(new BigNumber(exchangeRate)).decimalPlaces(2).toString(),
