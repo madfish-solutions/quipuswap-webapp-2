@@ -1,5 +1,5 @@
 import { RawTokenMetadata } from '../api';
-import { getTokenStandard } from '../helpers/tokens/get-koken-standard';
+import { getTokenStandard } from '../helpers/tokens/get-token-standard';
 import { Token, TokenAddress } from '../types';
 import { mapTokenMeta } from './token-meta.map';
 

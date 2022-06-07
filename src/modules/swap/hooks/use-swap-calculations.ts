@@ -2,24 +2,21 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import {
-  DexTypeEnum,
   getBestTradeExactInput,
   getBestTradeExactOutput,
   getTradeInputAmount,
   getTradeOutputAmount,
   Trade,
-  TradeOperation,
   useAllRoutePairs
 } from 'swap-router-sdk';
 
-import { UnsupportedDexType } from '@shared/errors/unsupported-dex-type.error';
-import { fromDecimals, getTokenIdFromSlug, toDecimals } from '@shared/helpers';
+import { fromDecimals, toDecimals } from '@shared/helpers';
 import { useTokens, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { TokensMap } from '@shared/store/tokens.store';
-import { BooleanMap, DexPair, DexPairType, Optional, Token } from '@shared/types';
+import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
 
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
+import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';
 import { useRoutePairsCombinations, useTradeWithSlippageTolerance } from '../utils/swap-router-sdk-adapters';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
@@ -27,60 +24,6 @@ interface SwapPair {
   inputToken: Optional<Token>;
   outputToken: Optional<Token>;
 }
-
-const mapDexType = (dexType: DexTypeEnum): DexPairType => {
-  switch (dexType) {
-    case DexTypeEnum.QuipuSwap:
-      return DexPairType.TokenToXtz;
-    case DexTypeEnum.QuipuSwapTokenToTokenDex:
-      return DexPairType.TokenToToken;
-    default:
-      throw new UnsupportedDexType();
-  }
-};
-
-const DEFAULT_DEX_ID = 0;
-
-const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Token): DexPair => {
-  const { aTokenPool, bTokenPool, dexType, dexAddress, dexId } = operation;
-
-  const dex = {
-    token1Pool: aTokenPool,
-    token2Pool: bTokenPool,
-    token1,
-    token2
-  };
-
-  const type = mapDexType(dexType);
-
-  const id = type === DexPairType.TokenToXtz ? dexAddress : dexId?.toNumber?.() ?? DEFAULT_DEX_ID;
-
-  return {
-    ...dex,
-    id,
-    type
-  } as DexPair;
-};
-
-const mapTradeToDexPairs = (trade: Nullable<Trade>, tokens: TokensMap): DexPair[] =>
-  trade
-    ? trade.map(operation => {
-        const { aTokenSlug, bTokenSlug } = operation;
-        const { contractAddress: aTokenAddress } = getTokenIdFromSlug(aTokenSlug);
-        const { contractAddress: bTokenAddress } = getTokenIdFromSlug(bTokenSlug);
-        const token1 = tokens.get(aTokenSlug) ?? tokens.get(aTokenAddress);
-        const token2 = tokens.get(bTokenSlug) ?? tokens.get(bTokenAddress);
-
-        if (!token1) {
-          throw new Error(`No Token Metadata of ${token1}`);
-        }
-        if (!token2) {
-          throw new Error(`No Token Metadata of ${token2}`);
-        }
-
-        return mapTradeToDexPair(operation, token1, token2);
-      })
-    : [];
 
 const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
   if (!trade) {
@@ -151,8 +94,8 @@ export const useSwapCalculations = () => {
     const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
-    const rawOutput = getTradeOutputAmount(bestTradeExact);
-    setOutputAmount(rawOutput ? fromDecimals(rawOutput, outputToken) : null);
+    const atomicOutputAmount = getTradeOutputAmount(bestTradeExact);
+    setOutputAmount(atomicOutputAmount ? fromDecimals(atomicOutputAmount, outputToken) : null);
   };
 
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
@@ -165,8 +108,8 @@ export const useSwapCalculations = () => {
     const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
-    const rawInput = getTradeInputAmount(bestTradeExact);
-    setInputAmount(rawInput ? fromDecimals(rawInput, inputToken) : null);
+    const atomicInputAmount = getTradeInputAmount(bestTradeExact);
+    setInputAmount(atomicInputAmount ? fromDecimals(atomicInputAmount, inputToken) : null);
   };
 
   const onSwapPairChange = (newPair: SwapPair) => {
