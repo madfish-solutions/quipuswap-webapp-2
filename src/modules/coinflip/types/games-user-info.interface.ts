@@ -4,7 +4,7 @@ import { Token } from '@shared/types';
 
 export interface TokenWon {
   token: Token;
-  amount: BigNumber;
+  amount: Nullable<BigNumber>;
 }
 
 export interface GameUserInfo {

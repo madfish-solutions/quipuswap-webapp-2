@@ -9,7 +9,7 @@ import { Nullable } from '@shared/types';
 import styles from './token-reward-cell.module.scss';
 
 interface Props {
-  amount: BigNumber;
+  amount: Nullable<BigNumber>;
   dollarEquivalent: Nullable<BigNumber>;
 }
 

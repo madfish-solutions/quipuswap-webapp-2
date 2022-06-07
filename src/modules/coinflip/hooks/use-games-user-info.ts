@@ -12,19 +12,22 @@ export const useGamesUserInfo = () => {
   const isReady = useReady();
   const [isLoading, setLoading] = useState(false);
 
-  const getGamesUserInfo = useCallback(async () => {
-    if (isReady && !isNull(coinflipStore)) {
-      try {
-        await coinflipStore.gamesCountStore.load();
-        await coinflipStore.tokenWonStore.load();
-        await coinflipStore.tokensWonStore.load();
-      } catch (error) {
-        showErrorToast(error as Error);
-      } finally {
-        setLoading(false);
+  const getGamesUserInfo = useCallback(
+    async (accountPkh: Nullable<string>) => {
+      if (isReady && !isNull(coinflipStore) && !isNull(accountPkh)) {
+        try {
+          await coinflipStore.gamesCountStore.load();
+          await coinflipStore.tokenWonStore.load();
+          await coinflipStore.tokensWonStore.load();
+        } catch (error) {
+          showErrorToast(error as Error);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
-  }, [isReady, showErrorToast, coinflipStore]);
+    },
+    [isReady, showErrorToast, coinflipStore]
+  );
 
   return { isLoadingGamesInfo: isLoading, getGamesUserInfo };
 };

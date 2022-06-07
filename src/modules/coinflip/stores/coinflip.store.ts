@@ -75,7 +75,6 @@ export class CoinflipStore {
       payout: computed,
       token: computed,
       gameUserInfo: computed,
-      userReward: computed,
 
       setToken: action,
       setInput: action
@@ -87,17 +86,6 @@ export class CoinflipStore {
     const tokensWon = this.tokensWonStore.data;
 
     return { gamesCount, tokensWon };
-  }
-
-  get userReward() {
-    if (isNull(this.gameUserInfo.tokensWon)) {
-      return null;
-    }
-
-    return this.gameUserInfo.tokensWon.reduce((accm, curr) => {
-      // TODO: multiply by exchange rate
-      return accm.plus(curr.amount);
-    }, new BigNumber(0));
   }
 
   get payout(): Nullable<BigNumber> {
@@ -128,7 +116,7 @@ export class CoinflipStore {
   private async getGamesCount() {
     return await getGamesCountByTokenApi(
       this.rootStore.tezos,
-      defined(this.rootStore.authStore.accountPkh),
+      defined(this.rootStore.authStore.accountPkh, 'accountPkh'),
       this.token
     );
   }

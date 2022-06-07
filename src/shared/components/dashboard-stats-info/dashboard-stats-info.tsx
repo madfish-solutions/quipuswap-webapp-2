@@ -53,6 +53,7 @@ export const DashboardStatsInfo: FC<Props> = ({
     >
       {cards.map((card: ReactElement, index: number) => (
         <div
+          key={index}
           className={cx(
             cardClassName,
             computedClassName(

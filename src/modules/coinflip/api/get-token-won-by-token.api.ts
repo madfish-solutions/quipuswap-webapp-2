@@ -17,7 +17,8 @@ export const getTokenWonByTokenApi = async (
   const tokenAsset = getTokenAsset(token);
 
   const { gamers_stats } = (await getCoinflipStorage(tezos)) as CoinflipStorage;
-  const { total_won_amt } = (await gamers_stats.get([accountPkh, new BigNumber(tokenAsset)])) as GamersStats;
+  const stats = (await gamers_stats.get([accountPkh, new BigNumber(tokenAsset)])) as GamersStats;
+  const amount = stats ? fromDecimals(stats.total_won_amt, token) : null;
 
-  return { token: token, amount: fromDecimals(total_won_amt, token) };
+  return { token, amount };
 };
