@@ -58,7 +58,8 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
     return new BigNumber('0');
   }
 
-  const reward = new BigNumber(Math.floor((timestamp - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+  const timeFrom = Math.min(timestamp, new Date(item.endTime).getTime());
+  const reward = new BigNumber(Math.floor((timeFrom - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
   );
 
