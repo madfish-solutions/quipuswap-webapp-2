@@ -78,17 +78,22 @@ export const useSwapCalculations = () => {
     tradingSlippage
   );
 
-  const resetCalculations = () => {
-    setInputAmount(null);
-    setOutputAmount(null);
+  const resetCalculations = (
+    initialInputAmount: Nullable<BigNumber> = null,
+    initialOutputAmount: Nullable<BigNumber> = null
+  ) => {
+    setInputAmount(initialInputAmount);
+    setOutputAmount(initialOutputAmount);
     setBestTrade(null);
   };
 
   const onInputAmountChange = (newInputAmount: Nullable<BigNumber>) => {
     setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
+
     if (!newInputAmount || !routePairsCombinations.length) {
-      return resetCalculations();
+      return resetCalculations(newInputAmount, null);
     }
+
     setInputAmount(newInputAmount);
 
     const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputToken), routePairsCombinations);
@@ -100,9 +105,11 @@ export const useSwapCalculations = () => {
 
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
     setLastAmountFieldChanged(SwapField.OUTPUT_AMOUNT);
+
     if (!newOutputAmount || !routePairsCombinations.length) {
-      return resetCalculations();
+      return resetCalculations(null, newOutputAmount);
     }
+
     setOutputAmount(newOutputAmount);
 
     const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputToken), routePairsCombinations);
