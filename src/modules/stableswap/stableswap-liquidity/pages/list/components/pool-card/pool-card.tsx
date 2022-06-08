@@ -5,9 +5,6 @@ import { Link } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { StableswapRoutes, Tabs } from '@modules/stableswap';
-import { extractTokens } from '@modules/stableswap/helpers';
-import { StableswapItem } from '@modules/stableswap/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
   Card,
@@ -19,6 +16,10 @@ import {
   TokensSymbols
 } from '@shared/components';
 
+import { extractTokens } from '../../../../../helpers';
+import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
+import { StableswapItem } from '../../../../../types';
+import { Tabs } from '../../../../tabs.enum';
 import { preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';

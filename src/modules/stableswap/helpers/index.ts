@@ -2,8 +2,6 @@ export * from './calculate-lp-value';
 export * from './calculate-tokens-input';
 export * from './calculate-output-with-token';
 export * from './calculate-output-with-lp';
-export * from './check-for-add-or-remove-in-url-parts';
-export * from './check-tab-for-add-or-remove';
 export * from './create-amount-michelson-map';
 export * from './extract-tokens';
 export * from './formik';

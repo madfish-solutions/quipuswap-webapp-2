@@ -5,10 +5,9 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
-import { getLastElement, getRouterParts, isUndefined } from '@shared/helpers';
+import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@shared/helpers';
 
 import { PageNotFoundPage } from '../../errors';
-import { checkForAddOrRemoveInUrlParts } from '../helpers';
 import { StableswapRoutes } from '../stableswap-routes.enum';
 import {
   StableswapLiquidityAddItemPage,
@@ -26,7 +25,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = checkForAddOrRemoveInUrlParts(routerParts);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [Tabs.add, Tabs.remove]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${Tabs.add}/${lastTab}`} />;

@@ -15,7 +15,7 @@ import {
   GameIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
-import { Trans } from '@translation';
+import { i18n, Trans } from '@translation';
 
 import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
@@ -85,13 +85,27 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
         id: 'Stableswap_Farm',
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}`,
         label: <Trans ns="common">Farm</Trans>,
-        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+        status: (
+          <StatusLabel
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={i18n.t('common|NEW')}
+            className={styles.navigationStatus}
+          />
+        )
       },
       {
         id: 'Stableswap_Liquidity',
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
         label: <Trans ns="common">Liquidity</Trans>,
-        status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />
+        status: (
+          <StatusLabel
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={i18n.t('common|NEW')}
+            className={styles.navigationStatus}
+          />
+        )
       }
     ]
   },

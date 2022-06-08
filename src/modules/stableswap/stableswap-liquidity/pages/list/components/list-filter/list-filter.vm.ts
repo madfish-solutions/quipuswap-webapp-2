@@ -1,8 +1,9 @@
 import { FormEvent } from 'react';
 
-import { useStableswapFilterStore } from '@modules/stableswap/hooks';
 import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
+
+import { useStableswapFilterStore } from '../../../../../hooks';
 
 export const useListFilterViewModel = () => {
   const { t } = useTranslation();
