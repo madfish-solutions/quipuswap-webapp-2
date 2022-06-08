@@ -53,7 +53,7 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: RawOrMappedToken) =>
+export const isTezosToken = (token: { contractAddress: string }) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;

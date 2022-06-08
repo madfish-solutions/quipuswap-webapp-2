@@ -72,7 +72,10 @@ const useDappTokens = () => {
           throw new InvalidFa2TokenIdError(address, tokenId ?? DEFAULT_FA2_TOKEN_ID);
         }
 
-        const customToken = await getTokenMetadata(NETWORK, address, tokenId);
+        const customToken = await getTokenMetadata({
+          contractAddress: address,
+          fa2TokenId: tokenId
+        });
         if (!customToken) {
           throw new TokenMetadataError();
         }

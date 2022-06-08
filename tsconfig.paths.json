@@ -12,6 +12,7 @@
       "@images/*": ["./images/*"],
       "@tests/*": ["./tests/*"],
       "@translation": ["./translation"],
+      "@libs": ["./libs"],
       "@app.router": ["./app-root-routes.enum"],
       "@layout": ["./layout"],
       "@shared": ["./shared"],
