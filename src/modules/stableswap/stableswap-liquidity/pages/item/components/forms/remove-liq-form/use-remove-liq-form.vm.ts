@@ -13,7 +13,7 @@ import {
   saveBigNumber,
   toFixed
 } from '@shared/helpers';
-import { useTokenBalance, useTokensWithBalances } from '@shared/hooks';
+import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
@@ -63,6 +63,7 @@ const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedPropo
 export const useRemoveLiqFormViewModel = () => {
   const { calcTokenAmountView } = useCalcTokenAmountView();
   const { removeStableswapLiquidity } = useRemoveStableswapLiquidity();
+  const { accountPkh } = useAuthStore();
   const stableswapItemStore = useStableswapItemStore();
   const stableswapItemFormStore = useStableswapItemFormStore();
   const { t } = useTranslation();
@@ -197,12 +198,15 @@ export const useRemoveLiqFormViewModel = () => {
     return stableswapItemFormStore.setIsBalancedProportion(state);
   };
 
+  const disabled = formik.isSubmitting || !accountPkh;
+
   return {
     data,
     formik,
     tooltip,
     labelInput,
     isSubmitting: formik.isSubmitting,
+    disabled,
     lpBalance,
     switcherValue: stableswapItemFormStore.isBalancedProportion,
     isLpInputDisabled: !stableswapItemFormStore.isBalancedProportion,
