@@ -22,5 +22,3 @@ Staging: https://qs-develop.vercel.app/
 `yarn clear` - clear app cache
 
 `yarn test`
-
-(test)
