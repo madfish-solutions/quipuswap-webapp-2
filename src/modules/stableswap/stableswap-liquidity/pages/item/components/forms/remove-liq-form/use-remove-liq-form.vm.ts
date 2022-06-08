@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { StableswapItem } from '@modules/stableswap/types';
 import {
   findBalanceToken,
   fromDecimals,
@@ -33,6 +32,7 @@ import {
   useStableswapItemStore,
   useCalcTokenAmountView
 } from '../../../../../../hooks';
+import { StableswapItem } from '../../../../../../types';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;

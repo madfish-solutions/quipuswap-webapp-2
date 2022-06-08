@@ -1,7 +1,8 @@
 import { FC, ReactNode } from 'react';
 
 import { AppRootRoutes } from '@app.router';
-import { StatusLabel } from '@shared/components/status-label';
+import { StableswapRoutes } from '@modules/stableswap';
+import { StatusLabel } from '@shared/components';
 import {
   AnalyticsIcon,
   FarmIcon,
@@ -14,26 +15,31 @@ import {
   GameIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
-import { Trans } from '@translation';
+import { i18n, Trans } from '@translation';
 
 import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
   id: string;
-  to?: string;
   label: ReactNode;
   target?: string;
   Icon?: FC<{ className?: string; id?: string }>;
   status?: ReactNode;
   hide?: boolean;
+  to: string;
 }
 
-export interface NavigationDataProps extends LinkInterface {
-  links?: LinkInterface[];
+export interface LinkMenuInterface extends LinkInterface {
+  links: LinkInterface[];
+  opened?: boolean;
 }
+
+export type NavigationDataProps = LinkInterface | LinkMenuInterface;
 
 export const isShow = (nav: NavigationDataProps) => !nav.hide;
+export const isMenuItem = (nav: NavigationDataProps): nav is LinkMenuInterface => 'links' in nav;
+export const isSingleItem = (nav: NavigationDataProps): nav is LinkInterface => !isMenuItem(nav);
 
 export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
@@ -55,14 +61,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     Icon: LiquidityIcon
   },
   {
-    id: 'Stableswap',
-    to: AppRootRoutes.Stableswap,
-    label: <Trans ns="common">Stableswap</Trans>,
-    Icon: StableswapIcon,
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label="NEW" className={styles.navigationStatus} />,
-    hide: isProd()
-  },
-  {
     id: 'Farming',
     to: AppRootRoutes.Farming,
     label: <Trans ns="common">Farming</Trans>,
@@ -74,6 +72,42 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     label: <Trans ns="common">Game</Trans>,
     Icon: GameIcon,
     hide: isProd()
+  },
+  {
+    id: 'Stableswap',
+    to: AppRootRoutes.Stableswap,
+    label: <Trans ns="common">Stableswap</Trans>,
+    Icon: StableswapIcon,
+    hide: isProd(),
+    opened: true,
+    links: [
+      {
+        id: 'Stableswap_Farm',
+        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}`,
+        label: <Trans ns="common">Farm</Trans>,
+        status: (
+          <StatusLabel
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={i18n.t('common|NEW')}
+            className={styles.navigationStatus}
+          />
+        )
+      },
+      {
+        id: 'Stableswap_Liquidity',
+        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
+        label: <Trans ns="common">Liquidity</Trans>,
+        status: (
+          <StatusLabel
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={i18n.t('common|NEW')}
+            className={styles.navigationStatus}
+          />
+        )
+      }
+    ]
   },
   {
     id: 'Analytics',
@@ -105,6 +139,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'More',
     label: <Trans ns="common">More</Trans>,
     Icon: MoreIcon,
+    to: '',
     links: [
       {
         id: 'More_Voting',
@@ -155,3 +190,15 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     ]
   }
 ];
+
+export const DEFAULT_OPENED_MENU: Record<string, boolean> = NAVIGATION_DATA.filter(
+  menu => isMenuItem(menu) && menu.opened
+)
+  .map(({ id }) => id)
+  .reduce(
+    (acc, id) => ({
+      ...acc,
+      [id]: true
+    }),
+    {}
+  );
