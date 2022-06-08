@@ -10,9 +10,9 @@ import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
   DexGraph,
+  getSymbolsString,
   getTokenPairSlug,
   getTokenSlug,
-  getTokensOptionalPairName,
   isEmptyArray,
   makeSwapOrSendRedirectionUrl,
   makeToken
@@ -365,9 +365,11 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
-  const title = `${t('swap|Swap')} ${getTokensOptionalPairName(formik.inputToken, formik.outputToken)}`;
+  const pairName =
+    formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
+  const title = `${t('swap|Swap')} ${pairName}`;
   const noRouteFound =
-    !swap.dexRoute && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
+    isEmptyArray(swap.trade) && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
   return {
