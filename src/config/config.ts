@@ -91,7 +91,7 @@ export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS = ['5', '6'];
+export const NEW_FARMINGS = ['11', '12'];
 
 // FarmingItems with Youves
 export const YOUVES_FARMINGS = ['5', '6'];

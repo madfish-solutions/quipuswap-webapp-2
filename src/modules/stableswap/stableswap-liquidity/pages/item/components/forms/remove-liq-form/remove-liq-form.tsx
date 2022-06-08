@@ -31,13 +31,12 @@ export const RemoveLiqForm: FC = observer(() => {
     labelInput,
     tooltip,
     switcherValue,
+    isSubmitting,
+    disabled,
     handleSwitcherClick,
     handleSubmit,
     handleLpInputChange
   } = removeLiqFormViewModel;
-
-  const disabled = false;
-  const isSubmitting = false;
 
   return (
     <form onSubmit={handleSubmit}>
