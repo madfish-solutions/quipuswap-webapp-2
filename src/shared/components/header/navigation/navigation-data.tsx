@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 
 import { AppRootRoutes } from '@app.router';
 import { StableswapRoutes } from '@modules/stableswap';
-import { StatusLabel } from '@shared/components/status-label';
+import { StatusLabel } from '@shared/components';
 import {
   AnalyticsIcon,
   FarmIcon,
