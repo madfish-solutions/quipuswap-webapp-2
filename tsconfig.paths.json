@@ -13,7 +13,8 @@
       "@tests/*": ["./tests/*"],
       "@translation": ["./translation"],
       "@app.router": ["./app.router"],
-      "@layout": ["./layout"]
+      "@layout": ["./layout"],
+      "@libs": ["./libs"]
     }
   }
 }

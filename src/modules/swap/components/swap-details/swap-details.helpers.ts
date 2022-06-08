@@ -7,7 +7,6 @@ export const dexRouteToQuipuUiKitRoute = (inputToken: Token, dexRoute: DexPair[]
   if (dexRoute.length === 0) {
     return [];
   }
-  //TODO
 
   return dexRoute.reduce<{ displayedRoute: RouteProps['routes']; currentToken: Token }>(
     ({ displayedRoute, currentToken }, { token1, token2 }, index) => {

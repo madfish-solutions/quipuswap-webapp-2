@@ -3,7 +3,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { Nullable, Token } from '@shared/types';
 
-import { PairInfo } from '../add-liquidity-form/pair-info.interface';
+import { PairInfo } from '../add-liquidity-form';
 
 export const getTezTokenPairInfo = (dex: FoundDex, token1: Token, token2: Token): Nullable<PairInfo> => {
   const isToken1Tezos = TEZOS_TOKEN.contractAddress === token1.contractAddress;

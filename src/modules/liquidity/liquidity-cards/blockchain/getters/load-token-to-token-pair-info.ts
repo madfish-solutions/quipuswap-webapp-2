@@ -3,8 +3,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { Nullable, Token } from '@shared/types';
 
 import { PairInfo } from '../../add-liquidity-form';
-import { newGetValidMichelTemplate } from '../../helpers/new-get-valid-michel-template';
-import { sortTokensPair } from '../../helpers/sort-tokens-pair';
+import { newGetValidMichelTemplate, sortTokensPair } from '../../helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');

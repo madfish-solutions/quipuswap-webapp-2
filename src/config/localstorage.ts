@@ -7,3 +7,4 @@ export const GLOBAL_SETTINGS_KEY = 'globalSettings';
 export const IS_DEV_KEY = 'DEV';
 export const IS_PROD_KEY = 'PROD';
 export const COOKIES_APPRROVAL_KEY = 'cookieApproval';
+export const TOKENS_KEY = 'tokens';
