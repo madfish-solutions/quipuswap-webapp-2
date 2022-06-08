@@ -61,7 +61,7 @@ export const useSwapCalculations = () => {
   useEffect(() => {
     try {
       setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
-    } catch (_) {
+    } catch {
       setDexRoute([]);
     }
   }, [bestTrade, tokens]);

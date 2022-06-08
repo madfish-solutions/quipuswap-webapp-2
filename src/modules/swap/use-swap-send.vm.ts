@@ -21,7 +21,7 @@ import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slu
 import { useDexGraph, useOnBlock } from '@shared/hooks';
 import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { SwapTabAction, Token, TokenMetadata, Undefined } from '@shared/types';
+import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { useSwapCalculations } from './hooks/use-swap-calculations';
@@ -31,10 +31,10 @@ import { useSwapLimits } from './providers/swap-limits-provider';
 import { getBalanceByTokenSlug } from './utils/get-balance-by-token-slug';
 import { SwapAmountFieldName, SwapField, SwapFormValues, SwapTokensFieldName } from './utils/types';
 
-function tokensMetadataIsSame(token1: Token, token2: Token) {
-  const propsToCompare: (keyof TokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
+const metadataPropsToCompare = ['decimals', 'name', 'symbol', 'thumbnailUri'] as const;
 
-  return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
+function tokensMetadataIsSame(token1: Token, token2: Token) {
+  return metadataPropsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
 const PRICE_IMPACT_WARNING_THRESHOLD = 10;
