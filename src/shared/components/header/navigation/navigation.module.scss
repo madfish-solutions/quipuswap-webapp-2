@@ -50,6 +50,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height $animationTime;
+  margin-left: 8px;
 }
 
 .linkToggle {
@@ -89,7 +90,6 @@
 
   .linksInner {
     max-height: 360px;
-    margin-left: 8px;
   }
 }
 
