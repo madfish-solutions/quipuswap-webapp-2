@@ -1,0 +1,215 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+@mixin poolCard($logos-text-color) {
+  .poolCard {
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  .poolInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .logoSymbols {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .whitelistedTag {
+    text-transform: uppercase;
+  }
+
+  .tokensSymbols {
+    white-space: nowrap;
+
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: $logos-text-color;
+  }
+
+  .cardCellHeader,
+  .tokensSymbols {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .cardCell {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .tokensValue {
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 4px;
+  }
+
+  .tokensInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .tokensLogos {
+    & > img,
+    & > svg {
+      width: 36px !important; //force overwrite
+    }
+  }
+
+  @include media('>phone') {
+    .stats {
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .tokensLogos {
+      & > img,
+      & > svg {
+        width: initial !important; //force overwrite
+      }
+    }
+  }
+
+  @include media('>Lphone') {
+    .logoSymbols {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .poolInfo {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logoSymbols {
+      font-size: 16px;
+      gap: 16px;
+    }
+  }
+
+  @include media('>tablet') {
+    .poolStats {
+      flex-direction: row;
+      gap: 40px;
+      order: 0;
+    }
+
+    .tokensInfo {
+      flex-direction: row;
+      gap: 40px;
+    }
+
+    .stats {
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 40px;
+    }
+
+    .cardCell {
+      justify-content: initial;
+    }
+  }
+
+  @include media('>Ltablet') {
+    .stats {
+      flex-direction: row;
+    }
+  }
+}
+
+.card.light:hover {
+  background: $hover-light-row;
+}
+
+.card.dark:hover {
+  background: $hover-dark-row;
+}
+
+.light {
+  @include poolCard($text-01);
+}
+
+.dark {
+  @include poolCard($text-inverse);
+}
+
+.userData {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.light {
+  .userData {
+    &::before {
+      background-color: $text-03;
+    }
+  }
+}
+
+.dark {
+  .userData {
+    &::before {
+      background-color: $text-02;
+    }
+  }
+}
+
+@include media('>phone', '<Lphone') {
+  .userData {
+    row-gap: 16px;
+  }
+}
+
+@include media('>=Lphone', '<=tablet') {
+  .userData {
+    width: 50%;
+    row-gap: 16px;
+  }
+}
+
+@include media('>tablet', '<Ltablet') {
+  .userData {
+    row-gap: 16px;
+  }
+}
+
+@include media('>=Ltablet') {
+  .userData {
+    flex-direction: row;
+    column-gap: 32px;
+  }
+
+  .userData {
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+
+      width: 1px;
+      height: 80%;
+
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

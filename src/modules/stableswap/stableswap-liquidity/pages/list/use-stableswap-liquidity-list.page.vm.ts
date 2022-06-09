@@ -29,7 +29,7 @@ export const useStableswapLiquidityPageViewModel = () => {
 
   return {
     isLoading,
-    list,
+    list: list ?? [],
     title
   };
 };

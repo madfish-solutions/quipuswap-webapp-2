@@ -1,6 +1,7 @@
 import { BlockInfoWrap, RawToken } from '@shared/types';
 
 export interface StableswapListResponse extends RawStableswapList, BlockInfoWrap {}
+export interface StableFarmListResponse extends RawStableFarmList, BlockInfoWrap {}
 export interface StableswapItemResponse extends IRawStableswapItem, BlockInfoWrap {}
 export interface StableswapStatsResponse extends RawStableswapStats, BlockInfoWrap {}
 
@@ -11,21 +12,35 @@ export interface RawStableswapStats {
 export interface RawStableswapList {
   list: Array<RawStableswapItem>;
 }
+export interface RawStableFarmList {
+  list: Array<RawStableFarmItem>;
+}
 
 export interface IRawStableswapItem {
   item: RawStableswapItem;
 }
 
-export interface RawStableswapItem {
+interface AbstractRawStableItem {
   id: string;
   contractAddress: string;
   tokensInfo: Array<RawStableswapTokensInfo>;
-  fees: RawStableswapFees;
-  totalLpSupply: string;
-  tvlInUsd: string;
-  poolContractUrl: string;
   isWhitelisted: boolean;
+}
+
+export interface RawStableswapItem extends AbstractRawStableItem {
+  tvlInUsd: string;
   lpToken: RawToken;
+  totalLpSupply: string;
+  poolContractUrl: string;
+  fees: RawStableswapFees;
+}
+export interface RawStableFarmItem extends AbstractRawStableItem {
+  apr: string;
+  apy: string;
+  atomicTvl: string;
+  stakedToken: RawToken;
+  farmContractUrl: string;
+  stakedTokenExchangeRate: string;
 }
 
 export interface RawStableswapFees {

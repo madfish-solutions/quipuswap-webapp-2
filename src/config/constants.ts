@@ -82,11 +82,13 @@ export const SKIP = -1;
 //#region API
 export const LIST = 'list';
 export const STATS = 'stats';
+export const FARM = 'farm';
 
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
+export const STABLEFARM_LIST_API_URL = `${STABLESWAP_API_URL}/${FARM}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 //#endregion
 
