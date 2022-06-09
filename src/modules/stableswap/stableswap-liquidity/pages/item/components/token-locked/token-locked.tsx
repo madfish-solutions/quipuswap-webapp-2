@@ -6,7 +6,7 @@ import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 
 import { useTokenLockedViewModel } from './use-token-locked.vm';
 
-export interface TokenLockedProps {
+interface Props {
   className: string;
   tokenSymbol: string;
   amount: BigNumber;
@@ -14,7 +14,7 @@ export interface TokenLockedProps {
   dollarEquivalent: BigNumber;
 }
 
-export const TokenLocked: FC<TokenLockedProps> = ({ className, amount, isLoading, tokenSymbol, dollarEquivalent }) => {
+export const TokenLocked: FC<Props> = ({ className, amount, isLoading, tokenSymbol, dollarEquivalent }) => {
   const cellName = useTokenLockedViewModel(tokenSymbol);
 
   return (

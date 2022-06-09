@@ -93,7 +93,6 @@ export const Details: FC = observer(() => {
       <DetailsCardCell cellName={t('stableswap|Dev Fee')} className={cardCellClassName} data-test-id="devFee">
         <StatePercentage isLoading={isLoading} value={devFee} />
       </DetailsCardCell>
-
       <div className={cx(commonContainerStyles.detailsButtons, styles.detailsButtons)}>
         <Button
           className={cx(commonContainerStyles.detailsButton, styles.detailsButton)}

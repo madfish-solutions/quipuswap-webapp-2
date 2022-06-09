@@ -4,7 +4,7 @@ import { AppRootRoutes } from '@app.router';
 import { i18n } from '@translation';
 
 import { useStableswapItemStore } from '../../../../../hooks';
-import { StableswapRoutes } from '../../../../../stableswap.page';
+import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
 import { StableswapFormTabs } from '../../../../../types';
 
 export const TabsContent = [
@@ -26,7 +26,7 @@ export const useStableswapFormTabsCardViewModel = () => {
   const { data: stableswapItem } = itemStore;
 
   const changeTabHandle = (tab: StableswapFormTabs) => {
-    const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${tab}/${stableswapItem?.id}`;
+    const url = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${tab}/${stableswapItem?.id}`;
 
     navigate(url);
   };

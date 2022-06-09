@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { BigNumber } from 'bignumber.js';
+import { Trade } from 'swap-router-sdk';
 
 import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import {
@@ -27,6 +28,7 @@ interface SwapDetailsParams {
   outputAmount: Undefined<BigNumber>;
   slippageTolerance: Undefined<BigNumber>;
   dexRoute: Undefined<DexPair[]>;
+  trade: Nullable<Trade>;
   recipient: Undefined<string>;
 }
 
@@ -37,7 +39,7 @@ const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
   const { dexGraph } = useDexGraph();
-  const { data: swapFee = null, error: swapFeeError } = useSwapFee({ ...params, dexChain: dexRoute });
+  const { data: swapFee = null, error: swapFeeError } = useSwapFee(params);
 
   const sellRate =
     inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount

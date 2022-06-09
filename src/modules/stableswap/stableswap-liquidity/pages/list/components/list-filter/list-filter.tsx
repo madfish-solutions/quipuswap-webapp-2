@@ -4,10 +4,10 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
-import { Sorter } from '@modules/stableswap/components';
 import { Card, Input, NumberInput, Switcher } from '@shared/components';
 import { Search } from '@shared/svg';
 
+import { Sorter } from '../../../../../components';
 import styles from './list-filter.module.scss';
 import { useListFilterViewModel } from './list-filter.vm';
 

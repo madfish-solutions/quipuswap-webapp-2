@@ -1,4 +1,4 @@
-import { FC, ReactNode, MouseEvent } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Nullable } from '@shared/types';
 
 import { ExternalLink } from '../../../../svg';
-import { NavigationDataProps } from '../content';
+import { NavigationDataProps } from '../navigation-data';
 import styles from './button-or-link.module.scss';
 
 interface Props {
@@ -43,7 +43,7 @@ export const ButtonOrLink: FC<Props> = ({ link, className, onFocus, onClick, ico
   return (
     <Link
       key={link.id}
-      to={link.to ?? ''}
+      to={link.to}
       className={className}
       target={link.target}
       onFocus={onFocus}
