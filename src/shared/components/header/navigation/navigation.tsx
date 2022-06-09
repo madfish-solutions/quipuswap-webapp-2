@@ -67,12 +67,19 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
       }
       if (isMenuItem(link)) {
         result.push(
-          <div className={cx(styles.linksWrapper, { [styles.menuOpened]: isInnerMenuOpened[link.id] })} key={link.id}>
+          <div className={cx({ [styles.menuOpened]: isInnerMenuOpened[link.id] })} key={link.id}>
             <ButtonOrLink
               key={link.id}
               link={link}
               icon={link.Icon ? <link.Icon className={styles.icon} id={iconId} /> : null}
-              className={cx(styles.link, styles.linkToggle, modeClass[colorThemeMode])}
+              className={cx(
+                styles.link,
+                styles.linkToggle,
+                {
+                  [styles.active]: isActivePath(router.pathname, link.to)
+                },
+                modeClass[colorThemeMode]
+              )}
               onClick={event => handleToggleMenu(event, link.id)}
               data-test-id={`secondaryNavigationButton-${link.id}`}
             />
@@ -81,7 +88,9 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                 <ButtonOrLink
                   key={subLink.id}
                   link={subLink}
-                  className={cx(styles.linkInner, modeClass[colorThemeMode])}
+                  className={cx(styles.linkInner, modeClass[colorThemeMode], {
+                    [styles.active]: isActivePath(router.pathname, subLink.to)
+                  })}
                   onFocus={() => handleToggleMenu(undefined, link.id, true)}
                   onClick={() => handleMenuClick(subLink.to ?? '')}
                   data-test-id={`secondaryNavigationButton-${subLink.id}`}

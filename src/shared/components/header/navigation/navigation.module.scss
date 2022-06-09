@@ -89,11 +89,16 @@
 
   .linksInner {
     max-height: 360px;
+    margin-left: 8px;
   }
 }
 
 .light {
   color: $text-01;
+
+  &.active {
+    color: $hover-primary-01-fallback;
+  }
 
   &:not(.active) {
     &:hover, &:focus {
@@ -110,6 +115,10 @@
 
 .dark {
   color: $text-inverse;
+
+  &.active {
+    color: $hover-primary-02-fallback;
+  }
 
   &:not(.active) {
     &:hover, &:focus {
