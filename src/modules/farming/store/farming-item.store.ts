@@ -13,7 +13,6 @@ import { getUserPendingReward } from '../helpers';
 import { FarmingItem, RawFarmingItem, RawUsersInfoValue, UsersInfoValue } from '../interfaces';
 import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
-import '@modules/farming/helpers/helpers.test.ts';
 
 const DEFAULT_INPUT_AMOUNT = 0;
 
