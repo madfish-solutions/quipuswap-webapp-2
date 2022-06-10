@@ -2028,6 +2028,11 @@
   dependencies:
     bignumber.js "^9.0.2"
 
+"@quipuswap/tokens-whitelist@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.0.tgz#f266aeea5d789c026bef978a3a62a40c70c3d47d"
+  integrity sha512-GORzJDmFrRzz1KEaWt6lSZHIddArO4rxrWMK1JamzyYVZgsw262oN4PTjs6EJZIcDd2dgYWrj/fkjpqYKzo57w==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -11011,10 +11016,6 @@ toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
-
-"tokens-whitelist@https://github.com/madfish-solutions/tokens-whitelist":
-  version "0.0.0"
-  resolved "https://github.com/madfish-solutions/tokens-whitelist#a7e776a4597103873ac3735eb2c9a8fe335d9647"
 
 toposort@^2.0.2:
   version "2.0.2"
