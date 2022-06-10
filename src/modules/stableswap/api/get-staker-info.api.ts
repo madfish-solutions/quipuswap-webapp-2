@@ -6,42 +6,52 @@ import { getContract } from '@shared/dapp/get-storage-info';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { StableFarmItem, StakerInfo } from '../types';
+import { RawStakerInfo, StableFarmItem, StakerInfo } from '../types';
 
 const DEFAULT_VALUE = new BigNumber('0');
+const DEFAULT_USER_INFO_VALUE = null;
+
+const callStakerInfoContractView = async (
+  contract: ReturnType<TezosToolkit['contract']['at']>,
+  accountPkh: string
+): Promise<Nullable<Array<RawStakerInfo>>> => {
+  const constractInstance = await Promise.resolve(contract);
+
+  try {
+    return await constractInstance.contractViews
+      .get_staker_info([{ user: accountPkh, pool_id: DEFAULT_STABLESWAP_POOL_ID }])
+      .executeView({ viewCaller: accountPkh });
+  } catch (error) {
+    return DEFAULT_USER_INFO_VALUE;
+  }
+};
 
 export const getStakerInfo = async (
   tezos: Nullable<TezosToolkit>,
   stableFarmsList: Array<StableFarmItem>,
   accountPkh: Nullable<string>
-): Promise<Record<string, StakerInfo>> => {
-  const stakerInfo: Record<string, StakerInfo> = {};
-
+): Promise<Array<StakerInfo>> => {
   if (isNull(tezos) || isNull(accountPkh)) {
-    for (const { contractAddress } of stableFarmsList) {
-      stakerInfo[contractAddress] = { yourEarned: null, yourDeposit: null };
-    }
-
-    return stakerInfo;
+    return stableFarmsList.map(() => ({ yourEarned: DEFAULT_VALUE, yourDeposit: DEFAULT_VALUE }));
   }
 
-  for (const { contractAddress } of stableFarmsList) {
-    const contract = await getContract(tezos, contractAddress);
+  const contractsPromises = stableFarmsList.map(async ({ contractAddress }) => getContract(tezos, contractAddress));
+  const userInfoPromises = contractsPromises.map(async contract => callStakerInfoContractView(contract, accountPkh));
+  const userInfo = await Promise.all(userInfoPromises);
 
-    // Remove try/catch after updating contracts
-    try {
-      const [{ info }] = await contract.contractViews
-        .get_staker_info([{ user: accountPkh, pool_id: DEFAULT_STABLESWAP_POOL_ID }])
-        .executeView({ viewCaller: accountPkh });
-
-      stakerInfo[contractAddress] = {
-        yourEarned: info.rewards.get(DEFAULT_STABLESWAP_POOL_ID) ?? DEFAULT_VALUE,
-        yourDeposit: info.balance
+  return userInfo.map(item => {
+    if (isNull(item)) {
+      return {
+        yourDeposit: DEFAULT_VALUE,
+        yourEarned: DEFAULT_VALUE
       };
-    } catch (error) {
-      stakerInfo[contractAddress] = { yourEarned: DEFAULT_VALUE, yourDeposit: DEFAULT_VALUE };
     }
-  }
 
-  return stakerInfo;
+    const [{ info }] = item;
+
+    return {
+      yourDeposit: info.balance,
+      yourEarned: info.rewards.get(new BigNumber(DEFAULT_STABLESWAP_POOL_ID)) ?? DEFAULT_VALUE
+    };
+  });
 };

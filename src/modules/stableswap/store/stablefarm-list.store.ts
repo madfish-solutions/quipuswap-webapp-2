@@ -13,8 +13,8 @@ export class StableFarmListStore {
     farmsListMapper
   );
 
-  readonly stakerInfo = new LoadingErrorData<Record<string, StakerInfo>, Record<string, StakerInfo>>(
-    {},
+  readonly stakerInfo = new LoadingErrorData<Array<StakerInfo>, Array<StakerInfo>>(
+    [],
     async () => await getStakerInfo(this.rootStore.tezos, this.list, this.rootStore.authStore.accountPkh),
     stakerInfoMapper
   );

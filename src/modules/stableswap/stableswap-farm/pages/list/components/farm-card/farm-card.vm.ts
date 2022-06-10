@@ -1,7 +1,7 @@
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
 
-export const useFarmCardViewModel = (contractAddress: string) => {
+export const useFarmCardViewModel = () => {
   const { t } = useTranslation();
 
   return {

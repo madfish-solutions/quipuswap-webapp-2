@@ -5,7 +5,7 @@ import { isNull } from '@shared/helpers';
 
 export const useStableFarmRouterViewModel = () => {
   const [isInitialazied, setIsInitialazied] = useState(false);
-  const [error, setError] = useState<Nullable<Error>>(null);
+  const [routerError, setRouterError] = useState<Nullable<Error>>(null);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -15,11 +15,11 @@ export const useStableFarmRouterViewModel = () => {
           await rootStore.createStableFarmListStore();
         }
         setIsInitialazied(true);
-      } catch (_error) {
-        setError(_error as Error);
+      } catch (error) {
+        setRouterError(error as Error);
       }
     })();
   }, [rootStore]);
 
-  return { isInitialazied, error };
+  return { isInitialazied, error: routerError };
 };

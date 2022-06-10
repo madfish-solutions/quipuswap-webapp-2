@@ -85,9 +85,6 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const withdrawalFeeLabel = withdrawalFee.toFixed();
   const shouldShowWithdrawalFee = !withdrawalFee.eq(ZERO);
 
-  // eslint-disable-next-line no-console
-  console.log('tvl', tvl.toFixed());
-
   return (
     <Link to={selectLink} data-test-id={`farming-item-${id}`}>
       <Card className={cx(styles.card, themeClass[colorThemeMode])}>

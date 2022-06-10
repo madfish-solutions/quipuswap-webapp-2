@@ -33,26 +33,28 @@ interface Props extends StableFarmItem, StakerInfo {
 }
 
 export const FarmCard: FC<Props> = ({
-  tokensInfo,
   tvl,
-  isWhitelisted,
-  stableFarmItemUrl,
   apr,
   apy,
-  contractAddress,
-  yourDeposit,
+  tokensInfo,
   yourEarned,
+  stakedToken,
+  yourDeposit,
+  isWhitelisted,
+  stableFarmItemUrl,
   shouldShowStakerInfo,
-  stakedTokenExchangeRate,
-  stakedToken
+  stakedTokenExchangeRate
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const { whitelistedTag, translation } = useFarmCardViewModel(contractAddress);
+  const { whitelistedTag, translation } = useFarmCardViewModel();
 
   const { status, label } = whitelistedTag;
   const { totalValueLockedTranslation, aprTranslation, apyTranslation, yourDeposiTranslation, yourEarnedTranslation } =
     translation;
+
+  const tvlInDollars = tvl.multipliedBy(stakedTokenExchangeRate);
+  const yourEarnedInDollars = yourEarned?.multipliedBy(stakedTokenExchangeRate);
 
   return (
     <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${Tabs.add}/${stableFarmItemUrl}`}>
@@ -71,12 +73,7 @@ export const FarmCard: FC<Props> = ({
             cellNameClassName={styles.cardCellHeader}
             cardCellClassName={styles.cardCell}
           >
-            <StateCurrencyAmount
-              amount={tvl}
-              dollarEquivalent={tvl.multipliedBy(stakedTokenExchangeRate)}
-              dollarEquivalentOnly
-              currency={DOLLAR}
-            />
+            <StateCurrencyAmount amount={tvl} dollarEquivalent={tvlInDollars} currency={DOLLAR} dollarEquivalentOnly />
           </ListItemCardCell>
 
           <ListItemCardCell
@@ -111,7 +108,7 @@ export const FarmCard: FC<Props> = ({
               >
                 <StateCurrencyAmount
                   amount={yourEarned}
-                  dollarEquivalent={yourEarned?.multipliedBy(stakedTokenExchangeRate)}
+                  dollarEquivalent={yourEarnedInDollars}
                   currency={DOLLAR}
                   dollarEquivalentOnly
                 />

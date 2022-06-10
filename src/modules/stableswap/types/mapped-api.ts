@@ -1,3 +1,4 @@
+import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { Token } from '@shared/types';
@@ -39,9 +40,20 @@ export interface StableFarmItem extends AbstractStableItem {
   stableFarmItemUrl: string;
 }
 
+export interface RawStakerInfo {
+  info: {
+    balance: BigNumber;
+    rewards: MichelsonMap<BigNumber, BigNumber>;
+  };
+  request: {
+    user: string;
+    pool_id: BigNumber;
+  };
+}
+
 export interface StakerInfo {
-  yourDeposit: Nullable<BigNumber>;
-  yourEarned: Nullable<BigNumber>;
+  yourDeposit: BigNumber;
+  yourEarned: BigNumber;
 }
 
 export interface StableswapTokensInfo {
