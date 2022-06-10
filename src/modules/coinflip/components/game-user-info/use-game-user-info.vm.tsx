@@ -1,8 +1,10 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
 
+import cx from 'classnames';
 import { Column, HeaderGroup, MetaBase, Cell } from 'react-table';
 
 import { TokenRewardCell } from '@modules/farming/pages/list/components/token-reward-cell';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { TokenInfo } from '@shared/elements';
 import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
@@ -24,7 +26,7 @@ export interface Row {
 
 const rewardTokensColumns: Column<Row>[] = [
   {
-    Header: i18n.t('common|Token'),
+    Header: i18n.t('common|Amount'),
     accessor: Columns.TOKEN
   },
   {
@@ -33,24 +35,31 @@ const rewardTokensColumns: Column<Row>[] = [
   }
 ];
 
-const getColumnProps = (id: string) => {
+const colorModes = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
+const getColumnProps = (id: string, colorTheme: ColorModes) => {
   if (id === Columns.TOKEN) {
-    return { className: styles.token };
+    return { className: cx(styles.token, colorModes[colorTheme]) };
   } else {
-    return { className: styles.amount };
+    return { className: cx(styles.amount, colorModes[colorTheme]) };
   }
 };
 
 const getCustomTableProps = () => ({ className: styles.table });
 
-const getCustomHeaderProps = (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) =>
-  getColumnProps(meta.column.id);
+const getCustomHeaderProps =
+  (colorTheme: ColorModes) => (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) =>
+    getColumnProps(meta.column.id, colorTheme);
 
-const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
-  getColumnProps(meta.cell.column.id);
+const getCustomCellProps = (colorTheme: ColorModes) => (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
+  getColumnProps(meta.cell.column.id, colorTheme);
 
 export const useGameUserInfoViewModel = (tokensWon: Nullable<IGameUserInfo['tokensWon']>) => {
   const exchangeRates = useNewExchangeRates();
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const data: Array<Row> = useMemo(() => {
     return (tokensWon ?? []).map(({ token, amount }) => {
       const { contractAddress, fa2TokenId } = token;
@@ -74,7 +83,7 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<IGameUserInfo['toke
     data,
     columns: rewardTokensColumns,
     getCustomTableProps,
-    getCustomHeaderProps,
-    getCustomCellProps
+    getCustomHeaderProps: getCustomHeaderProps(colorThemeMode),
+    getCustomCellProps: getCustomCellProps(colorThemeMode)
   };
 };

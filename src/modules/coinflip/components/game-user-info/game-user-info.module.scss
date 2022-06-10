@@ -7,16 +7,22 @@
 
 .token {
   text-align: left;
-  border-top: 1px solid $text-03;
   padding: 12px 0 16px 24px;
 }
 
 .amount {
   text-align: right;
-  border-top: 1px solid $text-03;
   padding: 12px 24px;
   width: 100px;
   & > div {
     margin-left: auto;
   }
+}
+
+.light {
+  border-top: 1px solid $ui-03;
+}
+
+.dark {
+  border-top: 1px solid $text-01;
 }
