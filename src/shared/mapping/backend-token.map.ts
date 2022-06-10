@@ -1,4 +1,3 @@
-import { DEFAULT_DECIMALS } from '@config/constants';
 import { RawToken, Standard, Token } from '@shared/types';
 
 export const mapBackendToken = (raw: RawToken, isLp?: boolean, newSymbol?: string): Token => ({
@@ -8,7 +7,7 @@ export const mapBackendToken = (raw: RawToken, isLp?: boolean, newSymbol?: strin
   type: raw.type as Standard,
   metadata: {
     ...raw.metadata,
-    decimals: isLp ? DEFAULT_DECIMALS : raw.metadata.decimals,
+    decimals: raw.metadata.decimals,
     symbol: newSymbol ?? raw.metadata.symbol
   }
 });
