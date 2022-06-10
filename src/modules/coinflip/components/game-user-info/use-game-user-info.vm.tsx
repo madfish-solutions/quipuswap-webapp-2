@@ -26,7 +26,7 @@ export interface Row {
 
 const rewardTokensColumns: Column<Row>[] = [
   {
-    Header: i18n.t('common|Amount'),
+    Header: i18n.t('common|Token'),
     accessor: Columns.TOKEN
   },
   {
