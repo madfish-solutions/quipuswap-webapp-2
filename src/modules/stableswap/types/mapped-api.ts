@@ -30,7 +30,7 @@ export interface StableswapItem extends AbstractStableItem {
 }
 
 export interface StableFarmItem extends AbstractStableItem {
-  atomicTvl: BigNumber;
+  tvl: BigNumber;
   stakedTokenExchangeRate: BigNumber;
   apr: BigNumber;
   apy: BigNumber;

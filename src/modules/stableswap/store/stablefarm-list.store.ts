@@ -1,10 +1,9 @@
 import { computed, makeObservable } from 'mobx';
 
-import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getStableFarmListApi, getStakerInfo } from '../api';
-import { farmsListMapper } from '../mapping';
+import { farmsListMapper, stakerInfoMapper } from '../mapping';
 import { RawStableFarmItem, StableFarmItem, StakerInfo } from '../types';
 
 export class StableFarmListStore {
@@ -14,10 +13,10 @@ export class StableFarmListStore {
     farmsListMapper
   );
 
-  readonly stakerInfo = new LoadingErrorData<{ [key: string]: StakerInfo }, { [key: string]: StakerInfo }>(
+  readonly stakerInfo = new LoadingErrorData<Record<string, StakerInfo>, Record<string, StakerInfo>>(
     {},
     async () => await getStakerInfo(this.rootStore.tezos, this.list, this.rootStore.authStore.accountPkh),
-    noopMap
+    stakerInfoMapper
   );
 
   constructor(private rootStore: RootStore) {

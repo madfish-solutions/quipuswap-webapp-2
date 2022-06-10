@@ -27,7 +27,7 @@ export const useStableswapFarmListPageViewModel = () => {
     ...item,
     ...info[item.contractAddress],
     shouldShowStakerInfo:
-      info[item.contractAddress]?.yourDeposit?.gt(DEFAULT_VALUE) &&
+      info[item.contractAddress]?.yourDeposit?.gt(DEFAULT_VALUE) ||
       info[item.contractAddress]?.yourEarned?.gt(DEFAULT_VALUE)
   }));
 

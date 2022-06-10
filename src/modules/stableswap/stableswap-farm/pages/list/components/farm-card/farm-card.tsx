@@ -34,7 +34,7 @@ interface Props extends StableFarmItem, StakerInfo {
 
 export const FarmCard: FC<Props> = ({
   tokensInfo,
-  atomicTvl,
+  tvl,
   isWhitelisted,
   stableFarmItemUrl,
   apr,
@@ -42,7 +42,9 @@ export const FarmCard: FC<Props> = ({
   contractAddress,
   yourDeposit,
   yourEarned,
-  shouldShowStakerInfo
+  shouldShowStakerInfo,
+  stakedTokenExchangeRate,
+  stakedToken
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -55,7 +57,7 @@ export const FarmCard: FC<Props> = ({
   return (
     <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${Tabs.add}/${stableFarmItemUrl}`}>
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
-        <div className={styles.poolInfo}>
+        <div className={styles.farmInfo}>
           <div className={styles.logoSymbols}>
             <TokensLogos className={styles.tokensLogos} tokens={extractTokens(tokensInfo)} width={48} />
             <TokensSymbols className={styles.tokensSymbols} tokens={extractTokens(tokensInfo)} />
@@ -67,9 +69,14 @@ export const FarmCard: FC<Props> = ({
           <ListItemCardCell
             cellName={totalValueLockedTranslation}
             cellNameClassName={styles.cardCellHeader}
-            cardCellClassName={styles.tokensValue}
+            cardCellClassName={styles.cardCell}
           >
-            <StateCurrencyAmount className={styles.poolStatsAmount} amount={atomicTvl} currency={DOLLAR} />
+            <StateCurrencyAmount
+              amount={tvl}
+              dollarEquivalent={tvl.multipliedBy(stakedTokenExchangeRate)}
+              dollarEquivalentOnly
+              currency={DOLLAR}
+            />
           </ListItemCardCell>
 
           <ListItemCardCell
@@ -77,7 +84,7 @@ export const FarmCard: FC<Props> = ({
             cellNameClassName={styles.cardCellHeader}
             cardCellClassName={styles.cardCell}
           >
-            <StateCurrencyAmount className={styles.poolStatsAmount} amount={apr} currency={PERCENT} />
+            <StateCurrencyAmount amount={apr} currency={PERCENT} />
           </ListItemCardCell>
 
           <ListItemCardCell
@@ -85,27 +92,29 @@ export const FarmCard: FC<Props> = ({
             cellNameClassName={styles.cardCellHeader}
             cardCellClassName={styles.cardCell}
           >
-            <StateCurrencyAmount className={styles.poolStatsAmount} amount={apy} currency={PERCENT} />
+            <StateCurrencyAmount amount={apy} currency={PERCENT} />
           </ListItemCardCell>
           {shouldShowStakerInfo && (
             <div className={styles.userData}>
               <ListItemCardCell
                 cellName={yourDeposiTranslation}
-                tooltip={'yourDepositTooltipTranslation'}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                <StateCurrencyAmount amount={yourDeposit} currency={'TOKEN'} data-test-id="yourDeposit" />
+                <StateCurrencyAmount amount={yourDeposit} currency={stakedToken.metadata.symbol} />
               </ListItemCardCell>
 
               <ListItemCardCell
                 cellName={yourEarnedTranslation}
-                tooltip={'yourEarnedTooltipTranslation'}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
-                data-test-id="yourEarned"
               >
-                <StateCurrencyAmount amount={yourEarned} currency={'TOKEN'} dollarEquivalentOnly />
+                <StateCurrencyAmount
+                  amount={yourEarned}
+                  dollarEquivalent={yourEarned?.multipliedBy(stakedTokenExchangeRate)}
+                  currency={DOLLAR}
+                  dollarEquivalentOnly
+                />
               </ListItemCardCell>
             </div>
           )}

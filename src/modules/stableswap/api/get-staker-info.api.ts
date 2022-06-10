@@ -1,4 +1,5 @@
 import { TezosToolkit } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { getContract } from '@shared/dapp/get-storage-info';
@@ -7,14 +8,14 @@ import { Nullable } from '@shared/types';
 
 import { StableFarmItem, StakerInfo } from '../types';
 
-const DEFAULT_VALUE = null;
+const DEFAULT_VALUE = new BigNumber('0');
 
 export const getStakerInfo = async (
   tezos: Nullable<TezosToolkit>,
   stableFarmsList: Array<StableFarmItem>,
   accountPkh: Nullable<string>
-): Promise<{ [key: string]: StakerInfo }> => {
-  const stakerInfo: { [key: string]: StakerInfo } = {};
+): Promise<Record<string, StakerInfo>> => {
+  const stakerInfo: Record<string, StakerInfo> = {};
 
   if (isNull(tezos) || isNull(accountPkh)) {
     for (const { contractAddress } of stableFarmsList) {

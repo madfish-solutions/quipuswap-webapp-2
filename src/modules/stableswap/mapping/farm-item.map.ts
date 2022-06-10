@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { fromDecimals } from '@shared/helpers';
 import { mapBackendToken } from '@shared/mapping';
 
 import { RawStableFarmItem, StableFarmItem } from '../types';
@@ -7,15 +8,15 @@ import { RawStableFarmItem, StableFarmItem } from '../types';
 export const farmItemMapper = (item: RawStableFarmItem): StableFarmItem => {
   const {
     id,
-    contractAddress,
-    tokensInfo,
-    atomicTvl,
-    stakedTokenExchangeRate,
     apr,
     apy,
-    farmContractUrl,
+    atomicTvl,
+    tokensInfo,
+    stakedToken,
     isWhitelisted,
-    stakedToken
+    farmContractUrl,
+    contractAddress,
+    stakedTokenExchangeRate
   } = item;
 
   const readyTokensInfo = tokensInfo.map(info => {
@@ -39,7 +40,7 @@ export const farmItemMapper = (item: RawStableFarmItem): StableFarmItem => {
     apy: new BigNumber(apy),
     tokensInfo: readyTokensInfo,
     stakedToken: readyStakedToken,
-    atomicTvl: new BigNumber(atomicTvl),
+    tvl: fromDecimals(new BigNumber(atomicTvl), readyStakedToken),
     stakedTokenExchangeRate: new BigNumber(stakedTokenExchangeRate)
   };
 };
