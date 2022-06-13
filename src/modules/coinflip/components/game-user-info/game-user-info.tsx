@@ -1,12 +1,13 @@
 import { FC } from 'react';
 
+import { TokenWon } from '@modules/coinflip/types';
 import { Table } from '@shared/structures';
-import { NullableField } from '@shared/types';
 
-import { GameUserInfo as IGameUserInfo } from '../../types';
 import { useGameUserInfoViewModel } from './use-game-user-info.vm';
 
-type Props = NullableField<Pick<IGameUserInfo, 'tokensWon'>>;
+interface Props {
+  tokensWon: Nullable<TokenWon[]>;
+}
 
 export const GameUserInfo: FC<Props> = ({ tokensWon }) => {
   const { data, columns, getCustomTableProps, getCustomHeaderProps, getCustomCellProps } =

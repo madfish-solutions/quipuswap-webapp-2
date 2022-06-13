@@ -22,7 +22,6 @@ interface Props {
   rewardTooltip: string;
   yourGamesTooltip: string;
   currency: string;
-  isLoading: boolean;
   details?: ReactNode;
 }
 
@@ -32,7 +31,6 @@ export const RewardInfo: FC<Props> = ({
   yourGamesTooltip,
   currency,
   gamesCount,
-  isLoading,
   details
 }) => {
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
@@ -50,7 +48,7 @@ export const RewardInfo: FC<Props> = ({
         amount={userReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
-        isLoading={isLoading}
+        isLoading={!Boolean(userReward)}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
@@ -60,7 +58,7 @@ export const RewardInfo: FC<Props> = ({
             <Tooltip content={yourGamesTooltip} />
           </div>
           <div className={modeClass[colorThemeMode]}>
-            <StateCurrencyAmount amount={gamesCount} isLoading={isLoading} amountClassName={styles.amount} />
+            <StateCurrencyAmount amount={gamesCount} isLoading={!Boolean(gamesCount)} amountClassName={styles.amount} />
           </div>
         </div>
         {details && showDetails && (

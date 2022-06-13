@@ -28,3 +28,8 @@ export interface GamersStats {
   total_lost_amt: BigNumber;
   total_bets_amt: BigNumber;
 }
+
+export enum TOKEN_ASSETS {
+  TEZOS = 0,
+  QUIPU = 1
+}

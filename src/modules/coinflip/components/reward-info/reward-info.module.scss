@@ -62,7 +62,7 @@
   }
 }
 
-@include media('>670px') {
+@include media('>tablet') {
   .yourGamesStats {
     align-items: flex-end;
   }

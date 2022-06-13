@@ -5,8 +5,8 @@ import cx from 'classnames';
 
 import { USD_DECIMALS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useAccountPkh } from '@providers/use-dapp';
 import { StateCurrencyAmount, Tooltip } from '@shared/components';
+import { useAuthStore } from '@shared/hooks';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -37,8 +37,8 @@ export const YourWinningsReward: FC<Props> = ({
   isLoading,
   className
 }) => {
-  const accountPkh = useAccountPkh();
-  const { t } = useTranslation(['coinflip']);
+  const { accountPkh } = useAuthStore();
+  const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -64,8 +64,8 @@ export const YourWinningsReward: FC<Props> = ({
           </>
         ) : (
           <div className={styles.alternativeTitle}>
-            <div className={styles.title}>Connect Wallet now!</div>
-            <div className={styles.description}>Here can be your reward</div>
+            <div className={styles.title}>{t('coinflip|connectWallet')}</div>
+            <div className={styles.description}>{t('coinflip|yourReward')}</div>
           </div>
         )}
       </div>

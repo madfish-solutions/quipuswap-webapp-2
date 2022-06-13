@@ -10,7 +10,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export const CoinflipRewardInfo: FC<Props> = observer(({ isLoading }) => {
+export const CoinflipRewardInfo: FC<Props> = observer(() => {
   const { tokensExchangeRateDollarEquivalent, gamesCount, tokensWon } = useCoinflipRewardInfoViewModel();
 
   return (
@@ -20,7 +20,6 @@ export const CoinflipRewardInfo: FC<Props> = observer(({ isLoading }) => {
       rewardTooltip="Reward Tooltip"
       yourGamesTooltip="Your Games Tooltip"
       currency="$"
-      isLoading={isLoading}
       details={<GameUserInfo tokensWon={tokensWon} />}
     />
   );

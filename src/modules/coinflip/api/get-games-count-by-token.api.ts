@@ -3,8 +3,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { Token } from '@shared/types';
 
-import { getTokenAsset } from '../helpers';
-import { getCoinflipStorage } from './get-coinflip-storage.api';
+import { getTokenAssetById } from '../helpers';
+import { getCoinflipStorageApi } from './get-coinflip-storage.api';
 import { CoinflipStorage, GamersStats } from './types';
 
 export const getGamesCountByTokenApi = async (
@@ -12,9 +12,9 @@ export const getGamesCountByTokenApi = async (
   accountPkh: string,
   token: Token
 ): Promise<BigNumber> => {
-  const tokenAsset = getTokenAsset(token);
+  const tokenAsset = getTokenAssetById(token);
 
-  const { gamers_stats } = (await getCoinflipStorage(tezos)) as CoinflipStorage;
+  const { gamers_stats } = (await getCoinflipStorageApi(tezos)) as CoinflipStorage;
   const { games_count: gamesCount } = (await gamers_stats.get([accountPkh, new BigNumber(tokenAsset)])) as GamersStats;
 
   return gamesCount;

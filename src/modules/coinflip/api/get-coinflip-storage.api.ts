@@ -6,7 +6,7 @@ import { isNull } from '@shared/helpers';
 
 import { CoinflipStorage } from './types';
 
-export const getCoinflipStorage = async (tezos: Nullable<TezosToolkit>) => {
+export const getCoinflipStorageApi = async (tezos: Nullable<TezosToolkit>) => {
   if (isNull(tezos)) {
     return null;
   }

@@ -228,9 +228,6 @@ export interface BlockInfo {
   timestamp: string;
 }
 
-export type NullableField<T> = {
-  [P in keyof T]: Nullable<T[P]>;
-};
 export interface AmountToken {
   token: Token;
   amount: BigNumber;

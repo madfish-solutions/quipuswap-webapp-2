@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
-import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 
 import { useCoinflipStore, useGamesUserInfo } from './hooks';
@@ -28,9 +27,7 @@ export const useCoinflipPageViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.coinflipStore)) {
-          await rootStore.createCoinflipStore();
-        }
+        await rootStore.createCoinflipStore();
       } finally {
         setIsInitialized(true);
       }

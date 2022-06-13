@@ -8,10 +8,9 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { TokenInfo } from '@shared/elements';
 import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
-import { Standard } from '@shared/types';
 import { i18n } from '@translation';
 
-import { GameUserInfo as IGameUserInfo } from '../../types';
+import { TokenWon } from '../../types';
 import styles from './game-user-info.module.scss';
 
 enum Columns {
@@ -40,13 +39,9 @@ const colorModes = {
   [ColorModes.Dark]: styles.dark
 };
 
-const getColumnProps = (id: string, colorTheme: ColorModes) => {
-  if (id === Columns.TOKEN) {
-    return { className: cx(styles.token, colorModes[colorTheme]) };
-  } else {
-    return { className: cx(styles.amount, colorModes[colorTheme]) };
-  }
-};
+const getColumnProps = (id: string, colorTheme: ColorModes) => ({
+  className: cx(id === Columns.TOKEN ? styles.token : styles.amount, colorModes[colorTheme])
+});
 
 const getCustomTableProps = () => ({ className: styles.table });
 
@@ -57,7 +52,7 @@ const getCustomHeaderProps =
 const getCustomCellProps = (colorTheme: ColorModes) => (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
   getColumnProps(meta.cell.column.id, colorTheme);
 
-export const useGameUserInfoViewModel = (tokensWon: Nullable<IGameUserInfo['tokensWon']>) => {
+export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
   const exchangeRates = useNewExchangeRates();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const data: Array<Row> = useMemo(() => {
@@ -65,8 +60,7 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<IGameUserInfo['toke
       const { contractAddress, fa2TokenId } = token;
       const tokenSlug = getTokenSlug({
         contractAddress: contractAddress,
-        fa2TokenId: fa2TokenId,
-        type: fa2TokenId === undefined ? Standard.Fa12 : Standard.Fa2
+        fa2TokenId: fa2TokenId
       });
       const tokenExchangeRate = exchangeRates[tokenSlug];
 

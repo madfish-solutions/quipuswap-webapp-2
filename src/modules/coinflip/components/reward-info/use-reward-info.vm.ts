@@ -7,7 +7,7 @@ export const useRewardInfoViewModel = () => {
   const { t } = useTranslation();
   const accountPkh = useAccountPkh();
   const [isOpen, setToggles] = useState(false);
-  const toggle = useCallback(() => setToggles(!isOpen), [isOpen]);
+  const toggle = useCallback(() => setToggles(_isOpen => !_isOpen), []);
 
   return {
     isDetailsOpen: isOpen,
