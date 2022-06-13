@@ -12,5 +12,6 @@ export const stableswap = {
   sucessfullyAdded: 'Liquidity has been successfully added',
   sucessfullyRemoved: 'Liquidity has been successfully removed',
   createPool: 'Create Pool',
-  createOwnPool: 'Can’t Find appropriate pool? Create Own!'
+  createOwnPool: 'Can’t Find appropriate pool? Create Own!',
+  stableFarmTitle: 'Stable Swap Farm'
 } as const;

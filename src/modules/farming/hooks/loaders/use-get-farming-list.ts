@@ -26,7 +26,7 @@ export const useGetFarmingList = () => {
     }
     // We need it only for dependency for loading list based on it.
     noopMap(authStore.accountPkh);
-  }, [authStore.accountPkh, isReady, showErrorToast, listStore]);
+  }, [isReady, authStore.accountPkh, listStore, showErrorToast]);
 
   const delayedGetFarmingList = useCallback(async () => {
     await sleep(DELAY_BEFORE_DATA_UPDATE);

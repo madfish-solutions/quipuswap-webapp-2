@@ -1,3 +1,4 @@
+import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { Token } from '@shared/types';
@@ -10,20 +11,49 @@ export interface StableswapList {
   list: Array<StableswapItem>;
 }
 
-export interface StableswapItem {
+interface AbstractStableItem {
   id: BigNumber;
   contractAddress: string;
   tokensInfo: Array<StableswapTokensInfo>;
+  isWhitelisted: boolean;
+}
+
+export interface StableswapItem extends AbstractStableItem {
   totalLpSupply: BigNumber;
   tvlInUsd: BigNumber;
   poolContractUrl: string;
   stableswapItemUrl: string;
-  isWhitelisted: boolean;
   liquidityProvidersFee: BigNumber;
   stakersFee: BigNumber;
   interfaceFee: BigNumber;
   devFee: BigNumber;
   lpToken: Token;
+}
+
+export interface StableFarmItem extends AbstractStableItem {
+  tvl: BigNumber;
+  stakedTokenExchangeRate: BigNumber;
+  apr: BigNumber;
+  apy: BigNumber;
+  farmContractUrl: string;
+  stakedToken: Token;
+  stableFarmItemUrl: string;
+}
+
+export interface RawStakerInfo {
+  info: {
+    balance: BigNumber;
+    rewards: MichelsonMap<BigNumber, BigNumber>;
+  };
+  request: {
+    user: string;
+    pool_id: BigNumber;
+  };
+}
+
+export interface StakerInfo {
+  yourDeposit: BigNumber;
+  yourEarned: BigNumber;
 }
 
 export interface StableswapTokensInfo {
