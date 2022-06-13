@@ -132,5 +132,6 @@ export const common = {
   Input: 'Input',
   Output: 'Output',
   Back: 'Back',
-  NEW: 'NEW'
+  NEW: 'NEW',
+  highMinOutError: 'Failed to swap with current slippage tolerance, try increasing it'
 } as const;
