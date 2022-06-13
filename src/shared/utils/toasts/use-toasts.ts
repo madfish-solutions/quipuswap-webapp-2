@@ -17,7 +17,7 @@ export interface UseToasts {
 export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
 
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation();
   const knownErrorsMessages = useMemo<Record<string, string>>(
     () => ({
       'Dex/high-min-out': t('common|highMinOutError')
