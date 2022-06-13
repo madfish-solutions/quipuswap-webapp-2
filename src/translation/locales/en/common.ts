@@ -133,5 +133,6 @@ export const common = {
   Output: 'Output',
   Back: 'Back',
   NEW: 'NEW',
-  highMinOutError: 'Failed to swap with current slippage tolerance, try increasing it'
+  highMinOutError:
+    "Your swap can't be completed because the exchange rates have been changed. Please, try again or increase your slippage tolerance."
 } as const;
