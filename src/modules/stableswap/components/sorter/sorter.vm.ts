@@ -1,7 +1,7 @@
-import { useStableswapFilterStore } from '@modules/stableswap/hooks';
 import { isDirrectOrder } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { useStableswapFilterStore } from '../../hooks';
 import { SortFieldItem, SortField } from './sorter.types';
 
 export const useSorterViewModel = () => {

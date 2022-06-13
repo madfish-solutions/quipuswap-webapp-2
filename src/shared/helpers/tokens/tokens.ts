@@ -22,8 +22,8 @@ import { isValidContractAddress } from '@shared/validators';
 
 import { mapBackendToken } from '../../mapping';
 import { getUniqArray } from '../arrays';
-import { getTokenSlug } from './get-token-slug';
 import { isTokenEqual } from './is-token-equal';
+import { getTokenSlug } from './token-slug';
 
 interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2TokenId' | 'isWhitelisted'> {
   fa2TokenId?: string;

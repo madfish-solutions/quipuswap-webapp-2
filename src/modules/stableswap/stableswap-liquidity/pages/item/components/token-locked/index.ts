@@ -1,1 +1,1 @@
-export * from './token-locked';
+export { TokenLocked } from './token-locked';

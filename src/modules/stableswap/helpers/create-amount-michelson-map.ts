@@ -5,11 +5,10 @@ import { LP_INPUT_KEY } from '@config/constants';
 import { isEmptyString, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { RemoveLiqFormValues } from '../stableswap-liquidity/pages/item/components';
 import { getIndexByInputSlug } from './get-input-slug-by-index';
 
 export const createAmountsMichelsonMapFormikValues = (
-  values: RemoveLiqFormValues,
+  values: { [key: string]: string },
   tokens: Array<Token>,
   index: number,
   inputAmount: string

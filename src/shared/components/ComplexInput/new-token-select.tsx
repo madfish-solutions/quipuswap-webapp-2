@@ -72,17 +72,15 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 
-  const amountStr = useMemo(() => (amount === undefined ? '' : new BigNumber(amount).toFixed()), [amount]);
+  const amountStr = useMemo(() => (isExist(amount) ? new BigNumber(amount).toFixed() : ''), [amount]);
   const tokenDecimals = token?.metadata.decimals;
 
   const [localAmount, setLocalAmount] = useState(amountStr);
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (!focused) {
-      setLocalAmount(amountStr);
-    }
-  }, [focused, amountStr]);
+    setLocalAmount(amountStr);
+  }, [amountStr]);
 
   const dollarEquivalent = useMemo(
     () => exchangeRate && (amount ?? new BigNumber(0)).times(new BigNumber(exchangeRate)).decimalPlaces(2).toString(),

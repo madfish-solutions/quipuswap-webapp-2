@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
 
-import { StableswapFormTabs } from '@modules/stableswap/types';
 import { Card, SettingsButton, Skeleton, Tabs } from '@shared/components';
 import { CFC } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
+import { StableswapFormTabs } from '../../../../../types';
 import { FormHeader } from '../form-header';
 import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 

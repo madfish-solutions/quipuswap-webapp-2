@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { render } from 'react-dom';
+
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import { BalancesProvider } from '@providers/balances-provider';
@@ -16,28 +17,30 @@ import { App } from './app';
 
 require('dotenv').config();
 
-render(
-  <RootStoreProvider>
-    <ColorThemeProvider>
-      <BrowserRouter>
-        <DAppProvider>
-          <ExchangeRatesProvider>
-            <NewExchangeRatesProvider>
-              <DAppBakerProvider>
-                <DAppTokensProvider>
-                  <BalancesProvider>
-                    <DexGraphProvider>
-                      <App />
-                    </DexGraphProvider>
-                  </BalancesProvider>
-                </DAppTokensProvider>
-              </DAppBakerProvider>
-            </NewExchangeRatesProvider>
-          </ExchangeRatesProvider>
-        </DAppProvider>
-      </BrowserRouter>
-    </ColorThemeProvider>
-  </RootStoreProvider>,
-
-  document.getElementById('root')
-);
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <RootStoreProvider>
+      <ColorThemeProvider>
+        <BrowserRouter>
+          <DAppProvider>
+            <ExchangeRatesProvider>
+              <NewExchangeRatesProvider>
+                <DAppBakerProvider>
+                  <DAppTokensProvider>
+                    <BalancesProvider>
+                      <DexGraphProvider>
+                        <App />
+                      </DexGraphProvider>
+                    </BalancesProvider>
+                  </DAppTokensProvider>
+                </DAppBakerProvider>
+              </NewExchangeRatesProvider>
+            </ExchangeRatesProvider>
+          </DAppProvider>
+        </BrowserRouter>
+      </ColorThemeProvider>
+    </RootStoreProvider>
+  );
+}
