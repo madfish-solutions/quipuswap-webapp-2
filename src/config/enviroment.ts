@@ -1,6 +1,6 @@
 import { NetworkType } from '@airgap/beacon-sdk';
-import IthacaWhitelistTokens from 'tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
-import MainnetWhitelistTokens from 'tokens-whitelist/tokens/quipuswap.whitelist.json';
+import IthacaWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
+import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { SupportedNetworks } from '@shared/types';
 
