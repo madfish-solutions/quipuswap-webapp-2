@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
@@ -10,7 +10,6 @@ export const useGamesUserInfo = () => {
   const { showErrorToast } = useToasts();
   const coinflipStore = useCoinflipStore();
   const isReady = useReady();
-  const [isLoading, setLoading] = useState(false);
 
   const getGamesUserInfo = useCallback(
     async (accountPkh: Nullable<string>) => {
@@ -20,13 +19,13 @@ export const useGamesUserInfo = () => {
           await coinflipStore.tokensWonStore.load();
         } catch (error) {
           showErrorToast(error as Error);
-        } finally {
-          setLoading(false);
         }
       }
     },
     [isReady, showErrorToast, coinflipStore]
   );
 
-  return { isLoadingGamesInfo: isLoading, getGamesUserInfo };
+  return {
+    getGamesUserInfo
+  };
 };

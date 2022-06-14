@@ -3,7 +3,7 @@ import { Token } from '@shared/types';
 
 import { TOKEN_ASSETS } from '../api/types';
 
-export const getTokenAssetById = (token: Token) => {
+export const getTokenAssetId = (token: Token) => {
   if (isTezosToken(token)) {
     return TOKEN_ASSETS.TEZOS;
   }

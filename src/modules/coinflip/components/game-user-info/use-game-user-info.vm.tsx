@@ -55,6 +55,7 @@ const getCustomCellProps = (colorTheme: ColorModes) => (_: unknown, meta: MetaBa
 export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
   const exchangeRates = useNewExchangeRates();
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   const data: Array<Row> = useMemo(() => {
     return (tokensWon ?? []).map(({ token, amount }) => {
       const { contractAddress, fa2TokenId } = token;

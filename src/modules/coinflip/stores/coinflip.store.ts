@@ -118,9 +118,10 @@ export class CoinflipStore {
 
   private async getTokensWon() {
     return Promise.all(
-      COINFLIP_TOKENS_TO_PLAY.map(async token => {
-        return await getTokenWonByTokenApi(this.rootStore.tezos, defined(this.rootStore.authStore.accountPkh), token);
-      })
+      COINFLIP_TOKENS_TO_PLAY.map(
+        async (token: Token): Promise<TokenWon> =>
+          await getTokenWonByTokenApi(this.rootStore.tezos, defined(this.rootStore.authStore.accountPkh), token)
+      )
     );
   }
 }
