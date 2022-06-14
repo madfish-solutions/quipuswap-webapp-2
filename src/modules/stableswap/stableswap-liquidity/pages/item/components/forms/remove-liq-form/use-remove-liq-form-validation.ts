@@ -10,7 +10,7 @@ import { NumberAsStringSchema } from '@shared/validators';
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
 export const useRemoveLiqFormValidation = (
-  userLpBalance: BigNumber,
+  userLpBalance: Nullable<BigNumber>,
   userTokenBalance: Array<BigNumber>,
   isBalancedProportion: boolean
 ) => {

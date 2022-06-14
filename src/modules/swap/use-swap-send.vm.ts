@@ -19,6 +19,7 @@ import {
 } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { useDexGraph, useOnBlock } from '@shared/hooks';
+import { useAmplitudeService } from '@shared/hooks/use-amplitude-service';
 import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
@@ -42,6 +43,8 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) => {
   const exchangeRates = useNewExchangeRates();
+
+  const amplitude = useAmplitudeService();
 
   const swap = useSwapCalculations();
   const { dexRoute, trade } = swap;
@@ -277,12 +280,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched(SwapField.INPUT_AMOUNT, true);
     setFieldValue(SwapField.INPUT_AMOUNT, newAmount, true);
     swap.onInputAmountChange(newAmount ?? null);
+    amplitude.debounceLog('SWAP_INPUT_CHANGE', { amount: newAmount?.toFixed() });
   };
+
   const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
     setFieldValue(SwapField.OUTPUT_AMOUNT, newAmount, true);
     swap.onOutputAmountChange(newAmount ?? null);
+    amplitude.debounceLog('SWAP_OUTPUT_CHANGE', { amount: newAmount?.toFixed() });
   };
 
   const handleSomeTokenChange = (
