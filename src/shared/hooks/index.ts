@@ -15,3 +15,4 @@ export * from './use-tokens';
 export * from './use-tokens-balances-store';
 export * from './use-tokens-balances-only';
 export * from './use-tokens-with-balances';
+export * from './use-debounced-state';

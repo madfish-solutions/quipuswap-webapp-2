@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { Undefined, Token } from '@shared/types';
 
 import { TokenInput } from '../token-input';
-import { TokensModal } from '../TokensModal';
+import { TokensModal } from '../tokens-modal';
 import { useTokenSelectViewModel } from './token-select.vm';
 
 interface Props extends HTMLProps<HTMLDivElement> {
