@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { FormikErrors, FormikTouched } from 'formik';
+import { FormikErrors } from 'formik';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { Search } from '@shared/svg';
@@ -17,7 +17,6 @@ export interface HeaderProps {
   onTokenIdDecrement: () => void;
   onTokenIdIncrement: () => void;
   isSecondInput: boolean;
-  touched: FormikTouched<Partial<FormValues>>;
   values: Partial<FormValues>;
 }
 
@@ -27,12 +26,9 @@ export const Header: FC<HeaderProps> = ({
   onChange,
   onTokenIdDecrement,
   onTokenIdIncrement,
-  touched,
   values
 }) => {
   const { t } = useTranslation(['common']);
-
-  const isError = (fieldName: TMFormField) => (touched[fieldName] ? errors[fieldName] : undefined);
 
   return (
     <div className={s.inputs}>
@@ -43,7 +39,7 @@ export const Header: FC<HeaderProps> = ({
         StartAdornment={Search}
         className={s.modalInput}
         placeholder={t('common|Search')}
-        error={isError(TMFormField.SEARCH)}
+        error={errors[TMFormField.SEARCH]}
         autoFocus
       />
       {isSecondInput && (
@@ -56,7 +52,7 @@ export const Header: FC<HeaderProps> = ({
           step={STEP}
           min={MIN_TOKEN_ID}
           max={MAX_TOKEN_ID}
-          error={isError(TMFormField.TOKEN_ID)}
+          error={errors[TMFormField.TOKEN_ID]}
           onIncrementClick={onTokenIdIncrement}
           onDecrementClick={onTokenIdDecrement}
         />

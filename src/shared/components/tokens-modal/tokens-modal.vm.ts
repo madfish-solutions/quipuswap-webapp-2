@@ -1,4 +1,4 @@
-import { useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
 import { noop } from 'rxjs';
 import { number as numberSchema, object as objectSchema, string as stringSchema } from 'yup';
 
@@ -22,6 +22,7 @@ const VALIDATION_SCHEMA = objectSchema().shape({
   [TMFormField.SEARCH]: stringSchema().required(),
   [TMFormField.TOKEN_ID]: numberSchema().optional()
 });
+const ALL_FORM_FIELDS = [TMFormField.SEARCH, TMFormField.TOKEN_ID];
 
 export const useTokensModalViewModel = ({
   onChange,
@@ -79,9 +80,17 @@ export const useTokensModalViewModel = ({
       Math.min(MAX_TOKEN_ID, Number(tokenId ?? DEFAULT_TOKEN_ID) + STEP)
     );
 
+  const errors = ALL_FORM_FIELDS.reduce<FormikErrors<Partial<FormValues>>>(
+    (errorsPart, fieldName) => ({
+      ...errorsPart,
+      [fieldName]: searchFormik.touched[fieldName] ? searchFormik.errors[fieldName] : undefined
+    }),
+    {}
+  );
+
   return {
     allTokens,
-    errors: searchFormik.errors,
+    errors,
     handleChange,
     handleTokenIdDecrement,
     handleTokenIdIncrement,
@@ -91,7 +100,6 @@ export const useTokensModalViewModel = ({
     isTokensNotFound,
     modalTitle: t('common|Search token'),
     notFoundLabel: t('common|No tokens found'),
-    touched: searchFormik.touched,
     values: searchFormik.values
   };
 };

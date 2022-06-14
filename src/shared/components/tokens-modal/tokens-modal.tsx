@@ -40,7 +40,6 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
     handleTokenIdDecrement,
     handleTokenIdIncrement,
     notFoundLabel,
-    touched,
     values
   } = useTokensModalViewModel({ onChange, blackListedTokens });
 
@@ -54,7 +53,6 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
           onTokenIdDecrement={handleTokenIdDecrement}
           onTokenIdIncrement={handleTokenIdIncrement}
           isSecondInput={isSoleFa2Token}
-          touched={touched}
           values={values}
         />
       }
@@ -71,7 +69,7 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
           <div className={s.notFoundLabel}>{notFoundLabel}</div>{' '}
         </div>
       )}
-      {isTokensLoading && MOCK_LOADING_ARRAY.map(x => <LoadingTokenCell key={x} />)}
+      {isTokensLoading && <Iterator data={MOCK_LOADING_ARRAY} render={LoadingTokenCell} />}
       <Iterator
         data={allTokens}
         keyFn={getTokenSlug}
