@@ -7,7 +7,7 @@ import { TokenRewardCell } from '@modules/farming/pages/list/components/token-re
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { TokenInfo } from '@shared/elements';
-import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
+import { getTokenSlug, multipliedIfPossible, isNull } from '@shared/helpers';
 import { i18n } from '@translation';
 
 import { TokenWon } from '../../types';
@@ -56,8 +56,10 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
   const exchangeRates = useNewExchangeRates();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const tokensThatUserPlayed = tokensWon?.filter(({ amount }) => !isNull(amount));
+
   const data: Array<Row> = useMemo(() => {
-    return (tokensWon ?? []).map(({ token, amount }) => {
+    return (tokensThatUserPlayed ?? []).map(({ token, amount }) => {
       const { contractAddress, fa2TokenId } = token;
       const tokenSlug = getTokenSlug({
         contractAddress: contractAddress,
@@ -72,7 +74,7 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
         [Columns.AMOUNT]: <TokenRewardCell amount={amount} dollarEquivalent={dollarEquivalent} />
       };
     });
-  }, [exchangeRates, tokensWon]);
+  }, [exchangeRates, tokensThatUserPlayed]);
 
   return {
     data,

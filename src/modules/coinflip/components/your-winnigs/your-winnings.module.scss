@@ -45,6 +45,9 @@
 .light {
   &.root {
     border: 2px dashed $hover-primary-01-fallback;
+  }
+
+  &.description {
     color: $text-01;
   }
 }
@@ -52,6 +55,9 @@
 .dark {
   &.root {
     border: 2px dashed $hover-primary-02-fallback;
+  }
+
+  &.description {
     color: $text-inverse;
   }
 }

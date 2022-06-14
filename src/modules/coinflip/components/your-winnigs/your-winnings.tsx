@@ -4,13 +4,16 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { USD_DECIMALS } from '@config/constants';
+import { NETWORK_ID } from '@config/enviroment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { StateCurrencyAmount, Tooltip } from '@shared/components';
+import { StateCurrencyAmount } from '@shared/components';
+import { isEqual } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { CoinflipStatsItem } from '../coinflip-stats-item';
 import styles from './your-winnings.module.scss';
 
 const modeClass = {
@@ -24,7 +27,6 @@ interface Props {
   amountDecimals?: number;
   currency: string;
   rewardTooltip: string;
-  isLoading: boolean;
   className?: string;
 }
 
@@ -34,38 +36,34 @@ export const YourWinningsReward: FC<Props> = ({
   dollarEquivalent,
   amountDecimals = USD_DECIMALS,
   rewardTooltip,
-  isLoading,
   className
 }) => {
   const { accountPkh } = useAuthStore();
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const isExchangeRatesExist = isEqual(NETWORK_ID, 'ithacanet');
 
   return (
     <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       <div className={styles.container}>
         {accountPkh ? (
           <>
-            <div className={styles.titleWrapper}>
-              <div className={styles.title}>{t('coinflip|yourWinnings')}</div>
-              <Tooltip content={rewardTooltip} />
-            </div>
-            <div className={styles.statesOfCurrencysAmount}>
+            <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
               <StateCurrencyAmount
                 className={styles.amount}
                 amount={amount}
                 currency={currency}
                 dollarEquivalent={dollarEquivalent}
                 amountDecimals={amountDecimals}
-                isLoading={isLoading}
                 isLeftCurrency={currency === '$'}
+                isError={isExchangeRatesExist}
               />
-            </div>
+            </CoinflipStatsItem>
           </>
         ) : (
           <div className={styles.alternativeTitle}>
             <div className={styles.title}>{t('coinflip|connectWallet')}</div>
-            <div className={styles.description}>{t('coinflip|yourReward')}</div>
+            <div className={cx(styles.description, modeClass[colorThemeMode])}>{t('coinflip|yourReward')}</div>
           </div>
         )}
       </div>

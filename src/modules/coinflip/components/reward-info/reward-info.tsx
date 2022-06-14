@@ -1,20 +1,16 @@
-import { FC, useContext, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
-import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
-import { Button, Card, StateCurrencyAmount, Tooltip } from '@shared/components';
+import { Button, Card, StateCurrencyAmount } from '@shared/components';
 import { ArrowSign } from '@shared/svg';
+import { Undefined } from '@shared/types';
 
+import { CoinflipStatsItem } from '../coinflip-stats-item';
 import { YourWinningsReward } from '../your-winnigs';
 import styles from './reward-info.module.scss';
 import { useRewardInfoViewModel } from './use-reward-info.vm';
-
-const modeClass = {
-  [ColorModes.Light]: styles.light,
-  [ColorModes.Dark]: styles.dark
-};
 
 interface Props {
   userReward: Nullable<BigNumber>;
@@ -22,6 +18,7 @@ interface Props {
   rewardTooltip: string;
   yourGamesTooltip: string;
   currency: string;
+  isError: Undefined<boolean>;
   details?: ReactNode;
 }
 
@@ -31,11 +28,11 @@ export const RewardInfo: FC<Props> = ({
   yourGamesTooltip,
   currency,
   gamesCount,
+  isError,
   details
 }) => {
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
   const { detailsButtonTransaction } = transaction;
-  const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <Card
@@ -48,20 +45,13 @@ export const RewardInfo: FC<Props> = ({
         amount={userReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
-        isLoading={!Boolean(userReward)}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
-        <div className={styles.yourGamesStats}>
-          <div className={styles.label}>
-            <span>Your Games</span>
-            <Tooltip content={yourGamesTooltip} />
-          </div>
-          <div className={modeClass[colorThemeMode]}>
-            <StateCurrencyAmount amount={gamesCount} isLoading={!Boolean(gamesCount)} amountClassName={styles.amount} />
-          </div>
-        </div>
-        {details && showDetails && (
+        <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
+          <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!Boolean(gamesCount)} />
+        </CoinflipStatsItem>
+        {details && showDetails && isError && (
           <Button
             className={cx(styles.viewDetailsButton)}
             theme="inverse"

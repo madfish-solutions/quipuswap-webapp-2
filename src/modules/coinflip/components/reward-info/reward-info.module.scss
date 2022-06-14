@@ -50,17 +50,6 @@
   padding: 40px 0 0;
 }
 
-.light {
-  &.amount {
-    color: $text-01;
-  }
-}
-
-.dark {
-  &.amount {
-    color: $text-inverse;
-  }
-}
 
 @include media('>tablet') {
   .yourGamesStats {
