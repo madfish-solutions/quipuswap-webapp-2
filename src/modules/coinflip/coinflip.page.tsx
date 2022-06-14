@@ -14,7 +14,7 @@ export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
   const { t } = useTranslation();
   const { isLoading } = useCoinflipGeneralStats();
-  const { isLoadingGamesInfo } = useGamesUserInfo();
+  useGamesUserInfo();
 
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
@@ -22,7 +22,7 @@ export const CoinflipPage: FC = observer(() => {
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
 
-      <CoinflipRewardInfo isLoading={isLoadingGamesInfo} />
+      <CoinflipRewardInfo />
 
       <CoinflipTokenSelector />
 
