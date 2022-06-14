@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { Button } from '@shared/components';
 import { WalletType } from '@shared/types';
@@ -11,7 +11,7 @@ interface Props {
   className?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
-  label: string;
+  label: ReactNode;
   onClick: (walletType: WalletType) => void;
   disabled?: boolean;
   available?: boolean;

@@ -28,7 +28,7 @@ export const useValidationSchema = () => {
       // @ts-ignore
       (inputToken?: Token, outputToken?: Token) => {
         if (!inputToken) {
-          return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
+          return bigNumberSchema().nullable().required(t(REQUIRE_FIELD_MESSAGE));
         }
         const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
@@ -47,6 +47,7 @@ export const useValidationSchema = () => {
               () => t('common|Insufficient funds'),
               value => !(value instanceof BigNumber) || value.eq(EMPTY_BALANCE_AMOUNT)
             )
+            .nullable()
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
 
@@ -66,6 +67,7 @@ export const useValidationSchema = () => {
               }),
             value => !(value instanceof BigNumber) || value.decimalPlaces() <= inputTokenDecimals
           )
+          .nullable()
           .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
@@ -74,7 +76,7 @@ export const useValidationSchema = () => {
       // @ts-ignore
       (inputToken?: Token, outputToken?: Token) => {
         if (!outputToken) {
-          return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
+          return bigNumberSchema().nullable().required(t(REQUIRE_FIELD_MESSAGE));
         }
         const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
@@ -89,6 +91,7 @@ export const useValidationSchema = () => {
               }),
             value => !(value instanceof BigNumber) || value.decimalPlaces() <= outputTokenDecimals
           )
+          .nullable()
           .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),

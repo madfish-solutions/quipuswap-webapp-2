@@ -7,6 +7,7 @@ export const common = {
   Voting: 'Voting',
   Stake: 'Stake',
   Farming: 'Farming',
+  Game: 'Game',
   Portfolio: 'Portfolio',
   Governance: 'Governance',
   Stableswap: 'Stableswap',
@@ -123,12 +124,15 @@ export const common = {
   lessDetails: 'Less Details',
   select: 'Select',
   whiteListed: 'Whitelisted',
-  totalValue: 'Total Value',
+  tvl: 'TVL',
   Payout: 'Payout',
-  value: 'Value',
+  tokenValues: 'Token Values',
   Explore: 'Explore',
   'Pool Details': 'Pool Details',
   Input: 'Input',
   Output: 'Output',
-  Back: 'Back'
+  Back: 'Back',
+  NEW: 'NEW',
+  highMinOutError:
+    "Your swap can't be completed because the exchange rates have been changed. Please, try again or increase your slippage tolerance."
 } as const;

@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { isNull } from '@shared/helpers';
 
-export const calculateLpValue = (
+export const calculateShares = (
   inputAmount: Nullable<BigNumber>,
   reserve: BigNumber,
   totalLpSupply: BigNumber

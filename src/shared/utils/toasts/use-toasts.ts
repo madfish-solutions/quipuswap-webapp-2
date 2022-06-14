@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
 import { isUndefined } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
 import { useUpdateToast } from './use-update-toast';
 
@@ -15,6 +16,14 @@ export interface UseToasts {
 
 export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
+
+  const { t } = useTranslation();
+  const knownErrorsMessages = useMemo<Record<string, string>>(
+    () => ({
+      'Dex/high-min-out': t('common|highMinOutError')
+    }),
+    [t]
+  );
 
   const showErrorToast = useCallback(
     (error: Error | string) => {
@@ -34,9 +43,11 @@ export const useToasts = (): UseToasts => {
         !isUndefined(error.name) &&
         !isUndefined(error.message)
       ) {
+        const knownErrorMessage = knownErrorsMessages[error.message];
+
         updateToast({
           type: 'error',
-          render: `${error.name}: ${error.message}`
+          render: knownErrorMessage ?? `${error.name}: ${error.message}`
         });
 
         return;
@@ -47,7 +58,7 @@ export const useToasts = (): UseToasts => {
         render: `${JSON.stringify(error)}`
       });
     },
-    [updateToast]
+    [updateToast, knownErrorsMessages]
   );
 
   const showInfoToast = useCallback(

@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { batchOperations } from '@shared/dapp';
-import { getBlockchainTimestamp, toDecimals } from '@shared/helpers';
+import { getBlockchainTimestamp, increaseBySlippage, toDecimals } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { increaseBySlippage, getTokensResetAndUpdateOperators } from '../../helpers';
+import { getTokensResetAndUpdateOperators } from '../../helpers';
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -30,20 +30,19 @@ export const addLiquidityTokenToToken = async (
   const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
   const { address: dexAddress } = dex.contract;
-  const { decimals: decimalsA } = tokenA.metadata;
 
-  const tokenABN = new BigNumber(tokenAInput);
-  const tokenAAmount = toDecimals(tokenABN, decimalsA);
+  const tokenAAmount = new BigNumber(tokenAInput);
+  const aTokemAtom = toDecimals(tokenAAmount, tokenA);
 
-  const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
+  const shares = aTokemAtom.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
+  const bTokemAtom = shares.multipliedBy(tokenBPool).dividedBy(totalSupply).integerValue(BigNumber.ROUND_UP);
 
-  const withDecimalsA = increaseBySlippage(tokenAAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withDecimalsB = increaseBySlippage(tokenBAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageA = increaseBySlippage(aTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
-    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
-  const investParams = dex.contract.methods.invest(id, shares, withDecimalsA, withDecimalsB, transactionDeadline);
+    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, aTokemAtom, bTokemAtom);
+  const investParams = dex.contract.methods.invest(id, shares, withSlippageA, withSlippageB, transactionDeadline);
 
   return await (
     await batchOperations(tezos, [

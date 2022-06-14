@@ -19,7 +19,7 @@ export const StateWrapper: CFC<StateWrapperProps> = ({
   errorFallback
 }) => {
   if (isError) {
-    return errorFallback!;
+    return errorFallback ?? null;
   }
 
   if (isLoading) {

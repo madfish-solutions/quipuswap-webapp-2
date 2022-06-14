@@ -2,6 +2,7 @@ import { OperationEntry } from '@taquito/rpc';
 
 import { useTezos } from '@providers/use-dapp';
 
+import { NoTezosError } from '../../errors/no-tezos.error';
 import { useToasts } from '../toasts';
 import { confirmOperation } from './confirm-operation.service';
 import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
@@ -15,7 +16,10 @@ export const useConfirmOperation = () => {
     showInfoToast(<TransactionSendedToast hash={opHash} />);
 
     try {
-      const operationEntry = await confirmOperation(tezos!, opHash);
+      if (!tezos) {
+        return Promise.reject(new NoTezosError());
+      }
+      const operationEntry = await confirmOperation(tezos, opHash);
 
       showSuccessToast(<ConfirmationSuccessToast hash={operationEntry.hash} message={message} />);
 

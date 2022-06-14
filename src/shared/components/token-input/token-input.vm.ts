@@ -2,20 +2,19 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap, isExist } from '@shared/helpers';
+import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 
 import { TokenInputViewModelProps } from './types';
 
 export const useTokenInputViewModel = ({
-  value,
-
   tokens,
-
-  balance,
+  hiddenBalance,
   readOnly,
   hiddenPercentSelector,
   onInputChange
 }: TokenInputViewModelProps) => {
+  const { accountPkh } = useAuthStore();
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,8 +41,9 @@ export const useTokenInputViewModel = ({
   };
 
   const amountCap = !Array.isArray(tokens) ? getTokenInputAmountCap(tokens) : undefined;
-  const isFormReady = isExist(balance) && !readOnly;
-  const showPercentSelector = !hiddenPercentSelector && isFormReady;
+  const isFormReady = !readOnly;
+  const shownPercentSelector = !hiddenPercentSelector && isFormReady;
+  const shownBalance = Boolean(accountPkh) && !hiddenBalance;
 
   return {
     isFocused,
@@ -51,7 +51,8 @@ export const useTokenInputViewModel = ({
     notWhitelistedMessage,
 
     isFormReady,
-    showPercentSelector,
+    shownPercentSelector,
+    shownBalance,
 
     amountCap,
 

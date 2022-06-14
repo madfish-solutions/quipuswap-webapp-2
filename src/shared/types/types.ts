@@ -62,16 +62,20 @@ export interface TokenPair {
   dex?: Nullable<FoundDex>;
 }
 
-export interface Token {
-  type: Standard;
+export interface TokenAddress {
   contractAddress: string;
   fa2TokenId?: number;
+}
+
+export interface Token extends TokenAddress {
+  type: Standard;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;
 }
 
-export interface RawToken extends Omit<Token, 'fa2TokenId'> {
-  fa2TokenId?: string;
+export interface RawToken extends Omit<Token, 'type' | 'isWhitelisted'> {
+  type: string;
+  isWhitelisted?: boolean;
 }
 
 export interface TokenWithQSNetworkType extends Token {
@@ -222,4 +226,9 @@ export interface BlockInfo {
   level: number;
   hash: string;
   timestamp: string;
+}
+
+export interface AmountToken {
+  token: Token;
+  amount: BigNumber;
 }

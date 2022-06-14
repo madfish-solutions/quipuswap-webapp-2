@@ -32,8 +32,10 @@ export const TokenInput: FC<TokenInputProps> = ({
   tokens = [],
   value,
   balance,
-  hiddenPercentSelector,
   error,
+  disabled,
+  hiddenPercentSelector,
+  hiddenBalance,
   readOnly,
   onInputChange,
   onSelectorClick
@@ -45,8 +47,8 @@ export const TokenInput: FC<TokenInputProps> = ({
     notWhitelistedMessage,
 
     isFormReady,
-    showPercentSelector,
-
+    shownPercentSelector,
+    shownBalance,
     amountCap,
 
     focusInput,
@@ -56,11 +58,10 @@ export const TokenInput: FC<TokenInputProps> = ({
     handleInputChange,
     handlePercentageSelect
   } = useTokenInputViewModel({
-    value,
     tokens,
-    balance,
     readOnly,
     hiddenPercentSelector,
+    hiddenBalance,
     onInputChange
   });
 
@@ -90,7 +91,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
-            {isFormReady && <Balance balance={balance} colorMode={colorThemeMode} />}
+            {shownBalance && <Balance balance={balance} colorMode={colorThemeMode} />}
           </div>
           <input
             id={id}
@@ -100,7 +101,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             ref={inputRef}
             value={value}
             autoComplete="off"
-            disabled={!isFormReady}
+            disabled={!isFormReady || disabled}
             onChange={handleInputChange}
           />
           <div className={styles.dangerContainer}>
@@ -120,10 +121,10 @@ export const TokenInput: FC<TokenInputProps> = ({
           </div>
         </div>
       </div>
-      <Scaffolding showChild={showPercentSelector} className={styles.scaffoldingPercentSelector}>
+      <Scaffolding showChild={shownPercentSelector} className={styles.scaffoldingPercentSelector}>
         <PercentSelector amountCap={amountCap} value={balance} handleBalance={handlePercentageSelect} />
       </Scaffolding>
-      <ComplexError error={error} />
+      {error && <ComplexError error={error} />}
     </div>
   );
 };

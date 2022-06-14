@@ -18,7 +18,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
       <StableswapLiquidityGeneralStats />
       <ListFilter />
       <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
-        <Iterator render={PoolCard} data={list ?? []} isGrouped wrapperClassName={styles.poolsList} />
+        <Iterator render={PoolCard} data={list} isGrouped wrapperClassName={styles.poolsList} />
       </StateWrapper>
     </>
   );

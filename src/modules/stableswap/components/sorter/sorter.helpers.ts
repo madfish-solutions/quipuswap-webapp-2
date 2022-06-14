@@ -1,6 +1,6 @@
-import { StableswapItem } from '@modules/stableswap/types';
 import { cloneArray, isNull, sortBigNumber } from '@shared/helpers';
 
+import { StableswapItem } from '../../types';
 import { SortDirection, SortField } from './sorter.types';
 
 const sortById = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>

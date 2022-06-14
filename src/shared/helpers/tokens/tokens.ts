@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
-import { TOKENS_URL } from '@config/enviroment';
+import { TOKENS } from '@config/enviroment';
 import { SAVED_TOKENS_KEY } from '@config/localstorage';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
 import { getContract } from '@shared/dapp';
@@ -20,10 +20,10 @@ import {
 } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
+import { mapBackendToken } from '../../mapping';
 import { getUniqArray } from '../arrays';
-import { ipfsToHttps } from '../link-transformers';
-import { getTokenSlug } from './get-token-slug';
 import { isTokenEqual } from './is-token-equal';
+import { getTokenSlug } from './token-slug';
 
 interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2TokenId' | 'isWhitelisted'> {
   fa2TokenId?: string;
@@ -118,9 +118,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(TOKENS_URL));
-  const json = await response.json();
-  const arr: Token[] = json.tokens?.length ? json.tokens : json.length ? json : [];
+  const arr: Token[] = TOKENS?.tokens?.length ? TOKENS.tokens.map(token => mapBackendToken(token)) : [];
 
   if (arr.length) {
     const Tokens: Token[] = arr.map(token => ({
@@ -130,7 +128,7 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
 
     tokens = tokens.filter(fallbackToken => !Tokens.some(token => isTokenEqual(fallbackToken, token))).concat(Tokens);
   } else {
-    throw new InvalidTokensListError(json);
+    throw new InvalidTokensListError(TOKENS);
   }
 
   return getUniqArray(tokens, getTokenSlug);

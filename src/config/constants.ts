@@ -9,6 +9,7 @@ import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
 //#region time
 export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
+export const MS_IN_MINUTES = MS_IN_SECOND * SECONDS_IN_MINUTE;
 export const MINUTES_IN_HOUR = 60;
 export const HOURS_IN_DAY = 24;
 export const DAYS_IN_YEAR = 365;
@@ -81,11 +82,13 @@ export const SKIP = -1;
 //#region API
 export const LIST = 'list';
 export const STATS = 'stats';
+export const FARM = 'farm';
 
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
+export const STABLEFARM_LIST_API_URL = `${STABLESWAP_API_URL}/${FARM}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 //#endregion
 
@@ -100,7 +103,7 @@ export const ZERO_AMOUNT = 0;
 export const USD_DECIMALS = 2;
 
 export const MAX_ITEMS_PER_PAGE = 5;
-export const MAX_HOPS_COUNT = 5;
+export const MAX_HOPS_COUNT = 3;
 
 export const NO_TIMELOCK_VALUE = '0';
 
@@ -125,8 +128,9 @@ const FARM_ID_FOR_RESTAKE_MAP: Record<SupportedNetworks, number> = {
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];
 
 const PERCENTAGE = 100;
-export const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
+export const PERCENTAGE_100 = new BigNumber(PERCENTAGE);
 
 export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
+export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 //#endregion

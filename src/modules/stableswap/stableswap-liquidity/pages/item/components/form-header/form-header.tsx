@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import { AppRootRoutes } from '@app.router';
-import { StableswapRoutes } from '@modules/stableswap';
 import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
 import { useTranslation } from '@translation';
 
+import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
 import styles from './form-header.module.scss';
 
 export const FormHeader: FC = () => {

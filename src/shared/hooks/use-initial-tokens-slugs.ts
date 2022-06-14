@@ -58,7 +58,7 @@ export const useInitialTokensSlugs = (
             }
 
             if (tokenType === Standard.Fa2 && (await fa2TokenExists(tezos, contractAddress, fa2TokenId))) {
-              return getTokenSlug({ type: tokenType, fa2TokenId, contractAddress });
+              return getTokenSlug({ fa2TokenId, contractAddress });
             }
           } catch {
             // return statement is below

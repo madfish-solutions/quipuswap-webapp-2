@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
 import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -14,7 +14,7 @@ import { StableTokenInput } from '../../stable-token-input';
 import styles from '../forms.module.scss';
 import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 
-export const RemoveLiqForm: FC = () => {
+export const RemoveLiqForm: FC = observer(() => {
   const { t } = useTranslation();
 
   const removeLiqFormViewModel = useRemoveLiqFormViewModel();
@@ -23,22 +23,37 @@ export const RemoveLiqForm: FC = () => {
     return null;
   }
 
-  const { data, formik, lpBalance, labelOutput, tooltip, handleSubmit, handleLpInputChange } = removeLiqFormViewModel;
-
-  const disabled = false;
-  const isSubmitting = false;
+  const {
+    data,
+    formik,
+    lpBalance,
+    isLpInputDisabled,
+    labelInput,
+    tooltip,
+    switcherValue,
+    isSubmitting,
+    disabled,
+    handleSwitcherClick,
+    handleSubmit,
+    handleLpInputChange
+  } = removeLiqFormViewModel;
 
   return (
     <form onSubmit={handleSubmit}>
-      <StableLpInput formik={formik} label={labelOutput} balance={lpBalance} onInputChange={handleLpInputChange} />
+      <StableLpInput
+        disabled={isLpInputDisabled}
+        formik={formik}
+        label={labelInput}
+        balance={lpBalance}
+        onInputChange={handleLpInputChange}
+      />
 
       <ArrowDown className={styles.svg} />
 
       <Iterator render={StableTokenInput} data={data} separator={<Plus className={styles.svg} />} />
 
       <div className={cx(styles.switcherContainer, styles.switcherWhitelistedOnly)}>
-        {/* Mock data */}
-        <Switcher value={true} disabled={true} onClick={noopMap} />
+        <Switcher value={switcherValue} onClick={handleSwitcherClick} />
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
         <Tooltip content={tooltip} />
       </div>
@@ -58,4 +73,4 @@ export const RemoveLiqForm: FC = () => {
       </div>
     </form>
   );
-};
+});

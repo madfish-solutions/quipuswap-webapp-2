@@ -50,6 +50,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height $animationTime;
+  margin-left: 8px;
 }
 
 .linkToggle {
@@ -95,6 +96,10 @@
 .light {
   color: $text-01;
 
+  &.active {
+    color: $hover-primary-01-fallback;
+  }
+
   &:not(.active) {
     &:hover, &:focus {
       background-color: $hover-light-row;
@@ -110,6 +115,10 @@
 
 .dark {
   color: $text-inverse;
+
+  &.active {
+    color: $hover-primary-02-fallback;
+  }
 
   &:not(.active) {
     &:hover, &:focus {
