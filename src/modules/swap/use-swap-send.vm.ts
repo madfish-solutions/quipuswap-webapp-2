@@ -372,6 +372,11 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     isEmptyArray(swap.trade) && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
 
+  const updateRates = () => {
+    refreshDexPools();
+    swap.updateCalculations();
+  };
+
   return {
     accountPkh,
     action: formik.action,
@@ -403,7 +408,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient: formik.recipient,
-    refreshDexPools,
+    updateRates,
     sellRate,
     shouldShowPriceImpactWarning,
     submitDisabled,
