@@ -3,9 +3,10 @@ import { useCallback } from 'react';
 import { MichelsonMap } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { READ_ONLY_SIGNER_PK_HASH } from '@config/enviroment';
 import { useRootStore } from '@providers/root-store-provider';
 import { getContract } from '@shared/dapp';
-import { defined } from '@shared/helpers';
+import { defined, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 
 import { useStableswapItemStore } from './store';
@@ -20,6 +21,7 @@ export const useCalcTokenAmountView = (isDeposit = false) => {
       try {
         const contract = await getContract(defined(tezos), defined(item).contractAddress);
         const poolId = defined(item).lpToken.fa2TokenId;
+        const viewCaller = isNull(accountPkh) ? READ_ONLY_SIGNER_PK_HASH : accountPkh;
 
         return await contract.contractViews
           .calc_token_amount({
@@ -27,7 +29,7 @@ export const useCalcTokenAmountView = (isDeposit = false) => {
             amounts: amounts,
             is_deposit: isDeposit
           })
-          .executeView({ viewCaller: defined(accountPkh) });
+          .executeView({ viewCaller });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

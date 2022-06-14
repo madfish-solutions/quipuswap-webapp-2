@@ -1,6 +1,6 @@
 import { NetworkType } from '@airgap/beacon-sdk';
-import IthacaWhitelistTokens from 'tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
-import MainnetWhitelistTokens from 'tokens-whitelist/tokens/quipuswap.whitelist.json';
+import IthacaWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
+import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { SupportedNetworks } from '@shared/types';
 
@@ -109,3 +109,6 @@ const DEX_POOLS_URLS: Record<SupportedNetworks, string> = {
 
 export const DEX_POOL_URL = DEX_POOLS_URLS[NETWORK_ID];
 //#region DEX_POOLS_URLS
+
+// Google Analytics (gtag)
+export const GOOGLE_TAG_MANAGER_ID = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID;

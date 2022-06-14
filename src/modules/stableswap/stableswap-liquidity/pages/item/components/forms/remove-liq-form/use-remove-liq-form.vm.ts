@@ -36,13 +36,14 @@ import { StableswapItem } from '../../../../../../types';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
-const ZERO = new BigNumber('0');
+const DEFAULT_LP_BALANCE = null;
 export interface RemoveLiqFormValues {
   [key: string]: string;
 }
 
 const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedProportion: boolean) => {
   const lpBalance = useTokenBalance(item?.lpToken);
+  const fixedLpBalance = lpBalance ?? DEFAULT_LP_BALANCE;
 
   const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;
   const balanceTokens = useTokensWithBalances(tokens);
@@ -50,7 +51,7 @@ const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedPropo
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
 
-  const validationSchema = useRemoveLiqFormValidation(lpBalance ?? ZERO, lockeds, isBalancedProportion);
+  const validationSchema = useRemoveLiqFormValidation(fixedLpBalance, lockeds, isBalancedProportion);
 
   return {
     lpBalance,

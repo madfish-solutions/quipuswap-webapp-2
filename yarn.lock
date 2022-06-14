@@ -2028,6 +2028,11 @@
   dependencies:
     bignumber.js "^9.0.2"
 
+"@quipuswap/tokens-whitelist@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.0.tgz#f266aeea5d789c026bef978a3a62a40c70c3d47d"
+  integrity sha512-GORzJDmFrRzz1KEaWt6lSZHIddArO4rxrWMK1JamzyYVZgsw262oN4PTjs6EJZIcDd2dgYWrj/fkjpqYKzo57w==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -2714,6 +2719,11 @@
   integrity sha512-FgTtbqPOCI3dzZPZoC2T/sx3L34qxy99ITWn4eoSA95qPyXDMH0ALoAqUp49ITniiJFsXUVBtalh/KffMpg21Q==
   dependencies:
     "@types/react" "*"
+
+"@types/react-gtm-module@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-gtm-module/-/react-gtm-module-2.0.1.tgz#b2c6cd14ec251d6ae7fa576edf1d43825908a378"
+  integrity sha512-T/DN9gAbCYk5wJ1nxf4pSwmXz4d1iVjM++OoG+mwMfz9STMAotGjSb65gJHOS5bPvl6vLSsJnuC+y/43OQrltg==
 
 "@types/react-modal@^3.13.1":
   version "3.13.1"
@@ -9725,6 +9735,11 @@ react-final-form@^6.5.9:
   dependencies:
     "@babel/runtime" "^7.15.4"
 
+react-gtm-module@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/react-gtm-module/-/react-gtm-module-2.0.11.tgz#14484dac8257acd93614e347c32da9c5ac524206"
+  integrity sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -11012,10 +11027,6 @@ toidentifier@1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-"tokens-whitelist@https://github.com/madfish-solutions/tokens-whitelist":
-  version "0.0.0"
-  resolved "https://github.com/madfish-solutions/tokens-whitelist#a7e776a4597103873ac3735eb2c9a8fe335d9647"
-
 toposort@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
@@ -11273,6 +11284,11 @@ use-composed-ref@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/use-composed-ref/-/use-composed-ref-1.3.0.tgz#3d8104db34b7b264030a9d916c5e94fbe280dbda"
   integrity sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==
+
+use-debounce@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-8.0.1.tgz#5f3e11b067bdf9f2c554a20b4764e38b48022664"
+  integrity sha512-6tGAFJKJ0qCalecaV7/gm/M6n238nmitNppvR89ff1yfwSFjwFKR7IQZzIZf1KZRQhqNireBzytzU6jgb29oVg==
 
 use-isomorphic-layout-effect@^1.1.1:
   version "1.1.2"

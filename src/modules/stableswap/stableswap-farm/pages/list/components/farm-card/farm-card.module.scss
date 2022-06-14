@@ -1,0 +1,123 @@
+@import '@styles/breakpoints';
+@import '@styles/variables';
+
+.card {
+  padding: 24px;
+}
+
+.card.light:hover {
+  background: $hover-light-row;
+}
+
+.card.dark:hover {
+  background: $hover-dark-row;
+}
+
+.card > div {
+  padding-top: 0;
+}
+
+.tokensSymbols,
+.whitelistedTag {
+  margin-top: 8px;
+}
+
+.tokensSymbols {
+  font-size: 1rem;
+  letter-spacing: 0.75px;
+  font-weight: 600;
+}
+
+.stats {
+  margin-top: 16px;
+}
+
+.stats,
+.userData {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.light {
+  .tokensSymbols,
+  .farmStatsAmount {
+    color: $text-01;
+  }
+
+  .userData {
+    &::before {
+      background-color: $text-03;
+    }
+  }
+}
+
+.dark {
+  .tokensSymbols,
+  .farmStatsAmount {
+    color: $text-inverse;
+  }
+
+  .userData {
+    &::before {
+      background-color: $text-02;
+    }
+  }
+}
+
+@include media('>phone') {
+  .cardCell {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@include media('>Ltablet') {
+  .farmInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .logoSymbols {
+    display: flex;
+    align-items: center;
+  }
+
+  .tokensSymbols {
+    margin-left: 16px;
+    margin-top: 0;
+    font-size: 1.143rem;
+  }
+
+  .stats {
+    flex-direction: row;
+    column-gap: 40px;
+  }
+
+  .cardCell {
+    flex-direction: column;
+  }
+
+  .userData {
+    flex-direction: row;
+    column-gap: 32px;
+  }
+
+  .userData {
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+
+      width: 1px;
+      height: 80%;
+
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: -20px;
+    }
+  }
+}
