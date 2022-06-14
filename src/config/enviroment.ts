@@ -109,3 +109,6 @@ const DEX_POOLS_URLS: Record<SupportedNetworks, string> = {
 
 export const DEX_POOL_URL = DEX_POOLS_URLS[NETWORK_ID];
 //#region DEX_POOLS_URLS
+
+// Google Analytics (gtag)
+export const GOOGLE_TAG_MANAGER_ID = process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID;
