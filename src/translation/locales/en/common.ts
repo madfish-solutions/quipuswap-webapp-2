@@ -1,4 +1,5 @@
 export const common = {
+  Token: 'Token',
   Copy: 'Copy',
   Paste: 'Paste',
   Home: 'Home',

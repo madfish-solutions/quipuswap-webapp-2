@@ -5,17 +5,17 @@ import { useToasts } from '@shared/utils';
 import { useCoinflipStore } from './stores';
 
 export const useCoinflipGeneralStats = () => {
-  const conflipStore = useCoinflipStore();
-  const token = conflipStore?.token;
+  const coinflipStore = useCoinflipStore();
+  const token = coinflipStore?.token;
   const { showErrorToast } = useToasts();
 
   useEffect(() => {
     try {
-      void conflipStore?.generalStats.load();
+      void coinflipStore?.generalStats.load();
     } catch (error) {
       showErrorToast(error as Error);
     }
-  }, [conflipStore?.generalStats, showErrorToast, token]);
+  }, [coinflipStore?.generalStats, showErrorToast, token]);
 
-  return { isLoading: Boolean(conflipStore?.generalStats.isLoading) };
+  return { isLoading: Boolean(coinflipStore?.generalStats.isLoading) };
 };
