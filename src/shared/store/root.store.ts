@@ -59,6 +59,11 @@ export class RootStore {
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
+      stableswapListStore: observable,
+      stableswapItemStore: observable,
+      stableswapItemFormStore: observable,
+      stableswapFilterStore: observable,
+
       stableFarmListStore: observable,
 
       coinflipStore: observable,
@@ -67,7 +72,13 @@ export class RootStore {
       createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
-      createCoinflipStore: action
+      createCoinflipStore: action,
+
+      createStableFarmListStore: action,
+      createStableswapListStore: action,
+      createStableswapItemStore: action,
+      createStableswapItemFormStore: action,
+      createStableswapFilterStore: action
     });
   }
 
@@ -76,7 +87,7 @@ export class RootStore {
   }
 
   async createStableFarmListStore() {
-    if (isNull(this.stableswapListStore)) {
+    if (isNull(this.stableFarmListStore)) {
       const { StableFarmListStore } = await import('@modules/stableswap/store/stablefarm-list.store');
       this.stableFarmListStore = new StableFarmListStore(this);
     }
