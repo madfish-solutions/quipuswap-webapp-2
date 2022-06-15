@@ -7,7 +7,7 @@ import { getTokenAddress, getTokenSlug, isString } from '../helpers';
 import { mapToken } from '../mapping/token.map';
 import { useTokensStore } from './use-tokens-store';
 
-export const useTokens = (tokens: Optional<Array<TokenAddress | string>>) => {
+export const useTokensLoader = (tokens: Optional<Array<TokenAddress | string>>) => {
   const tokensStore = useTokensStore();
 
   useEffect(() => {
@@ -15,6 +15,7 @@ export const useTokens = (tokens: Optional<Array<TokenAddress | string>>) => {
       if (!tokens || !tokens.length) {
         return;
       }
+      tokensStore.setLoading(true);
       const tokenSlugs = tokens.map(tokenSlugOrAddress =>
         isString(tokenSlugOrAddress) ? tokenSlugOrAddress : getTokenSlug(tokenSlugOrAddress)
       );
@@ -31,7 +32,11 @@ export const useTokens = (tokens: Optional<Array<TokenAddress | string>>) => {
             tokensStore.setToken(tokenSlug, token);
           }
         });
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } finally {
+        tokensStore.setLoading(false);
+      }
     })();
   }, [tokens, tokensStore]);
 };

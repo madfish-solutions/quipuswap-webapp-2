@@ -10,8 +10,8 @@ import {
   useAllRoutePairs
 } from 'swap-router-sdk';
 
-import { fromDecimals, toDecimals } from '@shared/helpers';
-import { useTokens, useTokensStore } from '@shared/hooks';
+import { fromDecimals, isEmptyArray, toDecimals } from '@shared/helpers';
+import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
 
@@ -47,24 +47,24 @@ export const useSwapCalculations = () => {
     [allRoutePairs.data]
   );
 
-  const { tokens } = useTokensStore();
+  const { tokens, loading: tokensLoading } = useTokensStore();
   const {
     settings: { tradingSlippage }
   } = useSettingsStore();
 
-  const [dexRoute, setDexRoute] = useState<DexPair[]>([]);
+  const [dexRoute, setDexRoute] = useState<DexPair[]>();
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
-  useTokens(tokensSlugs);
+  useTokensLoader(tokensSlugs);
 
   useEffect(() => {
     try {
       setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
     } catch {
-      setDexRoute([]);
+      setDexRoute(tokensLoading && !isEmptyArray(bestTrade) ? undefined : []);
     }
-  }, [bestTrade, tokens]);
+  }, [tokensLoading, bestTrade, tokens, tokens.size]);
 
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
   const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);
