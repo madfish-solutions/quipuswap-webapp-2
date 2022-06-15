@@ -128,6 +128,14 @@ export const useSwapCalculations = () => {
     }
   };
 
+  const updateCalculations = () => {
+    if (lastAmountFieldChanged === SwapField.INPUT_AMOUNT) {
+      onInputAmountChange(inputAmount);
+    } else {
+      onOutputAmountChange(outputAmount);
+    }
+  };
+
   return {
     dexRoute,
     onInputAmountChange,
@@ -136,6 +144,7 @@ export const useSwapCalculations = () => {
     inputAmount,
     outputAmount,
     resetCalculations,
-    trade: bestTradeWithSlippageTolerance
+    trade: bestTradeWithSlippageTolerance,
+    updateCalculations
   };
 };

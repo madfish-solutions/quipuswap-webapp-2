@@ -62,7 +62,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient,
-    refreshDexPools,
+    updateRates,
     sellRate,
     shouldShowPriceImpactWarning,
     submitDisabled,
@@ -162,7 +162,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           {accountPkh && dataIsStale && !isSubmitting && (
             <Button
               loading={dexPoolsLoading}
-              onClick={refreshDexPools}
+              onClick={updateRates}
               className={styles.button}
               data-test-id="updateRatesButton"
             >
