@@ -41,7 +41,7 @@ export * from './tabs';
 export * from './testnet-alert';
 export * from './token-logo';
 export * from './tokens-logos-deprecated';
-export * from './TokensModal';
+export * from './tokens-modal';
 export * from './tooltip';
 export * from './top-stats';
 export * from './deadline-input';
