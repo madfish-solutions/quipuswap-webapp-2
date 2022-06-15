@@ -49,7 +49,7 @@ export const RewardInfo: FC<Props> = ({
       />
       <div className={styles.wrapper}>
         <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
-          <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!Boolean(gamesCount)} />
+          <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
         </CoinflipStatsItem>
         {details && showDetails && isError && (
           <Button

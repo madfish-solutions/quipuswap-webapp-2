@@ -3,10 +3,6 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  & > :nth-child(1) > :nth-child(1) > :nth-child(1),
-  & > :nth-child(1) > :nth-child(1) > :nth-child(2) {
-    border-top: none;
-  }
 }
 
 .token {
@@ -29,4 +25,8 @@
 
 .dark {
   border-top: 1px solid $text-01;
+}
+
+.header {
+  border-top: none;
 }

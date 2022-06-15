@@ -13,8 +13,8 @@ const DEFAULT_USER_INFO = {
 
 export const useCoinflipRewardInfoViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const exchangeRate = useNewExchangeRates();
   const { gamesCount, tokensWon } = coinflipStore;
+  const exchangeRate = useNewExchangeRates();
   const isGamesCount = isExist(gamesCount);
 
   if (isNull(gamesCount) || isNull(tokensWon)) {

@@ -39,15 +39,15 @@ const colorModes = {
   [ColorModes.Dark]: styles.dark
 };
 
-const getColumnProps = (id: string, colorTheme: ColorModes) => ({
-  className: cx(id === Columns.TOKEN ? styles.token : styles.amount, colorModes[colorTheme])
+const getColumnProps = (id: string, colorTheme: ColorModes, className?: string) => ({
+  className: cx(id === Columns.TOKEN ? styles.token : styles.amount, colorModes[colorTheme], className)
 });
 
 const getCustomTableProps = () => ({ className: styles.table });
 
 const getCustomHeaderProps =
-  (colorTheme: ColorModes) => (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) =>
-    getColumnProps(meta.column.id, colorTheme);
+  (colorTheme: ColorModes, className: string) => (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) =>
+    getColumnProps(meta.column.id, colorTheme, className);
 
 const getCustomCellProps = (colorTheme: ColorModes) => (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
   getColumnProps(meta.cell.column.id, colorTheme);
@@ -80,7 +80,7 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
     data,
     columns: rewardTokensColumns,
     getCustomTableProps,
-    getCustomHeaderProps: getCustomHeaderProps(colorThemeMode),
+    getCustomHeaderProps: getCustomHeaderProps(colorThemeMode, styles.header),
     getCustomCellProps: getCustomCellProps(colorThemeMode)
   };
 };
