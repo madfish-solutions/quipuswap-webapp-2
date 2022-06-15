@@ -9,7 +9,7 @@ export const operationAmountSchema = (balance: Nullable<BigNumber>, isZeroInclus
     ? numberAsStringSchema(
         { value: ZERO, isInclusive: isZeroInclusive },
         { value: balance, isInclusive: true },
-        'The value should be greater than zero.',
+        isZeroInclusive ? 'The value should be non-negative.' : 'The value should be greater than zero.',
         `Max available value is ${balance.toNumber()}`
       )
     : numberAsStringSchema();
