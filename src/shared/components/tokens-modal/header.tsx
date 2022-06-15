@@ -28,7 +28,7 @@ export const Header: FC<HeaderProps> = ({
   onTokenIdIncrement,
   values
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation();
 
   return (
     <div className={s.inputs}>
