@@ -8,7 +8,7 @@ import { useTranslation } from '@translation';
 
 import { Input } from '../input';
 import { NumberInput } from '../number-input';
-import s from './tokens-modal.module.scss';
+import styles from './tokens-modal.module.scss';
 import { FormValues, TMFormField } from './types';
 
 export interface HeaderProps {
@@ -31,13 +31,13 @@ export const Header: FC<HeaderProps> = ({
   const { t } = useTranslation();
 
   return (
-    <div className={s.inputs}>
+    <div className={styles.inputs}>
       <Input
         name={TMFormField.SEARCH}
         onChange={onChange}
         value={values[TMFormField.SEARCH]}
         StartAdornment={Search}
-        className={s.modalInput}
+        className={styles.modalInput}
         placeholder={t('common|Search')}
         error={errors[TMFormField.SEARCH]}
         autoFocus
@@ -47,7 +47,7 @@ export const Header: FC<HeaderProps> = ({
           name={TMFormField.TOKEN_ID}
           onChange={onChange}
           value={values[TMFormField.TOKEN_ID]}
-          className={s.modalInput}
+          className={styles.modalInput}
           placeholder={t('common|Token ID')}
           step={STEP}
           min={MIN_TOKEN_ID}

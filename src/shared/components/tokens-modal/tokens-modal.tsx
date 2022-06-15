@@ -13,12 +13,12 @@ import { Token } from '@shared/types';
 import { Iterator } from '../iterator';
 import { LoadingTokenCell, TokenCell } from '../modal-cell';
 import { Header } from './header';
-import s from './tokens-modal.module.scss';
+import styles from './tokens-modal.module.scss';
 import { useTokensModalViewModel } from './tokens-modal.vm';
 
 const themeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 interface TokensModalProps extends Props {
@@ -57,16 +57,16 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
         />
       }
       className={themeClass[colorThemeMode]}
-      modalClassName={s.tokenModal}
-      containerClassName={s.tokenModal}
-      cardClassName={cx(s.tokenModal, s.maxHeight)}
-      contentClassName={cx(s.tokenModal)}
+      modalClassName={styles.tokenModal}
+      containerClassName={styles.tokenModal}
+      cardClassName={cx(styles.tokenModal, styles.maxHeight)}
+      contentClassName={cx(styles.tokenModal)}
       {...restProps}
     >
       {isTokensNotFound && (
-        <div className={s.tokenNotFound}>
+        <div className={styles.tokenNotFound}>
           <NotFound />
-          <div className={s.notFoundLabel}>{notFoundLabel}</div>{' '}
+          <div className={styles.notFoundLabel}>{notFoundLabel}</div>
         </div>
       )}
       {isTokensLoading && <Iterator data={MOCK_LOADING_ARRAY} render={LoadingTokenCell} />}

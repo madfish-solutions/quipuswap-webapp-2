@@ -38,21 +38,21 @@ export const useTokensSearch = (
   const [isSoleFa2Token, setSoleFa2Token] = useState(false);
 
   const getTokens = useCallback(
-    async (_: string, newInputValue: string, newInputToken = DEFAULT_TOKEN_ID) => {
+    async (_: string, newInputValue: string, newTokenId = DEFAULT_TOKEN_ID) => {
       if (!tezos) {
         return [];
       }
 
       const isTokens = tokens.filter((token: Token) =>
-        localSearchToken(token as TokenWithRequiredNetwork, NETWORK, newInputValue, newInputToken)
+        localSearchToken(token as TokenWithRequiredNetwork, NETWORK, newInputValue, newTokenId)
       );
 
       let foundToken: Nullable<Token> = null;
       if (!isEmptyString(newInputValue) && isEmptyArray(isTokens)) {
-        foundToken = await searchCustomToken(newInputValue, newInputToken);
+        foundToken = await searchCustomToken(newInputValue, newTokenId);
       }
 
-      return isExist(foundToken) ? [...isTokens, foundToken] : isTokens;
+      return isExist(foundToken) ? isTokens.concat(foundToken) : isTokens;
     },
     [searchCustomToken, tezos, tokens]
   );
@@ -79,7 +79,6 @@ export const useTokensSearch = (
       const uniqTokens_ = getUniqArray(targetTokens, getTokenSlug);
 
       return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
-      // inputValue is needed
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedSearchInputValue, filteredTokens, searchTokens, blackListedTokens]
   );

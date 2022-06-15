@@ -1,10 +1,12 @@
+import { ChangeEvent } from 'react';
+
 import { FormikErrors, useFormik } from 'formik';
 import { noop } from 'rxjs';
 import { number as numberSchema, object as objectSchema, string as stringSchema } from 'yup';
 
 import { DEFAULT_TOKEN_ID, MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { useAddCustomToken } from '@providers/dapp-tokens';
-import { getTokenSlug, isEmptyArray, parseNumber } from '@shared/helpers';
+import { clamp, getTokenSlug, isEmptyArray, toNonNegativeIntString } from '@shared/helpers';
 import { useTokensSearch } from '@shared/hooks/use-tokens-search';
 import { amplitudeService } from '@shared/services';
 import { Token } from '@shared/types';
@@ -57,12 +59,14 @@ export const useTokensModalViewModel = ({
     searchFormik.resetForm();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    if (name === TMFormField.TOKEN_ID) {
-      searchFormik.setFieldValue(name, value && Number(parseNumber(value.toString(), MIN_TOKEN_ID, MAX_TOKEN_ID)));
+    if (name === TMFormField.TOKEN_ID && value) {
+      const normalizedStr = toNonNegativeIntString(value);
+
+      searchFormik.setFieldValue(name, clamp(Number(normalizedStr), MIN_TOKEN_ID, MAX_TOKEN_ID));
     } else {
       searchFormik.setFieldValue(name, value);
     }
