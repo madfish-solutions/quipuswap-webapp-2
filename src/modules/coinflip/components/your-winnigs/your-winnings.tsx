@@ -1,7 +1,9 @@
 import { FC, useContext } from 'react';
 
+import { NetworkType } from '@airgap/beacon-sdk';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { USD_DECIMALS } from '@config/constants';
 import { NETWORK_ID } from '@config/enviroment';
@@ -30,44 +32,39 @@ interface Props {
   className?: string;
 }
 
-export const YourWinningsReward: FC<Props> = ({
-  amount,
-  currency,
-  dollarEquivalent,
-  amountDecimals = USD_DECIMALS,
-  rewardTooltip,
-  className
-}) => {
-  const { accountPkh } = useAuthStore();
-  const { t } = useTranslation();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const isExchangeRatesExist = isEqual(NETWORK_ID, 'ithacanet');
+export const YourWinningsReward: FC<Props> = observer(
+  ({ amount, currency, dollarEquivalent, amountDecimals = USD_DECIMALS, rewardTooltip, className }) => {
+    const { accountPkh } = useAuthStore();
+    const { t } = useTranslation();
+    const { colorThemeMode } = useContext(ColorThemeContext);
+    const isExchangeRatesExist = isEqual(NETWORK_ID, NetworkType.MAINNET);
 
-  return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
-      <div className={styles.container}>
-        {accountPkh ? (
-          <>
-            <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
-              <StateCurrencyAmount
-                className={styles.amount}
-                amount={amount}
-                currency={currency}
-                dollarEquivalent={dollarEquivalent}
-                amountDecimals={amountDecimals}
-                isLeftCurrency={currency === '$'}
-                isError={isExchangeRatesExist}
-              />
-            </CoinflipStatsItem>
-          </>
-        ) : (
-          <div className={styles.alternativeTitle}>
-            <div className={styles.title}>{t('coinflip|connectWallet')}</div>
-            <div className={cx(styles.description, modeClass[colorThemeMode])}>{t('coinflip|yourReward')}</div>
-          </div>
-        )}
+    return (
+      <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+        <div className={styles.container}>
+          {accountPkh ? (
+            <>
+              <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
+                <StateCurrencyAmount
+                  className={styles.amount}
+                  amount={amount}
+                  currency={currency}
+                  dollarEquivalent={dollarEquivalent}
+                  amountDecimals={amountDecimals}
+                  isLeftCurrency={currency === '$'}
+                  isError={!isExchangeRatesExist}
+                />
+              </CoinflipStatsItem>
+            </>
+          ) : (
+            <div className={styles.alternativeTitle}>
+              <div className={styles.title}>{t('coinflip|connectWallet')}</div>
+              <div className={cx(styles.description, modeClass[colorThemeMode])}>{t('coinflip|yourReward')}</div>
+            </div>
+          )}
+        </div>
+        <GobletIcon />
       </div>
-      <GobletIcon />
-    </div>
-  );
-};
+    );
+  }
+);

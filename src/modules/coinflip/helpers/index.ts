@@ -1,1 +1,1 @@
-export * from './get-token-asset-by-id';
+export * from './get-coinflip-asset-id';
