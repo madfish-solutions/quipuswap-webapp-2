@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DashPlug, Tooltip } from '@shared/components';
@@ -21,26 +22,22 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const CoinflipStatsItem: CFC<CoinflipStatsItemProps> = ({
-  itemName,
-  children,
-  loading,
-  tooltipContent,
-  ...props
-}) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const { accountPkh } = useAuthStore();
+export const CoinflipStatsItem: CFC<CoinflipStatsItemProps> = observer(
+  ({ itemName, children, loading, tooltipContent, ...props }) => {
+    const { colorThemeMode } = useContext(ColorThemeContext);
+    const { accountPkh } = useAuthStore();
 
-  const content =
-    isNull(accountPkh) || isNull(children) ? <DashPlug animation={loading} className={styles.dash} /> : children;
+    const content =
+      isNull(accountPkh) || isNull(children) ? <DashPlug animation={loading} className={styles.dash} /> : children;
 
-  return (
-    <div className={cx(modeClass[colorThemeMode], styles.item)} {...props}>
-      <span className={styles.header}>
-        <span data-test-id="coinflipStatsItemName">{itemName}</span>
-        <Tooltip content={tooltipContent} />
-      </span>
-      <div className={styles.value}>{content}</div>
-    </div>
-  );
-};
+    return (
+      <div className={cx(modeClass[colorThemeMode], styles.item)} {...props}>
+        <span className={styles.header}>
+          <span data-test-id="coinflipStatsItemName">{itemName}</span>
+          <Tooltip content={tooltipContent} />
+        </span>
+        <div className={styles.value}>{content}</div>
+      </div>
+    );
+  }
+);
