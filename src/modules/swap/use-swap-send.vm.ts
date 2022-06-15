@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DexTypeEnum } from 'swap-router-sdk';
 
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
@@ -416,6 +417,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     recipient: formik.recipient,
     updateRates,
     sellRate,
+    shouldHideRouteRow: trade?.some(({ dexType }) => dexType === DexTypeEnum.QuipuSwapCurveLike) ?? false,
     shouldShowPriceImpactWarning,
     submitDisabled,
     swapFee,
