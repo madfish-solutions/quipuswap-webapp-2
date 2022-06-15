@@ -60,9 +60,9 @@ export const useSwapCalculations = () => {
 
   useEffect(() => {
     try {
-      setDexRoute(tokensLoading && !isEmptyArray(bestTrade) ? undefined : mapTradeToDexPairs(bestTrade, tokens));
+      setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
     } catch {
-      setDexRoute([]);
+      setDexRoute(tokensLoading && !isEmptyArray(bestTrade) ? undefined : []);
     }
   }, [tokensLoading, bestTrade, tokens, tokens.size]);
 
