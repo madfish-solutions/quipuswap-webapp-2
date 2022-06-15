@@ -25,6 +25,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
   additional?: ReactNode;
   footer?: ReactNode;
   contentClassName?: string;
+  footerClassName?: string;
   isV2?: boolean;
 }
 
@@ -42,6 +43,7 @@ export const Card: FC<Props> = ({
   children,
   isV2 = false,
   contentClassName,
+  footerClassName,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -76,7 +78,7 @@ export const Card: FC<Props> = ({
       )}
       {additional && <div className={styles.additional}>{additional}</div>}
       <div className={cx(styles.content, contentClassName)}>{children}</div>
-      {footer && <div className={styles.footer}>{footer}</div>}
+      {footer && <div className={cx(styles.footer, footerClassName)}>{footer}</div>}
     </div>
   );
 };
