@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { i18n } from '@translation';
 
-import { useStableswapItemStore } from '../../hooks';
+// import { useStableswapItemStore } from '../../hooks';
 import { StableswapRoutes, StableswapContentRoutes } from '../../stableswap-routes.enum';
 import { StableswapFormTabs } from '../../types';
 
@@ -37,11 +37,12 @@ interface Params {
 }
 
 export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
-  const stableswapItemStore = useStableswapItemStore();
   const navigate = useNavigate();
+  // const stableswapItemStore = useStableswapItemStore();
 
-  const { itemStore } = stableswapItemStore;
-  const { data: stableswapItem } = itemStore;
+  // const { itemStore } = stableswapItemStore;
+  // const { data: stableswapItem } = itemStore;
+  const stableswapItem = { id: 0 };
 
   const changeTabHandle = useCallback(
     (tab: StableswapFormTabs) => {
