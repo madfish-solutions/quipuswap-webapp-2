@@ -1,9 +1,12 @@
 import { FormEvent } from 'react';
 
+import cx from 'classnames';
+
 import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableswapFilterStore } from '../../../../../hooks';
+import styles from './list-filter.module.scss';
 
 export const useListFilterViewModel = () => {
   const { t } = useTranslation();
@@ -37,21 +40,29 @@ export const useListFilterViewModel = () => {
     stableswapFilterStore.handleDecrement();
   };
 
+  const switcherData = [
+    {
+      value: whitelistedOnly,
+      onClick: setWhitelistedOnly,
+      translation: t('stableswap|Whitelisted Only'),
+      translationClassName: styles.switcherTranslation,
+      className: cx(styles.switcherContainer, styles.switcherWhitelistedOnly)
+    }
+  ];
+
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
-    numberInputPlaceholderTranslation: t('common|Token ID'),
-    whitelistedOnlyTranslation: t('stableswap|Whitelisted Only')
+    numberInputPlaceholderTranslation: t('common|Token ID')
   };
 
   return {
     search,
     tokenIdValue,
-    whitelistedOnly,
-    setWhitelistedOnly,
     onSearchChange,
     onTokenIdChange,
     handleIncrement,
     handleDecrement,
-    translation
+    translation,
+    switcherData
   };
 };

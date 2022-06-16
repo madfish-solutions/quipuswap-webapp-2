@@ -1,9 +1,13 @@
 import { FormEvent } from 'react';
 
+import cx from 'classnames';
+
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
+
+import styles from './list-filter.module.scss';
 
 export const useListFilterViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
@@ -42,6 +46,24 @@ export const useListFilterViewModel = () => {
     farmingFilterStore.handleDecrement();
   };
 
+  const switcherData = [
+    {
+      value: stakedOnly,
+      onClick: setStakedOnly,
+      disabled: isNull(accountPkh),
+      translation: t('farm|stakedOnly'),
+      translationClassName: styles.switcherTranslation,
+      className: cx(styles.switcherContainer, styles.switcherStakeOnly)
+    },
+    {
+      value: activeOnly,
+      onClick: setActiveOnly,
+      translation: t('farm|activeOnly'),
+      translationClassName: styles.switcherTranslation,
+      className: cx(styles.switcherContainer, styles.switcherActiveOnly)
+    }
+  ];
+
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
     numberInputPlaceholderTranslation: t('common|Token ID'),
@@ -61,6 +83,7 @@ export const useListFilterViewModel = () => {
     onTokenIdChange,
     handleIncrement,
     handleDecrement,
-    translation
+    translation,
+    switcherData
   };
 };
