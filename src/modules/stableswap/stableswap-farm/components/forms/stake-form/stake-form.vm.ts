@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { DEFAULT_TOKEN } from '@config/tokens';
@@ -19,10 +20,12 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
 
   const validationSchema = useFormValidation(balance ?? null);
 
-  const handleStakeSubmit = async (_: FormValues, actions: FormikHelpers<FormValues>) => {
+  const handleStakeSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
 
-    await stableswapFarmStake();
+    if (values[FormFields.inputAmount]) {
+      await stableswapFarmStake(new BigNumber(values[FormFields.inputAmount]));
+    }
 
     formik.resetForm();
     actions.setSubmitting(false);

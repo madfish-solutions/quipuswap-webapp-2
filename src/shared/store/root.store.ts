@@ -102,8 +102,6 @@ export class RootStore {
     if (isNull(this.stableFarmItemStore)) {
       const { StableFarmItemStore } = await import('@modules/stableswap/store/stablefarm-item.store');
       this.stableFarmItemStore = new StableFarmItemStore(this);
-      // eslint-disable-next-line no-console
-      console.log('load');
     }
   }
 

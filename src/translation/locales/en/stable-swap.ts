@@ -11,6 +11,8 @@ export const stableswap = {
   balancedProportionRemove: 'Remove all coins in a balanced proportion',
   sucessfullyAdded: 'Liquidity has been successfully added',
   sucessfullyRemoved: 'Liquidity has been successfully removed',
+  sucessfullyStaked: 'Stake has neen successfull',
+  sucessfullyUnstaked: 'Unstake has neen successfull',
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!',
   stableFarmTitle: 'Stable Swap Farm'
