@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { BigNumber } from 'bignumber.js';
 
@@ -26,6 +25,7 @@ export interface UsersInfoValueWithId extends UsersInfoValue {
 }
 
 const ZERO = 0;
+const ZERO_BN = new BigNumber('0');
 
 export const DEFAULT_RAW_USER_INFO: RawUsersInfoValue = {
   last_staked: new Date().toISOString(),
@@ -53,18 +53,20 @@ export const REWARD_PRECISION = 1e18;
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
 export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem, timestamp: number = Date.now()) => {
-  const { staked: totalStaked, rewardPerSecond, stakeStatus } = item;
+  const { staked: totalStaked, rewardPerSecond } = item;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
-    return new BigNumber('0');
+    return ZERO_BN;
   }
 
-  const rewardTime =
-    stakeStatus === 'DISABLED'
-      ? new Date(item.endTime).getTime() - new Date(userInfo.last_staked).getTime()
-      : timestamp - new Date(item.udp).getTime();
+  const timeFrom = Math.min(timestamp, new Date(item.endTime).getTime());
+  let reward = new BigNumber(Math.floor((timeFrom - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+    rewardPerSecond
+  );
 
-  const reward = new BigNumber(Math.floor(rewardTime) / MS_IN_SECOND).multipliedBy(rewardPerSecond);
+  if (reward.isNegative()) {
+    reward = ZERO_BN;
+  }
 
   const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
 
