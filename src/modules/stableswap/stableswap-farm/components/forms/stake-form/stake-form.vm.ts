@@ -44,14 +44,9 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
     formik.setFieldValue(FormFields.inputAmount, realValue);
   };
 
-  const unstakeAmountError = getFormikError(formik, FormFields.inputAmount);
+  const inputAmountError = getFormikError(formik, FormFields.inputAmount);
 
-  const disabled = formik.isSubmitting || isExist(unstakeAmountError);
-
-  const inputAmountError =
-    formik.errors[FormFields.inputAmount] && formik.touched[FormFields.inputAmount]
-      ? formik.errors[FormFields.inputAmount]
-      : undefined;
+  const disabled = formik.isSubmitting || isExist(inputAmountError);
 
   const label = t('common|Amount');
   const buttonText = t('common|Stake');

@@ -11,8 +11,9 @@ export const useStableFarmRouterViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.stableFarmListStore)) {
+        if (isNull(rootStore.stableFarmListStore) || isNull(rootStore.stableFarmItemStore)) {
           await rootStore.createStableFarmListStore();
+          await rootStore.createStableFarmItemStore();
         }
         setIsInitialazied(true);
       } catch (error) {

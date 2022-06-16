@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
+import { extractTokens } from '@modules/stableswap/helpers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { isUndefined } from '@shared/helpers';
+import { getSymbolsString, isUndefined } from '@shared/helpers';
+
+import { useGetStableFarmItem, useStableFarmItemStore } from '../../../hooks';
 
 export const useStableswapFarmAddItemPageViewModel = () => {
   const params = useParams();
@@ -11,6 +15,8 @@ export const useStableswapFarmAddItemPageViewModel = () => {
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
+  const { getStableFarmItem } = useGetStableFarmItem();
+  const stableFarmItemStore = useStableFarmItemStore();
   const poolId = params.poolId;
 
   useEffect(() => {
@@ -18,12 +24,14 @@ export const useStableswapFarmAddItemPageViewModel = () => {
       if ((!dAppReady || isUndefined(poolId)) && prevAccountPkhRef.current === accountPkh) {
         return;
       }
+
+      await getStableFarmItem(new BigNumber(`${poolId}`));
     };
 
     void loadItem();
-  }, [dAppReady, poolId, accountPkh]);
+  }, [dAppReady, poolId, accountPkh, getStableFarmItem]);
 
-  const title = 'Title';
+  const title = stableFarmItemStore.item ? getSymbolsString(extractTokens(stableFarmItemStore.item.tokensInfo)) : '';
 
   return { title };
 };
