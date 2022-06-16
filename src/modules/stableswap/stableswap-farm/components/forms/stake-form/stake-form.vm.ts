@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { DEFAULT_TOKEN } from '@config/tokens';
-import { numberAsString, getFormikError, isExist } from '@shared/helpers';
+import { numberAsString, getFormikError, isExist, toDecimals } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -24,7 +24,8 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
     actions.setSubmitting(true);
 
     if (values[FormFields.inputAmount]) {
-      await stableswapFarmStake(new BigNumber(values[FormFields.inputAmount]));
+      const amount = toDecimals(new BigNumber(values[FormFields.inputAmount]), DEFAULT_TOKEN);
+      await stableswapFarmStake(amount);
     }
 
     formik.resetForm();
