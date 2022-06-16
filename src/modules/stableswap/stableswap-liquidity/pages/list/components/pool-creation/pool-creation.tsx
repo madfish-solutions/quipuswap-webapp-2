@@ -8,7 +8,7 @@ import { Button } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
-import { Tabs } from '../../../../tabs.enum';
+import { StableswapFormTabs } from '../../../../../types';
 import styles from './pool-creation.module.scss';
 
 const modeClass = {
@@ -23,7 +23,11 @@ export const PoolCreation: FC = () => {
   return (
     <div className={cx(styles.createPool, modeClass[colorThemeMode])}>
       <div className={cx(styles.poolCreateDescription, modeClass[colorThemeMode])}>{t('stableswap|createOwnPool')}</div>
-      <Button className={styles.button} href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${Tabs.add}`}>
+      {/*TODO: /create*/}
+      <Button
+        className={styles.button}
+        href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${StableswapFormTabs.add}`}
+      >
         {t('stableswap|createPool')}
       </Button>
     </div>

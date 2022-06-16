@@ -1,4 +1,6 @@
 export enum StableswapFormTabs {
   add = 'add',
-  remove = 'remove'
+  remove = 'remove',
+  stake = 'stake',
+  unstake = 'unstake'
 }

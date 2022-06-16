@@ -7,22 +7,21 @@ import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { StableswapFormTabs } from '../../../types';
-import { Details } from './components';
-import { AddLiqForm } from './components/forms';
-import { useStableswapLiquiditAddItemPageViewModel } from './use-stableswap-liquidity-add-item-page.vm';
+import { StakeForm } from '../../components';
+import { useStableswapFarmAddItemPageViewModel } from './use-stableswap-farm-add-item.page.vm';
 
-export const StableswapLiquidityAddItemPage: FC = observer(() => {
-  const { title } = useStableswapLiquiditAddItemPageViewModel();
+export const StableswapFarmAddItemPage: FC = observer(() => {
+  const { title } = useStableswapFarmAddItemPageViewModel();
 
   return (
     <>
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock>
-        <StableswapFormTabsCard subpath={StableswapRoutes.liquidity} tabActiveId={StableswapFormTabs.add}>
-          <AddLiqForm />
+        <StableswapFormTabsCard subpath={StableswapRoutes.farming} tabActiveId={StableswapFormTabs.stake}>
+          <StakeForm />
         </StableswapFormTabsCard>
-        <Details />
+        {/* <Details /> */}
       </StickyBlock>
     </>
   );
