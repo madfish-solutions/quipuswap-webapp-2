@@ -15,9 +15,9 @@ interface Props {
 }
 
 export const StableswapFormTabsCard: CFC<Props> = observer(({ subpath, tabActiveId, children }) => {
-  const { stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel({ subpath });
+  const { isLoading, changeTabHandle } = useStableswapFormTabsCardViewModel({ subpath });
 
-  if (!stableswapItem) {
+  if (isLoading) {
     return <Skeleton className={styles.Skeleton} />;
   }
 

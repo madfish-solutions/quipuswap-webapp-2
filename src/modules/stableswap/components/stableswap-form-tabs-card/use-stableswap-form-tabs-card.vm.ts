@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { i18n } from '@translation';
 
-// import { useStableswapItemStore } from '../../hooks';
+import { useStableswapItemStore, useStableFarmItemStore } from '../../hooks';
 import { StableswapRoutes, StableswapContentRoutes } from '../../stableswap-routes.enum';
 import { StableswapFormTabs } from '../../types';
 
@@ -38,23 +38,25 @@ interface Params {
 
 export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
   const navigate = useNavigate();
-  // const stableswapItemStore = useStableswapItemStore();
+  const stableswapItemStore = useStableswapItemStore();
+  const stableFarmItemStore = useStableFarmItemStore();
 
-  // const { itemStore } = stableswapItemStore;
-  // const { data: stableswapItem } = itemStore;
-  const stableswapItem = { id: 0 };
+  const item = useMemo(
+    () => (subpath === StableswapRoutes.liquidity ? stableswapItemStore?.item?.id : stableFarmItemStore?.item?.id),
+    [stableFarmItemStore?.item?.id, stableswapItemStore?.item?.id, subpath]
+  );
 
   const changeTabHandle = useCallback(
     (tab: StableswapFormTabs) => {
-      const url = `${AppRootRoutes.Stableswap}${subpath}/${tab}/${stableswapItem?.id}`;
+      const url = `${AppRootRoutes.Stableswap}${subpath}/${tab}/${item?.toFixed()}`;
 
       navigate(url);
     },
-    [navigate, stableswapItem?.id, subpath]
+    [item, navigate, subpath]
   );
 
   return {
-    stableswapItem,
+    isLoading: !Boolean(stableswapItemStore?.item) && !Boolean(stableFarmItemStore?.item),
     changeTabHandle
   };
 };
