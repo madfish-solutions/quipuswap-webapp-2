@@ -13,7 +13,7 @@ export const stableswapFarmStakeApi = async (
 ) => {
   const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
 
-  const swableswapLiquidityParams = stableswapPoolContract.methods.add(amount, poolId).toTransferParams();
+  const swableswapLiquidityParams = stableswapPoolContract.methods.add(poolId, amount).toTransferParams();
 
   return await withApproveApi(tezos, stableswapPoolContractAddress, DEFAULT_TOKEN, accountPkh, amount, [
     swableswapLiquidityParams
