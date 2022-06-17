@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
@@ -6,7 +7,6 @@ import { useRootStore } from '@providers/root-store-provider';
 import {
   decreaseBySlippage,
   getFirstElement,
-  increaseBySlippage,
   isExist,
   isNull,
   isSingleElement,
@@ -15,7 +15,7 @@ import {
 } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { AmountToken } from '@shared/types';
+import { AmountToken, Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -24,7 +24,7 @@ import {
   removeStableswapLiquidityImbalancedApi,
   removeStableswapLiquiditySingleCoinApi
 } from '../../api';
-import { getStableswapDeadline } from '../../helpers';
+import { apllyStableswapFee, getStableswapDeadline } from '../../helpers';
 import { tokensAndAmountsMapper } from '../../mapping';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../store';
 
@@ -49,11 +49,27 @@ export const useRemoveStableswapLiquidity = () => {
   const { item } = useStableswapItemStore();
   const { shares, inputAmounts, isBalancedProportion } = useStableswapItemFormStore();
 
+  const decreaseAmount = useCallback(
+    (token: Token, amount: BigNumber, fees: Array<BigNumber>) => {
+      const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+
+      const decreasedAmountWithFee = apllyStableswapFee(decreasedAmount, fees).integerValue(BigNumber.ROUND_DOWN);
+
+      return {
+        token,
+        amount: decreasedAmountWithFee
+      };
+    },
+    [liquiditySlippage]
+  );
+
   const removeStableswapLiquidity = useCallback(async () => {
     if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
       return;
     }
-    const { lpToken, contractAddress, tokensInfo } = item;
+    const { lpToken, contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
+
+    const fees = [liquidityProvidersFee, stakersFee, interfaceFee, devFee];
 
     const tokens = tokensInfo.map(({ token }) => token);
     const deadline = getStableswapDeadline(transactionDeadline);
@@ -68,20 +84,9 @@ export const useRemoveStableswapLiquidity = () => {
     const message = t('stableswap|sucessfullyRemoved');
 
     if (isBalancedProportion) {
-      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => {
-        const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
-        // eslint-disable-next-line no-console
-        console.log({
-          token,
-          amount: amount.toFixed(),
-          decreasedAmount: decreasedAmount.toFixed()
-        });
-
-        return {
-          token,
-          amount: decreasedAmount
-        };
-      });
+      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
+        decreaseAmount(token, amount, fees)
+      );
 
       try {
         const operation = await removeStableswapLiquidityBalancedApi(
@@ -103,15 +108,15 @@ export const useRemoveStableswapLiquidity = () => {
       if (isSingle) {
         const tokenAmount = getFirstElement(tokensAmounts);
         const index = new BigNumber(tokenAmount.index);
-        const decreasedAmount = decreaseBySlippage(tokenAmount.amount, liquiditySlippage).integerValue(
-          BigNumber.ROUND_DOWN
-        );
+
+        const decreasedAmountWithFee = decreaseAmount(tokenAmount.token, tokenAmount.amount, fees).amount;
+        console.log(tokenAmount.index);
         try {
           const operation = await removeStableswapLiquiditySingleCoinApi(
             tezos,
             contractAddress,
             index,
-            decreasedAmount,
+            decreasedAmountWithFee,
             sharesAmountAtom,
             deadline,
             accountPkh
@@ -123,16 +128,15 @@ export const useRemoveStableswapLiquidity = () => {
         }
       } else {
         try {
-          //TODO: validate!!!
-          const increasedLpInputAmountAtom = increaseBySlippage(sharesAmountAtom, liquiditySlippage).integerValue(
-            BigNumber.ROUND_DOWN
+          const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
+            decreaseAmount(token, amount, fees)
           );
 
           const operation = await removeStableswapLiquidityImbalancedApi(
             tezos,
             contractAddress,
-            tokensAmounts,
-            increasedLpInputAmountAtom,
+            decreasedTokensAndAmounts,
+            sharesAmountAtom,
             deadline,
             accountPkh
           );
@@ -146,10 +150,10 @@ export const useRemoveStableswapLiquidity = () => {
   }, [
     accountPkh,
     confirmOperation,
+    decreaseAmount,
     inputAmounts,
     isBalancedProportion,
     item,
-    liquiditySlippage,
     shares,
     showErrorToast,
     t,
