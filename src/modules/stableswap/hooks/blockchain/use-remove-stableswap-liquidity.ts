@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
@@ -110,7 +109,7 @@ export const useRemoveStableswapLiquidity = () => {
         const index = new BigNumber(tokenAmount.index);
 
         const decreasedAmountWithFee = decreaseAmount(tokenAmount.token, tokenAmount.amount, fees).amount;
-        console.log(tokenAmount.index);
+
         try {
           const operation = await removeStableswapLiquiditySingleCoinApi(
             tezos,
