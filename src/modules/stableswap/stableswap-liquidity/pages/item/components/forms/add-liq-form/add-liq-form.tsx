@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Button, ConnectWalletOrDoSomething, Iterator, Switcher, Tooltip } from '@shared/components';
+import { AlarmMessage, Button, ConnectWalletOrDoSomething, Iterator, Switcher, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
@@ -22,8 +22,16 @@ export const AddLiqForm: FC = observer(() => {
     return null;
   }
 
-  const { data, disabled, isSubmitting, tooltip, switcherValue, handleSwitcherClick, handleSubmit } =
-    addLiqFormViewModel;
+  const {
+    data,
+    disabled,
+    isSubmitting,
+    tooltip,
+    switcherValue,
+    isAllInputsNonNegativeOnInbalancedLiquidity,
+    handleSwitcherClick,
+    handleSubmit
+  } = addLiqFormViewModel;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -33,6 +41,9 @@ export const AddLiqForm: FC = observer(() => {
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionAdd')}</span>
         <Tooltip content={tooltip} />
       </div>
+      {isAllInputsNonNegativeOnInbalancedLiquidity && (
+        <AlarmMessage message={t('stableswap|allZeroInpupts')} className={styles.alarmMessage} />
+      )}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button

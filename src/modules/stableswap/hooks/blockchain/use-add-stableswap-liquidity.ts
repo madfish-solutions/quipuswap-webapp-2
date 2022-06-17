@@ -49,11 +49,10 @@ export const useAddStableswapLiquidity = () => {
 
     const tokens = extractTokens(tokensInfo);
     const amountsAtoms = inputAmounts.map((amount, index) =>
-      isNull(amount) ? new BigNumber('0') : toDecimals(amount, tokens[index])
+      isNull(amount) || amount.isNaN() ? new BigNumber('0') : toDecimals(amount, tokens[index])
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-
     const shares = await calculateShares(amountsAtoms);
     const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
