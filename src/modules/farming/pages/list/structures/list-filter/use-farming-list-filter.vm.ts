@@ -3,13 +3,14 @@ import { FormEvent } from 'react';
 import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
+import { ListFilterViewProps } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import styles from './list-filter.module.scss';
+import styles from './farming-list-filter.module.scss';
 
-export const useListFilterViewModel = () => {
+export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation(['common', 'farm']);
   const farmingFilterStore = useFarmingFilterStore();
   const { accountPkh } = useAuthStore();
@@ -46,11 +47,13 @@ export const useListFilterViewModel = () => {
     farmingFilterStore.handleDecrement();
   };
 
-  const switcherData = [
+  const switcherDataList = [
     {
       value: stakedOnly,
       onClick: setStakedOnly,
       disabled: isNull(accountPkh),
+      switcherDTI: 'stakedOnlySwitcher',
+      switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translation: t('farm|stakedOnly'),
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
@@ -58,6 +61,8 @@ export const useListFilterViewModel = () => {
     {
       value: activeOnly,
       onClick: setActiveOnly,
+      switcherDTI: 'activeOnlySwitcher',
+      switcherTranslationDTI: 'activeOnlySwitcherTranslation',
       translation: t('farm|activeOnly'),
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherActiveOnly)
@@ -74,16 +79,11 @@ export const useListFilterViewModel = () => {
   return {
     search,
     tokenIdValue,
-    activeOnly,
-    stakedOnly,
-    isStakedOnlyDisabled: isNull(accountPkh),
-    setStakedOnly,
-    setActiveOnly,
     onSearchChange,
     onTokenIdChange,
     handleIncrement,
     handleDecrement,
     translation,
-    switcherData
+    switcherDataList
   };
 };

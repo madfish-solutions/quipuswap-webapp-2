@@ -1,0 +1,35 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.switcherContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  flex: 1;
+  span {
+    color: $text-03;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.switcherTranslation {
+  min-width: max-content;
+}
+
+@include media(">Lphone") {
+  .switcherWhitelistedOnly {
+    grid-row: 3 / 4;
+  }
+}
+
+@include media(">Ltablet") {
+  .switcherWhitelistedOnly {
+    grid-column: 3 / 4;
+  }
+
+  .switcherWhitelistedOnly {
+    grid-row: none;
+  }
+}

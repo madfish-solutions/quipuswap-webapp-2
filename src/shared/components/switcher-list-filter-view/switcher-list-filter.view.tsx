@@ -1,27 +1,31 @@
 import { FC } from 'react';
 
-import { Switcher } from '../switcher/switcher';
+import { Switcher } from '../switcher';
 
-interface Props {
+export interface SwitcherLabelProps {
   value: boolean;
   onClick: (state: boolean) => void;
   disabled?: boolean;
+  switcherDTI: string;
+  switcherTranslationDTI: string;
   translation: string;
   translationClassName: string;
   className: string;
 }
 
-export const SwitcherListFilterView: FC<Props> = ({
+export const SwitcherLabel: FC<SwitcherLabelProps> = ({
   value,
   disabled,
   onClick,
+  switcherDTI,
+  switcherTranslationDTI,
   translation,
   translationClassName,
   className
 }) => (
   <div className={className}>
-    <Switcher value={value} disabled={disabled} onClick={onClick} data-test-id="stakedOnlySwitcher" />
-    <span className={translationClassName} data-test-id="stakedOnlySwitcherTitle">
+    <Switcher value={value} disabled={disabled} onClick={onClick} data-test-id={switcherDTI} />
+    <span className={translationClassName} data-test-id={switcherTranslationDTI}>
       {translation}
     </span>
   </div>

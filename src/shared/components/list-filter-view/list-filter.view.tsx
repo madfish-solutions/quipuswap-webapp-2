@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, FormEvent } from 'react';
 
 import cx from 'classnames';
 
@@ -10,31 +10,26 @@ import { Card } from '../card';
 import { Input } from '../input';
 import { Iterator } from '../iterator';
 import { NumberInput } from '../number-input';
-import { SwitcherListFilterView } from '../switcher-list-filter-view';
+import { SwitcherLabel, SwitcherLabelProps } from '../switcher-list-filter-view';
 import styles from './list-filter.view.module.scss';
 
-interface Props {
-  search: string;
-  tokenIdValue: string;
-  onSearchChange: (event: React.FormEvent<HTMLInputElement>) => void;
-  onTokenIdChange: (event: React.FormEvent<HTMLInputElement>) => void;
-  handleIncrement: () => void;
-  handleDecrement: () => void;
-  translation: {
-    inputPlaceholderTranslation: string;
-    numberInputPlaceholderTranslation: string;
-  };
-  switcherData: Array<{
-    value: boolean;
-    onClick: (state: boolean) => void;
-    disabled?: boolean;
-    translation: string;
-    translationClassName: string;
-    className: string;
-  }>;
+interface InputPlaceholder {
+  inputPlaceholderTranslation: string;
+  numberInputPlaceholderTranslation: string;
 }
 
-export const ListFilterView: FC<Props> = ({
+export interface ListFilterViewProps {
+  search: string;
+  tokenIdValue: string;
+  onSearchChange: (event: FormEvent<HTMLInputElement>) => void;
+  onTokenIdChange: (event: FormEvent<HTMLInputElement>) => void;
+  handleIncrement: () => void;
+  handleDecrement: () => void;
+  translation: InputPlaceholder;
+  switcherDataList: Array<SwitcherLabelProps>;
+}
+
+export const ListFilterView: FC<ListFilterViewProps> = ({
   search,
   tokenIdValue,
   onSearchChange,
@@ -42,7 +37,7 @@ export const ListFilterView: FC<Props> = ({
   handleIncrement,
   handleDecrement,
   translation,
-  switcherData
+  switcherDataList
 }) => {
   const { inputPlaceholderTranslation, numberInputPlaceholderTranslation } = translation;
 
@@ -69,7 +64,7 @@ export const ListFilterView: FC<Props> = ({
         onDecrementClick={handleDecrement}
       />
 
-      <Iterator render={SwitcherListFilterView} data={switcherData} />
+      <Iterator render={SwitcherLabel} data={switcherDataList} />
 
       <div className={cx(styles.switcherContainer, styles.sorterContainer)}>
         <Sorter />
