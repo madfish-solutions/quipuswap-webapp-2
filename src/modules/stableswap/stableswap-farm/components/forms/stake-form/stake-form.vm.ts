@@ -44,7 +44,6 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
   const handleInputAmountChange = (value: string) => {
     const decimals = DEFAULT_TOKEN.metadata.decimals;
     const { realValue } = numberAsString(value, decimals);
-    // farmingItemStore.setInputAmount(fixedValue);
     formik.setFieldValue(FormFields.inputAmount, realValue);
   };
 

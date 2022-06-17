@@ -7,7 +7,7 @@ import { Optional, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
 export interface StableswapFarmFormViewProps {
-  handleSubmit: (e?: FormEvent<HTMLFormElement> | undefined) => void;
+  handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
   label: string;
   inputAmount: string;
   balance: Optional<BigNumber.Value>;
