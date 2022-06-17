@@ -4,16 +4,51 @@ import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { ListFilterViewProps } from '@shared/components';
-import { isNull } from '@shared/helpers';
+import { isNull, isDirrectOrder } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
+import { FarmingSortField, FarmingSortFieldItem } from '../../types/sort';
 import styles from './farming-list-filter.module.scss';
 
 export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation(['common', 'farm']);
   const farmingFilterStore = useFarmingFilterStore();
+  const { sortField, sortDirection } = farmingFilterStore;
   const { accountPkh } = useAuthStore();
+
+  const handleSortFieldChange = (value: unknown) => {
+    const item = value as FarmingSortFieldItem;
+
+    return farmingFilterStore.onSortFieldChange(item.field);
+  };
+
+  const handleSortDirectionToggle = () => {
+    return farmingFilterStore.onSortDirectionToggle();
+  };
+
+  const sortValues: FarmingSortFieldItem[] = [
+    { label: t('common|Default'), field: FarmingSortField.ID },
+    { label: t('farm|apr'), field: FarmingSortField.APR },
+    { label: t('farm|apy'), field: FarmingSortField.APY },
+    { label: t('farm|tvl'), field: FarmingSortField.TVL }
+  ];
+
+  const sortUserValues: FarmingSortFieldItem[] = [
+    { label: t('farm|balance'), field: FarmingSortField.BALANCE },
+    { label: t('farm|deposit'), field: FarmingSortField.DEPOSIT },
+    { label: t('farm|earned'), field: FarmingSortField.EARNED }
+  ];
+
+  const sortingValues = isNull(accountPkh) ? sortValues : sortValues.concat(sortUserValues);
+  const sortingValue = sortingValues
+    .map(item => ({
+      ...item,
+      label: `Sorted by ${item.label}`
+    }))
+    .find(({ field }) => field === sortField);
+
+  const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const { search, tokenIdValue, activeOnly, stakedOnly } = farmingFilterStore;
 
@@ -76,6 +111,14 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     activeOnlyTranslation: t('farm|activeOnly')
   };
 
+  const sorterProps = {
+    sortingValue,
+    sortDirectionRotate,
+    sortingValues,
+    handleSortFieldChange,
+    handleSortDirectionToggle
+  };
+
   return {
     search,
     tokenIdValue,
@@ -84,6 +127,7 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     handleIncrement,
     handleDecrement,
     translation,
+    sorterProps,
     switcherDataList
   };
 };

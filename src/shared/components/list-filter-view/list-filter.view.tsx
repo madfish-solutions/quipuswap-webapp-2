@@ -3,13 +3,13 @@ import { FC, FormEvent } from 'react';
 import cx from 'classnames';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
-import { Sorter } from '@modules/stableswap/components';
 import { Search } from '@shared/svg';
 
 import { Card } from '../card';
 import { Input } from '../input';
 import { Iterator } from '../iterator';
 import { NumberInput } from '../number-input';
+import { SorterProps, SorterView } from '../sorter-view';
 import { SwitcherLabel, SwitcherLabelProps } from '../switcher-list-filter-view';
 import styles from './list-filter.view.module.scss';
 
@@ -27,7 +27,11 @@ export interface ListFilterViewProps {
   handleDecrement: () => void;
   translation: InputPlaceholder;
   switcherDataList: Array<SwitcherLabelProps>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sorterProps: SorterProps | any;
 }
+
+// TODO: remove any from sorterProps
 
 export const ListFilterView: FC<ListFilterViewProps> = ({
   search,
@@ -37,6 +41,7 @@ export const ListFilterView: FC<ListFilterViewProps> = ({
   handleIncrement,
   handleDecrement,
   translation,
+  sorterProps,
   switcherDataList
 }) => {
   const { inputPlaceholderTranslation, numberInputPlaceholderTranslation } = translation;
@@ -67,7 +72,7 @@ export const ListFilterView: FC<ListFilterViewProps> = ({
       <Iterator render={SwitcherLabel} data={switcherDataList} />
 
       <div className={cx(styles.switcherContainer, styles.sorterContainer)}>
-        <Sorter />
+        <SorterView {...sorterProps} />
       </div>
     </Card>
   );

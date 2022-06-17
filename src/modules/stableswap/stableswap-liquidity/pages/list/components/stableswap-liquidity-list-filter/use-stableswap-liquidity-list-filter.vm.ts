@@ -3,15 +3,41 @@ import { FormEvent } from 'react';
 import cx from 'classnames';
 
 import { ListFilterViewProps } from '@shared/components';
-import { isNull } from '@shared/helpers';
+import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableswapFilterStore } from '../../../../../hooks';
+import { StableswapLiquiditySortField, StableswapLiquiditySortFieldItem } from '../../types';
 import styles from './stableswap-liquidity-list-filter.module.scss';
 
 export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
   const stableswapFilterStore = useStableswapFilterStore();
+  const { sortField, sortDirection } = stableswapFilterStore;
+
+  const handleSortFieldChange = (value: unknown) => {
+    const item = value as StableswapLiquiditySortFieldItem;
+
+    return stableswapFilterStore.onSortFieldChange(item.field);
+  };
+
+  const handleSortDirectionToggle = () => {
+    return stableswapFilterStore.onSortDirectionToggle();
+  };
+
+  const sortingValues: StableswapLiquiditySortFieldItem[] = [
+    { label: t('common|Default'), field: StableswapLiquiditySortField.ID },
+    { label: t('farm|tvl'), field: StableswapLiquiditySortField.TVL }
+  ];
+
+  const sortingValue = sortingValues
+    .map(item => ({
+      ...item,
+      label: `Sorted by ${item.label}`
+    }))
+    .find(({ field }) => field === sortField);
+
+  const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const { search, tokenIdValue, whitelistedOnly } = stableswapFilterStore;
 
@@ -58,6 +84,14 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     numberInputPlaceholderTranslation: t('common|Token ID')
   };
 
+  const sorterProps = {
+    sortingValue,
+    sortDirectionRotate,
+    sortingValues,
+    handleSortFieldChange,
+    handleSortDirectionToggle
+  };
+
   return {
     search,
     tokenIdValue,
@@ -66,6 +100,7 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     handleIncrement,
     handleDecrement,
     translation,
+    sorterProps,
     switcherDataList
   };
 };

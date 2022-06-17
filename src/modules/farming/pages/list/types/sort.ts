@@ -1,4 +1,4 @@
-export enum SortField {
+export enum FarmingSortField {
   ID = 'ID',
   APR = 'APR',
   APY = 'APY',
@@ -8,7 +8,7 @@ export enum SortField {
   EARNED = 'EARNED'
 }
 
-export interface SortFieldItem {
+export interface FarmingSortFieldItem {
   label: string;
-  field: SortField;
+  field: FarmingSortField;
 }

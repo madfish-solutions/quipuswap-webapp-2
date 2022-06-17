@@ -58,6 +58,8 @@ export const useStableswapFarmListFilterViewModel = (): ListFilterViewProps => {
     numberInputPlaceholderTranslation: t('common|Token ID')
   };
 
+  const sorterProps = {};
+
   return {
     search,
     tokenIdValue,
@@ -66,6 +68,7 @@ export const useStableswapFarmListFilterViewModel = (): ListFilterViewProps => {
     handleIncrement,
     handleDecrement,
     translation,
+    sorterProps,
     switcherDataList
   };
 };

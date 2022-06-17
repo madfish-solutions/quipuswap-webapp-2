@@ -1,7 +1,7 @@
-import { cloneArray, isNull, sortBigNumber } from '@shared/helpers';
+import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { StableswapItem } from '../../types';
-import { SortDirection, SortField } from './sorter.types';
+import { StableswapItem } from '../../../../types';
+import { StableswapLiquiditySortField } from '../types';
 
 const sortById = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);
@@ -10,18 +10,22 @@ const sortByTvl = (first: StableswapItem, second: StableswapItem, sortDirection:
   sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const stableswapSorts = {
-  [SortField.ID]: sortById,
-  [SortField.TVL]: sortByTvl
+  [StableswapLiquiditySortField.ID]: sortById,
+  [StableswapLiquiditySortField.TVL]: sortByTvl
 };
 
 const sortStableswap = (
   first: StableswapItem,
   second: StableswapItem,
-  sortField: SortField,
+  sortField: StableswapLiquiditySortField,
   sortDirection: SortDirection
 ) => stableswapSorts[sortField](first, second, sortDirection);
 
-export const sortStableswapList = (list: Array<StableswapItem>, sortField: SortField, sortDirection: SortDirection) => {
+export const sortStableswapList = (
+  list: Array<StableswapItem>,
+  sortField: StableswapLiquiditySortField,
+  sortDirection: SortDirection
+) => {
   if (isNull(sortField)) {
     return list;
   }
