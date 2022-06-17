@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { isEmptyArray, isUndefined } from '@shared/helpers';
 import { ArrowDown } from '@shared/svg';
 import { Token } from '@shared/types';
 
@@ -39,10 +40,13 @@ export const ListItemCard: FC<Props> = ({
   labels,
   status,
   isNew,
-  itemStats = [],
-  userStats = []
+  itemStats,
+  userStats
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const shouldOutputTokensRender =
+    (Array.isArray(outputToken) && !isEmptyArray(outputToken)) || !isUndefined(outputToken);
 
   return (
     <Link to={href}>
@@ -54,7 +58,7 @@ export const ListItemCard: FC<Props> = ({
             <div className={styles.logosContainer}>
               <TokensLogos tokens={inputToken} width={32} />
 
-              {outputToken && (
+              {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
                   <span className={styles.earn}>Earn</span>
@@ -65,7 +69,7 @@ export const ListItemCard: FC<Props> = ({
 
             <div className={styles.symbolsContainer}>
               <TokensSymbols className={styles.tokensSymbols} tokens={inputToken} />
-              {outputToken && (
+              {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
                   <span className={styles.earn}>Earn</span>
@@ -77,7 +81,7 @@ export const ListItemCard: FC<Props> = ({
 
           <div className={styles.statusAndlabelsContainer}>
             <StatusLabel {...status} />
-            {labels && (
+            {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={StatusLabel} data={labels} />
               </div>
@@ -87,7 +91,9 @@ export const ListItemCard: FC<Props> = ({
 
         <div className={styles.statsContainer}>
           <Iterator render={StateListItemCardCell} data={itemStats} />
-          {userStats && <Iterator render={StateListItemCardCell} data={userStats} />}
+          {!isUndefined(userStats) && !isEmptyArray(userStats) && (
+            <Iterator render={StateListItemCardCell} data={userStats} />
+          )}
         </div>
       </Card>
     </Link>
