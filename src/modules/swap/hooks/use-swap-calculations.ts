@@ -17,7 +17,11 @@ import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
 
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
 import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';
-import { useRoutePairsCombinations, useTradeWithSlippageTolerance } from '../utils/swap-router-sdk-adapters';
+import {
+  swapRouterSdkTokenSlugToQuipuTokenSlug,
+  useRoutePairsCombinations,
+  useTradeWithSlippageTolerance
+} from '../utils/swap-router-sdk-adapters';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
@@ -30,12 +34,20 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
     return [];
   }
 
-  const tokens: BooleanMap = trade.reduce((acc, { aTokenSlug, bTokenSlug }) => {
-    acc[aTokenSlug] = true;
-    acc[bTokenSlug] = true;
+  const tokens: BooleanMap = trade.reduce(
+    (
+      acc,
+      { aTokenSlug: swapRouterSdkATokenSlug, aTokenStandard, bTokenSlug: swapRouterSdkBTokenSlug, bTokenStandard }
+    ) => {
+      const aTokenSlug = swapRouterSdkTokenSlugToQuipuTokenSlug(swapRouterSdkATokenSlug, aTokenStandard);
+      const bTokenSlug = swapRouterSdkTokenSlugToQuipuTokenSlug(swapRouterSdkBTokenSlug, bTokenStandard);
+      acc[aTokenSlug] = true;
+      acc[bTokenSlug] = true;
 
-    return acc;
-  }, {} as BooleanMap);
+      return acc;
+    },
+    {} as BooleanMap
+  );
 
   return Object.keys(tokens);
 };

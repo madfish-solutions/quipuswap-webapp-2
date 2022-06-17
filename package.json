@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.0.21",
+  "version": "3.0.22",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env REACT_APP_NETWORK=mainnet REACT_APP_MAINNET_BASE_URL=http://localhost:3000 REACT_APP_HANGZHOUNET_BASE_URL=http://localhost:3002 REACT_APP_ITHACANET_BASE_URL=http://localhost:3003 PORT=3000 craco start",
@@ -63,7 +63,7 @@
     "react-toastify": "^9.0.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "swap-router-sdk": "^1.13.5",
+    "swap-router-sdk": "1.13.6",
     "swr": "^1.3.0",
     "url": "^0.11.0",
     "use-debounce": "^8.0.1",
