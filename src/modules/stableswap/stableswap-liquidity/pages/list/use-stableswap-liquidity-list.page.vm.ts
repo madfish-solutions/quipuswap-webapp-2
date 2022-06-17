@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
+import { getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -39,12 +40,12 @@ export const useStableswapLiquidityPageViewModel = () => {
     inputToken: extractTokens(tokensInfo),
     status: { status: ActiveStatus.ACTIVE, label: t('common|whiteListed'), filled: true },
     itemStats: [
-      ...tokensInfo.map(info => ({
+      ...tokensInfo.map(({ reserves, reservesInUsd, token }) => ({
         cellName: t('common|tokenValue'),
         amounts: {
-          amount: info.reserves,
-          dollarEquivalent: info.reservesInUsd,
-          currency: info.token.metadata.symbol
+          amount: reserves,
+          dollarEquivalent: reservesInUsd,
+          currency: getTokenSymbol(token)
         }
       })),
       {
