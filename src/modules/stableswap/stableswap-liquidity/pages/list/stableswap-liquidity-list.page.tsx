@@ -2,14 +2,13 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
-import { ListFilter, PoolCard, StableswapLiquidityGeneralStats } from './components';
-import styles from './stableswap-liquidity-list.page.module.scss';
+import { ListFilter, StableswapLiquidityGeneralStats } from './components';
 import { useStableswapLiquidityPageViewModel } from './use-stableswap-liquidity-list.page.vm';
 
 export const StableswapLiquidityListPage: FC = observer(() => {
-  const { isLoading, list, title } = useStableswapLiquidityPageViewModel();
+  const { isLoading, title, list } = useStableswapLiquidityPageViewModel();
 
   return (
     <>
@@ -18,7 +17,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
       <StableswapLiquidityGeneralStats />
       <ListFilter />
       <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
-        <Iterator render={PoolCard} data={list} isGrouped wrapperClassName={styles.poolsList} />
+        <Iterator render={ListItemCard} data={list} />
       </StateWrapper>
     </>
   );

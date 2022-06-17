@@ -128,6 +128,7 @@ export const common = {
   tvl: 'TVL',
   Payout: 'Payout',
   tokenValues: 'Token Values',
+  tokenValue: 'Token Value',
   Explore: 'Explore',
   'Pool Details': 'Pool Details',
   Input: 'Input',
