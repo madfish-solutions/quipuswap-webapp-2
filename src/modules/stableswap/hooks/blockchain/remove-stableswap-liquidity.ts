@@ -10,6 +10,7 @@ import {
   isExist,
   isNull,
   isSingleElement,
+  saveBigNumber,
   toDecimals
 } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
@@ -56,7 +57,12 @@ export const useRemoveStableswapLiquidity = () => {
 
     const tokens = tokensInfo.map(({ token }) => token);
     const deadline = getStableswapDeadline(transactionDeadline);
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, inputAmounts);
+
+    const amountsAtoms = inputAmounts.map((amount, index) =>
+      toDecimals(saveBigNumber(amount, new BigNumber('0')), tokens[index])
+    );
+
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
     const sharesAmountAtom = toDecimals(shares, lpToken);
 
     const message = t('stableswap|sucessfullyRemoved');
@@ -64,6 +70,12 @@ export const useRemoveStableswapLiquidity = () => {
     if (isBalancedProportion) {
       const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => {
         const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+        // eslint-disable-next-line no-console
+        console.log({
+          token,
+          amount: amount.toFixed(),
+          decreasedAmount: decreasedAmount.toFixed()
+        });
 
         return {
           token,
