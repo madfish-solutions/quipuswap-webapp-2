@@ -53,10 +53,6 @@ export const getTokenOutput = ({ inputToken, inputAmount, dexChain }: SwapParams
   let intermediateInputAmount = inputAmount;
   dexChain.forEach(pair => {
     const { token1, token2, token1Pool, token2Pool } = pair;
-    if (pair.id === 'KT1NEa7CmaLaWgHNi6LkRi5Z1f4oHfdzRdGA') {
-      // eslint-disable-next-line no-console
-      console.log('x2', JSON.stringify([currentToken, token1, token2], undefined, 2));
-    }
     const shouldSell = getTokenSlug(currentToken) === getTokenSlug(token1);
     const inputLiquidity = shouldSell ? token1Pool : token2Pool;
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
@@ -176,9 +172,6 @@ export const getPriceImpact = (swapParams: SwapParams) => {
         : new BigNumber(1).minus(newMarketQuotient.div(initialMarketQuotient))
     ).times(100);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e);
-
     return new BigNumber(FALLBACK_PRICE_IMPACT);
   }
 };
