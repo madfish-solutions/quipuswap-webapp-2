@@ -12,8 +12,8 @@ import {
   StableswapItemStore as IStableswapItemStore,
   StableswapItemFormStore as IStableswapItemFormStore,
   StableswapListStore as IStableswapListStore,
-  StableswapFarmListStore as IStableFarmListStore,
-  StableswapFarmFilterStore as IStableswapFarmFilterStore
+  StableFarmListStore as IStableFarmListStore,
+  StableFarmFilterStore as IStableFarmFilterStore
 } from '@modules/stableswap/store';
 
 import { isExist, isNull } from '../helpers';
@@ -40,8 +40,8 @@ export class RootStore {
   stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
-  stableswapFarmListStore: Nullable<IStableFarmListStore> = null;
-  stableswapFarmFilterStore: Nullable<IStableswapFarmFilterStore> = null;
+  stableFarmListStore: Nullable<IStableFarmListStore> = null;
+  stableFarmFilterStore: Nullable<IStableFarmFilterStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -66,8 +66,8 @@ export class RootStore {
       stableswapItemFormStore: observable,
       stableswapFilterStore: observable,
 
-      stableswapFarmListStore: observable,
-      stableswapFarmFilterStore: observable,
+      stableFarmListStore: observable,
+      stableFarmFilterStore: observable,
 
       coinflipStore: observable,
 
@@ -77,7 +77,7 @@ export class RootStore {
       createFarmingItemStore: action,
       createCoinflipStore: action,
 
-      createStableswapFarmListStore: action,
+      createStableFarmListStore: action,
       createStableswapListStore: action,
       createStableswapItemStore: action,
       createStableswapItemFormStore: action,
@@ -89,10 +89,10 @@ export class RootStore {
     this.tezos = tezos;
   }
 
-  async createStableswapFarmListStore() {
-    if (isNull(this.stableswapFarmListStore)) {
-      const { StableswapFarmListStore } = await import('@modules/stableswap/store/stableswap-farm-list.store');
-      this.stableswapFarmListStore = new StableswapFarmListStore(this);
+  async createStableFarmListStore() {
+    if (isNull(this.stableFarmListStore)) {
+      const { StableFarmListStore } = await import('@modules/stableswap/store/stablefarm-list.store');
+      this.stableFarmListStore = new StableFarmListStore(this);
     }
   }
   async createStableswapListStore() {
@@ -123,10 +123,10 @@ export class RootStore {
     }
   }
 
-  async createStableswapFarmFilterStore() {
-    if (isNull(this.stableswapFarmFilterStore)) {
-      const { StableswapFarmFilterStore } = await import('@modules/stableswap/store/stableswap-farm-filter.store');
-      this.stableswapFarmFilterStore = new StableswapFarmFilterStore();
+  async createStableFarmFilterStore() {
+    if (isNull(this.stableFarmFilterStore)) {
+      const { StableFarmFilterStore } = await import('@modules/stableswap/store/stablefarm-filter.store');
+      this.stableFarmFilterStore = new StableFarmFilterStore();
     }
   }
 

@@ -7,7 +7,7 @@ import { farmsListMapper, stakerInfoMapper } from '../mapping';
 import { listWithUserInfo } from '../stableswap-farm/pages/list/helpers';
 import { RawStableFarmItem, StableFarmItem, StakerInfo } from '../types';
 
-export class StableswapFarmListStore {
+export class StableFarmListStore {
   readonly listStore = new LoadingErrorData<Array<RawStableFarmItem>, Array<StableFarmItem>>(
     [],
     async () => await getStableFarmListApi(),
@@ -40,6 +40,6 @@ export class StableswapFarmListStore {
   }
 
   get filteredList() {
-    return this.rootStore.stableswapFarmFilterStore?.filterAndSort(this.listWithUserInfo);
+    return this.rootStore.stableFarmFilterStore?.filterAndSort(this.listWithUserInfo);
   }
 }

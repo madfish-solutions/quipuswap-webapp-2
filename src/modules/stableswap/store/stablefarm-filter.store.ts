@@ -3,15 +3,15 @@ import { action, makeObservable, observable } from 'mobx';
 import { isExist } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
 
-import { sortStableswapFarmList } from '../stableswap-farm/pages/list/helpers';
-import { StableswapFarmSortField } from '../stableswap-farm/pages/list/types';
+import { sortStableFarmList } from '../stableswap-farm/pages/list/helpers';
+import { StableFarmSortField } from '../stableswap-farm/pages/list/types';
 import { StableFarmItem, StakerInfo } from '../types';
 
-export class StableswapFarmFilterStore extends BaseFilterStore {
+export class StableFarmFilterStore extends BaseFilterStore {
   stakedOnly = false;
   whitelistedOnly = true;
 
-  sortField: StableswapFarmSortField = StableswapFarmSortField.ID;
+  sortField: StableFarmSortField = StableFarmSortField.ID;
 
   constructor() {
     super();
@@ -43,7 +43,7 @@ export class StableswapFarmFilterStore extends BaseFilterStore {
       );
     }
 
-    return sortStableswapFarmList(localList, this.sortField, this.sortDirection);
+    return sortStableFarmList(localList, this.sortField, this.sortDirection);
   }
 
   setStakedOnly(state: boolean) {
@@ -54,7 +54,7 @@ export class StableswapFarmFilterStore extends BaseFilterStore {
     this.whitelistedOnly = state;
   }
 
-  onSortFieldChange(field: StableswapFarmSortField) {
+  onSortFieldChange(field: StableFarmSortField) {
     this.sortField = field;
   }
 }

@@ -5,13 +5,13 @@ import BigNumber from 'bignumber.js';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useGetStableFarmList, useStableswapFarmListStore } from '../../../hooks';
+import { useGetStableFarmList, useStableFarmListStore } from '../../../hooks';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
-export const useStableswapFarmListPageViewModel = () => {
+export const useStableFarmListPageViewModel = () => {
   const isReady = useReady();
-  const stableswapFarmListStore = useStableswapFarmListStore();
+  const stableFarmListStore = useStableFarmListStore();
   const { getStableFarmList } = useGetStableFarmList();
   const { t } = useTranslation();
   const title = t('stableswap|stableFarmTitle');
@@ -22,7 +22,7 @@ export const useStableswapFarmListPageViewModel = () => {
     }
   }, [getStableFarmList, isReady]);
 
-  const { listStore, filteredList } = stableswapFarmListStore;
+  const { listStore, filteredList } = stableFarmListStore;
   const { isLoading } = listStore;
 
   const data = filteredList?.map(item => {

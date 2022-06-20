@@ -1,7 +1,7 @@
 import { StableFarmItem, StakerInfo } from '@modules/stableswap/types';
 import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { StableswapFarmSortField } from '../types';
+import { StableFarmSortField } from '../types';
 
 const sortById = (first: StableFarmItem, second: StableFarmItem, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);
@@ -28,24 +28,24 @@ const sortByEarned = (
 ) => sortBigNumber(first.yourEarned, second.yourEarned, sortDirection);
 
 const stableFarmingSorts = {
-  [StableswapFarmSortField.ID]: sortById,
-  [StableswapFarmSortField.APR]: sortByApr,
-  [StableswapFarmSortField.APY]: sortByApy,
-  [StableswapFarmSortField.TVL]: sortByTvl,
-  [StableswapFarmSortField.DEPOSIT]: sortByDeposit,
-  [StableswapFarmSortField.EARNED]: sortByEarned
+  [StableFarmSortField.ID]: sortById,
+  [StableFarmSortField.APR]: sortByApr,
+  [StableFarmSortField.APY]: sortByApy,
+  [StableFarmSortField.TVL]: sortByTvl,
+  [StableFarmSortField.DEPOSIT]: sortByDeposit,
+  [StableFarmSortField.EARNED]: sortByEarned
 };
 
-const sortStableswapFarm = (
+const sortStableFarm = (
   first: StableFarmItem & StakerInfo,
   second: StableFarmItem & StakerInfo,
-  sortField: StableswapFarmSortField,
+  sortField: StableFarmSortField,
   sortDirection: SortDirection
 ) => stableFarmingSorts[sortField](first, second, sortDirection);
 
-export const sortStableswapFarmList = (
+export const sortStableFarmList = (
   list: Array<StableFarmItem & StakerInfo>,
-  sortField: StableswapFarmSortField,
+  sortField: StableFarmSortField,
   sortDirection: SortDirection
 ) => {
   if (isNull(sortField)) {
@@ -54,7 +54,7 @@ export const sortStableswapFarmList = (
 
   const localList = cloneArray(list);
 
-  localList.sort((first, second) => sortStableswapFarm(first, second, sortField, sortDirection));
+  localList.sort((first, second) => sortStableFarm(first, second, sortField, sortDirection));
 
   return localList;
 };

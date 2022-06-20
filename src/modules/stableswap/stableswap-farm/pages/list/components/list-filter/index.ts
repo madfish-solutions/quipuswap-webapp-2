@@ -1,1 +1,1 @@
-export * from './stableswap-farm-list-filter';
+export * from './stablefarm-list-filter';

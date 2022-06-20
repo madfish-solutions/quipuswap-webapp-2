@@ -11,9 +11,9 @@ export const useStableFarmRouterViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.stableswapFarmListStore) || isNull(rootStore.stableswapFarmFilterStore)) {
-          await rootStore.createStableswapFarmListStore();
-          await rootStore.createStableswapFarmFilterStore();
+        if (isNull(rootStore.stableFarmListStore) || isNull(rootStore.stableFarmFilterStore)) {
+          await rootStore.createStableFarmListStore();
+          await rootStore.createStableFarmFilterStore();
         }
         setIsInitialazied(true);
       } catch (error) {

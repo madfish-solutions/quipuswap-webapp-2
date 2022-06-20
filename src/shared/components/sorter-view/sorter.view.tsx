@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import Select, { Props as SelectProps } from 'react-select';
 
 import { FarmingSortFieldItem } from '@modules/farming/pages/list/types';
-import { StableswapFarmSortFieldItem } from '@modules/stableswap/stableswap-farm/pages/list/types';
+import { StableFarmSortFieldItem } from '@modules/stableswap/stableswap-farm/pages/list/types';
 import { StableswapSortFieldItem } from '@modules/stableswap/stableswap-liquidity/pages/list/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
@@ -15,9 +15,9 @@ import { Undefined } from '@shared/types';
 import styles from './sorter.module.scss';
 
 export interface SorterProps {
-  sortingValue: Undefined<FarmingSortFieldItem | StableswapSortFieldItem | StableswapFarmSortFieldItem>;
+  sortingValue: Undefined<FarmingSortFieldItem | StableswapSortFieldItem | StableFarmSortFieldItem>;
   sortDirectionRotate: boolean;
-  sortingValues: FarmingSortFieldItem[] | StableswapSortFieldItem[] | StableswapFarmSortFieldItem[];
+  sortingValues: FarmingSortFieldItem[] | StableswapSortFieldItem[] | StableFarmSortFieldItem[];
   buttonDTI: string;
   handleSortFieldChange: (value: unknown) => void;
   handleSortDirectionToggle: () => void;

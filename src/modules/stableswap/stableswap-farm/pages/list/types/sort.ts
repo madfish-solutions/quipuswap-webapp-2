@@ -1,4 +1,4 @@
-export enum StableswapFarmSortField {
+export enum StableFarmSortField {
   ID = 'ID',
   APR = 'APR',
   APY = 'APY',
@@ -7,7 +7,7 @@ export enum StableswapFarmSortField {
   EARNED = 'EARNED'
 }
 
-export interface StableswapFarmSortFieldItem {
+export interface StableFarmSortFieldItem {
   label: string;
-  field: StableswapFarmSortField;
+  field: StableFarmSortField;
 }

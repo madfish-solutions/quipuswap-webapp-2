@@ -2,41 +2,41 @@ import { FormEvent } from 'react';
 
 import cx from 'classnames';
 
-import { useStableswapFarmFilterStore } from '@modules/stableswap/hooks';
+import { useStableFarmFilterStore } from '@modules/stableswap/hooks';
 import { ListFilterViewProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { StableswapFarmSortField, StableswapFarmSortFieldItem } from '../../types';
-import styles from './stableswap-farm-list-filter.module.scss';
+import { StableFarmSortField, StableFarmSortFieldItem } from '../../types';
+import styles from './stablefarm-list-filter.module.scss';
 
-export const useStableswapFarmListFilterViewModel = (): ListFilterViewProps => {
+export const useStableFarmListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
-  const stableswapFarmFilterStore = useStableswapFarmFilterStore();
+  const stableFarmFilterStore = useStableFarmFilterStore();
   const { accountPkh } = useAuthStore();
-  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableswapFarmFilterStore;
+  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableFarmFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
-    const item = value as StableswapFarmSortFieldItem;
+    const item = value as StableFarmSortFieldItem;
 
-    return stableswapFarmFilterStore.onSortFieldChange(item.field);
+    return stableFarmFilterStore.onSortFieldChange(item.field);
   };
 
   const handleSortDirectionToggle = () => {
-    return stableswapFarmFilterStore.onSortDirectionToggle();
+    return stableFarmFilterStore.onSortDirectionToggle();
   };
 
-  const sortValues: StableswapFarmSortFieldItem[] = [
-    { label: t('common|Default'), field: StableswapFarmSortField.ID },
-    { label: t('stableswap|apr'), field: StableswapFarmSortField.APR },
-    { label: t('stableswap|apy'), field: StableswapFarmSortField.APY },
-    { label: t('stableswap|tvl'), field: StableswapFarmSortField.TVL }
+  const sortValues: StableFarmSortFieldItem[] = [
+    { label: t('common|Default'), field: StableFarmSortField.ID },
+    { label: t('stableswap|apr'), field: StableFarmSortField.APR },
+    { label: t('stableswap|apy'), field: StableFarmSortField.APY },
+    { label: t('stableswap|tvl'), field: StableFarmSortField.TVL }
   ];
 
-  const sortUserValues: StableswapFarmSortFieldItem[] = [
-    { label: t('stableswap|deposit'), field: StableswapFarmSortField.DEPOSIT },
-    { label: t('stableswap|earned'), field: StableswapFarmSortField.EARNED }
+  const sortUserValues: StableFarmSortFieldItem[] = [
+    { label: t('stableswap|deposit'), field: StableFarmSortField.DEPOSIT },
+    { label: t('stableswap|earned'), field: StableFarmSortField.EARNED }
   ];
 
   const sortingValues = isNull(accountPkh) ? sortValues : sortValues.concat(sortUserValues);
@@ -51,33 +51,33 @@ export const useStableswapFarmListFilterViewModel = (): ListFilterViewProps => {
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const setStakedOnly = (state: boolean) => {
-    return stableswapFarmFilterStore.setStakedOnly(state);
+    return stableFarmFilterStore.setStakedOnly(state);
   };
 
   const setWhitelistedOnly = (state: boolean) => {
-    return stableswapFarmFilterStore.setWhitelistedOnly(state);
+    return stableFarmFilterStore.setWhitelistedOnly(state);
   };
 
   const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e)) {
       return;
     }
-    stableswapFarmFilterStore.onSearchChange((e.target as HTMLInputElement).value);
+    stableFarmFilterStore.onSearchChange((e.target as HTMLInputElement).value);
   };
 
   const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e) || isNull(e.target)) {
       return;
     }
-    stableswapFarmFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
+    stableFarmFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
   };
 
   const handleIncrement = () => {
-    stableswapFarmFilterStore.handleIncrement();
+    stableFarmFilterStore.handleIncrement();
   };
 
   const handleDecrement = () => {
-    stableswapFarmFilterStore.handleDecrement();
+    stableFarmFilterStore.handleDecrement();
   };
 
   const switcherDataList = [
