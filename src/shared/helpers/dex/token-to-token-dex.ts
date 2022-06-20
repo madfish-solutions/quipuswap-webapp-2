@@ -13,13 +13,13 @@ const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times
 
 export class InputOverflowError extends Error {
   constructor(inputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
-    super(`Input amount (${inputAmount.toFixed()} exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
+    super(`Input amount (${inputAmount.toFixed()}) exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
   }
 }
 
 export class OutputOverflowError extends Error {
   constructor(outputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
-    super(`Output amount (${outputAmount.toFixed()} exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
+    super(`Output amount (${outputAmount.toFixed()}) exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
   }
 }
 
