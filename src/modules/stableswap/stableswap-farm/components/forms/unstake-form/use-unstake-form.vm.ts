@@ -55,6 +55,7 @@ export const useUntakeFormViewModel = (): StableswapFarmFormViewProps => {
 
   const label = t('common|Amount');
   const buttonText = t('common|Unstake');
+  const balanceText = t('common|Available balance');
 
   return {
     handleSubmit: formik.handleSubmit,
@@ -66,6 +67,7 @@ export const useUntakeFormViewModel = (): StableswapFarmFormViewProps => {
     tokens: token,
     handleInputAmountChange,
     disabled,
-    buttonText
+    buttonText,
+    balanceText
   };
 };
