@@ -9,7 +9,7 @@ import { StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
 
 import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableswapFormTabs } from '../types';
+import { StableFarmFormTabs } from '../types';
 import { StableswapFarmAddItemPage, StableswapFarmListPage } from './pages';
 import { useStableFarmRouterViewModel } from './stablefarm.routing.vm';
 
@@ -21,13 +21,13 @@ export const StableswapFarmRouter: FC = observer(() => {
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [StableswapFormTabs.stake, StableswapFormTabs.unstake]);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [StableFarmFormTabs.stake, StableFarmFormTabs.unstake]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableswapFormTabs.stake}/${lastTab}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${lastTab}`}
       />
     );
   }
@@ -37,7 +37,7 @@ export const StableswapFarmRouter: FC = observer(() => {
       <Routes>
         <Route index element={<StableswapFarmListPage />} />
 
-        <Route path={`/${StableswapFormTabs.stake}/:poolId`} element={<StableswapFarmAddItemPage />} />
+        <Route path={`/${StableFarmFormTabs.stake}/:poolId`} element={<StableswapFarmAddItemPage />} />
         {/* <Route path={`/${Tabs.unstake}/:poolId`} element={<StableswapLiquidityRemoveItemPage />} /> */}
 
         <Route path="*" element={<PageNotFoundPage />} />

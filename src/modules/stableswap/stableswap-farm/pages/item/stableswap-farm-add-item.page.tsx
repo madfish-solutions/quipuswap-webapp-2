@@ -6,7 +6,7 @@ import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
-import { StableswapFormTabs } from '../../../types';
+import { StableFarmFormTabs } from '../../../types';
 import { StakeForm } from '../../components';
 import { useStableswapFarmAddItemPageViewModel } from './use-stableswap-farm-add-item.page.vm';
 
@@ -18,7 +18,7 @@ export const StableswapFarmAddItemPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StickyBlock>
-        <StableswapFormTabsCard subpath={StableswapRoutes.farming} tabActiveId={StableswapFormTabs.stake}>
+        <StableswapFormTabsCard subpath={StableswapRoutes.farming} tabActiveId={StableFarmFormTabs.stake}>
           <StakeForm />
         </StableswapFormTabsCard>
         {/* <Details /> */}

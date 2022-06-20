@@ -7,26 +7,26 @@ import { i18n } from '@translation';
 
 import { useStableswapItemStore, useStableFarmItemStore } from '../../hooks';
 import { StableswapRoutes, StableswapContentRoutes } from '../../stableswap-routes.enum';
-import { StableswapFormTabs } from '../../types';
+import { StableswapFormTabs, StableswapLiquidityFormTabs, StableFarmFormTabs } from '../../types';
 
 export const TabsContent = {
   [StableswapRoutes.liquidity]: [
     {
-      id: StableswapFormTabs.add,
+      id: StableswapLiquidityFormTabs.add,
       label: i18n.t('common|Add')
     },
     {
-      id: StableswapFormTabs.remove,
+      id: StableswapLiquidityFormTabs.remove,
       label: i18n.t('common|Remove')
     }
   ],
   [StableswapRoutes.farming]: [
     {
-      id: StableswapFormTabs.stake,
+      id: StableFarmFormTabs.stake,
       label: i18n.t('common|Stake')
     },
     {
-      id: StableswapFormTabs.unstake,
+      id: StableFarmFormTabs.unstake,
       label: i18n.t('common|Unstake')
     }
   ]

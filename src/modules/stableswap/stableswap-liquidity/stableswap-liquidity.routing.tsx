@@ -9,7 +9,7 @@ import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@sha
 
 import { PageNotFoundPage } from '../../errors';
 import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableswapFormTabs } from '../types';
+import { StableswapLiquidityFormTabs } from '../types';
 import {
   StableswapLiquidityAddItemPage,
   StableswapLiquidityListPage,
@@ -25,13 +25,16 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [StableswapFormTabs.add, StableswapFormTabs.remove]);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [
+    StableswapLiquidityFormTabs.add,
+    StableswapLiquidityFormTabs.remove
+  ]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapFormTabs.add}/${lastTab}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastTab}`}
       />
     );
   }
@@ -39,8 +42,11 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <Routes>
-        <Route path={`/${StableswapFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
-        <Route path={`/${StableswapFormTabs.remove}/:poolId`} element={<StableswapLiquidityRemoveItemPage />} />
+        <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
+        />
 
         <Route path={'/'} element={<StableswapLiquidityListPage />} />
 

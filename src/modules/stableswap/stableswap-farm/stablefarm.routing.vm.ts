@@ -11,10 +11,13 @@ export const useStableFarmRouterViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.stableFarmListStore) || isNull(rootStore.stableFarmItemStore)) {
+        if (isNull(rootStore.stableFarmListStore)) {
           await rootStore.createStableFarmListStore();
+        }
+        if (isNull(rootStore.stableFarmItemStore)) {
           await rootStore.createStableFarmItemStore();
         }
+
         setIsInitialazied(true);
       } catch (error) {
         setRouterError(error as Error);

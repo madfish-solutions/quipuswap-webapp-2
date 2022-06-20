@@ -17,7 +17,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
-import { StableFarmItem, StableswapFormTabs, StakerInfo } from '../../../../../types';
+import { StableFarmFormTabs, StableFarmItem, StakerInfo } from '../../../../../types';
 import styles from './farm-card.module.scss';
 import { useFarmCardViewModel } from './farm-card.vm';
 
@@ -57,7 +57,7 @@ export const FarmCard: FC<Props> = ({
 
   return (
     <Link
-      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableswapFormTabs.stake}/${stableFarmItemUrl}`}
+      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${stableFarmItemUrl}`}
     >
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.farmInfo}>

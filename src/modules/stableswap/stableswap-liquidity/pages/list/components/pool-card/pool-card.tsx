@@ -18,7 +18,7 @@ import {
 
 import { extractTokens } from '../../../../../helpers';
 import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
-import { StableswapFormTabs, StableswapItem } from '../../../../../types';
+import { StableswapLiquidityFormTabs, StableswapItem } from '../../../../../types';
 import { preparePoolAmounts } from './pool-card.helpers';
 import styles from './pool-card.module.scss';
 import { usePoolCardViewModel } from './pool-card.vm';
@@ -48,7 +48,7 @@ export const PoolCard: FC<Props> = ({
 
   return (
     <Link
-      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapFormTabs.add}/${stableswapItemUrl}`}
+      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${stableswapItemUrl}`}
     >
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.poolInfo}>

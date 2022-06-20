@@ -16,16 +16,20 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
 
   const { stableswapFarmStake } = useStableswapFarmStake();
 
-  const balance = useTokenBalance(DEFAULT_TOKEN);
+  const token = DEFAULT_TOKEN;
+
+  const balance = useTokenBalance(token);
 
   const validationSchema = useFormValidation(balance ?? null);
 
   const handleStakeSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
 
-    if (values[FormFields.inputAmount]) {
-      const amount = toDecimals(new BigNumber(values[FormFields.inputAmount]), DEFAULT_TOKEN);
-      await stableswapFarmStake(amount);
+    const amount = new BigNumber(values[FormFields.inputAmount]);
+
+    if (!amount.isNaN()) {
+      const amountAtoms = toDecimals(amount, token);
+      await stableswapFarmStake(amountAtoms);
     }
 
     formik.resetForm();
@@ -40,9 +44,8 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
     onSubmit: handleStakeSubmit
   });
 
-  const tokens = DEFAULT_TOKEN;
   const handleInputAmountChange = (value: string) => {
-    const decimals = DEFAULT_TOKEN.metadata.decimals;
+    const decimals = token.metadata.decimals;
     const { realValue } = numberAsString(value, decimals);
     formik.setFieldValue(FormFields.inputAmount, realValue);
   };
@@ -61,7 +64,7 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
     label,
     balance,
     inputAmountError,
-    tokens,
+    tokens: token,
     handleInputAmountChange,
     disabled,
     buttonText
