@@ -10,7 +10,10 @@ import { getInputSlugByIndex } from '../../../../../../helpers';
 
 export const useAddLiqFormValidation = (userBalance: Array<Nullable<BigNumber>>, isBalancedProportion: boolean) => {
   return useMemo(() => {
-    const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(operationAmountSchema);
+    const isZeroInclusive = !isBalancedProportion;
+    const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(balance =>
+      operationAmountSchema(balance, isZeroInclusive)
+    );
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
       const fixedItem = isBalancedProportion ? item.required('Value is required') : item;

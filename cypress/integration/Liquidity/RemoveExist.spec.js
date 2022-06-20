@@ -7,7 +7,6 @@ describe('Form exists', () => {
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
     cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="cardTab-1"]').click();
-
     // Check if Title 'Pool Details' ok
     cy.get('[data-test-id="poolDetails"] [data-test-id="headerContent"]').should('contain', 'Pool Details');
   });
