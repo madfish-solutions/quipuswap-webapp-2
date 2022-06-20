@@ -5,13 +5,13 @@ import BigNumber from 'bignumber.js';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useGetStableFarmList, useStableFarmListStore } from '../../../hooks';
+import { useGetStableFarmList, useStableswapFarmListStore } from '../../../hooks';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
 export const useStableswapFarmListPageViewModel = () => {
   const isReady = useReady();
-  const stableFarmListStore = useStableFarmListStore();
+  const stableswapFarmListStore = useStableswapFarmListStore();
   const { getStableFarmList } = useGetStableFarmList();
   const { t } = useTranslation();
   const title = t('stableswap|stableFarmTitle');
@@ -22,20 +22,19 @@ export const useStableswapFarmListPageViewModel = () => {
     }
   }, [getStableFarmList, isReady]);
 
-  const { listStore, list, info } = stableFarmListStore;
+  const { listStore, filteredList } = stableswapFarmListStore;
   const { isLoading } = listStore;
 
-  const data = list.map((item, index) => {
-    if (info.length > index) {
+  const data = filteredList?.map(item => {
+    if (item.yourDeposit && item.yourEarned) {
       return {
         ...item,
-        ...info[index],
-        shouldShowStakerInfo: info[index].yourDeposit.gt(DEFAULT_VALUE) || info[index].yourEarned.gt(DEFAULT_VALUE)
+        shouldShowStakerInfo: item.yourDeposit.gt(DEFAULT_VALUE) || item.yourEarned.gt(DEFAULT_VALUE)
       };
     }
 
     return { ...item, yourDeposit: DEFAULT_VALUE, yourEarned: DEFAULT_VALUE };
   });
 
-  return { title, isLoading, data };
+  return { title, isLoading, data: data ?? [] };
 };

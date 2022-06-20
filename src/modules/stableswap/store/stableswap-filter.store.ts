@@ -2,15 +2,13 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
 
-import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers/sorter.helpers';
-import { StableswapLiquiditySortField } from '../stableswap-liquidity/pages/list/types';
+import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers';
+import { StableswapSortField } from '../stableswap-liquidity/pages/list/types';
 import { StableswapItem } from '../types';
-
-// TODO: StableswapLiquiditySortField replace type
 
 export class StableswapFilterStore extends BaseFilterStore {
   whitelistedOnly = true;
-  sortField: StableswapLiquiditySortField = StableswapLiquiditySortField.ID;
+  sortField: StableswapSortField = StableswapSortField.ID;
 
   constructor() {
     super();
@@ -43,7 +41,7 @@ export class StableswapFilterStore extends BaseFilterStore {
     this.whitelistedOnly = state;
   }
 
-  onSortFieldChange(field: StableswapLiquiditySortField) {
+  onSortFieldChange(field: StableswapSortField) {
     this.sortField = field;
   }
 }

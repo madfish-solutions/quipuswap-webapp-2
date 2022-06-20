@@ -19,17 +19,26 @@
 }
 
 @include media(">Lphone") {
-  .switcherWhitelistedOnly {
+  .switcherStakeOnly {
     grid-row: 3 / 4;
+  }
+
+  .switcherWhitelistedOnly {
+    grid-row: 4 / 5;
   }
 }
 
 @include media(">Ltablet") {
-  .switcherWhitelistedOnly {
+  .switcherStakeOnly {
     grid-column: 3 / 4;
   }
 
   .switcherWhitelistedOnly {
+    grid-row: none;
+  }
+
+  .switcherStakeOnly,
+  .switcherActiveOnly {
     grid-row: none;
   }
 }

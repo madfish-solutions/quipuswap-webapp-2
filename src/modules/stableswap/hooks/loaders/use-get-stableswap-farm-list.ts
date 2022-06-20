@@ -5,13 +5,13 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useStableFarmListStore } from '../store';
+import { useStableswapFarmListStore } from '../store';
 
 export const useGetStableFarmList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const { listStore, stakerInfo } = useStableFarmListStore();
+  const { listStore, stakerInfo } = useStableswapFarmListStore();
 
   const getStableFarmList = useCallback(async () => {
     if (!isReady) {

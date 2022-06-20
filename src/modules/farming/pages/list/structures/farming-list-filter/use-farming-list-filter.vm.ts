@@ -12,10 +12,10 @@ import { FarmingSortField, FarmingSortFieldItem } from '../../types/sort';
 import styles from './farming-list-filter.module.scss';
 
 export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
-  const { t } = useTranslation(['common', 'farm']);
-  const farmingFilterStore = useFarmingFilterStore();
-  const { sortField, sortDirection } = farmingFilterStore;
   const { accountPkh } = useAuthStore();
+  const farmingFilterStore = useFarmingFilterStore();
+  const { search, tokenIdValue, activeOnly, stakedOnly, sortField, sortDirection } = farmingFilterStore;
+  const { t } = useTranslation(['common', 'farm']);
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as FarmingSortFieldItem;
@@ -49,8 +49,6 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     .find(({ field }) => field === sortField);
 
   const sortDirectionRotate = isDirrectOrder(sortDirection);
-
-  const { search, tokenIdValue, activeOnly, stakedOnly } = farmingFilterStore;
 
   const setStakedOnly = (state: boolean) => {
     return farmingFilterStore.setStakedOnly(state);
@@ -116,7 +114,8 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     sortDirectionRotate,
     sortingValues,
     handleSortFieldChange,
-    handleSortDirectionToggle
+    handleSortDirectionToggle,
+    buttonDTI: 'FarmingASC/DESCSortButton'
   };
 
   return {

@@ -1,9 +1,9 @@
-export enum StableswapLiquiditySortField {
+export enum StableswapSortField {
   ID = 'ID',
   TVL = 'TVL'
 }
 
-export interface StableswapLiquiditySortFieldItem {
+export interface StableswapSortFieldItem {
   label: string;
-  field: StableswapLiquiditySortField;
+  field: StableswapSortField;
 }

@@ -7,7 +7,7 @@ import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableswapFilterStore } from '../../../../../hooks';
-import { StableswapLiquiditySortField, StableswapLiquiditySortFieldItem } from '../../types';
+import { StableswapSortField, StableswapSortFieldItem } from '../../types';
 import styles from './stableswap-liquidity-list-filter.module.scss';
 
 export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps => {
@@ -16,7 +16,7 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
   const { sortField, sortDirection } = stableswapFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
-    const item = value as StableswapLiquiditySortFieldItem;
+    const item = value as StableswapSortFieldItem;
 
     return stableswapFilterStore.onSortFieldChange(item.field);
   };
@@ -25,9 +25,9 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     return stableswapFilterStore.onSortDirectionToggle();
   };
 
-  const sortingValues: StableswapLiquiditySortFieldItem[] = [
-    { label: t('common|Default'), field: StableswapLiquiditySortField.ID },
-    { label: t('farm|tvl'), field: StableswapLiquiditySortField.TVL }
+  const sortingValues: StableswapSortFieldItem[] = [
+    { label: t('common|Default'), field: StableswapSortField.ID },
+    { label: t('farm|tvl'), field: StableswapSortField.TVL }
   ];
 
   const sortingValue = sortingValues
@@ -89,7 +89,8 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     sortDirectionRotate,
     sortingValues,
     handleSortFieldChange,
-    handleSortDirectionToggle
+    handleSortDirectionToggle,
+    buttonDTI: 'SSLASC/DESCSortButton'
   };
 
   return {

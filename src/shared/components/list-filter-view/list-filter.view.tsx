@@ -27,11 +27,8 @@ export interface ListFilterViewProps {
   handleDecrement: () => void;
   translation: InputPlaceholder;
   switcherDataList: Array<SwitcherLabelProps>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sorterProps: SorterProps | any;
+  sorterProps: SorterProps;
 }
-
-// TODO: remove any from sorterProps
 
 export const ListFilterView: FC<ListFilterViewProps> = ({
   search,
