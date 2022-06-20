@@ -5,16 +5,20 @@ import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
 import { useTranslation } from '@translation';
 
-import { StableswapRoutes } from '../../../../../stableswap-routes.enum';
+import { StableswapContentRoutes } from '../../stableswap-routes.enum';
 import styles from './form-header.module.scss';
 
-export const FormHeader: FC = () => {
+interface Props {
+  subpath: StableswapContentRoutes;
+}
+
+export const FormHeader: FC<Props> = ({ subpath }) => {
   const { t } = useTranslation();
 
   return (
     <div className={styles.root}>
       <Button
-        href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`}
+        href={`${AppRootRoutes.Stableswap}${subpath}`}
         theme="quaternary"
         icon
         className={styles.arrowButton}

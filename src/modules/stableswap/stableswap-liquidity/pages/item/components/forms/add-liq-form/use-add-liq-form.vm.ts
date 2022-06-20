@@ -3,8 +3,7 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { hasFormikError, isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
-import { useTranslation } from '@translation';
+import { isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
 
 import {
   calculateOutputWithToken,
@@ -20,6 +19,7 @@ import {
   useStableswapTokensBalances
 } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
+import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 
 const DEFAULT_LENGTH = 0;
 
@@ -28,7 +28,6 @@ export interface AddLiqFormValues {
 }
 
 export const useAddLiqFormViewModel = () => {
-  const { t } = useTranslation();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
   const { item } = useStableswapItemStore();
@@ -53,6 +52,9 @@ export const useAddLiqFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
+  const { label, tooltip, disabled, isSubmitting, isAllInputsNonNegativeOnInbalancedLiquidity } =
+    useAddLiqFormHelper(formik);
+
   useEffect(() => {
     return () => formStore.clearStore();
   }, [formStore]);
@@ -60,11 +62,6 @@ export const useAddLiqFormViewModel = () => {
   if (isNull(item)) {
     return null;
   }
-
-  const label = t('common|Input');
-  const tooltip = t('common|Success');
-  const isSubmitting = formik.isSubmitting;
-  const disabled = isSubmitting || hasFormikError(formik.errors);
 
   const { tokensInfo, totalLpSupply, lpToken } = item;
 
@@ -127,6 +124,7 @@ export const useAddLiqFormViewModel = () => {
     tooltip,
     disabled,
     isSubmitting,
+    isAllInputsNonNegativeOnInbalancedLiquidity,
     switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
     handleSubmit: formik.handleSubmit

@@ -7,6 +7,10 @@ export interface StableswapStats {
   totalTvlInUsd: BigNumber;
 }
 
+export interface StableFarmStats {
+  totalTvlInUsd: BigNumber;
+}
+
 export interface StableswapList {
   list: Array<StableswapItem>;
 }

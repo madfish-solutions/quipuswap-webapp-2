@@ -15,6 +15,10 @@ export const useStableFarmRouterViewModel = () => {
           await rootStore.createStableFarmListStore();
           await rootStore.createStableFarmFilterStore();
         }
+        if (isNull(rootStore.stableFarmItemStore)) {
+          await rootStore.createStableFarmItemStore();
+        }
+
         setIsInitialazied(true);
       } catch (error) {
         setRouterError(error as Error);

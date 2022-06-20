@@ -1,0 +1,2 @@
+export const DEFAULT_WAIT_TIMEOUT = 3000;
+export const REPEAT_WAIT_TIMEOUT = 10000;

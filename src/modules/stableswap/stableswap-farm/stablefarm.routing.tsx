@@ -8,9 +8,10 @@ import { PageNotFoundPage } from '@modules/errors';
 import { StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
 
-import { Tabs } from '../stableswap-liquidity';
 import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableswapFarmListPage } from './pages/list';
+import { StableFarmFormTabs } from '../types';
+import { StableswapFarmListPage } from './pages';
+import { StableswapFarmAddItemPage } from './pages/item/stableswap-farm-add-item.page';
 import { useStableFarmRouterViewModel } from './stablefarm.routing.vm';
 
 export const StableswapFarmRouter: FC = observer(() => {
@@ -21,16 +22,24 @@ export const StableswapFarmRouter: FC = observer(() => {
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [Tabs.add, Tabs.remove]);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [StableFarmFormTabs.stake, StableFarmFormTabs.unstake]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
-    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${Tabs.add}/${lastTab}`} />;
+    return (
+      <Navigate
+        replace
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${lastTab}`}
+      />
+    );
   }
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <Routes>
         <Route index element={<StableswapFarmListPage />} />
+
+        <Route path={`/${StableFarmFormTabs.stake}/:poolId`} element={<StableswapFarmAddItemPage />} />
+        {/* <Route path={`/${Tabs.unstake}/:poolId`} element={<StableswapLiquidityRemoveItemPage />} /> */}
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>

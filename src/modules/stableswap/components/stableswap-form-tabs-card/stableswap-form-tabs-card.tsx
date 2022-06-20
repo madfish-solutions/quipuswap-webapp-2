@@ -4,30 +4,32 @@ import { Card, SettingsButton, Skeleton, Tabs } from '@shared/components';
 import { CFC } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
-import { StableswapFormTabs } from '../../../../../types';
+import { StableswapContentRoutes } from '../../stableswap-routes.enum';
+import { StableswapFormTabs } from '../../types';
 import { FormHeader } from '../form-header';
 import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 
 interface Props {
+  subpath: StableswapContentRoutes;
   tabActiveId: StableswapFormTabs;
 }
 
-export const StableswapFormTabsCard: CFC<Props> = observer(({ tabActiveId, children }) => {
-  const { stableswapItem, changeTabHandle } = useStableswapFormTabsCardViewModel();
+export const StableswapFormTabsCard: CFC<Props> = observer(({ subpath, tabActiveId, children }) => {
+  const { isLoading, changeTabHandle } = useStableswapFormTabsCardViewModel({ subpath });
 
-  if (!stableswapItem) {
+  if (isLoading) {
     return <Skeleton className={styles.Skeleton} />;
   }
 
   return (
     <Card
       header={{
-        content: <FormHeader />
+        content: <FormHeader subpath={subpath} />
       }}
       subheader={{
         content: (
           <Tabs
-            values={TabsContent}
+            values={TabsContent[subpath]}
             activeId={tabActiveId}
             setActiveId={id => changeTabHandle(id as StableswapFormTabs)}
             className={styles.tabs}
