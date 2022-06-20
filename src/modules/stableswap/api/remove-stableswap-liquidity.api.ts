@@ -60,23 +60,3 @@ export const removeStableswapLiquidityImbalancedApi = async (
 
   return await sendBatch(tezos, [removeSwableswapLiquidityParams]);
 };
-
-export const removeStableswapLiquiditySingleCoinApi = async (
-  tezos: TezosToolkit,
-  stableswapPoolContractAddress: string,
-  index: BigNumber,
-  amount: BigNumber,
-  shares: BigNumber,
-  deadline: Date,
-  accountPkh: string,
-  receiver: Nullable<string> = null
-) => {
-  const receiverFixed = accountPkh === receiver ? null : receiver;
-  const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
-
-  const removeSwableswapLiquidityParams = stableswapPoolContract.methods
-    .divest_one_coin(DEFAULT_STABLESWAP_POOL_ID, shares, index, amount, deadline, receiverFixed, STABLESWAP_REFERRAL)
-    .toTransferParams();
-
-  return await sendBatch(tezos, [removeSwableswapLiquidityParams]);
-};
