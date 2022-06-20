@@ -61,12 +61,9 @@ export const useRemoveStableswapLiquidity = () => {
     const sharesAmountAtom = toDecimals(shares, lpToken);
 
     const message = t('stableswap|sucessfullyRemoved');
+    const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => decreaseAmount(token, amount, fees));
 
     if (isBalancedProportion) {
-      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
-        decreaseAmount(token, amount, fees)
-      );
-
       try {
         const operation = await removeStableswapLiquidityBalancedApi(
           tezos,
@@ -82,10 +79,6 @@ export const useRemoveStableswapLiquidity = () => {
         showErrorToast(error as Error);
       }
     } else {
-      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
-        decreaseAmount(token, amount, fees)
-      );
-
       try {
         const operation = await removeStableswapLiquidityImbalancedApi(
           tezos,
