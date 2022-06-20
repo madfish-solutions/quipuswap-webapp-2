@@ -9,7 +9,7 @@ import { getSymbolsString, isUndefined } from '@shared/helpers';
 
 import { useGetStableFarmItem, useStableFarmItemStore } from '../../../hooks';
 
-export const useStableswapFarmAddItemPageViewModel = () => {
+export const useStableswapFarmItemPageViewModel = () => {
   const params = useParams();
   const dAppReady = useReady();
   const accountPkh = useAccountPkh();

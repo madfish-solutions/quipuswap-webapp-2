@@ -1,1 +1,2 @@
-export * from './stableswap-farm-add-item.page';
+export * from './stableswap-farm-stake-item.page';
+export * from './stableswap-farm-unstake-item.page';
