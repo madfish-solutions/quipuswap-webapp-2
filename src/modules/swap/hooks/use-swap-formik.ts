@@ -96,7 +96,7 @@ export const useSwapFormik = (
       amplitudeService.logEvent('SWAP_SEND_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
-      amplitudeService.logEvent('SWAP_SEND_FIELD', { ...logData, error });
+      amplitudeService.logEvent('SWAP_SEND_FAILED', { ...logData, error });
       throw error;
     }
   };
