@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { extractTokens } from '@modules/stableswap/helpers';
-import { Tabs } from '@modules/stableswap/stableswap-liquidity';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
@@ -18,7 +17,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
-import { StableFarmItem, StakerInfo } from '../../../../../types';
+import { StableFarmFormTabs, StableFarmItem, StakerInfo } from '../../../../../types';
 import styles from './farm-card.module.scss';
 import { useFarmCardViewModel } from './farm-card.vm';
 
@@ -57,7 +56,9 @@ export const FarmCard: FC<Props> = ({
   const yourEarnedInDollars = yourEarned?.multipliedBy(stakedTokenExchangeRate);
 
   return (
-    <Link to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${Tabs.add}/${stableFarmItemUrl}`}>
+    <Link
+      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${stableFarmItemUrl}`}
+    >
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.farmInfo}>
           <div className={styles.logoSymbols}>

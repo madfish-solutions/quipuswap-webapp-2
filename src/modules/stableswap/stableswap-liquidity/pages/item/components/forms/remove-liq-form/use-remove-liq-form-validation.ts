@@ -15,7 +15,10 @@ export const useRemoveLiqFormValidation = (
   isBalancedProportion: boolean
 ) => {
   return useMemo(() => {
-    const inputAmountSchemas: Array<NumberAsStringSchema> = userTokenBalance.map(operationAmountSchema);
+    const isZeroInclusive = !isBalancedProportion;
+    const inputAmountSchemas: Array<NumberAsStringSchema> = userTokenBalance.map(balance =>
+      operationAmountSchema(balance, isZeroInclusive)
+    );
     const lpInputShema = operationAmountSchema(userLpBalance);
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {

@@ -8,3 +8,4 @@ export * from './formik';
 export * from './get-input-slug-by-index';
 export * from './get-stableswap-deadline';
 export * from './get-stableswap-title';
+export * from './apply-stableswap-fee';

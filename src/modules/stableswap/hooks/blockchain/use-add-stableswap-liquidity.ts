@@ -10,7 +10,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { addStableswapLiquidityApi } from '../../api';
-import { extractTokens, getStableswapDeadline, createAmountsMichelsonMap } from '../../helpers';
+import { extractTokens, getStableswapDeadline, createAmountsMichelsonMap, apllyStableswapFee } from '../../helpers';
 import { tokensAndAmountsMapper } from '../../mapping';
 import { useStableswapItemStore, useStableswapItemFormStore } from '../store';
 import { useCalcTokenAmountView } from '../use-calc-token-amount';
@@ -45,17 +45,24 @@ export const useAddStableswapLiquidity = () => {
       return;
     }
 
-    const { contractAddress, tokensInfo } = item;
+    const { contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
 
     const tokens = extractTokens(tokensInfo);
     const amountsAtoms = inputAmounts.map((amount, index) =>
-      isNull(amount) ? new BigNumber('0') : toDecimals(amount, tokens[index])
+      isNull(amount) || amount.isNaN() ? new BigNumber('0') : toDecimals(amount, tokens[index])
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-
     const shares = await calculateShares(amountsAtoms);
-    const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+
+    const sharesWithFee = apllyStableswapFee(shares, [
+      liquidityProvidersFee,
+      stakersFee,
+      interfaceFee,
+      devFee
+    ]).integerValue(BigNumber.ROUND_DOWN);
+
+    const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const deadline = getStableswapDeadline(transactionDeadline);
 
