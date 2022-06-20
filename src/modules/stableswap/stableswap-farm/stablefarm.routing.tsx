@@ -10,7 +10,8 @@ import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@sha
 
 import { StableswapRoutes } from '../stableswap-routes.enum';
 import { StableFarmFormTabs } from '../types';
-import { StableswapFarmAddItemPage, StableswapFarmListPage } from './pages';
+import { StableswapFarmListPage } from './pages';
+import { StableswapFarmAddItemPage } from './pages/item/stableswap-farm-add-item.page';
 import { useStableFarmRouterViewModel } from './stablefarm.routing.vm';
 
 export const StableswapFarmRouter: FC = observer(() => {
