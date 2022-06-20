@@ -1,8 +1,7 @@
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
-import { CoinflipStorage } from '@modules/coinflip/api/types';
+import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
 import { useCoinflipStore } from '@modules/coinflip/hooks';
-import { TOKEN_ASSETS } from '@modules/coinflip/interfaces/token-assets';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getContract } from '@shared/dapp';

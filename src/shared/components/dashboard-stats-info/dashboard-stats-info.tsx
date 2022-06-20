@@ -9,7 +9,6 @@ import styles from './dashboard-stats-info.module.scss';
 import { useDashboardStatsInfoViewModel } from './use-dashboard-stats-info.vm';
 
 const ZERO = 0;
-const TWO = 2;
 
 interface Props {
   header?: string;
@@ -32,35 +31,22 @@ export const DashboardStatsInfo: FC<Props> = ({
   className
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { isRightElement, isFlexEndRightElement, computedClassName } = useDashboardStatsInfoViewModel();
+  const { cardHeader, rootContentClassName, computedClassName } = useDashboardStatsInfoViewModel(
+    header,
+    cards.length,
+    countOfRightElements
+  );
 
-  const rootContentClassName = countOfRightElements ? styles.rootWithRightColumn : styles.root;
   const cardClassName = cx(styles.card, modeClass[colorThemeMode]);
-
-  const elementsFlexBasis50 = countOfRightElements * TWO;
 
   return (
     <Card
-      header={
-        header
-          ? {
-              content: header
-            }
-          : undefined
-      }
+      header={cardHeader}
       contentClassName={cx(rootContentClassName, contentClassName)}
       className={cx(styles.rootCard, className)}
     >
-      {cards.map((card: ReactElement, index: number) => (
-        <div
-          className={cx(
-            cardClassName,
-            computedClassName(
-              isRightElement(index, elementsFlexBasis50),
-              isFlexEndRightElement(index, elementsFlexBasis50)
-            )
-          )}
-        >
+      {cards.map((card, index) => (
+        <div className={cx(cardClassName, computedClassName(index))} key={index}>
           {card}
         </div>
       ))}

@@ -18,6 +18,8 @@ interface TableProps<T extends object> {
   getCustomTableBodyProps?: TableBodyPropGetter<T>;
   getCustomRowProps?: RowPropGetter<T>;
   getCustomCellProps?: CellPropGetter<T>;
+  headerClassName?: string;
+  cellClassName?: string;
 }
 
 const defaultPropGetter = () => ({});
