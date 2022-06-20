@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 
@@ -8,10 +8,10 @@ import { useTokenLockedViewModel } from './use-token-locked.vm';
 
 interface Props {
   className: string;
-  tokenSymbol: string;
-  amount: BigNumber;
+  tokenSymbol: Nullable<string>;
+  amount: Nullable<BigNumber>;
   isLoading: boolean;
-  dollarEquivalent: BigNumber;
+  dollarEquivalent: Nullable<BigNumber>;
 }
 
 export const TokenLocked: FC<Props> = ({ className, amount, isLoading, tokenSymbol, dollarEquivalent }) => {
