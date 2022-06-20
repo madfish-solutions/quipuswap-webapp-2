@@ -21,6 +21,7 @@ export const useGetStableFarmItem = () => {
       try {
         stableFarmItemStore.setPoolId(poolId);
         await stableFarmItemStore.itemStore.load();
+        await stableFarmItemStore.stakerInfoStore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }
