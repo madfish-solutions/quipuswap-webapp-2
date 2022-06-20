@@ -16,5 +16,6 @@ export const stableswap = {
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!',
   stableFarmTitle: 'Stable Swap Farm',
-  allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input."
+  allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input.",
+  totalValueLocked: 'Total Value Locked'
 } as const;
