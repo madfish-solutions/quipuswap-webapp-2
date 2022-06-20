@@ -17,6 +17,7 @@ describe('Check error notification', () => {
         cy.visit('/swap');
         cy.get('[data-test-id="acceptCookieButton"]').click();
         cy.get('[for="swap-send-from"]').click().type('133332222221');
+        cy.wait(2000);
         cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
             .invoke('text')
             .then(text => {
@@ -28,6 +29,7 @@ describe('Check error notification', () => {
         cy.visit('/swap');
         cy.get('[data-test-id="acceptCookieButton"]').click();
         cy.get('[for="swap-send-from"]').click().type('1').type('{backspace}');
+        cy.wait(2000);
         cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
             .invoke('text')
             .then(text => {

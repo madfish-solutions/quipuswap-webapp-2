@@ -22,7 +22,7 @@ describe('Select new tokens in the fields', () => {
         cy.reload()
     });
     it('Should_DisplayDataInFirstInput_When_SecondInputIs1', () => {
-        cy.get('[data-test-id="addLiquidityTokenB"] [data-test-id="addLiquidityTokenB"]')
+        cy.get('[data-test-id="addLiquidityTokenB"] [data-test-id="addLiquidityTokenB"]', { timeout: 10000 })
             .click().type('1');
         cy.wait(3000);
         cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]')
@@ -30,18 +30,18 @@ describe('Select new tokens in the fields', () => {
     });
     it('Should_DisplayNewTokenInSecondInput_When_SecondInputIsChanged', () => {
         cy.get('[data-test-id="addLiquidityTokenB"] [data-test-id="tokenSelectButton"]').click();
-        cy.get('[data-test-id="fDAO"]').click();
+        cy.get('[data-test-id="hDAO"]').click();
     });
     it('Should_DisplayNewTitle_When_NewTokenAreSelected', () => {
         // Check if title of the page is ok
-        cy.get('[data-test-id="liquidityPageTitle"]').should('contain', 'KUSD / fDAO');
+        cy.get('[data-test-id="liquidityPageTitle"]').should('contain', 'KUSD / hDAO');
     });
     it('Should_DisplayNewInfoInPoolDetailsSection_When_NewTokenAreSelected', () => {
         // Check if title of the page is ok
         cy.get('[data-test-id="sellPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'KUSD');
-        cy.get('[data-test-id="sellPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'fDAO');
+        cy.get('[data-test-id="sellPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'hDAO');
         cy.get('[data-test-id="buyPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'KUSD');
-        cy.get('[data-test-id="buyPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'fDAO');
+        cy.get('[data-test-id="buyPrice"] [data-test-id="rightVisibleCurrency"]').should('contain', 'hDAO');
     });
     it('Should_BeEmptyFieldInFirstInput_When_NewTokenAreSelected', () => {
         cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]')
@@ -58,13 +58,14 @@ describe('Select new tokens in the fields', () => {
     it('Should_CalculateFirstToken_When_TokenToTokenInExistingPool', () => {
         cy.get('[data-test-id="addLiquidityTokenB"] [data-test-id="tokenSelectButton"]').click();
         cy.get('[data-test-id="uUSD"]').click();
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]')
             .invoke('val').then(parseFloat).should('be.gte', 0);
     });
     it('Should_CalculateSecondInput_When_FirstInputIsChangedInExistingPool', () => {
         cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]')
             .click().type('{backspace}');
+        cy.wait(3000);
         cy.get('[data-test-id="addLiquidityTokenB"] [data-test-id="addLiquidityTokenB"]')
             .invoke('val').then(parseFloat).should('be.gte', 0);
         cy.reload();

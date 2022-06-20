@@ -1,5 +1,10 @@
 {
     "baseUrl": "http://localhost:3000/",
     "ignoreTestFiles": "**/1-getting-started/*",
-    "ignoreTestFiles": "**/2-advanced-examples/*"
+    "ignoreTestFiles": "**/2-advanced-examples/*",
+    "defaultCommandTimeout": 10000,
+    "retries": {
+    "runMode": 2,
+    "openMode": 2
+  }
 }
