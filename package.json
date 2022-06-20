@@ -13,6 +13,7 @@
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
+    "e2e": "npx cypress run --record --key f271c554-5264-44d3-89e2-a309096fa019",
     "eject": "react-scripts eject",
     "postinstall": "husky install"
   },
