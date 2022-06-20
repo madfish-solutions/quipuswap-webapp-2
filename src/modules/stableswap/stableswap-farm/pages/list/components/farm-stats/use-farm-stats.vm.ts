@@ -4,13 +4,13 @@ import { useStableFarmListStore } from '../../../../../hooks';
 
 export const useFarmStatsViewModel = () => {
   const { t } = useTranslation();
-  const stableFarmListStore = useStableFarmListStore();
+  const { stats } = useStableFarmListStore();
 
   const label = t('stableswap|totalValueLocked');
 
   return {
     label,
 
-    tvl: stableFarmListStore.stats?.totalTvlInUsd.toString() ?? null
+    tvl: stats?.totalTvlInUsd.toString() ?? null
   };
 };

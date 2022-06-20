@@ -32,6 +32,7 @@ export class StableFarmListStore {
       info: computed
     });
   }
+
   get stats() {
     return this.statsStore.data;
   }
