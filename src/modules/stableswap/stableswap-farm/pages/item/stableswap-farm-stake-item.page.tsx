@@ -8,10 +8,10 @@ import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { StableFarmFormTabs } from '../../../types';
 import { StakeForm } from '../../components';
-import { useStableswapFarmAddItemPageViewModel } from './use-stableswap-farm-add-item.page.vm';
+import { useStableswapFarmItemPageViewModel } from './use-stableswap-farm-item.page.vm';
 
-export const StableswapFarmAddItemPage: FC = observer(() => {
-  const { title } = useStableswapFarmAddItemPageViewModel();
+export const StableswapFarmStakeItemPage: FC = observer(() => {
+  const { title } = useStableswapFarmItemPageViewModel();
 
   return (
     <>
