@@ -3,37 +3,17 @@ import { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
-import {
-  decreaseBySlippage,
-  getFirstElement,
-  isExist,
-  isNull,
-  isSingleElement,
-  saveBigNumber,
-  toDecimals
-} from '@shared/helpers';
+import { decreaseBySlippage, isExist, isNull, saveBigNumber, toDecimals } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { AmountToken, Token } from '@shared/types';
+import { Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import {
-  removeStableswapLiquidityBalancedApi,
-  removeStableswapLiquidityImbalancedApi,
-  removeStableswapLiquiditySingleCoinApi
-} from '../../api';
+import { removeStableswapLiquidityBalancedApi, removeStableswapLiquidityImbalancedApi } from '../../api';
 import { apllyStableswapFee, getStableswapDeadline } from '../../helpers';
 import { tokensAndAmountsMapper } from '../../mapping';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../store';
-
-const isWithdrawInOneCoin = (tokensAndAmounts: Array<AmountToken>) => {
-  const filteredTokenAmounts = tokensAndAmounts
-    .map((element, index) => ({ ...element, index }))
-    .filter(({ amount }) => amount.isGreaterThan('0'));
-
-  return { isSingle: isSingleElement(filteredTokenAmounts), tokensAmounts: filteredTokenAmounts };
-};
 
 export const useRemoveStableswapLiquidity = () => {
   const { t } = useTranslation();
@@ -102,48 +82,23 @@ export const useRemoveStableswapLiquidity = () => {
         showErrorToast(error as Error);
       }
     } else {
-      const { isSingle, tokensAmounts } = isWithdrawInOneCoin(tokensAndAmounts);
+      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
+        decreaseAmount(token, amount, fees)
+      );
 
-      if (isSingle) {
-        const tokenAmount = getFirstElement(tokensAmounts);
-        const index = new BigNumber(tokenAmount.index);
+      try {
+        const operation = await removeStableswapLiquidityImbalancedApi(
+          tezos,
+          contractAddress,
+          decreasedTokensAndAmounts,
+          sharesAmountAtom,
+          deadline,
+          accountPkh
+        );
 
-        const decreasedAmountWithFee = decreaseAmount(tokenAmount.token, tokenAmount.amount, fees).amount;
-
-        try {
-          const operation = await removeStableswapLiquiditySingleCoinApi(
-            tezos,
-            contractAddress,
-            index,
-            decreasedAmountWithFee,
-            sharesAmountAtom,
-            deadline,
-            accountPkh
-          );
-
-          await confirmOperation(operation.opHash, { message });
-        } catch (error) {
-          showErrorToast(error as Error);
-        }
-      } else {
-        try {
-          const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
-            decreaseAmount(token, amount, fees)
-          );
-
-          const operation = await removeStableswapLiquidityImbalancedApi(
-            tezos,
-            contractAddress,
-            decreasedTokensAndAmounts,
-            sharesAmountAtom,
-            deadline,
-            accountPkh
-          );
-
-          await confirmOperation(operation.opHash, { message });
-        } catch (error) {
-          showErrorToast(error as Error);
-        }
+        await confirmOperation(operation.opHash, { message });
+      } catch (error) {
+        showErrorToast(error as Error);
       }
     }
   }, [
