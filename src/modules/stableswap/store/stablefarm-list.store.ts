@@ -4,6 +4,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getStableFarmListApi, getStableFarmStatsApi, getStakerInfo } from '../api';
 import { farmsListMapper, stakerInfoMapper, statsMapper } from '../mapping';
+import { listWithUserInfo } from '../stableswap-farm/pages/list/helpers';
 import { RawStableFarmItem, RawStableFarmStats, StableFarmItem, StableFarmStats, StakerInfo } from '../types';
 
 export class StableFarmListStore {
@@ -43,5 +44,13 @@ export class StableFarmListStore {
 
   get info() {
     return this.stakerInfo.data;
+  }
+
+  get listWithUserInfo() {
+    return listWithUserInfo(this.list, this.info);
+  }
+
+  get filteredList() {
+    return this.rootStore.stableFarmFilterStore?.filterAndSort(this.listWithUserInfo);
   }
 }
