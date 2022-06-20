@@ -1,7 +1,7 @@
 import { FarmingItem } from '@modules/farming/interfaces';
 import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { FarmingSortField } from '../types/sort';
+import { FarmingSortField } from '../types';
 
 const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);

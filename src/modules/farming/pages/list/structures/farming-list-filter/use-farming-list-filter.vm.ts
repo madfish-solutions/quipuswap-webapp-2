@@ -8,7 +8,7 @@ import { isNull, isDirrectOrder } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { FarmingSortField, FarmingSortFieldItem } from '../../types/sort';
+import { FarmingSortField, FarmingSortFieldItem } from '../../types';
 import styles from './farming-list-filter.module.scss';
 
 export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
