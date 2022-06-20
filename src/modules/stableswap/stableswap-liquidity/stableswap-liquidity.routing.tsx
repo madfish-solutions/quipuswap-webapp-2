@@ -9,13 +9,13 @@ import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@sha
 
 import { PageNotFoundPage } from '../../errors';
 import { StableswapRoutes } from '../stableswap-routes.enum';
+import { StableswapLiquidityFormTabs } from '../types';
 import {
   StableswapLiquidityAddItemPage,
   StableswapLiquidityListPage,
   StableswapLiquidityRemoveItemPage
 } from './pages';
 import { useStableswapLiquidityRouterViewModel } from './stableswap-liquidity.routing.vm';
-import { Tabs } from './tabs.enum';
 
 export const StableswapLiquidityRouter: FC = observer(() => {
   const { pathname } = useLocation();
@@ -25,17 +25,28 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [Tabs.add, Tabs.remove]);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [
+    StableswapLiquidityFormTabs.add,
+    StableswapLiquidityFormTabs.remove
+  ]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
-    return <Navigate replace to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${Tabs.add}/${lastTab}`} />;
+    return (
+      <Navigate
+        replace
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastTab}`}
+      />
+    );
   }
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <Routes>
-        <Route path={`/${Tabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
-        <Route path={`/${Tabs.remove}/:poolId`} element={<StableswapLiquidityRemoveItemPage />} />
+        <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
+          element={<StableswapLiquidityRemoveItemPage />}
+        />
 
         <Route path={'/'} element={<StableswapLiquidityListPage />} />
 

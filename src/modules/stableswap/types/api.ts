@@ -1,9 +1,11 @@
 import { BlockInfoWrap, RawToken } from '@shared/types';
 
 export interface StableswapListResponse extends RawStableswapList, BlockInfoWrap {}
-export interface StableFarmListResponse extends RawStableFarmList, BlockInfoWrap {}
 export interface StableswapItemResponse extends IRawStableswapItem, BlockInfoWrap {}
 export interface StableswapStatsResponse extends RawStableswapStats, BlockInfoWrap {}
+
+export interface StableFarmListResponse extends RawStableFarmList, BlockInfoWrap {}
+export interface StableFarmItemResponse extends IRawStableFarmItem, BlockInfoWrap {}
 
 export interface RawStableswapStats {
   totalTvlInUsd: string;
@@ -18,6 +20,10 @@ export interface RawStableFarmList {
 
 export interface IRawStableswapItem {
   item: RawStableswapItem;
+}
+
+export interface IRawStableFarmItem {
+  item: RawStableFarmItem;
 }
 
 interface AbstractRawStableItem {
