@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import {
@@ -6,8 +6,7 @@ import {
   getBestTradeExactOutput,
   getTradeInputAmount,
   getTradeOutputAmount,
-  Trade,
-  useAllRoutePairs
+  Trade
 } from 'swap-router-sdk';
 
 import { fromDecimals, isEmptyArray, toDecimals } from '@shared/helpers';
@@ -15,7 +14,7 @@ import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
 
-import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
+import { useRoutePairs } from '../providers/route-pairs-provider';
 import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';
 import {
   swapRouterSdkTokenSlugToQuipuTokenSlug,
@@ -53,11 +52,7 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
 };
 
 export const useSwapCalculations = () => {
-  const allRoutePairs = useAllRoutePairs(TEZOS_DEXES_API_URL);
-  const filteredRoutePairs = useMemo(
-    () => allRoutePairs.data.filter(routePair => KNOWN_DEX_TYPES.includes(routePair.dexType)),
-    [allRoutePairs.data]
-  );
+  const { routePairs } = useRoutePairs();
 
   const { tokens, loading: tokensLoading } = useTokensStore();
   const {
@@ -69,6 +64,11 @@ export const useSwapCalculations = () => {
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
   useTokensLoader(tokensSlugs);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(bestTrade);
+  }, [bestTrade]);
 
   useEffect(() => {
     try {
@@ -83,7 +83,7 @@ export const useSwapCalculations = () => {
   const [outputAmount, setOutputAmount] = useState<Nullable<BigNumber>>(null);
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
 
-  const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, filteredRoutePairs);
+  const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, routePairs);
   const bestTradeWithSlippageTolerance = useTradeWithSlippageTolerance(
     inputAmount && toDecimals(inputAmount, inputToken),
     bestTrade,
