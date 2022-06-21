@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { Optional, Token } from '@shared/types';
 
-type Tokens = Token | Array<Token>;
+export type Tokens = Token | Array<Token>;
 
 export interface TokenInputViewModelProps {
   tokens?: Tokens;
@@ -16,6 +16,7 @@ export interface TokenInputViewModelProps {
 export interface TokenInputProps extends TokenInputViewModelProps {
   value: string;
   balance: Optional<BigNumber.Value>;
+  balanceText?: string;
   id?: string;
   className?: string;
   label: string;

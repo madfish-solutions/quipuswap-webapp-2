@@ -2028,10 +2028,10 @@
   dependencies:
     bignumber.js "^9.0.2"
 
-"@quipuswap/tokens-whitelist@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.1.tgz#b21353bd0af334a6ff2b4cbfdc40b0eb2bd87873"
-  integrity sha512-w9F00BFfBbtrHz8LLQQ30/SbnM0N2zm09zBJSvj5Dy25v/SwyIQqU8qcpnvcwpeplMpV+HtrMxNLk5+U5LOZbQ==
+"@quipuswap/tokens-whitelist@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.2.tgz#bea5b631fee2ab6007f9a8e640e4f54c6bb01dce"
+  integrity sha512-pRANJwrqYsVbZUxPZUIw/vtg7HnvkkOzIvomykVOz3Q2ysNY6pEqN5oqvDIcgAs15Efvc6zSDnXBZepHAwqKvg==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -10849,10 +10849,10 @@ svgo@^2.7.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
-swap-router-sdk@^1.13.5:
-  version "1.13.5"
-  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.13.5.tgz#94bd39b0939c479c805e025643555cd30e513519"
-  integrity sha512-uQPtwisbe+6V2GlmgdLLofXD+9LnabzVunW2SrM5fyEAuYPOcV83Mn0qXiUlmwnLFMPkQOH0JEvY2Psmlr/A6Q==
+swap-router-sdk@1.13.6:
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.13.6.tgz#2dfc00cf1a922b4f6b925d2e1f40b6ced8078e2c"
+  integrity sha512-d3Em5/Mz8LQcvblqrKEbchX+CgDAJOEEbTs9StNG8nvvqjuIfWtcHTGdUsNZmelLUtWiI3rGjGuRj+Okmh7jgA==
   dependencies:
     "@taquito/taquito" "12.1.1"
     async-retry "1.3.3"

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DexTypeEnum } from 'swap-router-sdk';
 
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
@@ -377,6 +378,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const noRouteFound =
     isEmptyArray(swap.trade) && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
+  const shouldHideRouteRow = trade?.some(({ dexType }) => dexType === DexTypeEnum.QuipuSwapCurveLike) ?? false;
 
   const updateRates = () => {
     refreshDexPools();
@@ -416,6 +418,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     recipient: formik.recipient,
     updateRates,
     sellRate,
+    shouldHideRouteRow,
     shouldShowPriceImpactWarning,
     submitDisabled,
     swapFee,

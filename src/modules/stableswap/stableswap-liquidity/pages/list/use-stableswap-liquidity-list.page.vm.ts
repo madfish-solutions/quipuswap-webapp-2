@@ -10,7 +10,7 @@ import { useTranslation } from '@translation';
 import { extractTokens } from '../../../helpers';
 import { useStableswapListStore, useGetStableswapList, useGetStableswapStats } from '../../../hooks';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
-import { Tabs } from '../../tabs.enum';
+import { StableswapLiquidityFormTabs } from '../../../types';
 
 export const useStableswapLiquidityPageViewModel = () => {
   const stableswapListStore = useStableswapListStore();
@@ -20,7 +20,7 @@ export const useStableswapLiquidityPageViewModel = () => {
 
   const { t } = useTranslation();
   const title = t('common|Stableswap Liquidity');
-  const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${Tabs.add}`;
+  const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}`;
 
   /*
     Load data

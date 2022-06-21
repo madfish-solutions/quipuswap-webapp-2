@@ -2,12 +2,10 @@ import { observer } from 'mobx-react-lite';
 
 import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
-import { EmptyFarmingList, FarmingListSkeleton } from './components';
-import { FarmingRewardsList } from './components/farming-rewards-list';
+import { EmptyFarmingList, FarmingListSkeleton, FarmingRewardsList } from './components';
 import styles from './farming-list.page.module.scss';
 import { ListStats } from './list-stats/list-stats';
-import { FarmingListItem } from './structures';
-import { ListFilter } from './structures/list-filter';
+import { FarmingListItem, FarmingListFilter } from './structures';
 import { useFarmingListViewModel } from './use-farming-list.vm';
 
 export const FarmsListPage = observer(() => {
@@ -22,7 +20,7 @@ export const FarmsListPage = observer(() => {
         <FarmingRewardsList />
       </StateWrapper>
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
-        <ListFilter />
+        <FarmingListFilter />
         <Iterator
           data={list ?? []}
           keyFn={item => item.id.toFixed()}
