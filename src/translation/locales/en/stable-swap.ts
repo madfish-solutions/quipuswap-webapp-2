@@ -1,5 +1,9 @@
 export const stableswap = {
   tvl: 'TVL',
+  apr: 'APR',
+  apy: 'APY',
+  deposit: 'Deposit',
+  earned: 'Earned',
   liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
   'Total LP Supply': 'Total LP Supply',
@@ -18,5 +22,6 @@ export const stableswap = {
   stableFarmTitle: 'Stable Swap Farm',
   allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input.",
   totalValueLocked: 'Total Value Locked',
-  Harvest: 'Harvest'
+  Harvest: 'Harvest',
+  harvestAll: 'Harvest All'
 } as const;
