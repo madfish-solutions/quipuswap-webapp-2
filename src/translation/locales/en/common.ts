@@ -131,6 +131,7 @@ export const common = {
   tokenValues: 'Token Values',
   Explore: 'Explore',
   'Pool Details': 'Pool Details',
+  stakeDetails: 'Stake Details',
   Input: 'Input',
   Output: 'Output',
   Back: 'Back',
