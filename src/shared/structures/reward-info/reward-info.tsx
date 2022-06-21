@@ -74,7 +74,7 @@ export const RewardInfo: CFC<Props> = ({
   });
 
   const wrapContainerClassName = cx(styles.container, containerClassName, {
-    [styles.pb0]: isDetailsOpen
+    [styles.pb0]: isDetailsOpen && details
   });
 
   const wrapViewDetailsButtonrClassName = cx(styles.order3, styles.viewDetailsButton, viewDetailsButtonClassName);
