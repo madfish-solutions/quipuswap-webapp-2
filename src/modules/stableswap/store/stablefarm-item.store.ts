@@ -53,7 +53,7 @@ export class StableFarmItemStore {
       return null;
     }
 
-    const stakerInfo = await getStakerInfo(this.rootStore.tezos, [this.item], this.rootStore.authStore.accountPkh);
+    const stakerInfo = await getStakerInfo(this.rootStore.tezos, this.item, this.rootStore.authStore.accountPkh);
 
     return getFirstElement(stakerInfo);
   }
