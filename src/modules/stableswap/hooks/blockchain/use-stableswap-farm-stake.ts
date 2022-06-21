@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { stableswapFarmStakeApi } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
@@ -27,10 +26,8 @@ export const useStableswapFarmStake = () => {
       }
       const { contractAddress } = item;
 
-      const poolId = new BigNumber(DEFAULT_STABLESWAP_POOL_ID);
-
       try {
-        const operation = await stableswapFarmStakeApi(tezos, contractAddress, amount, poolId, accountPkh);
+        const operation = await stableswapFarmStakeApi(tezos, contractAddress, amount, accountPkh);
 
         await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyStaked') });
       } catch (error) {
