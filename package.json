@@ -21,7 +21,7 @@
     "@airgap/beacon-sdk": "^3.1.0",
     "@craco/craco": "^6.4.3",
     "@quipuswap/sdk": "^3.0.0",
-    "@quipuswap/tokens-whitelist": "^1.0.1",
+    "@quipuswap/tokens-whitelist": "^1.0.2",
     "@taquito/beacon-wallet": "^12.1.1",
     "@taquito/taquito": "^12.1.1",
     "@temple-wallet/dapp": "^7.0.0",

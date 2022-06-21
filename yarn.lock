@@ -2028,10 +2028,10 @@
   dependencies:
     bignumber.js "^9.0.2"
 
-"@quipuswap/tokens-whitelist@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.1.tgz#b21353bd0af334a6ff2b4cbfdc40b0eb2bd87873"
-  integrity sha512-w9F00BFfBbtrHz8LLQQ30/SbnM0N2zm09zBJSvj5Dy25v/SwyIQqU8qcpnvcwpeplMpV+HtrMxNLk5+U5LOZbQ==
+"@quipuswap/tokens-whitelist@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.2.tgz#bea5b631fee2ab6007f9a8e640e4f54c6bb01dce"
+  integrity sha512-pRANJwrqYsVbZUxPZUIw/vtg7HnvkkOzIvomykVOz3Q2ysNY6pEqN5oqvDIcgAs15Efvc6zSDnXBZepHAwqKvg==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
