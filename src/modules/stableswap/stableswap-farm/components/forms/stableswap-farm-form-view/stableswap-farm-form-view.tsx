@@ -17,6 +17,7 @@ export interface StableswapFarmFormViewProps {
   disabled: boolean;
   isSubmitting: boolean;
   buttonText: string;
+  balanceText?: string;
 }
 
 export const StableswapFarmFormView: FC<StableswapFarmFormViewProps> = ({
@@ -29,7 +30,8 @@ export const StableswapFarmFormView: FC<StableswapFarmFormViewProps> = ({
   handleInputAmountChange,
   disabled,
   isSubmitting,
-  buttonText
+  buttonText,
+  balanceText
 }) => (
   <form onSubmit={handleSubmit}>
     <TokenInput
@@ -39,6 +41,7 @@ export const StableswapFarmFormView: FC<StableswapFarmFormViewProps> = ({
       balance={balance}
       error={inputAmountError}
       tokens={tokens}
+      balanceText={balanceText}
       onInputChange={handleInputAmountChange}
     />
     <div className={styles.buttons}>

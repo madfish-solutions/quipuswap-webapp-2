@@ -10,8 +10,7 @@ import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@sha
 
 import { StableswapRoutes } from '../stableswap-routes.enum';
 import { StableFarmFormTabs } from '../types';
-import { StableswapFarmListPage } from './pages';
-import { StableswapFarmAddItemPage } from './pages/item/stableswap-farm-add-item.page';
+import { StableswapFarmStakeItemPage, StableswapFarmUnstakeItemPage, StableswapFarmListPage } from './pages';
 import { useStableFarmRouterViewModel } from './stablefarm.routing.vm';
 
 export const StableswapFarmRouter: FC = observer(() => {
@@ -38,8 +37,8 @@ export const StableswapFarmRouter: FC = observer(() => {
       <Routes>
         <Route index element={<StableswapFarmListPage />} />
 
-        <Route path={`/${StableFarmFormTabs.stake}/:poolId`} element={<StableswapFarmAddItemPage />} />
-        {/* <Route path={`/${Tabs.unstake}/:poolId`} element={<StableswapLiquidityRemoveItemPage />} /> */}
+        <Route path={`/${StableFarmFormTabs.stake}/:poolId`} element={<StableswapFarmStakeItemPage />} />
+        <Route path={`/${StableFarmFormTabs.unstake}/:poolId`} element={<StableswapFarmUnstakeItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>
