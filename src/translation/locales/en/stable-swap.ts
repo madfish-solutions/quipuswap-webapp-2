@@ -1,5 +1,9 @@
 export const stableswap = {
   tvl: 'TVL',
+  apr: 'APR',
+  apy: 'APY',
+  deposit: 'Deposit',
+  earned: 'Earned',
   liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
   'Total LP Supply': 'Total LP Supply',
@@ -20,5 +24,6 @@ export const stableswap = {
   dexContract: 'Dex Contract',
   APR: 'APR',
   valueLocked: 'Value Locked',
-  Tags: 'Tags'
+  Tags: 'Tags',
+  totalValueLocked: 'Total Value Locked'
 } as const;

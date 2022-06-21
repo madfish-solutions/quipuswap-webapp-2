@@ -6,8 +6,17 @@ export interface StableswapStatsResponse extends RawStableswapStats, BlockInfoWr
 
 export interface StableFarmListResponse extends RawStableFarmList, BlockInfoWrap {}
 export interface StableFarmItemResponse extends IRawStableFarmItem, BlockInfoWrap {}
+export interface StableFarmStatsResponse extends IRawStableFarmStats, BlockInfoWrap {}
 
 export interface RawStableswapStats {
+  totalTvlInUsd: string;
+}
+
+export interface IRawStableFarmStats {
+  stats: RawStableFarmStats;
+}
+
+export interface RawStableFarmStats {
   totalTvlInUsd: string;
 }
 
