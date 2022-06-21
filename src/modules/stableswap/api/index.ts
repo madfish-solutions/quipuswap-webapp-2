@@ -8,3 +8,4 @@ export * from './remove-stableswap-liquidity.api';
 export * from './stableswap-farm-stake.api';
 export * from './get-stablefarm-item.api';
 export * from './get-stablefarm-stats.api';
+export * from './stablefarm-harvest.api';
