@@ -18,7 +18,7 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { TokenLocked } from '../token-locked';
+import { TokenLocked } from '../../../../../components/token-locked';
 import styles from './details.module.scss';
 import { useDetailsVievModel } from './use-details.vm';
 
