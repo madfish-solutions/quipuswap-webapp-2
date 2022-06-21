@@ -10,26 +10,22 @@ export const useStableswapLiquidityRewardInfoViewModel = () => {
   const { t } = useTranslation();
   const { filteredList } = useStableFarmListStore();
   const { harvestAll: harvestAllApi } = useStableFarmHarvestAll();
-  const farmsWithRewars = useMemo(() => {
-    return filteredList?.filter(({ yourEarned }) => {
-      return yourEarned?.isGreaterThan('0');
-    });
-  }, [filteredList]);
+  const farmsWithRewars = useMemo(
+    () => filteredList?.filter(({ yourEarned }) => yourEarned?.isGreaterThan('0')),
+    [filteredList]
+  );
 
-  const claimablePendingRewards = useMemo(() => {
-    return (
-      farmsWithRewars?.reduce((acc, { yourEarned }) => {
-        return acc.plus(yourEarned);
-      }, new BigNumber('0')) ?? null
-    );
-  }, [farmsWithRewars]);
+  const claimablePendingRewards = useMemo(
+    () => farmsWithRewars?.reduce((acc, { yourEarned }) => acc.plus(yourEarned), new BigNumber('0')) ?? null,
+    [farmsWithRewars]
+  );
 
-  const harvestAll = useCallback(() => {
+  const harvestAll = useCallback(async () => {
     if (!farmsWithRewars || isEmptyArray(farmsWithRewars)) {
       return;
     }
 
-    harvestAllApi(farmsWithRewars.map(({ contractAddress }) => contractAddress));
+    await harvestAllApi(farmsWithRewars.map(({ contractAddress }) => contractAddress));
   }, [farmsWithRewars, harvestAllApi]);
 
   const harvestAllText = t('stableswap|harvestAll');
