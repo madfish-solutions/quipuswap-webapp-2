@@ -2,25 +2,22 @@ import { useCallback, useMemo } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { ZERO_AMOUNT } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
-import { useStableFarmItemStore, useStableswapFarmStake } from '@modules/stableswap/hooks';
 import { fromDecimals, isEmptyArray, isNull, multipliedIfPossible } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { useStableFarmHarvest, useStableFarmItemStore } from '../../../hooks';
 import { StableFarmRewardDetailsParams } from '../stablefarm-reward-details/types';
 
 export const useStableFarmRewardInfoViewModel = () => {
   const { t } = useTranslation();
   const { item, userInfo } = useStableFarmItemStore();
-  const { stableswapFarmStake } = useStableswapFarmStake();
+  const { harvest } = useStableFarmHarvest();
 
   const quipuExchangeRates = item?.stakedTokenExchangeRate ?? null;
   const tokensInfo = item?.tokensInfo ?? null;
 
-  const harvest = useCallback(() => {
-    void stableswapFarmStake(new BigNumber(ZERO_AMOUNT));
-  }, [stableswapFarmStake]);
+  const hadleHarvest = useCallback(async () => await harvest(), [harvest]);
 
   const shares = userInfo ? fromDecimals(userInfo.yourDeposit, DEFAULT_TOKEN) : null;
   const sharesDollarEquivalent = multipliedIfPossible(quipuExchangeRates, shares);
@@ -64,7 +61,7 @@ export const useStableFarmRewardInfoViewModel = () => {
 
   return {
     claimablePendingRewards,
-    harvest,
+    hadleHarvest,
 
     buttonText,
     rewardTooltip,
