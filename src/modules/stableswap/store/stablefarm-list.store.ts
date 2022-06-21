@@ -6,6 +6,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getStableFarmListApi, getStableFarmStatsApi, getStakerInfo } from '../api';
 import { farmsListMapper, stakerInfoMapper, statsMapper } from '../mapping';
+import { listWithUserInfo } from '../stableswap-farm/pages/list/helpers';
 import {
   RawStableFarmItem,
   RawStableFarmStats,
@@ -50,7 +51,6 @@ export class StableFarmListStore {
     return this.listStore.data;
   }
 
-  //TODO: find a better way to mapping
   get info(): Array<StakerInfo> {
     if (isEmptyArray(this.stakerInfo.data) || isEmptyArray(this.list)) {
       return [];
@@ -72,5 +72,13 @@ export class StableFarmListStore {
         yourEarned
       };
     });
+  }
+
+  get listWithUserInfo() {
+    return listWithUserInfo(this.list, this.info);
+  }
+
+  get filteredList() {
+    return this.rootStore.stableFarmFilterStore?.filterAndSort(this.listWithUserInfo);
   }
 }
