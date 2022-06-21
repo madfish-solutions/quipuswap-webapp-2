@@ -13,10 +13,8 @@ export const stableFarmHarvestApi = async (
     toArray(stableswapPoolContractAddresses).map(async contractAddress => tezos.wallet.at(contractAddress))
   );
 
-  const poolId = new BigNumber(DEFAULT_STABLESWAP_POOL_ID);
-
   const swableswapLiquidityParams = stableswapPoolContracts.map(contract =>
-    contract.methods.add(poolId, new BigNumber(ZERO_AMOUNT)).toTransferParams()
+    contract.methods.add(DEFAULT_STABLESWAP_POOL_ID, new BigNumber(ZERO_AMOUNT)).toTransferParams()
   );
 
   return await sendBatch(tezos, swableswapLiquidityParams);

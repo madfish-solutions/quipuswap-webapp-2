@@ -2,11 +2,11 @@ import { useCallback, useMemo } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
 import { fromDecimals, isEmptyArray, isNull, multipliedIfPossible } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableFarmHarvest, useStableFarmItemStore } from '../../../hooks';
+import { useStableFarmStakerBalance } from '../../hooks';
 import { StableFarmRewardDetailsParams } from '../stablefarm-reward-details/types';
 
 export const useStableFarmRewardInfoViewModel = () => {
@@ -19,7 +19,7 @@ export const useStableFarmRewardInfoViewModel = () => {
 
   const hadleHarvest = useCallback(async () => await harvest(), [harvest]);
 
-  const shares = userInfo ? fromDecimals(userInfo.yourDeposit, DEFAULT_TOKEN) : null;
+  const shares = useStableFarmStakerBalance();
   const sharesDollarEquivalent = multipliedIfPossible(quipuExchangeRates, shares);
 
   const rawData: Array<StableFarmRewardDetailsParams> = useMemo(() => {

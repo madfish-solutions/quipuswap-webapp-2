@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
 
 import { StableswapFarmFormView } from '../stableswap-farm-form-view';
-import { useStakeFormViewModel } from './use-stake-form.vm';
+import { useUntakeFormViewModel } from './use-unstake-form.vm';
 
-export const StakeForm = observer(() => {
-  const params = useStakeFormViewModel();
+export const UnstakeForm = observer(() => {
+  const params = useUntakeFormViewModel();
 
   return <StableswapFarmFormView {...params} />;
 });
