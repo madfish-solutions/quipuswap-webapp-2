@@ -14,7 +14,7 @@ import { useStableFarmRewardInfoViewModel } from './use-stablefarm-reward-info.v
 export const StableFarmRewardInfo = observer(() => {
   const {
     claimablePendingRewards,
-    harvest,
+    hadleHarvest,
     buttonText,
     rewardTooltip,
     rawData,
@@ -34,7 +34,7 @@ export const StableFarmRewardInfo = observer(() => {
       viewDetailsButtonClassName={styles.viewDetailsButton}
       claimablePendingRewards={claimablePendingRewards}
       currency={DOLLAR}
-      onButtonClick={harvest}
+      onButtonClick={hadleHarvest}
       rewardTooltip={rewardTooltip}
       buttonText={buttonText}
       buttonUp
