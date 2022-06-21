@@ -11,7 +11,7 @@ export const useGetStableFarmList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const { listStore, stakerInfo } = useStableFarmListStore();
+  const { listStore, stakerInfo, statsStore } = useStableFarmListStore();
 
   const getStableFarmList = useCallback(async () => {
     if (!isReady) {
@@ -20,6 +20,7 @@ export const useGetStableFarmList = () => {
 
     try {
       await listStore.load();
+      await statsStore.load();
       await stakerInfo.load();
     } catch (error) {
       showErrorToast(error as Error);
@@ -27,7 +28,7 @@ export const useGetStableFarmList = () => {
 
     // We need it only for dependency for loading list based on it.
     noopMap(authStore.accountPkh);
-  }, [isReady, authStore.accountPkh, listStore, stakerInfo, showErrorToast]);
+  }, [isReady, authStore.accountPkh, listStore, stakerInfo, statsStore, showErrorToast]);
 
   return { getStableFarmList };
 };
