@@ -7,7 +7,7 @@ import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { StableFarmFormTabs } from '../../../types';
-import { UnstakeForm } from '../../components';
+import { Details, StableFarmRewardInfo, UnstakeForm } from '../../components';
 import { useStableswapFarmItemPageViewModel } from './use-stableswap-farm-item.page.vm';
 
 export const StableswapFarmUnstakeItemPage: FC = observer(() => {
@@ -17,11 +17,12 @@ export const StableswapFarmUnstakeItemPage: FC = observer(() => {
     <>
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
+      <StableFarmRewardInfo />
       <StickyBlock>
         <StableswapFormTabsCard subpath={StableswapRoutes.farming} tabActiveId={StableFarmFormTabs.unstake}>
           <UnstakeForm />
         </StableswapFormTabsCard>
-        {/* <Details /> */}
+        <Details />
       </StickyBlock>
     </>
   );
