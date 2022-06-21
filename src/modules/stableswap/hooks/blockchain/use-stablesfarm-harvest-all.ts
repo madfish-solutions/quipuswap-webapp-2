@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
 
-import { stableFarmHarvestApi } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
+
+import { stableFarmHarvestApi } from '../../api';
 
 export const useStableFarmHarvestAll = () => {
   const { tezos } = useRootStore();
@@ -23,7 +24,7 @@ export const useStableFarmHarvestAll = () => {
       try {
         const operation = await stableFarmHarvestApi(tezos, contractAdresses);
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyStaked') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyHarvested') });
       } catch (error) {
         showErrorToast(error as Error);
       }

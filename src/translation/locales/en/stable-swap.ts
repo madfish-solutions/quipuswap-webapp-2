@@ -17,6 +17,7 @@ export const stableswap = {
   sucessfullyRemoved: 'Liquidity has been successfully removed',
   sucessfullyStaked: 'Stake has been successfull',
   sucessfullyUnstaked: 'Unstake has been successfull',
+  sucessfullyHarvested: 'Harvest has been successfull',
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!',
   stableFarmTitle: 'Stable Swap Farm',
@@ -26,5 +27,6 @@ export const stableswap = {
   valueLocked: 'Value Locked',
   Tags: 'Tags',
   totalValueLocked: 'Total Value Locked',
+  Harvest: 'Harvest',
   harvestAll: 'Harvest All'
 } as const;
