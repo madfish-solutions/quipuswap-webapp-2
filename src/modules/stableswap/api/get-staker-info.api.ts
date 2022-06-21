@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { getContract } from '@shared/dapp/get-storage-info';
-import { isNull } from '@shared/helpers';
+import { isNull, toArray } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { RawContractStakerInfo, RawStakerInfo, StableFarmItem } from '../types';
@@ -28,14 +28,16 @@ const callStakerInfoContractView = async (
 
 export const getStakerInfo = async (
   tezos: Nullable<TezosToolkit>,
-  stableFarmsList: Array<StableFarmItem>,
+  stableFarmsList: Array<StableFarmItem> | StableFarmItem,
   accountPkh: Nullable<string>
 ): Promise<Array<RawStakerInfo>> => {
   if (isNull(tezos) || isNull(accountPkh)) {
-    return stableFarmsList.map(() => ({ yourReward: null, yourDeposit: DEFAULT_VALUE }));
+    return toArray(stableFarmsList).map(() => ({ yourReward: null, yourDeposit: DEFAULT_VALUE }));
   }
 
-  const contractsPromises = stableFarmsList.map(async ({ contractAddress }) => getContract(tezos, contractAddress));
+  const contractsPromises = toArray(stableFarmsList).map(async ({ contractAddress }) =>
+    getContract(tezos, contractAddress)
+  );
   const userInfoPromises = contractsPromises.map(async contract => callStakerInfoContractView(contract, accountPkh));
   const userInfo = await Promise.all(userInfoPromises);
 
