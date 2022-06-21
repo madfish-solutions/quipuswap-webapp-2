@@ -25,5 +25,6 @@ export const stableswap = {
   APR: 'APR',
   valueLocked: 'Value Locked',
   Tags: 'Tags',
-  totalValueLocked: 'Total Value Locked'
+  totalValueLocked: 'Total Value Locked',
+  harvestAll: 'Harvest All'
 } as const;
