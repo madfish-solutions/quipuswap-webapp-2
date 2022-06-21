@@ -1,11 +1,11 @@
 import { DEFAULT_TOKEN } from '@config/tokens';
 import { fromDecimals } from '@shared/helpers';
 
-import { StakerInfo } from '../types';
+import { RawStakerInfo } from '../types';
 
-export const stakerInfoMapper = (rawStakerInfo: Array<StakerInfo>) => {
-  return rawStakerInfo.map(({ yourEarned, yourDeposit }) => ({
+export const stakerInfoMapper = (rawStakerInfo: Array<RawStakerInfo>) => {
+  return rawStakerInfo.map(({ yourReward, yourDeposit }) => ({
     yourDeposit: fromDecimals(yourDeposit, DEFAULT_TOKEN),
-    yourEarned: fromDecimals(yourEarned, DEFAULT_TOKEN)
+    yourReward
   }));
 };
