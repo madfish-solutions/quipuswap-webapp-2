@@ -10,3 +10,4 @@ export * from './get-stablefarm-item.api';
 export * from './stableswap-farm-unstake.api';
 export * from './get-stablefarm-staker-balance.api';
 export * from './get-stablefarm-stats.api';
+export * from './stablefarm-harvest.api';
