@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DexTypeEnum } from 'swap-router-sdk';
+import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
@@ -10,7 +11,6 @@ import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
-  DexGraph,
   getSymbolsString,
   getTokenPairSlug,
   getTokenSlug,
@@ -29,6 +29,7 @@ import { useTranslation } from '@translation';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
+import { useRoutePairs } from './providers/route-pairs-provider';
 import { useSwapLimits } from './providers/swap-limits-provider';
 import { getBalanceByTokenSlug } from './utils/get-balance-by-token-slug';
 import { SwapAmountFieldName, SwapField, SwapFormValues, SwapTokensFieldName } from './utils/types';
@@ -48,7 +49,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const amplitude = useAmplitudeService();
 
   const swap = useSwapCalculations();
-  const { dexRoute, trade } = swap;
+  const { dexRoute, trade, updateCalculations } = swap;
 
   const {
     errors,
@@ -139,8 +140,10 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === formik.action)!;
 
-  const { dexGraph, dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
-  const prevDexGraphRef = useRef<DexGraph>();
+  // TODO: remove useDexGraph and related functions globally
+  const { dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
+  const { routePairs, updateRoutePairs } = useRoutePairs();
+  const prevRoutePairsRef = useRef<RoutePair[]>(routePairs);
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
@@ -166,6 +169,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const refreshDexPoolsIfNecessary = () => {
     if (dataIsStale && !dexPoolsLoading) {
       refreshDexPools();
+      updateRoutePairs();
     }
   };
 
@@ -228,11 +232,12 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   }, [setValues, formik.inputToken, formik.outputToken, tokens, swap, updateBalance]);
 
   useEffect(() => {
-    if (prevDexGraphRef.current !== dexGraph && formik.inputToken && formik.outputToken) {
+    if (prevRoutePairsRef.current !== routePairs && formik.inputToken && formik.outputToken) {
       updateSwapLimits(formik.inputToken, formik.outputToken);
+      updateCalculations();
     }
-    prevDexGraphRef.current = dexGraph;
-  }, [dexGraph, formik.inputToken, formik.outputToken, updateSwapLimits]);
+    prevRoutePairsRef.current = routePairs;
+  }, [routePairs, formik.inputToken, formik.outputToken, updateSwapLimits, updateCalculations]);
 
   useOnBlock(tezos, updateSelectedTokensBalances);
 
@@ -382,7 +387,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const updateRates = () => {
     refreshDexPools();
-    swap.updateCalculations();
+    updateRoutePairs();
   };
 
   return {
