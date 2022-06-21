@@ -64,6 +64,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     recipient,
     updateRates,
     sellRate,
+    shouldHideRouteRow,
     shouldShowPriceImpactWarning,
     submitDisabled,
     swapFee,
@@ -190,6 +191,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           route={dexRoute}
           buyRate={buyRate}
           sellRate={sellRate}
+          shouldHideRouteRow={shouldHideRouteRow}
         />
       </StickyBlock>
     </>

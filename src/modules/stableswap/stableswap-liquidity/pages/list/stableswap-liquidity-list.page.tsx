@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
-import { ListFilter, StableswapLiquidityGeneralStats } from './components';
+import { StableswapLiquidityListFilter, StableswapLiquidityGeneralStats } from './components';
 import { useStableswapLiquidityPageViewModel } from './use-stableswap-liquidity-list.page.vm';
 
 export const StableswapLiquidityListPage: FC = observer(() => {
@@ -15,7 +15,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StableswapLiquidityGeneralStats />
-      <ListFilter />
+      <StableswapLiquidityListFilter />
       <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
         <Iterator render={ListItemCard} data={list} />
       </StateWrapper>

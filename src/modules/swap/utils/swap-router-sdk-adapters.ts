@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import {
+  TokenStandardEnum,
   Trade,
   useRoutePairsCombinations as originalUseRoutePairsCombinations,
   useTradeWithSlippageTolerance as originalUseTradeWithSlippageTolerance
@@ -8,7 +9,7 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { MAX_HOPS_COUNT } from '@config/constants';
 import { WHITELISTED_POOLS } from '@config/whitelisted-pools';
-import { getTokenSlug, isTezosToken } from '@shared/helpers';
+import { getTokenIdFromSlug, getTokenSlug, isExist, isTezosToken } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 const FALLBACK_TRADE: Trade = [];
@@ -19,6 +20,19 @@ const getSwapRouterSdkTokenSlug = (token: Token) =>
     ...token,
     fa2TokenId: isTezosToken(token) ? undefined : token.fa2TokenId ?? FALLBACK_TOKEN_ID
   });
+
+export const swapRouterSdkTokenSlugToQuipuTokenSlug = (inputSlug: string, tokenStandard?: TokenStandardEnum) => {
+  const { contractAddress, fa2TokenId } = getTokenIdFromSlug(inputSlug);
+
+  if (isExist(fa2TokenId)) {
+    return getTokenSlug({
+      contractAddress,
+      fa2TokenId: tokenStandard === TokenStandardEnum.FA2 ? fa2TokenId : undefined
+    });
+  }
+
+  return inputSlug;
+};
 
 export const useRoutePairsCombinations = (
   inputToken: Optional<Token>,
