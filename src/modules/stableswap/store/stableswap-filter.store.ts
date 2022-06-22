@@ -2,12 +2,13 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
 
-import { sortStableswapList, SortField } from '../components';
+import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers';
+import { StableswapSortField } from '../stableswap-liquidity/pages/list/types';
 import { StableswapItem } from '../types';
 
 export class StableswapFilterStore extends BaseFilterStore {
   whitelistedOnly = true;
-  sortField: SortField = SortField.ID;
+  sortField: StableswapSortField = StableswapSortField.ID;
 
   constructor() {
     super();
@@ -40,7 +41,7 @@ export class StableswapFilterStore extends BaseFilterStore {
     this.whitelistedOnly = state;
   }
 
-  onSortFieldChange(field: SortField) {
+  onSortFieldChange(field: StableswapSortField) {
     this.sortField = field;
   }
 }

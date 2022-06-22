@@ -4,7 +4,7 @@ import { Field, FieldMetaState } from 'react-final-form';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { Input, NumberInput } from '@shared/components';
-import { parseNumber } from '@shared/helpers';
+import { clamp, toNonNegativeIntString } from '@shared/helpers';
 import { useSaveFunction } from '@shared/helpers/crutches';
 import { Search } from '@shared/svg';
 import { validateMinMaxNonStrict } from '@shared/validators';
@@ -12,6 +12,12 @@ import { useTranslation } from '@translation';
 
 import s from './PositionsModal.module.scss';
 import { HeaderProps, PMFormField } from './PositionsModal.types';
+
+const parseTokenId = (value: string) => {
+  const normalizedStr = toNonNegativeIntString(value);
+
+  return clamp(Number(normalizedStr), MIN_TOKEN_ID, MAX_TOKEN_ID).toString();
+};
 
 export const Header: FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
@@ -48,7 +54,7 @@ export const Header: FC<HeaderProps> = ({ isSecondInput, debounce, save, values,
         <Field
           name={PMFormField.TOKEN_ID}
           validate={validateMinMaxNonStrict(MIN_TOKEN_ID, MAX_TOKEN_ID)}
-          parse={value => parseNumber(value, MIN_TOKEN_ID, MAX_TOKEN_ID)}
+          parse={parseTokenId}
         >
           {({ input, meta }) => (
             <NumberInput

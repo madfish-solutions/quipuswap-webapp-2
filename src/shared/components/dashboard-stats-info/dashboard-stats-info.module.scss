@@ -1,7 +1,8 @@
 @import '@styles/variables';
 @import '@styles/breakpoints';
 
-.root, .rootWithRightColumn {
+.root,
+.rootWithRightColumn {
   display: flex;
   justify-content: space-between;
   padding: 0;
@@ -11,11 +12,11 @@
   flex-wrap: wrap;
 
   .light {
-    border-top: .5px solid $ui-03;
+    border-top: 0.5px solid $ui-03;
   }
 
   .dark {
-    border-top: .5px solid $ui-06;
+    border-top: 0.5px solid $ui-06;
   }
 }
 
@@ -51,20 +52,20 @@
 }
 
 .rightCard {
-  flex-basis: 50%;
+  flex-basis: 55%;
 }
 
-@include media(">Lphone") {
+@include media('>Lphone') {
   .leftCard {
     flex-basis: 50%;
   }
 
   .light {
-    border: .5px solid $ui-03;
+    border: 0.5px solid $ui-03;
   }
 
   .dark {
-    border: .5px solid $ui-06;
+    border: 0.5px solid $ui-06;
   }
 
   .rootWithRightColumn {
@@ -76,5 +77,8 @@
   .card {
     flex-basis: 50%;
     flex-shrink: 0;
+    &.singleCard {
+      flex-basis: 100%;
+    }
   }
 }

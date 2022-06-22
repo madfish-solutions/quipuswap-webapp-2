@@ -17,6 +17,11 @@ interface Props {
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   className?: string;
+  containerClassName?: string;
+  childrenContainerClassName?: string;
+  userInfoContainerClassName?: string;
+  buttonContainerClassName?: string;
+  viewDetailsButtonClassName?: string;
   currency: string;
   onButtonClick: () => void;
   buttonText: string;
@@ -37,6 +42,11 @@ export const RewardInfo: CFC<Props> = ({
   dollarEquivalent,
   amountDecimals,
   className,
+  containerClassName,
+  childrenContainerClassName,
+  userInfoContainerClassName,
+  buttonContainerClassName,
+  viewDetailsButtonClassName,
   onButtonClick,
   currency,
   header,
@@ -53,17 +63,21 @@ export const RewardInfo: CFC<Props> = ({
 
   const isButtonDisabled = isNull(claimablePendingRewards) || claimablePendingRewards.eq(ZERO_REWARDS) || disabled;
 
-  const childrenContainerClassName = cx(styles.childrenContainer, {
+  const wrapChildrenContainerClassName = cx(styles.childrenContainer, childrenContainerClassName, {
     [styles.order2]: buttonUp
   });
 
-  const buttonContainerClassName = cx(styles.buttonContainer, {
+  const wrapUserInfoContainerClassName = cx(styles.userInfoContainer, userInfoContainerClassName);
+
+  const wrapButtonContainerClassName = cx(styles.buttonContainer, buttonContainerClassName, {
     [styles.order1]: buttonUp
   });
 
-  const containerClassName = cx(styles.container, {
-    [styles.pb0]: isDetailsOpen
+  const wrapContainerClassName = cx(styles.container, containerClassName, {
+    [styles.pb0]: isDetailsOpen && details
   });
+
+  const wrapViewDetailsButtonrClassName = cx(styles.order3, styles.viewDetailsButton, viewDetailsButtonClassName);
 
   return (
     <Card
@@ -73,7 +87,7 @@ export const RewardInfo: CFC<Props> = ({
       footer={isDetailsOpen && details}
       data-test-id="farmingListPendingRewards"
     >
-      <div className={containerClassName}>
+      <div className={wrapContainerClassName}>
         <PendingRewards
           className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
@@ -82,9 +96,9 @@ export const RewardInfo: CFC<Props> = ({
           amountDecimals={amountDecimals}
           currency={currency}
         />
-        <div className={styles.userInfoContainer}>
-          {children && <div className={childrenContainerClassName}>{children}</div>}
-          <div className={buttonContainerClassName}>
+        <div className={wrapUserInfoContainerClassName}>
+          {children && <div className={wrapChildrenContainerClassName}>{children}</div>}
+          <div className={wrapButtonContainerClassName}>
             <ConnectWalletOrDoSomething>
               <Button
                 data-test-id="rewardButtonAttribute"
@@ -99,7 +113,7 @@ export const RewardInfo: CFC<Props> = ({
 
           {details && showDetails && (
             <Button
-              className={cx(styles.order3, styles.viewDetailsButton)}
+              className={wrapViewDetailsButtonrClassName}
               theme="inverse"
               icon={<ArrowSign rotation={isDetailsOpen} />}
               onClick={toggle}
