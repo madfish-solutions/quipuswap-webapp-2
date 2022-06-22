@@ -38,11 +38,11 @@ export const stableswap = {
   pairId: 'The ID number of the LP token for this pair. (Default ID is 0)',
   totalLPSupply: 'The total amount of LP tokens issued by this pool.',
   liquidityProviersFee:
-    'This fee is divided between the liquidity providers in proportion to ther share size in the pool.',
-  interfaceFee: 'A fee for using farming interface. Goes to the interface devs.',
-  quipuStakersFee: 'This fee is proportionally distributed among the users who staked QUIPU under this pool. ',
-  devFee: 'The fee charged by QuipuSwap team on each swap.',
+    'This fee is divided between the liquidity providers in proportion to their share size in the pool.',
+  interfaceFee: 'A fee for using the farming interface. Goes to the interface devs.',
+  quipuStakersFee: 'This fee is proportionally distributed among the users who staked QUIPU under this pool.',
+  devFee: 'The fee is charged by QuipuSwap team on each swap.',
   coinsBalancedProportion:
-    "Automatically match input balances for all four selected assets according to the current asset ratio in the pool. Input value will be proportionally higher the higher the asset's current representation in the pool is.",
+    "Automatically match input balances for all selected assets according to the current asset ratio in the pool. Input value will be proportionally higher the asset's current representation in the pool is.",
   tokenAmountLocked: 'The amount of {{tokenName}} locked within this pool by liquidity providers.'
 } as const;

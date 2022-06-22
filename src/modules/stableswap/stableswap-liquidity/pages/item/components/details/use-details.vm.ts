@@ -1,7 +1,7 @@
 import cx from 'classnames';
 
 import { useReady } from '@providers/use-dapp';
-import { getTokenSymbol, getTokenName, isExist } from '@shared/helpers';
+import { getTokenSymbol, isExist } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -23,7 +23,7 @@ export const useDetailsVievModel = () => {
       amount: reserves,
       className: cardCellClassName,
       isLoading,
-      tooltipContent: t('stableswap|tokenAmountLocked', { tokenName: getTokenName(token) }),
+      tooltipContent: t('stableswap|tokenAmountLocked', { tokenName: getTokenSymbol(token) }),
       dollarEquivalent: reserves.multipliedBy(exchangeRate)
     }));
 
