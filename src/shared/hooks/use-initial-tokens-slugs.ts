@@ -3,10 +3,9 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
-import { NETWORK_ID } from '@config/enviroment';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAddCustomToken, useSearchCustomTokens, useTokens } from '@providers/dapp-tokens';
-import { fallbackToolkits } from '@providers/use-dapp';
+import { fallbackToolkit } from '@providers/use-dapp';
 import { getTokenType, fa2TokenExists, getTokenSlug } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { Standard } from '@shared/types';
@@ -33,7 +32,7 @@ export const useInitialTokensSlugs = (
     // eslint-disable-next-line sonarjs/cognitive-complexity
     async (_key: string, tokensSlug = ''): Promise<TokensSlugs> => {
       const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-');
-      const tezos = fallbackToolkits[NETWORK_ID];
+      const tezos = fallbackToolkit;
 
       const tokensSlugs = await Promise.all(
         [rawSlug1, rawSlug2].map(async (rawSlug, index) => {

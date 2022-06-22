@@ -1,6 +1,7 @@
 import { TempleWallet } from '@temple-wallet/dapp';
 
-import { APP_NAME } from '@config/enviroment';
+import { APP_NAME } from '@config/config';
+import { RPC_URL } from '@config/enviroment';
 import { LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoTempleWallet } from '@shared/errors';
 import { LastUsedConnectionKey, QSNetwork } from '@shared/types';
@@ -26,7 +27,7 @@ export const connectWalletTemple = async (forcePermission: boolean, network: QSN
       ? (network.id as never)
       : {
           name: network.name,
-          rpc: network.rpcBaseURL
+          rpc: RPC_URL
         };
 
     await wallet.connect(params, { forcePermission: true });

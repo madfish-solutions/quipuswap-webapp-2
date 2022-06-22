@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { FEE_RATE } from '@config/enviroment';
+import { FEE_RATE } from '@config/config';
 import { DexPair, TokenId } from '@shared/types';
 
 import { SwapParams } from '../swap';
