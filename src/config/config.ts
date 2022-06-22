@@ -3,6 +3,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
 import { METADATA_API, NETWORK_ID, RPC_URLS } from './enviroment';
+import { DEFAULT_TOKEN, TEZOS_TOKEN } from './tokens';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
@@ -98,5 +99,8 @@ export const YOUVES_FARMINGS = ['5', '6'];
 // Link to the Youves site
 export const YOUVES_LINK = 'https://app.youves.com/earn';
 
+// Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, DEFAULT_TOKEN];

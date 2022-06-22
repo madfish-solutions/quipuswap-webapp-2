@@ -1,17 +1,19 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { COINFLIP_TOKENS_TO_PLAY, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { fromDecimals } from '@shared/helpers';
-import { LoadingErrorData, RootStore } from '@shared/store';
+import { fromDecimals, defined } from '@shared/helpers';
+import { noopMap } from '@shared/mapping';
+import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
-import { getCoinflipGeneralStatsApi } from '../api';
+import { getCoinflipGeneralStatsApi, getGamesCountByTokenApi, getTokenWonByTokenApi } from '../api';
 import { GeneralStatsInterface } from '../api/types';
 import { DashboardGeneralStats } from '../interfaces';
 import { DEFAULT_GENERAL_STATS, generalStatsMapping } from '../mapping';
+import { TokenWon } from '../types';
 
 export enum TokenToPlay {
   Tezos = 'XTZ',
@@ -40,10 +42,21 @@ export class CoinflipStore {
 
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
+  readonly gamesCountStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
+    null,
+    async () => await this.getGamesCount(),
+    noopMap
+  );
+
+  readonly tokensWonStore = new LoadingErrorData<TokenWon[], Nullable<TokenWon[]>>(
+    null,
+    async () => await this.getTokensWon(),
+    noopMap
+  );
+
   readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
     DEFAULT_GENERAL_STATS,
-    async () =>
-      await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token.contractAddress),
+    async () => await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token),
     generalStatsMapping
   );
 
@@ -54,10 +67,20 @@ export class CoinflipStore {
 
       payout: computed,
       token: computed,
+      gamesCount: computed,
+      tokensWon: computed,
 
       setToken: action,
       setInput: action
     });
+  }
+
+  get gamesCount(): Nullable<BigNumber> {
+    return this.gamesCountStore.data;
+  }
+
+  get tokensWon(): Nullable<TokenWon[]> {
+    return this.tokensWonStore.data;
   }
 
   get payout(): Nullable<BigNumber> {
@@ -83,5 +106,22 @@ export class CoinflipStore {
 
   setInput(input: Nullable<BigNumber>) {
     this.game.input = input;
+  }
+
+  private async getGamesCount() {
+    return await getGamesCountByTokenApi(
+      this.rootStore.tezos,
+      defined(this.rootStore.authStore.accountPkh),
+      this.token
+    );
+  }
+
+  private async getTokensWon() {
+    return Promise.all(
+      COINFLIP_TOKENS_TO_PLAY.map(
+        async (token: Token): Promise<TokenWon> =>
+          await getTokenWonByTokenApi(this.rootStore.tezos, defined(this.rootStore.authStore.accountPkh), token)
+      )
+    );
   }
 }

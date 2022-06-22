@@ -12,7 +12,9 @@ import {
   StableswapItemStore as IStableswapItemStore,
   StableswapItemFormStore as IStableswapItemFormStore,
   StableswapListStore as IStableswapListStore,
-  StableFarmListStore as IStableFarmListStore
+  StableFarmListStore as IStableFarmListStore,
+  StableFarmFilterStore as IStableFarmFilterStore,
+  StableFarmItemStore as IStableFarmItemStore
 } from '@modules/stableswap/store';
 
 import { isExist, isNull } from '../helpers';
@@ -40,6 +42,8 @@ export class RootStore {
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   stableFarmListStore: Nullable<IStableFarmListStore> = null;
+  stableFarmFilterStore: Nullable<IStableFarmFilterStore> = null;
+  stableFarmItemStore: Nullable<IStableFarmItemStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -59,7 +63,14 @@ export class RootStore {
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
+      stableswapListStore: observable,
+      stableswapItemStore: observable,
+      stableswapItemFormStore: observable,
+      stableswapFilterStore: observable,
+
       stableFarmListStore: observable,
+      stableFarmFilterStore: observable,
+      stableFarmItemStore: observable,
 
       coinflipStore: observable,
 
@@ -67,7 +78,15 @@ export class RootStore {
       createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
-      createCoinflipStore: action
+      createCoinflipStore: action,
+
+      createStableswapListStore: action,
+      createStableswapItemStore: action,
+      createStableswapItemFormStore: action,
+      createStableswapFilterStore: action,
+
+      createStableFarmListStore: action,
+      createStableFarmItemStore: action
     });
   }
 
@@ -76,11 +95,19 @@ export class RootStore {
   }
 
   async createStableFarmListStore() {
-    if (isNull(this.stableswapListStore)) {
+    if (isNull(this.stableFarmListStore)) {
       const { StableFarmListStore } = await import('@modules/stableswap/store/stablefarm-list.store');
       this.stableFarmListStore = new StableFarmListStore(this);
     }
   }
+
+  async createStableFarmItemStore() {
+    if (isNull(this.stableFarmItemStore)) {
+      const { StableFarmItemStore } = await import('@modules/stableswap/store/stablefarm-item.store');
+      this.stableFarmItemStore = new StableFarmItemStore(this);
+    }
+  }
+
   async createStableswapListStore() {
     if (isNull(this.stableswapListStore)) {
       const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');
@@ -106,6 +133,13 @@ export class RootStore {
     if (isNull(this.stableswapFilterStore)) {
       const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
       this.stableswapFilterStore = new StableswapFilterStore();
+    }
+  }
+
+  async createStableFarmFilterStore() {
+    if (isNull(this.stableFarmFilterStore)) {
+      const { StableFarmFilterStore } = await import('@modules/stableswap/store/stablefarm-filter.store');
+      this.stableFarmFilterStore = new StableFarmFilterStore();
     }
   }
 

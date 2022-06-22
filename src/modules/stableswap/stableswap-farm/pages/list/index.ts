@@ -1,1 +1,1 @@
-export * from './stableswap-farm-list.page';
+export * from './stablefarm-list.page';

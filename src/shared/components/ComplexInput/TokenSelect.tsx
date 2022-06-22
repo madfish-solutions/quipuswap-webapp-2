@@ -26,7 +26,7 @@ import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
-import { TokensModal } from '../TokensModal';
+import { TokensModal } from '../tokens-modal';
 import s from './ComplexInput.module.scss';
 
 const DEFAULT_EXCHANGE_RATE = 0;

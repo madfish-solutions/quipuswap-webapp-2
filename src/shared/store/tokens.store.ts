@@ -7,12 +7,15 @@ export type TokensMap = Map<string, Nullable<Token>>;
 
 export class TokensStore {
   tokens: TokensMap = new Map();
+  loading = false;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokens: observable,
+      loading: observable,
 
-      setToken: action
+      setToken: action,
+      setLoading: action
     });
   }
 
@@ -22,5 +25,9 @@ export class TokensStore {
 
   getToken(tokenSlug: string): Nullable<Token> {
     return this.tokens.get(tokenSlug) ?? null;
+  }
+
+  setLoading(value: boolean) {
+    this.loading = value;
   }
 }
