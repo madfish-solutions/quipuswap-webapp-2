@@ -11,6 +11,12 @@
 - [ ] Merge all needed [pull requests](https://github.com/madfish-solutions/quipuswap-webapp-2/pulls) into `develop` for features or `main` for a hotfix
 - [ ] Wait for all successfully finished builds and tests features in the staging
 
+### E2E Cypress
+- [ ] Wait to build staging environment
+- [ ] Change `baseUrl` in the `cypress.json` to staging mainnet URL
+- [ ] Run tests by command `yarn e2e`
+- [ ] Wait to all success tests
+
 ### Prepare Vercel
 - [ ] Change the Production Branch of the [Hangzhou](https://vercel.com/quipuswap-v2-ui/qs-ui-hangzhou/settings/git) in the Vercel
 - [ ] Change the Production Branch of the [Ithaca](https://vercel.com/quipuswap-v2-ui/qs-ui-ithaca/settings/git) in the Vercel
