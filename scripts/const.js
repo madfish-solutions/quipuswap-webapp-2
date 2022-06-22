@@ -8,3 +8,7 @@ exports.SITEMAP_PROD = 'sitemap.PROD.xml';
 exports.SITEMAP = 'sitemap.xml';
 
 exports.PUBLIC = !!process.env.PUBLIC;
+
+exports.INDEX_HTML_PROD = 'index.PROD.html';
+exports.INDEX_HTML_DEV = 'index.DEV.html';
+exports.INDEX_HTML = 'index.html';
