@@ -42,11 +42,10 @@ export class FarmingFilterStore extends BaseFilterStore {
 
     if (this.search) {
       localList = localList.filter(
-        ({ stakedToken, rewardToken, tokenA, tokenB }) =>
+        ({ stakedToken, rewardToken, tokens }) =>
           this.tokenMatchesSearch(stakedToken, true) ||
           this.tokenMatchesSearch(rewardToken) ||
-          this.tokenMatchesSearch(tokenA) ||
-          (isExist(tokenB) && this.tokenMatchesSearch(tokenB))
+          tokens.some(token => this.tokenMatchesSearch(token))
       );
     }
 

@@ -4,11 +4,12 @@ import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
 import { YOUVES_FARMINGS } from '@config/config';
+import { SLASH } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { DashPlug } from '@shared/components';
-import { getTokensName, isNull, isUndefined } from '@shared/helpers';
+import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -50,7 +51,7 @@ export const useFarmingItemPageViewModel = () => {
 
   const getTitle = () => {
     if (farmingItem) {
-      return `Farming ${getTokensName(farmingItem.tokenA, farmingItem.tokenB)}`;
+      return `Farming ${farmingItem.tokens.reduce((accum, value) => accum + SLASH + getTokenSymbol(value), '')}`;
     }
 
     if (!isLoading && isNull(farmingItem)) {
