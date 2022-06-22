@@ -13,7 +13,7 @@
 # production
 /build
 /public/robots.txt
-/public/sitemap.xm
+/public/sitemap.xml
 /public/index.html
 
 # misc
