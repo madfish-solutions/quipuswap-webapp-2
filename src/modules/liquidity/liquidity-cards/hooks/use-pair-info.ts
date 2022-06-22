@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
-import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
 import { isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 

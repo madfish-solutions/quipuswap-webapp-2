@@ -5,13 +5,13 @@ import { SupportedNetworks } from '@shared/types';
 
 import { ReadOnlySigner } from '../readonly-signer';
 import { michelEncoder } from './michel-encoder';
-import { rpcClients } from './rpc-clients';
+import { rpcClient } from './rpc-clients';
 
 export const getTempleWalletState = async (wallet: TempleWallet, networkId: SupportedNetworks) => {
-  const tezos = new TezosToolkit(rpcClients[networkId]);
+  const tezos = new TezosToolkit(rpcClient);
   tezos.setWalletProvider(wallet);
   tezos.setPackerProvider(michelEncoder);
-  tezos.setRpcProvider(rpcClients[networkId]);
+  tezos.setRpcProvider(rpcClient);
   const pkh = wallet.connected ? await wallet.getPKH() : null;
   let pk: string | null = null;
   if (wallet.connected && pkh) {

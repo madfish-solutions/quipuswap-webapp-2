@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { NETWORK } from '@config/config';
-import { APP_NAME, NETWORK_ID, networksBaseUrls } from '@config/enviroment';
+import { APP_NAME, NETWORK } from '@config/config';
+import { NETWORK_ID, networksBaseUrls, RPC_URL } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
   beaconWallet,
@@ -16,9 +15,9 @@ import {
   getTempleWalletState,
   michelEncoder,
   ReadOnlySigner,
-  rpcClients
+  rpcClient
 } from '@shared/helpers';
-import { LastUsedConnectionKey, Nullable, SupportedNetworks, QSNetwork } from '@shared/types';
+import { LastUsedConnectionKey, Nullable, QSNetwork } from '@shared/types';
 
 export interface DAppType {
   connectionType: Nullable<LastUsedConnectionKey>;
@@ -29,13 +28,9 @@ export interface DAppType {
   isLoading: boolean;
 }
 
-export const fallbackToolkits: Record<SupportedNetworks, TezosToolkit> = {
-  [NetworkType.MAINNET]: new TezosToolkit(rpcClients.mainnet),
-  [NetworkType.HANGZHOUNET]: new TezosToolkit(rpcClients.hangzhounet),
-  [NetworkType.ITHACANET]: new TezosToolkit(rpcClients.ithacanet)
-};
+export const fallbackToolkit = new TezosToolkit(rpcClient);
 
-Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
+fallbackToolkit.setPackerProvider(michelEncoder);
 
 function useDApp() {
   const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
@@ -53,7 +48,7 @@ function useDApp() {
       setState(prevState => ({
         ...prevState,
         connectionType: null,
-        tezos: prevState.tezos ?? fallbackToolkits[NETWORK_ID]
+        tezos: prevState.tezos ?? fallbackToolkit
       })),
     []
   );
@@ -96,7 +91,7 @@ function useDApp() {
           } else {
             setState(prevState => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkits[NETWORK_ID],
+              tezos: prevState.tezos ?? fallbackToolkit,
               templeWallet: wlt
             }));
           }
@@ -130,7 +125,7 @@ function useDApp() {
             return;
           }
 
-          const toolkit = new TezosToolkit(rpcClients[NETWORK_ID]);
+          const toolkit = new TezosToolkit(rpcClient);
           toolkit.setPackerProvider(michelEncoder);
           toolkit.setWalletProvider(beaconWallet);
 
@@ -162,9 +157,9 @@ function useDApp() {
   }, [setFallbackState, templeInitialAvailable]);
 
   useEffect(() => {
-    if (!tezos || tezos.rpc.getRpcUrl() !== NETWORK.rpcBaseURL) {
+    if (!tezos || tezos.rpc.getRpcUrl() !== RPC_URL) {
       const wlt = new TempleWallet(APP_NAME, null);
-      const fallbackTzTk = fallbackToolkits[NETWORK_ID];
+      const fallbackTzTk = fallbackToolkit;
       setState(prevState => ({
         ...prevState,
         templeWallet: wlt,
@@ -184,7 +179,7 @@ function useDApp() {
           setState(prevState => ({
             ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
-            tezos: fallbackToolkits[NETWORK_ID],
+            tezos: fallbackToolkit,
             accountPkh: null,
             accountPublicKey: null,
             connectionType: null
@@ -224,7 +219,7 @@ function useDApp() {
   const disconnect = useCallback(async () => {
     setState(prevState => ({
       ...prevState,
-      tezos: fallbackToolkits[NETWORK_ID],
+      tezos: fallbackToolkit,
       accountPkh: null,
       accountPublicKey: null,
       connectionType: null
@@ -244,7 +239,7 @@ function useDApp() {
       accountPkh: null,
       accountPublicKey: null,
       connectionType: null,
-      tezos: fallbackToolkits[networkNew.id],
+      tezos: fallbackToolkit,
       isLoading: false
     }));
   }, []);

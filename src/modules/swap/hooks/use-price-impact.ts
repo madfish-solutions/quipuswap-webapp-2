@@ -1,5 +1,5 @@
-import { TOKEN_TO_TOKEN_DEX } from '@config/config';
 import { PERCENTAGE_100 } from '@config/constants';
+import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
 import { getPriceImpact, toDecimals } from '@shared/helpers';
 
 import { SwapDetailsParams } from '../utils/types';
