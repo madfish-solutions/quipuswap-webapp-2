@@ -91,7 +91,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
 
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
-  const shapeClassName = cx(s.shape, { [s.disabled]: inputDisabled });
+  const inputClassName = cx(s.item3, s.input, { [s.disabled]: inputDisabled });
 
   const focusInput = useCallback(() => {
     if (inputRef?.current) {
@@ -153,11 +153,11 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
           {label}
         </label>
         <div className={s.background}>
-          <div className={shapeClassName}>
+          <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>{account && <Balance balance={preparedBalance} colorMode={colorThemeMode} />}</div>
             <input
-              className={cx(s.item3, s.input)}
+              className={inputClassName}
               onFocus={handleFocus}
               onBlur={handleBlur}
               ref={inputRef}
