@@ -12,7 +12,6 @@ import { SwapDetailsParams } from '../utils/types';
 import { usePriceImpact } from './use-price-impact';
 import { useSwapFee } from './use-swap-fee';
 
-const MINIMAL_INPUT_AMOUNT = 0;
 const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
 export const useSwapDetails = (params: SwapDetailsParams) => {
@@ -24,14 +23,14 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
 
   const sellRate = useMemo(
     () =>
-      inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
+      inputToken && outputToken && inputAmount?.gt(ZERO_AMOUNT) && outputAmount
         ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
         : null,
     [inputAmount, inputToken, outputAmount, outputToken]
   );
 
   const buyRate = useMemo(() => {
-    if (inputToken && outputToken && outputAmount?.gt(MINIMAL_INPUT_AMOUNT) && trade && !isEmptyArray(trade)) {
+    if (inputToken && outputToken && outputAmount?.gt(ZERO_AMOUNT) && trade && !isEmptyArray(trade)) {
       try {
         const { value: maxReverseInput } = getMaxInputRoute(reverseRoutePairsCombinations);
         const probeReverseInput = BigNumber.minimum(
@@ -51,7 +50,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
         return fromDecimals(probeReverseOutput, inputToken)
           .dividedBy(fromDecimals(probeReverseInput, outputToken))
           .decimalPlaces(inputToken.metadata.decimals);
-      } catch (e) {
+      } catch (_) {
         // return statement is below
       }
     }
