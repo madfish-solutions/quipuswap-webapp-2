@@ -1,101 +1,68 @@
 import { useMemo } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { Trade } from 'swap-router-sdk';
+import { getBestTradeExactInput, getMaxInputRoute, getTradeOutputAmount } from 'swap-router-sdk';
 
-import { TOKEN_TO_TOKEN_DEX } from '@config/config';
-import {
-  fromDecimals,
-  getMaxInputRoute,
-  getMaxTokenInput,
-  getPriceImpact,
-  getRateByInputOutput,
-  getRouteWithInput,
-  getTokenOutput,
-  getTokenSlug,
-  isEmptyArray,
-  toDecimals
-} from '@shared/helpers';
-import { useDexGraph } from '@shared/hooks';
-import { DexPair, Token, Undefined } from '@shared/types';
+import { ZERO_AMOUNT } from '@config/constants';
+import { fromDecimals, getRateByInputOutput, isEmptyArray, toDecimals } from '@shared/helpers';
 
+import { useRoutePairs } from '../providers/route-pairs-provider';
+import { useRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
+import { SwapDetailsParams } from '../utils/types';
+import { usePriceImpact } from './use-price-impact';
 import { useSwapFee } from './use-swap-fee';
 
-interface SwapDetailsParams {
-  inputToken: Undefined<Token>;
-  outputToken: Undefined<Token>;
-  inputAmount: Undefined<BigNumber>;
-  outputAmount: Undefined<BigNumber>;
-  slippageTolerance: Undefined<BigNumber>;
-  dexRoute: Undefined<DexPair[]>;
-  trade: Nullable<Trade>;
-  recipient: Undefined<string>;
-}
-
-const WHOLE_ITEM_PERCENT = 100;
 const MINIMAL_INPUT_AMOUNT = 0;
 const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
 export const useSwapDetails = (params: SwapDetailsParams) => {
-  const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
-  const { dexGraph } = useDexGraph();
+  const { trade, inputToken, outputToken, inputAmount, outputAmount } = params;
+  const priceImpact = usePriceImpact(params);
   const { data: swapFee = null, error: swapFeeError } = useSwapFee(params);
+  const { routePairs } = useRoutePairs();
+  const reverseRoutePairsCombinations = useRoutePairsCombinations(outputToken, inputToken, routePairs);
 
-  const sellRate =
-    inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
-      ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
-      : null;
+  const sellRate = useMemo(
+    () =>
+      inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
+        ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
+        : null,
+    [inputAmount, inputToken, outputAmount, outputToken]
+  );
 
   const buyRate = useMemo(() => {
-    if (inputToken && outputToken && outputAmount?.gt(MINIMAL_INPUT_AMOUNT) && dexRoute && !isEmptyArray(dexRoute)) {
+    if (inputToken && outputToken && outputAmount?.gt(MINIMAL_INPUT_AMOUNT) && trade && !isEmptyArray(trade)) {
       try {
-        const maxReverseInputRoute = getMaxInputRoute({
-          startTokenSlug: getTokenSlug(outputToken),
-          endTokenSlug: getTokenSlug(inputToken),
-          graph: dexGraph
-        })!;
-        const maxReverseInput = getMaxTokenInput(inputToken, maxReverseInputRoute);
+        const { value: maxReverseInput } = getMaxInputRoute(reverseRoutePairsCombinations);
         const probeReverseInput = BigNumber.minimum(
           toDecimals(new BigNumber(DEFAULT_REVERSE_INPUT_AMOUNT), outputToken),
           maxReverseInput
         );
 
-        const reverseDexChain = getRouteWithInput({
-          inputAmount: probeReverseInput,
-          startTokenSlug: getTokenSlug(outputToken),
-          endTokenSlug: getTokenSlug(inputToken),
-          graph: dexGraph
-        })!;
-        const probeReverseOutput = getTokenOutput({
-          inputToken: outputToken,
-          inputAmount: probeReverseInput,
-          dexChain: reverseDexChain
-        });
+        const reverseTrade = getBestTradeExactInput(probeReverseInput, reverseRoutePairsCombinations);
+        if (isEmptyArray(reverseTrade)) {
+          return !sellRate || sellRate.eq(ZERO_AMOUNT)
+            ? null
+            : new BigNumber(1).div(sellRate).decimalPlaces(inputToken.metadata.decimals);
+        }
+
+        const probeReverseOutput = getTradeOutputAmount(reverseTrade)!;
 
         return fromDecimals(probeReverseOutput, inputToken)
           .dividedBy(fromDecimals(probeReverseInput, outputToken))
           .decimalPlaces(inputToken.metadata.decimals);
-      } catch (_) {
+      } catch (e) {
         // return statement is below
       }
     }
 
     return null;
-  }, [dexRoute, inputToken, outputAmount, outputToken, dexGraph]);
+  }, [trade, inputToken, outputAmount, outputToken, reverseRoutePairsCombinations, sellRate]);
 
   return {
     swapFee,
     swapFeeError,
-    priceImpact:
-      inputToken && inputAmount && dexRoute && slippageTolerance
-        ? getPriceImpact({
-            inputToken: inputToken,
-            inputAmount: toDecimals(inputAmount, inputToken),
-            dexChain: dexRoute,
-            slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
-            ttDexAddress: TOKEN_TO_TOKEN_DEX
-          })
-        : null,
+    priceImpact,
     buyRate,
     sellRate
   };
