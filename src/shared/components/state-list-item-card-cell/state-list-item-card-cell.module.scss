@@ -1,0 +1,31 @@
+@import '@styles/breakpoints';
+@import '@styles/variables';
+
+.cardCellHeader {
+  font-size: 1rem;
+  line-height: 1.714;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.cardCell {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+@include media('>phone', '<Ltablet') {
+  .cardCell {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@include media('>=Ltablet') {
+  .cardCell {
+    flex-direction: column;
+    justify-content: flex-start;
+    column-gap: 16px;
+  }
+}
