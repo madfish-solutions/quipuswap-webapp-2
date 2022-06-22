@@ -21,6 +21,11 @@ export const usePoolCardViewModel = () => {
       liquidityProvidersFeeTranslation: t('stableswap|liquidityProvidersFee'),
       selectTranslation: t('common|select'),
       valueTranslation: t('common|tokenValues')
+    },
+    tooltip: {
+      tokenValuesTooltip: t('stableswap|tokenValuesTooltip'),
+      tvlFarmTooltip: t('stableswap|tvlFarmTooltip'),
+      liquidityProvidersFeeTooltip: t('stableswap|liquidityProvidersFeeTooltip')
     }
   };
 };

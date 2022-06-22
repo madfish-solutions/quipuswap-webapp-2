@@ -99,7 +99,7 @@ export const useRemoveLiqFormViewModel = () => {
 
   const labelInput = t('common|Input');
   const labelOutput = t('common|Output');
-  const tooltip = t('common|Success');
+  const tooltip = t('stableswap|coinsBalancedProportion');
 
   const { tokensInfo, totalLpSupply, lpToken } = item;
 
