@@ -41,10 +41,11 @@ export const PoolCard: FC<Props> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const { whitelistedTag, translation } = usePoolCardViewModel();
+  const { whitelistedTag, translation, tooltip } = usePoolCardViewModel();
 
   const { status, label } = whitelistedTag;
   const { totalValueTranslation, liquidityProvidersFeeTranslation, valueTranslation } = translation;
+  const { tokenValuesTooltip, tvlFarmTooltip, liquidityProvidersFeeTooltip } = tooltip;
 
   return (
     <Link
@@ -64,6 +65,7 @@ export const PoolCard: FC<Props> = ({
             cellName={valueTranslation}
             cellNameClassName={styles.cardCellHeader}
             cardCellClassName={styles.tokensValue}
+            tooltip={tokenValuesTooltip}
           >
             <Iterator
               isGrouped
@@ -78,6 +80,7 @@ export const PoolCard: FC<Props> = ({
               cellName={totalValueTranslation}
               cellNameClassName={styles.cardCellHeader}
               cardCellClassName={styles.cardCell}
+              tooltip={tvlFarmTooltip}
             >
               <StateCurrencyAmount
                 className={styles.poolStatsAmount}
@@ -91,6 +94,7 @@ export const PoolCard: FC<Props> = ({
               cellName={liquidityProvidersFeeTranslation}
               cellNameClassName={styles.cardCellHeader}
               cardCellClassName={styles.cardCell}
+              tooltip={liquidityProvidersFeeTooltip}
             >
               <StateCurrencyAmount
                 className={styles.poolStatsAmount}
