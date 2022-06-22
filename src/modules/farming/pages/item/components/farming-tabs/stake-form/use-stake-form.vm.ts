@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { DUMMY_BAKER } from '@config/bakers';
 import { DEFAULT_DECIMALS } from '@config/constants';
-import { TEZOS_TOKEN } from '@config/tokens';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoStake } from '@modules/farming/hooks/blockchain/use-do-stake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
@@ -16,7 +15,6 @@ import {
   isNull,
   isExist,
   getFormikError,
-  getTokenPairSlug,
   numberAsString
 } from '@shared/helpers';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
@@ -103,16 +101,14 @@ export const useStakeFormViewModel = () => {
     formik.setFieldValue(StakeFormFields.selectedBaker, baker.address);
   };
 
-  const { tradeHref, investHref } = useMemo(() => {
+  // TODO: Create different links for stableswap and regular liquidity
+  /* const { tradeHref, investHref } = useMemo(() => {
     if (isNull(farmingItem)) {
       return {};
     }
 
-    const { tokenA, tokenB } = farmingItem;
-    const pairSlug = isExist(tokenB) ? getTokenPairSlug(tokenA, tokenB) : getTokenPairSlug(TEZOS_TOKEN, tokenA);
-
-    return { tradeHref: `/swap/${pairSlug}`, investHref: isExist(tokenB) ? `/liquidity/add/${pairSlug}` : null };
-  }, [farmingItem]);
+    return { tradeHref: `/swap`, investHref: '/liquidity/add/' };
+  }, [farmingItem]); */
 
   return {
     bakerInputValue: formik.values[StakeFormFields.selectedBaker],
@@ -127,8 +123,9 @@ export const useStakeFormViewModel = () => {
     bakerError,
     farmStatusError,
     disabled,
-    tradeHref,
-    investHref,
+    // TODO: uncomment lined below affter creating valid links
+    /* tradeHref,
+    investHref */
     handleInputAmountChange,
     handleBakerChange
   };
