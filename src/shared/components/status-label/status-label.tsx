@@ -7,7 +7,7 @@ import { ActiveStatus } from '@shared/types';
 
 import styles from './status-label.module.scss';
 
-interface Props {
+export interface StatusLabelProps {
   className?: string;
   status: ActiveStatus;
   label?: string;
@@ -25,7 +25,7 @@ const statusClass = {
   [ActiveStatus.ACTIVE]: styles.active
 };
 
-export const StatusLabel: FC<Props> = ({ className, status, label, filled, ...props }) => {
+export const StatusLabel: FC<StatusLabelProps> = ({ className, status, label, filled, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
