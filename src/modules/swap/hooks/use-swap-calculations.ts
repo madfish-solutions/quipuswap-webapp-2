@@ -66,11 +66,6 @@ export const useSwapCalculations = () => {
   useTokensLoader(tokensSlugs);
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(bestTrade);
-  }, [bestTrade]);
-
-  useEffect(() => {
     try {
       setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
     } catch {
