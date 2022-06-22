@@ -6,7 +6,7 @@ import { loadTokenToTokenPairInfo } from '@modules/liquidity/liquidity-cards/blo
 
 import { NETWORK_ID } from '../src/config/enviroment';
 import { loadTezDex } from '../src/modules/liquidity/hooks/helpers/load-tez-dex';
-import { isExist, rpcClients } from '../src/shared/helpers';
+import { isExist, rpcClient } from '../src/shared/helpers';
 import { Token, TokenMetadata } from '../src/shared/types';
 
 interface WhitelistedToken {
@@ -788,7 +788,7 @@ const MainnetWhitelistTokens: Array<WhitelistedToken> = [
 ];
 
 const ITERATION_STEP = 1;
-const tezos = new TezosToolkit(rpcClients.mainnet);
+const tezos = new TezosToolkit(rpcClient);
 
 const sleep = async (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms));
