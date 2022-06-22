@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
+import { Trade } from 'swap-router-sdk';
 
-import { SwapTabAction, Token } from '@shared/types';
+import { DexPair, SwapTabAction, Token, Undefined } from '@shared/types';
 
 export enum SwapField {
   INPUT_AMOUNT = 'inputAmount',
@@ -22,4 +23,15 @@ export interface SwapFormValues {
   [SwapField.OUTPUT_AMOUNT]: BigNumber;
   [SwapField.RECIPIENT]: string;
   [SwapField.ACTION]: SwapTabAction;
+}
+
+export interface SwapDetailsParams {
+  inputToken: Undefined<Token>;
+  outputToken: Undefined<Token>;
+  inputAmount: Undefined<BigNumber>;
+  outputAmount: Undefined<BigNumber>;
+  slippageTolerance: Undefined<BigNumber>;
+  dexRoute: Undefined<DexPair[]>;
+  trade: Nullable<Trade>;
+  recipient: Undefined<string>;
 }
