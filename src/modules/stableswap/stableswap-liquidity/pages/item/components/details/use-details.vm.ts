@@ -18,7 +18,7 @@ export const useDetailsVievModel = () => {
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
   if (isExist(item)) {
-    const tokensLockedData = item.tokensInfo.map(({ token, reserves, exchangeRate }, index) => ({
+    const tokensLockedData = item.tokensInfo.map(({ token, reserves, exchangeRate }) => ({
       tokenSymbol: getTokenSymbol(token),
       amount: reserves,
       className: cardCellClassName,
