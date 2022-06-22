@@ -73,7 +73,6 @@ export const FarmingRewardInfo: FC = observer(() => {
               className={styles.statsValueText}
               currency={getTokenSymbol(stakedToken)}
               dollarEquivalent={myDepositDollarEquivalent}
-              amountDecimals={stakedToken.metadata.decimals}
               labelSize="large"
             />
           )}
