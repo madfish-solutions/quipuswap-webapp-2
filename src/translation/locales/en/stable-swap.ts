@@ -1,5 +1,9 @@
 export const stableswap = {
   tvl: 'TVL',
+  apr: 'APR',
+  apy: 'APY',
+  deposit: 'Deposit',
+  earned: 'Earned',
   liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
   'Total LP Supply': 'Total LP Supply',
@@ -13,8 +17,16 @@ export const stableswap = {
   sucessfullyRemoved: 'Liquidity has been successfully removed',
   sucessfullyStaked: 'Stake has been successfull',
   sucessfullyUnstaked: 'Unstake has been successfull',
+  sucessfullyHarvested: 'Harvest has been successfull',
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!',
   stableFarmTitle: 'Stable Swap Farm',
-  allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input."
+  allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input.",
+  dexContract: 'Dex Contract',
+  APR: 'APR',
+  valueLocked: 'Value Locked',
+  Tags: 'Tags',
+  totalValueLocked: 'Total Value Locked',
+  Harvest: 'Harvest',
+  harvestAll: 'Harvest All'
 } as const;

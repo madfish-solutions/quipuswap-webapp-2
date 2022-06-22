@@ -13,6 +13,7 @@ import {
   StableswapItemFormStore as IStableswapItemFormStore,
   StableswapListStore as IStableswapListStore,
   StableFarmListStore as IStableFarmListStore,
+  StableFarmFilterStore as IStableFarmFilterStore,
   StableFarmItemStore as IStableFarmItemStore
 } from '@modules/stableswap/store';
 
@@ -41,6 +42,7 @@ export class RootStore {
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   stableFarmListStore: Nullable<IStableFarmListStore> = null;
+  stableFarmFilterStore: Nullable<IStableFarmFilterStore> = null;
   stableFarmItemStore: Nullable<IStableFarmItemStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
@@ -67,6 +69,7 @@ export class RootStore {
       stableswapFilterStore: observable,
 
       stableFarmListStore: observable,
+      stableFarmFilterStore: observable,
       stableFarmItemStore: observable,
 
       coinflipStore: observable,
@@ -130,6 +133,13 @@ export class RootStore {
     if (isNull(this.stableswapFilterStore)) {
       const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
       this.stableswapFilterStore = new StableswapFilterStore();
+    }
+  }
+
+  async createStableFarmFilterStore() {
+    if (isNull(this.stableFarmFilterStore)) {
+      const { StableFarmFilterStore } = await import('@modules/stableswap/store/stablefarm-filter.store');
+      this.stableFarmFilterStore = new StableFarmFilterStore();
     }
   }
 

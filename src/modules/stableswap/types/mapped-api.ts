@@ -7,6 +7,10 @@ export interface StableswapStats {
   totalTvlInUsd: BigNumber;
 }
 
+export interface StableFarmStats {
+  totalTvlInUsd: BigNumber;
+}
+
 export interface StableswapList {
   list: Array<StableswapItem>;
 }
@@ -40,7 +44,7 @@ export interface StableFarmItem extends AbstractStableItem {
   stableFarmItemUrl: string;
 }
 
-export interface RawStakerInfo {
+export interface RawContractStakerInfo {
   info: {
     balance: BigNumber;
     rewards: MichelsonMap<BigNumber, BigNumber>;
@@ -51,6 +55,10 @@ export interface RawStakerInfo {
   };
 }
 
+export interface RawStakerInfo {
+  yourDeposit: BigNumber;
+  yourReward: Nullable<MichelsonMap<BigNumber, BigNumber>>;
+}
 export interface StakerInfo {
   yourDeposit: BigNumber;
   yourEarned: BigNumber;

@@ -37,6 +37,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   hiddenPercentSelector,
   hiddenBalance,
   readOnly,
+  balanceText,
   onInputChange,
   onSelectorClick
 }) => {
@@ -91,7 +92,7 @@ export const TokenInput: FC<TokenInputProps> = ({
             {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
           </div>
           <div className={styles.balance}>
-            {shownBalance && <Balance balance={balance} colorMode={colorThemeMode} />}
+            {shownBalance && <Balance text={balanceText} balance={balance} colorMode={colorThemeMode} />}
           </div>
           <input
             id={id}

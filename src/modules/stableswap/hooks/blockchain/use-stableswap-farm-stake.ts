@@ -24,10 +24,10 @@ export const useStableswapFarmStake = () => {
       if (isNull(tezos) || isNull(item) || isNull(accountPkh)) {
         return;
       }
-      const { contractAddress, id } = item;
+      const { contractAddress } = item;
 
       try {
-        const operation = await stableswapFarmStakeApi(tezos, contractAddress, amount, id, accountPkh);
+        const operation = await stableswapFarmStakeApi(tezos, contractAddress, amount, accountPkh);
 
         await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyStaked') });
       } catch (error) {

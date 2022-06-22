@@ -9,7 +9,7 @@ import { useGetStableFarmList, useStableFarmListStore } from '../../../hooks';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
-export const useStableswapFarmListPageViewModel = () => {
+export const useStableFarmListPageViewModel = () => {
   const isReady = useReady();
   const stableFarmListStore = useStableFarmListStore();
   const { getStableFarmList } = useGetStableFarmList();
@@ -22,20 +22,19 @@ export const useStableswapFarmListPageViewModel = () => {
     }
   }, [getStableFarmList, isReady]);
 
-  const { listStore, list, info } = stableFarmListStore;
+  const { listStore, filteredList } = stableFarmListStore;
   const { isLoading } = listStore;
 
-  const data = list.map((item, index) => {
-    if (info.length > index) {
+  const data = filteredList?.map(item => {
+    if (item.yourDeposit && item.yourEarned) {
       return {
         ...item,
-        ...info[index],
-        shouldShowStakerInfo: info[index].yourDeposit.gt(DEFAULT_VALUE) || info[index].yourEarned.gt(DEFAULT_VALUE)
+        shouldShowStakerInfo: item.yourDeposit.gt(DEFAULT_VALUE) || item.yourEarned.gt(DEFAULT_VALUE)
       };
     }
 
     return { ...item, yourDeposit: DEFAULT_VALUE, yourEarned: DEFAULT_VALUE };
   });
 
-  return { title, isLoading, data };
+  return { title, isLoading, data: data ?? [] };
 };

@@ -5,13 +5,14 @@ import { BaseFilterStore } from '@shared/store';
 import { ActiveStatus } from '@shared/types';
 
 import { FarmingItem } from '../interfaces';
-import { sortFarmingList, SortField } from '../pages/list/components'; //TODO
+import { sortFarmingList } from '../pages/list/helpers'; //TODO
+import { FarmingSortField } from '../pages/list/types';
 
 export class FarmingFilterStore extends BaseFilterStore {
   stakedOnly = false;
   activeOnly = true;
 
-  sortField: SortField = SortField.ID;
+  sortField: FarmingSortField = FarmingSortField.ID;
 
   constructor() {
     super();
@@ -60,7 +61,7 @@ export class FarmingFilterStore extends BaseFilterStore {
     this.activeOnly = state;
   }
 
-  onSortFieldChange(field: SortField) {
+  onSortFieldChange(field: FarmingSortField) {
     this.sortField = field;
   }
 }
