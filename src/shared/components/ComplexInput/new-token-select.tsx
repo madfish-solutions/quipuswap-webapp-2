@@ -41,6 +41,7 @@ interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   blackListedTokens: Token[];
   id?: string;
   placeholder?: string;
+  inputDisabled?: boolean;
   onAmountChange: (value: Undefined<BigNumber>) => void;
   onTokenChange: (token: Token) => void;
 }
@@ -61,6 +62,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   error,
   id,
   placeholder,
+  inputDisabled,
   onAmountChange,
   onTokenChange,
   token,
@@ -88,6 +90,8 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   );
 
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
+
+  const shapeClassName = cx(s.shape, { [s.disabled]: inputDisabled });
 
   const focusInput = useCallback(() => {
     if (inputRef?.current) {
@@ -149,7 +153,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
           {label}
         </label>
         <div className={s.background}>
-          <div className={s.shape}>
+          <div className={shapeClassName}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>{account && <Balance balance={preparedBalance} colorMode={colorThemeMode} />}</div>
             <input
@@ -158,6 +162,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
               onBlur={handleBlur}
               ref={inputRef}
               value={localAmount}
+              disabled={inputDisabled}
               autoComplete="off"
               onChange={handleAmountChange}
               placeholder={placeholder}

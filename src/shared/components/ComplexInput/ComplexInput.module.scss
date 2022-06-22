@@ -198,6 +198,19 @@
     @include background-text-color($hover-primary-01);
   }
 }
+
+.disabled {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: $text-02;
+    border-radius: 8px;
+    opacity: 0.5;
+  }
+}
+
 .dark {
   &:not(.readOnly) {
     .input {
@@ -244,7 +257,7 @@
 .scaffoldingPercentSelector {
   height: 16px;
 }
-@include media('>tablet') {
+@include media(">tablet") {
   .item2Line {
     justify-content: flex-end;
   }
