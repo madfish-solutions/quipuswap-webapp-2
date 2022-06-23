@@ -2,9 +2,9 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
-import { TOKEN_TO_TOKEN_DEX } from '@config/config';
+import { STABLESWAP_REFERRAL } from '@config/config';
 import { SECONDS_IN_MINUTE } from '@config/constants';
-import { STABLESWAP_REFERRAL } from '@config/enviroment';
+import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defined } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
