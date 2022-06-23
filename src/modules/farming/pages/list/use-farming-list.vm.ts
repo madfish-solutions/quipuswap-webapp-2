@@ -6,10 +6,12 @@ import { useFarmingListStore } from '@modules/farming/hooks';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
 import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
 import { useReady } from '@providers/use-dapp';
-import { getTokenSymbol } from '@shared/helpers';
+import { getTokenSymbol, isNull } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 export const useFarmingListViewModel = () => {
+  const { accountPkh } = useAuthStore();
   const farmingListStore = useFarmingListStore();
   const isReady = useReady();
   const { getFarmingList } = useGetFarmingList();
@@ -64,26 +66,28 @@ export const useFarmingListViewModel = () => {
         }
       }
     ],
-    userStats: [
-      {
-        cellName: t('farm|yourDeposit'),
-        amounts: {
-          amount: item.depositBalance,
-          dollarEquivalent: item.depositBalance?.multipliedBy(item.depositExchangeRate ?? '0'),
-          currency: getTokenSymbol(item.stakedToken),
-          dollarEquivalentOnly: true
-        }
-      },
-      {
-        cellName: t('farm|yourEarned'),
-        amounts: {
-          amount: item.earnBalance,
-          dollarEquivalent: item.earnBalance?.multipliedBy(item.earnExchangeRate ?? '0'),
-          currency: getTokenSymbol(item.rewardToken),
-          dollarEquivalentOnly: true
-        }
-      }
-    ]
+    userStats: isNull(accountPkh)
+      ? undefined
+      : [
+          {
+            cellName: t('farm|yourDeposit'),
+            amounts: {
+              amount: item.depositBalance,
+              dollarEquivalent: item.depositBalance?.multipliedBy(item.depositExchangeRate ?? '0'),
+              currency: getTokenSymbol(item.stakedToken),
+              dollarEquivalentOnly: true
+            }
+          },
+          {
+            cellName: t('farm|yourEarned'),
+            amounts: {
+              amount: item.earnBalance,
+              dollarEquivalent: item.earnBalance?.multipliedBy(item.earnExchangeRate ?? '0'),
+              currency: getTokenSymbol(item.rewardToken),
+              dollarEquivalentOnly: true
+            }
+          }
+        ]
   }));
 
   return {
