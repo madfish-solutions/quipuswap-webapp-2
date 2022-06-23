@@ -1,6 +1,6 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
-@import "@styles/text";
+@import '@styles/variables';
+@import '@styles/breakpoints';
+@import '@styles/text';
 
 .baker {
   max-width: 100%;
@@ -197,10 +197,12 @@
   .actionButtonText {
     @include background-text-color($hover-primary-01);
   }
+  .disabled {
+    background-color: $ui-04;
+  }
 }
 
 .disabled {
-  background-color: $text-02;
   border-radius: 8px;
 }
 
@@ -230,6 +232,9 @@
   .actionButtonText {
     @include background-text-color($hover-primary-02);
   }
+  .disabled {
+    background-color: $text-02;
+  }
 }
 .readOnly {
   .input {
@@ -250,7 +255,7 @@
 .scaffoldingPercentSelector {
   height: 16px;
 }
-@include media(">tablet") {
+@include media('>tablet') {
   .item2Line {
     justify-content: flex-end;
   }
