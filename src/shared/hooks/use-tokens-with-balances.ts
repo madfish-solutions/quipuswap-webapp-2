@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { isExist, toArray } from '@shared/helpers';
+import { getTokenSlug, isExist, toArray } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { useAuthStore } from './use-auth-store';
@@ -13,6 +13,12 @@ export interface BalanceToken {
   token: Token;
 }
 
+const uniqSlugs = (tokens: Optional<Array<Token>>) => {
+  return tokens?.reduce((acc, token) => {
+    return acc + getTokenSlug(token);
+  }, '');
+};
+
 export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<BalanceToken> => {
   const tokensBalancesStore = useTokensBalancesStore();
   const { accountPkh } = useAuthStore();
@@ -22,7 +28,7 @@ export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<Bal
     const cleanTokens = toArray(tokens).filter(Boolean) as Array<Token>;
     setWrapTokens(cleanTokens);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExist(tokens)]);
+  }, [uniqSlugs(tokens)]);
 
   useEffect(() => {
     if (isExist(wrapTokens)) {
