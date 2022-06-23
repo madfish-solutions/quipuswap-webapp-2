@@ -8,17 +8,25 @@ import { useTokenLockedViewModel } from './use-token-locked.vm';
 
 interface Props {
   className: string;
+  tooltipContent?: string;
   tokenSymbol: Nullable<string>;
   amount: Nullable<BigNumber>;
   isLoading: boolean;
   dollarEquivalent: Nullable<BigNumber>;
 }
 
-export const TokenLocked: FC<Props> = ({ className, amount, isLoading, tokenSymbol, dollarEquivalent }) => {
+export const TokenLocked: FC<Props> = ({
+  className,
+  tooltipContent,
+  amount,
+  isLoading,
+  tokenSymbol,
+  dollarEquivalent
+}) => {
   const cellName = useTokenLockedViewModel(tokenSymbol);
 
   return (
-    <DetailsCardCell cellName={cellName} className={className}>
+    <DetailsCardCell cellName={cellName} tooltipContent={tooltipContent} className={className}>
       <StateCurrencyAmount
         isLoading={isLoading}
         currency={tokenSymbol}

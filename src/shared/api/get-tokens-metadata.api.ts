@@ -1,4 +1,4 @@
-import { NETWORK } from '@config/config';
+import { METADATA_API } from '@config/enviroment';
 import { TOKENS_KEY } from '@config/localstorage';
 import { TEZOS_TOKEN } from '@config/tokens';
 
@@ -52,7 +52,7 @@ export const getTokenMetadata = async ({
     return tokenFromLS;
   }
 
-  return await fetch(`${NETWORK.metadata}/${contractAddress}/${fa2TokenId || DEFAULT_TOKEN_ID}`)
+  return await fetch(`${METADATA_API}/${contractAddress}/${fa2TokenId || DEFAULT_TOKEN_ID}`)
     .then(async res => {
       if (!res.ok) {
         return null;

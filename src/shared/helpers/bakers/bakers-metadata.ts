@@ -1,5 +1,4 @@
-import { TZKT_API_DELEGATE_URL } from '@config/config';
-import { BAKERS_API } from '@config/enviroment';
+import { BAKERS_API, TZKT_API_DELEGATE_URL } from '@config/config';
 import { Nullable } from '@shared/types';
 
 interface BakerMetadataResponse {

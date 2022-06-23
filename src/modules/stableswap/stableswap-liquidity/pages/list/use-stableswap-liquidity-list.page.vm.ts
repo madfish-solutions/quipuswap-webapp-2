@@ -42,6 +42,7 @@ export const useStableswapLiquidityPageViewModel = () => {
     itemStats: [
       ...tokensInfo.map(({ reserves, reservesInUsd, token }) => ({
         cellName: t('common|tokenValue'),
+        tooltip: t('stableswap|tokenValuesTooltip'),
         amounts: {
           amount: reserves,
           dollarEquivalent: reservesInUsd,
@@ -50,6 +51,7 @@ export const useStableswapLiquidityPageViewModel = () => {
       })),
       {
         cellName: t('common|tvl'),
+        tooltip: t('stableswap|tvlFarmTooltip'),
         amounts: {
           amount: tvlInUsd,
           currency: DOLLAR,
@@ -59,6 +61,7 @@ export const useStableswapLiquidityPageViewModel = () => {
       },
       {
         cellName: t('stableswap|liquidityProvidersFee'),
+        tooltip: t('stableswap|liquidityProvidersFeeTooltip'),
         amounts: {
           amount: liquidityProvidersFee,
           currency: PERCENT
