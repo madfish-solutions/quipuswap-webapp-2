@@ -107,7 +107,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
-    hide: isProd(),
+    hide: !isProd(),
     status: <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
   },
   {
