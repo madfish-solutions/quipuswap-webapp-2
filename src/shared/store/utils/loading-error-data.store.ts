@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { serverIsUnavailableMessage } from '@config/constants';
+import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
 
 import { Undefined, Nullable } from '../../types/types';
 
@@ -62,12 +62,11 @@ export class LoadingErrorData<RawData, Data> {
     try {
       this.startLoading();
       this.setRawData(await this.getDate());
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error) {
       // eslint-disable-next-line no-console
       console.error('error', error);
-      if (error.message.includes('503 Service Temporarily Unavailable')) {
-        return this.setError(serverIsUnavailableMessage);
+      if (error instanceof Error && error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
+        return this.setError(SERVER_UNAVAILABLE_MESSAGE);
       }
       this.setError(error as Error);
 

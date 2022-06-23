@@ -136,4 +136,5 @@ export const DEFAULT_STABLESWAP_POOL_ID = 0;
 //#endregion
 
 // error constant
-export const serverIsUnavailableMessage = 'The server is temporarily unavailable.';
+export const SERVER_UNAVAILABLE_MESSAGE = 'The server is temporarily unavailable.';
+export const SERVER_UNAVAILABLE_ERROR_MESSAGE = '503 Service Temporarily Unavailable';
