@@ -1,11 +1,9 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { SERVER_UNAVAILABLE } from '@config/constants';
+import { serverIsUnavailbleMessage, SERVER_UNAVAILABLE } from '@config/constants';
 import { isEqual } from '@shared/helpers';
 
 import { Undefined, Nullable } from '../../types/types';
-
-const serverIsUnavailbleMessage = 'The server is temporarily unavailable.';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
