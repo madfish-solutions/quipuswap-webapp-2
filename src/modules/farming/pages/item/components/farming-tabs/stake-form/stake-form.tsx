@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { isExist, isNull } from '@shared/helpers';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -25,8 +24,9 @@ export const StakeForm: FC = observer(() => {
     farmStatusError,
     disabled,
     handleBakerChange,
-    tradeHref,
-    investHref,
+    // TODO: uncomment lined below affter creating valid links
+    /* tradeHref,
+    investHref */
     handleInputAmountChange
   } = useStakeFormViewModel();
 
@@ -34,7 +34,7 @@ export const StakeForm: FC = observer(() => {
     return null;
   }
 
-  const tokens = [farmingItem.tokenA, farmingItem.tokenB].filter(isExist);
+  const { tokens } = farmingItem;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -56,7 +56,8 @@ export const StakeForm: FC = observer(() => {
           value={bakerInputValue}
         />
       )}
-      <div className={styles.suggestedOperationsButtons}>
+      {/* TODO: uncomment lined below affter creating valid links */}
+      {/* <div className={styles.suggestedOperationsButtons}>
         <Button theme="underlined" href={tradeHref} data-test-id="tradeButton">
           {t('common|Trade')}
         </Button>
@@ -65,7 +66,7 @@ export const StakeForm: FC = observer(() => {
             {t('common|Invest')}
           </Button>
         )}
-      </div>
+      </div> */}
       <FarmingAlert className={styles.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
       <div className={styles.buttons}>
         <ConnectWalletOrDoSomething>
