@@ -1,11 +1,18 @@
 import { FC } from 'react';
 
+import { BigNumber } from 'bignumber.js';
+
+import { DOLLAR } from '@config/constants';
 import { StateCurrencyAmount, Tooltip } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import styles from './tvl.module.scss';
 
-export const Tvl: FC = () => {
+interface Props {
+  amount: Nullable<BigNumber.Value>;
+}
+
+export const Tvl: FC<Props> = ({ amount }) => {
   const { t } = useTranslation('stableswap');
 
   return (
@@ -14,7 +21,7 @@ export const Tvl: FC = () => {
         {t('stableswap|tvl')}
         <Tooltip content={t('stableswap|tvlProtocolTooltip')} />
       </div>
-      <StateCurrencyAmount amount={10000} currency="$" isLeftCurrency className={styles.amount} />
+      <StateCurrencyAmount amount={amount} currency={DOLLAR} isLeftCurrency className={styles.amount} />
     </div>
   );
 };
