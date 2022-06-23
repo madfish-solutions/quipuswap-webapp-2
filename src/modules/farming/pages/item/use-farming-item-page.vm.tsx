@@ -8,7 +8,7 @@ import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { DashPlug } from '@shared/components';
-import { getTokensName, isNull, isUndefined } from '@shared/helpers';
+import { getTokensNames, isNull, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -50,7 +50,7 @@ export const useFarmingItemPageViewModel = () => {
 
   const getTitle = () => {
     if (farmingItem) {
-      return `Farming ${getTokensName(farmingItem.tokenA, farmingItem.tokenB)}`;
+      return `Farming ${getTokensNames(farmingItem.tokens)}`;
     }
 
     if (!isLoading && isNull(farmingItem)) {

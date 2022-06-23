@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { BlockInfoWrap, Nullable, RawToken, Token, Undefined } from '@shared/types';
+import { BlockInfoWrap, Nullable, RawToken, Token } from '@shared/types';
 import { ActiveStatus } from '@shared/types/active-statuts-enum';
 
 export interface RawFarmingStats {
@@ -47,8 +47,7 @@ export interface RawFarmingItem {
   staked: string;
 
   timelock: string;
-  tokenA: RawToken;
-  tokenB: Undefined<RawToken>;
+  tokens: Array<RawToken>;
   tvlInStakedToken: string;
   tvlInUsd: Nullable<string>;
 
@@ -100,8 +99,7 @@ export interface FarmingItem extends UserBalances {
   staked: BigNumber;
 
   timelock: string;
-  tokenA: Token;
-  tokenB: Undefined<Token>;
+  tokens: Array<Token>;
   tvlInUsd: Nullable<BigNumber>;
   tvlInStakedToken: BigNumber;
 

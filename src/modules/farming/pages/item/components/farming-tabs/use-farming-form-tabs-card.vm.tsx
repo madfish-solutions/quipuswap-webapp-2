@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom'; //TODO
 
 import { useFarmingItemStore } from '@modules/farming/hooks';
@@ -21,6 +23,12 @@ export const useFarmingFormTabsCardViewModel = () => {
 
   const { itemStore, currentTab } = farmingItemStore;
   const { data: farmingItem } = itemStore;
+
+  useEffect(() => {
+    return () => {
+      farmingItemStore.setTab(FarmingFormTabs.stake);
+    };
+  }, [farmingItemStore]);
 
   const isStakeForm = farmingItemStore.currentTab === FarmingFormTabs.stake;
 

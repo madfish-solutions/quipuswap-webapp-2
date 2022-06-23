@@ -26,7 +26,7 @@ export const Details: FC = observer(() => {
   const { t } = useTranslation();
   const {
     contractAddress,
-    id,
+    poolId,
     totalLpSupply,
     liquidityProvidersFee,
     interfaceFee,
@@ -46,7 +46,12 @@ export const Details: FC = observer(() => {
       contentClassName={commonContainerStyles.content}
       data-test-id="stableswapDetails"
     >
-      <DetailsCardCell cellName={t('common|Pair Address')} className={cardCellClassName} data-test-id="pairAddress">
+      <DetailsCardCell
+        cellName={t('common|Pair Address')}
+        tooltipContent={t('stableswap|pairAddress')}
+        className={cardCellClassName}
+        data-test-id="pairAddress"
+      >
         <StateWrapper
           isLoading={isLoading}
           loaderFallback={<DashPlug />}
@@ -56,14 +61,20 @@ export const Details: FC = observer(() => {
           {contractAddress && <ContractHashWithCopy contractAddress={contractAddress} />}
         </StateWrapper>
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('common|Pair ID')} className={cardCellClassName} data-test-id="pairId">
-        <StateCurrencyAmount isLoading={isLoading} amount={id} />
+      <DetailsCardCell
+        cellName={t('common|Pair ID')}
+        tooltipContent={t('stableswap|pairId')}
+        className={cardCellClassName}
+        data-test-id="pairId"
+      >
+        <StateCurrencyAmount isLoading={isLoading} amount={poolId} />
       </DetailsCardCell>
 
       <Iterator render={TokenLocked} data={tokensLockedData} />
 
       <DetailsCardCell
         cellName={t('stableswap|Total LP Supply')}
+        tooltipContent={t('stableswap|totalLPSupply')}
         className={cardCellClassName}
         data-test-id="totalLpSupply"
       >
@@ -71,6 +82,7 @@ export const Details: FC = observer(() => {
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|liquidityProvidersFee')}
+        tooltipContent={t('stableswap|liquidityProviersFee')}
         className={cardCellClassName}
         data-test-id="liquidityProvidersFee"
       >
@@ -78,6 +90,7 @@ export const Details: FC = observer(() => {
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|Interface Fee')}
+        tooltipContent={t('stableswap|interfaceFee')}
         className={cardCellClassName}
         data-test-id="interfaceFee"
       >
@@ -85,12 +98,18 @@ export const Details: FC = observer(() => {
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|QUIPU Stakers Fee')}
+        tooltipContent={t('stableswap|quipuStakersFee')}
         className={cardCellClassName}
         data-test-id="quipuStakersFee"
       >
         <StatePercentage isLoading={isLoading} value={stakersFee} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('stableswap|Dev Fee')} className={cardCellClassName} data-test-id="devFee">
+      <DetailsCardCell
+        cellName={t('stableswap|Dev Fee')}
+        tooltipContent={t('stableswap|devFee')}
+        className={cardCellClassName}
+        data-test-id="devFee"
+      >
         <StatePercentage isLoading={isLoading} value={devFee} />
       </DetailsCardCell>
       <div className={cx(commonContainerStyles.detailsButtons, styles.detailsButtons)}>

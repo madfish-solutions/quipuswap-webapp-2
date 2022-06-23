@@ -1,13 +1,16 @@
 import cx from 'classnames';
 
+import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { getTokenSymbol, isExist } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { useStableswapItemStore } from '../../../../../hooks';
 import styles from './details.module.scss';
 
 export const useDetailsVievModel = () => {
+  const { t } = useTranslation();
   const dAppReady = useReady();
   const { itemStore } = useStableswapItemStore();
   const { data: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
@@ -21,11 +24,13 @@ export const useDetailsVievModel = () => {
       amount: reserves,
       className: cardCellClassName,
       isLoading,
+      tooltipContent: t('stableswap|tokenAmountLocked', { tokenName: getTokenSymbol(token) }),
       dollarEquivalent: reserves.multipliedBy(exchangeRate)
     }));
 
     return {
       ...item,
+      poolId: DEFAULT_STABLESWAP_POOL_ID,
       cardCellClassName,
       isLoading,
       tokensLockedData
@@ -35,7 +40,7 @@ export const useDetailsVievModel = () => {
   return {
     isLoading,
     cardCellClassName,
-    id: null,
+    poolId: null,
     tokensInfo: null,
     totalLpSupply: null,
     tvlInUsd: null,
