@@ -83,7 +83,7 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, ITHACANET_NETWORK];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS = ['13', '14', '15'];
+export const NEW_FARMINGS = ['16', '17', '18'];
 
 // FarmingItems with Youves
 export const YOUVES_FARMINGS = ['5', '6'];

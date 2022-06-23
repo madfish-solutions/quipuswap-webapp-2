@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
 import { useFarmingListStore } from '@modules/farming/hooks';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
@@ -30,15 +31,12 @@ export const useFarmingListViewModel = () => {
   const { listStore, list } = farmingListStore;
   const { isLoading } = listStore;
 
-  // eslint-disable-next-line no-console
-  console.log('list', list);
-
   const data2 = list?.map(item => ({
     href: `${item.id}`,
     status: { status: item.stakeStatus, filled: true },
     inputToken: item.tokens,
     outputToken: item.rewardToken,
-    isNew: item.id.eq('16') || item.id.eq('17') || item.id.eq('18'),
+    isNew: NEW_FARMINGS.includes(item.id.toFixed()),
     itemStats: [
       {
         cellName: t('farm|tvl'),
