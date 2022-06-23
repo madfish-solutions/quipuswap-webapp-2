@@ -1,9 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { COINFLIP_TOKENS_TO_PLAY, COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { COINFLIP_TOKENS_TO_PLAY, DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { fromDecimals, defined } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';

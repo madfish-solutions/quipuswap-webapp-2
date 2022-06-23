@@ -6,11 +6,17 @@ const { copyFile } = require('fs/promises');
 const {
   PUBLIC,
   PUBLIC_DIR_PATH,
+
   ROBOTS_TXT,
   ROBOTS_TXT_DEV,
   ROBOTS_TXT_PROD,
+
   SITEMAP,
-  SITEMAP_PROD
+  SITEMAP_PROD,
+
+  INDEX_HTML_PROD,
+  INDEX_HTML_DEV,
+  INDEX_HTML
 } = require('./const.js');
 
 console.log('___ PUBLIC BUILD: ___', PUBLIC);
@@ -39,5 +45,16 @@ const copySitemap = async () => {
   }
 };
 
+const copyIndexHtml = async () => {
+  try {
+    const fileName = PUBLIC ? INDEX_HTML_PROD : INDEX_HTML_DEV;
+    await copyFile(`${PUBLIC_DIR_PATH}/${fileName}`, `${PUBLIC_DIR_PATH}/${INDEX_HTML}`);
+    console.log(`${INDEX_HTML} was created from ${fileName}`);
+  } catch (error) {
+    console.error(`Failed to create ${INDEX_HTML}`, error);
+  }
+};
+
 void copyRobotsTxt();
 void copySitemap();
+void copyIndexHtml();

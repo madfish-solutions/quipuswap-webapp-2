@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { MichelsonMap } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { READ_ONLY_SIGNER_PK_HASH } from '@config/enviroment';
+import { READ_ONLY_SIGNER_PK_HASH } from '@config/config';
 import { useRootStore } from '@providers/root-store-provider';
 import { getContract } from '@shared/dapp';
 import { defined, isNull } from '@shared/helpers';

@@ -2,8 +2,8 @@ import { TezosToolkit, MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
+import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
-import { STABLESWAP_REFERRAL } from '@config/enviroment';
 import { AmountToken } from '@shared/types';
 
 export const addStableswapLiquidityApi = async (
