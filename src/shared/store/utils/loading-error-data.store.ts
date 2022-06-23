@@ -66,9 +66,10 @@ export class LoadingErrorData<RawData, Data> {
       // eslint-disable-next-line no-console
       console.error('error', error);
       if (error instanceof Error && error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
-        return this.setError(SERVER_UNAVAILABLE_MESSAGE);
+        this.setError(SERVER_UNAVAILABLE_MESSAGE);
+      } else {
+        this.setError(error as Error);
       }
-      this.setError(error as Error);
 
       throw error;
     } finally {
