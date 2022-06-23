@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
+import { DELAY_BEFORE_DATA_UPDATE, serverIsUnavailbleMessage, SERVER_UNAVAILABLE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
-import { sleep } from '@shared/helpers';
+import { isEqual, sleep } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
@@ -21,7 +21,10 @@ export const useGetFarmingList = () => {
       try {
         await listStore.load();
       } catch (error) {
-        showErrorToast('The server is temporarily unavailable.');
+        if (isEqual(error, SERVER_UNAVAILABLE)) {
+          showErrorToast(serverIsUnavailbleMessage);
+        }
+        showErrorToast(error as Error);
       }
     }
     // We need it only for dependency for loading list based on it.

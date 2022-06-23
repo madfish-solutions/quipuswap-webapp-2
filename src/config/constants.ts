@@ -141,3 +141,4 @@ Service Temporarily Unavailable</h1></center> <hr><center>nginx</center> </body>
 error page --> <I-- a padding to disable MSIE and Chrome friendly error page -> <!-- a padding to disable MSIE and Chrome friendly error page -->
 <- a padding to disable MSIE and Chrome friendly error page -> <1-- a padding to disable MSIE and Chrome friendly error page -> <!-- a padding
 to disable MSIE and Chrome friendly error page -->`;
+export const serverIsUnavailbleMessage = 'The server is temporarily unavailable.';
