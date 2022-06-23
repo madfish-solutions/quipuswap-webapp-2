@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { serverIsUnavailableMessage } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
 import { useToasts } from '@shared/utils';
@@ -17,7 +18,11 @@ export const useGamesUserInfo = () => {
         try {
           await coinflipStore.gamesCountStore.load();
           await coinflipStore.tokensWonStore.load();
-        } catch (error) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          if (error.message.includes('503 Service Temporarily Unavailable')) {
+            return showErrorToast(serverIsUnavailableMessage);
+          }
           showErrorToast(error as Error);
         }
       }
