@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { TZKT_EXPLORER_URL } from '@config/config';
+import { TZKT_EXPLORER_URL } from '@config/enviroment';
 import { Button } from '@shared/components';
 import { shortize } from '@shared/helpers';
 
@@ -16,7 +16,7 @@ const ExplorerHashLink: FC<{ hash: string }> = ({ hash }) => {
     </Button>
   );
 };
-
+//TODO: move to localisation
 const TRANSACTION = 'Transaction';
 const TRANSACTION_SEND = 'sent to blockchain';
 const TRANSACTION_CONFIMED = 'has been confirmed';

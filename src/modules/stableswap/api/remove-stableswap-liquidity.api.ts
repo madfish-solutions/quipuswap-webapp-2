@@ -2,8 +2,8 @@ import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
+import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
-import { STABLESWAP_REFERRAL } from '@config/enviroment';
 import { AmountToken } from '@shared/types';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
