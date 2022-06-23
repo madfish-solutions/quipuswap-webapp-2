@@ -1,8 +1,8 @@
 import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET, TZKT_EXPLORER_URL } from '@config/config';
+import { IS_NETWORK_MAINNET } from '@config/config';
 import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
+import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/enviroment';
 import { getDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';

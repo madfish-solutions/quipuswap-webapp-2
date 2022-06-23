@@ -28,5 +28,21 @@ export const stableswap = {
   Tags: 'Tags',
   totalValueLocked: 'Total Value Locked',
   Harvest: 'Harvest',
-  harvestAll: 'Harvest All'
+  harvestAll: 'Harvest All',
+  tvlProtocolTooltip: 'Total value of assets locked in the Stableswap protocol.',
+  tvlFarmTooltip: 'Total value of assets locked in this farm farms.',
+  tokenValuesTooltip: 'Value of type of asset locked in this farm.',
+  liquidityProvidersFeeTooltip:
+    "The percentage of your swapped sum you pay to the pool's liquidity providers on each swap.",
+  pairAddress: 'Direct smart contract address for this farm.',
+  pairId: 'The ID number of the LP token for this pair. (Default ID is 0)',
+  totalLPSupply: 'The total amount of LP tokens issued by this pool.',
+  liquidityProviersFee:
+    'This fee is divided between the liquidity providers in proportion to their share size in the pool.',
+  interfaceFee: 'A fee for using the farming interface. Goes to the interface devs.',
+  quipuStakersFee: 'This fee is proportionally distributed among the users who staked QUIPU under this pool.',
+  devFee: 'The fee is charged by QuipuSwap team on each swap.',
+  coinsBalancedProportion:
+    "Automatically match input balances for all selected assets according to the current asset ratio in the pool. Input value will be proportionally higher the asset's current representation in the pool is.",
+  tokenAmountLocked: 'The amount of {{tokenName}} locked within this pool by liquidity providers.'
 } as const;
