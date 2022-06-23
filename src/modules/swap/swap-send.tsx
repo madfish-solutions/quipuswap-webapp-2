@@ -128,6 +128,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             token={outputToken}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleOutputTokenChange}
+            inputDisabled
             id="swap-send-to"
             placeholder="0.0"
             data-test-id="to"

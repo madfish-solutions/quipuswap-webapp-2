@@ -198,6 +198,12 @@
     @include background-text-color($hover-primary-01);
   }
 }
+
+.disabled {
+  background-color: $text-02;
+  border-radius: 8px;
+}
+
 .dark {
   &:not(.readOnly) {
     .input {
@@ -244,7 +250,7 @@
 .scaffoldingPercentSelector {
   height: 16px;
 }
-@include media('>tablet') {
+@include media(">tablet") {
   .item2Line {
     justify-content: flex-end;
   }
@@ -287,6 +293,7 @@
     flex-basis: content;
   }
   .dangerContainer {
+    margin-top: 8px;
     order: 4;
     margin-left: 6px;
   }
