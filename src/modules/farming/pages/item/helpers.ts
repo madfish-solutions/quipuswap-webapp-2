@@ -11,4 +11,4 @@ export const makeBaker = (delegateAddress: Optional<string>, knownBakers: Whitel
   return null;
 };
 
-export const canDelegate = (farmingItem: FarmingItem) => farmingItem.tokens.some(token => isTezosToken(token));
+export const canDelegate = (farmingItem: FarmingItem) => farmingItem.tokens.some(isTezosToken);
