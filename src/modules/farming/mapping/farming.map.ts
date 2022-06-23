@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { fromDecimals, getTokensName, isExist, multipliedIfPossible } from '@shared/helpers';
+import { fromDecimals, isExist, multipliedIfPossible } from '@shared/helpers';
 import { balanceMap, mapBackendToken } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
@@ -32,8 +32,9 @@ const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
 };
 
 export const mapFarmingItem = (raw: RawFarmingItem): FarmingItem => {
-  const stakedToken = mapBackendToken(raw.stakedToken, Boolean(raw.tokenB), getTokensName(raw.tokenA, raw.tokenB));
+  const stakedToken = mapBackendToken(raw.stakedToken);
   const rewardToken = mapBackendToken(raw.rewardToken);
+  const tokens = raw.tokens.map(token => mapBackendToken(token));
 
   const myBalance = nullableBalanceMap(raw.myBalance, stakedToken);
   const depositBalance = nullableBalanceMap(raw.depositBalance, stakedToken);
@@ -46,8 +47,7 @@ export const mapFarmingItem = (raw: RawFarmingItem): FarmingItem => {
     depositBalance,
     earnBalance,
     id: new BigNumber(raw.id),
-    tokenA: mapBackendToken(raw.tokenA),
-    tokenB: raw.tokenB ? mapBackendToken(raw.tokenB) : undefined,
+    tokens,
     stakedToken,
     rewardToken,
     tvlInUsd: mapRawBigNumber(raw.tvlInUsd),
