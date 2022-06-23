@@ -28,7 +28,7 @@ export const AddLiqForm: FC = observer(() => {
     isSubmitting,
     tooltip,
     switcherValue,
-    isAllInputsNonNegativeOnInbalancedLiquidity,
+    shouldShowZeroInputsAlert,
     handleSwitcherClick,
     handleSubmit
   } = addLiqFormViewModel;
@@ -41,7 +41,7 @@ export const AddLiqForm: FC = observer(() => {
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionAdd')}</span>
         <Tooltip content={tooltip} />
       </div>
-      {isAllInputsNonNegativeOnInbalancedLiquidity && (
+      {shouldShowZeroInputsAlert && (
         <AlarmMessage message={t('stableswap|allZeroInpupts')} className={styles.alarmMessage} />
       )}
       <div className={stylesCommonContainer.buttons}>

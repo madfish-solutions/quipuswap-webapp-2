@@ -20,6 +20,7 @@ import {
 } from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
+import { useZeroInputsError } from './use-zero-inputs-error';
 
 const DEFAULT_LENGTH = 0;
 
@@ -36,7 +37,12 @@ export const useAddLiqFormViewModel = () => {
 
   const validationSchema = useAddLiqFormValidation(userBalances, formStore.isBalancedProportion);
 
+  const isZeroInputsError = useZeroInputsError();
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
+    if (isZeroInputsError) {
+      return;
+    }
+
     actions.setSubmitting(true);
 
     await addStableswapLiquidity();
@@ -52,8 +58,7 @@ export const useAddLiqFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  const { label, tooltip, disabled, isSubmitting, isAllInputsNonNegativeOnInbalancedLiquidity } =
-    useAddLiqFormHelper(formik);
+  const { label, tooltip, disabled, isSubmitting, shouldShowZeroInputsAlert } = useAddLiqFormHelper(formik);
 
   useEffect(() => {
     return () => formStore.clearStore();
@@ -124,7 +129,8 @@ export const useAddLiqFormViewModel = () => {
     tooltip,
     disabled,
     isSubmitting,
-    isAllInputsNonNegativeOnInbalancedLiquidity,
+    isZeroInputsError,
+    shouldShowZeroInputsAlert,
     switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
     handleSubmit: formik.handleSubmit
