@@ -4,29 +4,6 @@ import { SupportedNetworks, WhitelistedBaker } from '@shared/types';
 
 import { NETWORK_ID } from './enviroment';
 
-export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
-  {
-    address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9',
-    logo: 'https://services.tzkt.io/v1/avatars/tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
-  },
-  {
-    address: 'tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp',
-    logo: 'https://services.tzkt.io/v1/avatars/tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp'
-  },
-  {
-    address: 'tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru',
-    logo: 'https://services.tzkt.io/v1/avatars/tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru'
-  },
-  {
-    address: 'tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16',
-    logo: 'https://services.tzkt.io/v1/avatars/tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16'
-  },
-  {
-    address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4',
-    logo: 'https://services.tzkt.io/v1/avatars/tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
-  }
-];
-
 export const ITHACANET_BAKERS: WhitelistedBaker[] = [
   {
     address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9',
@@ -72,7 +49,6 @@ export const ITHACANET_BAKERS: WhitelistedBaker[] = [
 
 const dummyBakers: Record<SupportedNetworks, string> = {
   [NetworkType.MAINNET]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
-  [NetworkType.HANGZHOUNET]: HANGZHOUNET_BAKERS[0].address,
   [NetworkType.ITHACANET]: ITHACANET_BAKERS[0].address
 };
 
