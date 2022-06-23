@@ -1,6 +1,11 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { SERVER_UNAVAILABLE } from '@config/constants';
+import { isEqual } from '@shared/helpers';
+
 import { Undefined, Nullable } from '../../types/types';
+
+const serverIsUnavailbleMessage = 'The server is temporarily unavailable.';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
@@ -8,7 +13,7 @@ export class LoadingErrorData<RawData, Data> {
 
   isInitialized = false;
   isLoading = false;
-  error: Nullable<Error> = null;
+  error: Nullable<Error | string> = null;
 
   constructor(
     private defaultData: Data,
@@ -41,7 +46,7 @@ export class LoadingErrorData<RawData, Data> {
     this.data = this.mapping(rawData);
   }
 
-  setError(error: Error) {
+  setError(error: Error | string) {
     this.error = error;
     this.rawData = undefined;
     this.data = this.defaultData;
@@ -63,6 +68,9 @@ export class LoadingErrorData<RawData, Data> {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('error', error);
+      if (isEqual(error, SERVER_UNAVAILABLE)) {
+        this.setError(serverIsUnavailbleMessage);
+      }
       this.setError(error as Error);
 
       throw error;
