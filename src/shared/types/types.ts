@@ -14,10 +14,7 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export type SupportedNetworks = Extract<
-  NetworkType,
-  NetworkType.MAINNET | NetworkType.HANGZHOUNET | NetworkType.ITHACANET
->;
+export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.ITHACANET>;
 
 export enum QSNetworkType {
   MAIN = 'MAIN',
@@ -44,8 +41,6 @@ export interface QSNetwork {
   connectType: ConnectType;
   name: string;
   type: QSNetworkType;
-  rpcBaseURL: string;
-  metadata: string;
   disabled: boolean;
 }
 

@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { TZKT_EXPLORER_URL } from '@config/config';
+import { TZKT_EXPLORER_URL } from '@config/enviroment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getBakerName, getTokenSymbol } from '@shared/helpers';
