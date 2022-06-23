@@ -7,3 +7,4 @@ export * from './local-search-token';
 export * from './token-type';
 export * from './get-token-pair-slug';
 export * from './get-token-id-from-slug';
+export * from './get-tokens-names';

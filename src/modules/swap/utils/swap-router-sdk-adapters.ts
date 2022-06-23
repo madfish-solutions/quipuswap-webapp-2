@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import {
   TokenStandardEnum,
   Trade,
+  getAllowedRoutePairsCombinations as originalGetAllowedRoutePairsCombinations,
   useRoutePairsCombinations as originalUseRoutePairsCombinations,
   useTradeWithSlippageTolerance as originalUseTradeWithSlippageTolerance
 } from 'swap-router-sdk';
@@ -15,7 +16,7 @@ import { Optional, Token } from '@shared/types';
 const FALLBACK_TRADE: Trade = [];
 const FALLBACK_TOKEN_ID = 0;
 
-const getSwapRouterSdkTokenSlug = (token: Token) =>
+export const getSwapRouterSdkTokenSlug = (token: Token) =>
   getTokenSlug({
     ...token,
     fa2TokenId: isTezosToken(token) ? undefined : token.fa2TokenId ?? FALLBACK_TOKEN_ID
@@ -40,6 +41,15 @@ export const useRoutePairsCombinations = (
   routePairs: RoutePair[]
 ) =>
   originalUseRoutePairsCombinations(
+    inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
+    outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
+    routePairs,
+    WHITELISTED_POOLS,
+    MAX_HOPS_COUNT
+  );
+
+export const getAllowedRoutePairsCombinations = (inputToken: Token, outputToken: Token, routePairs: RoutePair[]) =>
+  originalGetAllowedRoutePairsCombinations(
     inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
     outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
     routePairs,

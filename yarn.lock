@@ -2028,10 +2028,10 @@
   dependencies:
     bignumber.js "^9.0.2"
 
-"@quipuswap/tokens-whitelist@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.2.tgz#bea5b631fee2ab6007f9a8e640e4f54c6bb01dce"
-  integrity sha512-pRANJwrqYsVbZUxPZUIw/vtg7HnvkkOzIvomykVOz3Q2ysNY6pEqN5oqvDIcgAs15Efvc6zSDnXBZepHAwqKvg==
+"@quipuswap/tokens-whitelist@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.3.tgz#a4cf50c5de7d84a4de1a4a70c265054eb34beb0b"
+  integrity sha512-sUMWN/mHCcJ2lPM/Ud52Au8e7KkSh9+tRscHwlesZpos4pwPXlBzudwsuYExHOUsqxcG4Kc5kSkQ4SyfVUsEqQ==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -2719,11 +2719,6 @@
   integrity sha512-FgTtbqPOCI3dzZPZoC2T/sx3L34qxy99ITWn4eoSA95qPyXDMH0ALoAqUp49ITniiJFsXUVBtalh/KffMpg21Q==
   dependencies:
     "@types/react" "*"
-
-"@types/react-gtm-module@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@types/react-gtm-module/-/react-gtm-module-2.0.1.tgz#b2c6cd14ec251d6ae7fa576edf1d43825908a378"
-  integrity sha512-T/DN9gAbCYk5wJ1nxf4pSwmXz4d1iVjM++OoG+mwMfz9STMAotGjSb65gJHOS5bPvl6vLSsJnuC+y/43OQrltg==
 
 "@types/react-modal@^3.13.1":
   version "3.13.1"
@@ -5556,6 +5551,47 @@ eslint@^8.16.0, eslint@^8.3.0:
   version "8.16.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.16.0.tgz#6d936e2d524599f2a86c708483b4c372c5d3bbae"
   integrity sha512-MBndsoXY/PeVTDJeWsYj7kLZ5hQpJOfMYLsF6LicLHQWbRDG19lK5jOix4DPl8yY4SUFcE3txy86OzFLWT+yoA==
+  dependencies:
+    "@eslint/eslintrc" "^1.3.0"
+    "@humanwhocodes/config-array" "^0.9.2"
+    ajv "^6.10.0"
+    chalk "^4.0.0"
+    cross-spawn "^7.0.2"
+    debug "^4.3.2"
+    doctrine "^3.0.0"
+    escape-string-regexp "^4.0.0"
+    eslint-scope "^7.1.1"
+    eslint-utils "^3.0.0"
+    eslint-visitor-keys "^3.3.0"
+    espree "^9.3.2"
+    esquery "^1.4.0"
+    esutils "^2.0.2"
+    fast-deep-equal "^3.1.3"
+    file-entry-cache "^6.0.1"
+    functional-red-black-tree "^1.0.1"
+    glob-parent "^6.0.1"
+    globals "^13.15.0"
+    ignore "^5.2.0"
+    import-fresh "^3.0.0"
+    imurmurhash "^0.1.4"
+    is-glob "^4.0.0"
+    js-yaml "^4.1.0"
+    json-stable-stringify-without-jsonify "^1.0.1"
+    levn "^0.4.1"
+    lodash.merge "^4.6.2"
+    minimatch "^3.1.2"
+    natural-compare "^1.4.0"
+    optionator "^0.9.1"
+    regexpp "^3.2.0"
+    strip-ansi "^6.0.1"
+    strip-json-comments "^3.1.0"
+    text-table "^0.2.0"
+    v8-compile-cache "^2.0.3"
+
+eslint@^8.17.0:
+  version "8.18.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.18.0.tgz#78d565d16c993d0b73968c523c0446b13da784fd"
+  integrity sha512-As1EfFMVk7Xc6/CvhssHUjsAQSkpfXvUGMFC3ce8JDe6WvqCgRrLOBQbVpsBFr1X1V+RACOadnzVvcUS5ni2bA==
   dependencies:
     "@eslint/eslintrc" "^1.3.0"
     "@humanwhocodes/config-array" "^0.9.2"
@@ -9466,6 +9502,11 @@ prettier@^2.6.2:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
   integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
 
+prettier@^2.7.0:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
+  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
+
 pretty-bytes@^5.3.0, pretty-bytes@^5.4.1, pretty-bytes@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
@@ -9739,11 +9780,6 @@ react-final-form@^6.5.9:
   integrity sha512-x3XYvozolECp3nIjly+4QqxdjSSWfcnpGEL5K8OBT6xmGrq5kBqbA6+/tOqoom9NwqIPPbxPNsOViFlbKgowbA==
   dependencies:
     "@babel/runtime" "^7.15.4"
-
-react-gtm-module@^2.0.11:
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/react-gtm-module/-/react-gtm-module-2.0.11.tgz#14484dac8257acd93614e347c32da9c5ac524206"
-  integrity sha512-8gyj4TTxeP7eEyc2QKawEuQoAZdjKvMY4pgWfycGmqGByhs17fR+zEBs0JUDq4US/l+vbTl+6zvUIx27iDo/Vw==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -10849,14 +10885,16 @@ svgo@^2.7.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
-swap-router-sdk@1.13.6:
-  version "1.13.6"
-  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.13.6.tgz#2dfc00cf1a922b4f6b925d2e1f40b6ced8078e2c"
-  integrity sha512-d3Em5/Mz8LQcvblqrKEbchX+CgDAJOEEbTs9StNG8nvvqjuIfWtcHTGdUsNZmelLUtWiI3rGjGuRj+Okmh7jgA==
+swap-router-sdk@1.15.0-beta:
+  version "1.15.0-beta"
+  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.15.0-beta.tgz#89df26edde75a5dc6ba1413f160ebea2f136198b"
+  integrity sha512-Dw2rFAZb3ZSfud5Fl7dJgtU3nYTa76aEzyTZnQOMj4SPTRDH0S+mmpI8K8ssbx/j4oQGVfohwFAtFd8dy6bnGA==
   dependencies:
     "@taquito/taquito" "12.1.1"
     async-retry "1.3.3"
     bignumber.js "9.0.2"
+    eslint "^8.17.0"
+    prettier "^2.7.0"
 
 swr@^1.3.0:
   version "1.3.0"

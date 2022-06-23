@@ -2,7 +2,8 @@ import { NetworkType } from '@airgap/beacon-sdk';
 
 import { SupportedNetworks, Standard, Token } from '@shared/types';
 
-import { IPFS_GATEWAY, NETWORK_ID } from './enviroment';
+import { IPFS_GATEWAY } from './config';
+import { NETWORK_ID } from './enviroment';
 
 export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
@@ -45,8 +46,9 @@ export const ITHACANET_DEFAULT_TOKEN: Token = {
 
 export const networksDefaultTokens: Record<SupportedNetworks, Token> = {
   [NetworkType.MAINNET]: MAINNET_DEFAULT_TOKEN,
-  [NetworkType.HANGZHOUNET]: HANGZHOUNET_DEFAULT_TOKEN,
   [NetworkType.ITHACANET]: ITHACANET_DEFAULT_TOKEN
 };
 
 export const DEFAULT_TOKEN = networksDefaultTokens[NETWORK_ID];
+
+export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, DEFAULT_TOKEN];

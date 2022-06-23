@@ -2,17 +2,13 @@ import { useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import constate from 'constate';
+import { getMaxInputRoute, getMaxOutputRoute } from 'swap-router-sdk';
 
-import {
-  fromDecimals,
-  getMaxInputRoute,
-  getMaxOutputRoute,
-  getMaxTokenInput,
-  getTokenOutput,
-  getTokenSlug
-} from '@shared/helpers';
-import { useDexGraph } from '@shared/hooks';
+import { fromDecimals, getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
+
+import { getAllowedRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
+import { useRoutePairs } from './route-pairs-provider';
 
 type TokensAmounts = Record<string, Record<string, BigNumber>>;
 
@@ -25,7 +21,7 @@ const updateTokensAmounts = (prevAmounts: TokensAmounts, token1: Token, token2: 
 });
 
 export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
-  const { dexGraph } = useDexGraph();
+  const { routePairs } = useRoutePairs();
 
   const [maxInputAmounts, setMaxInputAmounts] = useState<TokensAmounts>({});
   const [maxOutputAmounts, setMaxOutputAmounts] = useState<TokensAmounts>({});
@@ -39,37 +35,13 @@ export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
   };
 
   const updateSwapLimits = (token1: Token, token2: Token) => {
-    const startTokenSlug = getTokenSlug(token1);
-    const endTokenSlug = getTokenSlug(token2);
     try {
-      const maxInputRoute = getMaxInputRoute({
-        startTokenSlug,
-        endTokenSlug,
-        graph: dexGraph
-      });
-      if (maxInputRoute) {
-        updateMaxInputAmount(token1, token2, fromDecimals(getMaxTokenInput(token2, maxInputRoute), token1));
-      }
-      const maxOutputRoute = getMaxOutputRoute({
-        startTokenSlug,
-        endTokenSlug,
-        graph: dexGraph
-      });
-      if (maxOutputRoute) {
-        const generalMaxInputAmount = getMaxTokenInput(token2, maxOutputRoute);
-        updateMaxOutputAmount(
-          token1,
-          token2,
-          fromDecimals(
-            getTokenOutput({
-              inputToken: token1,
-              inputAmount: generalMaxInputAmount,
-              dexChain: maxOutputRoute
-            }),
-            token2
-          )
-        );
-      }
+      const combinations = getAllowedRoutePairsCombinations(token1, token2, routePairs);
+
+      const { value: atomsMaxInputAmount } = getMaxInputRoute(combinations);
+      updateMaxInputAmount(token1, token2, fromDecimals(atomsMaxInputAmount, token1));
+      const { value: atomsMaxOutputAmount } = getMaxOutputRoute(combinations);
+      updateMaxOutputAmount(token1, token2, fromDecimals(atomsMaxOutputAmount, token2));
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

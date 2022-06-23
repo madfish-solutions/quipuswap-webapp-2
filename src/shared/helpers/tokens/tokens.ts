@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
-import { TOKENS } from '@config/enviroment';
+import { TOKENS } from '@config/config';
 import { SAVED_TOKENS_KEY } from '@config/localstorage';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
 import { getContract } from '@shared/dapp';

@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
-import { STABLESWAP_REFERRAL } from '@config/enviroment';
+import { STABLESWAP_REFERRAL } from '@config/config';
 import { DexPair, TokenId } from '@shared/types';
 
 export interface SwapParams {

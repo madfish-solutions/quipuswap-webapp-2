@@ -1,5 +1,4 @@
-import { BAKERS_HTTP, CLOUDFLARE_IPFS, IPFS, TEMPLEWALLET_IMG } from '@config/config';
-import { IPFS_GATEWAY } from '@config/enviroment';
+import { BAKERS_HTTP, CLOUDFLARE_IPFS, IPFS, IPFS_GATEWAY, TEMPLEWALLET_IMG } from '@config/config';
 
 //TODO
 export const prepareTokenLogo = (url?: string | null) => {

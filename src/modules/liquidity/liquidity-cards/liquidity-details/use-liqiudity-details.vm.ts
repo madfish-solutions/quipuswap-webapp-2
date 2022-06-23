@@ -1,7 +1,8 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@config/config';
+import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS } from '@config/config';
+import { TZKT_EXPLORER_URL } from '@config/enviroment';
 import { fromDecimals, getTokenSymbol, isTezIncluded, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 

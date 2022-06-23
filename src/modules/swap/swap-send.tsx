@@ -22,6 +22,7 @@ import { SwapTabAction } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
 import { SwapDetails } from './components/swap-details';
+import { RoutePairsProvider } from './providers/route-pairs-provider';
 import { SwapLimitsProvider } from './providers/swap-limits-provider';
 import { useSwapSendViewModel } from './use-swap-send.vm';
 
@@ -127,6 +128,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             token={outputToken}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleOutputTokenChange}
+            inputDisabled
             id="swap-send-to"
             placeholder="0.0"
             data-test-id="to"
@@ -200,8 +202,10 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
 
 export const SwapSend = (props: SwapSendProps) => {
   return (
-    <SwapLimitsProvider>
-      <OrdinarySwapSend {...props} />
-    </SwapLimitsProvider>
+    <RoutePairsProvider>
+      <SwapLimitsProvider>
+        <OrdinarySwapSend {...props} />
+      </SwapLimitsProvider>
+    </RoutePairsProvider>
   );
 };

@@ -1,6 +1,6 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
-@import "@styles/text";
+@import '@styles/variables';
+@import '@styles/breakpoints';
+@import '@styles/text';
 
 .baker {
   max-width: 100%;
@@ -197,7 +197,15 @@
   .actionButtonText {
     @include background-text-color($hover-primary-01);
   }
+  .disabled {
+    background-color: $ui-04;
+  }
 }
+
+.disabled {
+  border-radius: 8px;
+}
+
 .dark {
   &:not(.readOnly) {
     .input {
@@ -223,6 +231,9 @@
   }
   .actionButtonText {
     @include background-text-color($hover-primary-02);
+  }
+  .disabled {
+    background-color: $text-02;
   }
 }
 .readOnly {
@@ -287,6 +298,7 @@
     flex-basis: content;
   }
   .dangerContainer {
+    margin-top: 8px;
     order: 4;
     margin-left: 6px;
   }
