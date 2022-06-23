@@ -25,7 +25,9 @@ export const isFoundIndex = (index: number) => index !== -1;
 export const isEmptyArray = (array: Nullable<unknown[]>) => (array ? array.length === 0 : true);
 export const isSingleElement = (array: Nullable<unknown[]>) => (array ? array.length === 1 : true);
 
-export const isLastElementIndex = (index: number, array: unknown[]) => index === array.length - 1;
+export const lastElementIndex = <T>(array: T[]) => array.length - 1;
+
+export const isLastElementIndex = (index: number, array: unknown[]) => index === lastElementIndex(array);
 export const isFirstElementIndex = (index: number) => index === FISRT_INDEX;
 
 export const getFirstElement = <T>(array: T[]): T => array[FISRT_INDEX];
