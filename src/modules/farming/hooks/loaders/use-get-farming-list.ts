@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { DELAY_BEFORE_DATA_UPDATE, serverIsUnavailbleMessage, SERVER_UNAVAILABLE } from '@config/constants';
+import { DELAY_BEFORE_DATA_UPDATE, serverIsUnavailableMessage } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
-import { isEqual, sleep } from '@shared/helpers';
+import { sleep } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
@@ -20,9 +20,10 @@ export const useGetFarmingList = () => {
     if (isReady) {
       try {
         await listStore.load();
-      } catch (error) {
-        if (isEqual(error, SERVER_UNAVAILABLE)) {
-          showErrorToast(serverIsUnavailbleMessage);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.message.includes('503 Service Temporarily Unavailable')) {
+          return showErrorToast(serverIsUnavailableMessage);
         }
         showErrorToast(error as Error);
       }
