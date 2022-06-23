@@ -26,7 +26,7 @@ export const Details: FC = observer(() => {
   const { t } = useTranslation();
   const {
     contractAddress,
-    id,
+    poolId,
     totalLpSupply,
     liquidityProvidersFee,
     interfaceFee,
@@ -67,7 +67,7 @@ export const Details: FC = observer(() => {
         className={cardCellClassName}
         data-test-id="pairId"
       >
-        <StateCurrencyAmount isLoading={isLoading} amount={id} />
+        <StateCurrencyAmount isLoading={isLoading} amount={poolId} />
       </DetailsCardCell>
 
       <Iterator render={TokenLocked} data={tokensLockedData} />
