@@ -12,8 +12,7 @@ export const farmingListDataHelper = (item: FarmingItem, accountPkh: Nullable<st
   const timeLockLabel = getTimeLockDescription(item.timelock);
   const withdrawalFeeLabel = item.withdrawalFee.toFixed();
 
-  const shouldShowUserStats =
-    isNull(accountPkh) || item.depositBalance?.isEqualTo(ZERO) || item.earnBalance?.isEqualTo(ZERO);
+  const shouldShowUserStats = !isNull(accountPkh) && (item.depositBalance?.gt(ZERO) || item.earnBalance?.gt(ZERO));
   const shouldShowLockPeriod = !!Number(item.timelock);
   const shouldShowWithdrawalFee = !item.withdrawalFee.eq(ZERO);
 
