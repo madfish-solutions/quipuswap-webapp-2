@@ -134,3 +134,10 @@ export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 //#endregion
+
+// error constant
+export const SERVER_UNAVAILABLE = `HttpResponse: Http error response: (503) <html> <head><title>503 Service Temporarily Unavailable-</title></head> «body> <center><h1>503
+Service Temporarily Unavailable</h1></center> <hr><center>nginx</center> </body> </html> <1-- a padding to disable MSIE and Chrome friendly
+error page --> <I-- a padding to disable MSIE and Chrome friendly error page -> <!-- a padding to disable MSIE and Chrome friendly error page -->
+<- a padding to disable MSIE and Chrome friendly error page -> <1-- a padding to disable MSIE and Chrome friendly error page -> <!-- a padding
+to disable MSIE and Chrome friendly error page -->`;
