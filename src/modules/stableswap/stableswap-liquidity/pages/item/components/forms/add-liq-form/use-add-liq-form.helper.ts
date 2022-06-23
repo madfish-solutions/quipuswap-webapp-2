@@ -10,7 +10,7 @@ export const useAddLiqFormHelper = (formik: IFormik) => {
   const formStore = useStableswapItemFormStore();
 
   const label = t('common|Input');
-  const tooltip = t('common|Success');
+  const tooltip = t('stableswap|coinsBalancedProportion');
   const isSubmitting = formik.isSubmitting;
   const isAllInputsNonNegativeOnInbalancedLiquidity =
     !formStore.isBalancedProportion &&

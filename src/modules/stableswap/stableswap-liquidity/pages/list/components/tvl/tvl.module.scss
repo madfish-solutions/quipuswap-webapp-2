@@ -10,6 +10,8 @@
 }
 
 .tvlTitle {
+  display: flex;
+  align-items: center;
   color: $text-03;
   font-weight: 600;
   font-size: 16px;
