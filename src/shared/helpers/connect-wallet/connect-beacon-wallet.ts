@@ -2,8 +2,8 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
-import { IS_NETWORK_MAINNET, NETWORK } from '@config/config';
-import { APP_NAME, BASE_URL, NETWORK_ID } from '@config/enviroment';
+import { APP_NAME, IS_NETWORK_MAINNET, NETWORK } from '@config/config';
+import { BASE_URL, NETWORK_ID, RPC_URL } from '@config/enviroment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoBeaconWallet, WalletNotConnected } from '@shared/errors';
 import { ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';
@@ -11,7 +11,7 @@ import { ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';
 import { ReadOnlySigner } from '../readonly-signer';
 import { isDefaultConnectType } from './is-default-connect-type';
 import { michelEncoder } from './michel-encoder';
-import { rpcClients } from './rpc-clients';
+import { rpcClient } from './rpc-clients';
 
 const getPreferredNetwork = () => {
   if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
@@ -43,12 +43,12 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
         : {
             type: NetworkType.CUSTOM,
             name: qsNetwork.name,
-            rpcUrl: qsNetwork.rpcBaseURL
+            rpcUrl: RPC_URL
           };
     await beaconWallet.requestPermissions({ network });
   }
 
-  const tezos = new TezosToolkit(rpcClients[qsNetwork.id]);
+  const tezos = new TezosToolkit(rpcClient);
   tezos.setPackerProvider(michelEncoder);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { StateCurrencyAmount } from '@shared/components';
+import { StateCurrencyAmount, Tooltip } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import styles from './tvl.module.scss';
@@ -10,7 +10,10 @@ export const Tvl: FC = () => {
 
   return (
     <div className={styles.tvl}>
-      <div className={styles.tvlTitle}>{t('stableswap|tvl')}</div>
+      <div className={styles.tvlTitle}>
+        {t('stableswap|tvl')}
+        <Tooltip content={t('stableswap|tvlProtocolTooltip')} />
+      </div>
       <StateCurrencyAmount amount={10000} currency="$" isLeftCurrency className={styles.amount} />
     </div>
   );
