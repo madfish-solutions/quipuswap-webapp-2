@@ -134,3 +134,7 @@ export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 //#endregion
+
+// error constant
+export const SERVER_UNAVAILABLE_MESSAGE = 'The server is temporarily unavailable.';
+export const SERVER_UNAVAILABLE_ERROR_MESSAGE = '503 Service Temporarily Unavailable';
