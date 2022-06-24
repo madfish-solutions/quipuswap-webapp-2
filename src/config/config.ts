@@ -27,7 +27,7 @@ export const BAKERS_API = 'https://api.baking-bad.org/v2/bakers';
 export const EXCHANGE_RATES_URL = 'https://api.templewallet.com/api/exchange-rates';
 export const IPFS_GATEWAY = 'https://cloudflare-ipfs.com/ipfs';
 
-export const STABLESWAP_REFERRAL = 'tz1MnmtP4uAcgMpeZN6JtyziXeFqqwQG6yn6';
+export const STABLESWAP_REFERRAL = 'tz1Sw2mFAUzbkm7dkGCDrbeBsJTTtV7JD8Ey';
 export const FARMING_REFERRER_CONTRACT = 'tz1Sw2mFAUzbkm7dkGCDrbeBsJTTtV7JD8Ey';
 
 //#region READ_ONLY_SIGNER
