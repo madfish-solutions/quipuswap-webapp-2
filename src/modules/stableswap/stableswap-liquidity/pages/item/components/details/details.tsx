@@ -47,7 +47,7 @@ export const Details: FC = observer(() => {
       data-test-id="stableswapDetails"
     >
       <DetailsCardCell
-        cellName={t('common|Pair Address')}
+        cellName={t('stableswap|poolAddress')}
         tooltipContent={t('stableswap|pairAddress')}
         className={cardCellClassName}
         data-test-id="pairAddress"
@@ -62,7 +62,7 @@ export const Details: FC = observer(() => {
         </StateWrapper>
       </DetailsCardCell>
       <DetailsCardCell
-        cellName={t('common|Pair ID')}
+        cellName={t('stableswap|poolId')}
         tooltipContent={t('stableswap|pairId')}
         className={cardCellClassName}
         data-test-id="pairId"
