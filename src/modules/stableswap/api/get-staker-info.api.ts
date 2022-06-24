@@ -1,29 +1,91 @@
-import { TezosToolkit } from '@taquito/taquito';
+import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
-import { getContract } from '@shared/dapp/get-storage-info';
-import { isNull, toArray } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { DEFAULT_STABLESWAP_POOL_ID, ZERO_AMOUNT } from '@config/constants';
+import { getStorageInfo } from '@shared/dapp/get-storage-info';
+import { isExist, isNull, toArray } from '@shared/helpers';
+import { nat, Nullable } from '@shared/types';
 
-import { RawContractStakerInfo, RawStakerInfo, StableFarmItem } from '../types';
+import {
+  EarningsValue,
+  RawStakerInfo,
+  StableFarmItem,
+  StableswapStorage,
+  StakerAccumulator,
+  StakersBalanceValue
+} from '../types';
 
 const DEFAULT_VALUE = new BigNumber('0');
-const DEFAULT_USER_INFO_VALUE = null;
 
-const callStakerInfoContractView = async (
-  contract: ReturnType<TezosToolkit['contract']['at']>,
-  accountPkh: string
-): Promise<Nullable<Array<RawContractStakerInfo>>> => {
-  const constractInstance = await Promise.resolve(contract);
+const earningsMapSchemaValue = {
+  prim: 'map',
+  args: [
+    {
+      prim: 'nat'
+    },
+    {
+      prim: 'pair',
+      args: [
+        {
+          prim: 'nat',
+          annots: ['%reward_f']
+        },
+        {
+          prim: 'nat',
+          annots: ['%former_f']
+        }
+      ]
+    }
+  ]
+};
 
-  try {
-    return await constractInstance.contractViews
-      .get_staker_info([{ user: accountPkh, pool_id: DEFAULT_STABLESWAP_POOL_ID }])
-      .executeView({ viewCaller: accountPkh });
-  } catch (error) {
-    return DEFAULT_USER_INFO_VALUE;
+const rewardMapSchemaValue = {
+  prim: 'map',
+  args: [{ prim: 'nat' }, { prim: 'nat' }]
+};
+
+const ACCUM_PRECISION = 10_000_000_000;
+
+const getHarvestedStakerRewards = async (
+  { balance: stakerBalance, earnings }: StakersBalanceValue,
+  poolStakerAccumulator: StakerAccumulator
+) => {
+  const result = {
+    yourDeposit: stakerBalance,
+    yourReward: new MichelsonMap<nat, nat>(rewardMapSchemaValue)
+  };
+
+  for (const [i, poolAccumF] of poolStakerAccumulator.accumulator_f.entries()) {
+    const reward = earnings.get(i) ?? {
+      former_f: new BigNumber(ZERO_AMOUNT),
+      reward_f: new BigNumber(ZERO_AMOUNT)
+    };
+    const newFormerF = stakerBalance.multipliedBy(poolAccumF);
+    const newRewardValue = reward.reward_f.plus(newFormerF.minus(reward.former_f).abs());
+    const rewardAmt = newRewardValue.dividedToIntegerBy(ACCUM_PRECISION);
+    result.yourReward.set(i, rewardAmt);
   }
+
+  return result;
+};
+
+const getSinglePoolStakerInfo = async (
+  contractAddress: string,
+  accountPkh: string,
+  tezos: TezosToolkit,
+  poolId: BigNumber
+) => {
+  const { storage } = await getStorageInfo<StableswapStorage>(tezos, contractAddress);
+  const { pools, stakers_balance } = storage;
+  const stakerAccum = (await stakers_balance.get([accountPkh, poolId])) ?? {
+    balance: new BigNumber(ZERO_AMOUNT),
+    earnings: new MichelsonMap<nat, EarningsValue>(earningsMapSchemaValue)
+  };
+  const pool = await pools.get(poolId);
+
+  return isExist(pool)
+    ? await getHarvestedStakerRewards(stakerAccum, pool.staker_accumulator)
+    : { yourDeposit: DEFAULT_VALUE, yourReward: null };
 };
 
 export const getStakerInfo = async (
@@ -35,25 +97,10 @@ export const getStakerInfo = async (
     return toArray(stableFarmsList).map(() => ({ yourReward: null, yourDeposit: DEFAULT_VALUE }));
   }
 
-  const contractsPromises = toArray(stableFarmsList).map(async ({ contractAddress }) =>
-    getContract(tezos, contractAddress)
+  return await Promise.all(
+    toArray(stableFarmsList).map(
+      async ({ contractAddress }) =>
+        await getSinglePoolStakerInfo(contractAddress, accountPkh, tezos, new BigNumber(DEFAULT_STABLESWAP_POOL_ID))
+    )
   );
-  const userInfoPromises = contractsPromises.map(async contract => callStakerInfoContractView(contract, accountPkh));
-  const userInfo = await Promise.all(userInfoPromises);
-
-  return userInfo.map(item => {
-    if (isNull(item)) {
-      return {
-        yourDeposit: DEFAULT_VALUE,
-        yourReward: null
-      };
-    }
-
-    const [{ info }] = item;
-
-    return {
-      yourDeposit: info.balance,
-      yourReward: info.rewards
-    };
-  });
 };
