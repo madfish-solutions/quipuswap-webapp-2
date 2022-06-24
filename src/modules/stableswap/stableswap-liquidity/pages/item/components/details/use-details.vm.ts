@@ -1,6 +1,6 @@
 import cx from 'classnames';
 
-import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
+// import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { getTokenSymbol, isExist } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
@@ -30,7 +30,7 @@ export const useDetailsVievModel = () => {
 
     return {
       ...item,
-      poolId: DEFAULT_STABLESWAP_POOL_ID,
+      poolId: item.id,
       cardCellClassName,
       isLoading,
       tokensLockedData
