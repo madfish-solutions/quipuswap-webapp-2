@@ -6,7 +6,7 @@ export type address = string;
 export type timestamp = string;
 export type key_hash = string;
 export type nat = BigNumber;
-export type bytes = unknown; //VALIDATE!
+export type bytes = string;
 
 export type BigMapKeyType = string | number | object;
 
