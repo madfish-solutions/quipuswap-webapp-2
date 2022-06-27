@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
-import { isUndefined } from '@shared/helpers';
+import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
 import { useTranslation } from '@translation';
 
 import { useUpdateToast } from './use-update-toast';
@@ -36,14 +36,12 @@ export const useToasts = (): UseToasts => {
         return;
       }
 
-      if (
-        typeof error === 'object' &&
-        'name' in error &&
-        'message' in error &&
-        !isUndefined(error.name) &&
-        !isUndefined(error.message)
-      ) {
-        const knownErrorMessage = knownErrorsMessages[error.message];
+      if (error instanceof Error) {
+        let knownErrorMessage = knownErrorsMessages[error.message];
+
+        if (error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
+          knownErrorMessage = SERVER_UNAVAILABLE_MESSAGE;
+        }
 
         updateToast({
           type: 'error',

@@ -5,18 +5,18 @@ describe('Check color of the smile in the Exchange Details section', () => {
         // Go to the swap page 
         cy.visit('/swap');
         cy.get('[data-test-id="acceptCookieButton"]').click();
-        cy.get('[for="swap-send-from"]').click().type('999999');
+        cy.get('[for="swap-send-from"]').click().type('9999');
         cy.get('[data-test-id="priceImpact"] span span')
             .should('have.css', 'color', 'rgb(234, 36, 36)');
     });
     it('Should_DisplayNotification_When_TooBigAmount', () => {
         cy.visit('/swap');
         cy.get('[data-test-id="acceptCookieButton"]').click();
-        cy.get('[for="swap-send-from"]').click().type('999999');
-        cy.get('[data-test-id="shouldShowPriceImpactWarning"]')
+        cy.get('[for="swap-send-from"]').click().type('567777');
+        cy.get('[data-test-id="error"]')
             .invoke('text')
             .then(text => {
-                expect(text).to.contain('Double check the output amount and/or try to split the exchange to the smaller trades.')
+                expect(text).to.contain('Value has to be a number between')
             });
     });
     it('Should_DisplayYellowTextInPriceImpact_When_AmountNotOK', () => {
@@ -29,7 +29,7 @@ describe('Check color of the smile in the Exchange Details section', () => {
     it('Should_DisplayGreenTextInPriceImpact_When_AmountIs5', () => {
         cy.visit('/swap');
         cy.get('[data-test-id="acceptCookieButton"]').click();
-        cy.get('[for="swap-send-from"]').click().type('5');
+        cy.get('[data-test-id="from"] [data-test-id="input"]').click().type('5');
         cy.get('[data-test-id="priceImpact"] span span')
             .should('have.css', 'color', 'rgb(46, 211, 62)');
     });
