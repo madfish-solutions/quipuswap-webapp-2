@@ -7,6 +7,7 @@ describe('Select new tokens in the fields', () => {
         cy.get('[data-test-id="acceptCookieButton"]').click();
         // Choose new tokens and check if new token are selected in the field
         cy.get('[data-test-id="from"] [data-test-id="changeToken"]').click();
+        cy.wait(1000);
         cy.get('[data-test-id="KUSD"]').click();
         cy.get('[data-test-id="from"] [data-test-id="changeToken"]').should('contain', 'KUSD');
 

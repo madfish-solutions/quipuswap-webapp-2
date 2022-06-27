@@ -68,7 +68,7 @@ describe('Select new tokens in the fields', () => {
     cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]')
       .invoke('val')
       .then(parseFloat)
-      .should('be.gte', 0);
+      .should('be.NaN');
   });
   it('Should_CalculateSecondInput_When_FirstInputIsChangedInExistingPool', () => {
     cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="addLiquidityTokenA"]').click().type('{backspace}');

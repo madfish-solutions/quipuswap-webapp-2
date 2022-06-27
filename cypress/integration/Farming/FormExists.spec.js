@@ -13,6 +13,6 @@ describe('Form exists', () => {
     // Check if 'Earn extra income' text is ok
     cy.get('[data-test-id="farmingListPendingRewards"]').should('contain', 'Earn extra income with QuipuSwap');
     //Check if one of the farmings is availible
-    cy.get('[data-test-id="farming-item-6"]').should('exist');
+    cy.get('[href="/farming/6"]').should('exist');
   });
 });
