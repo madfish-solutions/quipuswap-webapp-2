@@ -59,6 +59,8 @@ export const common = {
   'You entered not a valid address': 'You entered not a valid address',
   'You entered not a valid QP address': 'You entered not a valid QP address',
   'This field is required': 'This field is required',
+  'Value is required': 'Value is required',
+  'At least one output amount should be provided': 'At least one output amount should be provided',
   'Insufficient funds': 'Insufficient funds',
   'Minimal value is {{min}}': 'Minimal value is {{min}}',
   'Maximal value is {{max}}': 'Maximal value is {{max}}',
