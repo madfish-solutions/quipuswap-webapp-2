@@ -1,11 +1,12 @@
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_STABLESWAP_POOL_ID, ZERO_AMOUNT } from '@config/constants';
+import { DEFAULT_STABLESWAP_POOL_ID, STABLESWAP_FARM_ACCUM_PRECISION, ZERO_AMOUNT } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp/get-storage-info';
 import { isExist, isNull, toArray } from '@shared/helpers';
 import { nat, Nullable } from '@shared/types';
 
+import { earningsMapSchema, rewardMapSchema } from '../schemas/get-staker-info.schemas';
 import {
   EarningsValue,
   RawStakerInfo,
@@ -17,42 +18,13 @@ import {
 
 const DEFAULT_VALUE = new BigNumber('0');
 
-const earningsMapSchemaValue = {
-  prim: 'map',
-  args: [
-    {
-      prim: 'nat'
-    },
-    {
-      prim: 'pair',
-      args: [
-        {
-          prim: 'nat',
-          annots: ['%reward_f']
-        },
-        {
-          prim: 'nat',
-          annots: ['%former_f']
-        }
-      ]
-    }
-  ]
-};
-
-const rewardMapSchemaValue = {
-  prim: 'map',
-  args: [{ prim: 'nat' }, { prim: 'nat' }]
-};
-
-const ACCUM_PRECISION = 10_000_000_000;
-
-const getHarvestedStakerRewards = async (
+const getHarvestedStakerRewards = (
   { balance: stakerBalance, earnings }: StakersBalanceValue,
   poolStakerAccumulator: StakerAccumulator
 ) => {
   const result = {
     yourDeposit: stakerBalance,
-    yourReward: new MichelsonMap<nat, nat>(rewardMapSchemaValue)
+    yourReward: new MichelsonMap<nat, nat>(rewardMapSchema)
   };
 
   for (const [i, poolAccumF] of poolStakerAccumulator.accumulator_f.entries()) {
@@ -62,7 +34,7 @@ const getHarvestedStakerRewards = async (
     };
     const newFormerF = stakerBalance.multipliedBy(poolAccumF);
     const newRewardValue = reward.reward_f.plus(newFormerF.minus(reward.former_f).abs());
-    const rewardAmt = newRewardValue.dividedToIntegerBy(ACCUM_PRECISION);
+    const rewardAmt = newRewardValue.dividedToIntegerBy(STABLESWAP_FARM_ACCUM_PRECISION);
     result.yourReward.set(i, rewardAmt);
   }
 
@@ -79,12 +51,12 @@ const getSinglePoolStakerInfo = async (
   const { pools, stakers_balance } = storage;
   const stakerAccum = (await stakers_balance.get([accountPkh, poolId])) ?? {
     balance: new BigNumber(ZERO_AMOUNT),
-    earnings: new MichelsonMap<nat, EarningsValue>(earningsMapSchemaValue)
+    earnings: new MichelsonMap<nat, EarningsValue>(earningsMapSchema)
   };
   const pool = await pools.get(poolId);
 
   return isExist(pool)
-    ? await getHarvestedStakerRewards(stakerAccum, pool.staker_accumulator)
+    ? getHarvestedStakerRewards(stakerAccum, pool.staker_accumulator)
     : { yourDeposit: DEFAULT_VALUE, yourReward: null };
 };
 
