@@ -16,6 +16,8 @@ export const farmingListDataHelper = (item: FarmingItem, accountPkh: Nullable<st
   const shouldShowLockPeriod = !!Number(item.timelock);
   const shouldShowWithdrawalFee = !item.withdrawalFee.eq(ZERO);
 
+  const farmingItemDTI = `farming-item-${item.id}`;
+
   const labels = [];
   if (shouldShowLockPeriod) {
     labels.push({ status: item.stakeStatus, label: `${timeLockLabel} LOCK` });
@@ -84,6 +86,7 @@ export const farmingListDataHelper = (item: FarmingItem, accountPkh: Nullable<st
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),
-    status: { status: item.stakeStatus, filled: true }
+    status: { status: item.stakeStatus, filled: true },
+    farmingItemDTI
   };
 };

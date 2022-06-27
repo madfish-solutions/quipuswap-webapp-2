@@ -29,6 +29,8 @@ export const stableswap = {
   totalValueLocked: 'Total Value Locked',
   Harvest: 'Harvest',
   harvestAll: 'Harvest All',
+  poolAddress: 'Pool Address',
+  poolId: 'Pool ID',
   tvlProtocolTooltip: 'Total value of assets locked in the Stableswap protocol.',
   tvlFarmTooltip: 'Total value of assets locked in this farm farms.',
   tokenValuesTooltip: 'Value of type of asset locked in this farm.',

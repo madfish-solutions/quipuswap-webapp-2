@@ -1,7 +1,7 @@
 import { MichelsonMap } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { nat, address, key_hash, bytes, timestamp, BigMap } from './helper.types';
+import { nat, address, key_hash, bytes, timestamp, BigMap } from '@shared/types';
 
 export interface FarmingContractStorageWrapper {
   storage: FarmingContractStorage;
