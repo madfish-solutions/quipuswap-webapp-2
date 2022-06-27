@@ -1,9 +1,9 @@
 {
     "projectId": "4ytwek",
-    "baseUrl": "http://localhost:3000/",
+    "baseUrl": "https://localhost:3000",
     "defaultCommandTimeout": 10000,
     "retries": {
     "runMode": 2,
-    "openMode": 2
+    "openMode": 0
   }
 }
