@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import Select, { Props as SelectProps } from 'react-select';
 
 import { FarmingSortFieldItem } from '@modules/farming/pages/list/types';
-import { StableDividendsSortFieldItem } from '@modules/stableswap/stableswap-farm/pages/list/types';
+import { StableDividendsSortFieldItem } from '@modules/stableswap/stabledividends/pages/list/types';
 import { StableswapSortFieldItem } from '@modules/stableswap/stableswap-liquidity/pages/list/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
