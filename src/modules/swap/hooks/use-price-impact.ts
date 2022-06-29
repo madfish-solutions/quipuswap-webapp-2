@@ -1,17 +1,5 @@
-import { PERCENTAGE_100 } from '@config/constants';
-import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
-import { getPriceImpact, toDecimals } from '@shared/helpers';
+import { Trade } from 'swap-router-sdk';
 
-import { SwapDetailsParams } from '../utils/types';
+import { getPriceImpact, isEmptyArray } from '@shared/helpers';
 
-export const usePriceImpact = ({ inputToken, inputAmount, dexRoute, slippageTolerance }: SwapDetailsParams) => {
-  return inputToken && inputAmount && dexRoute && slippageTolerance
-    ? getPriceImpact({
-        inputToken: inputToken,
-        inputAmount: toDecimals(inputAmount, inputToken),
-        dexChain: dexRoute,
-        slippageTolerance: slippageTolerance?.div(PERCENTAGE_100),
-        ttDexAddress: TOKEN_TO_TOKEN_DEX
-      })
-    : null;
-};
+export const usePriceImpact = (trade: Nullable<Trade>) => (isEmptyArray(trade) ? null : getPriceImpact(trade!));
