@@ -1,10 +1,10 @@
-import { STABLEFARM_STATS_API_URL } from '@config/constants';
+import { STABLEDIVIDENDS_STATS_API_URL } from '@config/constants';
 
-import { StableFarmStatsResponse } from '../types';
+import { StableDividendsStatsResponse } from '../types';
 
-export const getStableFarmStatsApi = async () => {
-  const response = await fetch(STABLEFARM_STATS_API_URL);
-  const data = (await response.json()) as StableFarmStatsResponse;
+export const getStableDividendsStatsApi = async () => {
+  const response = await fetch(STABLEDIVIDENDS_STATS_API_URL);
+  const data = (await response.json()) as StableDividendsStatsResponse;
 
   const { stats } = data;
 

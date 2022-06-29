@@ -17,7 +17,7 @@ import {
   TokensSymbols
 } from '@shared/components';
 
-import { StableFarmFormTabs, StableFarmItem, StakerInfo } from '../../../../../types';
+import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '../../../../../types';
 import styles from './farm-card.module.scss';
 import { useFarmCardViewModel } from './farm-card.vm';
 
@@ -26,7 +26,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props extends StableFarmItem, StakerInfo {
+interface Props extends StableDividendsItem, StakerInfo {
   className?: string;
   shouldShowStakerInfo?: boolean;
 }
@@ -40,7 +40,7 @@ export const FarmCard: FC<Props> = ({
   stakedToken,
   yourDeposit,
   isWhitelisted,
-  stableFarmItemUrl,
+  stableDividendsItemUrl,
   shouldShowStakerInfo,
   stakedTokenExchangeRate
 }) => {
@@ -57,7 +57,7 @@ export const FarmCard: FC<Props> = ({
 
   return (
     <Link
-      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${stableFarmItemUrl}`}
+      to={`${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${stableDividendsItemUrl}`}
     >
       <Card className={cx(styles.card, modeClass[colorThemeMode])} contentClassName={styles.poolCard}>
         <div className={styles.farmInfo}>

@@ -5,19 +5,19 @@ import { DEFAULT_TOKEN } from '@config/tokens';
 import { numberAsString, getFormikError, isExist, toDecimals } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { useStableswapFarmUnstake } from '../../../../hooks';
-import { useFormValidation, useStableFarmStakerBalance } from '../../../hooks';
+import { useStableDividendsUnstake } from '../../../../hooks';
+import { useFormValidation, useStableDividendsStakerBalance } from '../../../hooks';
 import { FormFields, FormValues } from '../../../types';
-import { StableswapFarmFormViewProps } from '../stableswap-farm-form-view';
+import { StableDividendsFormViewProps } from '../stableswap-farm-form-view';
 
-export const useUntakeFormViewModel = (): StableswapFarmFormViewProps => {
+export const useUntakeFormViewModel = (): StableDividendsFormViewProps => {
   const { t } = useTranslation();
 
-  const { stableswapFarmUnstake } = useStableswapFarmUnstake();
+  const { stableDividendsUnstake } = useStableDividendsUnstake();
 
   const token = DEFAULT_TOKEN;
 
-  const balance = useStableFarmStakerBalance();
+  const balance = useStableDividendsStakerBalance();
 
   const validationSchema = useFormValidation(balance ?? null);
 
@@ -28,7 +28,7 @@ export const useUntakeFormViewModel = (): StableswapFarmFormViewProps => {
 
     if (!amount.isNaN()) {
       const amountAtoms = toDecimals(amount, token);
-      await stableswapFarmUnstake(amountAtoms);
+      await stableDividendsUnstake(amountAtoms);
     }
 
     formik.resetForm();

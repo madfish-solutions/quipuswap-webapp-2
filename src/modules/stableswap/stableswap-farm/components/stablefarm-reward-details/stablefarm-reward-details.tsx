@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite';
 
 import { Table } from '@shared/structures';
 
-import { useStableFarmRewardDetailsViewModel } from './stablefarm-reward-details.vm';
-import { StableFarmRewardProps } from './types';
+import { useStableDividendsRewardDetailsViewModel } from './stablefarm-reward-details.vm';
+import { StableDividendsRewardProps } from './types';
 
-export const StableFarmRewardDetails: FC<StableFarmRewardProps> = observer(props => {
+export const StableDividendsRewardDetails: FC<StableDividendsRewardProps> = observer(props => {
   const { data, columns, getCustomTableProps, getCustomHeaderProps, getCustomCellProps } =
-    useStableFarmRewardDetailsViewModel(props);
+    useStableDividendsRewardDetailsViewModel(props);
 
   return (
     <Table

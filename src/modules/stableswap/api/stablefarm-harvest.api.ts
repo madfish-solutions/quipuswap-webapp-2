@@ -5,7 +5,7 @@ import { sendBatch } from '@blockchain';
 import { DEFAULT_STABLESWAP_POOL_ID, ZERO_AMOUNT } from '@config/constants';
 import { toArray } from '@shared/helpers';
 
-export const stableFarmHarvestApi = async (
+export const stableDividendsHarvestApi = async (
   tezos: TezosToolkit,
   stableswapPoolContractAddresses: Array<string> | string
 ) => {

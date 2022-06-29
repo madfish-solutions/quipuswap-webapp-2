@@ -7,16 +7,16 @@ import { extractTokens } from '@modules/stableswap/helpers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { getSymbolsString, isUndefined } from '@shared/helpers';
 
-import { useGetStableFarmItem, useStableFarmItemStore } from '../../../hooks';
+import { useGetStableDividendsItem, useStableDividendsItemStore } from '../../../hooks';
 
-export const useStableswapFarmItemPageViewModel = () => {
+export const useStableDividendsItemPageViewModel = () => {
   const params = useParams();
   const dAppReady = useReady();
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
-  const { getStableFarmItem } = useGetStableFarmItem();
-  const stableFarmItemStore = useStableFarmItemStore();
+  const { getStableDividendsItem } = useGetStableDividendsItem();
+  const stableDividendsItemStore = useStableDividendsItemStore();
   const poolId = params.poolId;
 
   useEffect(() => {
@@ -25,13 +25,15 @@ export const useStableswapFarmItemPageViewModel = () => {
         return;
       }
 
-      await getStableFarmItem(new BigNumber(`${poolId}`));
+      await getStableDividendsItem(new BigNumber(`${poolId}`));
     };
 
     void loadItem();
-  }, [dAppReady, poolId, accountPkh, getStableFarmItem]);
+  }, [dAppReady, poolId, accountPkh, getStableDividendsItem]);
 
-  const title = stableFarmItemStore.item ? getSymbolsString(extractTokens(stableFarmItemStore.item.tokensInfo)) : '';
+  const title = stableDividendsItemStore.item
+    ? getSymbolsString(extractTokens(stableDividendsItemStore.item.tokensInfo))
+    : '';
 
   return { title };
 };

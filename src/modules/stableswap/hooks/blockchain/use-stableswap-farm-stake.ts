@@ -2,24 +2,24 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { stableswapFarmStakeApi } from '@modules/stableswap/api';
+import { stableDividendsStakeApi } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { useStableFarmItemStore } from '../store';
+import { useStableDividendsItemStore } from '../store';
 
-export const useStableswapFarmStake = () => {
+export const useStableDividendsStake = () => {
   const { tezos } = useRootStore();
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
-  const { item } = useStableFarmItemStore();
+  const { item } = useStableDividendsItemStore();
   const { accountPkh } = useAuthStore();
 
-  const stableswapFarmStake = useCallback(
+  const stableDividendsStake = useCallback(
     async (amount: BigNumber) => {
       if (isNull(tezos) || isNull(item) || isNull(accountPkh)) {
         return;
@@ -27,7 +27,7 @@ export const useStableswapFarmStake = () => {
       const { contractAddress } = item;
 
       try {
-        const operation = await stableswapFarmStakeApi(tezos, contractAddress, amount, accountPkh);
+        const operation = await stableDividendsStakeApi(tezos, contractAddress, amount, accountPkh);
 
         await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyStaked') });
       } catch (error) {
@@ -37,5 +37,5 @@ export const useStableswapFarmStake = () => {
     [accountPkh, confirmOperation, item, showErrorToast, t, tezos]
   );
 
-  return { stableswapFarmStake };
+  return { stableDividendsStake };
 };

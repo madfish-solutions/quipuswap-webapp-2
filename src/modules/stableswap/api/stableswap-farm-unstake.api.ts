@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { sendBatch } from '@blockchain';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 
-export const stableswapFarmUnstakeApi = async (
+export const stableDividendsUnstakeApi = async (
   tezos: TezosToolkit,
   stableswapPoolContractAddress: string,
   amount: BigNumber

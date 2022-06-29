@@ -1,9 +1,9 @@
 import { useRootStore } from '@providers/root-store-provider';
 
-import { StableFarmItemStore } from '../../store';
+import { StableDividendsItemStore } from '../../store';
 
-export const useStableFarmItemStore = () => {
-  const { stableFarmItemStore } = useRootStore();
+export const useStableDividendsItemStore = () => {
+  const { stableDividendsItemStore } = useRootStore();
 
-  return stableFarmItemStore as StableFarmItemStore;
+  return stableDividendsItemStore as StableDividendsItemStore;
 };

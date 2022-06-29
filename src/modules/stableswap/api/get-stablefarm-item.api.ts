@@ -1,19 +1,19 @@
 import BigNumber from 'bignumber.js';
 
-import { STABLEFARM_LIST_API_URL } from '@config/constants';
+import { STABLEDIVIDENDS_LIST_API_URL } from '@config/constants';
 import { NoPoolIdError } from '@shared/errors';
 import { Nullable } from '@shared/types';
 
-import { StableFarmItemResponse } from '../types';
+import { StableDividendsItemResponse } from '../types';
 
-export const getStableFarmItemApi = async (poolId: Nullable<BigNumber>) => {
+export const getStableDividendsItemApi = async (poolId: Nullable<BigNumber>) => {
   if (!poolId) {
     throw new NoPoolIdError();
   }
 
-  const response = await fetch(`${STABLEFARM_LIST_API_URL}/${poolId.toFixed()}`);
+  const response = await fetch(`${STABLEDIVIDENDS_LIST_API_URL}/${poolId.toFixed()}`);
 
-  const data = (await response.json()) as StableFarmItemResponse;
+  const data = (await response.json()) as StableDividendsItemResponse;
 
   return data.item;
 };

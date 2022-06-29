@@ -1,10 +1,10 @@
 import { useTranslation } from '@translation';
 
-import { useStableFarmListStore } from '../../../../../hooks';
+import { useStableDividendsListStore } from '../../../../../hooks';
 
 export const useFarmStatsViewModel = () => {
   const { t } = useTranslation();
-  const { stats } = useStableFarmListStore();
+  const { stats } = useStableDividendsListStore();
 
   const label = t('stableswap|totalValueLocked');
 

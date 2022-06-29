@@ -2,22 +2,22 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { stableswapFarmUnstakeApi } from '@modules/stableswap/api';
+import { stableDividendsUnstakeApi } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { useStableFarmItemStore } from '../store';
+import { useStableDividendsItemStore } from '../store';
 
-export const useStableswapFarmUnstake = () => {
+export const useStableDividendsUnstake = () => {
   const { tezos } = useRootStore();
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
-  const { item } = useStableFarmItemStore();
+  const { item } = useStableDividendsItemStore();
 
-  const stableswapFarmUnstake = useCallback(
+  const stableDividendsUnstake = useCallback(
     async (amount: BigNumber) => {
       if (isNull(tezos) || isNull(item)) {
         return;
@@ -25,7 +25,7 @@ export const useStableswapFarmUnstake = () => {
       const { contractAddress } = item;
 
       try {
-        const operation = await stableswapFarmUnstakeApi(tezos, contractAddress, amount);
+        const operation = await stableDividendsUnstakeApi(tezos, contractAddress, amount);
 
         await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyUnstaked') });
       } catch (error) {
@@ -35,5 +35,5 @@ export const useStableswapFarmUnstake = () => {
     [confirmOperation, item, showErrorToast, t, tezos]
   );
 
-  return { stableswapFarmUnstake };
+  return { stableDividendsUnstake };
 };

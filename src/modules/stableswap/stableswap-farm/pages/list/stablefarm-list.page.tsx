@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite';
 
 import { Iterator, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
-import { FarmCard, StableFarmListFilter, FarmStats, StableswapLiquidityRewardInfo } from './components';
+import { FarmCard, StableDividendsListFilter, FarmStats, StableswapLiquidityRewardInfo } from './components';
 import styles from './stablefarm-list.page.module.scss';
-import { useStableFarmListPageViewModel } from './use-stablefarm-list.page.vm';
+import { useStableDividendsListPageViewModel } from './use-stablefarm-list.page.vm';
 
-export const StableswapFarmListPage: FC = observer(() => {
-  const { title, data } = useStableFarmListPageViewModel();
+export const StableDividendsListPage: FC = observer(() => {
+  const { title, data } = useStableDividendsListPageViewModel();
 
   return (
     <>
@@ -17,7 +17,7 @@ export const StableswapFarmListPage: FC = observer(() => {
       <PageTitle>{title}</PageTitle>
       <FarmStats />
       <StableswapLiquidityRewardInfo />
-      <StableFarmListFilter />
+      <StableDividendsListFilter />
       <StateWrapper loaderFallback={<></>}>
         <Iterator render={FarmCard} data={data} isGrouped wrapperClassName={styles.farmsList} />
       </StateWrapper>

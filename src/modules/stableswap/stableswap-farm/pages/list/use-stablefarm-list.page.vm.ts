@@ -5,24 +5,24 @@ import BigNumber from 'bignumber.js';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useGetStableFarmList, useStableFarmListStore } from '../../../hooks';
+import { useGetStableDividendsList, useStableDividendsListStore } from '../../../hooks';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
-export const useStableFarmListPageViewModel = () => {
+export const useStableDividendsListPageViewModel = () => {
   const isReady = useReady();
-  const stableFarmListStore = useStableFarmListStore();
-  const { getStableFarmList } = useGetStableFarmList();
+  const stableDividendsListStore = useStableDividendsListStore();
+  const { getStableDividendsList } = useGetStableDividendsList();
   const { t } = useTranslation();
-  const title = t('stableswap|stableFarmTitle');
+  const title = t('stableswap|stableDividendsTitle');
 
   useEffect(() => {
     if (isReady) {
-      void getStableFarmList();
+      void getStableDividendsList();
     }
-  }, [getStableFarmList, isReady]);
+  }, [getStableDividendsList, isReady]);
 
-  const { listStore, filteredList } = stableFarmListStore;
+  const { listStore, filteredList } = stableDividendsListStore;
   const { isLoading } = listStore;
 
   const data = filteredList?.map(item => {
