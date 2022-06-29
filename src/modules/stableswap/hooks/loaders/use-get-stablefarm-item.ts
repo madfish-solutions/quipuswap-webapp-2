@@ -5,29 +5,29 @@ import BigNumber from 'bignumber.js';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useStableFarmItemStore } from '../store';
+import { useStableDividendsItemStore } from '../store';
 
-export const useGetStableFarmItem = () => {
+export const useGetStableDividendsItem = () => {
   const { showErrorToast } = useToasts();
-  const stableFarmItemStore = useStableFarmItemStore();
+  const stableDividendsItemStore = useStableDividendsItemStore();
   const isReady = useReady();
 
-  const getStableFarmItem = useCallback(
+  const getStableDividendsItem = useCallback(
     async (poolId: BigNumber) => {
       if (!isReady) {
         return;
       }
 
       try {
-        stableFarmItemStore.setPoolId(poolId);
-        await stableFarmItemStore.itemStore.load();
-        await stableFarmItemStore.stakerInfoStore.load();
+        stableDividendsItemStore.setPoolId(poolId);
+        await stableDividendsItemStore.itemStore.load();
+        await stableDividendsItemStore.stakerInfoStore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }
     },
-    [isReady, showErrorToast, stableFarmItemStore]
+    [isReady, showErrorToast, stableDividendsItemStore]
   );
 
-  return { getStableFarmItem };
+  return { getStableDividendsItem };
 };

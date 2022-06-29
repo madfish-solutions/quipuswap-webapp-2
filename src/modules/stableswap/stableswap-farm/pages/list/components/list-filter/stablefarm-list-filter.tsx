@@ -4,10 +4,10 @@ import { observer } from 'mobx-react-lite';
 
 import { ListFilterView } from '@shared/components';
 
-import { useStableFarmListFilterViewModel } from './use-stableswap-farm-list-filter.vm';
+import { useStableDividendsListFilterViewModel } from './use-stableswap-farm-list-filter.vm';
 
-export const StableFarmListFilter: FC = observer(() => {
-  const params = useStableFarmListFilterViewModel();
+export const StableDividendsListFilter: FC = observer(() => {
+  const params = useStableDividendsListFilterViewModel();
 
   return <ListFilterView {...params} />;
 });

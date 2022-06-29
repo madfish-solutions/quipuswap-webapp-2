@@ -4,28 +4,28 @@ import { computed, makeObservable } from 'mobx';
 import { fromDecimals, isEmptyArray } from '@shared/helpers';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
-import { getStableFarmListApi, getStableFarmStatsApi, getStakerInfo } from '../api';
+import { getStableDividendsListApi, getStableDividendsStatsApi, getStakerInfo } from '../api';
 import { farmsListMapper, stakerInfoMapper, statsMapper } from '../mapping';
 import { listWithUserInfo } from '../stableswap-farm/pages/list/helpers';
 import {
-  RawStableFarmItem,
-  RawStableFarmStats,
+  RawStableDividendsItem,
+  RawStableDividendsStats,
   RawStakerInfo,
-  StableFarmItem,
-  StableFarmStats,
+  StableDividendsItem,
+  StableDividendsStats,
   StakerInfo
 } from '../types';
 
-export class StableFarmListStore {
-  readonly statsStore = new LoadingErrorData<RawStableFarmStats, Nullable<StableFarmStats>>(
+export class StableDividendsListStore {
+  readonly statsStore = new LoadingErrorData<RawStableDividendsStats, Nullable<StableDividendsStats>>(
     null,
-    async () => await getStableFarmStatsApi(),
+    async () => await getStableDividendsStatsApi(),
     statsMapper
   );
 
-  readonly listStore = new LoadingErrorData<Array<RawStableFarmItem>, Array<StableFarmItem>>(
+  readonly listStore = new LoadingErrorData<Array<RawStableDividendsItem>, Array<StableDividendsItem>>(
     [],
-    async () => await getStableFarmListApi(),
+    async () => await getStableDividendsListApi(),
     farmsListMapper
   );
 
@@ -79,6 +79,6 @@ export class StableFarmListStore {
   }
 
   get filteredList() {
-    return this.rootStore.stableFarmFilterStore?.filterAndSort(this.listWithUserInfo);
+    return this.rootStore.stableDividendsFilterStore?.filterAndSort(this.listWithUserInfo);
   }
 }

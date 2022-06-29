@@ -5,7 +5,7 @@ import { withApproveApi } from '@blockchain';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
 
-export const stableswapFarmStakeApi = async (
+export const stableDividendsStakeApi = async (
   tezos: TezosToolkit,
   stableswapPoolContractAddress: string,
   amount: BigNumber,

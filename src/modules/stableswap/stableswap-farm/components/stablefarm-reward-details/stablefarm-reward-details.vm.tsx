@@ -8,7 +8,7 @@ import { TokenInfo } from '@shared/elements';
 import { i18n } from '@translation';
 
 import styles from './stablefarm-reward-details.module.scss';
-import { StableFarmRewardProps } from './types';
+import { StableDividendsRewardProps } from './types';
 
 enum Columns {
   TOKEN = 'TOKEN',
@@ -47,7 +47,7 @@ const getCustomHeaderProps = (_: unknown, meta: MetaBase<Row> & { column: Header
 const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
   getColumnProps(meta.cell.column.id);
 
-export const useStableFarmRewardDetailsViewModel = ({ rawData }: StableFarmRewardProps) => {
+export const useStableDividendsRewardDetailsViewModel = ({ rawData }: StableDividendsRewardProps) => {
   const data: Array<Row> = rawData.map(({ token, claimable }) => ({
     [Columns.TOKEN]: <TokenInfo token={token} />,
     [Columns.CLAIMABLE]: <TokenRewardCell {...claimable} />

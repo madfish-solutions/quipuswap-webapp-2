@@ -6,16 +6,16 @@ import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
-import { getStableFarmItemApi, getStakerInfo } from '../api';
+import { getStableDividendsItemApi, getStakerInfo } from '../api';
 import { farmItemMapper } from '../mapping';
-import { IRawStableFarmItem, RawStakerInfo, StableFarmItem } from '../types';
+import { IRawStableDividendsItem, RawStakerInfo, StableDividendsItem } from '../types';
 
-export class StableFarmItemStore {
+export class StableDividendsItemStore {
   poolId: Nullable<BigNumber> = null;
 
-  readonly itemStore = new LoadingErrorData<IRawStableFarmItem['item'], Nullable<StableFarmItem>>(
+  readonly itemStore = new LoadingErrorData<IRawStableDividendsItem['item'], Nullable<StableDividendsItem>>(
     null,
-    async () => await getStableFarmItemApi(this.poolId),
+    async () => await getStableDividendsItemApi(this.poolId),
     farmItemMapper
   );
 

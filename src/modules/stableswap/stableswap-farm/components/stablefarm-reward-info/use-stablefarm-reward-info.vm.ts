@@ -5,25 +5,25 @@ import { BigNumber } from 'bignumber.js';
 import { fromDecimals, isEmptyArray, isNull, multipliedIfPossible } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { useStableFarmHarvest, useStableFarmItemStore } from '../../../hooks';
-import { useStableFarmStakerBalance } from '../../hooks';
-import { StableFarmRewardDetailsParams } from '../stablefarm-reward-details/types';
+import { useStableDividendsHarvest, useStableDividendsItemStore } from '../../../hooks';
+import { useStableDividendsStakerBalance } from '../../hooks';
+import { StableDividendsRewardDetailsParams } from '../stablefarm-reward-details/types';
 
-export const useStableFarmRewardInfoViewModel = () => {
+export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
-  const { item, userInfo } = useStableFarmItemStore();
-  const { harvest } = useStableFarmHarvest();
+  const { item, userInfo } = useStableDividendsItemStore();
+  const { harvest } = useStableDividendsHarvest();
 
   const quipuExchangeRates = item?.stakedTokenExchangeRate ?? null;
   const tokensInfo = item?.tokensInfo ?? null;
 
   const hadleHarvest = useCallback(async () => await harvest(), [harvest]);
 
-  const shares = useStableFarmStakerBalance();
+  const shares = useStableDividendsStakerBalance();
   const sharesDollarEquivalent = multipliedIfPossible(quipuExchangeRates, shares);
 
-  const rawData: Array<StableFarmRewardDetailsParams> = useMemo(() => {
-    const helperArray: Array<StableFarmRewardDetailsParams> = [];
+  const rawData: Array<StableDividendsRewardDetailsParams> = useMemo(() => {
+    const helperArray: Array<StableDividendsRewardDetailsParams> = [];
     if (isNull(userInfo) || isNull(tokensInfo)) {
       return [];
     }

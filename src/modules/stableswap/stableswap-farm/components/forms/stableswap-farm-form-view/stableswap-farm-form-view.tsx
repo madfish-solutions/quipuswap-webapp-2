@@ -6,7 +6,7 @@ import { Button, ConnectWalletOrDoSomething, TokenInput, Tokens } from '@shared/
 import { Optional, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
-export interface StableswapFarmFormViewProps {
+export interface StableDividendsFormViewProps {
   handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
   label: string;
   inputAmount: string;
@@ -20,7 +20,7 @@ export interface StableswapFarmFormViewProps {
   balanceText?: string;
 }
 
-export const StableswapFarmFormView: FC<StableswapFarmFormViewProps> = ({
+export const StableDividendsFormView: FC<StableDividendsFormViewProps> = ({
   handleSubmit,
   label,
   inputAmount,

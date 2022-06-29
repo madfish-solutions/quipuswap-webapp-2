@@ -6,16 +6,16 @@ import { useAuthStore } from '@shared/hooks';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { stableFarmHarvestApi } from '../../api';
-import { useStableFarmItemStore } from '../store';
+import { stableDividendsHarvestApi } from '../../api';
+import { useStableDividendsItemStore } from '../store';
 
-export const useStableFarmHarvest = () => {
+export const useStableDividendsHarvest = () => {
   const { tezos } = useRootStore();
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const { accountPkh } = useAuthStore();
-  const { item } = useStableFarmItemStore();
+  const { item } = useStableDividendsItemStore();
 
   const harvest = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh) || isNull(item)) {
@@ -25,7 +25,7 @@ export const useStableFarmHarvest = () => {
     const { contractAddress } = item;
 
     try {
-      const operation = await stableFarmHarvestApi(tezos, contractAddress);
+      const operation = await stableDividendsHarvestApi(tezos, contractAddress);
 
       await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyHarvested') });
     } catch (error) {

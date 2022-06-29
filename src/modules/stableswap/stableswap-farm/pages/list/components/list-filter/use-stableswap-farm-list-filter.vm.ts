@@ -2,41 +2,41 @@ import { FormEvent } from 'react';
 
 import cx from 'classnames';
 
-import { useStableFarmFilterStore } from '@modules/stableswap/hooks';
+import { useStableDividendsFilterStore } from '@modules/stableswap/hooks';
 import { ListFilterViewProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { StableFarmSortField, StableFarmSortFieldItem } from '../../types';
+import { StableDividendsSortField, StableDividendsSortFieldItem } from '../../types';
 import styles from './stablefarm-list-filter.module.scss';
 
-export const useStableFarmListFilterViewModel = (): ListFilterViewProps => {
+export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
-  const stableFarmFilterStore = useStableFarmFilterStore();
+  const stableDividendsFilterStore = useStableDividendsFilterStore();
   const { accountPkh } = useAuthStore();
-  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableFarmFilterStore;
+  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableDividendsFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
-    const item = value as StableFarmSortFieldItem;
+    const item = value as StableDividendsSortFieldItem;
 
-    return stableFarmFilterStore.onSortFieldChange(item.field);
+    return stableDividendsFilterStore.onSortFieldChange(item.field);
   };
 
   const handleSortDirectionToggle = () => {
-    return stableFarmFilterStore.onSortDirectionToggle();
+    return stableDividendsFilterStore.onSortDirectionToggle();
   };
 
-  const sortValues: StableFarmSortFieldItem[] = [
-    { label: t('common|Default'), field: StableFarmSortField.ID },
-    { label: t('stableswap|apr'), field: StableFarmSortField.APR },
-    { label: t('stableswap|apy'), field: StableFarmSortField.APY },
-    { label: t('stableswap|tvl'), field: StableFarmSortField.TVL }
+  const sortValues: StableDividendsSortFieldItem[] = [
+    { label: t('common|Default'), field: StableDividendsSortField.ID },
+    { label: t('stableswap|apr'), field: StableDividendsSortField.APR },
+    { label: t('stableswap|apy'), field: StableDividendsSortField.APY },
+    { label: t('stableswap|tvl'), field: StableDividendsSortField.TVL }
   ];
 
-  const sortUserValues: StableFarmSortFieldItem[] = [
-    { label: t('stableswap|deposit'), field: StableFarmSortField.DEPOSIT },
-    { label: t('stableswap|earned'), field: StableFarmSortField.EARNED }
+  const sortUserValues: StableDividendsSortFieldItem[] = [
+    { label: t('stableswap|deposit'), field: StableDividendsSortField.DEPOSIT },
+    { label: t('stableswap|earned'), field: StableDividendsSortField.EARNED }
   ];
 
   const sortingValues = isNull(accountPkh) ? sortValues : sortValues.concat(sortUserValues);
@@ -51,33 +51,33 @@ export const useStableFarmListFilterViewModel = (): ListFilterViewProps => {
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const setStakedOnly = (state: boolean) => {
-    return stableFarmFilterStore.setStakedOnly(state);
+    return stableDividendsFilterStore.setStakedOnly(state);
   };
 
   const setWhitelistedOnly = (state: boolean) => {
-    return stableFarmFilterStore.setWhitelistedOnly(state);
+    return stableDividendsFilterStore.setWhitelistedOnly(state);
   };
 
   const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e)) {
       return;
     }
-    stableFarmFilterStore.onSearchChange((e.target as HTMLInputElement).value);
+    stableDividendsFilterStore.onSearchChange((e.target as HTMLInputElement).value);
   };
 
   const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e) || isNull(e.target)) {
       return;
     }
-    stableFarmFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
+    stableDividendsFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
   };
 
   const handleIncrement = () => {
-    stableFarmFilterStore.handleIncrement();
+    stableDividendsFilterStore.handleIncrement();
   };
 
   const handleDecrement = () => {
-    stableFarmFilterStore.handleDecrement();
+    stableDividendsFilterStore.handleDecrement();
   };
 
   const switcherDataList = [

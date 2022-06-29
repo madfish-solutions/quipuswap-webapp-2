@@ -6,13 +6,13 @@ import { ActiveStatus } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { useStableFarmItemStore } from '../../../hooks';
+import { useStableDividendsItemStore } from '../../../hooks';
 import styles from './details.module.scss';
 
 export const useDetailsVievModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
-  const { itemStore } = useStableFarmItemStore();
+  const { itemStore } = useStableDividendsItemStore();
   const { data: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
 
   const isLoading = isDataLoading || !isDataInitialized || !dAppReady;

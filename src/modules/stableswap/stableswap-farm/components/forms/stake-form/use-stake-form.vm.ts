@@ -6,15 +6,15 @@ import { numberAsString, getFormikError, isExist, toDecimals } from '@shared/hel
 import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useStableswapFarmStake } from '../../../../hooks';
+import { useStableDividendsStake } from '../../../../hooks';
 import { useFormValidation } from '../../../hooks';
 import { FormFields, FormValues } from '../../../types';
-import { StableswapFarmFormViewProps } from '../stableswap-farm-form-view';
+import { StableDividendsFormViewProps } from '../stableswap-farm-form-view';
 
-export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
+export const useStakeFormViewModel = (): StableDividendsFormViewProps => {
   const { t } = useTranslation();
 
-  const { stableswapFarmStake } = useStableswapFarmStake();
+  const { stableDividendsStake } = useStableDividendsStake();
 
   const token = DEFAULT_TOKEN;
 
@@ -29,7 +29,7 @@ export const useStakeFormViewModel = (): StableswapFarmFormViewProps => {
 
     if (!amount.isNaN()) {
       const amountAtoms = toDecimals(amount, token);
-      await stableswapFarmStake(amountAtoms);
+      await stableDividendsStake(amountAtoms);
     }
 
     formik.resetForm();

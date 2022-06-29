@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js';
 import { fromDecimals } from '@shared/helpers';
 import { mapBackendToken } from '@shared/mapping';
 
-import { RawStableFarmItem, StableFarmItem } from '../types';
+import { RawStableDividendsItem, StableDividendsItem } from '../types';
 
-export const farmItemMapper = (item: RawStableFarmItem): StableFarmItem => {
+export const farmItemMapper = (item: RawStableDividendsItem): StableDividendsItem => {
   const {
     id,
     apr,
@@ -35,7 +35,7 @@ export const farmItemMapper = (item: RawStableFarmItem): StableFarmItem => {
     farmContractUrl,
     contractAddress,
     id: new BigNumber(id),
-    stableFarmItemUrl: id,
+    stableDividendsItemUrl: id,
     apr: new BigNumber(apr),
     apy: new BigNumber(apy),
     tokensInfo: readyTokensInfo,

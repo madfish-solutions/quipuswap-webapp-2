@@ -7,11 +7,11 @@ import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
 
-import { StableFarmRewardDetails } from '../stablefarm-reward-details';
+import { StableDividendsRewardDetails } from '../stablefarm-reward-details';
 import styles from './stablefarm-reward-info.module.scss';
-import { useStableFarmRewardInfoViewModel } from './use-stablefarm-reward-info.vm';
+import { useStableDividendsRewardInfoViewModel } from './use-stablefarm-reward-info.vm';
 
-export const StableFarmRewardInfo = observer(() => {
+export const StableDividendsRewardInfo = observer(() => {
   const {
     claimablePendingRewards,
     hadleHarvest,
@@ -23,7 +23,7 @@ export const StableFarmRewardInfo = observer(() => {
     sharesDollarEquivalent,
     yourShareName,
     yourShareTooltip
-  } = useStableFarmRewardInfoViewModel();
+  } = useStableDividendsRewardInfoViewModel();
 
   return (
     <RewardInfo
@@ -38,7 +38,7 @@ export const StableFarmRewardInfo = observer(() => {
       rewardTooltip={rewardTooltip}
       buttonText={buttonText}
       buttonUp
-      details={showDetails && <StableFarmRewardDetails rawData={rawData} />}
+      details={showDetails && <StableDividendsRewardDetails rawData={rawData} />}
     >
       <FarmingStatsItem
         itemName={yourShareName}

@@ -6,20 +6,20 @@ import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
-import { StableFarmFormTabs } from '../../../types';
-import { StableFarmRewardInfo, StakeForm, Details } from '../../components';
-import { useStableswapFarmItemPageViewModel } from './use-stableswap-farm-item.page.vm';
+import { StableDividendsFormTabs } from '../../../types';
+import { StableDividendsRewardInfo, StakeForm, Details } from '../../components';
+import { useStableDividendsItemPageViewModel } from './use-stableswap-farm-item.page.vm';
 
-export const StableswapFarmStakeItemPage: FC = observer(() => {
-  const { title } = useStableswapFarmItemPageViewModel();
+export const StableDividendsStakeItemPage: FC = observer(() => {
+  const { title } = useStableDividendsItemPageViewModel();
 
   return (
     <>
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
-      <StableFarmRewardInfo />
+      <StableDividendsRewardInfo />
       <StickyBlock>
-        <StableswapFormTabsCard subpath={StableswapRoutes.farming} tabActiveId={StableFarmFormTabs.stake}>
+        <StableswapFormTabsCard subpath={StableswapRoutes.dividends} tabActiveId={StableDividendsFormTabs.stake}>
           <StakeForm />
         </StableswapFormTabsCard>
         <Details />

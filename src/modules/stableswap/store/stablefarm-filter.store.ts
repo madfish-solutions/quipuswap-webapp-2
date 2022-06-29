@@ -3,15 +3,15 @@ import { action, makeObservable, observable } from 'mobx';
 import { isExist } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
 
-import { sortStableFarmList } from '../stableswap-farm/pages/list/helpers';
-import { StableFarmSortField } from '../stableswap-farm/pages/list/types';
-import { StableFarmItem, StakerInfo } from '../types';
+import { sortStableDividendsList } from '../stableswap-farm/pages/list/helpers';
+import { StableDividendsSortField } from '../stableswap-farm/pages/list/types';
+import { StableDividendsItem, StakerInfo } from '../types';
 
-export class StableFarmFilterStore extends BaseFilterStore {
+export class StableDividendsFilterStore extends BaseFilterStore {
   stakedOnly = false;
   whitelistedOnly = true;
 
-  sortField: StableFarmSortField = StableFarmSortField.ID;
+  sortField: StableDividendsSortField = StableDividendsSortField.ID;
 
   constructor() {
     super();
@@ -27,7 +27,7 @@ export class StableFarmFilterStore extends BaseFilterStore {
     });
   }
 
-  filterAndSort(list: Array<StableFarmItem & StakerInfo>) {
+  filterAndSort(list: Array<StableDividendsItem & StakerInfo>) {
     let localList = [...list];
     if (this.stakedOnly) {
       localList = localList.filter(({ yourDeposit }) => isExist(yourDeposit) && yourDeposit.isGreaterThan('0'));
@@ -43,7 +43,7 @@ export class StableFarmFilterStore extends BaseFilterStore {
       );
     }
 
-    return sortStableFarmList(localList, this.sortField, this.sortDirection);
+    return sortStableDividendsList(localList, this.sortField, this.sortDirection);
   }
 
   setStakedOnly(state: boolean) {
@@ -54,7 +54,7 @@ export class StableFarmFilterStore extends BaseFilterStore {
     this.whitelistedOnly = state;
   }
 
-  onSortFieldChange(field: StableFarmSortField) {
+  onSortFieldChange(field: StableDividendsSortField) {
     this.sortField = field;
   }
 }

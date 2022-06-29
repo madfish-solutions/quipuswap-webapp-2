@@ -9,25 +9,28 @@ import { StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
 
 import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableFarmFormTabs } from '../types';
-import { StableswapFarmStakeItemPage, StableswapFarmUnstakeItemPage, StableswapFarmListPage } from './pages';
-import { useStableFarmRouterViewModel } from './stablefarm.routing.vm';
+import { StableDividendsFormTabs } from '../types';
+import { StableDividendsStakeItemPage, StableDividendsUnstakeItemPage, StableDividendsListPage } from './pages';
+import { useStableDividendsRouterViewModel } from './stablefarm.routing.vm';
 
-export const StableswapFarmRouter: FC = observer(() => {
+export const StableDividendsRouter: FC = observer(() => {
   const { pathname } = useLocation();
 
-  const { isInitialazied, error } = useStableFarmRouterViewModel();
+  const { isInitialazied, error } = useStableDividendsRouterViewModel();
 
   const routerParts = getRouterParts(pathname);
   const lastTab = getLastElement(routerParts);
 
-  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [StableFarmFormTabs.stake, StableFarmFormTabs.unstake]);
+  const isAddOrRemoveInUrl = isSomeInArray(routerParts, [
+    StableDividendsFormTabs.stake,
+    StableDividendsFormTabs.unstake
+  ]);
 
   if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${lastTab}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${lastTab}`}
       />
     );
   }
@@ -35,10 +38,10 @@ export const StableswapFarmRouter: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <Routes>
-        <Route index element={<StableswapFarmListPage />} />
+        <Route index element={<StableDividendsListPage />} />
 
-        <Route path={`/${StableFarmFormTabs.stake}/:poolId`} element={<StableswapFarmStakeItemPage />} />
-        <Route path={`/${StableFarmFormTabs.unstake}/:poolId`} element={<StableswapFarmUnstakeItemPage />} />
+        <Route path={`/${StableDividendsFormTabs.stake}/:poolId`} element={<StableDividendsStakeItemPage />} />
+        <Route path={`/${StableDividendsFormTabs.unstake}/:poolId`} element={<StableDividendsUnstakeItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </Routes>

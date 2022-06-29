@@ -1,10 +1,10 @@
-import { STABLEFARM_LIST_API_URL } from '@config/constants';
+import { STABLEDIVIDENDS_LIST_API_URL } from '@config/constants';
 
-import { StableFarmListResponse } from '../types';
+import { StableDividendsListResponse } from '../types';
 
-export const getStableFarmListApi = async () => {
-  const response = await fetch(STABLEFARM_LIST_API_URL);
-  const data = (await response.json()) as StableFarmListResponse;
+export const getStableDividendsListApi = async () => {
+  const response = await fetch(STABLEDIVIDENDS_LIST_API_URL);
+  const data = (await response.json()) as StableDividendsListResponse;
 
   return data.list;
 };

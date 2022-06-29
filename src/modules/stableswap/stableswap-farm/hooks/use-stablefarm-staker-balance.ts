@@ -5,14 +5,14 @@ import { useRootStore } from '@providers/root-store-provider';
 import { fromDecimals, isNull } from '@shared/helpers';
 import { useAuthStore, useOnBlock } from '@shared/hooks';
 
-import { useStableFarmItemStore } from '../../hooks';
+import { useStableDividendsItemStore } from '../../hooks';
 
-export const useStableFarmStakerBalance = () => {
+export const useStableDividendsStakerBalance = () => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
-  const stableFarmItemStore = useStableFarmItemStore();
+  const stableDividendsItemStore = useStableDividendsItemStore();
 
-  const { item, poolId, stakerInfoStore, userInfo } = stableFarmItemStore;
+  const { item, poolId, stakerInfoStore, userInfo } = stableDividendsItemStore;
 
   const updateStakerBalance = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh) || isNull(item) || isNull(poolId)) {

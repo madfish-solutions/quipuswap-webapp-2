@@ -5,15 +5,15 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useStableFarmListStore } from '../store';
+import { useStableDividendsListStore } from '../store';
 
-export const useGetStableFarmList = () => {
+export const useGetStableDividendsList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const { listStore, stakerInfo, statsStore } = useStableFarmListStore();
+  const { listStore, stakerInfo, statsStore } = useStableDividendsListStore();
 
-  const getStableFarmList = useCallback(async () => {
+  const getStableDividendsList = useCallback(async () => {
     if (!isReady) {
       return;
     }
@@ -30,5 +30,5 @@ export const useGetStableFarmList = () => {
     noopMap(authStore.accountPkh);
   }, [isReady, authStore.accountPkh, listStore, stakerInfo, statsStore, showErrorToast]);
 
-  return { getStableFarmList };
+  return { getStableDividendsList };
 };
