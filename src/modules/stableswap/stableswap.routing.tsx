@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 
 import { PageNotFoundPage } from '../errors';
-import { StableDividendsRouter } from './stableswap-farm';
+import { StableDividendsRouter } from './stabledividends';
 import { StableswapLiquidityRouter } from './stableswap-liquidity';
 import { StableswapRoutes } from './stableswap-routes.enum';
 

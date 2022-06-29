@@ -96,14 +96,14 @@ export class RootStore {
 
   async createStableDividendsListStore() {
     if (isNull(this.stableDividendsListStore)) {
-      const { StableDividendsListStore } = await import('@modules/stableswap/store/stablefarm-list.store');
+      const { StableDividendsListStore } = await import('@modules/stableswap/store/stabledividends-list.store');
       this.stableDividendsListStore = new StableDividendsListStore(this);
     }
   }
 
   async createStableDividendsItemStore() {
     if (isNull(this.stableDividendsItemStore)) {
-      const { StableDividendsItemStore } = await import('@modules/stableswap/store/stablefarm-item.store');
+      const { StableDividendsItemStore } = await import('@modules/stableswap/store/stabledividends-item.store');
       this.stableDividendsItemStore = new StableDividendsItemStore(this);
     }
   }
@@ -138,7 +138,7 @@ export class RootStore {
 
   async createStableDividendsFilterStore() {
     if (isNull(this.stableDividendsFilterStore)) {
-      const { StableDividendsFilterStore } = await import('@modules/stableswap/store/stablefarm-filter.store');
+      const { StableDividendsFilterStore } = await import('@modules/stableswap/store/stabledividends-filter.store');
       this.stableDividendsFilterStore = new StableDividendsFilterStore();
     }
   }
