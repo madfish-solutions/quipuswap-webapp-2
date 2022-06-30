@@ -55,9 +55,9 @@ export const useStableDividendsRewardInfoViewModel = () => {
   const buttonText = t('stableswap|Harvest');
   //TODO: tooltip text
   const rewardTooltip = undefined;
-  const yourShareName = t('farm|Your Share');
+  const yourShareName = t('stableswap|yourShare');
   //TODO: tooltip text
-  const yourShareTooltip = t('farm|yourShareTooltip');
+  const yourShareTooltip = t('stableswap|yourShareTooltip');
 
   return {
     claimablePendingRewards,

@@ -22,11 +22,11 @@ export interface Row {
 
 const rewardTokensColumns: Column<Row>[] = [
   {
-    Header: i18n.t('farm|Token'),
+    Header: i18n.t('stableswap|token'),
     accessor: Columns.TOKEN
   },
   {
-    Header: i18n.t('farm|Claimable'),
+    Header: i18n.t('stableswap|claimable'),
     accessor: Columns.CLAIMABLE
   }
 ];

@@ -19,7 +19,7 @@ export const useDetailsVievModel = () => {
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
   if (isExist(item)) {
-    const { tvl, apr, farmContractUrl, stakedToken, stakedTokenExchangeRate, isWhitelisted } = item;
+    const { tvl, apr, stableDividendsContractUrl, stakedToken, stakedTokenExchangeRate, isWhitelisted } = item;
 
     const whitelistedTag = isWhitelisted
       ? {
@@ -34,7 +34,7 @@ export const useDetailsVievModel = () => {
       tvl,
       apr,
       whitelistedTag,
-      farmContractUrl,
+      stableDividendsContractUrl,
       dollarEquivalent: tvl.multipliedBy(stakedTokenExchangeRate),
       tokenSymbol: getTokenSymbol(stakedToken)
     };
@@ -45,7 +45,7 @@ export const useDetailsVievModel = () => {
     cardCellClassName,
     tvl: null,
     apr: null,
-    farmContractUrl: '',
+    stableDividendsContractUrl: '',
     dollarEquivalent: null,
     tokenSymbol: null
   };

@@ -2,12 +2,12 @@ import { observer } from 'mobx-react-lite';
 
 import { DOLLAR } from '@config/constants';
 import { DEFAULT_TOKEN } from '@config/tokens';
-import { FarmingStatsItem } from '@modules/farming/pages/item/components/farming-stats-item';
 import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
 
 import { StableDividendsRewardDetails } from '../stabledividends-reward-details';
+import { StableDividendsStatsItem } from '../stabledividends-stats-item';
 import styles from './stabledividends-reward-info.module.scss';
 import { useStableDividendsRewardInfoViewModel } from './use-stabledividends-reward-info.vm';
 
@@ -40,7 +40,7 @@ export const StableDividendsRewardInfo = observer(() => {
       buttonUp
       details={showDetails && <StableDividendsRewardDetails rawData={rawData} />}
     >
-      <FarmingStatsItem
+      <StableDividendsStatsItem
         itemName={yourShareName}
         loading={isNull(shares)}
         tooltipContent={yourShareTooltip}
@@ -53,7 +53,7 @@ export const StableDividendsRewardInfo = observer(() => {
           dollarEquivalent={sharesDollarEquivalent}
           labelSize="large"
         />
-      </FarmingStatsItem>
+      </StableDividendsStatsItem>
     </RewardInfo>
   );
 });

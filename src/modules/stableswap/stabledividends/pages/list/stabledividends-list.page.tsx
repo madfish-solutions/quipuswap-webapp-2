@@ -24,7 +24,7 @@ export const StableDividendsListPage: FC = observer(() => {
       <StableswapLiquidityRewardInfo />
       <StableDividendsListFilter />
       <StateWrapper loaderFallback={<></>}>
-        <Iterator render={StableDividendsCard} data={data} isGrouped wrapperClassName={styles.farmsList} />
+        <Iterator render={StableDividendsCard} data={data} isGrouped wrapperClassName={styles.stableDividendsList} />
       </StateWrapper>
     </>
   );

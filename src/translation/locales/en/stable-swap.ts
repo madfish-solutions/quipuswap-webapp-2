@@ -1,4 +1,6 @@
 export const stableswap = {
+  token: 'Token',
+  claimable: 'Claimable',
   tvl: 'TVL',
   apr: 'APR',
   apy: 'APY',
@@ -6,6 +8,7 @@ export const stableswap = {
   earned: 'Earned',
   liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
+  stakedOnly: 'Staked Only',
   'Total LP Supply': 'Total LP Supply',
   'Interface Fee': 'Interface Fee',
   'QUIPU Stakers Fee': 'QUIPU Stakers Fee',
@@ -27,6 +30,8 @@ export const stableswap = {
   valueLocked: 'Value Locked',
   Tags: 'Tags',
   totalValueLocked: 'Total Value Locked',
+  yourShare: 'Your Share',
+  yourShareTooltip: 'Current value of your stake in this farm.',
   Harvest: 'Harvest',
   harvestAll: 'Harvest All',
   poolAddress: 'Pool Address',
