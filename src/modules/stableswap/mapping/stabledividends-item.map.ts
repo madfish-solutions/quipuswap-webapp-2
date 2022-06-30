@@ -14,7 +14,7 @@ export const stableDividendsItemMapper = (item: RawStableDividendsItem): StableD
     tokensInfo,
     stakedToken,
     isWhitelisted,
-    farmContractUrl,
+    stableDividendsContractUrl,
     contractAddress,
     stakedTokenExchangeRate
   } = item;
@@ -32,7 +32,7 @@ export const stableDividendsItemMapper = (item: RawStableDividendsItem): StableD
 
   return {
     isWhitelisted,
-    farmContractUrl,
+    stableDividendsContractUrl,
     contractAddress,
     id: new BigNumber(id),
     stableDividendsItemUrl: id,

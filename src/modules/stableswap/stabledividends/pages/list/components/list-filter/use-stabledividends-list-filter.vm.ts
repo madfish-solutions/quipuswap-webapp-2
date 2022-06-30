@@ -87,7 +87,7 @@ export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => 
       disabled: isNull(accountPkh),
       switcherDTI: 'stakedOnlySwitcher',
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
-      translation: t('farm|stakedOnly'),
+      translation: t('stableswap|stakedOnly'),
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
     },
