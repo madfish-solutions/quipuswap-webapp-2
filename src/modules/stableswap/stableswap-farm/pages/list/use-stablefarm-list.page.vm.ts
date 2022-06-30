@@ -33,76 +33,89 @@ export const useStableFarmListPageViewModel = () => {
   const { listStore, filteredList } = stableFarmListStore;
   const { isLoading } = listStore;
 
-  const data = filteredList?.map(item => {
-    const shouldShowUserStats =
-      !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarned?.gt(DEFAULT_VALUE));
+  const data = filteredList?.map(
+    ({
+      id,
+      stableFarmItemUrl,
+      tokensInfo,
+      tvl,
+      apr,
+      apy,
+      stakedToken,
+      stakedTokenExchangeRate,
+      yourDeposit,
+      yourEarned
+    }) => {
+      const shouldShowUserStats =
+        !isNull(accountPkh) && (yourDeposit?.gt(DEFAULT_VALUE) || yourEarned?.gt(DEFAULT_VALUE));
 
-    // TODO: Rename StableFarmFormTabs to StableDividendsFromTabs after merge QUIPU-225
-    const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${item.stableFarmItemUrl}`;
-    const status = { status: ActiveStatus.ACTIVE, label: t('common|whiteListed'), filled: true };
-    const extractedTokens = extractTokens(item.tokensInfo);
+      // TODO: Rename StableFarmFormTabs to StableDividendsFromTabs after merge QUIPU-225
+      const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}/${StableFarmFormTabs.stake}/${stableFarmItemUrl}`;
+      const status = { status: ActiveStatus.ACTIVE, label: t('common|whiteListed'), filled: true };
+      const extractedTokens = extractTokens(tokensInfo);
 
-    const stableDividendsItemDTI = `stable-dividends-item-${item.id}`;
+      const stableDividendsItemDTI = `stable-dividends-item-${id}`;
 
-    const itemStats = [
-      {
-        cellName: t('stableswap|tvl'),
-        amounts: {
-          amount: item.tvl,
-          dollarEquivalent: item.tvl,
-          currency: DOLLAR,
-          dollarEquivalentOnly: true
-        }
-      },
-      {
-        cellName: t('stableswap|apr'),
-        amounts: {
-          amount: item.apr,
-          currency: PERCENT,
-          amountDecimals: 2
-        }
-      },
-      {
-        cellName: t('stableswap|apy'),
-        amounts: {
-          amount: item.apy,
-          currency: PERCENT,
-          amountDecimals: 2
-        }
-      }
-    ];
-
-    const userStats = shouldShowUserStats
-      ? [
-          {
-            cellName: t('stableswap|yourDeposit'),
-            amounts: {
-              amount: item.yourDeposit,
-              dollarEquivalent: item.yourDeposit.multipliedBy(item.stakedTokenExchangeRate),
-              dollarEquivalentOnly: true
-            }
-          },
-          {
-            cellName: t('stableswap|yourEarned'),
-            amounts: {
-              amount: item.yourEarned,
-              dollarEquivalent: item.yourEarned.multipliedBy(item.stakedTokenExchangeRate),
-              dollarEquivalentOnly: true
-            }
+      const itemStats = [
+        {
+          cellName: t('stableswap|tvl'),
+          amounts: {
+            amount: tvl,
+            dollarEquivalent: tvl,
+            currency: DOLLAR,
+            dollarEquivalentOnly: true
           }
-        ]
-      : undefined;
+        },
+        {
+          cellName: t('stableswap|apr'),
+          amounts: {
+            amount: apr,
+            currency: PERCENT,
+            amountDecimals: 2
+          }
+        },
+        {
+          cellName: t('stableswap|apy'),
+          amounts: {
+            amount: apy,
+            currency: PERCENT,
+            amountDecimals: 2
+          }
+        }
+      ];
 
-    return {
-      href: link,
-      status: status,
-      inputToken: extractedTokens,
-      outputToken: item.stakedToken,
-      itemStats,
-      userStats,
-      stableDividendsItemDTI
-    };
-  });
+      const userStats = shouldShowUserStats
+        ? [
+            {
+              cellName: t('stableswap|yourDeposit'),
+              amounts: {
+                amount: yourDeposit,
+                dollarEquivalent: yourDeposit.multipliedBy(stakedTokenExchangeRate),
+                dollarEquivalentOnly: true
+              }
+            },
+            {
+              cellName: t('stableswap|yourEarned'),
+              amounts: {
+                amount: yourEarned,
+                dollarEquivalent: yourEarned.multipliedBy(stakedTokenExchangeRate),
+                dollarEquivalentOnly: true
+              }
+            }
+          ]
+        : undefined;
+
+      return {
+        href: link,
+        status: status,
+        inputToken: extractedTokens,
+        outputToken: stakedToken,
+        itemStats,
+        userStats,
+        stableDividendsItemDTI
+      };
+    }
+  );
 
   return { title, isLoading, data: data ?? [] };
 };
