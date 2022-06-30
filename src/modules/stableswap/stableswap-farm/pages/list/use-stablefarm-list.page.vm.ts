@@ -108,8 +108,8 @@ export const useStableFarmListPageViewModel = () => {
       return {
         href: link,
         status: status,
-        inputToken: extractedTokens,
-        outputToken: stakedToken,
+        inputToken: stakedToken,
+        outputToken: extractedTokens,
         itemStats,
         userStats,
         stableDividendsItemDTI
