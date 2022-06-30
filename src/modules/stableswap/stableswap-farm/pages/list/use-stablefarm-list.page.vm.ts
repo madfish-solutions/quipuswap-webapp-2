@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useEffect } from 'react';
 
 import BigNumber from 'bignumber.js';
