@@ -23,6 +23,8 @@ export const stableswap = {
   stableFarmTitle: 'Stable Swap Farm',
   allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input.",
   dexContract: 'Dex Contract',
+  yourDeposit: 'Your Deposit',
+  yourEarned: 'Your Earned',
   APR: 'APR',
   valueLocked: 'Value Locked',
   Tags: 'Tags',
