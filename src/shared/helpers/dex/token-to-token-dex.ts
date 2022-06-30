@@ -1,9 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 import { DexTypeEnum, getTradeInputAmount, getTradeOutputAmount, Trade } from 'swap-router-sdk';
 
-import { PERCENTAGE_100, ZERO_AMOUNT } from '@config/constants';
+import { ZERO_AMOUNT } from '@config/constants';
 import { DexPair } from '@shared/types';
 
+import { fractionToPercentage } from '../fraction-to-percentage';
 import { getTokenPairSlug } from '../tokens';
 
 export class InputOverflowError extends Error {
@@ -60,11 +61,11 @@ export const getPriceImpact = (trade: Trade) => {
     if (inputAmount?.isFinite() && outputAmount && !outputAmount?.eq(ZERO_AMOUNT)) {
       const actualRatio = outputAmount.div(inputAmount);
 
-      return (
+      return fractionToPercentage(
         actualRatio.gt(expectedRatio)
           ? new BigNumber(1).minus(expectedRatio.div(actualRatio))
           : new BigNumber(1).minus(actualRatio.div(expectedRatio))
-      ).times(PERCENTAGE_100);
+      );
     }
 
     return new BigNumber(ZERO_AMOUNT);
@@ -75,11 +76,11 @@ export const getPriceImpact = (trade: Trade) => {
     const newDexPairs = getDexPairsAfterSwap(trade);
     const newMarketQuotient = getMarketQuotient(newDexPairs);
 
-    return (
+    return fractionToPercentage(
       newMarketQuotient.gt(initialMarketQuotient)
         ? new BigNumber(1).minus(initialMarketQuotient.div(newMarketQuotient))
         : new BigNumber(1).minus(newMarketQuotient.div(initialMarketQuotient))
-    ).times(PERCENTAGE_100);
+    );
   } catch (e) {
     return new BigNumber(FALLBACK_PRICE_IMPACT);
   }
