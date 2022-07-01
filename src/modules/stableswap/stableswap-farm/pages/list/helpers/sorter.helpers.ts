@@ -25,7 +25,7 @@ const sortByEarned = (
   first: StableFarmItem & StakerInfo,
   second: StableFarmItem & StakerInfo,
   sortDirection: SortDirection
-) => sortBigNumber(first.yourEarned, second.yourEarned, sortDirection);
+) => sortBigNumber(first.yourEarnedInUsd, second.yourEarnedInUsd, sortDirection);
 
 const stableFarmingSorts = {
   [StableFarmSortField.ID]: sortById,

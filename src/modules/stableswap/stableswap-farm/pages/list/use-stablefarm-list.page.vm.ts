@@ -26,10 +26,10 @@ export const useStableFarmListPageViewModel = () => {
   const { isLoading } = listStore;
 
   const data = filteredList?.map(item => {
-    if (item.yourDeposit && item.yourEarned) {
+    if (item.yourDeposit && item.yourEarnedInUsd) {
       return {
         ...item,
-        shouldShowStakerInfo: item.yourDeposit.gt(DEFAULT_VALUE) || item.yourEarned.gt(DEFAULT_VALUE)
+        shouldShowStakerInfo: item.yourDeposit.gt(DEFAULT_VALUE) || item.yourEarnedInUsd.gt(DEFAULT_VALUE)
       };
     }
 

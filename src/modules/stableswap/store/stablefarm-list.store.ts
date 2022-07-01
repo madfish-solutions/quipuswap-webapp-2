@@ -57,19 +57,19 @@ export class StableFarmListStore {
     }
 
     return this.stakerInfo.data.map(({ yourReward, yourDeposit }: RawStakerInfo, infoIndex) => {
-      let yourEarned = new BigNumber('0');
+      let yourEarnedInUsd = new BigNumber('0');
       const { tokensInfo } = this.list[infoIndex];
 
       yourReward?.forEach((value, tokenIndex) => {
         const { token, exchangeRate } = tokensInfo[tokenIndex.toNumber()];
 
         const tokenValue = fromDecimals(value, token);
-        yourEarned = yourEarned.plus(tokenValue.multipliedBy(exchangeRate));
+        yourEarnedInUsd = yourEarnedInUsd.plus(tokenValue.multipliedBy(exchangeRate));
       });
 
       return {
         yourDeposit,
-        yourEarned
+        yourEarnedInUsd
       };
     });
   }

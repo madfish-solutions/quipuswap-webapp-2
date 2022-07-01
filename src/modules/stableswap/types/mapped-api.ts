@@ -61,7 +61,7 @@ export interface RawStakerInfo {
 }
 export interface StakerInfo {
   yourDeposit: BigNumber;
-  yourEarned: BigNumber;
+  yourEarnedInUsd: BigNumber;
 }
 
 export interface StableswapTokensInfo {

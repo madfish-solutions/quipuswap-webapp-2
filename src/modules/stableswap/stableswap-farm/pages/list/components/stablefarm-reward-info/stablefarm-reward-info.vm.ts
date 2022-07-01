@@ -11,16 +11,12 @@ export const useStableswapLiquidityRewardInfoViewModel = () => {
   const { listWithUserInfo } = useStableFarmListStore();
   const { harvestAll: harvestAllApi } = useStableFarmHarvestAll();
   const farmsWithRewars = useMemo(
-    () => listWithUserInfo?.filter(({ yourEarned }) => yourEarned?.isGreaterThan('0')),
+    () => listWithUserInfo?.filter(({ yourEarnedInUsd }) => yourEarnedInUsd?.isGreaterThan('0')),
     [listWithUserInfo]
   );
 
   const claimablePendingRewards = useMemo(
-    () =>
-      farmsWithRewars?.reduce(
-        (acc, { yourEarned, stakedTokenExchangeRate }) => acc.plus(yourEarned?.multipliedBy(stakedTokenExchangeRate)),
-        new BigNumber('0')
-      ) ?? null,
+    () => farmsWithRewars?.reduce((acc, { yourEarnedInUsd }) => acc.plus(yourEarnedInUsd), new BigNumber('0')) ?? null,
     [farmsWithRewars]
   );
 
