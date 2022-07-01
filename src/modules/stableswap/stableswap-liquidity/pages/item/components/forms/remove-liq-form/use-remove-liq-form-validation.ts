@@ -23,7 +23,7 @@ export const useRemoveLiqFormValidation = (
   return useMemo(() => {
     const isZeroInclusive = !isBalancedProportion;
     const inputAmountSchemas: Array<NumberAsStringSchema> = userTokenBalance.map((balance, index) => {
-      const tokenMetadata = stableswapItem?.tokensInfo[index].token.metadata;
+      const tokenMetadata = stableswapItem?.tokensInfo[index]?.token.metadata;
 
       return operationAmountSchema(
         balance,
