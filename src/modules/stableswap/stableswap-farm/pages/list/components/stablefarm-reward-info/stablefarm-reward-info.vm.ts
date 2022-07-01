@@ -16,7 +16,11 @@ export const useStableswapLiquidityRewardInfoViewModel = () => {
   );
 
   const claimablePendingRewards = useMemo(
-    () => farmsWithRewars?.reduce((acc, { yourEarned }) => acc.plus(yourEarned), new BigNumber('0')) ?? null,
+    () =>
+      farmsWithRewars?.reduce(
+        (acc, { yourEarned, stakedTokenExchangeRate }) => acc.plus(yourEarned?.multipliedBy(stakedTokenExchangeRate)),
+        new BigNumber('0')
+      ) ?? null,
     [farmsWithRewars]
   );
 
