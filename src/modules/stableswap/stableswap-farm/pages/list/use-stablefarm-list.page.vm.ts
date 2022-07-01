@@ -7,8 +7,9 @@ import { DOLLAR, PERCENT } from '@config/constants';
 import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { StableFarmFormTabs } from '@modules/stableswap/types';
-import { useAccountPkh, useReady } from '@providers/use-dapp';
+import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -22,7 +23,7 @@ export const useStableFarmListPageViewModel = () => {
   const { getStableFarmList } = useGetStableFarmList();
   const { t } = useTranslation();
   const title = t('stableswap|stableFarmTitle');
-  const accountPkh = useAccountPkh();
+  const { accountPkh } = useAuthStore();
 
   useEffect(() => {
     if (isReady) {
