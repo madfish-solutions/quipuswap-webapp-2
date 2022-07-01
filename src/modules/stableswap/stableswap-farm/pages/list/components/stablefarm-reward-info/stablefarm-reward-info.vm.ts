@@ -8,11 +8,11 @@ import { useTranslation } from '@translation';
 
 export const useStableswapLiquidityRewardInfoViewModel = () => {
   const { t } = useTranslation();
-  const { filteredList } = useStableFarmListStore();
+  const { listWithUserInfo } = useStableFarmListStore();
   const { harvestAll: harvestAllApi } = useStableFarmHarvestAll();
   const farmsWithRewars = useMemo(
-    () => filteredList?.filter(({ yourEarned }) => yourEarned?.isGreaterThan('0')),
-    [filteredList]
+    () => listWithUserInfo?.filter(({ yourEarned }) => yourEarned?.isGreaterThan('0')),
+    [listWithUserInfo]
   );
 
   const claimablePendingRewards = useMemo(
