@@ -52,27 +52,37 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
+const toSeconds = (timestamp: string | number) =>
+  Math.floor((typeof timestamp === 'number' ? timestamp : new Date(timestamp).getTime()) / MS_IN_SECOND);
+
 export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem, timestamp: number = Date.now()) => {
-  const { staked: totalStaked, rewardPerSecond } = item;
+  // eslint-disable-next-line no-console
+  console.log('x1', userInfo.prev_earned.toFixed(), userInfo.earned.toFixed());
+  const { staked: totalStaked, rewardPerSecond, rewardPerShare } = item;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return ZERO_BN;
   }
 
-  const timeFrom = Math.min(timestamp, new Date(item.endTime).getTime());
-  let reward = new BigNumber(Math.floor((timeFrom - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
-    rewardPerSecond
-  );
+  const tezosNow = toSeconds(timestamp);
+  const farmEndTime = toSeconds(item.endTime);
+  const farmUpd = toSeconds(item.udp);
+  let newRewardPerShare = rewardPerShare;
 
-  if (reward.isNegative()) {
-    reward = ZERO_BN;
+  if (farmUpd <= farmEndTime) {
+    const timeDiff = tezosNow > farmEndTime ? farmEndTime - farmUpd : tezosNow - farmUpd;
+    const reward = rewardPerSecond.times(timeDiff);
+    newRewardPerShare = newRewardPerShare.plus(reward.dividedToIntegerBy(totalStaked));
   }
 
-  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
+  const userEarnedWithPrecision = userInfo.earned.plus(
+    userInfo.staked.times(newRewardPerShare).minus(userInfo.prev_earned).abs()
+  );
 
-  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
+  const earned = fromRewardPrecision(userEarnedWithPrecision);
+  const harvestFee = fromRewardPrecision(earned.times(item.harvestFee));
 
-  return fromRewardPrecision(pending);
+  return earned.minus(harvestFee);
 };
 
 export const getUserPendingRewardWithFee = (
