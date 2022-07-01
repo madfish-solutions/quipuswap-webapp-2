@@ -19,7 +19,7 @@ export const removeStableswapLiquidityBalancedApi = async (
   stableswapPoolContractAddress: string,
   tokensAndAmounts: Array<AmountToken>,
   shares: BigNumber,
-  deadline: Date,
+  deadline: string,
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
@@ -39,7 +39,7 @@ export const removeStableswapLiquidityImbalancedApi = async (
   stableswapPoolContractAddress: string,
   tokensAndAmounts: Array<AmountToken>,
   shares: BigNumber,
-  deadline: Date,
+  deadline: string,
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
