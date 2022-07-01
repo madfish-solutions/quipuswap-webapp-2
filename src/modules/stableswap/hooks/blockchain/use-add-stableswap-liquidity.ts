@@ -64,7 +64,7 @@ export const useAddStableswapLiquidity = () => {
 
     const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
-    const deadline = getStableswapDeadline(transactionDeadline);
+    const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
     try {
       const operation = await addStableswapLiquidityApi(

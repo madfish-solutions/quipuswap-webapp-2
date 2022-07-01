@@ -51,7 +51,7 @@ export const useRemoveStableswapLiquidity = () => {
     const fees = [liquidityProvidersFee, stakersFee, interfaceFee, devFee];
 
     const tokens = tokensInfo.map(({ token }) => token);
-    const deadline = getStableswapDeadline(transactionDeadline);
+    const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
     const amountsAtoms = inputAmounts.map((amount, index) =>
       toDecimals(saveBigNumber(amount, new BigNumber('0')), tokens[index])
