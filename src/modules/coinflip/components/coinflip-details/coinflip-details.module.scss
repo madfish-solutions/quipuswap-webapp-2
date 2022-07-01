@@ -1,0 +1,40 @@
+@import '@styles/variables';
+
+.content {
+  padding: 12px 24px;
+}
+
+.h3 {
+  font-size: 1rem;
+  line-height: 1.143;
+  font-weight: 600;
+}
+
+.gameInfo,
+.lastGameResult {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.gameInfo {
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.payoutCoefficient {
+  font-size: 1.714rem;
+  line-height: 1.333;
+}
+
+.dark {
+  .gameInfo {
+    border-bottom: 1px solid $text-01;
+  }
+}
+
+.light {
+  .gameInfo {
+    border-bottom: 1px solid $ui-03;
+  }
+}

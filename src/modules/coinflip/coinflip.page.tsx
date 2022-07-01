@@ -7,13 +7,11 @@ import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
 import styles from './coinflip.page.module.scss';
-import { CoinflipGame, CoinflipTokenSelector, CoinflipDashboardStatsInfo, CoinflipRewardInfo } from './components';
-import { useCoinflipGeneralStats } from './hooks';
+import { CoinflipGame, CoinflipTokenSelector, CoinflipRewardInfo, CoinflipDetails } from './components';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
   const { t } = useTranslation();
-  const { isLoading } = useCoinflipGeneralStats();
 
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
@@ -25,10 +23,11 @@ export const CoinflipPage: FC = observer(() => {
 
       <CoinflipTokenSelector />
 
-      <CoinflipDashboardStatsInfo isLoading={isLoading} />
+      {/* <CoinflipDashboardStatsInfo isLoading={isLoading} /> */}
 
       <div className={styles.game}>
         <CoinflipGame />
+        <CoinflipDetails />
       </div>
     </StateWrapper>
   );
