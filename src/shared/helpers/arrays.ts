@@ -23,6 +23,7 @@ export const cloneArray = <T>(array: Array<T>): Array<T> => array.slice();
 export const isFoundIndex = (index: number) => index !== -1;
 
 export const isEmptyArray = (array: Nullable<unknown[]>) => (array ? array.length === 0 : true);
+export const isNotEmptyArray = <T>(array: Nullable<T[]>): array is T[] => (array ? array.length !== 0 : false);
 export const isSingleElement = (array: Nullable<unknown[]>) => (array ? array.length === 1 : true);
 
 export const lastElementIndex = <T>(array: T[]) => array.length - 1;
