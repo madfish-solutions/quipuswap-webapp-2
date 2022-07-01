@@ -2,11 +2,10 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, TestnetAlert, StateWrapper } from '@shared/components';
+import { PageTitle, TestnetAlert, StateWrapper, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
-import styles from './coinflip.page.module.scss';
 import { CoinflipGame, CoinflipTokenSelector, CoinflipRewardInfo, CoinflipDetails } from './components';
 
 export const CoinflipPage: FC = observer(() => {
@@ -25,10 +24,10 @@ export const CoinflipPage: FC = observer(() => {
 
       {/* <CoinflipDashboardStatsInfo isLoading={isLoading} /> */}
 
-      <div className={styles.game}>
+      <StickyBlock>
         <CoinflipGame />
         <CoinflipDetails />
-      </div>
+      </StickyBlock>
     </StateWrapper>
   );
 });
