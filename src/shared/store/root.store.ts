@@ -16,6 +16,7 @@ import {
   StableFarmFilterStore as IStableFarmFilterStore,
   StableFarmItemStore as IStableFarmItemStore
 } from '@modules/stableswap/store';
+import { TokensModalStore } from '@shared/modals/tokens-modal/tokens-modal.store';
 
 import { isExist, isNull } from '../helpers';
 import { Nullable } from '../types';
@@ -31,6 +32,7 @@ export class RootStore {
   settingsStore: SettingsStore;
   tokensBalancesStore: TokensBalancesStore;
   tokensStore: TokensStore;
+  tokensModalStore: TokensModalStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
@@ -55,6 +57,7 @@ export class RootStore {
     this.settingsStore = new SettingsStore(this);
     this.tokensBalancesStore = new TokensBalancesStore(this);
     this.tokensStore = new TokensStore(this);
+    this.tokensModalStore = new TokensModalStore(this);
 
     makeObservable(this, {
       tezos: observable,
