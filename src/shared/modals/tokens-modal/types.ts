@@ -1,4 +1,4 @@
-import { TabsProps } from '@shared/components';
+import { ManagedTokensModalCellProps, TabsProps } from '@shared/components';
 import { TokensModalCellProps } from '@shared/components/tokens-modal-cell';
 
 export interface TokensModalViewProps {
@@ -6,7 +6,8 @@ export interface TokensModalViewProps {
   isModalOpen: boolean;
   openTokensModal: () => void;
   closeTokensModal: () => void;
-  tokens: Array<TokensModalCellProps>;
+  tokensModalCellParams: Array<TokensModalCellProps>;
+  managedTokensModalCellParams: Array<ManagedTokensModalCellProps>;
   minQuantity?: number;
   maxQuantity?: number;
   tabsProps: TabsProps;

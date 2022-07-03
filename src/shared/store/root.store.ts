@@ -23,6 +23,7 @@ import { Nullable } from '../types';
 import { AuthStore } from './auth.store';
 import { SettingsStore } from './settings.store';
 import { TokensBalancesStore } from './tokens-balances.store';
+import { TokensManagerStore } from './tokens-manager.store';
 import { TokensStore } from './tokens.store';
 import { UiStore } from './ui.store';
 
@@ -32,6 +33,7 @@ export class RootStore {
   settingsStore: SettingsStore;
   tokensBalancesStore: TokensBalancesStore;
   tokensStore: TokensStore;
+  tokensManagerStore: TokensManagerStore;
   tokensModalStore: TokensModalStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
@@ -57,6 +59,7 @@ export class RootStore {
     this.settingsStore = new SettingsStore(this);
     this.tokensBalancesStore = new TokensBalancesStore(this);
     this.tokensStore = new TokensStore(this);
+    this.tokensManagerStore = new TokensManagerStore(this);
     this.tokensModalStore = new TokensModalStore(this);
 
     makeObservable(this, {

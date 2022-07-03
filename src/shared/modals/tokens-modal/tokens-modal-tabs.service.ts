@@ -9,12 +9,8 @@ export const tabsContent = [
     label: 'Tokens'
   },
   {
-    id: 'list',
-    label: 'List'
-  },
-  {
-    id: 'settings',
-    label: 'Settings'
+    id: 'manage',
+    label: 'Manage'
   }
 ];
 

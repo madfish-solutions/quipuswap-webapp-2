@@ -68,6 +68,11 @@ export interface Token extends TokenAddress {
   metadata: TokenMetadata;
 }
 
+export interface ManagedToken extends Token {
+  isFavorite?: boolean;
+  isHidden?: boolean;
+}
+
 export interface RawToken extends Omit<Token, 'type' | 'isWhitelisted'> {
   type: string;
   isWhitelisted?: boolean;

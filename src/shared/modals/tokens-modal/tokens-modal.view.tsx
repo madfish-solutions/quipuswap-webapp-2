@@ -1,27 +1,37 @@
 import { FC } from 'react';
 
-import { Button, Iterator, Tabs } from '@shared/components';
+import { Button, Iterator, ManagedTokensModalCell, Tabs } from '@shared/components';
 import { TokensModalCell } from '@shared/components/tokens-modal-cell';
 
 import { Modal } from '../modal';
+import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
 
 export const TokensModalView: FC<TokensModalViewProps> = ({
   setTokens,
   isModalOpen,
   closeTokensModal,
-  tokens,
+  tokensModalCellParams,
+  managedTokensModalCellParams,
   tabsProps
 }) => {
   return (
     <Modal
+      cardClassName={styles.modalCard}
       title={'Serch Tokens'}
       isOpen={isModalOpen}
       onRequestClose={closeTokensModal}
       header={<Tabs {...tabsProps} />}
     >
-      <Iterator render={TokensModalCell} data={tokens} />
-      <Button onClick={setTokens}>Click Me</Button>
+      {tabsProps.activeId === 'tokens' && (
+        <>
+          <Iterator render={TokensModalCell} data={tokensModalCellParams} />
+          <Button onClick={setTokens}>Click Me</Button>
+        </>
+      )}
+      {tabsProps.activeId === 'manage' && (
+        <Iterator render={ManagedTokensModalCell} data={managedTokensModalCellParams} />
+      )}
     </Modal>
   );
 };

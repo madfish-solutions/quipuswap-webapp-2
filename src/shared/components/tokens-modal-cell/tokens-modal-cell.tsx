@@ -1,32 +1,36 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
-import { Checkbox, Favorite } from '@shared/elements';
+import BigNumber from 'bignumber.js';
+
+import { Bin, Checkbox } from '@shared/elements';
 import { getTokenName, getTokenSymbol } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { ManagedToken } from '@shared/types';
 
+import { StateCurrencyAmount } from '../state-components';
 import { TokensLogos } from '../tokens-logo';
 import styles from './tokens-modal-cell.module.scss';
 
 export interface TokensModalCellProps {
-  token: Token & { isChoosen: boolean };
+  token: ManagedToken & { isChoosen: boolean };
+  onDeleteToken: () => void;
   onTokenClick: () => void;
+  balance?: Nullable<BigNumber.Value>;
 }
 
-export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick }) => {
-  //TODO: change to store handler
-  const [isFavorite, setIsFavorite] = useState(false);
+export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance, onDeleteToken }) => (
+  <div className={styles.tokensModalCell} onClick={onTokenClick}>
+    <Bin className={styles.bin} onClick={onDeleteToken} />
 
-  return (
-    <div className={styles.tokensModalCell} onClick={onTokenClick}>
-      <TokensLogos tokens={token} />
-      <div>
-        <h6 className={styles.tokenName}>{getTokenName(token)}</h6>
-        <div className={styles.tokenSymbol}>{getTokenSymbol(token)}</div>
-      </div>
-      <div className={styles.checkboxContainer}>
-        <Favorite checked={isFavorite} onClick={() => setIsFavorite(prev => !prev)} />
-        <Checkbox checked={token.isChoosen} />
-      </div>
+    <TokensLogos tokens={token} />
+
+    <div>
+      <h6 className={styles.tokenName}>{getTokenName(token)}</h6>
+      <div className={styles.tokenSymbol}>{getTokenSymbol(token)}</div>
     </div>
-  );
-};
+
+    <div className={styles.checkboxContainer}>
+      {balance && <StateCurrencyAmount amount={balance} />}
+      <Checkbox className={styles.checkbox} checked={token.isChoosen} />
+    </div>
+  </div>
+);
