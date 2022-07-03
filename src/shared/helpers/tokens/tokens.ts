@@ -4,11 +4,12 @@ import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
 import { TOKENS } from '@config/config';
-import { SAVED_TOKENS_KEY } from '@config/localstorage';
+import { FAVORITE_TOKENS_KEY, HIDDEN_TOKENS_KEY, SAVED_TOKENS_KEY } from '@config/localstorage';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
 import { getContract } from '@shared/dapp';
 import { InvalidTokensListError } from '@shared/errors';
 import {
+  ManagedToken,
   Nullable,
   QSNetwork,
   Standard,
@@ -138,6 +139,48 @@ export const saveCustomToken = (token: TokenWithQSNetworkType) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
     JSON.stringify([token, ...getSavedTokens().filter((x: TokenWithQSNetworkType) => !isTokenEqual(x, token))])
+  );
+};
+
+export const getFavoritesTokensSlugs = () => {
+  return JSON.parse(localStorage.getItem(FAVORITE_TOKENS_KEY) ?? '[]') as Array<string>;
+};
+
+export const markTokenAsFavotire = (token: ManagedToken) => {
+  const favoritesTokensSlugs = getFavoritesTokensSlugs();
+  const tokenSlug = getTokenSlug(token);
+
+  localStorage.setItem(FAVORITE_TOKENS_KEY, JSON.stringify([tokenSlug, ...favoritesTokensSlugs]));
+};
+
+export const removeFavoriteMarkFromToken = (token: ManagedToken) => {
+  const favoritesTokensSlugs = getFavoritesTokensSlugs();
+  const tokenSlug = getTokenSlug(token);
+
+  localStorage.setItem(
+    FAVORITE_TOKENS_KEY,
+    JSON.stringify([...favoritesTokensSlugs.filter(_tokenSlug => _tokenSlug !== tokenSlug)])
+  );
+};
+
+export const getHiddenTokensSlugs = () => {
+  return JSON.parse(localStorage.getItem(HIDDEN_TOKENS_KEY) ?? '[]') as Array<string>;
+};
+
+export const hideTokenFromList = (token: ManagedToken) => {
+  const hiddenTokensSlugs = getHiddenTokensSlugs();
+  const tokenSlug = getTokenSlug(token);
+
+  localStorage.setItem(HIDDEN_TOKENS_KEY, JSON.stringify([tokenSlug, ...hiddenTokensSlugs]));
+};
+
+export const makeTokenVisibleInlist = (token: ManagedToken) => {
+  const hiddenTokensSlugs = getHiddenTokensSlugs();
+  const tokenSlug = getTokenSlug(token);
+
+  localStorage.setItem(
+    HIDDEN_TOKENS_KEY,
+    JSON.stringify([...hiddenTokensSlugs.filter(_tokenSlug => _tokenSlug !== tokenSlug)])
   );
 };
 

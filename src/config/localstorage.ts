@@ -8,3 +8,5 @@ export const IS_DEV_KEY = 'DEV';
 export const IS_PROD_KEY = 'PROD';
 export const COOKIES_APPRROVAL_KEY = 'cookieApproval';
 export const TOKENS_KEY = 'tokens';
+export const FAVORITE_TOKENS_KEY = 'favorite';
+export const HIDDEN_TOKENS_KEY = 'hidden';
