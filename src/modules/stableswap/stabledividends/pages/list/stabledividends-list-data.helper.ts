@@ -63,7 +63,7 @@ export const stableDividendsListDataHelper = (item: StableDividendsItem & Staker
           cellName: i18n.t('stableswap|yourEarned'),
           amounts: {
             amount: item.yourEarnedInUsd,
-            dollarEquivalent: item.yourEarnedInUsd.multipliedBy(item.stakedTokenExchangeRate),
+            dollarEquivalent: item.yourEarnedInUsd,
             dollarEquivalentOnly: true
           }
         }
