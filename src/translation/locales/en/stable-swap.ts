@@ -32,7 +32,7 @@ export const stableswap = {
   poolAddress: 'Pool Address',
   poolId: 'Pool ID',
   tvlProtocolTooltip: 'Total value of assets locked in the Stableswap protocol.',
-  tvlFarmTooltip: 'Total value of assets locked in this farm farms.',
+  tvlPoolTooltip: 'Total value of assets locked in this farm farms.',
   tokenValuesTooltip: 'Value of type of asset locked in this farm.',
   liquidityProvidersFeeTooltip:
     "The percentage of your swapped sum you pay to the pool's liquidity providers on each swap.",
