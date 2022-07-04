@@ -7,7 +7,7 @@ import styles from './coinflip-game-select.module.scss';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
 
-const COIN_SIZE = 142;
+const COIN_SIZE = 128;
 
 export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
   const {
