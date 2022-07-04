@@ -12,9 +12,9 @@ import {
   StableswapItemStore as IStableswapItemStore,
   StableswapItemFormStore as IStableswapItemFormStore,
   StableswapListStore as IStableswapListStore,
-  StableFarmListStore as IStableFarmListStore,
-  StableFarmFilterStore as IStableFarmFilterStore,
-  StableFarmItemStore as IStableFarmItemStore
+  StableDividendsListStore as IStableDividendsListStore,
+  StableDividendsFilterStore as IStableDividendsFilterStore,
+  StableDividendsItemStore as IStableDividendsItemStore
 } from '@modules/stableswap/store';
 
 import { isExist, isNull } from '../helpers';
@@ -41,9 +41,9 @@ export class RootStore {
   stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
   stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
-  stableFarmListStore: Nullable<IStableFarmListStore> = null;
-  stableFarmFilterStore: Nullable<IStableFarmFilterStore> = null;
-  stableFarmItemStore: Nullable<IStableFarmItemStore> = null;
+  stableDividendsListStore: Nullable<IStableDividendsListStore> = null;
+  stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
+  stableDividendsItemStore: Nullable<IStableDividendsItemStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -68,9 +68,9 @@ export class RootStore {
       stableswapItemFormStore: observable,
       stableswapFilterStore: observable,
 
-      stableFarmListStore: observable,
-      stableFarmFilterStore: observable,
-      stableFarmItemStore: observable,
+      stableDividendsListStore: observable,
+      stableDividendsFilterStore: observable,
+      stableDividendsItemStore: observable,
 
       coinflipStore: observable,
 
@@ -85,8 +85,9 @@ export class RootStore {
       createStableswapItemFormStore: action,
       createStableswapFilterStore: action,
 
-      createStableFarmListStore: action,
-      createStableFarmItemStore: action
+      createStableDividendsListStore: action,
+      createStableDividendsFilterStore: action,
+      createStableDividendsItemStore: action
     });
   }
 
@@ -94,17 +95,17 @@ export class RootStore {
     this.tezos = tezos;
   }
 
-  async createStableFarmListStore() {
-    if (isNull(this.stableFarmListStore)) {
-      const { StableFarmListStore } = await import('@modules/stableswap/store/stablefarm-list.store');
-      this.stableFarmListStore = new StableFarmListStore(this);
+  async createStableDividendsListStore() {
+    if (isNull(this.stableDividendsListStore)) {
+      const { StableDividendsListStore } = await import('@modules/stableswap/store/stabledividends-list.store');
+      this.stableDividendsListStore = new StableDividendsListStore(this);
     }
   }
 
-  async createStableFarmItemStore() {
-    if (isNull(this.stableFarmItemStore)) {
-      const { StableFarmItemStore } = await import('@modules/stableswap/store/stablefarm-item.store');
-      this.stableFarmItemStore = new StableFarmItemStore(this);
+  async createStableDividendsItemStore() {
+    if (isNull(this.stableDividendsItemStore)) {
+      const { StableDividendsItemStore } = await import('@modules/stableswap/store/stabledividends-item.store');
+      this.stableDividendsItemStore = new StableDividendsItemStore(this);
     }
   }
 
@@ -136,10 +137,10 @@ export class RootStore {
     }
   }
 
-  async createStableFarmFilterStore() {
-    if (isNull(this.stableFarmFilterStore)) {
-      const { StableFarmFilterStore } = await import('@modules/stableswap/store/stablefarm-filter.store');
-      this.stableFarmFilterStore = new StableFarmFilterStore();
+  async createStableDividendsFilterStore() {
+    if (isNull(this.stableDividendsFilterStore)) {
+      const { StableDividendsFilterStore } = await import('@modules/stableswap/store/stabledividends-filter.store');
+      this.stableDividendsFilterStore = new StableDividendsFilterStore();
     }
   }
 
