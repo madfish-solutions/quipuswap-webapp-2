@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useMemo, useState } from 'react';
 
-import { getTokenSlug } from '@shared/helpers';
-import { useTokensWithBalances } from '@shared/hooks';
+import { getTokenSlug, isNull } from '@shared/helpers';
+// import { useTokensWithBalances } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { Token } from '@shared/types';
 
@@ -16,9 +16,9 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const tokensManagerStore = useTokensManagerStore();
 
-  const { tokens, managedTokens } = tokensManagerStore;
+  const { filteredTokens, filteredManagedTokens, search, tokenIdValue } = tokensManagerStore;
 
-  const tokenBlances = useTokensWithBalances(tokens);
+  // const tokenBlances = useTokensWithBalances(tokens);
 
   const [choosenTokens, setChoosenTokens] = useState<Array<Token>>([]);
 
@@ -40,7 +40,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   );
 
   const tokensModalCellParams = useMemo(() => {
-    return tokenBlances.map(({ token, balance }) => {
+    return filteredTokens.map(token => {
       const isTokenChoosen = choosenTokensSlugs.includes(getTokenSlug(token));
 
       return {
@@ -48,22 +48,45 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
           ...token,
           isChoosen: isTokenChoosen
         },
-        balance,
-        onTokenClick: () => onTokenClick(token),
-        onDeleteToken: () => tokensManagerStore.hideOrShowToken(token)
+        balance: null,
+        onTokenClick: () => onTokenClick(token)
       };
     });
-  }, [choosenTokensSlugs, onTokenClick, tokenBlances, tokensManagerStore]);
+  }, [choosenTokensSlugs, onTokenClick, filteredTokens]);
 
   const managedTokensModalCellParams = useMemo(() => {
-    return managedTokens.map(token => {
+    return filteredManagedTokens.map(token => {
       return {
         token,
         onFavoriteClick: () => tokensManagerStore.addOrRemoveTokenFavorite(token),
         onHideToken: () => tokensManagerStore.hideOrShowToken(token)
       };
     });
-  }, [managedTokens, tokensManagerStore]);
+  }, [filteredManagedTokens, tokensManagerStore]);
+
+  //#region create hook to aviod code repeating
+  const handeTokensSearchChange = (event: FormEvent<HTMLInputElement>) => {
+    if (isNull(event)) {
+      return;
+    }
+    tokensManagerStore.onSearchChange((event.target as HTMLInputElement).value);
+  };
+
+  const handleTokenIdChange = (event: FormEvent<HTMLInputElement>) => {
+    if (isNull(event) || isNull(event.target)) {
+      return;
+    }
+    tokensManagerStore.onTokenIdChange((event.target as HTMLInputElement).value);
+  };
+
+  const handleIncrement = () => {
+    tokensManagerStore.handleIncrement();
+  };
+
+  const handleDecrement = () => {
+    tokensManagerStore.handleDecrement();
+  };
+  //#endregion create hook to aviod code repeating
 
   const openTokensModal = () => {
     tokensModalStore.setOpenState(true);
@@ -86,6 +109,16 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     isModalOpen: tokensModalStore.isOpen,
     openTokensModal,
     closeTokensModal,
-    tabsProps
+    headerProps: {
+      tabsProps,
+
+      search,
+      tokenIdValue,
+
+      handeTokensSearchChange,
+      handleTokenIdChange,
+      handleIncrement,
+      handleDecrement
+    }
   };
 };

@@ -1,5 +1,7 @@
-import { ManagedTokensModalCellProps, TabsProps } from '@shared/components';
+import { ManagedTokensModalCellProps } from '@shared/components';
 import { TokensModalCellProps } from '@shared/components/tokens-modal-cell';
+
+import { TokensModalHeaderProps } from './tokens-modal-header';
 
 export interface TokensModalViewProps {
   setTokens: () => void;
@@ -10,5 +12,5 @@ export interface TokensModalViewProps {
   managedTokensModalCellParams: Array<ManagedTokensModalCellProps>;
   minQuantity?: number;
   maxQuantity?: number;
-  tabsProps: TabsProps;
+  headerProps: TokensModalHeaderProps;
 }

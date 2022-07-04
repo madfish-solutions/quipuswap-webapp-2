@@ -1,3 +1,23 @@
+@import "@styles/variables";
+
 .modalCard {
   height: 80vh;
+}
+
+.modalContent {
+  overflow-y: auto;
+  height: 60vh;
+}
+
+.tabs {
+  margin: -16px -24px 0 -16px;
+  padding: 0 16px;
+  border-bottom: 1px solid $text-01;
+}
+
+.inputs {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
 }
