@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { NETWORK } from '@config/config';
 import { SKIP, SWAP } from '@config/constants';
@@ -17,22 +17,35 @@ import {
 } from '@shared/helpers';
 import { ManagedToken, TokenWithQSNetworkType } from '@shared/types';
 
+import { BaseFilterStore } from './base-filter.store';
 import { RootStore } from './root.store';
 
-export class TokensManagerStore {
+export class TokensManagerStore extends BaseFilterStore {
   managedTokens: Array<ManagedToken> = [];
 
   get tokens() {
     return this.managedTokens.filter(token => !token.isHidden);
   }
 
+  get filteredTokens() {
+    return this.tokens.filter(token => this.tokenMatchesSearch(token));
+  }
+
+  get filteredManagedTokens() {
+    return this.managedTokens.filter(token => this.tokenMatchesSearch(token));
+  }
+
   constructor(rootStore: RootStore) {
+    super();
     makeObservable(this, {
       managedTokens: observable,
 
       loadTokens: action,
       saveCustomToken: action,
-      addOrRemoveTokenFavorite: action
+      addOrRemoveTokenFavorite: action,
+
+      tokens: computed,
+      filteredTokens: computed
     });
 
     this.loadTokens();

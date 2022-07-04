@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { Bin, Checkbox } from '@shared/elements';
+import { Checkbox } from '@shared/elements';
 import { getTokenName, getTokenSymbol } from '@shared/helpers';
 import { ManagedToken } from '@shared/types';
 
@@ -12,15 +12,12 @@ import styles from './tokens-modal-cell.module.scss';
 
 export interface TokensModalCellProps {
   token: ManagedToken & { isChoosen: boolean };
-  onDeleteToken: () => void;
   onTokenClick: () => void;
   balance?: Nullable<BigNumber.Value>;
 }
 
-export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance, onDeleteToken }) => (
+export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance }) => (
   <div className={styles.tokensModalCell} onClick={onTokenClick}>
-    <Bin className={styles.bin} onClick={onDeleteToken} />
-
     <TokensLogos tokens={token} />
 
     <div>
