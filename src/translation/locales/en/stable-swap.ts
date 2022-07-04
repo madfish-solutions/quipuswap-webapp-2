@@ -23,6 +23,8 @@ export const stableswap = {
   sucessfullyHarvested: 'Harvest has been successfull',
   createPool: 'Create Pool',
   createOwnPool: 'Can’t Find appropriate pool? Create Own!',
+  yourDeposit: 'Your Deposit',
+  yourEarned: 'Your Earned',
   stableDividendsTitle: 'Stableswap Dividends',
   allZeroInpupts: "Investing of 0 assets doesn't make a lot of sense. Please, provide at least one non-zero input.",
   dexContract: 'Dex Contract',
