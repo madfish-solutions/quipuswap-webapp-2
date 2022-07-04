@@ -1,6 +1,3 @@
-import { useContext } from 'react';
-
-import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { CoinSideAQuipuIcon, CoinSideATezosIcon, CoinSideBQuipuIcon, CoinSideBTezosIcon } from '@shared/svg';
 
 import { CoinSide, TokenToPlay } from '../../stores';
@@ -12,9 +9,6 @@ export const useCoinflipGameSelectViewModel = ({
   coinSide,
   handleSelectCoinSide
 }: CoinflipGameSelectProps) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const isDarkTheme = colorThemeMode === ColorModes.Dark;
-
   const iSelectedSideA = coinSide === CoinSide.A;
   const iSelectedSideB = coinSide === CoinSide.B;
 
@@ -33,7 +27,6 @@ export const useCoinflipGameSelectViewModel = ({
     handleSelectSideA,
     handleSelectSideB,
     CoinSideAIcon,
-    CoinSideBIcon,
-    isDarkTheme
+    CoinSideBIcon
   };
 };
