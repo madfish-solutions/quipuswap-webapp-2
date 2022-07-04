@@ -1,17 +1,25 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card } from '@shared/components';
 
 import styles from './coinflip-rules.module.scss';
 
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const CoinflipRules: FC = () => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <Card
       header={{ content: <>Play Coinflip - get a chance to double your bid!</> }}
       contentClassName={styles.content}
-      className={styles.root}
+      className={cx(styles.root, modeClass[colorThemeMode])}
     >
       <div>
         <h3 className={styles.h3}>How to play?</h3>
