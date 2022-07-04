@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite';
 import { DOLLAR } from '@config/constants';
 import { RewardInfo } from '@shared/structures';
 
-import { useStableswapLiquidityRewardInfoViewModel } from './stabledividends-reward-info.vm';
+import { useStableDividendsRewardInfoViewModel } from './stabledividends-reward-info.vm';
 
-export const StableswapLiquidityRewardInfo: FC = observer(() => {
-  const { claimablePendingRewards, harvestAll, harvestAllText } = useStableswapLiquidityRewardInfoViewModel();
+export const StableDividendsRewardInfo: FC = observer(() => {
+  const { claimablePendingRewards, harvestAll, harvestAllText } = useStableDividendsRewardInfoViewModel();
 
   return (
     <RewardInfo

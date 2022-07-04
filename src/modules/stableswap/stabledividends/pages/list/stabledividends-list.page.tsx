@@ -8,7 +8,7 @@ import {
   StableDividendsCard,
   StableDividendsListFilter,
   StableDividendsStats,
-  StableswapLiquidityRewardInfo
+  StableDividendsRewardInfo
 } from './components';
 import styles from './stabledividends-list.page.module.scss';
 import { useStableDividendsListPageViewModel } from './use-stabledividends-list.page.vm';
@@ -21,7 +21,7 @@ export const StableDividendsListPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitle>{title}</PageTitle>
       <StableDividendsStats />
-      <StableswapLiquidityRewardInfo />
+      <StableDividendsRewardInfo />
       <StableDividendsListFilter />
       <StateWrapper loaderFallback={<></>}>
         <Iterator render={StableDividendsCard} data={data} isGrouped wrapperClassName={styles.stableDividendsList} />

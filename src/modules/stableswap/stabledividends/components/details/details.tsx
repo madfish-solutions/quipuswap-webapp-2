@@ -14,16 +14,8 @@ import { useDetailsVievModel } from './use-details.vm';
 
 export const Details: FC = observer(() => {
   const { t } = useTranslation();
-  const {
-    tvl,
-    apr,
-    whitelistedTag,
-    stableDividendsContractUrl,
-    cardCellClassName,
-    isLoading,
-    dollarEquivalent,
-    tokenSymbol
-  } = useDetailsVievModel();
+  const { tvl, apr, whitelistedTag, farmContractUrl, cardCellClassName, isLoading, dollarEquivalent, tokenSymbol } =
+    useDetailsVievModel();
 
   return (
     <Card
@@ -57,7 +49,7 @@ export const Details: FC = observer(() => {
         <Button
           className={cx(commonContainerStyles.detailsButton, styles.detailsButton)}
           theme="inverse"
-          href={stableDividendsContractUrl}
+          href={farmContractUrl}
           external
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
           data-test-id="stableswapContractButton"

@@ -58,7 +58,7 @@ export interface RawStableDividendsItem extends AbstractRawStableItem {
   apy: string;
   atomicTvl: string;
   stakedToken: RawToken;
-  stableDividendsContractUrl: string;
+  farmContractUrl: string;
   stakedTokenExchangeRate: string;
 }
 
