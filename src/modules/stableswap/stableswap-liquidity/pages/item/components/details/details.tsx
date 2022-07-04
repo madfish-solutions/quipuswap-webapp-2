@@ -35,6 +35,7 @@ export const Details: FC = observer(() => {
     poolContractUrl,
     cardCellClassName,
     isLoading,
+    tvlInUsd,
     tokensLockedData
   } = useDetailsVievModel();
 
@@ -68,6 +69,15 @@ export const Details: FC = observer(() => {
         data-test-id="pairId"
       >
         <StateCurrencyAmount isLoading={isLoading} amount={poolId} />
+      </DetailsCardCell>
+
+      <DetailsCardCell
+        cellName={t('stableswap|tvl')}
+        tooltipContent={t('stableswap|tvlPoolTooltip')}
+        className={cardCellClassName}
+        data-test-id="tvl"
+      >
+        <StateCurrencyAmount isLoading={isLoading} amount={tvlInUsd} />
       </DetailsCardCell>
 
       <Iterator render={TokenLocked} data={tokensLockedData} />

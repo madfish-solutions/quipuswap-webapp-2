@@ -16,7 +16,7 @@ const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { trade, inputToken, outputToken, inputAmount, outputAmount } = params;
-  const priceImpact = usePriceImpact(params);
+  const priceImpact = usePriceImpact(trade);
   const { data: swapFee = null, error: swapFeeError } = useSwapFee(params);
   const { routePairs } = useRoutePairs();
   const reverseRoutePairsCombinations = useRoutePairsCombinations(outputToken, inputToken, routePairs);
