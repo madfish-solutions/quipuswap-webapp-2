@@ -39,7 +39,7 @@ export interface StableDividendsItem extends AbstractStableItem {
   stakedTokenExchangeRate: BigNumber;
   apr: BigNumber;
   apy: BigNumber;
-  stableDividendsContractUrl: string;
+  farmContractUrl: string;
   stakedToken: Token;
   stableDividendsItemUrl: string;
 }

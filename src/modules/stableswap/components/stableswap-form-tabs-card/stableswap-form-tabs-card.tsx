@@ -7,7 +7,7 @@ import styles from '@styles/CommonContainer.module.scss';
 import { StableswapContentRoutes } from '../../stableswap-routes.enum';
 import { StableswapFormTabs } from '../../types';
 import { FormHeader } from '../form-header';
-import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stabledividends-form-tabs-card.vm';
+import { TabsContent, useStableswapFormTabsCardViewModel } from './use-stableswap-form-tabs-card.vm';
 
 interface Props {
   subpath: StableswapContentRoutes;

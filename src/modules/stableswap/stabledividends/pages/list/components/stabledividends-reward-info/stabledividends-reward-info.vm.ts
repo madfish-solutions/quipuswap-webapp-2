@@ -6,7 +6,7 @@ import { useStableDividendsHarvestAll, useStableDividendsListStore } from '@modu
 import { isEmptyArray } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-export const useStableswapLiquidityRewardInfoViewModel = () => {
+export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
   const { filteredList } = useStableDividendsListStore();
   const { harvestAll: harvestAllApi } = useStableDividendsHarvestAll();

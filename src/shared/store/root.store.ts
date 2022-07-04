@@ -86,6 +86,7 @@ export class RootStore {
       createStableswapFilterStore: action,
 
       createStableDividendsListStore: action,
+      createStableDividendsFilterStore: action,
       createStableDividendsItemStore: action
     });
   }
