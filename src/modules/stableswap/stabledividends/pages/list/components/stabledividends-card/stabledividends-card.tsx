@@ -36,7 +36,7 @@ export const StableDividendsCard: FC<Props> = ({
   apr,
   apy,
   tokensInfo,
-  yourEarned,
+  yourEarnedInUsd,
   stakedToken,
   yourDeposit,
   isWhitelisted,
@@ -53,7 +53,6 @@ export const StableDividendsCard: FC<Props> = ({
     translation;
 
   const tvlInDollars = tvl.multipliedBy(stakedTokenExchangeRate);
-  const yourEarnedInDollars = yourEarned?.multipliedBy(stakedTokenExchangeRate);
 
   return (
     <Link
@@ -108,8 +107,8 @@ export const StableDividendsCard: FC<Props> = ({
                 cardCellClassName={styles.cardCell}
               >
                 <StateCurrencyAmount
-                  amount={yourEarned}
-                  dollarEquivalent={yourEarnedInDollars}
+                  amount={yourEarnedInUsd}
+                  dollarEquivalent={yourEarnedInUsd}
                   currency={DOLLAR}
                   dollarEquivalentOnly
                 />

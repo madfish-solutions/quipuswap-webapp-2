@@ -25,7 +25,7 @@ const sortByEarned = (
   first: StableDividendsItem & StakerInfo,
   second: StableDividendsItem & StakerInfo,
   sortDirection: SortDirection
-) => sortBigNumber(first.yourEarned, second.yourEarned, sortDirection);
+) => sortBigNumber(first.yourEarnedInUsd, second.yourEarnedInUsd, sortDirection);
 
 const stableDividendsingSorts = {
   [StableDividendsSortField.ID]: sortById,

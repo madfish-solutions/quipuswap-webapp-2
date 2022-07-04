@@ -13,7 +13,7 @@ const DEFAULT_VALUE = new BigNumber('0');
 
 export const stableDividendsListDataHelper = (item: StableDividendsItem & StakerInfo, accountPkh: Nullable<string>) => {
   const shouldShowUserStats =
-    !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarned?.gt(DEFAULT_VALUE));
+    !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarnedInUsd?.gt(DEFAULT_VALUE));
 
   const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${item.stableDividendsItemUrl}`;
   const status = { status: ActiveStatus.ACTIVE, label: i18n.t('common|whiteListed'), filled: true };
@@ -62,8 +62,8 @@ export const stableDividendsListDataHelper = (item: StableDividendsItem & Staker
         {
           cellName: i18n.t('stableswap|yourEarned'),
           amounts: {
-            amount: item.yourEarned,
-            dollarEquivalent: item.yourEarned.multipliedBy(item.stakedTokenExchangeRate),
+            amount: item.yourEarnedInUsd,
+            dollarEquivalent: item.yourEarnedInUsd.multipliedBy(item.stakedTokenExchangeRate),
             dollarEquivalentOnly: true
           }
         }
