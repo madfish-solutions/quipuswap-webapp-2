@@ -17,10 +17,7 @@ export const useCoinflipPageViewModel = () => {
   const { getGamesUserInfo } = useGamesUserInfo();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
 
-
-
   useEffect(() => {
-    const get
     if (!dAppReady && prevAccountPkhRef.current === accountPkh) {
       return;
     }
