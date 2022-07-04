@@ -59,9 +59,10 @@ export interface RawStakerInfo {
   yourDeposit: BigNumber;
   yourReward: Nullable<MichelsonMap<BigNumber, BigNumber>>;
 }
+
 export interface StakerInfo {
   yourDeposit: BigNumber;
-  yourEarned: BigNumber;
+  yourEarnedInUsd: BigNumber;
 }
 
 export interface StableswapTokensInfo {
