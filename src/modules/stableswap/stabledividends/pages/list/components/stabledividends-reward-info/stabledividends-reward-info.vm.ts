@@ -8,15 +8,15 @@ import { useTranslation } from '@translation';
 
 export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
-  const { filteredList } = useStableDividendsListStore();
+  const { listWithUserInfo } = useStableDividendsListStore();
   const { harvestAll: harvestAllApi } = useStableDividendsHarvestAll();
   const farmsWithRewars = useMemo(
-    () => filteredList?.filter(({ yourEarned }) => yourEarned?.isGreaterThan('0')),
-    [filteredList]
+    () => listWithUserInfo?.filter(({ yourEarnedInUsd }) => yourEarnedInUsd?.isGreaterThan('0')),
+    [listWithUserInfo]
   );
 
   const claimablePendingRewards = useMemo(
-    () => farmsWithRewars?.reduce((acc, { yourEarned }) => acc.plus(yourEarned), new BigNumber('0')) ?? null,
+    () => farmsWithRewars?.reduce((acc, { yourEarnedInUsd }) => acc.plus(yourEarnedInUsd), new BigNumber('0')) ?? null,
     [farmsWithRewars]
   );
 
