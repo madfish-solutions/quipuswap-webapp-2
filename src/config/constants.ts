@@ -82,15 +82,16 @@ export const SKIP = -1;
 //#region API
 export const LIST = 'list';
 export const STATS = 'stats';
-export const FARM = 'farm';
+// TODO: change api address => change farm => dividends (if needed)
+export const DIVIDENDS = 'farm';
 
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
-export const STABLEFARM_LIST_API_URL = `${STABLESWAP_API_URL}/${FARM}/${LIST}`;
-export const STABLEFARM_STATS_API_URL = `${STABLESWAP_API_URL}/${FARM}/${STATS}`;
+export const STABLEDIVIDENDS_LIST_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${LIST}`;
+export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${STATS}`;
 //#endregion
 
 //TODO: assort mix
@@ -133,7 +134,7 @@ export const PERCENTAGE_100 = new BigNumber(PERCENTAGE);
 export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
-export const STABLESWAP_FARM_ACCUM_PRECISION = 10_000_000_000;
+export const STABLESWAP_DIVIDENDS_ACCUM_PRECISION = 10_000_000_000;
 //#endregion
 
 // error constant

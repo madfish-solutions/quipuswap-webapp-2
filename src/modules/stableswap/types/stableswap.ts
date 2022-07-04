@@ -3,9 +3,9 @@ export enum StableswapLiquidityFormTabs {
   remove = 'remove'
 }
 
-export enum StableFarmFormTabs {
+export enum StableDividendsFormTabs {
   stake = 'stake',
   unstake = 'unstake'
 }
 
-export type StableswapFormTabs = StableFarmFormTabs | StableswapLiquidityFormTabs;
+export type StableswapFormTabs = StableDividendsFormTabs | StableswapLiquidityFormTabs;
