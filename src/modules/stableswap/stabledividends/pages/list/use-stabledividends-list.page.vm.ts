@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 
-import BigNumber from 'bignumber.js';
-
 import { useReady } from '@providers/use-dapp';
+import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useGetStableDividendsList, useStableDividendsListStore } from '../../../hooks';
-
-const DEFAULT_VALUE = new BigNumber('0');
+import { stableDividendsListDataHelper } from './stabledividends-list-data.helper';
 
 export const useStableDividendsListPageViewModel = () => {
   const isReady = useReady();
@@ -15,6 +13,7 @@ export const useStableDividendsListPageViewModel = () => {
   const { getStableDividendsList } = useGetStableDividendsList();
   const { t } = useTranslation();
   const title = t('stableswap|stableDividendsTitle');
+  const { accountPkh } = useAuthStore();
 
   useEffect(() => {
     if (isReady) {
@@ -25,16 +24,7 @@ export const useStableDividendsListPageViewModel = () => {
   const { listStore, filteredList } = stableDividendsListStore;
   const { isLoading } = listStore;
 
-  const data = filteredList?.map(item => {
-    if (item.yourDeposit && item.yourEarned) {
-      return {
-        ...item,
-        shouldShowStakerInfo: item.yourDeposit.gt(DEFAULT_VALUE) || item.yourEarned.gt(DEFAULT_VALUE)
-      };
-    }
-
-    return { ...item, yourDeposit: DEFAULT_VALUE, yourEarned: DEFAULT_VALUE };
-  });
+  const data = filteredList?.map(item => stableDividendsListDataHelper(item, accountPkh));
 
   return { title, isLoading, data: data ?? [] };
 };
