@@ -1,6 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { isNull } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getCoinflipAssetId } from '../helpers';
@@ -14,8 +15,13 @@ export const getGamesCountByTokenApi = async (
 ): Promise<BigNumber> => {
   const tokenAsset = getCoinflipAssetId(token);
 
-  const { gamers_stats } = (await getCoinflipStorageApi(tezos)) as CoinflipStorage;
-  const { games_count: gamesCount } = (await gamers_stats.get([accountPkh, new BigNumber(tokenAsset)])) as GamersStats;
+  const coinflipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
 
-  return gamesCount;
+  if (isNull(coinflipStorage)) {
+    return new BigNumber('0');
+  }
+
+  const gamesCount = await coinflipStorage.gamers_stats.get<GamersStats>([accountPkh, new BigNumber(tokenAsset)]);
+
+  return gamesCount?.games_count ?? new BigNumber('0');
 };
