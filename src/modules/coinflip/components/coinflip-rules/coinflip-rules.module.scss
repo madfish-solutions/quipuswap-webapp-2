@@ -30,8 +30,17 @@
   list-style-type: disc;
 }
 
+.li {
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+
 @include media('>Ltablet') {
   .root {
     margin-top: 32px;
+  }
+
+  .content {
+    padding-bottom: 40px;
   }
 }
