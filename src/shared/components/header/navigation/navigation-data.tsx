@@ -85,9 +85,9 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     opened: true,
     links: [
       {
-        id: 'Stableswap_Farm',
-        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.farming}`,
-        label: <Trans ns="common">Farm</Trans>,
+        id: 'Stableswap_Dividends',
+        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
+        label: <Trans ns="common">Dividends</Trans>,
         status: (
           <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
         )

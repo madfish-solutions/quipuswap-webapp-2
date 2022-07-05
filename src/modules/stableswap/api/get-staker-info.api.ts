@@ -1,7 +1,7 @@
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_STABLESWAP_POOL_ID, STABLESWAP_FARM_ACCUM_PRECISION, ZERO_AMOUNT } from '@config/constants';
+import { DEFAULT_STABLESWAP_POOL_ID, STABLESWAP_DIVIDENDS_ACCUM_PRECISION, ZERO_AMOUNT } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp/get-storage-info';
 import { isExist, isNull, toArray } from '@shared/helpers';
 import { nat, Nullable } from '@shared/types';
@@ -10,7 +10,7 @@ import { earningsMapSchema, rewardMapSchema } from '../schemas/get-staker-info.s
 import {
   EarningsValue,
   RawStakerInfo,
-  StableFarmItem,
+  StableDividendsItem,
   StableswapStorage,
   StakerAccumulator,
   StakersBalanceValue
@@ -34,7 +34,7 @@ const getHarvestedStakerRewards = (
     };
     const newFormerF = stakerBalance.multipliedBy(poolAccumF);
     const newRewardValue = reward.reward_f.plus(newFormerF.minus(reward.former_f).abs());
-    const rewardAmt = newRewardValue.dividedToIntegerBy(STABLESWAP_FARM_ACCUM_PRECISION);
+    const rewardAmt = newRewardValue.dividedToIntegerBy(STABLESWAP_DIVIDENDS_ACCUM_PRECISION);
     result.yourReward.set(i, rewardAmt);
   }
 
@@ -62,15 +62,15 @@ const getSinglePoolStakerInfo = async (
 
 export const getStakerInfo = async (
   tezos: Nullable<TezosToolkit>,
-  stableFarmsList: Array<StableFarmItem> | StableFarmItem,
+  stableDividendsList: Array<StableDividendsItem> | StableDividendsItem,
   accountPkh: Nullable<string>
 ): Promise<Array<RawStakerInfo>> => {
   if (isNull(tezos) || isNull(accountPkh)) {
-    return toArray(stableFarmsList).map(() => ({ yourReward: null, yourDeposit: DEFAULT_VALUE }));
+    return toArray(stableDividendsList).map(() => ({ yourReward: null, yourDeposit: DEFAULT_VALUE }));
   }
 
   return await Promise.all(
-    toArray(stableFarmsList).map(
+    toArray(stableDividendsList).map(
       async ({ contractAddress }) =>
         await getSinglePoolStakerInfo(contractAddress, accountPkh, tezos, new BigNumber(DEFAULT_STABLESWAP_POOL_ID))
     )

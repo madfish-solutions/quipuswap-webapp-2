@@ -11,7 +11,7 @@ export const addStableswapLiquidityApi = async (
   stableswapPoolContractAddress: string,
   shares: BigNumber,
   tokensAndAmounts: Array<AmountToken>,
-  deadline: Date,
+  deadline: string,
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
