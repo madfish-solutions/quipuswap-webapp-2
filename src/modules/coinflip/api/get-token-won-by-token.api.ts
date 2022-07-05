@@ -10,13 +10,13 @@ import { getCoinflipStorageApi } from './get-coinflip-storage.api';
 import { CoinflipStorage } from './types';
 
 export const getTokenWonByTokenApi = async (tezos: Nullable<TezosToolkit>, accountPkh: string, token: Token) => {
-  const tokenAsset = getCoinflipAssetId(token);
-
   const coinFlipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
 
   if (isNull(coinFlipStorage)) {
     return { token, amount: new BigNumber('0') };
   }
+
+  const tokenAsset = getCoinflipAssetId(token);
 
   const stats = await coinFlipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
   const amount = stats ? fromDecimals(stats.total_won_amt, token) : null;

@@ -14,13 +14,12 @@ export const getGamersStatsApi = async (tezos: Nullable<TezosToolkit>, accountPk
     return null;
   }
 
-  const tokenAsset = getCoinflipAssetId(token);
-
   const coinFlipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
 
   if (isNull(coinFlipStorage)) {
     return null;
   }
+  const tokenAsset = getCoinflipAssetId(token);
 
   const gamerStats = await coinFlipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
