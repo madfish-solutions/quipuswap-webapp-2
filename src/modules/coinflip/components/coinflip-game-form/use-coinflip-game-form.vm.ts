@@ -28,9 +28,9 @@ export const useCoinflipGameFormViewModel = (
   payout: Nullable<BigNumber>,
   handleSubmit: Noop,
   onAmountInputChange: (amountInput: string) => void,
-  onCoinSideSelect: (coinSide: CoinSide) => void
+  onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void
 ) => {
-  const { handleCoinFlip } = useCoinFlip();
+  const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
   const formik = useFormik({
     initialValues: {
       [FormFields.coinSide]: '',
@@ -57,6 +57,12 @@ export const useCoinflipGameFormViewModel = (
       : undefined;
 
   const handleCoinSideSelect = (value: CoinSide) => {
+    if (formik.values[FormFields.coinSide] === value) {
+      onCoinSideSelect(null);
+      formik.setFieldValue(FormFields.coinSide, '');
+
+      return;
+    }
     onCoinSideSelect(value);
     formik.setFieldValue(FormFields.coinSide, value);
   };
@@ -70,7 +76,18 @@ export const useCoinflipGameFormViewModel = (
   const disabled = false;
   const isSubmitting = false;
 
-  const payoutAmount = payout ? bigNumberToString(payout) : '';
+  const payoutAmount = formik.values[FormFields.inputAmount] && payout ? bigNumberToString(payout) : '';
+
+  const handleCoinFlip = async () => {
+    if (formik.values[FormFields.coinSide] && formik.values[FormFields.inputAmount]) {
+      await handleCoinFlipPure(
+        new BigNumber(formik.values[FormFields.inputAmount]),
+        formik.values[FormFields.coinSide]
+      );
+      onCoinSideSelect(null);
+      formik.resetForm();
+    }
+  };
 
   return {
     tokenBalance,
