@@ -4,11 +4,11 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideBTezosIcon: FC<IconProps> = ({ size, ...props }) => {
+export const CoinSideBTezosIcon: FC<IconProps> = ({ ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideBQuipuIconNew');
 
   return (
-    <svg width={size} height={size} fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g clipPath={getUrl('a')}>
         <path
           d="M71.008 135c35.346 0 64-28.654 64-64 0-35.346-28.654-64-64-64-35.346 0-64 28.654-64 64 0 35.346 28.654 64 64 64Z"

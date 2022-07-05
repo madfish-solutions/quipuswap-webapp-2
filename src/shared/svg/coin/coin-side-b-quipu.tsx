@@ -4,11 +4,11 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideBQuipuIcon: FC<IconProps> = ({ size, ...props }) => {
+export const CoinSideBQuipuIcon: FC<IconProps> = ({ ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideBQuipuIconNew');
 
   return (
-    <svg width={size} height={size} fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M71 135c35.346 0 64-28.654 64-64 0-35.346-28.654-64-64-64C35.654 7 7 35.654 7 71c0 35.346 28.654 64 64 64Z"
         fill="#FCBF12"
@@ -137,11 +137,11 @@ export const CoinSideBQuipuIcon: FC<IconProps> = ({ size, ...props }) => {
       />
       <path
         d="m80.514 75.93 9.05 9.066a3.68 3.68 0 0 0 5.203-5.204l-9.05-9.066a3.68 3.68 0 1 0-5.203 5.204Z"
-        stroke={getUrl('a')}
+        fill={getUrl('a')}
       />
       <path
         d="m88.261 86.298-9.256-9.256a3.683 3.683 0 0 0-4.997.188 3.68 3.68 0 0 0 0 5.204l9.05 9.066a3.683 3.683 0 0 0 5.205 0 3.679 3.679 0 0 0-.002-5.202Z"
-        stroke={getUrl('b')}
+        fill={getUrl('b')}
       />
       <path
         opacity={0.77}
