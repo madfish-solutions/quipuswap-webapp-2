@@ -78,7 +78,8 @@ export const CoinflipGameForm: FC<Props> = ({
         id="coinflip-form-payout"
         label={t('common|Payout')}
         value={payoutAmount}
-        balance={null}
+        hiddenBalance
+        readOnly
         tokens={token}
         onInputChange={noop}
         className={styles.input}
