@@ -21,11 +21,11 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   // const tokenBlances = useTokensWithBalances(tokens);
 
   useEffect(() => {
-    if (isEmptyArray(filteredTokens)) {
+    if (isEmptyArray(filteredManagedTokens)) {
       tokensManagerStore.searchCustomToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEmptyArray(filteredTokens), tokensManagerStore]);
+  }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
   const [choosenTokens, setChoosenTokens] = useState<Array<Token>>([]);
 
