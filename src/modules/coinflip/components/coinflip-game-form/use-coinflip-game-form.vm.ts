@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 
 import { useCoinFlip } from '@modules/coinflip/hooks';
-import { bigNumberToString } from '@shared/helpers';
+import { bigNumberToString, isEqual } from '@shared/helpers';
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
@@ -57,7 +57,7 @@ export const useCoinflipGameFormViewModel = (
       : undefined;
 
   const handleCoinSideSelect = (value: CoinSide) => {
-    if (formik.values[FormFields.coinSide] === value) {
+    if (isEqual(formik.values[FormFields.coinSide], value)) {
       onCoinSideSelect(null);
       formik.setFieldValue(FormFields.coinSide, '');
 
