@@ -4,13 +4,11 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideAQuipuIcon: FC<IconProps> = ({ size, ...props }) => {
+export const CoinSideAQuipuIcon: FC<IconProps> = ({ ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideAQuipuIconNew');
 
   return (
     <svg
-      width={size}
-      height={size}
       viewBox="0 0 145 145"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

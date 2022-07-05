@@ -4,7 +4,7 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideBQuipuIcon: FC<IconProps> = ({ size, ...props }) => {
+export const CoinSideBQuipuIcon: FC<IconProps> = ({ ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideBQuipuIconNew');
 
   return (

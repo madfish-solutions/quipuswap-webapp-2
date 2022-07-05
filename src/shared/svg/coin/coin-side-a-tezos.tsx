@@ -2,9 +2,9 @@ import { FC } from 'react';
 
 import { IconProps } from '@shared/types';
 
-export const CoinSideATezosIcon: FC<IconProps> = ({ size, ...props }) => {
+export const CoinSideATezosIcon: FC<IconProps> = ({ ...props }) => {
   return (
-    <svg width={size} height={size} fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M71 135c35.346 0 64-28.654 64-64 0-35.346-28.654-64-64-64C35.654 7 7 35.654 7 71c0 35.346 28.654 64 64 64Z"
         fill="#1C2E3A"
