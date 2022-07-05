@@ -1,27 +1,74 @@
+import { TezosToolkit } from '@taquito/taquito';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { NETWORK } from '@config/config';
-import { SKIP, SWAP } from '@config/constants';
+import { DEFAULT_TOKEN_ID, SKIP, SWAP } from '@config/constants';
+import { NETWORK_ID } from '@config/enviroment';
+import { getTokenMetadata } from '@shared/api';
+import { getContract } from '@shared/dapp';
 import {
+  fa2TokenExists,
   getFavoritesTokensSlugs,
   getHiddenTokensSlugs,
   getTokens,
   getTokenSlug,
   hideTokenFromList,
   isEmptyArray,
+  isNull,
   isTokenEqual,
   makeTokenVisibleInlist,
   markTokenAsFavotire,
   removeFavoriteMarkFromToken,
   saveCustomToken
 } from '@shared/helpers';
-import { ManagedToken, TokenWithQSNetworkType } from '@shared/types';
+import { ManagedToken, Standard, Token, TokenWithQSNetworkType } from '@shared/types';
+import { isValidContractAddress } from '@shared/validators';
 
 import { BaseFilterStore } from './base-filter.store';
 import { RootStore } from './root.store';
 
+//copypaste find a better way
+const searchToken = async (tezos: TezosToolkit, address: string, tokenId?: number): Promise<Nullable<Token>> => {
+  if (!isValidContractAddress(address)) {
+    return null;
+  }
+
+  try {
+    const tokenContract = await getContract(tezos, address);
+
+    const isFa2 = Boolean(tokenContract.methods.update_operators);
+    if (isFa2 && !(await fa2TokenExists(tezos, address, tokenId ?? DEFAULT_TOKEN_ID))) {
+      return null;
+    }
+
+    const customToken = await getTokenMetadata({
+      contractAddress: address,
+      fa2TokenId: tokenId
+    });
+
+    if (!customToken) {
+      return null;
+    }
+
+    const token: TokenWithQSNetworkType = {
+      contractAddress: address,
+      metadata: customToken,
+      isWhitelisted: false,
+      type: isFa2 ? Standard.Fa2 : Standard.Fa12,
+      fa2TokenId: isFa2 ? tokenId || DEFAULT_TOKEN_ID : undefined,
+      network: NETWORK_ID
+    };
+
+    return token;
+  } catch (error) {
+    return null;
+  }
+};
+
 export class TokensManagerStore extends BaseFilterStore {
   managedTokens: Array<ManagedToken> = [];
+
+  isSearching = false;
 
   get tokens() {
     return this.managedTokens.filter(token => !token.isHidden);
@@ -35,14 +82,16 @@ export class TokensManagerStore extends BaseFilterStore {
     return this.managedTokens.filter(token => this.tokenMatchesSearch(token));
   }
 
-  constructor(rootStore: RootStore) {
+  constructor(private rootStore: RootStore) {
     super();
     makeObservable(this, {
       managedTokens: observable,
+      isSearching: observable,
 
       loadTokens: action,
       saveCustomToken: action,
       addOrRemoveTokenFavorite: action,
+      searchCustomToken: action,
 
       tokens: computed,
       filteredTokens: computed
@@ -130,6 +179,22 @@ export class TokensManagerStore extends BaseFilterStore {
       this.managedTokens = this.managedTokens.map((_token, index) => {
         return isTokenEqual(_token, token) ? localToken : _token;
       });
+    }
+  }
+
+  async searchCustomToken() {
+    if (this.rootStore.tezos) {
+      this.isSearching = true;
+
+      const tokenId = isNull(this.tokenId) ? undefined : this.tokenId.toNumber();
+
+      const token = await searchToken(this.rootStore.tezos, this.search, tokenId);
+
+      if (token) {
+        this.saveCustomToken(token);
+      }
+
+      this.isSearching = false;
     }
   }
 }
