@@ -82,6 +82,6 @@ export class BaseFilterStore {
 
     const isSymbol = includesCaseInsensitive(metadata?.symbol, this.search);
 
-    return isName || isSymbol || (isContract && fa2TokenIdMatches);
+    return isName || isSymbol || isContract;
   }
 }

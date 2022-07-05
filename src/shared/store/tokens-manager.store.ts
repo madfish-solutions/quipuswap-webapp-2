@@ -75,7 +75,11 @@ export class TokensManagerStore extends BaseFilterStore {
   }
 
   get filteredTokens() {
-    return this.tokens.filter(token => this.tokenMatchesSearch(token));
+    if (this.search) {
+      return this.managedTokens.filter(token => this.tokenMatchesSearch(token));
+    } else {
+      return this.tokens.filter(token => this.tokenMatchesSearch(token));
+    }
   }
 
   get filteredManagedTokens() {
@@ -91,6 +95,7 @@ export class TokensManagerStore extends BaseFilterStore {
       loadTokens: action,
       saveCustomToken: action,
       addOrRemoveTokenFavorite: action,
+      hideOrShowToken: action,
       searchCustomToken: action,
 
       tokens: computed,
