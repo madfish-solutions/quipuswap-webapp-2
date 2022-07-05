@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import cx from 'classnames';
-
 import { Button } from '@shared/components';
 
 import { CoinSelectedIcon } from '../coin-selected-icon';
@@ -17,7 +15,7 @@ export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
     <div className={styles.root}>
       <div className={styles.buttons}>
         <Button onClick={handleSelectSideA} theme="clean" className={styles.button}>
-          {iSelectedSideA && <CoinSelectedIcon className={cx(styles.selected, styles.iconSize)} />}
+          {iSelectedSideA && <CoinSelectedIcon className={styles.selected} />}
           <CoinSideAIcon className={styles.icon} />
         </Button>
 
