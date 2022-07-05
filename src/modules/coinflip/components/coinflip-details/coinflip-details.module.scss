@@ -28,14 +28,67 @@
   line-height: 1.333;
 }
 
+.resultContainer {
+  display: flex;
+  column-gap: 4px;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+}
+
+.yourSide {
+  font-size: 1.143rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: $text-03;
+}
+
+.result {
+  font-size: 1.714rem;
+  line-height: 1.333;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 .dark {
   .gameInfo {
     border-bottom: 1px solid $text-01;
+  }
+
+  .result {
+    color: $text-inverse;
   }
 }
 
 .light {
   .gameInfo {
     border-bottom: 1px solid $ui-03;
+  }
+
+  .result {
+    color: $text-01;
+  }
+}
+
+@include media('>Lphone', '<tablet') {
+  .cardCell {
+    &:last-child {
+      align-items: flex-end;
+    }
+  }
+
+  .resultContainer {
+    flex-direction: row;
+  }
+}
+
+@include media('>Ltablet') {
+  .cardCell {
+    &:last-child {
+      align-items: flex-end;
+    }
+  }
+
+  .resultContainer {
+    flex-direction: row;
   }
 }

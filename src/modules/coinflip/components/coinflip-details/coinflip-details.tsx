@@ -4,11 +4,11 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { Card, DetailsCardCell, StateCurrencyAmount, StateWrapper } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { useCoinflipDashboardStatsViewModel } from '../dashboard-general-stats-info/use-coinflip-dashboard-stats.vm';
 import styles from './coinflip-details.module.scss';
+import { useCoinflipDetailsViewModel } from './coinflip-details.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -22,8 +22,22 @@ interface Props {
 export const CoinflipDetails: FC<Props> = observer(({ className }) => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { bank, bankInUsd, totalWins, gamesCount, payoutCoefficient, tokenToPlay } =
-    useCoinflipDashboardStatsViewModel();
+  const {
+    bank,
+    bidSize,
+    bankInUsd,
+    totalWins,
+    gamesCount,
+    lastGameId,
+    rewardSize,
+    gameResult,
+    betCoinSide,
+    tokenToPlay,
+    bidSizeInUsd,
+    totalWinsInUsd,
+    rewardSizeInUsd,
+    payoutCoefficient
+  } = useCoinflipDetailsViewModel();
 
   return (
     <Card
@@ -47,7 +61,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|totalWins')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent="888888" currency={tokenToPlay} amount={totalWins} />
+          <StateCurrencyAmount dollarEquivalent={totalWinsInUsd} currency={tokenToPlay} amount={totalWins} />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gamesCount')} data-test-id="valueLocked">
@@ -58,19 +72,24 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <h3 className={styles.h3}>Your last game result</h3>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gameId')} data-test-id="valueLocked">
-          <StateCurrencyAmount amount="888888" />
+          <StateCurrencyAmount amount={lastGameId} />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|betSize')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent="888888" currency={tokenToPlay} amount="888888" />
+          <StateCurrencyAmount dollarEquivalent={bidSizeInUsd} currency={tokenToPlay} amount={bidSize} />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|rewardSize')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent="888888" currency={tokenToPlay} amount="888888" />
+          <StateCurrencyAmount dollarEquivalent={rewardSizeInUsd} currency={tokenToPlay} amount={rewardSize} />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent="888888" currency={tokenToPlay} amount="888888" />
+          <StateWrapper loaderFallback={<></>}>
+            <div className={styles.resultContainer}>
+              <span className={styles.yourSide}>(Your side is: {betCoinSide})</span>
+              <span className={styles.result}>{gameResult}</span>
+            </div>
+          </StateWrapper>
         </DetailsCardCell>
       </div>
     </Card>
