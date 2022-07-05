@@ -5,8 +5,9 @@ import { isNull } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getCoinflipAssetId } from '../helpers';
+import { GamersStatsRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';
-import { CoinflipStorage, GamersStats } from './types';
+import { CoinflipStorage } from './types';
 
 export const getGamesCountByTokenApi = async (
   tezos: Nullable<TezosToolkit>,
@@ -21,7 +22,7 @@ export const getGamesCountByTokenApi = async (
     return new BigNumber('0');
   }
 
-  const gamesCount = await coinflipStorage.gamers_stats.get<GamersStats>([accountPkh, new BigNumber(tokenAsset)]);
+  const gamesCount = await coinflipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
   return gamesCount?.games_count ?? new BigNumber('0');
 };
