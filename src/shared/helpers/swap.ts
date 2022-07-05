@@ -10,6 +10,7 @@ export interface SwapParams {
   inputToken: TokenId;
   inputAmount: BigNumber;
   dexChain: DexPair[];
+  trade: Trade;
   slippageTolerance?: BigNumber;
   ttDexAddress?: string;
   recipient?: string;

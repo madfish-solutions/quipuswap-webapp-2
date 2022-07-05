@@ -51,7 +51,7 @@ export const useStableswapLiquidityPageViewModel = () => {
       })),
       {
         cellName: t('common|tvl'),
-        tooltip: t('stableswap|tvlFarmTooltip'),
+        tooltip: t('stableswap|tvlPoolTooltip'),
         amounts: {
           amount: tvlInUsd,
           currency: DOLLAR,

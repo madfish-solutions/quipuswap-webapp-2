@@ -26,7 +26,7 @@ export const CoinflipGame: FC = observer(() => {
       header={{
         content: t('coinflip|selectCoinTitle')
       }}
-      data-test-id="farmingDetails"
+      data-test-id="coinflipDetails"
     >
       <CoinflipGameForm
         token={token}
