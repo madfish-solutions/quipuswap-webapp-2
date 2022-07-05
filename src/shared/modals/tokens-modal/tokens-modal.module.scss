@@ -1,13 +1,18 @@
 @import "@styles/variables";
 
+$card-header-height: 52px;
+$tabs-and-inputs-height:160px;
+$tabs-bottom-margin-16px: 16px;
+$button-height: 104px;
+
 .modalCard {
-  height: 80vh;
+  height: 85vh;
 }
 
 .modalContent {
   padding-top: 0;
   overflow-y: auto;
-  height: 60vh;
+  height: calc(85vh - $card-header-height - $tabs-and-inputs-height - $tabs-bottom-margin-16px - $button-height);
 }
 
 .tabs {
