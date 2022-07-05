@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
 import { Button } from '@shared/components';
-import { CoinSelectedIcon } from '@shared/svg';
 
+import { CoinSelectedIcon } from '../coin-selected-icon';
 import styles from './coinflip-game-select.module.scss';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
 
-const COIN_SIZE = 88;
+const COIN_SIZE = 128;
 
 export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
   const { error, iSelectedSideA, iSelectedSideB, handleSelectSideA, handleSelectSideB, CoinSideAIcon, CoinSideBIcon } =
