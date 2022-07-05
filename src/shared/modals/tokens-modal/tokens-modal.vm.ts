@@ -1,9 +1,9 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { getTokenSlug, isEmptyArray, isNull } from '@shared/helpers';
+import { getTokenSlug, isEmptyArray, isNull, isTokenEqual } from '@shared/helpers';
 // import { useTokensWithBalances } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
-import { Token } from '@shared/types';
+import { ManagedToken, Token } from '@shared/types';
 
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import { TokensModalViewProps } from './types';
@@ -16,8 +16,12 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const tokensManagerStore = useTokensManagerStore();
 
-  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching } = tokensManagerStore;
+  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching, managedTokens, tokens } =
+    tokensManagerStore;
 
+  const [choosenTokens, setChoosenTokens] = useState<Array<ManagedToken>>([]);
+
+  const choosenTokensSlugs = useMemo(() => choosenTokens.map(getTokenSlug), [choosenTokens]);
   // const tokenBlances = useTokensWithBalances(tokens);
 
   useEffect(() => {
@@ -27,9 +31,13 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
-  const [choosenTokens, setChoosenTokens] = useState<Array<Token>>([]);
+  useEffect(() => {
+    setChoosenTokens(prevTokens =>
+      prevTokens.filter(choosenToken => tokens.find(token => isTokenEqual(choosenToken, token)))
+    );
 
-  const choosenTokensSlugs = useMemo(() => choosenTokens.map(getTokenSlug), [choosenTokens]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-magic-numbers
+  }, [managedTokens.reduce((acc, { isHidden }) => (isHidden ? acc + 1 : acc), 0)]);
 
   const onTokenClick = useCallback(
     (token: Token) => {
@@ -100,6 +108,9 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   };
 
   const closeTokensModal = () => {
+    tokensManagerStore.onSearchChange('');
+    tokensManagerStore.onTokenIdChange('');
+
     tokensModalStore.setOpenState(false);
   };
 
