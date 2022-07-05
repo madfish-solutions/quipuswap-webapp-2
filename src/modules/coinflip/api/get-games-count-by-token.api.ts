@@ -14,13 +14,13 @@ export const getGamesCountByTokenApi = async (
   accountPkh: string,
   token: Token
 ): Promise<BigNumber> => {
-  const tokenAsset = getCoinflipAssetId(token);
-
   const coinflipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
 
   if (isNull(coinflipStorage)) {
     return new BigNumber('0');
   }
+
+  const tokenAsset = getCoinflipAssetId(token);
 
   const gamesCount = await coinflipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
