@@ -4,6 +4,7 @@ import { TokensModalCellProps } from '@shared/components/tokens-modal-cell';
 import { TokensModalHeaderProps } from './tokens-modal-header';
 
 export interface TokensModalViewProps {
+  isSearching: boolean;
   setTokens: () => void;
   isModalOpen: boolean;
   openTokensModal: () => void;

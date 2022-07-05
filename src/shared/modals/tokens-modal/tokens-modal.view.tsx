@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Button, Iterator, ManagedTokensModalCell } from '@shared/components';
+import { Button, Iterator, ManagedTokensModalCell, Skeleton } from '@shared/components';
 import { TokensModalCell } from '@shared/components/tokens-modal-cell';
 
 import { Modal } from '../modal';
@@ -9,6 +9,7 @@ import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
 
 export const TokensModalView: FC<TokensModalViewProps> = ({
+  isSearching,
   setTokens,
   isModalOpen,
   closeTokensModal,
@@ -26,6 +27,7 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
       header={<TokensModalHeader tabsClassName={styles.tabs} inputsClassName={styles.inputs} {...headerProps} />}
       footer={headerProps.tabsProps.activeId === 'tokens' && <Button onClick={setTokens}>Click Me</Button>}
     >
+      {isSearching && <Skeleton className={styles.skeleton} />}
       {headerProps.tabsProps.activeId === 'tokens' && (
         <>
           <Iterator render={TokensModalCell} data={tokensModalCellParams} />

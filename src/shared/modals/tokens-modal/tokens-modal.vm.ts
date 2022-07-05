@@ -1,6 +1,6 @@
-import { FormEvent, useCallback, useMemo, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { getTokenSlug, isNull } from '@shared/helpers';
+import { getTokenSlug, isEmptyArray, isNull } from '@shared/helpers';
 // import { useTokensWithBalances } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { Token } from '@shared/types';
@@ -16,9 +16,16 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const tokensManagerStore = useTokensManagerStore();
 
-  const { filteredTokens, filteredManagedTokens, search, tokenIdValue } = tokensManagerStore;
+  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching } = tokensManagerStore;
 
   // const tokenBlances = useTokensWithBalances(tokens);
+
+  useEffect(() => {
+    if (isEmptyArray(filteredTokens)) {
+      tokensManagerStore.searchCustomToken();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmptyArray(filteredTokens), tokensManagerStore]);
 
   const [choosenTokens, setChoosenTokens] = useState<Array<Token>>([]);
 
@@ -103,6 +110,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   };
 
   return {
+    isSearching,
     setTokens,
     tokensModalCellParams,
     managedTokensModalCellParams,

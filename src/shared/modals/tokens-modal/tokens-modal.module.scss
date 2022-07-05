@@ -5,6 +5,7 @@
 }
 
 .modalContent {
+  padding-top: 0;
   overflow-y: auto;
   height: 60vh;
 }
@@ -16,8 +17,13 @@
 }
 
 .inputs {
-  margin-top: 16px;
+  margin: 16px auto;
   display: flex;
   flex-direction: column;
   row-gap: 16px;
+}
+
+.skeleton {
+  height: 64px;
+  margin: 0 8px;
 }
