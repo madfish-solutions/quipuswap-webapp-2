@@ -100,7 +100,7 @@ export class CoinflipStore {
     this.game = { ...DEFAULT_COINFLIP_GAME };
   }
 
-  setCoinSide(coinSide: CoinSide) {
+  setCoinSide(coinSide: Nullable<CoinSide>) {
     this.game.coinSide = coinSide;
   }
 
