@@ -1,20 +1,19 @@
 import { FC } from 'react';
 
-import { Favorite } from '@shared/elements';
+import { Switcher, TokensLogos } from '@shared/components';
+import { FavoriteButton } from '@shared/elements';
 import { getTokenName, getTokenSymbol } from '@shared/helpers';
 import { ManagedToken } from '@shared/types';
 
-import { Switcher } from '../switcher';
-import { TokensLogos } from '../tokens-logo';
 import styles from './managed-tokens-list-modal-cell.module.scss';
 
 export interface ManagedTokensModalCellProps {
   token: ManagedToken;
-  onHideToken: () => void;
+  onHideClick: () => void;
   onFavoriteClick: () => void;
 }
 
-export const ManagedTokensModalCell: FC<ManagedTokensModalCellProps> = ({ token, onFavoriteClick, onHideToken }) => (
+export const ManagedTokensModalCell: FC<ManagedTokensModalCellProps> = ({ token, onFavoriteClick, onHideClick }) => (
   <div className={styles.tokensModalCell}>
     <TokensLogos tokens={token} />
 
@@ -24,8 +23,8 @@ export const ManagedTokensModalCell: FC<ManagedTokensModalCellProps> = ({ token,
     </div>
 
     <div className={styles.checkboxContainer}>
-      <Favorite checked={Boolean(token.isFavorite)} onClick={onFavoriteClick} />
-      <Switcher onClick={onHideToken} value={!Boolean(token.isHidden)} />
+      <FavoriteButton checked={Boolean(token.isFavorite)} onClick={onFavoriteClick} />
+      <Switcher onClick={onHideClick} value={!Boolean(token.isHidden)} />
     </div>
   </div>
 );

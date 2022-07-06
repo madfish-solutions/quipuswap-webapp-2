@@ -7,7 +7,7 @@ interface BinProps {
   className?: string;
 }
 
-export const Bin: FC<BinProps> = ({ onClick, className }) => {
+export const BinButton: FC<BinProps> = ({ onClick, className }) => {
   const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
     event => {
       event.stopPropagation();

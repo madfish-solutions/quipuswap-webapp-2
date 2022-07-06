@@ -60,7 +60,7 @@ export class RootStore {
     this.tokensBalancesStore = new TokensBalancesStore(this);
     this.tokensStore = new TokensStore(this);
     this.tokensManagerStore = new TokensManagerStore(this);
-    this.tokensModalStore = new TokensModalStore();
+    this.tokensModalStore = new TokensModalStore(this);
 
     makeObservable(this, {
       tezos: observable,
