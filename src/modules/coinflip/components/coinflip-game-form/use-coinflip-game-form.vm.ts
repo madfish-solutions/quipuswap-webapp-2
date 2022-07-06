@@ -68,7 +68,7 @@ export const useCoinflipGameFormViewModel = (
 
   const balance = tokenBalance ? tokenBalance.toFixed() : null;
   const disabled = false;
-  const isSubmitting = false;
+  // const isSubmitting = false;
 
   const payoutAmount = payout ? bigNumberToString(payout) : '';
 
@@ -79,7 +79,7 @@ export const useCoinflipGameFormViewModel = (
     handleFormSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],
     disabled,
-    isSubmitting,
+    isSubmitting: formik.isSubmitting,
     balance,
     coinSideError,
     handleInputAmountChange,
