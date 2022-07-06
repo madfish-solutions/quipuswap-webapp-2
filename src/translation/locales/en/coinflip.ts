@@ -5,5 +5,7 @@ export const coinflip = {
   selectTokenToPlayWith: 'Select Token to Play with',
   yourWinnings: 'Your Winnings',
   connectWallet: 'Connect Wallet now!',
-  yourReward: 'Here can be your reward'
+  yourReward: 'Here can be your reward',
+  areYouLucky: 'Are you lucky, bro?',
+  flipCoinToMultiply: 'Flip a coin to multiply!'
 } as const;

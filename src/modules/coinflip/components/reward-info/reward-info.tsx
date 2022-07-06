@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { Button, Card, StateCurrencyAmount } from '@shared/components';
+import { useAuthStore } from '@shared/hooks';
 import { ArrowSign } from '@shared/svg';
 import { Undefined } from '@shared/types';
 
@@ -31,6 +32,7 @@ export const RewardInfo: FC<Props> = ({
   isError,
   details
 }) => {
+  const { accountPkh } = useAuthStore();
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
   const { detailsButtonTransaction } = transaction;
 
@@ -43,14 +45,17 @@ export const RewardInfo: FC<Props> = ({
     >
       <YourWinningsReward
         amount={userReward}
+        gamesCount={gamesCount}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
-        <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
-          <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
-        </CoinflipStatsItem>
+        {gamesCount && accountPkh && (
+          <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
+            <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
+          </CoinflipStatsItem>
+        )}
         {details && showDetails && isError && (
           <Button
             className={cx(styles.viewDetailsButton)}
