@@ -20,6 +20,7 @@ interface Props {
   yourGamesTooltip: string;
   currency: string;
   isError: Undefined<boolean>;
+  hasTokensReward: boolean;
   details?: ReactNode;
 }
 
@@ -30,6 +31,7 @@ export const RewardInfo: FC<Props> = ({
   currency,
   gamesCount,
   isError,
+  hasTokensReward,
   details
 }) => {
   const { accountPkh } = useAuthStore();
@@ -46,17 +48,18 @@ export const RewardInfo: FC<Props> = ({
       <YourWinningsReward
         amount={userReward}
         gamesCount={gamesCount}
+        userHasTokenRewards={hasTokensReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
-        {gamesCount && accountPkh && (
+        {gamesCount?.isGreaterThan('0') && accountPkh && (
           <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
             <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
           </CoinflipStatsItem>
         )}
-        {details && showDetails && isError && (
+        {hasTokensReward && details && showDetails && isError && (
           <Button
             className={cx(styles.viewDetailsButton)}
             theme="inverse"
