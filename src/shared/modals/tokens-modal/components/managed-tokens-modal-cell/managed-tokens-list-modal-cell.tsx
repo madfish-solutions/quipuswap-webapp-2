@@ -15,7 +15,7 @@ export interface ManagedTokensModalCellProps {
 
 export const ManagedTokensModalCell: FC<ManagedTokensModalCellProps> = ({ token, onFavoriteClick, onHideClick }) => (
   <div className={styles.tokensModalCell}>
-    <TokensLogos tokens={token} />
+    <TokensLogos width={32} tokens={token} />
 
     <div>
       <h6 className={styles.tokenName}>{getTokenName(token)}</h6>

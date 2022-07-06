@@ -18,7 +18,7 @@ export interface TokensModalCellProps {
 
 export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance }) => (
   <div className={styles.tokensModalCell} onClick={onTokenClick}>
-    <TokensLogos tokens={token} />
+    <TokensLogos width={32} tokens={token} />
 
     <div>
       <h6 className={styles.tokenName}>{getTokenName(token)}</h6>
