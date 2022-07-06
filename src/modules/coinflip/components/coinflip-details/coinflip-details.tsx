@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, DashPlug, DetailsCardCell, StateCurrencyAmount, StateWrapper } from '@shared/components';
-import { isUndefined } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-details.module.scss';
@@ -95,7 +95,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           <StateCurrencyAmount
             errorFallback={<DashPlug animation={false} />}
             isError={shouldHideData}
-            className={cx({ [styles.amount]: !isUndefined(bidSizeInUsd) })}
+            className={cx({ [styles.amount]: isExist(bidSizeInUsd) })}
             dollarEquivalent={bidSizeInUsd}
             currency={tokenToPlay}
             amount={bidSize}
@@ -106,7 +106,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           <StateCurrencyAmount
             errorFallback={<DashPlug animation={false} />}
             isError={shouldHideData}
-            className={cx({ [styles.amount]: !isUndefined(rewardSizeInUsd) })}
+            className={cx({ [styles.amount]: isExist(rewardSizeInUsd) })}
             dollarEquivalent={rewardSizeInUsd}
             currency={tokenToPlay}
             amount={rewardSize}
