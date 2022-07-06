@@ -6,6 +6,14 @@ export const coinflip = {
   yourWinnings: 'Your Winnings',
   connectWallet: 'Connect Wallet now!',
   yourReward: 'Here can be your reward',
+  payoutCoefficient: 'Payout coefficient',
+  bank: 'Bank',
+  totalWins: 'Total wins',
+  gamesCount: 'Games count',
+  gameId: 'Game ID',
+  betSize: 'Bet size',
+  rewardSize: 'Reward size',
+  result: 'Result'
   areYouLucky: 'Are you lucky, bro?',
   flipCoinToMultiply: 'Flip a coin to multiply!'
 } as const;
