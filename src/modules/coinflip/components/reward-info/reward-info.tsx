@@ -48,7 +48,7 @@ export const RewardInfo: FC<Props> = ({
       <YourWinningsReward
         amount={userReward}
         gamesCount={gamesCount}
-        userHasTokenRewards={hasTokensReward}
+        hasTokensReward={hasTokensReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}

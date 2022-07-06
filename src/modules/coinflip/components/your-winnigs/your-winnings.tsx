@@ -30,7 +30,7 @@ interface Props {
   amountDecimals?: number;
   currency: string;
   rewardTooltip: string;
-  userHasTokenRewards: boolean;
+  hasTokensReward: boolean;
   className?: string;
 }
 
@@ -42,7 +42,7 @@ export const YourWinningsReward: FC<Props> = observer(
     dollarEquivalent,
     amountDecimals = USD_DECIMALS,
     rewardTooltip,
-    userHasTokenRewards,
+    hasTokensReward,
     className
   }) => {
     const { accountPkh } = useAuthStore();
@@ -54,7 +54,7 @@ export const YourWinningsReward: FC<Props> = observer(
       <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
         <div className={styles.container}>
           {accountPkh ? (
-            gamesCount?.isGreaterThan('0') && userHasTokenRewards ? (
+            gamesCount?.isGreaterThan('0') && hasTokensReward ? (
               <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
                 <StateCurrencyAmount
                   className={styles.amount}
