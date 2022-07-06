@@ -11,7 +11,7 @@ import { TokensLogos } from '../tokens-logo';
 import styles from './tokens-modal-cell.module.scss';
 
 export interface TokensModalCellProps {
-  token: ManagedToken & { isChoosen: boolean };
+  token: ManagedToken & { isChosen: boolean };
   onTokenClick: () => void;
   balance?: Nullable<BigNumber.Value>;
 }
@@ -27,7 +27,7 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
 
     <div className={styles.checkboxContainer}>
       {balance && <StateCurrencyAmount amount={balance} />}
-      <Checkbox className={styles.checkbox} checked={token.isChoosen} />
+      <Checkbox className={styles.checkbox} checked={token.isChosen} />
     </div>
   </div>
 );
