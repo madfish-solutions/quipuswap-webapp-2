@@ -25,6 +25,7 @@ const modeClass = {
 
 interface Props {
   amount: Nullable<BigNumber>;
+  gamesCount?: Nullable<BigNumber>;
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
@@ -33,7 +34,7 @@ interface Props {
 }
 
 export const YourWinningsReward: FC<Props> = observer(
-  ({ amount, currency, dollarEquivalent, amountDecimals = USD_DECIMALS, rewardTooltip, className }) => {
+  ({ amount, gamesCount, currency, dollarEquivalent, amountDecimals = USD_DECIMALS, rewardTooltip, className }) => {
     const { accountPkh } = useAuthStore();
     const { t } = useTranslation();
     const { colorThemeMode } = useContext(ColorThemeContext);
@@ -43,7 +44,7 @@ export const YourWinningsReward: FC<Props> = observer(
       <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
         <div className={styles.container}>
           {accountPkh ? (
-            <>
+            gamesCount ? (
               <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
                 <StateCurrencyAmount
                   className={styles.amount}
@@ -55,7 +56,14 @@ export const YourWinningsReward: FC<Props> = observer(
                   isError={!isExchangeRatesExist}
                 />
               </CoinflipStatsItem>
-            </>
+            ) : (
+              <div className={styles.alternativeTitle}>
+                <div className={styles.title}>{t('coinflip|areYouLucky')}</div>
+                <div className={cx(styles.description, modeClass[colorThemeMode])}>
+                  {t('coinflip|flipCoinToMultiply')}
+                </div>
+              </div>
+            )
           ) : (
             <div className={styles.alternativeTitle}>
               <div className={styles.title}>{t('coinflip|connectWallet')}</div>
