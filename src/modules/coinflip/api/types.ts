@@ -21,14 +21,6 @@ export interface GeneralStatsInterface {
   total_won_amt: BigNumber;
 }
 
-export interface GamersStats {
-  last_game_id: BigNumber;
-  games_count: BigNumber;
-  total_won_amt: BigNumber;
-  total_lost_amt: BigNumber;
-  total_bets_amt: BigNumber;
-}
-
 export enum TOKEN_ASSETS {
   TEZOS = 0,
   QUIPU = 1
