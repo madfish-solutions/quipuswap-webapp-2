@@ -7,7 +7,6 @@ export interface TokensModalViewProps {
   isSearching: boolean;
   setTokens: () => void;
   isModalOpen: boolean;
-  openTokensModal: () => void;
   closeTokensModal: () => void;
   tokensModalCellParams: Array<TokensModalCellProps>;
   managedTokensModalCellParams: Array<ManagedTokensModalCellProps>;
