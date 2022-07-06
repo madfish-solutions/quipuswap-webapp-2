@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js';
 
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
-import { bigNumberToString, fromDecimals } from '@shared/helpers';
+import { bigNumberToString, fromDecimals, isNull } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
@@ -19,8 +20,9 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 });
 
 export const useCoinflipDetailsViewModel = () => {
-  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
   const exchangeRates = useExchangeRates();
+  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
+  const { accountPkh } = useAuthStore();
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
@@ -38,6 +40,7 @@ export const useCoinflipDetailsViewModel = () => {
   const rewardSizeInUsd = rewardSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
+  const shouldHideData = isNull(accountPkh);
 
   return {
     bank,
@@ -50,6 +53,7 @@ export const useCoinflipDetailsViewModel = () => {
     betCoinSide,
     tokenToPlay,
     bidSizeInUsd,
+    shouldHideData,
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,

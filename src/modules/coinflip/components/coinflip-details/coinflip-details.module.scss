@@ -69,6 +69,10 @@
   }
 }
 
+.amount {
+  align-items: flex-end;
+}
+
 @include media('>Lphone', '<tablet') {
   .cardCell {
     &:last-child {
