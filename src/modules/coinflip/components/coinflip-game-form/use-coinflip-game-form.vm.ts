@@ -40,6 +40,9 @@ export const useCoinflipGameFormViewModel = (
     onSubmit: handleSubmit
   });
 
+  const formikInputAmountValue = formik.values[FormFields.inputAmount];
+  const formikCoinSideValue = formik.values[FormFields.coinSide];
+
   useEffect(() => {
     formik.resetForm();
     // Skip formik dependency
@@ -57,7 +60,7 @@ export const useCoinflipGameFormViewModel = (
       : undefined;
 
   const handleCoinSideSelect = (value: CoinSide) => {
-    if (isEqual(formik.values[FormFields.coinSide], value)) {
+    if (isEqual(formikCoinSideValue, value)) {
       onCoinSideSelect(null);
       formik.setFieldValue(FormFields.coinSide, '');
 
@@ -76,14 +79,11 @@ export const useCoinflipGameFormViewModel = (
   const disabled = false;
   const isSubmitting = false;
 
-  const payoutAmount = formik.values[FormFields.inputAmount] && payout ? bigNumberToString(payout) : '';
+  const payoutAmount = formikInputAmountValue && payout ? bigNumberToString(payout) : '';
 
   const handleCoinFlip = async () => {
-    if (formik.values[FormFields.coinSide] && formik.values[FormFields.inputAmount]) {
-      await handleCoinFlipPure(
-        new BigNumber(formik.values[FormFields.inputAmount]),
-        formik.values[FormFields.coinSide]
-      );
+    if (formikInputAmountValue && formikCoinSideValue) {
+      await handleCoinFlipPure(new BigNumber(formikInputAmountValue), formikCoinSideValue);
       onCoinSideSelect(null);
       formik.resetForm();
     }
@@ -94,7 +94,7 @@ export const useCoinflipGameFormViewModel = (
     payoutAmount,
     inputAmountError,
     handleFormSubmit: formik.handleSubmit,
-    inputAmount: formik.values[FormFields.inputAmount],
+    inputAmount: formikInputAmountValue,
     disabled,
     isSubmitting,
     balance,
