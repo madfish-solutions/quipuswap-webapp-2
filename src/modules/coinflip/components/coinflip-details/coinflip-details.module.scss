@@ -1,0 +1,98 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.content {
+  padding: 16px 24px;
+}
+
+.h3 {
+  font-size: 1rem;
+  line-height: 1.143;
+  font-weight: 600;
+}
+
+.gameInfo,
+.lastGameResult {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.gameInfo {
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.payoutCoefficient {
+  font-size: 1.714rem;
+  line-height: 1.333;
+}
+
+.resultContainer {
+  display: flex;
+  column-gap: 4px;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+}
+
+.yourSide {
+  font-size: 1.143rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: $text-03;
+}
+
+.result {
+  font-size: 1.714rem;
+  line-height: 1.333;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.dark {
+  .gameInfo {
+    border-bottom: 1px solid $text-01;
+  }
+
+  .result {
+    color: $text-inverse;
+  }
+}
+
+.light {
+  .gameInfo {
+    border-bottom: 1px solid $ui-03;
+  }
+
+  .result {
+    color: $text-01;
+  }
+}
+
+.amount {
+  align-items: flex-end;
+}
+
+@include media('>Lphone', '<tablet') {
+  .cardCell {
+    &:last-child {
+      align-items: flex-end;
+    }
+  }
+
+  .resultContainer {
+    flex-direction: row;
+  }
+}
+
+@include media('>Ltablet') {
+  .cardCell {
+    &:last-child {
+      align-items: flex-end;
+    }
+  }
+
+  .resultContainer {
+    flex-direction: row;
+  }
+}

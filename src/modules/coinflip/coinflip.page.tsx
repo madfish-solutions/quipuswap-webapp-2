@@ -2,24 +2,15 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, TestnetAlert, StateWrapper } from '@shared/components';
+import { PageTitle, TestnetAlert, StateWrapper, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
-import styles from './coinflip.page.module.scss';
-import {
-  CoinflipGame,
-  CoinflipTokenSelector,
-  CoinflipDashboardStatsInfo,
-  CoinflipRewardInfo,
-  CoinflipRules
-} from './components';
-import { useCoinflipGeneralStats } from './hooks';
+import { CoinflipDetails, CoinflipGame, CoinflipTokenSelector, CoinflipRewardInfo, CoinflipRules } from './components';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
   const { t } = useTranslation();
-  const { isLoading } = useCoinflipGeneralStats();
 
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
@@ -31,11 +22,10 @@ export const CoinflipPage: FC = observer(() => {
 
       <CoinflipTokenSelector />
 
-      <CoinflipDashboardStatsInfo isLoading={isLoading} />
-
-      <div className={styles.game}>
+      <StickyBlock>
         <CoinflipGame />
-      </div>
+        <CoinflipDetails />
+      </StickyBlock>
       <CoinflipRules />
     </StateWrapper>
   );
