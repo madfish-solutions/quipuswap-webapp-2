@@ -9,7 +9,7 @@ export const NETWORK_ID = (process.env.REACT_APP_NETWORK! ?? NetworkType.MAINNET
 //#region BASE_URL
 export const networksBaseUrls: Record<SupportedNetworks, string> = {
   [NetworkType.MAINNET]: process.env.REACT_APP_MAINNET_BASE_URL!,
-  [NetworkType.ITHACANET]: process.env.REACT_APP_ITHACANET_BASE_URL!
+  [NetworkType.GHOSTNET]: process.env.REACT_APP_GHOSTNET_BASE_URL!
 };
 
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
