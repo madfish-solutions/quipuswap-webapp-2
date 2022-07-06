@@ -30,11 +30,21 @@ interface Props {
   amountDecimals?: number;
   currency: string;
   rewardTooltip: string;
+  userHasTokenRewards: boolean;
   className?: string;
 }
 
 export const YourWinningsReward: FC<Props> = observer(
-  ({ amount, gamesCount, currency, dollarEquivalent, amountDecimals = USD_DECIMALS, rewardTooltip, className }) => {
+  ({
+    amount,
+    gamesCount,
+    currency,
+    dollarEquivalent,
+    amountDecimals = USD_DECIMALS,
+    rewardTooltip,
+    userHasTokenRewards,
+    className
+  }) => {
     const { accountPkh } = useAuthStore();
     const { t } = useTranslation();
     const { colorThemeMode } = useContext(ColorThemeContext);
@@ -44,7 +54,7 @@ export const YourWinningsReward: FC<Props> = observer(
       <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
         <div className={styles.container}>
           {accountPkh ? (
-            gamesCount ? (
+            gamesCount?.isGreaterThan('0') && userHasTokenRewards ? (
               <CoinflipStatsItem itemName="Your Winnings" loading={!Boolean(amount)} tooltipContent={rewardTooltip}>
                 <StateCurrencyAmount
                   className={styles.amount}
@@ -58,9 +68,8 @@ export const YourWinningsReward: FC<Props> = observer(
               </CoinflipStatsItem>
             ) : (
               <div className={styles.alternativeTitle}>
-                <div className={styles.title}>{t('coinflip|areYouLucky')}</div>
                 <div className={cx(styles.description, modeClass[colorThemeMode])}>
-                  {t('coinflip|flipCoinToMultiply')}
+                  {t('coinflip|luckFavorsPersistant')}
                 </div>
               </div>
             )
