@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { object, string } from 'yup';
 
 import { useCoinFlip } from '@modules/coinflip/hooks';
-import { bigNumberToString } from '@shared/helpers';
+import { bigNumberToString, isEqual } from '@shared/helpers';
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
@@ -28,9 +28,9 @@ export const useCoinflipGameFormViewModel = (
   payout: Nullable<BigNumber>,
   handleSubmit: Noop,
   onAmountInputChange: (amountInput: string) => void,
-  onCoinSideSelect: (coinSide: CoinSide) => void
+  onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void
 ) => {
-  const { handleCoinFlip } = useCoinFlip();
+  const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
   const formik = useFormik({
     initialValues: {
       [FormFields.coinSide]: '',
@@ -39,6 +39,9 @@ export const useCoinflipGameFormViewModel = (
     validationSchema: getValidation(tokenBalance),
     onSubmit: handleSubmit
   });
+
+  const inputAmount = formik.values[FormFields.inputAmount];
+  const coinSide = formik.values[FormFields.coinSide];
 
   useEffect(() => {
     formik.resetForm();
@@ -57,6 +60,12 @@ export const useCoinflipGameFormViewModel = (
       : undefined;
 
   const handleCoinSideSelect = (value: CoinSide) => {
+    if (isEqual(coinSide, value)) {
+      onCoinSideSelect(null);
+      formik.setFieldValue(FormFields.coinSide, '');
+
+      return;
+    }
     onCoinSideSelect(value);
     formik.setFieldValue(FormFields.coinSide, value);
   };
@@ -70,14 +79,22 @@ export const useCoinflipGameFormViewModel = (
   const disabled = false;
   // const isSubmitting = false;
 
-  const payoutAmount = payout ? bigNumberToString(payout) : '';
+  const payoutAmount = inputAmount && payout ? bigNumberToString(payout) : '';
+
+  const handleCoinFlip = async () => {
+    if (inputAmount && coinSide) {
+      await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
+      onCoinSideSelect(null);
+      formik.resetForm();
+    }
+  };
 
   return {
     tokenBalance,
     payoutAmount,
     inputAmountError,
     handleFormSubmit: formik.handleSubmit,
-    inputAmount: formik.values[FormFields.inputAmount],
+    inputAmount,
     disabled,
     isSubmitting: formik.isSubmitting,
     balance,
