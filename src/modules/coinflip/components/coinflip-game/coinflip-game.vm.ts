@@ -18,7 +18,7 @@ export const useCoinflipGameViewModel = () => {
     // flipApi();
   };
 
-  const handleSelectCoinSide = (coinSide: CoinSide) => {
+  const handleSelectCoinSide = (coinSide: Nullable<CoinSide>) => {
     coinflipStore.setCoinSide(coinSide);
   };
 

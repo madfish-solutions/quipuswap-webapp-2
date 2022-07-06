@@ -19,7 +19,7 @@ interface Props {
   amountBalance: Nullable<BigNumber>;
   tokenToPlay: TokenToPlay;
   coinSide: Nullable<CoinSide>;
-  onCoinSideSelect: (coinSide: CoinSide) => void;
+  onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void;
   onAmountInputChange: (amountInput: string) => void;
   handleSubmit: Noop;
 }
