@@ -1,9 +1,7 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 
-import { getTokenSlug, isEmptyArray, isNull, isTokenEqual } from '@shared/helpers';
-// import { useTokensWithBalances } from '@shared/hooks';
+import { isEmptyArray, isNull } from '@shared/helpers';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
-import { ManagedToken, Token } from '@shared/types';
 
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import { TokensModalViewProps } from './types';
@@ -13,73 +11,56 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
+  const { chosenTokens } = tokensModalStore;
 
   const tokensManagerStore = useTokensManagerStore();
 
-  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching, managedTokens, tokens } =
-    tokensManagerStore;
-
-  const [choosenTokens, setChoosenTokens] = useState<Array<ManagedToken>>([]);
-
-  const choosenTokensSlugs = useMemo(() => choosenTokens.map(getTokenSlug), [choosenTokens]);
-  // const tokenBlances = useTokensWithBalances(tokens);
+  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching } = tokensManagerStore;
 
   useEffect(() => {
     if (isEmptyArray(filteredManagedTokens)) {
-      tokensManagerStore.searchCustomToken();
+      void tokensManagerStore.searchCustomToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
-  useEffect(() => {
-    setChoosenTokens(prevTokens =>
-      prevTokens.filter(choosenToken => tokens.find(token => isTokenEqual(choosenToken, token)))
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-magic-numbers
-  }, [managedTokens.reduce((acc, { isHidden }) => (isHidden ? acc + 1 : acc), 0)]);
-
-  const onTokenClick = useCallback(
-    (token: Token) => {
-      if (choosenTokensSlugs.includes(getTokenSlug(token))) {
-        const newChoosenToken = choosenTokens.filter(
-          choosenToken => getTokenSlug(choosenToken) !== getTokenSlug(token)
-        );
-
-        setChoosenTokens(_ => newChoosenToken);
-      } else {
-        setChoosenTokens(prev => [...prev, token]);
-      }
-    },
-    [choosenTokens, choosenTokensSlugs]
-  );
+  // TODO - move to the TokensManagerStore
+  // useEffect(() => {
+  //   setChosenTokens(prevTokens =>
+  //     prevTokens.filter(chosenToken => tokens.find(token => isTokenEqual(chosenToken, token)))
+  //   );
+  //
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-magic-numbers
+  // }, [managedTokens.reduce((acc, { isHidden }) => (isHidden ? acc + 1 : acc), 0)]);
 
   const tokensModalCellParams = useMemo(() => {
     return filteredTokens.map(token => {
-      const isTokenChoosen = choosenTokensSlugs.includes(getTokenSlug(token));
+      const isTokenChosen = tokensModalStore.isChosenToken(token);
 
       return {
+        chosenTokens,
         token: {
           ...token,
-          isChoosen: isTokenChoosen
+          isChosen: isTokenChosen
         },
         balance: null,
-        onTokenClick: () => onTokenClick(token)
+        onTokenClick: () => tokensModalStore.toggleChosenToken(token)
       };
     });
-  }, [choosenTokensSlugs, onTokenClick, filteredTokens]);
+  }, [chosenTokens, tokensModalStore, filteredTokens]);
 
   const managedTokensModalCellParams = useMemo(() => {
     return filteredManagedTokens.map(token => {
       return {
         token,
+        // TODO: Use this handlers
         onFavoriteClick: () => tokensManagerStore.addOrRemoveTokenFavorite(token),
         onHideToken: () => tokensManagerStore.hideOrShowToken(token)
       };
     });
   }, [filteredManagedTokens, tokensManagerStore]);
 
-  //#region create hook to aviod code repeating
+  //#region create hook to avoid code repeating
   const handeTokensSearchChange = (event: FormEvent<HTMLInputElement>) => {
     if (isNull(event)) {
       return;
@@ -101,22 +82,15 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const handleDecrement = () => {
     tokensManagerStore.handleDecrement();
   };
-  //#endregion create hook to aviod code repeating
-
-  const openTokensModal = () => {
-    tokensModalStore.setOpenState(true);
-  };
+  //#endregion create hook to avoid code repeating
 
   const closeTokensModal = () => {
     tokensManagerStore.onSearchChange('');
     tokensManagerStore.onTokenIdChange('');
-
-    tokensModalStore.setOpenState(false);
+    tokensModalStore.close();
   };
 
   const setTokens = () => {
-    tokensModalStore.setChoosenTokens(choosenTokens);
-
     closeTokensModal();
   };
 
@@ -126,7 +100,6 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     tokensModalCellParams,
     managedTokensModalCellParams,
     isModalOpen: tokensModalStore.isOpen,
-    openTokensModal,
     closeTokensModal,
     headerProps: {
       tabsProps,
