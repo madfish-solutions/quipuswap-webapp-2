@@ -1,7 +1,7 @@
-import { ManagedTokensModalCellProps } from '@shared/components';
 import { TokensModalCellProps } from '@shared/components/tokens-modal-cell';
 
-import { TokensModalHeaderProps } from './tokens-modal-header';
+import { ManagedTokensModalCellProps } from './components';
+import { TokensModalHeaderProps } from './components/tokens-modal-header';
 
 export interface TokensModalViewProps {
   isSearching: boolean;

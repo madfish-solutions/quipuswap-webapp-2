@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo } from 'react';
 
 import { isEmptyArray, isNull } from '@shared/helpers';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
+import { isValidContractAddress } from '@shared/validators';
 
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import { TokensModalViewProps } from './types';
@@ -17,21 +18,13 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching } = tokensManagerStore;
 
+  //TODO: find a better way
   useEffect(() => {
     if (isEmptyArray(filteredManagedTokens)) {
       void tokensManagerStore.searchCustomToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
-
-  // TODO - move to the TokensManagerStore
-  // useEffect(() => {
-  //   setChosenTokens(prevTokens =>
-  //     prevTokens.filter(chosenToken => tokens.find(token => isTokenEqual(chosenToken, token)))
-  //   );
-  //
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps, @typescript-eslint/no-magic-numbers
-  // }, [managedTokens.reduce((acc, { isHidden }) => (isHidden ? acc + 1 : acc), 0)]);
 
   const tokensModalCellParams = useMemo(() => {
     return filteredTokens.map(token => {
@@ -55,7 +48,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
         token,
         // TODO: Use this handlers
         onFavoriteClick: () => tokensManagerStore.addOrRemoveTokenFavorite(token),
-        onHideToken: () => tokensManagerStore.hideOrShowToken(token)
+        onHideClick: () => tokensManagerStore.hideOrShowToken(token)
       };
     });
   }, [filteredManagedTokens, tokensManagerStore]);
@@ -94,6 +87,8 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     closeTokensModal();
   };
 
+  const showTokenIdInput = isValidContractAddress(search);
+
   return {
     isSearching,
     setTokens,
@@ -106,7 +101,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
       search,
       tokenIdValue,
-
+      showTokenIdInput,
       handeTokensSearchChange,
       handleTokenIdChange,
       handleIncrement,

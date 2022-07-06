@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { getTokenSlug, isExist } from '@shared/helpers';
+import { RootStore } from '@shared/store';
 import { Token } from '@shared/types';
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
@@ -11,7 +12,7 @@ export class TokensModalStore {
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
-  constructor() {
+  constructor(private readonly store: RootStore) {
     makeObservable(this, {
       isOpen: observable,
       chosenTokens: observable,
@@ -30,8 +31,6 @@ export class TokensModalStore {
   }
 
   toggleChosenToken(token: Token) {
-    // eslint-disable-next-line no-console
-    console.log('toggle', token);
     if (this.isChosenToken(token)) {
       if (!this.chosenTokens) {
         this.chosenTokens = [];

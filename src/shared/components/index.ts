@@ -61,4 +61,3 @@ export * from './list-item-card';
 export * from './list-filter-view';
 export * from './switcher-list-filter-view';
 export * from './sorter-view';
-export * from './managed-tokens-modal-cell';
