@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { isNull } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { Token } from '@shared/types';
 
@@ -30,7 +30,7 @@ export class TokensModalStore {
   }
 
   setChoosenTokens(value: Array<Token>) {
-    if (!isNull(this.tokensResolver)) {
+    if (isExist(this.tokensResolver)) {
       this.tokensResolver(value);
       this.tokensResolver = null;
     }
