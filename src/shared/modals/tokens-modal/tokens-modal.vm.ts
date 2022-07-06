@@ -1,7 +1,9 @@
-import { FormEvent, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
-import { isEmptyArray, isNull } from '@shared/helpers';
+import { isEmptyArray } from '@shared/helpers';
+import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
+import { noopMap } from '@shared/mapping';
 import { isValidContractAddress } from '@shared/validators';
 
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
@@ -12,11 +14,23 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { chosenTokens } = tokensModalStore;
+
+  const { chosenTokens } = useTokensModalStore();
 
   const tokensManagerStore = useTokensManagerStore();
 
-  const { filteredTokens, filteredManagedTokens, search, tokenIdValue, isSearching } = tokensManagerStore;
+  const {
+    search,
+    tokenIdValue,
+
+    onSearchChange: handeTokensSearchChange,
+    onTokenIdChange: handleTokenIdChange,
+
+    handleIncrement,
+    handleDecrement
+  } = useBaseFilterStoreConverter(tokensManagerStore);
+
+  const { filteredTokens, filteredManagedTokens, isSearching } = tokensManagerStore;
 
   //TODO: find a better way
   useEffect(() => {
@@ -27,11 +41,12 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
   const tokensModalCellParams = useMemo(() => {
+    noopMap(chosenTokens);
+
     return filteredTokens.map(token => {
       const isTokenChosen = tokensModalStore.isChosenToken(token);
 
       return {
-        chosenTokens,
         token: {
           ...token,
           isChosen: isTokenChosen
@@ -53,38 +68,19 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     });
   }, [filteredManagedTokens, tokensManagerStore]);
 
-  //#region create hook to avoid code repeating
-  const handeTokensSearchChange = (event: FormEvent<HTMLInputElement>) => {
-    if (isNull(event)) {
-      return;
-    }
-    tokensManagerStore.onSearchChange((event.target as HTMLInputElement).value);
-  };
-
-  const handleTokenIdChange = (event: FormEvent<HTMLInputElement>) => {
-    if (isNull(event) || isNull(event.target)) {
-      return;
-    }
-    tokensManagerStore.onTokenIdChange((event.target as HTMLInputElement).value);
-  };
-
-  const handleIncrement = () => {
-    tokensManagerStore.handleIncrement();
-  };
-
-  const handleDecrement = () => {
-    tokensManagerStore.handleDecrement();
-  };
-  //#endregion create hook to avoid code repeating
-
-  const closeTokensModal = () => {
+  const clearInputs = useCallback(() => {
     tokensManagerStore.onSearchChange('');
     tokensManagerStore.onTokenIdChange('');
-    tokensModalStore.close();
+  }, [tokensManagerStore]);
+
+  const closeTokensModal = () => {
+    clearInputs();
+    tokensModalStore.close({ abort: true });
   };
 
   const setTokens = () => {
-    closeTokensModal();
+    clearInputs();
+    tokensModalStore.close();
   };
 
   const showTokenIdInput = isValidContractAddress(search);

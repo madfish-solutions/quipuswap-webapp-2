@@ -1,11 +1,9 @@
-import { FormEvent } from 'react';
-
 import cx from 'classnames';
 
 import { useStableFarmFilterStore } from '@modules/stableswap/hooks';
 import { ListFilterViewProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { StableFarmSortField, StableFarmSortFieldItem } from '../../types';
@@ -14,17 +12,28 @@ import styles from './stablefarm-list-filter.module.scss';
 export const useStableFarmListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
   const stableFarmFilterStore = useStableFarmFilterStore();
+
+  const {
+    search,
+    tokenIdValue,
+    sortDirection,
+
+    onSearchChange,
+    onTokenIdChange,
+
+    handleIncrement,
+    handleDecrement,
+
+    handleSortDirectionToggle
+  } = useBaseFilterStoreConverter(stableFarmFilterStore);
+
   const { accountPkh } = useAuthStore();
-  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableFarmFilterStore;
+  const { whitelistedOnly, stakedOnly, sortField } = stableFarmFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as StableFarmSortFieldItem;
 
     return stableFarmFilterStore.onSortFieldChange(item.field);
-  };
-
-  const handleSortDirectionToggle = () => {
-    return stableFarmFilterStore.onSortDirectionToggle();
   };
 
   const sortValues: StableFarmSortFieldItem[] = [
@@ -56,28 +65,6 @@ export const useStableFarmListFilterViewModel = (): ListFilterViewProps => {
 
   const setWhitelistedOnly = (state: boolean) => {
     return stableFarmFilterStore.setWhitelistedOnly(state);
-  };
-
-  const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e)) {
-      return;
-    }
-    stableFarmFilterStore.onSearchChange((e.target as HTMLInputElement).value);
-  };
-
-  const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e) || isNull(e.target)) {
-      return;
-    }
-    stableFarmFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
-  };
-
-  const handleIncrement = () => {
-    stableFarmFilterStore.handleIncrement();
-  };
-
-  const handleDecrement = () => {
-    stableFarmFilterStore.handleDecrement();
   };
 
   const switcherDataList = [
