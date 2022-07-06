@@ -12,7 +12,7 @@ export const HomePage: FC = () => {
 
   const handleButtonClick = async () => {
     console.log('handleButtonClick');
-    const tokens = await chooseTokens();
+    const tokens = await chooseTokens({});
     console.log('After chooseTokens');
     // eslint-disable-next-line no-console
     console.log(tokens);

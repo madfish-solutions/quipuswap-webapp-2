@@ -1,24 +1,33 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { getTokenSlug, isExist } from '@shared/helpers';
+import { getTokenSlug, isExist, isNull, isTokenEqual } from '@shared/helpers';
 import { RootStore } from '@shared/store';
-import { Token } from '@shared/types';
+import { ManagedToken, Token } from '@shared/types';
+
+import { TokensModalAbort, TokensModalInitialParams } from './types';
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
 
 export class TokensModalStore {
-  isOpen = true;
-  chosenTokens: Nullable<Array<Token>> = null;
+  isOpen = false;
+  _chosenTokens: Nullable<Array<Token>> = null;
+  initialTokens: Nullable<Array<Token>> = null;
+
+  get chosenTokens(): Nullable<Array<Token>> {
+    return this.checkVisibilityOfChosenTokens(this._chosenTokens);
+  }
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
-  constructor(private readonly store: RootStore) {
+  constructor(private readonly rootstore: RootStore) {
     makeObservable(this, {
       isOpen: observable,
-      chosenTokens: observable,
+      _chosenTokens: observable,
 
       setOpenState: action,
-      toggleChosenToken: action
+      toggleChosenToken: action,
+      setChosenTokens: action,
+      setInitialTokens: action
     });
   }
 
@@ -26,32 +35,47 @@ export class TokensModalStore {
     this.isOpen = isOpen;
   }
 
-  private setChosenTokens(tokens: Nullable<Array<Token>>) {
-    this.chosenTokens = tokens;
+  setChosenTokens(tokens: Nullable<Array<Token>>) {
+    this._chosenTokens = tokens;
   }
 
-  toggleChosenToken(token: Token) {
+  setInitialTokens(tokens: Nullable<Array<Token>>) {
+    this.initialTokens = tokens;
+  }
+
+  toggleChosenToken(token: ManagedToken) {
     if (this.isChosenToken(token)) {
-      if (!this.chosenTokens) {
-        this.chosenTokens = [];
-      }
-      this.setChosenTokens([...this.chosenTokens, token]);
-    } else {
       this.setChosenTokens(
-        this.chosenTokens?.filter(chosenToken => getTokenSlug(chosenToken) !== getTokenSlug(token)) ?? null
+        this._chosenTokens?.filter(chosenToken => getTokenSlug(chosenToken) !== getTokenSlug(token)) ?? null
       );
+    } else {
+      if (!this._chosenTokens) {
+        this._chosenTokens = [];
+      }
+      if (token.isHidden) {
+        //make token visible
+        this.rootstore.tokensManagerStore.hideOrShowToken(token);
+      }
+      this.setChosenTokens([...this._chosenTokens, token]);
     }
   }
 
-  close() {
+  close(params?: TokensModalAbort) {
     if (isExist(this.tokensResolver)) {
-      this.tokensResolver(this.chosenTokens);
+      if (params?.abort) {
+        this.tokensResolver(this.initialTokens);
+      } else {
+        this.tokensResolver(this._chosenTokens);
+      }
       this.tokensResolver = null;
     }
   }
 
-  async open(chosenTokens: Nullable<Array<Token>> = null): Promise<Nullable<Array<Token>>> {
-    this.setChosenTokens(chosenTokens);
+  async open(params: TokensModalInitialParams): Promise<Nullable<Array<Token>>> {
+    const { tokens: initialTokens } = params;
+
+    this.setInitialTokens(initialTokens ?? null);
+    this.setChosenTokens(initialTokens ?? null);
     this.setOpenState(true);
 
     const tokens = await new Promise<Nullable<Array<Token>>>(resolve => {
@@ -60,13 +84,32 @@ export class TokensModalStore {
 
     this.setOpenState(false);
     this.setChosenTokens(null);
+    this.setInitialTokens(null);
 
     return tokens;
   }
 
   isChosenToken(token: Token) {
-    const chosenTokensSlugs = this.chosenTokens?.map(getTokenSlug);
+    const chosenTokensSlugs = this._chosenTokens?.map(getTokenSlug);
 
     return Boolean(chosenTokensSlugs?.includes(getTokenSlug(token)));
+  }
+
+  checkVisibilityOfChosenTokens(chosenTokens: Nullable<Array<Token>>) {
+    if (isNull(chosenTokens)) {
+      return null;
+    }
+
+    const hiddenToken = this.rootstore.tokensManagerStore.managedTokens.find(
+      managedToken => managedToken.isHidden && chosenTokens.find(chosenToken => isTokenEqual(chosenToken, managedToken))
+    );
+
+    if (!hiddenToken) {
+      return chosenTokens;
+    }
+
+    this.toggleChosenToken(hiddenToken);
+
+    return null;
   }
 }
