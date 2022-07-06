@@ -114,7 +114,11 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
-          <StateWrapper loaderFallback={<></>}>
+          <StateWrapper
+            loaderFallback={<DashPlug />}
+            isError={shouldHideData}
+            errorFallback={<DashPlug animation={false} />}
+          >
             <div className={styles.resultContainer}>
               <span className={styles.yourSide}>(Your side is: {betCoinSide})</span>
               <span className={styles.result}>{gameResult}</span>
