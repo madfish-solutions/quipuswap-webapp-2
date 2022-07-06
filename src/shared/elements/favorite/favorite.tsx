@@ -12,7 +12,7 @@ interface Props {
   className?: string;
 }
 
-export const Favorite: FC<Props> = ({ className, checked, onClick }) => {
+export const FavoriteButton: FC<Props> = ({ className, checked, onClick }) => {
   const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
     event => {
       event.stopPropagation();
