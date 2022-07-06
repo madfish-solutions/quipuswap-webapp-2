@@ -23,7 +23,11 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
     switch (headerProps.tabsProps.activeId) {
       case TokensModalTab.TOKENS:
         return {
-          footer: <Button onClick={setTokens}>{i18n.t('common|select')}</Button>,
+          footer: (
+            <Button className={styles.button} onClick={setTokens}>
+              {i18n.t('common|select')}
+            </Button>
+          ),
           content: <Iterator render={TokensModalCell} data={tokensModalCellParams} />
         };
       case TokensModalTab.MANAGE:

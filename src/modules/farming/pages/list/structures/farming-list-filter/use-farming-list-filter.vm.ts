@@ -67,28 +67,6 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     return farmingFilterStore.setActiveOnly(state);
   };
 
-  // const onSearchChange = (event: FormEvent<HTMLInputElement>) => {
-  //   if (isNull(event)) {
-  //     return;
-  //   }
-  //   farmingFilterStore.onSearchChange((event.target as HTMLInputElement).value);
-  // };
-
-  // const onTokenIdChange = (event: FormEvent<HTMLInputElement>) => {
-  //   if (isNull(event) || isNull(event.target)) {
-  //     return;
-  //   }
-  //   farmingFilterStore.onTokenIdChange((event.target as HTMLInputElement).value);
-  // };
-
-  // const handleIncrement = () => {
-  //   farmingFilterStore.handleIncrement();
-  // };
-
-  // const handleDecrement = () => {
-  //   farmingFilterStore.handleDecrement();
-  // };
-
   const switcherDataList = [
     {
       value: stakedOnly,
