@@ -4,7 +4,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { COINFLIP_TOKENS_TO_PLAY, DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { fromDecimals, defined, isEqual } from '@shared/helpers';
+import { fromDecimals, defined } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -101,11 +101,7 @@ export class CoinflipStore {
   }
 
   setCoinSide(coinSide: Nullable<CoinSide>) {
-    if (isEqual(this.game.coinSide, coinSide)) {
-      this.game.coinSide = null;
-    } else {
-      this.game.coinSide = coinSide;
-    }
+    this.game.coinSide = coinSide;
   }
 
   setInput(input: Nullable<BigNumber>) {
