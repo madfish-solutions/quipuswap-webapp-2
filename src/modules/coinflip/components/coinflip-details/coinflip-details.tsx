@@ -4,7 +4,8 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Card, DetailsCardCell, StateCurrencyAmount, StateWrapper } from '@shared/components';
+import { Card, DashPlug, DetailsCardCell, StateCurrencyAmount, StateWrapper } from '@shared/components';
+import { isUndefined } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-details.module.scss';
@@ -35,6 +36,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
     tokenToPlay,
     bidSizeInUsd,
     totalWinsInUsd,
+    shouldHideData,
     rewardSizeInUsd,
     payoutCoefficient
   } = useCoinflipDetailsViewModel();
@@ -57,11 +59,21 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|bank')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent={bankInUsd} currency={tokenToPlay} amount={bank} />
+          <StateCurrencyAmount
+            className={cx(styles.amount)}
+            dollarEquivalent={bankInUsd}
+            currency={tokenToPlay}
+            amount={bank}
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|totalWins')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent={totalWinsInUsd} currency={tokenToPlay} amount={totalWins} />
+          <StateCurrencyAmount
+            className={cx(styles.amount)}
+            dollarEquivalent={totalWinsInUsd}
+            currency={tokenToPlay}
+            amount={totalWins}
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gamesCount')} data-test-id="valueLocked">
@@ -72,15 +84,33 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <h3 className={styles.h3}>Your last game result</h3>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gameId')} data-test-id="valueLocked">
-          <StateCurrencyAmount amount={lastGameId} />
+          <StateCurrencyAmount
+            errorFallback={<DashPlug animation={false} />}
+            isError={shouldHideData}
+            amount={lastGameId}
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|betSize')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent={bidSizeInUsd} currency={tokenToPlay} amount={bidSize} />
+          <StateCurrencyAmount
+            errorFallback={<DashPlug animation={false} />}
+            isError={shouldHideData}
+            className={cx({ [styles.amount]: !isUndefined(bidSizeInUsd) })}
+            dollarEquivalent={bidSizeInUsd}
+            currency={tokenToPlay}
+            amount={bidSize}
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|rewardSize')} data-test-id="valueLocked">
-          <StateCurrencyAmount dollarEquivalent={rewardSizeInUsd} currency={tokenToPlay} amount={rewardSize} />
+          <StateCurrencyAmount
+            errorFallback={<DashPlug animation={false} />}
+            isError={shouldHideData}
+            className={cx({ [styles.amount]: !isUndefined(rewardSizeInUsd) })}
+            dollarEquivalent={rewardSizeInUsd}
+            currency={tokenToPlay}
+            amount={rewardSize}
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
