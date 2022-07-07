@@ -8,11 +8,7 @@ Staging: https://qs-develop.vercel.app/
 
 ## Available Scripts
 
-`yarn start` - start dev in the mainnet
-
-`yarn dev:mainnet`,
-`yarn dev:hangzhounet`,
-`yarn dev:ithacanet`
+`yarn start` - start dev
 
 `yarn build`
 
