@@ -8,7 +8,7 @@ const DEFAULT_USER_INFO = {
   tokensExchangeRateDollarEquivalent: null,
   gamesCount: null,
   tokensWon: null,
-  hasTokensReward: false,
+  isNotEmptyArray: false,
   isGamesCount: undefined
 };
 
@@ -28,6 +28,6 @@ export const useCoinflipRewardInfoViewModel = () => {
     gamesCount,
     tokensWon,
     isGamesCount,
-    hasTokensReward: Boolean(tokensWithReward?.length)
+    isNotEmptyArray: Boolean(tokensWithReward?.length)
   };
 };
