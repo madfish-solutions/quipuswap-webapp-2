@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "private": true,
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
