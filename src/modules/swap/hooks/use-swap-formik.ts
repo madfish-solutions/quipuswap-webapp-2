@@ -2,14 +2,22 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
+import { getApproveParams } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defined } from '@shared/helpers';
+import {
+  getTokenSlug,
+  getTokenSymbol,
+  getSwapMessage,
+  getDollarEquivalent,
+  defined,
+  getTokenAddress
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
-import { DexPair, SwapTabAction, Undefined } from '@shared/types';
+import { DexPair, SwapTabAction, TokenAddress, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { SwapField, SwapFormValues } from '../utils/types';
@@ -71,7 +79,7 @@ export const useSwapFormik = (
 
     try {
       amplitudeService.logEvent('SWAP_SEND', logData);
-      const tradeTransferParams = await getTradeOpParams(
+      let tradeTransferParams = await getTradeOpParams(
         defined(trade),
         accountPkh,
         tezos,
@@ -80,9 +88,31 @@ export const useSwapFormik = (
         transactionDeadline.toNumber()
       );
 
-      const walletParamsWithKind = tradeTransferParams.map(transferParams =>
-        parseTransferParamsToParamsWithKind(transferParams)
+      for (const item of trade!) {
+        if (item.aTokenSlug === 'tez') {
+          continue;
+        }
+
+        const aTokenAddressRaw = getTokenAddress(item.aTokenSlug);
+        const aTokenAddress: TokenAddress =
+          item.aTokenStandard === 'FA1_2' ? { contractAddress: aTokenAddressRaw.contractAddress } : aTokenAddressRaw;
+
+        const approveParams = await getApproveParams(
+          tezos,
+          item.dexAddress,
+          aTokenAddress,
+          accountPkh,
+          item.aTokenAmount,
+          tradeTransferParams
+        );
+
+        tradeTransferParams = approveParams;
+      }
+
+      const walletParamsWithKind = tradeTransferParams.map(tradeTransferParam =>
+        parseTransferParamsToParamsWithKind(tradeTransferParam)
       );
+
       const walletOperation = await tezos.wallet.batch(walletParamsWithKind).send();
 
       const inputTokenSymbol = getTokenSymbol(inputToken!);
