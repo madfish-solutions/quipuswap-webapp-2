@@ -14,7 +14,7 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.ITHACANET>;
+export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.GHOSTNET>;
 
 export enum QSNetworkType {
   MAIN = 'MAIN',
