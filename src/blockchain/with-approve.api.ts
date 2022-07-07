@@ -1,8 +1,8 @@
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { isTezosToken, isTokenFa12, toArray } from '@shared/helpers';
-import { AmountToken, Token } from '@shared/types';
+import { isExist, isTezosToken, isTokenFa12, toArray } from '@shared/helpers';
+import { AmountToken, Token, TokenAddress } from '@shared/types';
 
 import { getAllowance } from './get-allowance';
 import { sendBatch } from './send-batch';
@@ -12,7 +12,7 @@ const RESET_AMOUNT = 0;
 const getFA12ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: Token | TokenAddress,
   accountPkh: string,
   amount: BigNumber.Value,
   operationParams: TransferParams[]
@@ -30,7 +30,7 @@ const getFA12ApproveParams = async (
 const getFA2ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: Token | TokenAddress,
   accountPkh: string,
   operationParams: TransferParams[]
 ) => {
@@ -62,19 +62,19 @@ const getFA2ApproveParams = async (
   return [addOperatorParams, ...operationParams, removeOperatorParams];
 };
 
-const getApproveParams = async (
+export const getApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: Token | TokenAddress,
   accountPkh: string,
   amount: BigNumber.Value,
   operationParams: TransferParams[]
 ) => {
-  if (isTokenFa12(token)) {
-    return await getFA12ApproveParams(tezos, contractAddress, token, accountPkh, amount, operationParams);
+  if (isExist(token.fa2TokenId)) {
+    return await getFA2ApproveParams(tezos, contractAddress, token, accountPkh, operationParams);
   }
 
-  return await getFA2ApproveParams(tezos, contractAddress, token, accountPkh, operationParams);
+  return await getFA12ApproveParams(tezos, contractAddress, token, accountPkh, amount, operationParams);
 };
 
 const withFA12ApproveApi = async (
