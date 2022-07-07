@@ -123,7 +123,7 @@ export const FIRST_TWO_DIGITS_NUMBER = 10;
 
 const FARM_ID_FOR_RESTAKE_MAP: Record<SupportedNetworks, number> = {
   [NetworkType.MAINNET]: 3,
-  [NetworkType.ITHACANET]: 8
+  [NetworkType.GHOSTNET]: 8
 };
 
 export const FARM_ID_FOR_RESTAKE = FARM_ID_FOR_RESTAKE_MAP[NETWORK_ID];

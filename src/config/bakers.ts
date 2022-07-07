@@ -4,7 +4,7 @@ import { SupportedNetworks, WhitelistedBaker } from '@shared/types';
 
 import { NETWORK_ID } from './enviroment';
 
-export const ITHACANET_BAKERS: WhitelistedBaker[] = [
+export const GHOSTNET_BAKERS: WhitelistedBaker[] = [
   {
     address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9',
     logo: 'https://services.tzkt.io/v1/avatars/tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
@@ -49,7 +49,7 @@ export const ITHACANET_BAKERS: WhitelistedBaker[] = [
 
 const dummyBakers: Record<SupportedNetworks, string> = {
   [NetworkType.MAINNET]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
-  [NetworkType.ITHACANET]: ITHACANET_BAKERS[0].address
+  [NetworkType.GHOSTNET]: GHOSTNET_BAKERS[0].address
 };
 
 export const DUMMY_BAKER = dummyBakers[NETWORK_ID];
