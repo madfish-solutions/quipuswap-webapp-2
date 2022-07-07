@@ -49,6 +49,7 @@ export const DEFAULT_DEADLINE_MINS = 30;
 //#region tokens
 export const DEFAULT_DECIMALS = 6;
 export const LP_TOKEN_DECIMALS = 6;
+export const STABLESWAP_LP_DECIMALS = 18;
 //#endregion
 
 //#region strings
