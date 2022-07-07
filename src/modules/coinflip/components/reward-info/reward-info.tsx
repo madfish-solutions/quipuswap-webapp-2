@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { Button, Card, StateCurrencyAmount } from '@shared/components';
-import { useAuthStore } from '@shared/hooks';
 import { ArrowSign } from '@shared/svg';
 import { Undefined } from '@shared/types';
 
@@ -20,7 +19,7 @@ interface Props {
   yourGamesTooltip: string;
   currency: string;
   isError: Undefined<boolean>;
-  hasTokensReward: boolean;
+  isNotEmptyArray: boolean;
   details?: ReactNode;
 }
 
@@ -31,11 +30,15 @@ export const RewardInfo: FC<Props> = ({
   currency,
   gamesCount,
   isError,
-  hasTokensReward,
+  isNotEmptyArray,
   details
 }) => {
-  const { accountPkh } = useAuthStore();
-  const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
+  const { isDetailsOpen, toggle, transaction, isYourGamesVisible, isViewDetailsVisible } = useRewardInfoViewModel(
+    gamesCount,
+    details,
+    isError,
+    isNotEmptyArray
+  );
   const { detailsButtonTransaction } = transaction;
 
   return (
@@ -48,18 +51,18 @@ export const RewardInfo: FC<Props> = ({
       <YourWinningsReward
         amount={userReward}
         gamesCount={gamesCount}
-        hasTokensReward={hasTokensReward}
+        isNotEmptyArray={isNotEmptyArray}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
-        {gamesCount?.isGreaterThan('0') && accountPkh && (
+        {isYourGamesVisible && (
           <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
             <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
           </CoinflipStatsItem>
         )}
-        {hasTokensReward && details && showDetails && isError && (
+        {isViewDetailsVisible && (
           <Button
             className={cx(styles.viewDetailsButton)}
             theme="inverse"
