@@ -10,7 +10,7 @@ export const useRewardInfoViewModel = (
   gamesCount: Nullable<BigNumber>,
   details: ReactNode,
   isError: Undefined<boolean>,
-  isNotEmptyArray: boolean
+  hasTokensReward: boolean
 ) => {
   const { t } = useTranslation();
   const accountPkh = useAccountPkh();
@@ -18,7 +18,7 @@ export const useRewardInfoViewModel = (
   const toggle = useCallback(() => setToggles(_isOpen => !_isOpen), []);
 
   const isYourGamesVisible = gamesCount?.isGreaterThan('0') && accountPkh;
-  const isViewDetailsVisible = isNotEmptyArray && details && Boolean(accountPkh) && isError;
+  const isViewDetailsVisible = hasTokensReward && details && Boolean(accountPkh) && isError;
 
   return {
     accountPkh,

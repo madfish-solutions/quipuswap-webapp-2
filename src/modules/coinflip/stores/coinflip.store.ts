@@ -7,7 +7,7 @@ import { COINFLIP_TOKENS_TO_PLAY, DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tok
 import { fromDecimals, defined } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';
-import { Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import {
   getCoinflipGeneralStatsApi,
@@ -114,8 +114,8 @@ export class CoinflipStore {
     return this.userLastGameInfo.data;
   }
 
-  get tokensWithReward(): Undefined<TokenWon[]> {
-    return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0'));
+  get tokensWithReward(): Nullable<TokenWon[]> {
+    return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
   }
 
   get payout(): Nullable<BigNumber> {

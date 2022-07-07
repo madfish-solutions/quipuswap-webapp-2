@@ -30,7 +30,7 @@ interface Props {
   amountDecimals?: number;
   currency: string;
   rewardTooltip: string;
-  isNotEmptyArray: boolean;
+  hasTokensReward: boolean;
   className?: string;
 }
 
@@ -42,14 +42,14 @@ export const YourWinningsReward: FC<Props> = observer(
     dollarEquivalent,
     amountDecimals = USD_DECIMALS,
     rewardTooltip,
-    isNotEmptyArray,
+    hasTokensReward,
     className
   }) => {
     const { accountPkh } = useAuthStore();
     const { t } = useTranslation();
     const { colorThemeMode } = useContext(ColorThemeContext);
     const isExchangeRatesExist = isEqual(NETWORK_ID, NetworkType.MAINNET);
-    const isYourWinnigsVisible = gamesCount?.isGreaterThan('0') && isNotEmptyArray;
+    const isYourWinnigsVisible = gamesCount?.isGreaterThan('0') && hasTokensReward;
 
     return (
       <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
