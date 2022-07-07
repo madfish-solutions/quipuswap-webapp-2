@@ -5,5 +5,13 @@ export const coinflip = {
   selectTokenToPlayWith: 'Select Token to Play with',
   yourWinnings: 'Your Winnings',
   connectWallet: 'Connect Wallet now!',
-  yourReward: 'Here can be your reward'
+  yourReward: 'Here can be your reward',
+  payoutCoefficient: 'Payout coefficient',
+  bank: 'Bank',
+  totalWins: 'Total wins',
+  gamesCount: 'Games count',
+  gameId: 'Game ID',
+  betSize: 'Bet size',
+  rewardSize: 'Reward size',
+  result: 'Result'
 } as const;

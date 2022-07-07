@@ -9,10 +9,17 @@ import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
-import { getCoinflipGeneralStatsApi, getGamesCountByTokenApi, getTokenWonByTokenApi } from '../api';
+import {
+  getCoinflipGeneralStatsApi,
+  getGamesCountByTokenApi,
+  getTokenWonByTokenApi,
+  getGamersStatsApi,
+  getUserLastGameInfo
+} from '../api';
 import { GeneralStatsInterface } from '../api/types';
-import { DashboardGeneralStats } from '../interfaces';
-import { DEFAULT_GENERAL_STATS, generalStatsMapping } from '../mapping';
+import { DashboardGeneralStats, GamersStats, GamersStatsRaw, UserLastGame, UserLastGameRaw } from '../interfaces';
+import { DEFAULT_GENERAL_STATS, generalStatsMapping, userLastGameMapper } from '../mapping';
+import { gamersStatsMapper } from '../mapping/gamers-stats.map';
 import { TokenWon } from '../types';
 
 export enum TokenToPlay {
@@ -60,15 +67,30 @@ export class CoinflipStore {
     generalStatsMapping
   );
 
+  readonly gamersStatsInfo = new LoadingErrorData<Nullable<GamersStatsRaw>, Nullable<GamersStats>>(
+    null,
+    async () => await getGamersStatsApi(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.token),
+    gamersStatsMapper
+  );
+
+  readonly userLastGameInfo = new LoadingErrorData<Nullable<UserLastGameRaw>, Nullable<UserLastGame>>(
+    null,
+    async () => await getUserLastGameInfo(this.rootStore.tezos, this.gamersStatsInfo.data?.lastGameId ?? null),
+    userLastGameMapper
+  );
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
       game: observable,
+      gamersStatsInfo: observable,
+      userLastGameInfo: observable,
 
       payout: computed,
       token: computed,
       gamesCount: computed,
       tokensWon: computed,
+      gamersStats: computed,
 
       setToken: action,
       setInput: action
@@ -81,6 +103,14 @@ export class CoinflipStore {
 
   get tokensWon(): Nullable<TokenWon[]> {
     return this.tokensWonStore.data;
+  }
+
+  get gamersStats(): Nullable<GamersStats> {
+    return this.gamersStatsInfo.data;
+  }
+
+  get userLastGame(): Nullable<UserLastGame> {
+    return this.userLastGameInfo.data;
   }
 
   get payout(): Nullable<BigNumber> {
@@ -100,7 +130,7 @@ export class CoinflipStore {
     this.game = { ...DEFAULT_COINFLIP_GAME };
   }
 
-  setCoinSide(coinSide: CoinSide) {
+  setCoinSide(coinSide: Nullable<CoinSide>) {
     this.game.coinSide = coinSide;
   }
 

@@ -1,21 +1,28 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { isNull } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getCoinflipAssetId } from '../helpers';
+import { GamersStatsRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';
-import { CoinflipStorage, GamersStats } from './types';
+import { CoinflipStorage } from './types';
 
 export const getGamesCountByTokenApi = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: string,
   token: Token
 ): Promise<BigNumber> => {
+  const coinflipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
+
+  if (isNull(coinflipStorage)) {
+    return new BigNumber('0');
+  }
+
   const tokenAsset = getCoinflipAssetId(token);
 
-  const { gamers_stats } = (await getCoinflipStorageApi(tezos)) as CoinflipStorage;
-  const { games_count: gamesCount } = (await gamers_stats.get([accountPkh, new BigNumber(tokenAsset)])) as GamersStats;
+  const gamesCount = await coinflipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
-  return gamesCount;
+  return gamesCount?.games_count ?? new BigNumber('0');
 };

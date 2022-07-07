@@ -1,3 +1,5 @@
+@import '@styles/breakpoints';
+
 .buttons {
   display: flex;
   justify-content: center;
@@ -8,13 +10,17 @@
 }
 
 .icon {
-  margin: 40px;
+  margin: 20px;
+  width: 88px;
+  height: 88px;
 }
 
 .selected {
   position: absolute;
-  top: 40px;
-  left: 40px;
+  top: 20px;
+  left: 20px;
+  width: 88px;
+  height: 88px;
 }
 
 .error {
@@ -24,4 +30,19 @@
   line-height: 1.33;
   padding-top: 8px;
   color: #EF0000;
+}
+
+@include media('>tablet') {
+  .icon {
+    margin: 40px;
+    width: 128px;
+    height: 128px;
+  }
+
+  .selected {
+    top: 40px;
+    left: 40px;
+    width: 128px;
+    height: 128px;
+  }
 }
