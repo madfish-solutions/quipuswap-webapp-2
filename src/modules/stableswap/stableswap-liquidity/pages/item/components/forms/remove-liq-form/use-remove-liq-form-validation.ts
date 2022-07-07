@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { LP_INPUT_KEY } from '@config/constants';
+import { LP_INPUT_KEY, STABLESWAP_LP_DECIMALS } from '@config/constants';
 import { StableswapItem } from '@modules/stableswap/types';
 import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
@@ -11,7 +11,6 @@ import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
-const STABLESWAP_LP_DECIMALS = 18;
 export const useRemoveLiqFormValidation = (
   userLpBalance: Nullable<BigNumber>,
   userTokenBalance: Array<BigNumber>,
