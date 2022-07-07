@@ -19,7 +19,7 @@ interface Props {
   yourGamesTooltip: string;
   currency: string;
   isError: Undefined<boolean>;
-  isNotEmptyArray: boolean;
+  hasTokensReward: boolean;
   details?: ReactNode;
 }
 
@@ -30,14 +30,14 @@ export const RewardInfo: FC<Props> = ({
   currency,
   gamesCount,
   isError,
-  isNotEmptyArray,
+  hasTokensReward,
   details
 }) => {
   const { isDetailsOpen, toggle, transaction, isYourGamesVisible, isViewDetailsVisible } = useRewardInfoViewModel(
     gamesCount,
     details,
     isError,
-    isNotEmptyArray
+    hasTokensReward
   );
   const { detailsButtonTransaction } = transaction;
 
@@ -51,7 +51,7 @@ export const RewardInfo: FC<Props> = ({
       <YourWinningsReward
         amount={userReward}
         gamesCount={gamesCount}
-        isNotEmptyArray={isNotEmptyArray}
+        hasTokensReward={hasTokensReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}
