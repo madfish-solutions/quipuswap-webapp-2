@@ -4,9 +4,9 @@ export interface StableswapListResponse extends RawStableswapList, BlockInfoWrap
 export interface StableswapItemResponse extends IRawStableswapItem, BlockInfoWrap {}
 export interface StableswapStatsResponse extends IRawStableswapStats, BlockInfoWrap {}
 
-export interface StableFarmListResponse extends RawStableFarmList, BlockInfoWrap {}
-export interface StableFarmItemResponse extends IRawStableFarmItem, BlockInfoWrap {}
-export interface StableFarmStatsResponse extends IRawStableFarmStats, BlockInfoWrap {}
+export interface StableDividendsListResponse extends RawStableDividendsList, BlockInfoWrap {}
+export interface StableDividendsItemResponse extends IRawStableDividendsItem, BlockInfoWrap {}
+export interface StableDividendsStatsResponse extends IRawStableDividendsStats, BlockInfoWrap {}
 
 export interface IRawStableswapStats {
   stats: RawStableswapStats;
@@ -16,27 +16,27 @@ export interface RawStableswapStats {
   totalTvlInUsd: string;
 }
 
-export interface IRawStableFarmStats {
-  stats: RawStableFarmStats;
+export interface IRawStableDividendsStats {
+  stats: RawStableDividendsStats;
 }
 
-export interface RawStableFarmStats {
+export interface RawStableDividendsStats {
   totalTvlInUsd: string;
 }
 
 export interface RawStableswapList {
   list: Array<RawStableswapItem>;
 }
-export interface RawStableFarmList {
-  list: Array<RawStableFarmItem>;
+export interface RawStableDividendsList {
+  list: Array<RawStableDividendsItem>;
 }
 
 export interface IRawStableswapItem {
   item: RawStableswapItem;
 }
 
-export interface IRawStableFarmItem {
-  item: RawStableFarmItem;
+export interface IRawStableDividendsItem {
+  item: RawStableDividendsItem;
 }
 
 interface AbstractRawStableItem {
@@ -53,7 +53,7 @@ export interface RawStableswapItem extends AbstractRawStableItem {
   poolContractUrl: string;
   fees: RawStableswapFees;
 }
-export interface RawStableFarmItem extends AbstractRawStableItem {
+export interface RawStableDividendsItem extends AbstractRawStableItem {
   apr: string;
   apy: string;
   atomicTvl: string;
