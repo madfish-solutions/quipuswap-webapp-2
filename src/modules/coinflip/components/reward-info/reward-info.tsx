@@ -33,14 +33,19 @@ export const RewardInfo: FC<Props> = ({
   hasTokensReward,
   details
 }) => {
-  const { isDetailsOpen, toggle, transaction, isYourGamesVisible, isViewDetailsVisible, accountPkh } =
-    useRewardInfoViewModel(gamesCount, details, isError, hasTokensReward);
-  const { detailsButtonTransaction } = transaction;
+  const { isDetailsOpen, toggle, translation, isContentVisible } = useRewardInfoViewModel(
+    gamesCount,
+    details,
+    isError,
+    hasTokensReward
+  );
+  const { detailsButtonTransaction, yourGamesTranslation } = translation;
+  const { isFooterVisible, isYourGamesVisible, isViewDetailsVisible } = isContentVisible;
 
   return (
     <Card
       contentClassName={styles.cardContent}
-      footer={accountPkh && isDetailsOpen && details}
+      footer={isFooterVisible}
       className={styles.card}
       footerClassName={styles.footer}
     >
@@ -54,7 +59,11 @@ export const RewardInfo: FC<Props> = ({
       />
       <div className={styles.wrapper}>
         {isYourGamesVisible && (
-          <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
+          <CoinflipStatsItem
+            itemName={yourGamesTranslation}
+            loading={!Boolean(gamesCount)}
+            tooltipContent={yourGamesTooltip}
+          >
             <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
           </CoinflipStatsItem>
         )}

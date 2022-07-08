@@ -14,5 +14,6 @@ export const coinflip = {
   betSize: 'Bet size',
   rewardSize: 'Reward size',
   result: 'Result',
-  luckFavorsPersistant: 'Luck favors the persistent!'
+  luckFavorsPersistant: 'Luck favors the persistent!',
+  yourGames: 'Your Games'
 } as const;
