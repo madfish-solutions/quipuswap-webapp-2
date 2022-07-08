@@ -15,7 +15,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const tokensModalStore = useTokensModalStore();
 
-  const { chosenTokens } = useTokensModalStore();
+  const { chosenTokens, tokensWithChosen } = useTokensModalStore();
 
   const tokensManagerStore = useTokensManagerStore();
 
@@ -30,7 +30,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     handleDecrement
   } = useBaseFilterStoreConverter(tokensManagerStore);
 
-  const { filteredTokens, filteredManagedTokens, isSearching } = tokensManagerStore;
+  const { filteredManagedTokens, isSearching } = tokensManagerStore;
 
   //TODO: find a better way
   useEffect(() => {
@@ -43,19 +43,12 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tokensModalCellParams = useMemo(() => {
     noopMap(chosenTokens);
 
-    return filteredTokens.map(token => {
-      const isTokenChosen = tokensModalStore.isChosenToken(token);
-
-      return {
-        token: {
-          ...token,
-          isChosen: isTokenChosen
-        },
-        balance: null,
-        onTokenClick: () => tokensModalStore.toggleChosenToken(token)
-      };
-    });
-  }, [chosenTokens, tokensModalStore, filteredTokens]);
+    return tokensWithChosen.map(token => ({
+      token,
+      balance: null,
+      onTokenClick: () => tokensModalStore.toggleChosenToken(token)
+    }));
+  }, [chosenTokens, tokensWithChosen, tokensModalStore]);
 
   const managedTokensModalCellParams = useMemo(() => {
     return filteredManagedTokens.map(token => {
