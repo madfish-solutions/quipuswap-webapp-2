@@ -6,7 +6,14 @@ import { PageTitle, TestnetAlert, StateWrapper, StickyBlock } from '@shared/comp
 import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
-import { CoinflipDetails, CoinflipGame, CoinflipTokenSelector, CoinflipRewardInfo, CoinflipRules } from './components';
+import {
+  CoinflipDetails,
+  CoinflipGame,
+  CoinflipTokenSelector,
+  CoinflipRewardInfo,
+  CoinflipRules,
+  CoinflipResultModal
+} from './components';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized } = useCoinflipPageViewModel();
@@ -17,6 +24,8 @@ export const CoinflipPage: FC = observer(() => {
       <TestnetAlert />
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
+
+      <CoinflipResultModal />
 
       <CoinflipRewardInfo />
 
