@@ -6,6 +6,10 @@
     row-gap: 8px;
 
     .costItem:nth-child(3) {
+      font-size: 18px;
+      & > span {
+        font-size: 18px;
+      }
       padding-top: 8px;
       border-top: 1px solid $border-color;
     }
