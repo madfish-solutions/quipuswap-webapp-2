@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 
-import { useCoinFlip } from '@modules/coinflip/hooks';
+import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
 import { bigNumberToString, isEqual } from '@shared/helpers';
 import { Noop, Nullable } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
@@ -30,6 +30,8 @@ export const useCoinflipGameFormViewModel = (
   onAmountInputChange: (amountInput: string) => void,
   onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void
 ) => {
+  const { getGamersStats } = useGamersStats();
+  const { getUserLastGame } = useUserLastGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
   const formik = useFormik({
     initialValues: {
@@ -81,11 +83,15 @@ export const useCoinflipGameFormViewModel = (
   const payoutAmount = inputAmount && payout ? bigNumberToString(payout) : '';
 
   const handleCoinFlip = async () => {
-    if (inputAmount && coinSide) {
-      await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
-      onCoinSideSelect(null);
-      formik.resetForm();
+    if (!Boolean(inputAmount) || !Boolean(coinSide)) {
+      return;
     }
+
+    await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
+    onCoinSideSelect(null);
+    formik.resetForm();
+    await getGamersStats();
+    await getUserLastGame();
   };
 
   return {

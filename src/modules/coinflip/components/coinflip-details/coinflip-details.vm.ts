@@ -1,13 +1,16 @@
+import { useCallback, useEffect } from 'react';
+
 import BigNumber from 'bignumber.js';
 
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
+import { useRootStore } from '@providers/root-store-provider';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { bigNumberToString, fromDecimals, isNull } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
-import { useCoinflipStore } from '../../hooks';
+import { useCoinflipStore, useUserLastGame } from '../../hooks';
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
@@ -21,8 +24,24 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
+  const { tezos } = useRootStore();
   const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
+  const { getUserLastGame } = useUserLastGame();
+
+  const updateUserLastGame = useCallback(async () => {
+    if (isNull(tezos) || isNull(accountPkh)) {
+      return;
+    }
+
+    await getUserLastGame();
+  }, [accountPkh, getUserLastGame, tezos]);
+
+  useEffect(() => {
+    updateUserLastGame();
+  }, [updateUserLastGame]);
+
+  useOnBlock(tezos, updateUserLastGame);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 

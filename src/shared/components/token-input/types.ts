@@ -21,6 +21,7 @@ export interface TokenInputProps extends TokenInputViewModelProps {
   className?: string;
   label: string;
   error?: string;
+  decimals?: number;
   dollarEquivalent?: Optional<BigNumber.Value>;
   onSelectorClick?: () => void;
 }
