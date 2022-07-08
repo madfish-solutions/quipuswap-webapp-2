@@ -12,14 +12,15 @@ export interface ManagedTokensModalCellProps {
   onHideClick: () => void;
   onFavoriteClick: () => void;
 }
+const BIG_SLICE_AMOUNT = 50;
 
 export const ManagedTokensModalCell: FC<ManagedTokensModalCellProps> = ({ token, onFavoriteClick, onHideClick }) => (
   <div className={styles.tokensModalCell}>
     <TokensLogos width={32} tokens={token} />
 
     <div>
-      <h6 className={styles.tokenName}>{getTokenName(token)}</h6>
-      <div className={styles.tokenSymbol}>{getTokenSymbol(token)}</div>
+      <h6 className={styles.tokenSymbol}>{getTokenSymbol(token, BIG_SLICE_AMOUNT)}</h6>
+      <div className={styles.tokenName}>{getTokenName(token, BIG_SLICE_AMOUNT)}</div>
     </div>
 
     <div className={styles.checkboxContainer}>
