@@ -1,0 +1,26 @@
+@import "@styles/variables";
+
+@mixin creation-cost($border-color) {
+  &.cost {
+    display: grid;
+    row-gap: 8px;
+
+    .costItem:nth-child(3) {
+      padding-top: 8px;
+      border-top: 1px solid $border-color;
+    }
+  }
+
+  .costItem {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.light {
+  @include creation-cost($ui-03);
+}
+
+.dark {
+  @include creation-cost($text-01);
+}

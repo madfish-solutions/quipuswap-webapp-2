@@ -1,0 +1,50 @@
+@import "@styles/variables";
+
+@mixin radio-button($outline-color, $background-color) {
+  &.radioButton {
+    display: grid;
+    row-gap: 20px;
+  }
+
+  .label {
+    display: flex;
+    cursor: pointer;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+
+    .input {
+      position: absolute;
+      left: -9999px;
+      &:checked + span {
+        font-weight: 600;
+        &:before {
+          box-shadow: inset 0 0 0 2px $outline-color, inset 0 0 0 5px $background-color, inset 0 0 0 10px $outline-color;
+        }
+      }
+    }
+    span {
+      display: flex;
+      align-items: center;
+      transition: 0.25s ease;
+      &:before {
+        flex-shrink: 0;
+        display: flex;
+        content: "";
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+        transition: 0.25s ease;
+        box-shadow: inset 0 0 0 2px $ui-05;
+      }
+    }
+  }
+}
+.light {
+  @include radio-button($hover-primary-01-fallback, $ui-01);
+}
+
+.dark {
+  @include radio-button($hover-primary-02-fallback, $ui-07);
+}

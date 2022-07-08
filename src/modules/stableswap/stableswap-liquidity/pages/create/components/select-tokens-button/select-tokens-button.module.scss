@@ -1,0 +1,26 @@
+@import "@styles/variables";
+
+@mixin select-tokens-button($border-color, $text-color) {
+  &.selectTokensButton {
+    max-width: 100%;
+    background: none;
+    border: 2px dashed $border-color;
+    &:hover,
+    &:focus,
+    &:active {
+      padding: 14px;
+      border: none;
+      &>h3 {
+        color: $text-inverse !important;
+      }
+    }
+  }
+}
+
+.light {
+  @include select-tokens-button($hover-primary-01-fallback, $text-01);
+}
+
+.dark {
+  @include select-tokens-button($hover-primary-02-fallback, $text-inverse);
+}
