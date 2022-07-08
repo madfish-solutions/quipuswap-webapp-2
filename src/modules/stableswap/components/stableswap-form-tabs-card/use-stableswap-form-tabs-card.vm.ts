@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { i18n } from '@translation';
 
-import { useStableswapItemStore, useStableFarmItemStore } from '../../hooks';
+import { useStableswapItemStore, useStableDividendsItemStore } from '../../hooks';
 import { StableswapRoutes, StableswapContentRoutes } from '../../stableswap-routes.enum';
-import { StableswapFormTabs, StableswapLiquidityFormTabs, StableFarmFormTabs } from '../../types';
+import { StableswapFormTabs, StableswapLiquidityFormTabs, StableDividendsFormTabs } from '../../types';
 
 export const TabsContent = {
   [StableswapRoutes.liquidity]: [
@@ -20,13 +20,13 @@ export const TabsContent = {
       label: i18n.t('common|Remove')
     }
   ],
-  [StableswapRoutes.farming]: [
+  [StableswapRoutes.dividends]: [
     {
-      id: StableFarmFormTabs.stake,
+      id: StableDividendsFormTabs.stake,
       label: i18n.t('common|Stake')
     },
     {
-      id: StableFarmFormTabs.unstake,
+      id: StableDividendsFormTabs.unstake,
       label: i18n.t('common|Unstake')
     }
   ]
@@ -39,11 +39,11 @@ interface Params {
 export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
   const navigate = useNavigate();
   const stableswapItemStore = useStableswapItemStore();
-  const stableFarmItemStore = useStableFarmItemStore();
+  const stableDividendsItemStore = useStableDividendsItemStore();
 
   const item = useMemo(
-    () => (subpath === StableswapRoutes.liquidity ? stableswapItemStore?.item?.id : stableFarmItemStore?.item?.id),
-    [stableFarmItemStore?.item?.id, stableswapItemStore?.item?.id, subpath]
+    () => (subpath === StableswapRoutes.liquidity ? stableswapItemStore?.item?.id : stableDividendsItemStore?.item?.id),
+    [stableDividendsItemStore?.item?.id, stableswapItemStore?.item?.id, subpath]
   );
 
   const changeTabHandle = useCallback(
@@ -56,7 +56,7 @@ export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
   );
 
   return {
-    isLoading: !Boolean(stableswapItemStore?.item) && !Boolean(stableFarmItemStore?.item),
+    isLoading: !Boolean(stableswapItemStore?.item) && !Boolean(stableDividendsItemStore?.item),
     changeTabHandle
   };
 };

@@ -1,5 +1,5 @@
 import { NetworkType } from '@airgap/beacon-sdk';
-import IthacaWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
+import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
@@ -38,7 +38,7 @@ export const READ_ONLY_SIGNER_PK_HASH = 'tz1fVQangAfb9J1hRRMP2bSB6LvASD6KpY8A';
 //#region TOKENS
 const TOKENS_MAP = {
   [NetworkType.MAINNET]: MainnetWhitelistTokens,
-  [NetworkType.ITHACANET]: IthacaWhitelistTokens
+  [NetworkType.GHOSTNET]: GhostnetWhitelistTokens
 };
 
 export const TOKENS = TOKENS_MAP[NETWORK_ID];
@@ -49,7 +49,7 @@ export const FACTORIES: Record<SupportedNetworks, { fa1_2Factory: string[]; fa2F
     fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
     fa2Factory: ['KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ', 'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS']
   },
-  [NetworkType.ITHACANET]: {
+  [NetworkType.GHOSTNET]: {
     fa1_2Factory: ['KT1ED1G5UEnetTfV8yG7Q8M5vtGrP4JPiLfm'],
     fa2Factory: ['KT1NQ77PLLEofaJJGiwguoMJhZBebnJruXRQ']
   }
@@ -63,22 +63,22 @@ const MAINNET_NETWORK: QSNetwork = {
   disabled: false
 };
 
-const ITHACANET_NETWORK: QSNetwork = {
+const GHOSTNET_NETWORK: QSNetwork = {
   ...MAINNET_NETWORK,
-  id: NetworkType.ITHACANET,
-  name: 'Ithacanet',
+  id: NetworkType.GHOSTNET,
+  name: 'Ghostnet',
   type: QSNetworkType.TEST
 };
 
 const networks: Record<SupportedNetworks, QSNetwork> = {
   [NetworkType.MAINNET]: MAINNET_NETWORK,
-  [NetworkType.ITHACANET]: ITHACANET_NETWORK
+  [NetworkType.GHOSTNET]: GHOSTNET_NETWORK
 };
 export const NETWORK = networks[NETWORK_ID];
 
 export const IS_NETWORK_MAINNET = NETWORK_ID === NetworkType.MAINNET;
 
-export const ALL_NETWORKS = [MAINNET_NETWORK, ITHACANET_NETWORK];
+export const ALL_NETWORKS = [MAINNET_NETWORK, GHOSTNET_NETWORK];
 
 export const HIDE_ANALYTICS = true;
 

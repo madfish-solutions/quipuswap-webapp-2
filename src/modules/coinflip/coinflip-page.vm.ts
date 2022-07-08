@@ -4,7 +4,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
 import { useAuthStore } from '@shared/hooks';
 
-import { useCoinflipStore, useGamesUserInfo } from './hooks';
+import { useCoinflipGeneralStats, useCoinflipStore, useGamersStats, useGamesUserInfo, useUserLastGame } from './hooks';
 
 export const useCoinflipPageViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -15,14 +15,22 @@ export const useCoinflipPageViewModel = () => {
   const { accountPkh } = useAuthStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const { getGamesUserInfo } = useGamesUserInfo();
+  const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+  const { getGamersStats } = useGamersStats();
+  const { getUserLastGame } = useUserLastGame();
 
   useEffect(() => {
-    if (!dAppReady && prevAccountPkhRef.current === accountPkh) {
-      return;
-    }
-    void getGamesUserInfo(accountPkh);
-    prevAccountPkhRef.current = accountPkh;
-  }, [getGamesUserInfo, dAppReady, accountPkh, token]);
+    (async () => {
+      if (!dAppReady && prevAccountPkhRef.current === accountPkh) {
+        return;
+      }
+      await getGamesUserInfo(accountPkh);
+      await getCoinflipGeneralStats();
+      await getGamersStats();
+      await getUserLastGame();
+      prevAccountPkhRef.current = accountPkh;
+    })();
+  }, [getGamesUserInfo, getCoinflipGeneralStats, getGamersStats, getUserLastGame, dAppReady, accountPkh, token]);
 
   useEffect(() => {
     (async () => {
