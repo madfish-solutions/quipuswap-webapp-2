@@ -33,6 +33,7 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, disabled, bal
     <TokenInput
       className={className}
       tokens={lpToken}
+      decimals={lpToken.metadata.decimals}
       label={label}
       id={LP_INPUT_KEY}
       value={value}
