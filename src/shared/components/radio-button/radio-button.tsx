@@ -1,6 +1,5 @@
 import { FC, useContext } from 'react';
 
-// import { Iterator } from '../iterator';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
