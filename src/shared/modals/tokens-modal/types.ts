@@ -1,7 +1,6 @@
-import { TokensModalCellProps } from '@shared/components/tokens-modal-cell';
 import { Token } from '@shared/types';
 
-import { ManagedTokensModalCellProps } from './components';
+import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
 import { TokensModalHeaderProps } from './components/tokens-modal-header';
 
 export interface TokensModalViewProps {

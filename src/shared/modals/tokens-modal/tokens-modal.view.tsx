@@ -1,11 +1,10 @@
 import { FC, useMemo } from 'react';
 
 import { Button, Iterator, Skeleton } from '@shared/components';
-import { TokensModalCell } from '@shared/components/tokens-modal-cell';
 import { i18n } from '@translation';
 
 import { Modal } from '../modal';
-import { ManagedTokensModalCell, TokensModalHeader } from './components';
+import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader } from './components';
 import { TokensModalTab } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';

@@ -1,4 +1,6 @@
 @import "@styles/variables";
+@import "@styles/text";
+@import "@styles/breakpoints";
 
 .tokensModalCell {
   height: 64px;
@@ -11,17 +13,19 @@
   border-bottom: 1px solid $text-01;
 }
 
-.tokenName {
+.tokenSymbol {
+  @include ellipsis;
   text-transform: uppercase;
 }
 
 /* TODO: create and change to body-3 element */
-.tokenSymbol {
+.tokenName {
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
 
   color: $text-03;
+  @include ellipsis;
 }
 
 .checkboxContainer {
@@ -30,4 +34,16 @@
   align-items: center;
   column-gap: 16px;
   cursor: pointer;
+}
+
+.tokenSymbol,
+.tokenName {
+  max-width: 200px;
+}
+
+@include media(">tablet") {
+  .tokenSymbol,
+  .tokenName {
+    max-width: 300px;
+  }
 }
