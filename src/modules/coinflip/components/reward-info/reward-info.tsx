@@ -33,18 +33,14 @@ export const RewardInfo: FC<Props> = ({
   hasTokensReward,
   details
 }) => {
-  const { isDetailsOpen, toggle, transaction, isYourGamesVisible, isViewDetailsVisible } = useRewardInfoViewModel(
-    gamesCount,
-    details,
-    isError,
-    hasTokensReward
-  );
+  const { isDetailsOpen, toggle, transaction, isYourGamesVisible, isViewDetailsVisible, accountPkh } =
+    useRewardInfoViewModel(gamesCount, details, isError, hasTokensReward);
   const { detailsButtonTransaction } = transaction;
 
   return (
     <Card
       contentClassName={styles.cardContent}
-      footer={isDetailsOpen && details}
+      footer={accountPkh && isDetailsOpen && details}
       className={styles.card}
       footerClassName={styles.footer}
     >

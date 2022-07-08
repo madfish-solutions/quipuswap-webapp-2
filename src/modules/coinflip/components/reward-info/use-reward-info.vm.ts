@@ -1,7 +1,8 @@
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { useAccountPkh } from '@providers/use-dapp';
 import { Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -13,9 +14,14 @@ export const useRewardInfoViewModel = (
   hasTokensReward: boolean
 ) => {
   const { t } = useTranslation();
+  const { token } = useCoinflipStore();
   const accountPkh = useAccountPkh();
   const [isOpen, setToggles] = useState(false);
   const toggle = useCallback(() => setToggles(_isOpen => !_isOpen), []);
+
+  useEffect(() => {
+    setToggles(false);
+  }, [token, accountPkh]);
 
   const isYourGamesVisible = gamesCount?.isGreaterThan('0') && accountPkh;
   const isViewDetailsVisible = hasTokensReward && details && Boolean(accountPkh) && isError;
