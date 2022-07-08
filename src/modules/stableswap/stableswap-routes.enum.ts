@@ -1,7 +1,10 @@
 export enum StableswapRoutes {
   root = '/',
   liquidity = '/liquidity',
-  farming = '/farming'
+  dividends = '/dividends'
 }
 
-export type StableswapContentRoutes = Extract<StableswapRoutes, StableswapRoutes.farming | StableswapRoutes.liquidity>;
+export type StableswapContentRoutes = Extract<
+  StableswapRoutes,
+  StableswapRoutes.dividends | StableswapRoutes.liquidity
+>;

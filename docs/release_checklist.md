@@ -18,8 +18,7 @@
 - [ ] Wait to all success tests
 
 ### Prepare Vercel
-- [ ] Change the Production Branch of the [Hangzhou](https://vercel.com/quipuswap-v2-ui/qs-ui-hangzhou/settings/git) in the Vercel
-- [ ] Change the Production Branch of the [Ithaca](https://vercel.com/quipuswap-v2-ui/qs-ui-ithaca/settings/git) in the Vercel
+- [ ] Change the Production Branch of the [Ghostnet](https://vercel.com/quipuswap-v2-ui/qs-ui-ghostnet/settings/git) in the Vercel
 - [ ] Change the Production Branch of the [Mainnet](https://vercel.com/quipuswap-v2-ui/qs-ui/settings/git) in the Vercel
 
 ### Deploy
