@@ -4,23 +4,18 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { NETWORK } from '@config/config';
 import { DEFAULT_TOKEN_ID, SKIP, SWAP } from '@config/constants';
 import { NETWORK_ID } from '@config/enviroment';
-import { getTokenMetadata } from '@shared/api';
-import { getContract } from '@shared/dapp';
 import {
-  fa2TokenExists,
-  getFavoritesTokensSlugs,
-  getHiddenTokensSlugs,
-  getTokens,
-  getTokenSlug,
-  hideTokenFromList,
-  isEmptyArray,
-  isNull,
-  isTokenEqual,
-  makeTokenVisibleInlist,
-  markTokenAsFavotire,
-  removeFavoriteMarkFromToken,
-  saveCustomToken
-} from '@shared/helpers';
+  getFavoritesTokensSlugsApi,
+  getHiddenTokensSlugsApi,
+  getTokenMetadata,
+  hideTokenFromListApi,
+  makeTokenVisibleInlistApi,
+  markTokenAsFavotireApi,
+  removeFavoriteMarkFromTokenApi,
+  saveCustomTokenApi
+} from '@shared/api';
+import { getContract } from '@shared/dapp';
+import { fa2TokenExists, getTokens, getTokenSlug, isEmptyArray, isNull, isTokenEqual } from '@shared/helpers';
 import { ManagedToken, Standard, Token, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
@@ -109,8 +104,8 @@ export class TokensManagerStore extends BaseFilterStore {
     this.managedTokens = await getTokens(NETWORK, true);
 
     /* move to helper*/
-    const favoritesTokens = getFavoritesTokensSlugs();
-    const hiddenTokens = getHiddenTokensSlugs();
+    const favoritesTokens = getFavoritesTokensSlugsApi();
+    const hiddenTokens = getHiddenTokensSlugsApi();
     if (!isEmptyArray(favoritesTokens) || !isEmptyArray(hiddenTokens)) {
       this.managedTokens.forEach(token => {
         if (favoritesTokens.includes(getTokenSlug(token))) {
@@ -126,7 +121,7 @@ export class TokensManagerStore extends BaseFilterStore {
   }
 
   saveCustomToken(token: TokenWithQSNetworkType) {
-    saveCustomToken(token);
+    saveCustomTokenApi(token);
 
     this.managedTokens = [token as ManagedToken, ...this.managedTokens].sort(a => (a.isFavorite ? SKIP : SWAP));
   }
@@ -135,13 +130,13 @@ export class TokensManagerStore extends BaseFilterStore {
     const localToken = { ...token };
 
     if (localToken.isFavorite) {
-      removeFavoriteMarkFromToken(token);
+      removeFavoriteMarkFromTokenApi(token);
       localToken.isFavorite = false;
     } else {
-      markTokenAsFavotire(token);
+      markTokenAsFavotireApi(token);
       localToken.isFavorite = true;
       if (localToken.isHidden) {
-        makeTokenVisibleInlist(token);
+        makeTokenVisibleInlistApi(token);
         localToken.isHidden = false;
       }
     }
@@ -162,13 +157,13 @@ export class TokensManagerStore extends BaseFilterStore {
     const localToken = { ...token };
 
     if (localToken.isHidden) {
-      makeTokenVisibleInlist(token);
+      makeTokenVisibleInlistApi(token);
       localToken.isHidden = false;
     } else {
-      hideTokenFromList(token);
+      hideTokenFromListApi(token);
       localToken.isHidden = true;
       if (localToken.isFavorite) {
-        removeFavoriteMarkFromToken(token);
+        removeFavoriteMarkFromTokenApi(token);
         localToken.isFavorite = false;
       }
     }
