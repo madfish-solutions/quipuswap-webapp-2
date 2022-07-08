@@ -23,18 +23,26 @@ export const useRewardInfoViewModel = (
     setToggles(false);
   }, [token, accountPkh]);
 
+  const isFooterVisible = accountPkh && isOpen && details;
   const isYourGamesVisible = gamesCount?.isGreaterThan('0') && accountPkh;
   const isViewDetailsVisible = hasTokensReward && details && Boolean(accountPkh) && isError;
 
+  const yourGamesTranslation = t('coinflip|yourGames');
+  const detailsButtonTransaction = isOpen ? t('common|lessDetails') : t('common|viewDetails');
+
   return {
     accountPkh,
-    isYourGamesVisible,
-    isViewDetailsVisible,
     isDetailsOpen: isOpen,
     toggle,
     showDetails: Boolean(accountPkh),
-    transaction: {
-      detailsButtonTransaction: isOpen ? t('common|lessDetails') : t('common|viewDetails')
+    isContentVisible: {
+      isFooterVisible,
+      isYourGamesVisible,
+      isViewDetailsVisible
+    },
+    translation: {
+      yourGamesTranslation,
+      detailsButtonTransaction
     }
   };
 };
