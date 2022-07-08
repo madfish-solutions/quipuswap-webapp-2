@@ -1,0 +1,20 @@
+.root {
+  max-width: 327px;
+}
+
+.img {
+  width: 100%;
+}
+
+.bottomContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.button {
+  margin-top: 16px;
+  max-width: 280px;
+}
