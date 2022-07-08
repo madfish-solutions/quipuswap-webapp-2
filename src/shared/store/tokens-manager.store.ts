@@ -2,27 +2,28 @@ import { TezosToolkit } from '@taquito/taquito';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { NETWORK } from '@config/config';
-import { DEFAULT_TOKEN_ID, SKIP, SWAP } from '@config/constants';
+import { DEFAULT_TOKEN_ID } from '@config/constants';
 import { NETWORK_ID } from '@config/enviroment';
 import {
+  getTokenMetadata,
   getFavoritesTokensSlugsApi,
   getHiddenTokensSlugsApi,
-  getTokenMetadata,
-  hideTokenFromListApi,
+  saveCustomTokenApi,
   makeTokenVisibleInlistApi,
+  hideTokenFromListApi,
   markTokenAsFavotireApi,
-  removeFavoriteMarkFromTokenApi,
-  saveCustomTokenApi
+  removeFavoriteMarkFromTokenApi
 } from '@shared/api';
 import { getContract } from '@shared/dapp';
-import { fa2TokenExists, getTokens, getTokenSlug, isEmptyArray, isNull, isTokenEqual } from '@shared/helpers';
+import { fa2TokenExists, getTokens, getTokenSlug, isEmptyArray, isNull } from '@shared/helpers';
 import { ManagedToken, Standard, Token, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
 import { BaseFilterStore } from './base-filter.store';
 import { RootStore } from './root.store';
+import { sortManagedToken } from './utils';
 
-//copypaste find a better way
+// copy-past find a better way
 const searchToken = async (tezos: TezosToolkit, address: string, tokenId?: number): Promise<Nullable<Token>> => {
   if (!isValidContractAddress(address)) {
     return null;
@@ -66,19 +67,17 @@ export class TokensManagerStore extends BaseFilterStore {
   isSearching = false;
 
   get tokens() {
-    return this.managedTokens.filter(token => !token.isHidden);
+    return this.managedTokens.filter(token => !token.isHidden).sort(sortManagedToken);
   }
 
   get filteredTokens() {
-    if (this.search) {
-      return this.managedTokens.filter(token => this.tokenMatchesSearch(token));
-    } else {
-      return this.tokens.filter(token => this.tokenMatchesSearch(token));
-    }
+    const tokens = this.search ? this.managedTokens : this.tokens;
+
+    return tokens.filter(token => this.tokenMatchesSearch(token)).sort(sortManagedToken);
   }
 
   get filteredManagedTokens() {
-    return this.managedTokens.filter(token => this.tokenMatchesSearch(token));
+    return this.managedTokens.filter(token => this.tokenMatchesSearch(token)).sort(sortManagedToken);
   }
 
   constructor(private rootStore: RootStore) {
@@ -97,88 +96,79 @@ export class TokensManagerStore extends BaseFilterStore {
       filteredTokens: computed
     });
 
-    this.loadTokens();
+    void this.loadTokens();
+  }
+
+  private manageTokens() {
+    /* move to helper*/
+    const favoritesTokens = getFavoritesTokensSlugsApi();
+    const hiddenTokens = getHiddenTokensSlugsApi();
+    if (isEmptyArray(favoritesTokens) && isEmptyArray(hiddenTokens)) {
+      return;
+    }
+
+    this.managedTokens.forEach(token => {
+      if (favoritesTokens.includes(getTokenSlug(token)) && !token.isFavorite) {
+        token.isFavorite = true;
+      }
+      if (hiddenTokens.includes(getTokenSlug(token)) && !token.isHidden) {
+        token.isHidden = true;
+      }
+    });
+
+    this.managedTokens.sort(sortManagedToken);
   }
 
   async loadTokens() {
     this.managedTokens = await getTokens(NETWORK, true);
-
-    /* move to helper*/
-    const favoritesTokens = getFavoritesTokensSlugsApi();
-    const hiddenTokens = getHiddenTokensSlugsApi();
-    if (!isEmptyArray(favoritesTokens) || !isEmptyArray(hiddenTokens)) {
-      this.managedTokens.forEach(token => {
-        if (favoritesTokens.includes(getTokenSlug(token))) {
-          token.isFavorite = true;
-        }
-        if (hiddenTokens.includes(getTokenSlug(token))) {
-          token.isHidden = true;
-        }
-      });
-
-      this.managedTokens.sort(a => (a.isFavorite ? SKIP : SWAP));
-    }
+    this.manageTokens();
   }
 
-  saveCustomToken(token: TokenWithQSNetworkType) {
+  async saveCustomToken(token: TokenWithQSNetworkType) {
     saveCustomTokenApi(token);
 
-    this.managedTokens = [token as ManagedToken, ...this.managedTokens].sort(a => (a.isFavorite ? SKIP : SWAP));
+    return this.loadTokens();
+  }
+
+  makeTokenVisible(token: ManagedToken) {
+    token.isHidden = false;
+    makeTokenVisibleInlistApi(token);
+    this.manageTokens();
+  }
+
+  makeTokenHidden(token: ManagedToken) {
+    token.isHidden = true;
+    this.removeTokenFavorite(token);
+    hideTokenFromListApi(token);
+    this.manageTokens();
+  }
+
+  addTokenFavorite(token: ManagedToken) {
+    token.isFavorite = true;
+    this.makeTokenVisible(token);
+    markTokenAsFavotireApi(token);
+    this.manageTokens();
+  }
+
+  removeTokenFavorite(token: ManagedToken) {
+    token.isFavorite = false;
+    removeFavoriteMarkFromTokenApi(token);
+    this.manageTokens();
   }
 
   addOrRemoveTokenFavorite(token: ManagedToken) {
-    const localToken = { ...token };
-
-    if (localToken.isFavorite) {
-      removeFavoriteMarkFromTokenApi(token);
-      localToken.isFavorite = false;
+    if (token.isFavorite) {
+      this.removeTokenFavorite(token);
     } else {
-      markTokenAsFavotireApi(token);
-      localToken.isFavorite = true;
-      if (localToken.isHidden) {
-        makeTokenVisibleInlistApi(token);
-        localToken.isHidden = false;
-      }
-    }
-
-    const tokensWithoutCurrent = this.managedTokens.filter(_token => !isTokenEqual(_token, token));
-
-    if (localToken.isFavorite) {
-      this.managedTokens = [localToken, ...tokensWithoutCurrent];
-    } else {
-      const favoritesTokens = tokensWithoutCurrent.filter(_token => _token.isFavorite);
-      const notFavoritesTokens = tokensWithoutCurrent.filter(_token => !_token.isFavorite);
-
-      this.managedTokens = [...favoritesTokens, localToken, ...notFavoritesTokens];
+      this.addTokenFavorite(token);
     }
   }
 
   hideOrShowToken(token: ManagedToken) {
-    const localToken = { ...token };
-
-    if (localToken.isHidden) {
-      makeTokenVisibleInlistApi(token);
-      localToken.isHidden = false;
+    if (token.isHidden) {
+      this.makeTokenVisible(token);
     } else {
-      hideTokenFromListApi(token);
-      localToken.isHidden = true;
-      if (localToken.isFavorite) {
-        removeFavoriteMarkFromTokenApi(token);
-        localToken.isFavorite = false;
-      }
-    }
-
-    if (token.isFavorite) {
-      const tokensWithoutCurrent = this.managedTokens.filter(_token => !isTokenEqual(_token, token));
-
-      const favoritesTokens = tokensWithoutCurrent.filter(_token => _token.isFavorite);
-      const notFavoritesTokens = tokensWithoutCurrent.filter(_token => !_token.isFavorite);
-
-      this.managedTokens = [...favoritesTokens, localToken, ...notFavoritesTokens];
-    } else {
-      this.managedTokens = this.managedTokens.map((_token, index) => {
-        return isTokenEqual(_token, token) ? localToken : _token;
-      });
+      this.makeTokenHidden(token);
     }
   }
 
@@ -191,7 +181,7 @@ export class TokensManagerStore extends BaseFilterStore {
       const token = await searchToken(this.rootStore.tezos, this.search, tokenId);
 
       if (token) {
-        this.saveCustomToken(token);
+        await this.saveCustomToken(token);
       }
 
       this.isSearching = false;
