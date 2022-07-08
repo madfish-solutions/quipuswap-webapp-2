@@ -3,11 +3,12 @@ import { ReactNode, useContext, useMemo } from 'react';
 import cx from 'classnames';
 import { Column, HeaderGroup, MetaBase, Cell } from 'react-table';
 
+import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { TokenRewardCell } from '@modules/farming/pages/list/components/token-reward-cell';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { TokenInfo } from '@shared/elements';
-import { getTokenSlug, multipliedIfPossible, isNull } from '@shared/helpers';
+import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
 import { i18n } from '@translation';
 
 import { TokenWon } from '../../types';
@@ -53,13 +54,13 @@ const getCustomCellProps = (colorTheme: ColorModes) => (_: unknown, meta: MetaBa
   getColumnProps(meta.cell.column.id, colorTheme);
 
 export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
+  const coinflipStore = useCoinflipStore();
+  const { tokensWithReward } = coinflipStore;
   const exchangeRates = useNewExchangeRates();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const tokensThatUserPlayed = tokensWon?.filter(({ amount }) => !isNull(amount));
-
   const data: Array<Row> = useMemo(() => {
-    return (tokensThatUserPlayed ?? []).map(({ token, amount }) => {
+    return (tokensWithReward ?? []).map(({ token, amount }) => {
       const { contractAddress, fa2TokenId } = token;
       const tokenSlug = getTokenSlug({
         contractAddress: contractAddress,
@@ -74,7 +75,7 @@ export const useGameUserInfoViewModel = (tokensWon: Nullable<TokenWon[]>) => {
         [Columns.AMOUNT]: <TokenRewardCell amount={amount} dollarEquivalent={dollarEquivalent} />
       };
     });
-  }, [exchangeRates, tokensThatUserPlayed]);
+  }, [exchangeRates, tokensWithReward]);
 
   return {
     data,

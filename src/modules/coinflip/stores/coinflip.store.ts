@@ -91,6 +91,7 @@ export class CoinflipStore {
       gamesCount: computed,
       tokensWon: computed,
       gamersStats: computed,
+      tokensWithReward: computed,
 
       setToken: action,
       setInput: action
@@ -111,6 +112,10 @@ export class CoinflipStore {
 
   get userLastGame(): Nullable<UserLastGame> {
     return this.userLastGameInfo.data;
+  }
+
+  get tokensWithReward(): Nullable<TokenWon[]> {
+    return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
   }
 
   get payout(): Nullable<BigNumber> {
