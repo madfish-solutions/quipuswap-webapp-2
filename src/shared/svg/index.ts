@@ -52,3 +52,5 @@ export * from './youves-icon';
 export * from './game-icon';
 export * from './coin';
 export * from './xtz-token';
+export * from './favorite';
+export * from './bin';
