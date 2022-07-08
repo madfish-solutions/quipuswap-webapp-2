@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getTokenSlug, isExist, isNull, isTokenEqual } from '@shared/helpers';
 import { RootStore } from '@shared/store';
@@ -19,7 +19,18 @@ export class TokensModalStore {
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
-  constructor(private readonly rootstore: RootStore) {
+  get tokensWithChosen() {
+    return this.rootStore.tokensManagerStore.filteredTokens.map(token => {
+      const isTokenChosen = this.isChosenToken(token);
+
+      return {
+        ...token,
+        isChosen: isTokenChosen
+      };
+    });
+  }
+
+  constructor(private readonly rootStore: RootStore) {
     makeObservable(this, {
       isOpen: observable,
       _chosenTokens: observable,
@@ -27,7 +38,9 @@ export class TokensModalStore {
       setOpenState: action,
       toggleChosenToken: action,
       setChosenTokens: action,
-      setInitialTokens: action
+      setInitialTokens: action,
+
+      tokensWithChosen: computed
     });
   }
 
@@ -44,34 +57,30 @@ export class TokensModalStore {
   }
 
   toggleChosenToken(token: ManagedToken) {
-    if (this.isChosenToken(token)) {
-      this.setChosenTokens(
-        this._chosenTokens?.filter(chosenToken => getTokenSlug(chosenToken) !== getTokenSlug(token)) ?? null
-      );
-    } else {
-      if (!this._chosenTokens) {
-        this._chosenTokens = [];
-      }
-      if (token.isHidden) {
-        //make token visible
-        this.rootstore.tokensManagerStore.hideOrShowToken(token);
-      }
-      this.setChosenTokens([...this._chosenTokens, token]);
+    if (!this._chosenTokens) {
+      this._chosenTokens = [];
     }
+
+    if (token.isHidden) {
+      this.rootStore.tokensManagerStore.makeTokenVisible(token);
+    }
+
+    const tokens = this.isChosenToken(token)
+      ? this._chosenTokens?.filter(chosenToken => getTokenSlug(chosenToken) !== getTokenSlug(token)) ?? null
+      : [...this._chosenTokens, token];
+
+    this.setChosenTokens(tokens);
   }
 
   close(params?: TokensModalAbort) {
-    if (isExist(this.tokensResolver)) {
-      if (params?.abort) {
-        this.tokensResolver(this.initialTokens);
-      } else {
-        this.tokensResolver(this._chosenTokens);
-      }
-      this.tokensResolver = null;
+    if (!isExist(this.tokensResolver)) {
+      return;
     }
+    this.tokensResolver(params?.abort ? this.initialTokens : this._chosenTokens);
+    this.tokensResolver = null;
   }
 
-  async open(params: TokensModalInitialParams): Promise<Nullable<Array<Token>>> {
+  async open(params: TokensModalInitialParams = {}): Promise<Nullable<Array<Token>>> {
     const { tokens: initialTokens } = params;
 
     this.setInitialTokens(initialTokens ?? null);
@@ -95,12 +104,12 @@ export class TokensModalStore {
     return Boolean(chosenTokensSlugs?.includes(getTokenSlug(token)));
   }
 
-  checkVisibilityOfChosenTokens(chosenTokens: Nullable<Array<Token>>) {
+  private checkVisibilityOfChosenTokens(chosenTokens: Nullable<Array<Token>>) {
     if (isNull(chosenTokens)) {
       return null;
     }
 
-    const hiddenToken = this.rootstore.tokensManagerStore.managedTokens.find(
+    const hiddenToken = this.rootStore.tokensManagerStore.managedTokens.find(
       managedToken => managedToken.isHidden && chosenTokens.find(chosenToken => isTokenEqual(chosenToken, managedToken))
     );
 
