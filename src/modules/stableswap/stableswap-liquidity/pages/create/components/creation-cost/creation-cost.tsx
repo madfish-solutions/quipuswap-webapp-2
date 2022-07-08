@@ -37,7 +37,7 @@ export const CreationCost: FC<CreationCostProps> = ({ burned, devFee, total }) =
         <StateCurrencyAmount amount={devFee} currency={getTokenSymbol(DEFAULT_TOKEN)} />
       </div>
       <div className={styles.costItem}>
-        <h4>{i18n.t('stableswap|totalCost')}</h4>
+        <div>{i18n.t('stableswap|totalCost')}</div>
         <StateCurrencyAmount amount={total} currency={getTokenSymbol(DEFAULT_TOKEN)} />
       </div>
     </div>
