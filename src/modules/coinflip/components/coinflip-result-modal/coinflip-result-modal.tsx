@@ -23,6 +23,7 @@ export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, cur
 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
   const imageSrc = isResultSuccess ? CoinflipSuccesstImage : CoinflipLostImage;
+  const imageAlt = isResultSuccess ? 'Coinflip success result' : 'Coinflip lost result';
   const subTitle = isResultSuccess ? t('coinflip|wonRound') : t('coinflip|youLost');
 
   return (
@@ -34,7 +35,7 @@ export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, cur
       modalClassName={styles.modalClassName}
       onRequestClose={closeCoinflipsModal}
     >
-      <img className={styles.img} src={imageSrc} alt="Coinflip lost result" />
+      <img className={styles.img} src={imageSrc} alt={imageAlt} />
       <div className={styles.bottomContent}>
         <span>{subTitle}</span>
         {isResultSuccess ? (

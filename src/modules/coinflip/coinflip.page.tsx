@@ -25,7 +25,7 @@ export const CoinflipPage: FC = observer(() => {
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
 
-      <CoinflipResultModal isResultSuccess />
+      <CoinflipResultModal isResultSuccess={false} />
 
       <CoinflipRewardInfo />
 
