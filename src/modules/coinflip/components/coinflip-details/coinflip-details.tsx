@@ -38,7 +38,9 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
     totalWinsInUsd,
     shouldHideData,
     rewardSizeInUsd,
-    payoutCoefficient
+    payoutCoefficient,
+    isGamersStatsLoading,
+    isUserLastGameLoading
   } = useCoinflipDetailsViewModel();
 
   return (
@@ -55,29 +57,39 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           cellName={t('coinflip|payoutCoefficient')}
           data-test-id="valueLocked"
         >
-          <StateCurrencyAmount currency="X" amount={payoutCoefficient} className={styles.payoutCoefficient} />
+          <StateCurrencyAmount
+            className={styles.payoutCoefficient}
+            isLoading={isGamersStatsLoading}
+            loaderFallback={<DashPlug />}
+            amount={payoutCoefficient}
+            currency="X"
+          />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|bank')} data-test-id="valueLocked">
           <StateCurrencyAmount
             className={cx(styles.amount)}
-            dollarEquivalent={bankInUsd}
-            currency={tokenToPlay}
+            isLoading={isGamersStatsLoading}
+            loaderFallback={<DashPlug />}
             amount={bank}
+            currency={tokenToPlay}
+            dollarEquivalent={bankInUsd}
           />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|totalWins')} data-test-id="valueLocked">
           <StateCurrencyAmount
             className={cx(styles.amount)}
-            dollarEquivalent={totalWinsInUsd}
-            currency={tokenToPlay}
+            isLoading={isGamersStatsLoading}
+            loaderFallback={<DashPlug />}
             amount={totalWins}
+            currency={tokenToPlay}
+            dollarEquivalent={totalWinsInUsd}
           />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gamesCount')} data-test-id="valueLocked">
-          <StateCurrencyAmount amount={gamesCount} />
+          <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
         </DetailsCardCell>
       </div>
       <div className={styles.lastGameResult}>
@@ -85,39 +97,45 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gameId')} data-test-id="valueLocked">
           <StateCurrencyAmount
-            errorFallback={<DashPlug animation={false} />}
             isError={shouldHideData}
+            errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
+            loaderFallback={<DashPlug />}
             amount={lastGameId}
           />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|betSize')} data-test-id="valueLocked">
           <StateCurrencyAmount
-            errorFallback={<DashPlug animation={false} />}
-            isError={shouldHideData}
             className={cx({ [styles.amount]: isExist(bidSizeInUsd) })}
-            dollarEquivalent={bidSizeInUsd}
-            currency={tokenToPlay}
+            isError={shouldHideData}
+            errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
+            loaderFallback={<DashPlug />}
             amount={bidSize}
+            currency={tokenToPlay}
+            dollarEquivalent={bidSizeInUsd}
           />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|rewardSize')} data-test-id="valueLocked">
           <StateCurrencyAmount
-            errorFallback={<DashPlug animation={false} />}
-            isError={shouldHideData}
             className={cx({ [styles.amount]: isExist(rewardSizeInUsd) })}
-            dollarEquivalent={rewardSizeInUsd}
-            currency={tokenToPlay}
+            isError={shouldHideData}
+            errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
             amount={rewardSize}
+            currency={tokenToPlay}
+            dollarEquivalent={rewardSizeInUsd}
           />
         </DetailsCardCell>
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
           <StateWrapper
-            loaderFallback={<DashPlug />}
             isError={shouldHideData}
             errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
+            loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
               <span className={styles.yourSide}>(Your side is: {betCoinSide})</span>
