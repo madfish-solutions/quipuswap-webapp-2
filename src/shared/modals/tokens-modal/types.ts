@@ -18,7 +18,7 @@ export interface TokensModalViewProps {
 export interface TokensModalInitialParams {
   min?: number;
   max?: number;
-  tokens?: Array<Token>;
+  tokens?: Nullable<Array<Token>>;
   isSingle?: boolean;
 }
 
