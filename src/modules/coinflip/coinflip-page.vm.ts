@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
+import BigNumber from 'bignumber.js';
+
+import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
+import { fromDecimals } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 
 import { useCoinflipGeneralStats, useCoinflipStore, useGamersStats, useGamesUserInfo, useUserLastGame } from './hooks';
+
+const ZERO_BN = new BigNumber('0');
 
 export const useCoinflipPageViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -42,5 +48,17 @@ export const useCoinflipPageViewModel = () => {
     })();
   }, [rootStore]);
 
-  return { isInitialized };
+  const payoutCoefficient = fromDecimals(
+    coinflipStore?.generalStats.data?.payoutCoefficient ?? ZERO_BN,
+    COINFLIP_CONTRACT_DECIMALS
+  );
+  const bidSize = fromDecimals(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
+  const wonAmount = payoutCoefficient.multipliedBy(bidSize);
+
+  return {
+    isInitialized,
+    wonAmount,
+    result: coinflipStore?.userLastGameInfo.data?.status ?? null,
+    currency: token?.metadata.symbol
+  };
 };

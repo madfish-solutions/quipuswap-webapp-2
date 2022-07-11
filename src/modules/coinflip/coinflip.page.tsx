@@ -16,7 +16,7 @@ import {
 } from './components';
 
 export const CoinflipPage: FC = observer(() => {
-  const { isInitialized } = useCoinflipPageViewModel();
+  const { isInitialized, result, currency, wonAmount } = useCoinflipPageViewModel();
   const { t } = useTranslation();
 
   return (
@@ -25,7 +25,7 @@ export const CoinflipPage: FC = observer(() => {
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
 
-      <CoinflipResultModal isResultSuccess={false} />
+      <CoinflipResultModal result={result} wonAmount={wonAmount} currency={currency} />
 
       <CoinflipRewardInfo />
 

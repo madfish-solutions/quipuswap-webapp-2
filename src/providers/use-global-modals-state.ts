@@ -20,7 +20,7 @@ export const [GlobalModalsStateProvider, useGlobalModalsState] = constate(() => 
   } = useSingleModalState();
   const { isOpen: donationModalOpen, open: openDonationModal, close: closeDonationModal } = useSingleModalState();
   const { isOpen: settingsModalOpen, open: openSettingsModal, close: closeSettingsModal } = useSingleModalState();
-  const { isOpen: coinflipModalOpen, open: openCoinflipModal, close: closeCoinflipsModal } = useSingleModalState();
+  const { isOpen: coinflipModalOpen, open: openCoinflipModal, close: closeCoinflipModal } = useSingleModalState();
 
   return {
     installTempleWalletModalOpen,
@@ -40,6 +40,6 @@ export const [GlobalModalsStateProvider, useGlobalModalsState] = constate(() => 
     openSettingsModal,
     closeSettingsModal,
     openCoinflipModal,
-    closeCoinflipsModal
+    closeCoinflipModal
   };
 });
