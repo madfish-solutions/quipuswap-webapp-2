@@ -25,7 +25,8 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
-  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
+  const { generalStats, tokenToPlay, gamersStats, userLastGame, isGamersStatsLoading, isUserLastGameLoading } =
+    useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
 
@@ -61,6 +62,11 @@ export const useCoinflipDetailsViewModel = () => {
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
 
+  // eslint-disable-next-line no-console
+  console.log('userLastGame', userLastGame);
+  // eslint-disable-next-line no-console
+  console.log('isUserLastGameLoading', isUserLastGameLoading);
+
   return {
     bank,
     bidSize,
@@ -76,6 +82,8 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
+    isGamersStatsLoading: isNull(gamersStats) || isGamersStatsLoading,
+    isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
   };
