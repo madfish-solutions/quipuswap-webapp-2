@@ -15,5 +15,10 @@ export const coinflip = {
   rewardSize: 'Reward size',
   result: 'Result',
   luckFavorsPersistant: 'Luck favors the persistent!',
-  yourGames: 'Your Games'
+  yourGames: 'Your Games',
+  youLost: 'Your lost.',
+  congratulations: 'Congratulations!',
+  wonRound: 'You won in this round',
+  Ok: 'Ok',
+  oneMoreTime: 'Try your luck one more time!'
 } as const;
