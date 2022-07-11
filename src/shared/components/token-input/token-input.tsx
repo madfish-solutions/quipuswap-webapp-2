@@ -38,6 +38,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   hiddenBalance,
   readOnly,
   balanceText,
+  decimals,
   onInputChange,
   onSelectorClick
 }) => {
@@ -123,7 +124,12 @@ export const TokenInput: FC<TokenInputProps> = ({
         </div>
       </div>
       <Scaffolding showChild={shownPercentSelector} className={styles.scaffoldingPercentSelector}>
-        <PercentSelector amountCap={amountCap} value={balance} handleBalance={handlePercentageSelect} />
+        <PercentSelector
+          decimals={decimals}
+          amountCap={amountCap}
+          value={balance}
+          handleBalance={handlePercentageSelect}
+        />
       </Scaffolding>
       {error && <ComplexError error={error} />}
     </div>

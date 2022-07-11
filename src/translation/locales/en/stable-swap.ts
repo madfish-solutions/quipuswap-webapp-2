@@ -53,5 +53,18 @@ export const stableswap = {
   devFee: 'The fee is charged by QuipuSwap team on each swap.',
   coinsBalancedProportion:
     "Automatically match input balances for all selected assets according to the current asset ratio in the pool. Input value will be proportionally higher the asset's current representation in the pool is.",
-  tokenAmountLocked: 'The amount of {{tokenName}} locked within this pool by liquidity providers.'
+  tokenAmountLocked: 'The amount of {{tokenName}} locked within this pool by liquidity providers.',
+  selectTokens: 'Select Tokens',
+  fees: 'Fees',
+  amplificationParameters: 'A(amplification parameters)',
+  amplification10: '10(uncollateralized algoritmic stablecoins)',
+  amplification100: '100(non-redeemable, collateralized assets)',
+  amplification200: '200(redeemable assets)',
+  interfaceOrReferralFee: 'Interface/Referral Fee',
+  cost: 'Cost',
+  burnedCost: 'Burned',
+  devFeeCost: 'Dev Fee',
+  totalCost: 'Total',
+  create: 'Create',
+  newPool: 'New Pool'
 } as const;

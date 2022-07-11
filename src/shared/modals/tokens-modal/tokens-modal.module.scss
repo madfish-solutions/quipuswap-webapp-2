@@ -1,0 +1,41 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.modalCard {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  height: 85vh;
+}
+
+.modalContent {
+  padding-top: 0;
+  overflow-y: auto;
+}
+
+.tabs {
+  margin: -16px -24px 0 -16px;
+  padding: 0 16px;
+  border-bottom: 1px solid $text-01;
+}
+
+.inputs {
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.skeleton {
+  height: 64px;
+  margin: 0 8px;
+}
+
+.button {
+  max-width: 100%;
+}
+
+@include media(">tablet") {
+  .button {
+    max-width: 200px;
+  }
+}
