@@ -1,25 +1,51 @@
 import { FC } from 'react';
 
-import cx from 'classnames';
+import BigNumber from 'bignumber.js';
 
-import CoinflipLostImage from '@images/coinflip-lost-modal-image.png';
-import { Button, Card } from '@shared/components';
+import CoinflipLostImage from '@images/coinflip-lost-modal-image.svg';
+import CoinflipSuccesstImage from '@images/coinflip-success-modal-image.svg';
+import { useGlobalModalsState } from '@providers/use-global-modals-state';
+import { Button, StateCurrencyAmount } from '@shared/components';
+import { Modal } from '@shared/modals';
+import { useTranslation } from '@translation';
 
 import styles from './coinflip-result-modal.module.scss';
 
 interface Props {
-  className?: string;
+  isResultSuccess: boolean;
+  wonAmount?: BigNumber.Value;
+  currency?: string;
 }
 
-export const CoinflipResultModal: FC<Props> = ({ className }) => {
+export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, currency }) => {
+  const { t } = useTranslation();
+  const { coinflipModalOpen, closeCoinflipsModal } = useGlobalModalsState();
+
+  const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
+  const imageSrc = isResultSuccess ? CoinflipSuccesstImage : CoinflipLostImage;
+  const subTitle = isResultSuccess ? t('coinflip|wonRound') : t('coinflip|youLost');
+
   return (
-    <Card header={{ content: <>You lost.</>, className: styles.cardHeader }} className={cx(className, styles.root)}>
-      <img className={styles.img} src={CoinflipLostImage} alt="Coinflip lost result" />
+    <Modal
+      isOpen={coinflipModalOpen}
+      title={title}
+      className={styles.root}
+      contentClassName={styles.contentClassName}
+      modalClassName={styles.modalClassName}
+      onRequestClose={closeCoinflipsModal}
+    >
+      <img className={styles.img} src={imageSrc} alt="Coinflip lost result" />
       <div className={styles.bottomContent}>
-        <span>You lost.</span>
-        <h4>Try your luck one more time!</h4>
-        <Button className={styles.button}>Ok</Button>
+        <span>{subTitle}</span>
+        {isResultSuccess ? (
+          <StateCurrencyAmount className={styles.h4} amount={wonAmount} currency={currency} />
+        ) : (
+          <h4 className={styles.h4}>{t('coinflip|oneMoreTime')}</h4>
+        )}
+        <Button className={styles.button} onClick={closeCoinflipsModal}>
+          {t('coinflip|Ok')}
+        </Button>
       </div>
-    </Card>
+    </Modal>
   );
 };
