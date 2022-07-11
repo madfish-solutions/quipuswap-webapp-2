@@ -15,6 +15,7 @@ export class AmplitudeService {
       this.instance = amplitude.getInstance();
       this.instance.init(API_KEY);
       this.identify = new amplitude.Identify();
+      this.instance.identify(this.identify);
       Console.info('Amplitude.init', API_KEY);
     }
   }
