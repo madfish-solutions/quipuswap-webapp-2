@@ -49,7 +49,9 @@ export const useAddStableswapLiquidity = () => {
 
     const tokens = extractTokens(tokensInfo);
     const amountsAtoms = inputAmounts.map((amount, index) =>
-      isNull(amount) || amount.isNaN() ? new BigNumber('0') : toDecimals(amount, tokens[index])
+      isNull(amount) || amount.isNaN()
+        ? new BigNumber('0')
+        : toDecimals(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);

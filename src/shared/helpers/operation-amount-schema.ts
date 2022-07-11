@@ -1,11 +1,18 @@
 import BigNumber from 'bignumber.js';
 
-import { numberAsStringSchema } from '@shared/validators';
+import { makeNumberAsStringTestFn, numberAsStringSchema } from '@shared/validators';
+
+import { isExist } from './type-checks';
 
 const ZERO = 0;
 
-export const operationAmountSchema = (balance: Nullable<BigNumber>, isZeroInclusive = false) =>
-  balance
+export const operationAmountSchema = (
+  balance: Nullable<BigNumber>,
+  isZeroInclusive = false,
+  maxDecimals?: Nullable<number>,
+  decimalsOverflowError?: string
+) => {
+  const baseSchema = balance
     ? numberAsStringSchema(
         { value: ZERO, isInclusive: isZeroInclusive },
         { value: balance, isInclusive: true },
@@ -13,3 +20,14 @@ export const operationAmountSchema = (balance: Nullable<BigNumber>, isZeroInclus
         `Max available value is ${balance.toNumber()}`
       )
     : numberAsStringSchema();
+
+  if (isExist(maxDecimals) && isExist(decimalsOverflowError)) {
+    return baseSchema.test(
+      'input-decimals-amount',
+      () => decimalsOverflowError,
+      makeNumberAsStringTestFn(value => value.decimalPlaces() <= maxDecimals)
+    );
+  }
+
+  return baseSchema;
+};

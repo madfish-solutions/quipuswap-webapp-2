@@ -34,6 +34,7 @@ export const StableTokenInput: FC<Props> = observer(
       <TokenInput
         className={className}
         tokens={token}
+        decimals={token.metadata.decimals}
         label={label}
         id={inputSlug}
         value={value}

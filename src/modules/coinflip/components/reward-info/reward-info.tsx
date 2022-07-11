@@ -19,6 +19,7 @@ interface Props {
   yourGamesTooltip: string;
   currency: string;
   isError: Undefined<boolean>;
+  hasTokensReward: boolean;
   details?: ReactNode;
 }
 
@@ -29,29 +30,44 @@ export const RewardInfo: FC<Props> = ({
   currency,
   gamesCount,
   isError,
+  hasTokensReward,
   details
 }) => {
-  const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
-  const { detailsButtonTransaction } = transaction;
+  const { isDetailsOpen, toggle, translation, isContentVisible } = useRewardInfoViewModel(
+    gamesCount,
+    details,
+    isError,
+    hasTokensReward
+  );
+  const { detailsButtonTransaction, yourGamesTranslation } = translation;
+  const { isFooterVisible, isYourGamesVisible, isViewDetailsVisible } = isContentVisible;
 
   return (
     <Card
       contentClassName={styles.cardContent}
-      footer={isDetailsOpen && details}
+      footer={isFooterVisible}
       className={styles.card}
       footerClassName={styles.footer}
     >
       <YourWinningsReward
         amount={userReward}
+        gamesCount={gamesCount}
+        hasTokensReward={hasTokensReward}
         rewardTooltip={rewardTooltip}
         currency={currency}
         className={styles.yourWinnigns}
       />
       <div className={styles.wrapper}>
-        <CoinflipStatsItem itemName="Your Games" loading={!Boolean(gamesCount)} tooltipContent={yourGamesTooltip}>
-          <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
-        </CoinflipStatsItem>
-        {details && showDetails && isError && (
+        {isYourGamesVisible && (
+          <CoinflipStatsItem
+            itemName={yourGamesTranslation}
+            loading={!Boolean(gamesCount)}
+            tooltipContent={yourGamesTooltip}
+          >
+            <StateCurrencyAmount amount={gamesCount} amountClassName={styles.amount} isError={!isError} />
+          </CoinflipStatsItem>
+        )}
+        {isViewDetailsVisible && (
           <Button
             className={cx(styles.viewDetailsButton)}
             theme="inverse"

@@ -1,0 +1,48 @@
+@import "@styles/variables";
+@import "@styles/text";
+@import "@styles/breakpoints";
+
+.tokensModalCell {
+  height: 64px;
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+
+  border-bottom: 1px solid $text-01;
+}
+
+.tokenSymbol {
+  text-transform: uppercase;
+  @include ellipsis;
+}
+
+/* TODO: create and change to body-3 element */
+.tokenName {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: $text-03;
+  @include ellipsis;
+}
+
+.checkboxContainer {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.tokenSymbol,
+.tokenName {
+  max-width: 145px;
+}
+
+@include media(">tablet") {
+  .tokenSymbol,
+  .tokenName {
+    max-width: 240px;
+  }
+}
