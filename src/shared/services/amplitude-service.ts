@@ -1,4 +1,4 @@
-import amplitude, { AmplitudeClient, Identify } from 'amplitude-js';
+import amplitude, { AmplitudeClient } from 'amplitude-js';
 
 import { AMPLITUDE_API_KEY } from '@config/enviroment';
 
@@ -6,16 +6,15 @@ import { hash } from '../helpers';
 import { Nullable, Optional } from '../types';
 import { Console } from './console';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class AmplitudeService {
   private readonly instance: Nullable<AmplitudeClient> = null;
-  private readonly identify: Nullable<Identify> = null;
+  private userProps: Record<string, any> = {};
 
   constructor(API_KEY: Optional<string>) {
     if (API_KEY) {
       this.instance = amplitude.getInstance();
       this.instance.init(API_KEY);
-      this.identify = new amplitude.Identify();
-      this.instance.identify(this.identify);
       Console.info('Amplitude.init', API_KEY);
     }
   }
@@ -25,18 +24,22 @@ export class AmplitudeService {
     Console.info('Amplitude.userId', userId);
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   setUserProps(key: string, value: any) {
-    this.identify?.set(key, value);
+    // TODO: store user props in Identify object
+    this.userProps[key] = value;
     Console.info('Amplitude.setUserProps.key', value);
   }
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   logEvent(action: string, payload: { [key: string]: any } = {}) {
-    this.instance?.logEvent(action, payload);
-    Console.info(`Amplitude.${action}`, payload);
+    const payloadWithUserProps = {
+      ...payload,
+      userProps: this.userProps
+    };
+    this.instance?.logEvent(action, payloadWithUserProps);
+    Console.info(`Amplitude.${action}`, payloadWithUserProps);
   }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const amplitudeService = new AmplitudeService(AMPLITUDE_API_KEY);
 
