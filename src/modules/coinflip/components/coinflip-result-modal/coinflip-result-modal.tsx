@@ -4,22 +4,32 @@ import BigNumber from 'bignumber.js';
 
 import CoinflipLostImage from '@images/coinflip-lost-modal-image.svg';
 import CoinflipSuccesstImage from '@images/coinflip-success-modal-image.svg';
+import { getGameResult, Statuses } from '@modules/coinflip/helpers';
+import { Status } from '@modules/coinflip/interfaces';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button, StateCurrencyAmount } from '@shared/components';
+import { isNull } from '@shared/helpers';
 import { Modal } from '@shared/modals';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-result-modal.module.scss';
 
 interface Props {
-  isResultSuccess: boolean;
-  wonAmount?: BigNumber.Value;
+  result: Nullable<Status>;
+  wonAmount?: Nullable<BigNumber.Value>;
   currency?: string;
 }
 
-export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, currency }) => {
+export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) => {
   const { t } = useTranslation();
-  const { coinflipModalOpen, closeCoinflipsModal } = useGlobalModalsState();
+  const { coinflipModalOpen, closeCoinflipModal } = useGlobalModalsState();
+
+  if (isNull(result)) {
+    return null;
+  }
+
+  const gameResult = getGameResult(result);
+  const isResultSuccess = gameResult === Statuses.won;
 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
   const imageSrc = isResultSuccess ? CoinflipSuccesstImage : CoinflipLostImage;
@@ -33,7 +43,7 @@ export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, cur
       className={styles.root}
       contentClassName={styles.contentClassName}
       modalClassName={styles.modalClassName}
-      onRequestClose={closeCoinflipsModal}
+      onRequestClose={closeCoinflipModal}
     >
       <img className={styles.img} src={imageSrc} alt={imageAlt} />
       <div className={styles.bottomContent}>
@@ -43,7 +53,7 @@ export const CoinflipResultModal: FC<Props> = ({ isResultSuccess, wonAmount, cur
         ) : (
           <h4 className={styles.h4}>{t('coinflip|oneMoreTime')}</h4>
         )}
-        <Button className={styles.button} onClick={closeCoinflipsModal}>
+        <Button className={styles.button} onClick={closeCoinflipModal}>
           {t('coinflip|Ok')}
         </Button>
       </div>

@@ -2,7 +2,7 @@ import { Optional } from '@shared/types';
 
 import { Status } from '../interfaces';
 
-enum Statuses {
+export enum Statuses {
   won = 'won',
   lost = 'lost',
   started = 'started'
