@@ -62,11 +62,6 @@ export const useCoinflipDetailsViewModel = () => {
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
 
-  // eslint-disable-next-line no-console
-  console.log('userLastGame', userLastGame);
-  // eslint-disable-next-line no-console
-  console.log('isUserLastGameLoading', isUserLastGameLoading);
-
   return {
     bank,
     bidSize,

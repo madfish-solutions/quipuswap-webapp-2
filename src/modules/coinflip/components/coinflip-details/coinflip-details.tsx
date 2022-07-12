@@ -97,7 +97,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gameId')} data-test-id="valueLocked">
           <StateCurrencyAmount
-            isError={shouldHideData}
+            isError={shouldHideData || !isExist(lastGameId)}
             errorFallback={<DashPlug animation={false} />}
             isLoading={isUserLastGameLoading}
             loaderFallback={<DashPlug />}
@@ -108,7 +108,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|betSize')} data-test-id="valueLocked">
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(bidSizeInUsd) })}
-            isError={shouldHideData}
+            isError={shouldHideData || !isExist(bidSizeInUsd)}
             errorFallback={<DashPlug animation={false} />}
             isLoading={isUserLastGameLoading}
             loaderFallback={<DashPlug />}
@@ -121,7 +121,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|rewardSize')} data-test-id="valueLocked">
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(rewardSizeInUsd) })}
-            isError={shouldHideData}
+            isError={shouldHideData || !isExist(rewardSizeInUsd)}
             errorFallback={<DashPlug animation={false} />}
             isLoading={isUserLastGameLoading}
             amount={rewardSize}
@@ -132,7 +132,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
           <StateWrapper
-            isError={shouldHideData}
+            isError={shouldHideData || !isExist(betCoinSide) || !isExist(gameResult)}
             errorFallback={<DashPlug animation={false} />}
             isLoading={isUserLastGameLoading}
             loaderFallback={<DashPlug />}
