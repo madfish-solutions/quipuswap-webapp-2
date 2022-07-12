@@ -22,7 +22,7 @@ export const useUserLastGame = () => {
       openCoinflipModal();
     }
 
-    lastGameResultRef.current = getGameResult(coinflipStore?.userLastGameInfo?.data?.status);
+    lastGameResultRef.current = gameResult;
   }, [coinflipStore?.userLastGameInfo?.data?.status, openCoinflipModal]);
 
   const getUserLastGame = useCallback(async () => {
