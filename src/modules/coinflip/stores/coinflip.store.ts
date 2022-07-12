@@ -61,7 +61,7 @@ export class CoinflipStore {
     noopMap
   );
 
-  readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
+  readonly generalStatsStore = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
     DEFAULT_GENERAL_STATS,
     async () => await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token),
     generalStatsMapping
@@ -92,6 +92,7 @@ export class CoinflipStore {
       tokensWon: computed,
       gamersStats: computed,
       tokensWithReward: computed,
+      generalStats: computed,
 
       setToken: action,
       setInput: action
@@ -110,6 +111,10 @@ export class CoinflipStore {
     return this.gamersStatsInfo.data;
   }
 
+  get generalStats(): Nullable<DashboardGeneralStats> {
+    return this.generalStatsStore.data;
+  }
+
   get userLastGame(): Nullable<UserLastGame> {
     return this.userLastGameInfo.data;
   }
@@ -119,10 +124,8 @@ export class CoinflipStore {
   }
 
   get payout(): Nullable<BigNumber> {
-    return this.game.input && this.generalStats.data.payoutCoefficient
-      ? this.game.input.times(
-          Number(fromDecimals(this.generalStats.data.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
-        )
+    return this.game.input && this.generalStats?.payoutCoefficient
+      ? this.game.input.times(Number(fromDecimals(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)))
       : null;
   }
 

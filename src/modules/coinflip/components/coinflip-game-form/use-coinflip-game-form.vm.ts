@@ -2,49 +2,53 @@ import { useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
-import { object, string } from 'yup';
 
 import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
-import { bigNumberToString, isEqual } from '@shared/helpers';
-import { Noop, Nullable } from '@shared/types';
-import { balanceAmountSchema } from '@shared/validators';
+import { bigNumberToString, getFormikError, isEqual } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { CoinSide, TokenToPlay } from '../../stores';
+import { useCoinflipValidation } from './use-coinflip.validation';
 
 export enum FormFields {
   coinSide = 'coinSide',
   inputAmount = 'inputAmount'
 }
 
-const getValidation = (balance: Nullable<BigNumber>) =>
-  object().shape({
-    [FormFields.coinSide]: string().required('Coin Side is required'),
-    [FormFields.inputAmount]: balanceAmountSchema(balance).required('Amount is required')
-  });
-
 export const useCoinflipGameFormViewModel = (
   tokenToPlay: TokenToPlay,
   tokenBalance: Nullable<BigNumber>,
   payout: Nullable<BigNumber>,
-  handleSubmit: Noop,
   onAmountInputChange: (amountInput: string) => void,
   onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void
 ) => {
   const { getGamersStats } = useGamersStats();
   const { getUserLastGame } = useUserLastGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
+
+  const validationSchema = useCoinflipValidation(tokenBalance);
+
+  const handleCoinFlip = async () => {
+    await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
+    onCoinSideSelect(null); // TODO: Remove
+    formik.resetForm();
+    await getGamersStats();
+    await getUserLastGame();
+  };
+
   const formik = useFormik({
     initialValues: {
       [FormFields.coinSide]: '',
       [FormFields.inputAmount]: ''
     },
-    validationSchema: getValidation(tokenBalance),
-    onSubmit: handleSubmit
+    validationSchema: validationSchema,
+    onSubmit: handleCoinFlip
   });
 
   const inputAmount = formik.values[FormFields.inputAmount];
   const coinSide = formik.values[FormFields.coinSide];
 
+  // TODO: find better way
   useEffect(() => {
     formik.resetForm();
     // Skip formik dependency
@@ -52,47 +56,29 @@ export const useCoinflipGameFormViewModel = (
   }, [tokenToPlay]);
 
   const handleInputAmountChange = (value: string) => {
-    onAmountInputChange(value);
+    onAmountInputChange(value); // TODO: Remove
     formik.setFieldValue(FormFields.inputAmount, value);
   };
 
-  const inputAmountError =
-    formik.errors[FormFields.inputAmount] && formik.touched[FormFields.inputAmount]
-      ? formik.errors[FormFields.inputAmount]
-      : undefined;
+  const inputAmountError = getFormikError(formik, FormFields.inputAmount);
 
   const handleCoinSideSelect = (value: CoinSide) => {
     if (isEqual(coinSide, value)) {
-      onCoinSideSelect(null);
+      onCoinSideSelect(null); // TODO: Remove
       formik.setFieldValue(FormFields.coinSide, '');
 
       return;
     }
-    onCoinSideSelect(value);
+    onCoinSideSelect(value); // TODO: Remove
     formik.setFieldValue(FormFields.coinSide, value);
   };
 
-  const coinSideError =
-    formik.errors[FormFields.coinSide] && formik.touched[FormFields.coinSide]
-      ? formik.errors[FormFields.coinSide]
-      : undefined;
+  const coinSideError = getFormikError(formik, FormFields.coinSide);
 
   const balance = tokenBalance ? tokenBalance.toFixed() : null;
   const disabled = false;
 
   const payoutAmount = inputAmount && payout ? bigNumberToString(payout) : '';
-
-  const handleCoinFlip = async () => {
-    if (!Boolean(inputAmount) || !Boolean(coinSide)) {
-      return;
-    }
-
-    await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
-    onCoinSideSelect(null);
-    formik.resetForm();
-    await getGamersStats();
-    await getUserLastGame();
-  };
 
   return {
     tokenBalance,
@@ -105,7 +91,6 @@ export const useCoinflipGameFormViewModel = (
     balance,
     coinSideError,
     handleInputAmountChange,
-    handleCoinSideSelect,
-    handleCoinFlip
+    handleCoinSideSelect
   };
 };

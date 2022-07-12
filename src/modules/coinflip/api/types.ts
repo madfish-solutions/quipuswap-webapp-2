@@ -19,6 +19,7 @@ export interface GeneralStatsInterface {
   games_count: BigNumber;
   payout_quot_f: BigNumber;
   total_won_amt: BigNumber;
+  max_bet_percent_f: BigNumber;
 }
 
 export enum TOKEN_ASSETS {
