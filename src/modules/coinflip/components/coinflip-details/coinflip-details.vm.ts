@@ -25,7 +25,7 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
-  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
+  const { generalStatsStore, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
 
@@ -45,7 +45,7 @@ export const useCoinflipDetailsViewModel = () => {
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStats.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress

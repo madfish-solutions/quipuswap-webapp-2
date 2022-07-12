@@ -14,7 +14,7 @@ export const useCoinflipGeneralStats = () => {
   const getCoinflipGeneralStats = useCallback(async () => {
     if (isReady && !isNull(coinflipStore)) {
       try {
-        await coinflipStore.generalStats.load();
+        await coinflipStore.generalStatsStore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }

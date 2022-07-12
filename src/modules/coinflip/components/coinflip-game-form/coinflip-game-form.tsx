@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { observer } from 'mobx-react-lite';
 import { noop } from 'rxjs';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
@@ -24,80 +25,64 @@ interface Props {
   handleSubmit: Noop;
 }
 
-export const CoinflipGameForm: FC<Props> = ({
-  handleSubmit,
-  amountBalance,
-  payout,
-  token,
-  onAmountInputChange,
-  tokenToPlay,
-  coinSide,
-  onCoinSideSelect
-}) => {
-  const { t } = useTranslation();
-  const {
-    inputAmountError,
-    balance,
-    disabled,
-    isSubmitting,
-    handleFormSubmit,
-    inputAmount,
-    payoutAmount,
-    coinSideError,
-    handleInputAmountChange,
-    handleCoinSideSelect,
-    handleCoinFlip
-  } = useCoinflipGameFormViewModel(
-    tokenToPlay,
-    amountBalance,
-    payout,
-    handleSubmit,
-    onAmountInputChange,
-    onCoinSideSelect
-  );
+export const CoinflipGameForm: FC<Props> = observer(
+  ({ handleSubmit, amountBalance, payout, token, onAmountInputChange, tokenToPlay, coinSide, onCoinSideSelect }) => {
+    const { t } = useTranslation();
+    const {
+      inputAmountError,
+      balance,
+      disabled,
+      isSubmitting,
+      handleFormSubmit,
+      inputAmount,
+      payoutAmount,
+      coinSideError,
+      handleInputAmountChange,
+      handleCoinSideSelect
+    } = useCoinflipGameFormViewModel(tokenToPlay, amountBalance, payout, onAmountInputChange, onCoinSideSelect);
 
-  return (
-    <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
-      <CoinflipGameSelect
-        tokenToPlay={tokenToPlay}
-        coinSide={coinSide}
-        handleSelectCoinSide={handleCoinSideSelect}
-        error={coinSideError}
-      />
-      <TokenInput
-        id="coinflip-form-amount"
-        label={t('common|Amount')}
-        value={inputAmount}
-        balance={balance}
-        error={inputAmountError}
-        tokens={token}
-        onInputChange={handleInputAmountChange}
-        className={styles.input}
-      />
-      <TokenInput
-        id="coinflip-form-payout"
-        label={t('common|Payout')}
-        value={payoutAmount}
-        hiddenBalance
-        readOnly
-        tokens={token}
-        onInputChange={noop}
-        className={styles.input}
-      />
-      <div className={commonStyles.buttons}>
-        <ConnectWalletOrDoSomething>
-          <Button
-            type="submit"
-            onClick={handleCoinFlip}
-            className={commonStyles.button}
-            disabled={disabled}
-            loading={isSubmitting}
-            data-test-id="flipButton"
-          >
-            {t('coinflip|Flip')}
-          </Button>
-        </ConnectWalletOrDoSomething>
-      </div>
-    </form>
-  );
-};
+    return (
+      <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
+        <CoinflipGameSelect
+          tokenToPlay={tokenToPlay}
+          coinSide={coinSide}
+          handleSelectCoinSide={handleCoinSideSelect}
+          error={coinSideError}
+        />
+        <TokenInput
+          id="coinflip-form-amount"
+          label={t('common|Amount')}
+          value={inputAmount}
+          balance={balance}
+          error={inputAmountError}
+          tokens={token}
+          onInputChange={handleInputAmountChange}
+          className={styles.input}
+        />
+        <TokenInput
+          id="coinflip-form-payout"
+          label={t('common|Payout')}
+          value={payoutAmount}
+          hiddenBalance
+          readOnly
+          tokens={token}
+          onInputChange={noop}
+          className={styles.input}
+        />
+        <div className={commonStyles.buttons}>
+          <ConnectWalletOrDoSomething>
+            <Button
+              type="submit"
+              className={commonStyles.button}
+              disabled={disabled}
+              loading={isSubmitting}
+              data-test-id="flipButton"
+            >
+              {t('coinflip|Flip')}
+            </Button>
+          </ConnectWalletOrDoSomething>
+        </div>
+      </form>
+    );
+  }
+);
