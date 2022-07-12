@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
@@ -48,12 +48,15 @@ export const useCoinflipPageViewModel = () => {
     })();
   }, [rootStore]);
 
-  const payoutCoefficient = fromDecimals(
-    coinflipStore?.generalStats.data?.payoutCoefficient ?? ZERO_BN,
-    COINFLIP_CONTRACT_DECIMALS
-  );
-  const bidSize = fromDecimals(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
-  const wonAmount = payoutCoefficient.multipliedBy(bidSize);
+  const wonAmount = useMemo(() => {
+    const payoutCoefficient = fromDecimals(
+      coinflipStore?.generalStats.data?.payoutCoefficient ?? ZERO_BN,
+      COINFLIP_CONTRACT_DECIMALS
+    );
+    const bidSize = fromDecimals(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
+
+    return payoutCoefficient.multipliedBy(bidSize);
+  }, [coinflipStore?.generalStats.data?.payoutCoefficient, coinflipStore?.userLastGameInfo.data?.bidSize, token]);
 
   return {
     isInitialized,
