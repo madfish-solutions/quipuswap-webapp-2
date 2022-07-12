@@ -2,10 +2,12 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
+import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
 import { decreaseBySlippage, isExist, isNull, saveBigNumber, toDecimals } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { amplitudeService } from '@shared/services';
 import { Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
@@ -63,36 +65,41 @@ export const useRemoveStableswapLiquidity = () => {
     const message = t('stableswap|sucessfullyRemoved');
     const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => decreaseAmount(token, amount, fees));
 
-    if (isBalancedProportion) {
-      try {
-        const operation = await removeStableswapLiquidityBalancedApi(
-          tezos,
-          contractAddress,
-          decreasedTokensAndAmounts,
-          sharesAmountAtom,
-          deadline,
-          accountPkh
-        );
+    const logData = {
+      stableswapLiquidityRemove: getStableswapLiquidityLogData(
+        tokensInfo,
+        inputAmounts,
+        shares,
+        liquiditySlippage,
+        item
+      )
+    };
 
-        await confirmOperation(operation.opHash, { message });
-      } catch (error) {
-        showErrorToast(error as Error);
-      }
-    } else {
-      try {
-        const operation = await removeStableswapLiquidityImbalancedApi(
-          tezos,
-          contractAddress,
-          decreasedTokensAndAmounts,
-          sharesAmountAtom,
-          deadline,
-          accountPkh
-        );
+    try {
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE', logData);
+      const operation = isBalancedProportion
+        ? await removeStableswapLiquidityBalancedApi(
+            tezos,
+            contractAddress,
+            decreasedTokensAndAmounts,
+            sharesAmountAtom,
+            deadline,
+            accountPkh
+          )
+        : await removeStableswapLiquidityImbalancedApi(
+            tezos,
+            contractAddress,
+            decreasedTokensAndAmounts,
+            sharesAmountAtom,
+            deadline,
+            accountPkh
+          );
 
-        await confirmOperation(operation.opHash, { message });
-      } catch (error) {
-        showErrorToast(error as Error);
-      }
+      await confirmOperation(operation.opHash, { message });
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_SUCCESS', logData);
+    } catch (error) {
+      showErrorToast(error as Error);
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_FAILED', { ...logData, error });
     }
   }, [
     accountPkh,
@@ -100,6 +107,7 @@ export const useRemoveStableswapLiquidity = () => {
     decreaseAmount,
     inputAmounts,
     isBalancedProportion,
+    liquiditySlippage,
     item,
     shares,
     showErrorToast,
