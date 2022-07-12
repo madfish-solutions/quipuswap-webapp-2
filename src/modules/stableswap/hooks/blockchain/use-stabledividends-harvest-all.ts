@@ -25,8 +25,10 @@ export const useStableDividendsHarvestAll = () => {
       }
 
       const logData = {
-        poolsCount: contractAdresses.length,
-        rewardUsd: placeUSDDecimals(claimablePendingRewards).toNumber()
+        stableswapDividendsHarvestAll: {
+          poolsCount: contractAdresses.length,
+          rewardUsd: placeUSDDecimals(claimablePendingRewards).toNumber()
+        }
       };
 
       try {

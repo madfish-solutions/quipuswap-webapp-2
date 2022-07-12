@@ -27,8 +27,10 @@ export const useStableDividendsHarvest = () => {
 
     const { contractAddress, id } = item;
     const logData = {
-      poolId: id.toNumber(),
-      rewardUsd: placeUSDDecimals(claimablePendingRewards).toNumber()
+      stableswapDividendsHarvest: {
+        poolId: id.toNumber(),
+        rewardUsd: placeUSDDecimals(claimablePendingRewards).toNumber()
+      }
     };
 
     try {
