@@ -30,7 +30,7 @@ export const useStableDividendsStake = () => {
       }
       const { contractAddress, id, apr, stakedToken, stakedTokenExchangeRate, tvl } = item;
       const logData = {
-        stableswapStake: {
+        stableswapDividendsStake: {
           poolId: id.toNumber(),
           apr: apr.toNumber(),
           amount: fromDecimals(amount, stakedToken).toNumber(),
