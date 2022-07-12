@@ -15,7 +15,8 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const tokensModalStore = useTokensModalStore();
 
-  const { chosenTokens, tokensWithChosen } = useTokensModalStore();
+  const { chosenTokens, tokensWithChosen, minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk } =
+    useTokensModalStore();
 
   const tokensManagerStore = useTokensManagerStore();
 
@@ -84,7 +85,13 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     tokensModalCellParams,
     managedTokensModalCellParams,
     isModalOpen: tokensModalStore.isOpen,
+    isTokensQuantityOk,
     closeTokensModal,
+    tokensQuantityInfoParams: {
+      tokensQuantityStatus,
+      minQuantity,
+      maxQuantity
+    },
     headerProps: {
       tabsProps,
 

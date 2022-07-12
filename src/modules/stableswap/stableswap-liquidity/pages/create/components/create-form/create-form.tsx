@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Card, Button, Input, RadioButton, TokenInput, Iterator } from '@shared/components';
+import { Card, Button, Input, RadioButton, TokenInput, Iterator, AlarmMessage } from '@shared/components';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import styles from '@styles/CommonContainer.module.scss';
 import { i18n } from '@translation';
@@ -19,13 +19,13 @@ interface Props {
 
 export const CreateForm: FC<Props> = observer(({ subpath }) => {
   const {
-    handleSelectTokensClick,
-    radioButtonValue,
-    handleRadioButtonChange,
+    liquidityProvidersFeeInputParams,
     tokenInputsParams,
+    radioButtonParams,
+    creationCost,
+    tokensInputValidationMessage,
     handleSubmit,
-    radioButtonValues,
-    creationCost
+    handleSelectTokensClick
   } = useCreateFormViewModel();
 
   return (
@@ -40,13 +40,12 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
       <form className={createFormstyles.createForm} onSubmit={handleSubmit}>
         <SelectTokensButton onClick={handleSelectTokensClick} />
         {tokenInputsParams && <Iterator render={TokenInput} data={tokenInputsParams} />}
-
+        {tokensInputValidationMessage && <AlarmMessage message={tokensInputValidationMessage} />}
         <h3>{i18n.t('stableswap|fees')}</h3>
-        <Input label={i18n.t('stableswap|liquidityProvidersFee')} />
-        {/* <Input label={i18n.t('stableswap|interfaceOrReferralFee')} /> */}
+        <Input {...liquidityProvidersFeeInputParams} />
 
         <h3>{i18n.t('stableswap|amplificationParameters')}</h3>
-        <RadioButton onChange={handleRadioButtonChange} value={radioButtonValue} values={radioButtonValues} />
+        <RadioButton {...radioButtonParams} />
 
         <h3>{i18n.t('stableswap|cost')}</h3>
         <CreationCost {...creationCost} />
