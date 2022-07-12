@@ -12,7 +12,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props {
+export interface RadioButtonProps {
   values: Array<RadioItemProps>;
   onChange: (value: string) => void;
   value: string;
@@ -39,7 +39,7 @@ const RadioItem: FC<RadioItemProps> = ({ radioName, value, label, checkedValue }
   </label>
 );
 
-export const RadioButton: FC<Props> = ({ className, values, onChange, value }) => {
+export const RadioButton: FC<RadioButtonProps> = ({ className, values, onChange, value }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
