@@ -116,6 +116,9 @@ export class CoinflipStore {
   get isGamersStatsLoading() {
     return this.gamersStatsInfo.isLoading;
   }
+  get isGeneralStatsLoading() {
+    return this.generalStats.isLoading;
+  }
 
   get userLastGame(): Nullable<UserLastGame> {
     return this.userLastGameInfo.data;
