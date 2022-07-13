@@ -10,3 +10,4 @@ export * from './get-stabledividends-item.api';
 export * from './stabledividends-unstake.api';
 export * from './get-stabledividends-stats.api';
 export * from './stabledividends-harvest.api';
+export * from './get-pool-creation-cost.api';

@@ -32,6 +32,13 @@
 
 .button {
   max-width: 100%;
+  justify-self: end;
+}
+
+.footerContent {
+  display: grid;
+  row-gap: 16px;
+  width: 100%;
 }
 
 @include media(">tablet") {
