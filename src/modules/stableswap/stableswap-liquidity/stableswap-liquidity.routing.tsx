@@ -12,6 +12,7 @@ import { StableswapRoutes } from '../stableswap-routes.enum';
 import { StableswapLiquidityFormTabs } from '../types';
 import {
   StableswapLiquidityAddItemPage,
+  StableswapLiquidityCreatePage,
   StableswapLiquidityListPage,
   StableswapLiquidityRemoveItemPage
 } from './pages';
@@ -42,6 +43,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <Routes>
+        <Route path={`/${StableswapLiquidityFormTabs.create}`} element={<StableswapLiquidityCreatePage />} />
         <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
         <Route
           path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}

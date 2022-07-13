@@ -5,17 +5,10 @@ import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
 import { NETWORK_ID } from '@config/enviroment';
-import { getTokenMetadata } from '@shared/api';
+import { getTokenMetadata, saveCustomTokenApi } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { InvalidFa2TokenIdError, TokenMetadataError } from '@shared/errors';
-import {
-  fa2TokenExists,
-  getFallbackTokens,
-  getTokens,
-  isEmptyArray,
-  isTokenEqual,
-  saveCustomToken
-} from '@shared/helpers';
+import { fa2TokenExists, getFallbackTokens, getTokens, isEmptyArray, isTokenEqual } from '@shared/helpers';
 import { Standard, Token, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
@@ -93,7 +86,7 @@ const useDappTokens = () => {
           searchTokens: { loading: false, data: [token] }
         }));
         if (saveAfterSearch) {
-          saveCustomToken(token);
+          saveCustomTokenApi(token);
         }
 
         return token;
@@ -116,7 +109,7 @@ const useDappTokens = () => {
         return;
       }
 
-      saveCustomToken(token);
+      saveCustomTokenApi(token);
       setState(prevState => ({
         ...prevState,
         tokens: {

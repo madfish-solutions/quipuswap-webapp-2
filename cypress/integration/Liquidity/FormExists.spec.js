@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe('Form exists', () => {
-  before(() => {
+  beforeEach(() => {
     //before each 'it' go to liquidity tab'
     cy.visit('/');
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();

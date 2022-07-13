@@ -1,11 +1,9 @@
-import { FormEvent } from 'react';
-
 import cx from 'classnames';
 
 import { useStableDividendsFilterStore } from '@modules/stableswap/hooks';
 import { ListFilterViewProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { StableDividendsSortField, StableDividendsSortFieldItem } from '../../types';
@@ -14,17 +12,28 @@ import styles from './stabledividends-list-filter.module.scss';
 export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
   const stableDividendsFilterStore = useStableDividendsFilterStore();
+
+  const {
+    search,
+    tokenIdValue,
+    sortDirection,
+
+    onSearchChange,
+    onTokenIdChange,
+
+    handleIncrement,
+    handleDecrement,
+
+    handleSortDirectionToggle
+  } = useBaseFilterStoreConverter(stableDividendsFilterStore);
+
   const { accountPkh } = useAuthStore();
-  const { search, tokenIdValue, whitelistedOnly, stakedOnly, sortField, sortDirection } = stableDividendsFilterStore;
+  const { whitelistedOnly, stakedOnly, sortField } = stableDividendsFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as StableDividendsSortFieldItem;
 
     return stableDividendsFilterStore.onSortFieldChange(item.field);
-  };
-
-  const handleSortDirectionToggle = () => {
-    return stableDividendsFilterStore.onSortDirectionToggle();
   };
 
   const sortValues: StableDividendsSortFieldItem[] = [
@@ -56,28 +65,6 @@ export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => 
 
   const setWhitelistedOnly = (state: boolean) => {
     return stableDividendsFilterStore.setWhitelistedOnly(state);
-  };
-
-  const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e)) {
-      return;
-    }
-    stableDividendsFilterStore.onSearchChange((e.target as HTMLInputElement).value);
-  };
-
-  const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e) || isNull(e.target)) {
-      return;
-    }
-    stableDividendsFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
-  };
-
-  const handleIncrement = () => {
-    stableDividendsFilterStore.handleIncrement();
-  };
-
-  const handleDecrement = () => {
-    stableDividendsFilterStore.handleDecrement();
   };
 
   const switcherDataList = [
