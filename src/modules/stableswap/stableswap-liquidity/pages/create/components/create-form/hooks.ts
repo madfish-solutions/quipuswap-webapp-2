@@ -1,4 +1,4 @@
-import { useMemo, FormEvent } from 'react';
+import { useMemo, FormEvent, useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
@@ -12,19 +12,22 @@ import {
   getFirstElement,
   getFormikError,
   isNull,
-  isEmptyString
+  isEmptyString,
+  isEmptyArray
 } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 import { numberAsStringSchema, NumberAsStringSchema } from '@shared/validators';
 import { i18n } from '@translation';
 
 import {
-  LIQUIDITY_PRODIFDERS_FEE,
-  RADIO_BUTTON_NAME,
-  radioButtonValues,
+  LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
+  AMPLIFICATION_FIELD_NAME,
+  createPoolAmplification,
   UPPER_LIQUIDITY_PRODIFDERS_FEE,
   LOWER_LIQUIDITY_PRODIFDERS_FEE,
-  TOKEN_KEY
+  TOKEN_KEY,
+  MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
+  MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
 
 export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<Nullable<BigNumber>>) => {
@@ -52,11 +55,20 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
     ]);
 
     const liquidityProvidersFee = [
-      LIQUIDITY_PRODIFDERS_FEE,
+      LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
       numberAsStringSchema(LOWER_LIQUIDITY_PRODIFDERS_FEE, UPPER_LIQUIDITY_PRODIFDERS_FEE).required('Value is required')
     ];
 
-    const tokensSchema = [TOKEN_KEY, yup.boolean().is([true], 'Choose from 2 to 4 tokens to create stableswap pool')];
+    const tokensSchema = [
+      TOKEN_KEY,
+      yup.boolean().is(
+        [true],
+        i18n.t('stableswap|chooseTokensRecommendations', {
+          min: MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
+          max: MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
+        })
+      )
+    ];
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries([
       ...shapeMap,
@@ -72,8 +84,8 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
 
     return Object.fromEntries([
       ...tokensInputs,
-      [RADIO_BUTTON_NAME, getFirstElement(radioButtonValues).value],
-      [LIQUIDITY_PRODIFDERS_FEE, ''],
+      [AMPLIFICATION_FIELD_NAME, getFirstElement(createPoolAmplification).value],
+      [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, ''],
       [TOKEN_KEY, false]
     ]);
   }, [tokens]);
@@ -112,16 +124,16 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
   const liquidityProvidersFeeInputParams: InputProps = useMemo(
     () => ({
       label: i18n.t('stableswap|liquidityProvidersFee'),
-      error: getFormikError(formik, LIQUIDITY_PRODIFDERS_FEE),
-      value: isEmptyString(formik.values[LIQUIDITY_PRODIFDERS_FEE])
-        ? formik.values[LIQUIDITY_PRODIFDERS_FEE]
-        : `${formik.values[LIQUIDITY_PRODIFDERS_FEE]}${PERCENT}`,
+      error: getFormikError(formik, LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME),
+      value: isEmptyString(formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME])
+        ? formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
+        : `${formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]}${PERCENT}`,
       onChange: (event: FormEvent<HTMLInputElement>) => {
         if (isNull(event)) {
           return;
         }
         const value = (event.target as HTMLInputElement).value.replace(PERCENT, '');
-        formik.setFieldValue(LIQUIDITY_PRODIFDERS_FEE, value);
+        formik.setFieldValue(LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, value);
       }
     }),
     [formik]
@@ -134,13 +146,50 @@ export const useRadioButtonParams = (formik: ReturnType<typeof useFormik>) => {
   const radioButtonParams: RadioButtonProps = useMemo(
     () => ({
       onChange: (value: string) => {
-        formik.setFieldValue(RADIO_BUTTON_NAME, value);
+        formik.setFieldValue(AMPLIFICATION_FIELD_NAME, value);
       },
-      value: formik.values[RADIO_BUTTON_NAME],
-      values: radioButtonValues
+      value: formik.values[AMPLIFICATION_FIELD_NAME],
+      values: createPoolAmplification
     }),
     [formik]
   );
 
   return { radioButtonParams };
+};
+
+export const useHandleTokensCahange = (formik: ReturnType<typeof useFormik>) => {
+  const handleTokensChange = useCallback(
+    (chosenTokens: Nullable<Array<Token>>) => {
+      formik.setValues((prev: Record<string, string>) => {
+        const mainValues = {
+          [AMPLIFICATION_FIELD_NAME]: prev[AMPLIFICATION_FIELD_NAME],
+          [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]: prev[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
+        };
+
+        if (chosenTokens && !isEmptyArray(chosenTokens)) {
+          const tokensValues = Object.fromEntries(
+            chosenTokens.map(chosenToken => {
+              const tokenSlug = getTokenSlug(chosenToken);
+
+              return [tokenSlug, formik.values[tokenSlug] ?? ''];
+            })
+          );
+
+          return {
+            ...mainValues,
+            ...tokensValues,
+            [TOKEN_KEY]: true
+          };
+        } else {
+          return {
+            ...mainValues,
+            [TOKEN_KEY]: false
+          };
+        }
+      });
+    },
+    [formik]
+  );
+
+  return { handleTokensChange };
 };
