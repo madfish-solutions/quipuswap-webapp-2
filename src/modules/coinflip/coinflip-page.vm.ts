@@ -50,13 +50,13 @@ export const useCoinflipPageViewModel = () => {
 
   const wonAmount = useMemo(() => {
     const payoutCoefficient = fromDecimals(
-      coinflipStore?.generalStats.data?.payoutCoefficient ?? ZERO_BN,
+      coinflipStore?.generalStatsStore.data?.payoutCoefficient ?? ZERO_BN,
       COINFLIP_CONTRACT_DECIMALS
     );
     const bidSize = fromDecimals(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
 
     return payoutCoefficient.multipliedBy(bidSize);
-  }, [coinflipStore?.generalStats.data?.payoutCoefficient, coinflipStore?.userLastGameInfo.data?.bidSize, token]);
+  }, [coinflipStore?.generalStatsStore.data?.payoutCoefficient, coinflipStore?.userLastGameInfo.data?.bidSize, token]);
 
   return {
     isInitialized,
