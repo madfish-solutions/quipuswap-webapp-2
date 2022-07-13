@@ -80,9 +80,10 @@ export const useSwapFormik = (
         transactionDeadline.toNumber()
       );
 
-      const walletParamsWithKind = tradeTransferParams.map(transferParams =>
-        parseTransferParamsToParamsWithKind(transferParams)
+      const walletParamsWithKind = tradeTransferParams.map(tradeTransferParam =>
+        parseTransferParamsToParamsWithKind(tradeTransferParam)
       );
+
       const walletOperation = await tezos.wallet.batch(walletParamsWithKind).send();
 
       const inputTokenSymbol = getTokenSymbol(inputToken!);

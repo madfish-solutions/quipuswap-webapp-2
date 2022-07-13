@@ -15,12 +15,13 @@ export interface TokenInputViewModelProps {
 
 export interface TokenInputProps extends TokenInputViewModelProps {
   value: string;
-  balance: Optional<BigNumber.Value>;
+  balance?: Optional<BigNumber.Value>;
   balanceText?: string;
   id?: string;
   className?: string;
   label: string;
   error?: string;
+  decimals?: number;
   dollarEquivalent?: Optional<BigNumber.Value>;
   onSelectorClick?: () => void;
 }

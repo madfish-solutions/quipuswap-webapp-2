@@ -39,14 +39,14 @@ export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ'
 };
 
-export const ITHACANET_DEFAULT_TOKEN: Token = {
+export const GHOSTNET_DEFAULT_TOKEN: Token = {
   ...MAINNET_DEFAULT_TOKEN,
   contractAddress: 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'
 };
 
 export const networksDefaultTokens: Record<SupportedNetworks, Token> = {
   [NetworkType.MAINNET]: MAINNET_DEFAULT_TOKEN,
-  [NetworkType.ITHACANET]: ITHACANET_DEFAULT_TOKEN
+  [NetworkType.GHOSTNET]: GHOSTNET_DEFAULT_TOKEN
 };
 
 export const DEFAULT_TOKEN = networksDefaultTokens[NETWORK_ID];

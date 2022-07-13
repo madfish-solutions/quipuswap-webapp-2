@@ -35,7 +35,7 @@ export const useAddLiqFormViewModel = () => {
   const formStore = useStableswapItemFormStore();
   const userBalances = useStableswapTokensBalances(item);
 
-  const validationSchema = useAddLiqFormValidation(userBalances, formStore.isBalancedProportion);
+  const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
 
   const isZeroInputsError = useZeroInputsError();
   const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
@@ -72,12 +72,18 @@ export const useAddLiqFormViewModel = () => {
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
 
-  const handleImbalancedInputChange = (index: number) => async (inputAmount: string) => {
-    const formikKey = getInputSlugByIndex(index);
-    const inputAmountBN = new BigNumber(inputAmount);
+  const handleImbalancedInputChange = (index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    formik.setFieldValue(formikKey, inputAmount);
-    formStore.setInputAmount(inputAmountBN, index);
+    return async (inputAmount: string) => {
+      const { fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const formikKey = getInputSlugByIndex(index);
+      const inputAmountBN = saveBigNumber(fixedValue, null);
+
+      formik.setFieldValue(formikKey, inputAmount);
+      formStore.setInputAmount(inputAmountBN, index);
+    };
   };
 
   const handleBalancedInputChange = (reserves: BigNumber, index: number) => {
