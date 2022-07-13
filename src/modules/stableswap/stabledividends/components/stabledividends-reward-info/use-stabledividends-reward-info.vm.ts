@@ -1,56 +1,24 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-
-import { fromDecimals, isEmptyArray, isNull, multipliedIfPossible } from '@shared/helpers';
+import { isEmptyArray, multipliedIfPossible } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableDividendsHarvest, useStableDividendsItemStore } from '../../../hooks';
-import { useStableDividendsStakerBalance } from '../../hooks';
-import { StableDividendsRewardDetailsParams } from '../stabledividends-reward-details/types';
+import { useStableDividendsPendingRewards, useStableDividendsStakerBalance } from '../../hooks';
 
 export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
-  const { item, userInfo } = useStableDividendsItemStore();
+  const { item } = useStableDividendsItemStore();
   const { harvest } = useStableDividendsHarvest();
 
   const quipuExchangeRates = item?.stakedTokenExchangeRate ?? null;
-  const tokensInfo = item?.tokensInfo ?? null;
 
   const hadleHarvest = useCallback(async () => await harvest(), [harvest]);
 
   const shares = useStableDividendsStakerBalance();
   const sharesDollarEquivalent = multipliedIfPossible(quipuExchangeRates, shares);
 
-  const rawData: Array<StableDividendsRewardDetailsParams> = useMemo(() => {
-    const helperArray: Array<StableDividendsRewardDetailsParams> = [];
-    if (isNull(userInfo) || isNull(tokensInfo)) {
-      return [];
-    }
-
-    userInfo.yourReward?.forEach((value, key) => {
-      if (value.isGreaterThan('0')) {
-        const tokenInfo = tokensInfo[key.toNumber()];
-        const { token, exchangeRate } = tokenInfo;
-        const amount = fromDecimals(value, token);
-        helperArray.push({
-          claimable: {
-            amount,
-            dollarEquivalent: amount.multipliedBy(exchangeRate)
-          },
-          token
-        });
-      }
-    });
-
-    return helperArray;
-  }, [tokensInfo, userInfo]);
-
-  const claimablePendingRewards = useMemo(() => {
-    return rawData
-      .map(({ claimable }) => claimable.dollarEquivalent)
-      .reduce((acc, curr) => acc.plus(curr), new BigNumber('0'));
-  }, [rawData]);
+  const { rawData, claimablePendingRewards } = useStableDividendsPendingRewards();
 
   const buttonText = t('stableswap|Harvest');
   //TODO: tooltip text

@@ -90,9 +90,12 @@ export class CoinflipStore {
       token: computed,
       gamesCount: computed,
       tokensWon: computed,
-      gamersStats: computed,
       tokensWithReward: computed,
       generalStats: computed,
+      gamersStats: computed,
+      userLastGame: computed,
+      isGamersStatsLoading: computed,
+      isUserLastGameLoading: computed,
 
       setToken: action,
       setInput: action
@@ -115,8 +118,18 @@ export class CoinflipStore {
     return this.generalStatsStore.data;
   }
 
+  get isGamersStatsLoading() {
+    return this.gamersStatsInfo.isLoading;
+  }
+  get isGeneralStatsLoading() {
+    return this.generalStatsStore.isLoading;
+  }
+
   get userLastGame(): Nullable<UserLastGame> {
     return this.userLastGameInfo.data;
+  }
+  get isUserLastGameLoading() {
+    return this.userLastGameInfo.isLoading;
   }
 
   get tokensWithReward(): Nullable<TokenWon[]> {

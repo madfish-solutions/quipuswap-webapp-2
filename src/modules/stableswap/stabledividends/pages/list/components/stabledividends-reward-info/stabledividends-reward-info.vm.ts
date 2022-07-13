@@ -1,32 +1,22 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-
-import { useStableDividendsHarvestAll, useStableDividendsListStore } from '@modules/stableswap/hooks';
+import { useStableDividendsHarvestAll } from '@modules/stableswap/hooks';
+import { useTotalStableDividendsPendingRewards } from '@modules/stableswap/stabledividends/hooks';
 import { isEmptyArray } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
-  const { listWithUserInfo } = useStableDividendsListStore();
   const { harvestAll: harvestAllApi } = useStableDividendsHarvestAll();
-  const farmsWithRewars = useMemo(
-    () => listWithUserInfo?.filter(({ yourEarnedInUsd }) => yourEarnedInUsd?.isGreaterThan('0')),
-    [listWithUserInfo]
-  );
-
-  const claimablePendingRewards = useMemo(
-    () => farmsWithRewars?.reduce((acc, { yourEarnedInUsd }) => acc.plus(yourEarnedInUsd), new BigNumber('0')) ?? null,
-    [farmsWithRewars]
-  );
+  const { claimablePendingRewards, farmsWithRewards } = useTotalStableDividendsPendingRewards();
 
   const harvestAll = useCallback(async () => {
-    if (!farmsWithRewars || isEmptyArray(farmsWithRewars)) {
+    if (!farmsWithRewards || isEmptyArray(farmsWithRewards)) {
       return;
     }
 
-    await harvestAllApi(farmsWithRewars.map(({ contractAddress }) => contractAddress));
-  }, [farmsWithRewars, harvestAllApi]);
+    await harvestAllApi(farmsWithRewards.map(({ contractAddress }) => contractAddress));
+  }, [farmsWithRewards, harvestAllApi]);
 
   const harvestAllText = t('stableswap|harvestAll');
 
