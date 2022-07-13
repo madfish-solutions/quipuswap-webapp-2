@@ -10,7 +10,7 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
-import { useCoinflipStore, useUserLastGame } from '../../hooks';
+import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../../hooks';
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
@@ -29,6 +29,15 @@ export const useCoinflipDetailsViewModel = () => {
     useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
+  const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+
+  const updateGeneralStats = useCallback(async () => {
+    if (isNull(tezos)) {
+      return;
+    }
+
+    await getCoinflipGeneralStats();
+  }, [getCoinflipGeneralStats, tezos]);
 
   const updateUserLastGame = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh)) {
@@ -40,9 +49,11 @@ export const useCoinflipDetailsViewModel = () => {
 
   useEffect(() => {
     updateUserLastGame();
-  }, [updateUserLastGame]);
+    updateGeneralStats();
+  }, [updateUserLastGame, updateGeneralStats]);
 
   useOnBlock(tezos, updateUserLastGame);
+  useOnBlock(tezos, updateGeneralStats);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
