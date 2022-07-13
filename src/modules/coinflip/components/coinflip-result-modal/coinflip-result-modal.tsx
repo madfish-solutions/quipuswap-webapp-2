@@ -2,14 +2,13 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import CoinflipLostImage from '@images/coinflip-lost-modal-image.svg';
-import CoinflipSuccesstImage from '@images/coinflip-success-modal-image.svg';
 import { getGameResult, Statuses } from '@modules/coinflip/helpers';
 import { Status } from '@modules/coinflip/interfaces';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button, StateCurrencyAmount } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { Modal } from '@shared/modals';
+import { CoinflipFailResultSvg, CoinflipSuccessResultSvg } from '@shared/svg';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-result-modal.module.scss';
@@ -32,8 +31,6 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
   const isResultSuccess = gameResult === Statuses.won;
 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
-  const imageSrc = isResultSuccess ? CoinflipSuccesstImage : CoinflipLostImage;
-  const imageAlt = isResultSuccess ? 'Coinflip success result' : 'Coinflip lost result';
   const subTitle = isResultSuccess ? t('coinflip|wonRound') : t('coinflip|youLost');
 
   return (
@@ -45,7 +42,11 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
       modalClassName={styles.modalClassName}
       onRequestClose={closeCoinflipModal}
     >
-      <img className={styles.img} src={imageSrc} alt={imageAlt} />
+      {isResultSuccess ? (
+        <CoinflipSuccessResultSvg className={styles.img} />
+      ) : (
+        <CoinflipFailResultSvg className={styles.img} />
+      )}
       <div className={styles.bottomContent}>
         <span>{subTitle}</span>
         {isResultSuccess ? (
