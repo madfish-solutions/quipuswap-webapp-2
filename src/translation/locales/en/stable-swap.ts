@@ -66,5 +66,6 @@ export const stableswap = {
   devFeeCost: 'Dev Fee',
   totalCost: 'Total',
   create: 'Create',
-  newPool: 'New Pool'
+  newPool: 'New Pool',
+  chooseTokensRecommendations: 'Choose from {{min}} to {{max}} tokens to create stableswap pool'
 } as const;
