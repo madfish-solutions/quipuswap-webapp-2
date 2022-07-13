@@ -1,9 +1,21 @@
 {
-    "projectId": "4ytwek",
-    "baseUrl": "https://localhost:3000",
-    "defaultCommandTimeout": 10000,
-    "retries": {
+  "projectId": "4ytwek",
+  "baseUrl": "https://qs-develop.vercel.app/",
+  "defaultCommandTimeout": 10000,
+  "retries": {
     "runMode": 2,
-    "openMode": 0
+    "openMode": 2
+  },
+    "ignoreTestFiles": [
+      "**/__snapshots__/*",
+      "**/__image_snapshots__/*"
+    ],
+    "env": {
+      "cypress-plugin-snapshots": {
+        "imageConfig": {
+          "threshold": 0.01
+        }
+      }
+    }
   }
-}
+  
