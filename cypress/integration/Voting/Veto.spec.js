@@ -1,8 +1,7 @@
 /// <reference types="cypress" />
 
 describe('Veto', () => {
-  before(() => {
-    //before each 'it' go to veto tab'
+  beforeEach(() => {
     cy.visit('/voting/vote/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0');
     cy.get('[data-test-id="votingTokenSelect"] [data-test-id="cardTab-1"]').click();
   });
