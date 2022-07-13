@@ -25,8 +25,15 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
-  const { generalStats, tokenToPlay, gamersStats, userLastGame, isGamersStatsLoading, isUserLastGameLoading } =
-    useCoinflipStore();
+  const {
+    generalStats,
+    tokenToPlay,
+    gamersStats,
+    userLastGame,
+    isGamersStatsLoading,
+    isGeneralStatsLoading,
+    isUserLastGameLoading
+  } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
@@ -88,8 +95,8 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
-    isGamersStatsLoading: isNull(generalStats) || isGamersStatsLoading,
-    isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading,
+    isGamersStatsLoading: isNull(generalStats) || isGeneralStatsLoading,
+    isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
   };
