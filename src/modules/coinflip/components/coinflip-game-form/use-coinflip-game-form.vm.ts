@@ -30,7 +30,7 @@ export const useCoinflipGameFormViewModel = (
 
   const handleCoinFlip = async () => {
     await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
-    onCoinSideSelect(null); // TODO: Remove
+    onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
     formik.resetForm();
     await getGamersStats();
     await getUserLastGame();
@@ -56,7 +56,7 @@ export const useCoinflipGameFormViewModel = (
   }, [tokenToPlay]);
 
   const handleInputAmountChange = (value: string) => {
-    onAmountInputChange(value); // TODO: Remove
+    onAmountInputChange(value); // TODO: Remove when fix problem connection between store and validation
     formik.setFieldValue(FormFields.inputAmount, value);
   };
 
@@ -64,12 +64,12 @@ export const useCoinflipGameFormViewModel = (
 
   const handleCoinSideSelect = (value: CoinSide) => {
     if (isEqual(coinSide, value)) {
-      onCoinSideSelect(null); // TODO: Remove
+      onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
       formik.setFieldValue(FormFields.coinSide, '');
 
       return;
     }
-    onCoinSideSelect(value); // TODO: Remove
+    onCoinSideSelect(value); // TODO: Remove when fix problem connection between store and validation
     formik.setFieldValue(FormFields.coinSide, value);
   };
 
