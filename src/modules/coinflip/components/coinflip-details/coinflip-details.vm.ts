@@ -10,7 +10,7 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
-import { useCoinflipStore, useUserLastGame } from '../../hooks';
+import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../../hooks';
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
@@ -25,9 +25,26 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
-  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
+  const {
+    generalStatsStore,
+    tokenToPlay,
+    gamersStats,
+    userLastGame,
+    isGamersStatsLoading,
+    isGeneralStatsLoading,
+    isUserLastGameLoading
+  } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
+  const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+
+  const updateGeneralStats = useCallback(async () => {
+    if (isNull(tezos)) {
+      return;
+    }
+
+    await getCoinflipGeneralStats();
+  }, [getCoinflipGeneralStats, tezos]);
 
   const updateUserLastGame = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh)) {
@@ -35,17 +52,19 @@ export const useCoinflipDetailsViewModel = () => {
     }
 
     await getUserLastGame();
-  }, [accountPkh, getUserLastGame, tezos]);
+  }, [accountPkh, tezos, getUserLastGame]);
 
   useEffect(() => {
     updateUserLastGame();
-  }, [updateUserLastGame]);
+    updateGeneralStats();
+  }, [updateUserLastGame, updateGeneralStats]);
 
   useOnBlock(tezos, updateUserLastGame);
+  useOnBlock(tezos, updateGeneralStats);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStats.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress
@@ -76,6 +95,8 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
+    isGamersStatsLoading: isNull(generalStatsStore) || isGeneralStatsLoading,
+    isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
   };
