@@ -1,9 +1,8 @@
-import { FormEvent } from 'react';
-
 import cx from 'classnames';
 
 import { ListFilterViewProps } from '@shared/components';
-import { isDirrectOrder, isNull } from '@shared/helpers';
+import { isDirrectOrder } from '@shared/helpers';
+import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useStableswapFilterStore } from '../../../../../hooks';
@@ -13,16 +12,27 @@ import styles from './stableswap-liquidity-list-filter.module.scss';
 export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps => {
   const { t } = useTranslation();
   const stableswapFilterStore = useStableswapFilterStore();
-  const { sortField, sortDirection } = stableswapFilterStore;
+
+  const {
+    search,
+    tokenIdValue,
+    sortDirection,
+
+    onSearchChange,
+    onTokenIdChange,
+
+    handleIncrement,
+    handleDecrement,
+
+    handleSortDirectionToggle
+  } = useBaseFilterStoreConverter(stableswapFilterStore);
+
+  const { sortField, whitelistedOnly } = stableswapFilterStore;
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as StableswapSortFieldItem;
 
     return stableswapFilterStore.onSortFieldChange(item.field);
-  };
-
-  const handleSortDirectionToggle = () => {
-    return stableswapFilterStore.onSortDirectionToggle();
   };
 
   const sortingValues: StableswapSortFieldItem[] = [
@@ -39,32 +49,8 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
 
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
-  const { search, tokenIdValue, whitelistedOnly } = stableswapFilterStore;
-
   const setWhitelistedOnly = (state: boolean) => {
     return stableswapFilterStore.setWhitelistedOnly(state);
-  };
-
-  const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e)) {
-      return;
-    }
-    stableswapFilterStore.onSearchChange((e.target as HTMLInputElement).value);
-  };
-
-  const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
-    if (isNull(e) || isNull(e.target)) {
-      return;
-    }
-    stableswapFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
-  };
-
-  const handleIncrement = () => {
-    stableswapFilterStore.handleIncrement();
-  };
-
-  const handleDecrement = () => {
-    stableswapFilterStore.handleDecrement();
   };
 
   const switcherDataList = [

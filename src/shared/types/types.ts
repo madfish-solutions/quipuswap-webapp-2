@@ -14,7 +14,7 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.ITHACANET>;
+export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.GHOSTNET>;
 
 export enum QSNetworkType {
   MAIN = 'MAIN',
@@ -66,6 +66,11 @@ export interface Token extends TokenAddress {
   type: Standard;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;
+}
+
+export interface ManagedToken extends Token {
+  isFavorite?: boolean;
+  isHidden?: boolean;
 }
 
 export interface RawToken extends Omit<Token, 'type' | 'isWhitelisted'> {

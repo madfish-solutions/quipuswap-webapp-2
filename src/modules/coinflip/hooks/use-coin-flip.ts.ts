@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
@@ -12,20 +14,19 @@ import { betTokens } from '../api';
 
 export const useCoinFlip = () => {
   const { tezos } = useRootStore();
-  const { game, token } = useCoinflipStore();
-  const { coinSide, input } = game;
+  const { token } = useCoinflipStore();
   const accountPkh = useAccountPkh();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
 
-  const handleCoinFlip = async () => {
-    if (isNull(input) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
+  const handleCoinFlip = async (inputAmount: BigNumber, coinSide: string) => {
+    if (isNull(inputAmount) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
       return null;
     }
 
     try {
       const tokenAsset = isTezosToken(token) ? TOKEN_ASSETS.TEZOS : TOKEN_ASSETS.QUIPU;
-      const formattedAmount = toDecimals(input, TEZOS_TOKEN_DECIMALS);
+      const formattedAmount = toDecimals(inputAmount, TEZOS_TOKEN_DECIMALS);
 
       const contract = await getContract(tezos, COINFLIP_CONTRACT_ADDRESS);
       const { network_fee } = await contract.storage<CoinflipStorage>();

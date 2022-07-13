@@ -1,0 +1,14 @@
+.createForm {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.createButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.createButton {
+  margin-top: 40px;
+}
