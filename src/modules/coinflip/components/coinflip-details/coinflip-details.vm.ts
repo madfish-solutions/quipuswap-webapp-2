@@ -77,7 +77,7 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
-    isGamersStatsLoading: isNull(gamersStats) || isGamersStatsLoading,
+    isGamersStatsLoading: isNull(generalStats) || isGamersStatsLoading,
     isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
