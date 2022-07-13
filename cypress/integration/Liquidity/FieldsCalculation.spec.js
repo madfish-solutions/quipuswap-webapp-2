@@ -4,8 +4,6 @@ import { DEFAULT_WAIT_TIMEOUT } from '../../const';
 
 describe('Input fields are recalculating after entering in another field data', () => {
   before(() => {
-    //before each 'it' go to liquidity tab'
-    //cy.visit('/liquidity/add/tez-KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c_0');
     cy.visit('/');
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();

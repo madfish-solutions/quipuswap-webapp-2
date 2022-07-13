@@ -3,11 +3,13 @@
 import { DEFAULT_WAIT_TIMEOUT } from '../../const';
 
 describe('Check error notification', () => {
-  it('Should_DisplayError_When_FromTokenHaveTooManyDecimals', () => {
-    // Go to the swap page
+  beforeEach(() => {
     cy.visit('/swap');
     cy.get('[data-test-id="acceptCookieButton"]').click();
+});
+  it('Should_DisplayError_When_FromTokenHaveTooManyDecimals', () => {
     cy.get('[for="swap-send-from"]').click().type('1.33332222221');
+    cy.wait(DEFAULT_WAIT_TIMEOUT);
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
       .invoke('text')
       .then(text => {
@@ -15,9 +17,6 @@ describe('Check error notification', () => {
       });
   });
   it('Should_DisplayError_When_AmountOfFromFieldTooBig', () => {
-    // Go to the swap page
-    cy.visit('/swap');
-    cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.get('[for="swap-send-from"]').click().type('133332222221');
     cy.wait(DEFAULT_WAIT_TIMEOUT);
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
@@ -27,9 +26,6 @@ describe('Check error notification', () => {
       });
   });
   it('Should_DisplayError_When_FieldIsEmpty', () => {
-    // Input data in the From field and delete it. It should be notification that field is required
-    cy.visit('/swap');
-    cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.get('[for="swap-send-from"]').click().type('1').type('{backspace}');
     cy.wait(DEFAULT_WAIT_TIMEOUT);
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
