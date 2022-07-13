@@ -32,7 +32,8 @@ export const useCoinflipDetailsViewModel = () => {
     userLastGame,
     isGamersStatsLoading,
     isGeneralStatsLoading,
-    isUserLastGameLoading
+    isUserLastGameLoading,
+    bidSize: contractBidSize
   } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
@@ -83,6 +84,7 @@ export const useCoinflipDetailsViewModel = () => {
   return {
     bank,
     bidSize,
+    contractBidSize,
     totalWins,
     bankInUsd,
     rewardSize,
