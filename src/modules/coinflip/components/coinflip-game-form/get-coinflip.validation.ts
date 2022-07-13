@@ -1,14 +1,11 @@
 import { BigNumber } from 'bignumber.js';
 import { string } from 'yup';
 
-import { isEqual, leaveAllNumbers, onlyDigitsAndSeparator } from '@shared/helpers';
+import { isEqual, onlyDigits, onlyDigitsAndSeparator, amountGreaterThanValue } from '@shared/helpers';
 import { Token } from '@shared/types';
 import { i18n } from '@translation';
 
-import { amountGreaterThanValue } from './amount-greater-than-value.helper';
-
 const INPUT_ZERO_AMOUNT = 0;
-const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
 export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize: BigNumber) => {
   const { decimals, symbol } = token.metadata;
@@ -34,7 +31,6 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
       () => i18n.t('common|Insufficient funds'),
       value => amountGreaterThanValue(balance, value ?? '')
     )
-    .required(i18n.t(REQUIRE_FIELD_MESSAGE))
     .test(
       'bid-too-high',
       () =>
@@ -51,7 +47,6 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
           tokenSymbol: symbol,
           decimalPlaces: decimals
         }),
-      value => leaveAllNumbers(value ?? '').length <= decimals
-    )
-    .required(i18n.t(REQUIRE_FIELD_MESSAGE));
+      value => onlyDigits(value ?? '').length <= decimals
+    );
 };

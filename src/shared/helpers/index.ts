@@ -51,5 +51,5 @@ export * from './number-as-string';
 export * from './find-balance-token';
 export * from './get-token-decimals';
 export * from './clamp';
-export * from './leave-all-numbers';
+export * from './only-digits';
 export * from './only-digits-and-separator';

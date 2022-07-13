@@ -1,12 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
-const PRECISION = 1e18;
-const TOKEN_DECIMALS_PRECISION = 1e6;
+import { Optional } from '@shared/types';
 
-export const getBidSize = (bank: Nullable<BigNumber> | undefined, maxBetPercent: Nullable<BigNumber> | undefined) => {
+const PRECISION = 1e18;
+const TOKEN_DECIMALS_PRECISION = new BigNumber(1e6);
+
+export const getBidSize = (bank: Optional<BigNumber>, maxBetPercent: Optional<BigNumber>) => {
   if (!bank || !maxBetPercent) {
     return;
   }
 
-  return bank.multipliedBy(maxBetPercent).div(PRECISION).div(new BigNumber(TOKEN_DECIMALS_PRECISION));
+  return bank.multipliedBy(maxBetPercent).div(PRECISION).div(TOKEN_DECIMALS_PRECISION);
 };
