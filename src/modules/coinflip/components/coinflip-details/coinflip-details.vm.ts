@@ -26,7 +26,7 @@ export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
   const {
-    generalStats,
+    generalStatsStore,
     tokenToPlay,
     gamersStats,
     userLastGame,
@@ -64,7 +64,7 @@ export const useCoinflipDetailsViewModel = () => {
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStats.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress
@@ -95,7 +95,7 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
-    isGamersStatsLoading: isNull(generalStats) || isGeneralStatsLoading,
+    isGamersStatsLoading: isNull(generalStatsStore) || isGeneralStatsLoading,
     isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
