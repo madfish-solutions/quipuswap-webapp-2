@@ -5,13 +5,12 @@
     display: grid;
     row-gap: 8px;
 
-    .costItem:nth-child(3) {
+    .costItem:nth-child(1) {
       font-size: 18px;
       & > span {
         font-size: 18px;
       }
       padding-top: 8px;
-      border-top: 1px solid $border-color;
     }
   }
 

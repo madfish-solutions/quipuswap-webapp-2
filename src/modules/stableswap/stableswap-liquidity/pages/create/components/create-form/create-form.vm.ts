@@ -1,29 +1,24 @@
 import { useCallback, useState } from 'react';
 
-import { FormikHelpers, isEmptyArray, useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 
-import { getTokenSlug } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circlar dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Token } from '@shared/types';
 
-import {
-  MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
-  MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
-  RADIO_BUTTON_NAME,
-  LIQUIDITY_PRODIFDERS_FEE,
-  creationCost,
-  TOKEN_KEY
-} from './constants';
+import { usePoolCreationPrice } from '../../../../../hooks';
+import { MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL, MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL, TOKEN_KEY } from './constants';
 import {
   useFormikParams,
   useInputTokenParams,
   useLiquidityProvidersFeeInputParams,
-  useRadioButtonParams
+  useRadioButtonParams,
+  useHandleTokensCahange
 } from './hooks';
 
 export const useCreateFormViewModel = () => {
+  const { creationPrice } = usePoolCreationPrice();
   const { chooseTokens } = useChooseTokens();
   const [tokens, setTokens] = useState<Nullable<Array<Token>>>(null);
 
@@ -42,6 +37,8 @@ export const useCreateFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
+  const { handleTokensChange } = useHandleTokensCahange(formik);
+
   const handleSelectTokensClick = useCallback(async () => {
     const chosenTokens = await chooseTokens({
       tokens,
@@ -49,36 +46,10 @@ export const useCreateFormViewModel = () => {
       max: MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
     });
 
-    formik.setValues((prev: Record<string, string>) => {
-      const mainValues = {
-        [RADIO_BUTTON_NAME]: prev[RADIO_BUTTON_NAME],
-        [LIQUIDITY_PRODIFDERS_FEE]: prev[LIQUIDITY_PRODIFDERS_FEE]
-      };
-
-      if (chosenTokens && !isEmptyArray(chosenTokens)) {
-        const tokensValues = Object.fromEntries(
-          chosenTokens.map(chosenToken => {
-            const tokenSlug = getTokenSlug(chosenToken);
-
-            return [tokenSlug, formik.values[tokenSlug] ?? ''];
-          })
-        );
-
-        return {
-          ...mainValues,
-          ...tokensValues,
-          [TOKEN_KEY]: true
-        };
-      } else {
-        return {
-          ...mainValues,
-          [TOKEN_KEY]: false
-        };
-      }
-    });
+    handleTokensChange(chosenTokens);
 
     setTokens(chosenTokens);
-  }, [chooseTokens, formik, tokens]);
+  }, [chooseTokens, tokens, handleTokensChange]);
 
   const { tokenInputsParams } = useInputTokenParams(tokens, balances, formik);
   const { liquidityProvidersFeeInputParams } = useLiquidityProvidersFeeInputParams(formik);
@@ -88,8 +59,8 @@ export const useCreateFormViewModel = () => {
     liquidityProvidersFeeInputParams,
     tokenInputsParams,
     radioButtonParams,
-    tokensInputValidationMessage: formik.errors['tokens'] as string,
-    creationCost,
+    tokensInputValidationMessage: formik.errors[TOKEN_KEY] as string,
+    creationPrice,
 
     handleSelectTokensClick,
     handleSubmit: formik.handleSubmit

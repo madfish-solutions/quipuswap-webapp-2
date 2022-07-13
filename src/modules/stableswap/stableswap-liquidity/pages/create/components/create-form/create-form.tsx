@@ -22,7 +22,7 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
     liquidityProvidersFeeInputParams,
     tokenInputsParams,
     radioButtonParams,
-    creationCost,
+    creationPrice,
     tokensInputValidationMessage,
     handleSubmit,
     handleSelectTokensClick
@@ -47,9 +47,10 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
         <h3>{i18n.t('stableswap|amplificationParameters')}</h3>
         <RadioButton {...radioButtonParams} />
 
-        <h3>{i18n.t('stableswap|cost')}</h3>
-        <CreationCost {...creationCost} />
-
+        <div>
+          <h3>{i18n.t('stableswap|cost')}</h3>
+          <CreationCost total={creationPrice} />
+        </div>
         <div className={createFormstyles.createButtonContainer}>
           <Button type="submit" className={createFormstyles.createButton}>
             {i18n.t('stableswap|create')}
