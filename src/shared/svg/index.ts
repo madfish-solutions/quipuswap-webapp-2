@@ -54,3 +54,5 @@ export * from './coin';
 export * from './xtz-token';
 export * from './favorite';
 export * from './bin';
+export * from './coinflip-fail-result';
+export * from './coinflip-success-result';

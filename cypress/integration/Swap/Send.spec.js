@@ -1,12 +1,13 @@
 /// <reference types="cypress" />
 
 describe('Send', () => {
-  before(() => {
-    //before each 'it' go to send tab'
-    cy.visit('/send/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0');
-  });
+  beforeEach(() => {
+    cy.visit('/swap');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
+    cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="cardTab-1"]').click();
+});
   it('Should_BeElectedSendTab_When_ClickingOnSendTab', () => {
-    // check if Send tab is elected, not swap
+    cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="cardTab-0"]').click();
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="cardTab-1"]').click();
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="recipientTitle"]').should('exist');
     cy.get('[title="Send"]').should('contain', 'Send');

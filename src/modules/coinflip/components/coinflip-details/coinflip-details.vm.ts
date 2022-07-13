@@ -45,7 +45,7 @@ export const useCoinflipDetailsViewModel = () => {
     }
 
     await getUserLastGame();
-  }, [accountPkh, getUserLastGame, tezos]);
+  }, [accountPkh, tezos, getUserLastGame]);
 
   useEffect(() => {
     updateUserLastGame();
