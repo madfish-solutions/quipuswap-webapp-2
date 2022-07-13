@@ -2,10 +2,13 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
+import { STABLESWAP_LP_DECIMALS } from '@config/constants';
+import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, isExist, isNull, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, fromDecimals, isExist, isNull, toDecimals } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -68,7 +71,18 @@ export const useAddStableswapLiquidity = () => {
 
     const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
+    const logData = {
+      stableswapLiquidityAdd: getStableswapLiquidityLogData(
+        tokensInfo,
+        inputAmounts,
+        fromDecimals(sharesWithFee, STABLESWAP_LP_DECIMALS),
+        liquiditySlippage,
+        item
+      )
+    };
+
     try {
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD', logData);
       const operation = await addStableswapLiquidityApi(
         tezos,
         contractAddress,
@@ -79,8 +93,10 @@ export const useAddStableswapLiquidity = () => {
       );
 
       await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
+      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_FAILED', { ...logData, error });
     }
   }, [
     tezos,

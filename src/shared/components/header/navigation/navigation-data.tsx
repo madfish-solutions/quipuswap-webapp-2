@@ -81,7 +81,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Stableswap,
     label: <Trans ns="common">Stableswap</Trans>,
     Icon: StableswapIcon,
-    hide: isProd(),
     opened: true,
     links: [
       {
@@ -101,14 +100,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
         )
       }
     ]
-  },
-  {
-    id: 'Stableswap_Liquidity',
-    to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
-    label: <Trans ns="common">Stableswap</Trans>,
-    Icon: StableswapIcon,
-    hide: !isProd(),
-    status: <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
   },
   {
     id: 'Analytics',

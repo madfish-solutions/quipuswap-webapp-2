@@ -13,8 +13,6 @@ import { i18n } from '@translation';
 import styles from './creation-cost.module.scss';
 
 export interface CreationCostProps {
-  burned: Optional<BigNumber.Value>;
-  devFee: Optional<BigNumber.Value>;
   total: Optional<BigNumber.Value>;
 }
 
@@ -23,19 +21,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const CreationCost: FC<CreationCostProps> = ({ burned, devFee, total }) => {
+export const CreationCost: FC<CreationCostProps> = ({ total }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(modeClass[colorThemeMode], styles.cost)}>
-      <div className={styles.costItem}>
-        <div>{i18n.t('stableswap|burnedCost')}</div>
-        <StateCurrencyAmount amount={burned} currency={getTokenSymbol(DEFAULT_TOKEN)} />
-      </div>
-      <div className={styles.costItem}>
-        <div>{i18n.t('stableswap|devFeeCost')}</div>
-        <StateCurrencyAmount amount={devFee} currency={getTokenSymbol(DEFAULT_TOKEN)} />
-      </div>
       <div className={styles.costItem}>
         <div>{i18n.t('stableswap|totalCost')}</div>
         <StateCurrencyAmount amount={total} currency={getTokenSymbol(DEFAULT_TOKEN)} />

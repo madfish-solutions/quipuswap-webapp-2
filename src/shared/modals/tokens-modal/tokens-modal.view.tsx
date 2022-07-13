@@ -4,7 +4,7 @@ import { Button, Iterator, Skeleton } from '@shared/components';
 import { i18n } from '@translation';
 
 import { Modal } from '../modal';
-import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader } from './components';
+import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader, TokensQuantityInfo } from './components';
 import { TokensModalTab } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
@@ -14,18 +14,23 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
   setTokens,
   isModalOpen,
   closeTokensModal,
+  isTokensQuantityOk,
   tokensModalCellParams,
   managedTokensModalCellParams,
-  headerProps
+  headerProps,
+  tokensQuantityInfoParams
 }) => {
   const { footer, content } = useMemo(() => {
     switch (headerProps.tabsProps.activeId) {
       case TokensModalTab.TOKENS:
         return {
           footer: (
-            <Button className={styles.button} onClick={setTokens}>
-              {i18n.t('common|select')}
-            </Button>
+            <div className={styles.footerContent}>
+              <TokensQuantityInfo {...tokensQuantityInfoParams} />
+              <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
+                {i18n.t('common|select')}
+              </Button>
+            </div>
           ),
           content: <Iterator render={TokensModalCell} data={tokensModalCellParams} />
         };
@@ -34,13 +39,15 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
           footer: null,
           content: <Iterator render={ManagedTokensModalCell} data={managedTokensModalCellParams} />
         };
-      default:
-        return {
-          footer: null,
-          content: null
-        };
     }
-  }, [headerProps.tabsProps.activeId, managedTokensModalCellParams, setTokens, tokensModalCellParams]);
+  }, [
+    headerProps.tabsProps.activeId,
+    isTokensQuantityOk,
+    managedTokensModalCellParams,
+    setTokens,
+    tokensModalCellParams,
+    tokensQuantityInfoParams
+  ]);
 
   return (
     <Modal
