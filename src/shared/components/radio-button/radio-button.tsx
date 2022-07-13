@@ -12,8 +12,10 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props {
+export interface RadioButtonProps {
   values: Array<RadioItemProps>;
+  onChange: (value: string) => void;
+  value: string;
   className?: string;
 }
 
@@ -21,21 +23,33 @@ interface RadioItemProps {
   radioName: string;
   value: string;
   label: string;
+  checkedValue?: string;
 }
 
-const RadioItem: FC<RadioItemProps> = ({ radioName, value, label }) => (
+const RadioItem: FC<RadioItemProps> = ({ radioName, value, label, checkedValue }) => (
   <label className={styles.label}>
-    <input className={styles.input} type="radio" name={radioName} value={value} />
+    <input
+      className={styles.input}
+      type="radio"
+      name={radioName}
+      value={value}
+      defaultChecked={value === checkedValue}
+    />
     <span>{label}</span>
   </label>
 );
 
-export const RadioButton: FC<Props> = ({ className, values }) => {
+export const RadioButton: FC<RadioButtonProps> = ({ className, values, onChange, value }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div role="group" className={cx(modeClass[colorThemeMode], styles.radioButton, className)}>
-      <Iterator render={RadioItem} data={values} />
+    <div
+      role="group"
+      //@ts-ignore
+      onChange={event => onChange(event.target.value)}
+      className={cx(modeClass[colorThemeMode], styles.radioButton, className)}
+    >
+      <Iterator render={RadioItem} data={values.map(obj => ({ ...obj, checkedValue: value }))} />
     </div>
   );
 };
