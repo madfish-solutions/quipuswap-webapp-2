@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
 
 describe('Privacy Police', () => {
-  it('Should_RedirectToPrivacy_When_ClickingOnPrivacy', () => {
-    // Go to the analytics page
+  beforeEach(() => {
     cy.visit('/');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
+  });
+  it('Should_RedirectToPrivacy_When_ClickingOnPrivacy', () => {
     cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-More"]').click();
     cy.get('[data-test-id="menu"] [data-test-id="secondaryNavigationButton-More_PrivacyPolicy"]').click();
