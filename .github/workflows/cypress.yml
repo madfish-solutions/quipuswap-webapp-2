@@ -1,11 +1,9 @@
 name: cypress
 
 on:
-  pull_request:
-    types:
-      - opened
-    branches:
-      - 'main'
+  push:
+    tags:
+      - release
 
 jobs:
   e2e:
