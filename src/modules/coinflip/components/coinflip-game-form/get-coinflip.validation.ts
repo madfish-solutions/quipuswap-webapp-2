@@ -1,10 +1,11 @@
 import { BigNumber } from 'bignumber.js';
 import { string } from 'yup';
 
-import { isEqual, onlyDigits, onlyDigitsAndSeparator, amountGreaterThanValue } from '@shared/helpers';
+import { isEqual, isExist, onlyDigitsAndSeparator } from '@shared/helpers';
 import { Token } from '@shared/types';
 import { i18n } from '@translation';
 
+const DECIMAL_INDEX = 1;
 const INPUT_ZERO_AMOUNT = 0;
 
 export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize: BigNumber) => {
@@ -29,7 +30,7 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
     .test(
       'value-less-balance',
       () => i18n.t('common|Insufficient funds'),
-      value => amountGreaterThanValue(balance, value ?? '')
+      value => isExist(value) && balance.isGreaterThanOrEqualTo(new BigNumber(value))
     )
     .test(
       'bid-too-high',
@@ -38,7 +39,7 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
           amount: Number(bidSize),
           tokenSymbol: symbol
         }),
-      value => amountGreaterThanValue(bidSize, value ?? '')
+      value => isExist(value) && bidSize.isGreaterThanOrEqualTo(new BigNumber(value))
     )
     .test(
       'input-decimals-amount',
@@ -47,6 +48,6 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
           tokenSymbol: symbol,
           decimalPlaces: decimals
         }),
-      value => onlyDigits(value ?? '').length <= decimals
+      value => isExist(value) && (value.includes('.') ? value.split('.')[DECIMAL_INDEX].length <= decimals : true)
     );
 };

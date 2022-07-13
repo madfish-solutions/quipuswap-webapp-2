@@ -31,6 +31,7 @@ export const CoinflipGameForm: FC<Props> = observer(
     const {
       inputAmountError,
       balance,
+      decimals,
       disabled,
       isSubmitting,
       handleFormSubmit,
@@ -39,7 +40,7 @@ export const CoinflipGameForm: FC<Props> = observer(
       coinSideError,
       handleInputAmountChange,
       handleCoinSideSelect
-    } = useCoinflipGameFormViewModel(tokenToPlay, amountBalance, payout, onAmountInputChange, onCoinSideSelect);
+    } = useCoinflipGameFormViewModel(tokenToPlay, token, amountBalance, payout, onAmountInputChange, onCoinSideSelect);
 
     return (
       <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
@@ -56,6 +57,7 @@ export const CoinflipGameForm: FC<Props> = observer(
           balance={balance}
           error={inputAmountError}
           tokens={token}
+          decimals={decimals}
           onInputChange={handleInputAmountChange}
           className={styles.input}
         />

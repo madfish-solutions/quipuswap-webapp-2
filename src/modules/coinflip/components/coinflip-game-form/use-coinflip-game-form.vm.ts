@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 
 import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
 import { bigNumberToString, getFormikError, isEqual } from '@shared/helpers';
-import { Nullable } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 import { useCoinflipValidation } from './use-coinflip.validation';
@@ -17,6 +17,7 @@ export enum FormFields {
 
 export const useCoinflipGameFormViewModel = (
   tokenToPlay: TokenToPlay,
+  token: Token,
   tokenBalance: Nullable<BigNumber>,
   payout: Nullable<BigNumber>,
   onAmountInputChange: (amountInput: string) => void,
@@ -25,6 +26,8 @@ export const useCoinflipGameFormViewModel = (
   const { getGamersStats } = useGamersStats();
   const { getUserLastGame } = useUserLastGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
+
+  const { decimals } = token.metadata;
 
   const validationSchema = useCoinflipValidation(tokenBalance);
 
@@ -89,6 +92,7 @@ export const useCoinflipGameFormViewModel = (
     disabled,
     isSubmitting: formik.isSubmitting,
     balance,
+    decimals,
     coinSideError,
     handleInputAmountChange,
     handleCoinSideSelect
