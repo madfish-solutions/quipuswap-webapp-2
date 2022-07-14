@@ -26,7 +26,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
   const {
     bank,
     bidSize,
-    contractBidSize,
+    preparedBidSize,
     bankInUsd,
     totalWins,
     gamesCount,
@@ -98,7 +98,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
             loaderFallback={<DashPlug />}
-            amount={contractBidSize}
+            amount={preparedBidSize}
             currency={tokenToPlay}
           />
         </DetailsCardCell>
