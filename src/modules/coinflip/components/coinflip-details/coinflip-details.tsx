@@ -26,6 +26,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
   const {
     bank,
     bidSize,
+    preparedBidSize,
     bankInUsd,
     totalWins,
     gamesCount,
@@ -90,6 +91,16 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gamesCount')} data-test-id="valueLocked">
           <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
+        </DetailsCardCell>
+
+        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|maxBetAmount')} data-test-id="maxBetAmount">
+          <StateCurrencyAmount
+            className={cx(styles.amount)}
+            isLoading={isGamersStatsLoading}
+            loaderFallback={<DashPlug />}
+            amount={preparedBidSize}
+            currency={tokenToPlay}
+          />
         </DetailsCardCell>
       </div>
       <div className={styles.lastGameResult}>
