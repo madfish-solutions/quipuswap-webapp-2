@@ -1,17 +1,13 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext } from 'react';
 
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useRootStore } from '@providers/root-store-provider';
 import { Card } from '@shared/components';
-import { getNetworkFee } from '@shared/helpers';
-import { Undefined } from '@shared/types';
 
 import styles from './coinflip-rules.module.scss';
+import { useCoinflipRulesViewModel } from './use-coinflip-rules.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -19,17 +15,8 @@ const modeClass = {
 };
 
 export const CoinflipRules: FC = observer(() => {
-  const { tezos } = useRootStore();
-  const { bidSize } = useCoinflipStore();
+  const { bidSize, networkFee } = useCoinflipRulesViewModel();
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const [networkFee, setNetworkFee] = useState<Undefined<BigNumber>>();
-
-  useEffect(() => {
-    (async () => {
-      setNetworkFee(await getNetworkFee(tezos));
-    })();
-  }, [tezos]);
 
   return (
     <Card
