@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
+import { DEFAULT_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { bigNumberToString, fromDecimals, isNull } from '@shared/helpers';
@@ -80,7 +81,8 @@ export const useCoinflipDetailsViewModel = () => {
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
-  const preparedBidSize = Math.floor(Number(contractBidSize) * 1e6) / 1e6;
+  const preparedBidSize =
+    Math.floor(Number(contractBidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION;
 
   return {
     bank,
