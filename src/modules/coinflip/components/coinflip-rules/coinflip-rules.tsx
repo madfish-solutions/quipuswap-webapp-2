@@ -15,10 +15,8 @@ const modeClass = {
 };
 
 export const CoinflipRules: FC = observer(() => {
-  const { bidSize, networkFee } = useCoinflipRulesViewModel();
+  const { bidSize, networkFee, dataExists } = useCoinflipRulesViewModel();
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const dataExists = bidSize && networkFee;
 
   return dataExists ? (
     <Card

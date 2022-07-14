@@ -17,11 +17,13 @@ export const useCoinflipRulesViewModel = () => {
   const bidSize =
     Math.floor(Number(contractBidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION;
 
+  const dataExists = bidSize && networkFee;
+
   useEffect(() => {
     (async () => {
       setNetworkFee(await getNetworkFee(tezos));
     })();
   }, [tezos]);
 
-  return { bidSize, networkFee };
+  return { bidSize, networkFee, dataExists };
 };
