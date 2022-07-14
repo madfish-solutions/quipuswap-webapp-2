@@ -18,7 +18,9 @@ export const CoinflipRules: FC = observer(() => {
   const { bidSize, networkFee } = useCoinflipRulesViewModel();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  return (
+  const dataExists = bidSize && networkFee;
+
+  return dataExists ? (
     <Card
       header={{ content: <>Play Coinflip - get a chance to double your bid!</> }}
       contentClassName={styles.content}
@@ -43,9 +45,8 @@ export const CoinflipRules: FC = observer(() => {
         <h3 className={styles.h3}>Rules of the Game</h3>
         <ul className={cx(styles.list, styles.ul)}>
           <li className={styles.li}>
-            {`All rewards are paid from the Rewards pool. All lost bets of users and tokens that are added by the
-              project team fall into this pool. Note that you can not make a bid that is greater than ${bidSize} of the
-              rewards pool for obvious reasons.`}
+            {`All rewards are paid from the Rewards pool. All lost bets of users and tokens that are added by the project
+            team fall into this pool. Note that you can not make a bid that is greater than ${bidSize} of the rewards pool for obvious reasons.`}
           </li>
           <li className={styles.li}>
             We don't actually flip a coin. The flip's result is determined by an algorithm that derives a random number
@@ -59,5 +60,5 @@ export const CoinflipRules: FC = observer(() => {
         </ul>
       </div>
     </Card>
-  );
+  ) : null;
 });
