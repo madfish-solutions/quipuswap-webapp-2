@@ -80,11 +80,12 @@ export const useCoinflipDetailsViewModel = () => {
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
+  const preparedBidSize = Math.floor(Number(contractBidSize) * 1e6) / 1e6;
 
   return {
     bank,
     bidSize,
-    contractBidSize,
+    preparedBidSize,
     totalWins,
     bankInUsd,
     rewardSize,
