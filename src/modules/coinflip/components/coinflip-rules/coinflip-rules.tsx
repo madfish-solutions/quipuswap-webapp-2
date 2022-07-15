@@ -15,10 +15,10 @@ const modeClass = {
 };
 
 export const CoinflipRules: FC = observer(() => {
-  const { tokenSymbol, bidSize, networkFee, dataExists } = useCoinflipRulesViewModel();
+  const { networkFee } = useCoinflipRulesViewModel();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  return dataExists ? (
+  return networkFee ? (
     <Card
       header={{ content: <>Play Coinflip - get a chance to double your bid!</> }}
       contentClassName={styles.content}
@@ -44,7 +44,7 @@ export const CoinflipRules: FC = observer(() => {
         <ul className={cx(styles.list, styles.ul)}>
           <li className={styles.li}>
             {`All rewards are paid from the Rewards pool. All lost bets of users and tokens that are added by the project
-            team fall into this pool. Note that you can not make a bid that is greater than ${bidSize} ${tokenSymbol} of the rewards pool for obvious reasons.`}
+            team fall into this pool. Note that you can not make a bid that is greater than 50% of the rewards pool for obvious reasons.`}
           </li>
           <li className={styles.li}>
             We don't actually flip a coin. The flip's result is determined by an algorithm that derives a random number
