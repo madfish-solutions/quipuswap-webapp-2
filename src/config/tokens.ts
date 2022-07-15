@@ -52,5 +52,3 @@ export const networksDefaultTokens: Record<SupportedNetworks, Token> = {
 export const DEFAULT_TOKEN = networksDefaultTokens[NETWORK_ID];
 
 export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, DEFAULT_TOKEN];
-
-export const DEFAULT_TOKEN_DECIMALS_PRECISION = 1e6;
