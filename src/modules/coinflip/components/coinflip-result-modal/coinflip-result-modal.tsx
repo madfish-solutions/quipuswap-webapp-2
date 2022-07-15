@@ -9,6 +9,7 @@ import { Button, StateCurrencyAmount } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { Modal } from '@shared/modals';
 import { CoinflipFailResultSvg, CoinflipSuccessResultSvg } from '@shared/svg';
+import { TwitterIconButton } from '@shared/svg/twitter-icon-button';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-result-modal.module.scss';
@@ -29,6 +30,9 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
 
   const gameResult = getGameResult(result);
   const isResultSuccess = gameResult === Statuses.won;
+
+  const twitterShareLink = `https://twitter.com/share?&text=I've won ${wonAmount} QUIPU by playing %23Coinflip. Try your luck on @QuipuSwap!
+  %23game, %23DeFi, %23Tezos`;
 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
   const subTitle = isResultSuccess ? t('coinflip|wonRound') : t('coinflip|youLost');
@@ -57,6 +61,17 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
         <Button className={styles.button} onClick={closeCoinflipModal}>
           {t('coinflip|Ok')}
         </Button>
+
+        {isResultSuccess && (
+          <>
+            <div className={styles.shareResult}>Share ur result with friends</div>
+            <Button theme="secondary" external href={twitterShareLink}>
+              <div className={styles.buttonContent}>
+                <TwitterIconButton /> Twitter
+              </div>
+            </Button>
+          </>
+        )}
       </div>
     </Modal>
   );

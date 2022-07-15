@@ -31,6 +31,17 @@
   margin-top: 16px;
 }
 
+.buttonContent {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.shareResult {
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
 @include media('>tablet') {
   .h4 {
     font-size: 1.714rem;
