@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { string } from 'yup';
 
-import { DEFAULT_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
+import { TOKEN_DECIMALS_PRECISION } from '@config/config';
 import { isEqual, isExist, onlyDigitsAndSeparator } from '@shared/helpers';
 import { Token } from '@shared/types';
 import { i18n } from '@translation';
@@ -37,7 +37,7 @@ export const getCoinflipValidation = (token: Token, balance: BigNumber, bidSize:
       'bid-too-high',
       () =>
         i18n.t('common|amountShouldBeSmallerThanBid', {
-          amount: Math.floor(Number(bidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION,
+          amount: Math.floor(Number(bidSize) * TOKEN_DECIMALS_PRECISION) / TOKEN_DECIMALS_PRECISION,
           tokenSymbol: symbol
         }),
       value => isExist(value) && bidSize.isGreaterThanOrEqualTo(new BigNumber(value))

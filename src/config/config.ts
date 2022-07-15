@@ -93,3 +93,7 @@ export const YOUVES_LINK = 'https://app.youves.com/earn';
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+// PRECISIONS
+export const CONTRACT_DECIMALS_PRECISION = 1e18;
+export const TOKEN_DECIMALS_PRECISION = 1e6;
