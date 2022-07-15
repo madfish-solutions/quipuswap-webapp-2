@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { CONTRACT_DECIMALS_PRECISION, TOKEN_DECIMALS_PRECISION } from '@config/config';
+import { CONTRACT_DECIMALS_PRECISION, TOKEN_DECIMALS_PRECISION } from '@config/constants';
 import { Optional } from '@shared/types';
 
 const TOKEN_DECIMALS = new BigNumber(TOKEN_DECIMALS_PRECISION);
