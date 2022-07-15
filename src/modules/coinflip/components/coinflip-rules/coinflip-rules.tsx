@@ -15,7 +15,7 @@ const modeClass = {
 };
 
 export const CoinflipRules: FC = observer(() => {
-  const { bidSize, networkFee, dataExists } = useCoinflipRulesViewModel();
+  const { tokenSymbol, bidSize, networkFee, dataExists } = useCoinflipRulesViewModel();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return dataExists ? (
@@ -44,14 +44,14 @@ export const CoinflipRules: FC = observer(() => {
         <ul className={cx(styles.list, styles.ul)}>
           <li className={styles.li}>
             {`All rewards are paid from the Rewards pool. All lost bets of users and tokens that are added by the project
-            team fall into this pool. Note that you can not make a bid that is greater than ${bidSize} of the rewards pool for obvious reasons.`}
+            team fall into this pool. Note that you can not make a bid that is greater than ${bidSize} ${tokenSymbol} of the rewards pool for obvious reasons.`}
           </li>
           <li className={styles.li}>
             We don't actually flip a coin. The flip's result is determined by an algorithm that derives a random number
             from the hash of the block that includes the bidder's transaction.
           </li>
           <li className={styles.li}>
-            {`The network fees for bids will be only marginally higher than the average transaction cost (around ${networkFee}), and
+            {`The network fees for bids will be only marginally higher than the average transaction cost (around ${networkFee} TEZ), and
             a user will pay them. We need this to prevent DDoS attacks on Coin Flip.`}
           </li>
           <li className={styles.li}>In the future, the team may change certain elements of the game as it sees fit.</li>
