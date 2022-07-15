@@ -10,10 +10,11 @@ import { Undefined } from '@shared/types';
 
 export const useCoinflipRulesViewModel = () => {
   const { tezos } = useRootStore();
-  const { bidSize: contractBidSize } = useCoinflipStore();
+  const { bidSize: contractBidSize, token } = useCoinflipStore();
 
   const [networkFee, setNetworkFee] = useState<Undefined<BigNumber>>();
 
+  const { symbol: tokenSymbol } = token.metadata;
   const bidSize =
     Math.floor(Number(contractBidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION;
 
@@ -25,5 +26,5 @@ export const useCoinflipRulesViewModel = () => {
     })();
   }, [tezos]);
 
-  return { bidSize, networkFee, dataExists };
+  return { tokenSymbol, bidSize, networkFee, dataExists };
 };
