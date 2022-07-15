@@ -1,6 +1,6 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { TOKEN_DECIMALS_PRECISION } from '@config/config';
+import { TOKEN_DECIMALS_PRECISION } from '@config/constants';
 import { getCoinflipStorageApi } from '@modules/coinflip/api';
 import { CoinflipStorage } from '@modules/coinflip/api/types';
 

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { string } from 'yup';
 
-import { TOKEN_DECIMALS_PRECISION } from '@config/config';
+import { TOKEN_DECIMALS_PRECISION } from '@config/constants';
 import { isEqual, isExist, onlyDigitsAndSeparator } from '@shared/helpers';
 import { Token } from '@shared/types';
 import { i18n } from '@translation';
