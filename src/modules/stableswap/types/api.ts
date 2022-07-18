@@ -41,6 +41,7 @@ export interface IRawStableDividendsItem {
 
 interface AbstractRawStableItem {
   id: string;
+  poolId: string;
   contractAddress: string;
   tokensInfo: Array<RawStableswapTokensInfo>;
   isWhitelisted: boolean;
