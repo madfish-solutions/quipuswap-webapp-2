@@ -6,6 +6,7 @@ import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/componen
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { FarmingFormInvestLink } from '../../farming-form-invest-link';
 import { useUnstakeFormViewModel } from './use-unstake-form.vm';
 
 export const UnstakeForm: FC = observer(() => {
@@ -37,6 +38,9 @@ export const UnstakeForm: FC = observer(() => {
         tokens={tokens}
         onInputChange={handleInputAmountChange}
       />
+
+      <FarmingFormInvestLink />
+
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button

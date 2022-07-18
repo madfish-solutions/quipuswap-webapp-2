@@ -101,15 +101,6 @@ export const useStakeFormViewModel = () => {
     formik.setFieldValue(StakeFormFields.selectedBaker, baker.address);
   };
 
-  // TODO: Create different links for stableswap and regular liquidity
-  /* const { tradeHref, investHref } = useMemo(() => {
-    if (isNull(farmingItem)) {
-      return {};
-    }
-
-    return { tradeHref: `/swap`, investHref: '/liquidity/add/' };
-  }, [farmingItem]); */
-
   return {
     bakerInputValue: formik.values[StakeFormFields.selectedBaker],
     shouldShowBakerInput,
@@ -123,9 +114,6 @@ export const useStakeFormViewModel = () => {
     bakerError,
     farmStatusError,
     disabled,
-    // TODO: uncomment lined below affter creating valid links
-    /* tradeHref,
-    investHref */
     handleInputAmountChange,
     handleBakerChange
   };
