@@ -77,7 +77,7 @@ export const Details: FC = observer(() => {
         className={cardCellClassName}
         data-test-id="tvl"
       >
-        <StateCurrencyAmount isLoading={isLoading} amount={tvlInUsd} currency="$" isLeftCurrency />
+        <StateCurrencyAmount isLoading={isLoading} amount={tvlInUsd} currency="≈ $" isLeftCurrency />
       </DetailsCardCell>
 
       <Iterator render={TokenLocked} data={tokensLockedData} />
