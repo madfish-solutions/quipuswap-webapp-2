@@ -12,19 +12,27 @@ interface PercentSelectorProps {
   handleBalance?: (state: string) => void;
   value: Optional<BigNumber.Value>;
   amountCap?: BigNumber;
+  decimals?: number;
 }
 
 const DEFAULT_INPUT_CAP = new BigNumber('0');
 const MIN_SELECTABLE_VALUE = 0;
 
-const multipliedByPercent = (value: Nullable<BigNumber.Value>, percent: number) =>
-  formatIntegerWithDecimals(new BigNumber(value || '0').times(percent).toFixed());
+const multipliedByPercent = (value: Nullable<BigNumber.Value>, percent: number, decimals?: number) =>
+  decimals
+    ? formatIntegerWithDecimals(new BigNumber(value || '0').times(percent).toFixed(decimals, BigNumber.ROUND_DOWN))
+    : formatIntegerWithDecimals(new BigNumber(value || '0').times(percent).toFixed());
 
 //TODO: Remove value, make function (coefficient) => calulate(coefficient)
-export const PercentSelector: FC<PercentSelectorProps> = ({ handleBalance, value, amountCap = DEFAULT_INPUT_CAP }) => {
-  const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25));
-  const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5));
-  const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75));
+export const PercentSelector: FC<PercentSelectorProps> = ({
+  handleBalance,
+  value,
+  amountCap = DEFAULT_INPUT_CAP,
+  decimals
+}) => {
+  const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
+  const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
+  const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
   const handleMAX = () =>
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
 

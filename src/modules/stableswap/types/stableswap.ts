@@ -1,6 +1,7 @@
 export enum StableswapLiquidityFormTabs {
   add = 'add',
-  remove = 'remove'
+  remove = 'remove',
+  create = 'create'
 }
 
 export enum StableDividendsFormTabs {

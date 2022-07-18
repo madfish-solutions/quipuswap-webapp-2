@@ -141,5 +141,9 @@ export const common = {
   Back: 'Back',
   NEW: 'NEW',
   highMinOutError:
-    "Your swap can't be completed because the exchange rates have been changed. Please, try again or increase your slippage tolerance."
+    "Your swap can't be completed because the exchange rates have been changed. Please, try again or increase your slippage tolerance.",
+  amountShouldBeSmallerThanBid: `The amount should be smaller than {{amount}} {{tokenSymbol}}. Try another bid.`,
+  cantBeZeroAmount: "Amount can't be zero",
+  mustBeANumber: 'Must be a number',
+  amountRequired: 'Amount is required'
 } as const;

@@ -11,3 +11,4 @@ export * from './stabledividends-unstake.api';
 export * from './get-stabledividends-stats.api';
 export * from './stabledividends-harvest.api';
 export * from './create-stableswap-pool.api';
+export * from './get-pool-creation-cost.api';

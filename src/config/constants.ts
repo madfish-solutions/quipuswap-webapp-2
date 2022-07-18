@@ -49,6 +49,7 @@ export const DEFAULT_DEADLINE_MINS = 30;
 //#region tokens
 export const DEFAULT_DECIMALS = 6;
 export const LP_TOKEN_DECIMALS = 6;
+export const STABLESWAP_LP_DECIMALS = 18;
 //#endregion
 
 //#region strings
@@ -140,3 +141,8 @@ export const STABLESWAP_DIVIDENDS_ACCUM_PRECISION = 10_000_000_000;
 // error constant
 export const SERVER_UNAVAILABLE_MESSAGE = 'The server is temporarily unavailable.';
 export const SERVER_UNAVAILABLE_ERROR_MESSAGE = '503 Service Temporarily Unavailable';
+
+// PRECISIONS
+export const CONTRACT_DECIMALS_PRECISION = 1e18;
+export const TOKEN_DECIMALS_PRECISION = 1e6;
+export const PRECISION_PERCENT = 1e2;

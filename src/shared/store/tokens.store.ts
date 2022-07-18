@@ -1,13 +1,19 @@
 import { action, makeObservable, observable } from 'mobx';
 
+import { isExist } from '@shared/helpers';
+
 import { Token } from '../types';
 import { RootStore } from './root.store';
 
 export type TokensMap = Map<string, Nullable<Token>>;
 
 export class TokensStore {
-  tokens: TokensMap = new Map();
+  tokens: TokensMap = new Map<string, Nullable<Token>>();
   loading = false;
+
+  get tokensList() {
+    return [...this.tokens.values()].filter(isExist);
+  }
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {

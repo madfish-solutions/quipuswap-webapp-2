@@ -6,13 +6,13 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import s from './tabs.module.scss';
 
-export interface TabsProps {
+export interface TabsProps<Tab extends string = string> {
   values: {
     id: string;
     label: string;
   }[];
-  activeId: string;
-  setActiveId: (id: string) => void;
+  activeId: Tab;
+  setActiveId: (id: Tab) => void;
   className?: string;
   withUnderline?: boolean;
 }

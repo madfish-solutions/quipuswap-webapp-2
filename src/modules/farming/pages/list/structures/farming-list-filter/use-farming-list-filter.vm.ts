@@ -1,11 +1,9 @@
-import { FormEvent } from 'react';
-
 import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { ListFilterViewProps } from '@shared/components';
 import { isNull, isDirrectOrder } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { FarmingSortField, FarmingSortFieldItem } from '../../types';
@@ -14,17 +12,28 @@ import styles from './farming-list-filter.module.scss';
 export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
   const { accountPkh } = useAuthStore();
   const farmingFilterStore = useFarmingFilterStore();
-  const { search, tokenIdValue, activeOnly, stakedOnly, sortField, sortDirection } = farmingFilterStore;
+
+  const {
+    search,
+    tokenIdValue,
+    sortDirection,
+
+    onSearchChange,
+    onTokenIdChange,
+
+    handleIncrement,
+    handleDecrement,
+
+    handleSortDirectionToggle
+  } = useBaseFilterStoreConverter(farmingFilterStore);
+
+  const { activeOnly, stakedOnly, sortField } = farmingFilterStore;
   const { t } = useTranslation(['common', 'farm']);
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as FarmingSortFieldItem;
 
     return farmingFilterStore.onSortFieldChange(item.field);
-  };
-
-  const handleSortDirectionToggle = () => {
-    return farmingFilterStore.onSortDirectionToggle();
   };
 
   const sortValues: FarmingSortFieldItem[] = [
@@ -56,28 +65,6 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
 
   const setActiveOnly = (state: boolean) => {
     return farmingFilterStore.setActiveOnly(state);
-  };
-
-  const onSearchChange = (event: FormEvent<HTMLInputElement>) => {
-    if (isNull(event)) {
-      return;
-    }
-    farmingFilterStore.onSearchChange((event.target as HTMLInputElement).value);
-  };
-
-  const onTokenIdChange = (event: FormEvent<HTMLInputElement>) => {
-    if (isNull(event) || isNull(event.target)) {
-      return;
-    }
-    farmingFilterStore.onTokenIdChange((event.target as HTMLInputElement).value);
-  };
-
-  const handleIncrement = () => {
-    farmingFilterStore.handleIncrement();
-  };
-
-  const handleDecrement = () => {
-    farmingFilterStore.handleDecrement();
   };
 
   const switcherDataList = [

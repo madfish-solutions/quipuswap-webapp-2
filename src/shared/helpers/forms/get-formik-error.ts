@@ -1,4 +1,8 @@
-export const getFormikError = (
-  { errors, touched }: { errors: { [key: string]: string }; touched: { [key: string]: boolean } },
+import { FormikErrors, FormikTouched } from 'formik';
+
+import { Undefined } from '@shared/types';
+
+export const getFormikError = <E extends { [key: string]: string }, T extends { [key: string]: boolean }>(
+  { errors, touched }: { errors: FormikErrors<E>; touched: FormikTouched<T> },
   key: string
-) => (errors[key] && touched[key] ? errors[key] : undefined);
+): Undefined<string> => (errors[key] && touched[key] ? errors[key] : undefined) as Undefined<string>;
