@@ -3,6 +3,7 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { getGameResult, Statuses } from '@modules/coinflip/helpers';
+import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { Status } from '@modules/coinflip/interfaces';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button, StateCurrencyAmount } from '@shared/components';
@@ -21,8 +22,11 @@ interface Props {
 }
 
 export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) => {
+  const { token } = useCoinflipStore();
   const { t } = useTranslation();
   const { coinflipModalOpen, closeCoinflipModal } = useGlobalModalsState();
+
+  const { symbol } = token.metadata;
 
   if (isNull(result)) {
     return null;
@@ -31,7 +35,7 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
   const gameResult = getGameResult(result);
   const isResultSuccess = gameResult === Statuses.won;
 
-  const twitterShareLink = `https://twitter.com/share?&text=I've won ${wonAmount} QUIPU by playing %23Coinflip. Try your luck on @QuipuSwap!
+  const twitterShareLink = `https://twitter.com/share?&text=I've won ${wonAmount} ${symbol} by playing %23Coinflip. Try your luck on @QuipuSwap!
   %23game, %23DeFi, %23Tezos`;
 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
