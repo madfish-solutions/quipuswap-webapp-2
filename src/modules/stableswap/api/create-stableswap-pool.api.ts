@@ -1,4 +1,5 @@
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
+/* eslint-disable no-console */
+import { MichelsonMap, TezosToolkit, TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
@@ -74,12 +75,12 @@ const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees) =
 
   const inputTokens: Array<TokensValue> = [];
   const amountTokenList: Array<AmountToken> = [];
-  const tokensInfo = new MichelsonMap<number, TokenInfo>();
+  const tokensInfo = new MichelsonMap<BigNumber, TokenInfo>();
 
   creationParams.forEach(({ token, reserves, rateF, precisionMultiplierF }, index) => {
     inputTokens.push(mapTokenToBlockchainToken(token));
     amountTokenList.push(mapToAmountToken({ token, reserves }));
-    tokensInfo.set(index, mapTokensInfo({ reserves, rateF, precisionMultiplierF }));
+    tokensInfo.set(new BigNumber(index), mapTokensInfo({ reserves, rateF, precisionMultiplierF }));
   });
 
   return {
@@ -103,20 +104,27 @@ export const createStableswapPoolApi = async (
 
   const stableswapPoolContract = await tezos.wallet.at(stableswapFactoryContractAddress);
 
-  const addPoolTransferParams = stableswapPoolContract.methods
-    .add_pool({
-      amplificationParameter,
-      inputTokens,
-      tokensInfo,
-      STABLESWAP_REFERRAL,
-      managers,
-      contractFees
-    })
-    .toTransferParams();
+  let addPoolTransferParams: TransferParams = null as unknown as TransferParams;
+  try {
+    addPoolTransferParams = stableswapPoolContract.methods
+      .add_pool({
+        amplificationParameter,
+        inputTokens,
+        tokensInfo,
+        STABLESWAP_REFERRAL,
+        managers,
+        contractFees
+      })
+      .toTransferParams();
+  } catch (err) {
+    console.log({ inputTokens, tokensInfo, contractFees, amountTokenList });
+
+    console.error(err);
+  }
 
   const inputs = new MichelsonMap();
 
-  tokensInfo.forEach((value, key) => inputs.set(key, { token: inputTokens[key], value: value.reserves }));
+  tokensInfo.forEach((value, key) => inputs.set(key, { token: inputTokens[key.toNumber()], value: value.reserves }));
 
   const startDexTransferParams = stableswapPoolContract.methods.start_dex(inputs).toTransferParams();
 

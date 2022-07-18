@@ -18,17 +18,17 @@ export const TOKEN_KEY = 'tokens';
 export const createPoolAmplification = [
   {
     radioName: AMPLIFICATION_FIELD_NAME,
-    value: '10',
+    value: 1000,
     label: i18n.t('stableswap|amplification10')
   },
   {
     radioName: AMPLIFICATION_FIELD_NAME,
-    value: '100',
+    value: 10000,
     label: i18n.t('stableswap|amplification100')
   },
   {
     radioName: AMPLIFICATION_FIELD_NAME,
-    value: '200',
+    value: 20000,
     label: i18n.t('stableswap|amplification200')
   }
 ];
