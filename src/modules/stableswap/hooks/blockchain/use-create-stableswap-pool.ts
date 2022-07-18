@@ -2,6 +2,11 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
+import {
+  DEFAULT_STABLESWAP_INTERFACE_FEE_WITH_PRECISION,
+  DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION,
+  STABLESWAP_PRECISION_FEE
+} from '@config/constants';
 import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/enviroment';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
@@ -13,9 +18,17 @@ import { createStableswapPoolApi, CreationParams, Fees } from '../../api';
 
 interface Params {
   amplificationParameter: BigNumber;
-  fee: Fees;
+  fee: Pick<Fees, 'liquidityProvidersFee'>;
   creationParams: Array<CreationParams>;
 }
+
+const prepareFee = ({ liquidityProvidersFee }: Pick<Fees, 'liquidityProvidersFee'>): Fees => {
+  return {
+    liquidityProvidersFee: liquidityProvidersFee.multipliedBy(STABLESWAP_PRECISION_FEE),
+    stakersFee: DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION,
+    interfaceFee: DEFAULT_STABLESWAP_INTERFACE_FEE_WITH_PRECISION
+  };
+};
 
 export const useCreateStableswapPool = () => {
   const { tezos } = useRootStore();
@@ -29,6 +42,7 @@ export const useCreateStableswapPool = () => {
       if (isNull(tezos) || isNull(accountPkh)) {
         return;
       }
+      const fees = prepareFee(fee);
 
       try {
         const operation = await createStableswapPoolApi(
@@ -36,7 +50,7 @@ export const useCreateStableswapPool = () => {
           STABLESWAP_FACTORY_CONTRACT_ADDRESS,
           creationParams,
           amplificationParameter,
-          fee,
+          fees,
           accountPkh
         );
 
