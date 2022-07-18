@@ -51,7 +51,7 @@ const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedPropo
   const lockeds = (item && item.tokensInfo.map(({ reserves }) => reserves)) ?? [];
   const inputsCount = (item && item.tokensInfo.length) ?? DEFAULT_LENGTH;
 
-  const validationSchema = useRemoveLiqFormValidation(fixedLpBalance, lockeds, isBalancedProportion);
+  const validationSchema = useRemoveLiqFormValidation(fixedLpBalance, lockeds, item, isBalancedProportion);
 
   return {
     lpBalance,
@@ -152,14 +152,21 @@ export const useRemoveLiqFormViewModel = () => {
     return fixedShares.toFixed();
   };
 
-  const handleImbalancedInputChange = (index: number) => async (inputAmount: string) => {
-    formik.setFieldValue(getInputSlugByIndex(index), inputAmount);
+  const handleImbalancedInputChange = (index: number) => {
+    const localToken = extractTokens(item.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-    const shares = await calculateShares(index, inputAmount);
-    formik.setFieldValue(LP_INPUT_KEY, shares);
+    return async (inputAmount: string) => {
+      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const inputAmountBN = saveBigNumber(fixedValue, new BigNumber('0'));
+      formik.setFieldValue(getInputSlugByIndex(index), inputAmount);
 
-    stableswapItemFormStore.setInputAmount(saveBigNumber(inputAmount, new BigNumber('0')), index);
-    stableswapItemFormStore.setShares(new BigNumber(shares));
+      const shares = await calculateShares(index, realValue);
+      formik.setFieldValue(LP_INPUT_KEY, shares);
+
+      stableswapItemFormStore.setInputAmount(inputAmountBN, index);
+      stableswapItemFormStore.setShares(new BigNumber(shares));
+    };
   };
 
   const handleInputChange = (reserves: BigNumber, index: number) =>

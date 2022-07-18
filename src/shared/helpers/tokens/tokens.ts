@@ -4,47 +4,17 @@ import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
 import { TOKENS } from '@config/config';
-import { SAVED_TOKENS_KEY } from '@config/localstorage';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
+import { getSavedTokensApi } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { InvalidTokensListError } from '@shared/errors';
-import {
-  Nullable,
-  QSNetwork,
-  Standard,
-  SupportedNetworks,
-  Token,
-  TokenId,
-  TokenPair,
-  TokenWithQSNetworkType
-} from '@shared/types';
+import { QSNetwork, Standard, Token, TokenId, TokenPair, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
 import { mapBackendToken } from '../../mapping';
 import { getUniqArray } from '../arrays';
 import { isTokenEqual } from './is-token-equal';
 import { getTokenSlug } from './token-slug';
-
-interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2TokenId' | 'isWhitelisted'> {
-  fa2TokenId?: string;
-  isWhitelisted?: Nullable<boolean>;
-}
-
-export const getSavedTokens = (networkId?: SupportedNetworks) => {
-  const allRawTokens: Array<RawTokenWithQSNetworkType> = JSON.parse(
-    window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]'
-  );
-
-  const allTokens: TokenWithQSNetworkType[] = allRawTokens.map(({ fa2TokenId, ...restProps }) => ({
-    ...restProps,
-    fa2TokenId: fa2TokenId === undefined ? undefined : Number(fa2TokenId),
-    isWhitelisted: null
-  }));
-
-  return networkId
-    ? allTokens.filter(({ network: tokenNetwork }) => !tokenNetwork || tokenNetwork === networkId)
-    : allTokens;
-};
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
@@ -109,7 +79,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
   ];
 
   if (addTokensFromLocalStorage) {
-    tokens = tokens.concat(getSavedTokens(network.id));
+    tokens = tokens.concat(getSavedTokensApi(network.id));
   }
 
   return getUniqArray(tokens, getTokenSlug);
@@ -132,13 +102,6 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   }
 
   return getUniqArray(tokens, getTokenSlug);
-};
-
-export const saveCustomToken = (token: TokenWithQSNetworkType) => {
-  window.localStorage.setItem(
-    SAVED_TOKENS_KEY,
-    JSON.stringify([token, ...getSavedTokens().filter((x: TokenWithQSNetworkType) => !isTokenEqual(x, token))])
-  );
 };
 
 // generate cortege of uniq pairs of token1 repo and token2 repo

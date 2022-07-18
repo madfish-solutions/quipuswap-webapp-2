@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
 
 describe('Unstake form exists', () => {
-  it('Should_HiglightUnstakeForm_When_ClickOnUnstakeTab', () => {
-    // Go to the 5 Farming, unstake form
+  beforeEach(() => {
     cy.visit('/farming/5');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
+  });
+  it('Should_HiglightUnstakeForm_When_ClickOnUnstakeTab', () => {
     cy.get('[title="Unstake"]').click().should('have.css', 'color', 'rgb(139, 144, 160)');
   });
 

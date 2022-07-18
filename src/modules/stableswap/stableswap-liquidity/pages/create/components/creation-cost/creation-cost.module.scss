@@ -1,0 +1,29 @@
+@import "@styles/variables";
+
+@mixin creation-cost($border-color) {
+  &.cost {
+    display: grid;
+    row-gap: 8px;
+
+    .costItem:nth-child(1) {
+      font-size: 18px;
+      & > span {
+        font-size: 18px;
+      }
+      padding-top: 8px;
+    }
+  }
+
+  .costItem {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.light {
+  @include creation-cost($ui-03);
+}
+
+.dark {
+  @include creation-cost($text-01);
+}

@@ -1,6 +1,6 @@
 import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { isExist, isNull } from '@shared/helpers';
+import { isExist, isNotEmptyArray, isNull } from '@shared/helpers';
 
 import { getDollarsWin } from './helpers';
 
@@ -8,12 +8,13 @@ const DEFAULT_USER_INFO = {
   tokensExchangeRateDollarEquivalent: null,
   gamesCount: null,
   tokensWon: null,
+  hasTokensReward: false,
   isGamesCount: undefined
 };
 
 export const useCoinflipRewardInfoViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { gamesCount, tokensWon } = coinflipStore;
+  const { gamesCount, tokensWon, tokensWithReward } = coinflipStore;
   const exchangeRate = useNewExchangeRates();
   const isGamesCount = isExist(gamesCount);
 
@@ -26,6 +27,7 @@ export const useCoinflipRewardInfoViewModel = () => {
     tokensExchangeRateDollarEquivalent,
     gamesCount,
     tokensWon,
-    isGamesCount
+    isGamesCount,
+    hasTokensReward: isNotEmptyArray(tokensWithReward)
   };
 };
