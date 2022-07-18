@@ -20,7 +20,7 @@ import { useTranslation } from '@translation';
 
 import { TokenLocked } from '../../../../../components/token-locked';
 import styles from './details.module.scss';
-import { useDetailsVievModel } from './use-details.vm';
+import { useDetailsViewModel } from './use-details.vm';
 
 export const Details: FC = observer(() => {
   const { t } = useTranslation();
@@ -37,7 +37,7 @@ export const Details: FC = observer(() => {
     isLoading,
     tvlInUsd,
     tokensLockedData
-  } = useDetailsVievModel();
+  } = useDetailsViewModel();
 
   return (
     <Card
@@ -92,7 +92,7 @@ export const Details: FC = observer(() => {
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|liquidityProvidersFee')}
-        tooltipContent={t('stableswap|liquidityProviersFee')}
+        tooltipContent={t('stableswap|liquidityProvidersFeeFeeDescription')}
         className={cardCellClassName}
         data-test-id="liquidityProvidersFee"
       >
