@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { isNull } from '@shared/helpers';
@@ -11,7 +10,6 @@ import { useCoinflipStore } from './stores';
 import { useLastGameResultAmplitude } from './use-last-game-result-amplitude';
 
 export const useUserLastGame = () => {
-  const { tezos } = useRootStore();
   const { showErrorToast } = useToasts();
   const coinflipStore = useCoinflipStore();
   const isReady = useReady();
@@ -34,7 +32,7 @@ export const useUserLastGame = () => {
     }
 
     lastGameResultRef.current = gameResult;
-  }, [coinflipStore?.userLastGameInfo?.data?.status, lastGameLogEvent, openCoinflipModal, tezos]);
+  }, [coinflipStore?.userLastGameInfo?.data?.status, lastGameLogEvent, openCoinflipModal]);
 
   const getUserLastGame = useCallback(async () => {
     if (isReady && !isNull(coinflipStore)) {
