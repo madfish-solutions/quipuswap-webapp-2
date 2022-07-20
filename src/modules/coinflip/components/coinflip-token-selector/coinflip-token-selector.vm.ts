@@ -11,7 +11,7 @@ export const useTokenSelectorViewModel = () => {
     coinflipStore.setToken(_tokenToPlay as TokenToPlay);
 
     if (tokenToPlay !== _tokenToPlay) {
-      amplitudeService.logEvent('ASSET_SELECTED', {
+      amplitudeService.logEvent('CLICK_FLIP_TOKEN_SELECT', {
         asset: _tokenToPlay
       });
     }
