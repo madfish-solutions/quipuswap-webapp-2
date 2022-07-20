@@ -24,6 +24,10 @@ import { useZeroInputsError } from './use-zero-inputs-error';
 
 const DEFAULT_LENGTH = 0;
 
+const FIRST_INPUT = 0;
+const SECOND_INPUT = 1;
+const THIRD_INPUT = 2;
+
 export interface AddLiqFormValues {
   [key: string]: string;
 }
@@ -45,7 +49,7 @@ export const useAddLiqFormViewModel = () => {
 
     actions.setSubmitting(true);
 
-    await addStableswapLiquidity();
+    await addStableswapLiquidity(getFormikInputAmount());
     formStore.clearStore();
 
     formik.resetForm();
@@ -57,6 +61,14 @@ export const useAddLiqFormViewModel = () => {
     initialValues: getFormikInitialValues(item?.tokensInfo.length ?? DEFAULT_LENGTH),
     onSubmit: handleSubmit
   });
+
+  function getFormikInputAmount() {
+    return [
+      new BigNumber(formik.values[getInputSlugByIndex(FIRST_INPUT)]),
+      new BigNumber(formik.values[getInputSlugByIndex(SECOND_INPUT)]),
+      new BigNumber(formik.values[getInputSlugByIndex(THIRD_INPUT)])
+    ];
+  }
 
   const { label, tooltip, disabled, isSubmitting, shouldShowZeroInputsAlert } = useAddLiqFormHelper(formik);
 
@@ -79,10 +91,8 @@ export const useAddLiqFormViewModel = () => {
     return async (inputAmount: string) => {
       const { fixedValue } = numberAsString(inputAmount, localTokenDecimals);
       const formikKey = getInputSlugByIndex(index);
-      const inputAmountBN = saveBigNumber(fixedValue, null);
 
-      formik.setFieldValue(formikKey, inputAmount);
-      formStore.setInputAmount(inputAmountBN, index);
+      formik.setFieldValue(formikKey, fixedValue);
     };
   };
 
@@ -111,9 +121,7 @@ export const useAddLiqFormViewModel = () => {
           formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
         }
       });
-
       formik.setValues(formikValues);
-      formStore.setInputAmounts(calculatedValues);
     };
   };
 
