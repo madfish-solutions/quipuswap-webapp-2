@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
@@ -18,15 +18,12 @@ import {
   useStableswapItemStore,
   useStableswapTokensBalances
 } from '../../../../../../hooks';
+import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 import { useZeroInputsError } from './use-zero-inputs-error';
 
 const DEFAULT_LENGTH = 0;
-
-const FIRST_INPUT = 0;
-const SECOND_INPUT = 1;
-const THIRD_INPUT = 2;
 
 export interface AddLiqFormValues {
   [key: string]: string;
@@ -42,33 +39,27 @@ export const useAddLiqFormViewModel = () => {
   const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
 
   const isZeroInputsError = useZeroInputsError();
-  const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
-    if (isZeroInputsError) {
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (values: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
+      if (isZeroInputsError) {
+        return;
+      }
 
-    actions.setSubmitting(true);
-
-    await addStableswapLiquidity(getFormikInputAmount());
-    formStore.clearStore();
-
-    formik.resetForm();
-    actions.setSubmitting(false);
-  };
+      actions.setSubmitting(true);
+      const inputAmounts = getInputsAmountFormFormikValues(values);
+      await addStableswapLiquidity(inputAmounts);
+      formStore.clearStore();
+      actions.resetForm();
+      actions.setSubmitting(false);
+    },
+    [addStableswapLiquidity, formStore, isZeroInputsError]
+  );
 
   const formik = useFormik({
     validationSchema,
     initialValues: getFormikInitialValues(item?.tokensInfo.length ?? DEFAULT_LENGTH),
     onSubmit: handleSubmit
   });
-
-  function getFormikInputAmount() {
-    return [
-      new BigNumber(formik.values[getInputSlugByIndex(FIRST_INPUT)]),
-      new BigNumber(formik.values[getInputSlugByIndex(SECOND_INPUT)]),
-      new BigNumber(formik.values[getInputSlugByIndex(THIRD_INPUT)])
-    ];
-  }
 
   const { label, tooltip, disabled, isSubmitting, shouldShowZeroInputsAlert } = useAddLiqFormHelper(formik);
 
