@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
@@ -33,14 +33,11 @@ import {
   useCalcTokenAmountView
 } from '../../../../../../hooks';
 import { StableswapItem } from '../../../../../../types';
+import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
 const DEFAULT_LP_BALANCE = null;
-
-const FIRST_INPUT = 0;
-const SECOND_INPUT = 1;
-const THIRD_INPUT = 2;
 
 export interface RemoveLiqFormValues {
   [key: string]: string;
@@ -80,27 +77,26 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.isBalancedProportion
   );
 
-  const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
-    actions.setSubmitting(true);
-    await removeStableswapLiquidity(getFormikInputAmount());
-    formik.resetForm();
-    stableswapItemFormStore.clearStore();
-    actions.setSubmitting(false);
-  };
+  const handleSubmit = useCallback(
+    async (values: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
+      actions.setSubmitting(true);
+
+      const inputAmounts = getInputsAmountFormFormikValues(values);
+      await removeStableswapLiquidity(inputAmounts);
+
+      actions.resetForm();
+      stableswapItemFormStore.clearStore();
+
+      actions.setSubmitting(false);
+    },
+    [removeStableswapLiquidity, stableswapItemFormStore]
+  );
 
   const formik = useFormik({
     validationSchema,
     initialValues: getFormikInitialValuesRemoveForm(inputsCount),
     onSubmit: handleSubmit
   });
-
-  function getFormikInputAmount() {
-    return [
-      new BigNumber(formik.values[getInputSlugByIndex(FIRST_INPUT)]),
-      new BigNumber(formik.values[getInputSlugByIndex(SECOND_INPUT)]),
-      new BigNumber(formik.values[getInputSlugByIndex(THIRD_INPUT)])
-    ];
-  }
 
   useEffect(() => {
     return () => stableswapItemFormStore.clearStore();
