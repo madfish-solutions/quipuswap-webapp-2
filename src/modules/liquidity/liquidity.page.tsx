@@ -4,12 +4,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DEFAULT_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
 import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
-import { getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
+import { getFullLiquidityUrl, getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { LiquidityCards } from './liquidity-cards';
-import { getFullLiquidityUrl, parseUrl } from './liquidity-cards/helpers';
+import { parseUrl } from './liquidity-cards/helpers';
 
 const DEFAULT_TAB = 'add';
 const DEFAULT_LIQUIDITY_TOKEN_A = TEZOS_TOKEN_SLUG;

@@ -51,6 +51,8 @@ export interface RawFarmingItem {
   tvlInStakedToken: string;
   tvlInUsd: Nullable<string>;
 
+  stableswapItemId?: string;
+
   udp: string;
   withdrawalFee: string;
 
@@ -102,6 +104,8 @@ export interface FarmingItem extends UserBalances {
   tokens: Array<Token>;
   tvlInUsd: Nullable<BigNumber>;
   tvlInStakedToken: BigNumber;
+
+  stableswapItemId?: string;
 
   udp: string;
   withdrawalFee: BigNumber;
