@@ -1,4 +1,4 @@
-import { NO_TIMELOCK_VALUE, PRECISION_PERCENT, ZERO_BN } from '@config/constants';
+import { NO_TIMELOCK_VALUE, PRECISION_PERCENT } from '@config/constants';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible } from '@shared/helpers';
@@ -9,6 +9,7 @@ import { useFarmingItemStore, useDoHarvest, useGetFarmingItem } from '../../../.
 import { canDelegate, makeBaker } from '../../helpers';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
+const NO_INTERFACE_FEE = 0;
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
@@ -62,7 +63,7 @@ export const useFarmingRewardInfoViewModel = () => {
     farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInTokens =
     myRewardInTokensClear?.minus(
-      myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data?.harvestFee ?? ZERO_BN)
+      myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data?.harvestFee ?? NO_INTERFACE_FEE)
     ) ?? null;
   const myRewardInUsd = multipliedIfPossible(myRewardInTokens, farmingItem.earnExchangeRate);
 
