@@ -15,7 +15,7 @@ import { useTranslation } from '@translation';
 import { addStableswapLiquidityApi } from '../../api';
 import { extractTokens, getStableswapDeadline, createAmountsMichelsonMap, apllyStableswapFee } from '../../helpers';
 import { tokensAndAmountsMapper } from '../../mapping';
-import { useStableswapItemStore, useStableswapItemFormStore } from '../store';
+import { useStableswapItemStore } from '../store';
 import { useCalcTokenAmountView } from '../use-calc-token-amount';
 
 const IS_DEPOSIT = true;
@@ -32,7 +32,6 @@ export const useAddStableswapLiquidity = () => {
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const { item } = useStableswapItemStore();
-  const { inputAmounts } = useStableswapItemFormStore();
 
   const calculateShares = useCallback(
     async (amounts: Array<BigNumber>) => {
@@ -43,73 +42,77 @@ export const useAddStableswapLiquidity = () => {
     [calcTokenAmountView]
   );
 
-  const addStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
-      return;
-    }
+  const addStableswapLiquidity = useCallback(
+    async (inputAmounts: Nullable<BigNumber>[]) => {
+      if (isNull(tezos) || isNull(item) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
+        return;
+      }
 
-    const { contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
+      const { contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
 
-    const tokens = extractTokens(tokensInfo);
-    const amountsAtoms = inputAmounts.map((amount, index) =>
-      isNull(amount) || amount.isNaN()
-        ? new BigNumber('0')
-        : toDecimals(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
-    );
-
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-    const shares = await calculateShares(amountsAtoms);
-
-    const sharesWithFee = apllyStableswapFee(shares, [
-      liquidityProvidersFee,
-      stakersFee,
-      interfaceFee,
-      devFee
-    ]).integerValue(BigNumber.ROUND_DOWN);
-
-    const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
-
-    const deadline = await getStableswapDeadline(tezos, transactionDeadline);
-
-    const logData = {
-      stableswapLiquidityAdd: getStableswapLiquidityLogData(
-        tokensInfo,
-        inputAmounts,
-        fromDecimals(sharesWithFee, STABLESWAP_LP_DECIMALS),
-        liquiditySlippage,
-        item
-      )
-    };
-
-    try {
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD', logData);
-      const operation = await addStableswapLiquidityApi(
-        tezos,
-        contractAddress,
-        sharesWithSlippage,
-        tokensAndAmounts,
-        deadline,
-        accountPkh
+      const tokens = extractTokens(tokensInfo);
+      const amountsAtoms = inputAmounts.map((amount, index) =>
+        isNull(amount) || amount.isNaN()
+          ? new BigNumber('0')
+          : toDecimals(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
       );
 
-      await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_SUCCESS', logData);
-    } catch (error) {
-      showErrorToast(error as Error);
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_FAILED', { ...logData, error });
-    }
-  }, [
-    tezos,
-    item,
-    accountPkh,
-    inputAmounts,
-    calculateShares,
-    liquiditySlippage,
-    transactionDeadline,
-    confirmOperation,
-    t,
-    showErrorToast
-  ]);
+      const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
+      const shares = await calculateShares(amountsAtoms);
+
+      const sharesWithFee = apllyStableswapFee(shares, [
+        liquidityProvidersFee,
+        stakersFee,
+        interfaceFee,
+        devFee
+      ]).integerValue(BigNumber.ROUND_DOWN);
+
+      const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(
+        BigNumber.ROUND_DOWN
+      );
+
+      const deadline = await getStableswapDeadline(tezos, transactionDeadline);
+
+      const logData = {
+        stableswapLiquidityAdd: getStableswapLiquidityLogData(
+          tokensInfo,
+          inputAmounts,
+          fromDecimals(sharesWithFee, STABLESWAP_LP_DECIMALS),
+          liquiditySlippage,
+          item
+        )
+      };
+
+      try {
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD', logData);
+        const operation = await addStableswapLiquidityApi(
+          tezos,
+          contractAddress,
+          sharesWithSlippage,
+          tokensAndAmounts,
+          deadline,
+          accountPkh
+        );
+
+        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_SUCCESS', logData);
+      } catch (error) {
+        showErrorToast(error as Error);
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_FAILED', { ...logData, error });
+      }
+    },
+    [
+      tezos,
+      item,
+      accountPkh,
+      calculateShares,
+      liquiditySlippage,
+      transactionDeadline,
+      confirmOperation,
+      t,
+      showErrorToast
+    ]
+  );
 
   return { addStableswapLiquidity };
 };

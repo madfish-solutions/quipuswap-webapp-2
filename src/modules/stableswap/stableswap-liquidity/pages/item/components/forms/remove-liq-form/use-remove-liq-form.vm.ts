@@ -37,6 +37,11 @@ import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
 const DEFAULT_LP_BALANCE = null;
+
+const FIRST_INPUT = 0;
+const SECOND_INPUT = 1;
+const THIRD_INPUT = 2;
+
 export interface RemoveLiqFormValues {
   [key: string]: string;
 }
@@ -77,7 +82,7 @@ export const useRemoveLiqFormViewModel = () => {
 
   const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
     actions.setSubmitting(true);
-    await removeStableswapLiquidity();
+    await removeStableswapLiquidity(getFormikInputAmount());
     formik.resetForm();
     stableswapItemFormStore.clearStore();
     actions.setSubmitting(false);
@@ -88,6 +93,14 @@ export const useRemoveLiqFormViewModel = () => {
     initialValues: getFormikInitialValuesRemoveForm(inputsCount),
     onSubmit: handleSubmit
   });
+
+  function getFormikInputAmount() {
+    return [
+      new BigNumber(formik.values[getInputSlugByIndex(FIRST_INPUT)]),
+      new BigNumber(formik.values[getInputSlugByIndex(SECOND_INPUT)]),
+      new BigNumber(formik.values[getInputSlugByIndex(THIRD_INPUT)])
+    ];
+  }
 
   useEffect(() => {
     return () => stableswapItemFormStore.clearStore();
@@ -158,13 +171,11 @@ export const useRemoveLiqFormViewModel = () => {
 
     return async (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = saveBigNumber(fixedValue, new BigNumber('0'));
-      formik.setFieldValue(getInputSlugByIndex(index), inputAmount);
+      formik.setFieldValue(getInputSlugByIndex(index), fixedValue);
 
       const shares = await calculateShares(index, realValue);
       formik.setFieldValue(LP_INPUT_KEY, shares);
 
-      stableswapItemFormStore.setInputAmount(inputAmountBN, index);
       stableswapItemFormStore.setShares(new BigNumber(shares));
     };
   };
