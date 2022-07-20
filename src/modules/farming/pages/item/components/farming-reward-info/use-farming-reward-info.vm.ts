@@ -1,4 +1,4 @@
-import { NO_TIMELOCK_VALUE } from '@config/constants';
+import { NO_TIMELOCK_VALUE, PRECISION_PERCENT, ZERO_BN } from '@config/constants';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible } from '@shared/helpers';
@@ -58,7 +58,12 @@ export const useFarmingRewardInfoViewModel = () => {
   }
 
   const myDepositDollarEquivalent = multipliedIfPossible(farmingItem.depositBalance, farmingItem.depositExchangeRate);
-  const myRewardInTokens = farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
+  const myRewardInTokensClear =
+    farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
+  const myRewardInTokens =
+    myRewardInTokensClear?.minus(
+      myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data?.harvestFee ?? ZERO_BN)
+    ) ?? null;
   const myRewardInUsd = multipliedIfPossible(myRewardInTokens, farmingItem.earnExchangeRate);
 
   // TODO: Move to the model
