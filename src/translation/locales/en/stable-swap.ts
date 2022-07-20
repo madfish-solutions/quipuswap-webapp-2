@@ -46,7 +46,7 @@ export const stableswap = {
   pairAddress: 'Direct smart contract address for this farm.',
   pairId: 'The ID number of the LP token for this pair. (Default ID is 0)',
   totalLPSupply: 'The total amount of LP tokens issued by this pool.',
-  liquidityProviersFee:
+  liquidityProvidersFeeFeeDescription:
     'This fee is divided between the liquidity providers in proportion to their share size in the pool.',
   interfaceFee: 'A fee for using the farming interface. Goes to the interface devs.',
   quipuStakersFee: 'This fee is proportionally distributed among the users who staked QUIPU under this pool.',
