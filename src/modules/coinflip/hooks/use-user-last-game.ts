@@ -15,12 +15,7 @@ export const useUserLastGame = () => {
   const isReady = useReady();
   const lastGameResultRef = useRef<Nullable<Statuses>>(null);
   const { openCoinflipModal } = useGlobalModalsState();
-  const { lastGameLogEvent } = useLastGameResultAmplitude(
-    coinflipStore?.token,
-    coinflipStore?.tokenToPlay,
-    coinflipStore?.userLastGameInfo?.data?.bidSize,
-    coinflipStore?.userLastGameInfo?.data?.status
-  );
+  const { lastGameLogEvent } = useLastGameResultAmplitude();
 
   useEffect(() => {
     const gameResult = getGameResult(coinflipStore?.userLastGameInfo?.data?.status);

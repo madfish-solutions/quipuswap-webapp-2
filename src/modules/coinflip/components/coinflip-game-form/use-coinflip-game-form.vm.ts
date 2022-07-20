@@ -4,17 +4,16 @@ import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
+import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { bigNumberToString, getFormikError, getTokenSlug, isEqual } from '@shared/helpers';
+import { bigNumberToString, getDollarEquivalent, getFormikError, getTokenSlug, isEqual } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { Nullable, Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 import { useCoinflipValidation } from './use-coinflip.validation';
-
-const MOCK_TESTNET_EXCHANGE_RATE = 1.5;
 
 export enum FormFields {
   coinSide = 'coinSide',
@@ -42,15 +41,15 @@ export const useCoinflipGameFormViewModel = (
   const validationSchema = useCoinflipValidation(tokenBalance);
 
   const handleCoinFlip = async () => {
+    const amountInUsd = IS_NETWORK_MAINNET
+      ? getDollarEquivalent(inputAmount, exchangeRates[tokenSlug])
+      : TESTNET_EXCHANGE_RATE;
+
     const logData = {
       asset: tokenToPlay,
       coinSide,
       amount: Number(inputAmount),
-      amountInUsd: Number(
-        new BigNumber(inputAmount).multipliedBy(
-          IS_NETWORK_MAINNET ? exchangeRates[tokenSlug] : MOCK_TESTNET_EXCHANGE_RATE
-        )
-      )
+      amountInUsd
     };
 
     try {
