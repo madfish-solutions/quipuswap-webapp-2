@@ -3,11 +3,9 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { bigNumberToString, getDollarEquivalent, getFormikError, getTokenSlug, isEqual } from '@shared/helpers';
+import { bigNumberToString, getFormikError, isEqual } from '@shared/helpers';
+import { useAmountInUsd } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { Nullable, Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
@@ -33,27 +31,24 @@ export const useCoinflipGameFormViewModel = (
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
 
   const { showErrorToast } = useToasts();
-  const exchangeRates = useNewExchangeRates();
-  const tokenSlug = getTokenSlug(token);
+  const { getAmountInUsd } = useAmountInUsd();
 
   const { decimals } = token.metadata;
 
   const validationSchema = useCoinflipValidation(tokenBalance);
 
   const handleCoinFlip = async () => {
-    const amountInUsd = IS_NETWORK_MAINNET
-      ? getDollarEquivalent(inputAmount, exchangeRates[tokenSlug])
-      : TESTNET_EXCHANGE_RATE;
+    const amountInUsd = getAmountInUsd(new BigNumber(inputAmount), token);
 
     const logData = {
       asset: tokenToPlay,
       coinSide,
       amount: Number(inputAmount),
-      amountInUsd
+      amountInUsd: Number(amountInUsd)
     };
 
     try {
-      amplitudeService.logEvent('CLICK_FLIP_BUTTON', logData);
+      amplitudeService.logEvent('CLICK_FLIP_BUTTON_CLICK', logData);
 
       await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
       onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
@@ -61,11 +56,11 @@ export const useCoinflipGameFormViewModel = (
       await getGamersStats();
       await getUserLastGame();
 
-      amplitudeService.logEvent('CLICK_FLIP_BUTTON_SUCCESS', logData);
+      amplitudeService.logEvent('CLICK_FLIP_OPERATION_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
 
-      amplitudeService.logEvent('CLICK_FLIP_BUTTON_FAILED', {
+      amplitudeService.logEvent('CLICK_FLIP_OPERATION_FAILED', {
         ...logData,
         error
       });
@@ -109,7 +104,7 @@ export const useCoinflipGameFormViewModel = (
     onCoinSideSelect(value); // TODO: Remove when fix problem connection between store and validation
     formik.setFieldValue(FormFields.coinSide, value);
 
-    amplitudeService.logEvent('COIN_SIDE_SELECTED', {
+    amplitudeService.logEvent('CLICK_FLIP_COIN_SIDE_SELECT', {
       coinSide: value
     });
   };
