@@ -9,7 +9,7 @@ import { useFarmingItemStore, useDoHarvest, useGetFarmingItem } from '../../../.
 import { canDelegate, makeBaker } from '../../helpers';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
-const NO_INTERFACE_FEE = 0;
+const ZERO_INTERFACE_FEE = 0;
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
@@ -63,7 +63,7 @@ export const useFarmingRewardInfoViewModel = () => {
     farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInTokens =
     myRewardInTokensClear?.minus(
-      myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data?.harvestFee ?? NO_INTERFACE_FEE)
+      myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data?.harvestFee ?? ZERO_INTERFACE_FEE)
     ) ?? null;
   const myRewardInUsd = multipliedIfPossible(myRewardInTokens, farmingItem.earnExchangeRate);
 
