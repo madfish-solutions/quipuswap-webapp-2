@@ -60,9 +60,12 @@ export const useFarmingRewardInfoViewModel = () => {
   const myDepositDollarEquivalent = multipliedIfPossible(farmingItem.depositBalance, farmingItem.depositExchangeRate);
   const myRewardInTokensClear =
     farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
-  const myRewardInTokens = itemStore.data?.harvestFee
-    ? myRewardInTokensClear?.minus(myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data.harvestFee))
-    : myRewardInTokensClear;
+  const myRewardInTokens =
+    (itemStore.data?.harvestFee
+      ? myRewardInTokensClear?.minus(
+          myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data.harvestFee)
+        )
+      : myRewardInTokensClear) ?? null;
   const myRewardInUsd = multipliedIfPossible(myRewardInTokens, farmingItem.earnExchangeRate);
 
   // TODO: Move to the model
@@ -78,7 +81,7 @@ export const useFarmingRewardInfoViewModel = () => {
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
     endTimestamp,
-    myRewardInTokens: myRewardInTokens ?? null,
+    myRewardInTokens,
     myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
