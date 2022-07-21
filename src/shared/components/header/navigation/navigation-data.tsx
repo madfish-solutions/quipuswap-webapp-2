@@ -13,10 +13,11 @@ import {
   MoreIcon,
   StableswapIcon,
   SwapIcon,
-  GameIcon
+  GameIcon,
+  NewLiquidityIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
-import { i18n, Trans } from '@translation';
+import { i18n } from '@translation';
 
 import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
@@ -48,45 +49,51 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
     id: 'Home',
     to: AppRootRoutes.Root,
-    label: <Trans ns="common">Home</Trans>,
+    label: i18n.t('common|Home'),
     Icon: HomeIcon
   },
   {
     id: 'Swap',
     to: AppRootRoutes.Swap,
-    label: <Trans ns="common">Swap</Trans>,
+    label: i18n.t('common|Swap'),
     Icon: SwapIcon
   },
   {
     id: 'Liquidity',
     to: AppRootRoutes.Liquidity,
-    label: <Trans ns="common">Liquidity</Trans>,
+    label: i18n.t('common|Liquidity'),
     Icon: LiquidityIcon
+  },
+  {
+    id: 'NewLiquidity',
+    to: AppRootRoutes.NewLiquidity,
+    label: i18n.t('newLiquidity|newLiquidity'),
+    Icon: NewLiquidityIcon
   },
   {
     id: 'Farming',
     to: AppRootRoutes.Farming,
-    label: <Trans ns="common">Farming</Trans>,
+    label: i18n.t('common|Farming'),
     Icon: FarmIcon
   },
   {
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
-    label: <Trans ns="common">Game</Trans>,
+    label: i18n.t('common|Game'),
     Icon: GameIcon,
     hide: isProd()
   },
   {
     id: 'Stableswap',
     to: AppRootRoutes.Stableswap,
-    label: <Trans ns="common">Stableswap</Trans>,
+    label: i18n.t('common|Stableswap'),
     Icon: StableswapIcon,
     opened: true,
     links: [
       {
         id: 'Stableswap_Dividends',
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
-        label: <Trans ns="common">Dividends</Trans>,
+        label: i18n.t('common|Dividends'),
         status: (
           <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
         )
@@ -94,7 +101,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
       {
         id: 'Stableswap_Liquidity',
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
-        label: <Trans ns="common">Liquidity</Trans>,
+        label: i18n.t('common|Liquidity'),
         status: (
           <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
         )
@@ -104,39 +111,39 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
     id: 'Analytics',
     to: 'https://analytics.quipuswap.com/',
-    label: <Trans ns="common">Analytics</Trans>,
+    label: i18n.t('common|Analytics'),
     Icon: AnalyticsIcon,
     target: '_blank'
   },
   {
     id: 'Feedback',
     to: 'https://madfish.canny.io/quipuswap-feature-requests',
-    label: <Trans ns="common">Feedback</Trans>,
+    label: i18n.t('common|Feedback'),
     Icon: FeedbackIcon,
     target: '_blank'
   },
   // {
   //   id: 6,
   //   to: '/portfolio',
-  //   label: <Trans ns="common">Portfolio</Trans>,
+  //   label:i18n.t("common|Portfolio"),
   //   Icon: PortfolioIcon,
   // },
   // {
   //   id: 7,
   //   to: '/governance',
-  //   label: <Trans ns="common">Governance</Trans>,
+  //   label: i18n.t("common|Governance"),
   //   Icon: GovernanceIcon,
   // },
   {
     id: 'More',
-    label: <Trans ns="common">More</Trans>,
+    label: i18n.t('common|More'),
     Icon: MoreIcon,
     to: '',
     links: [
       {
         id: 'More_Voting',
         to: AppRootRoutes.Voting,
-        label: <Trans ns="common">Voting</Trans>
+        label: i18n.t('common|Voting')
       },
       {
         id: 'More_About',

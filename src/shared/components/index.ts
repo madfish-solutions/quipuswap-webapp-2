@@ -62,3 +62,4 @@ export * from './list-filter-view';
 export * from './switcher-list-filter-view';
 export * from './sorter-view';
 export * from './radio-button';
+export * from './list-stats';

@@ -13,6 +13,7 @@ export const common = {
   Portfolio: 'Portfolio',
   Governance: 'Governance',
   Stableswap: 'Stableswap',
+  Dividends: 'Dividends',
   'Stableswap Liquidity': 'Stableswap Liquidity',
   Feedback: 'Feedback',
   Analytics: 'Analytics',
