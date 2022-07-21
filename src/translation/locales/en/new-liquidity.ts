@@ -1,6 +1,6 @@
 //TODO: tooltips: tvl, apr, pools
 
-export const stake = {
+export const newLiquidity = {
   Liquidity: 'Liquidity',
   tvl: 'Total Value Locked',
   tvlTooltip: 'tvl tooltip',

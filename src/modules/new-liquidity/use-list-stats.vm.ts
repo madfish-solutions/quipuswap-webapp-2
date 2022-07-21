@@ -7,20 +7,20 @@ export const useListStatsViewModel = () => {
 
   const stats = [
     {
-      title: t('stake|tvl'),
-      tooltip: t('stake|tvlTooltip'),
+      title: t('newLiquidity|tvl'),
+      tooltip: t('newLiquidity|tvlTooltip'),
       amount: new BigNumber(10),
       testId: 'statsTVL'
     },
     {
-      title: t('stake|maxApr'),
-      tooltip: t('stake|maxAprTooltip'),
+      title: t('newLiquidity|maxApr'),
+      tooltip: t('newLiquidity|maxAprTooltip'),
       amount: new BigNumber(20),
       testId: 'statsMaxAPR'
     },
     {
-      title: t('stake|pools'),
-      tooltip: t('stake|poolsTooltip'),
+      title: t('newLiquidity|pools'),
+      tooltip: t('newLiquidity|poolsTooltip'),
       amount: new BigNumber(30),
       testId: 'statsPools'
     }

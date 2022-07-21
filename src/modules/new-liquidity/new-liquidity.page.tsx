@@ -5,7 +5,7 @@ import { useTranslation } from '@translation';
 
 import { useListStatsViewModel } from './use-list-stats.vm';
 
-export const StakePage: FC = () => {
+export const NewLiquidityPage: FC = () => {
   const { stats } = useListStatsViewModel();
   const { t } = useTranslation();
 
@@ -13,7 +13,7 @@ export const StakePage: FC = () => {
     <StateWrapper loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
-      <PageTitle>{t('stake|Liquidity')}</PageTitle>
+      <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
 
       <ListStats stats={stats} slidesToShow={3} />
     </StateWrapper>
