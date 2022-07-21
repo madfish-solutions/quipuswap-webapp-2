@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { fromDecimals } from '../helpers';
+import { toReal } from '../helpers';
 import { Nullable, Optional, Token } from '../types/types';
 
 export const balanceMap = (balance: Nullable<BigNumber>, token: Optional<Token>) => {
@@ -11,5 +11,5 @@ export const balanceMap = (balance: Nullable<BigNumber>, token: Optional<Token>)
     return balance;
   }
 
-  return fromDecimals(balance, token);
+  return toReal(balance, token);
 };

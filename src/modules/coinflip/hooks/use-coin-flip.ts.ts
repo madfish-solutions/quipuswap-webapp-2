@@ -7,7 +7,7 @@ import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getContract } from '@shared/dapp';
-import { isNull, isTezosToken, toDecimals } from '@shared/helpers';
+import { isNull, isTezosToken, toAtomic } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { betTokens } from '../api';
@@ -26,7 +26,7 @@ export const useCoinFlip = () => {
 
     try {
       const tokenAsset = isTezosToken(token) ? TOKEN_ASSETS.TEZOS : TOKEN_ASSETS.QUIPU;
-      const formattedAmount = toDecimals(inputAmount, TEZOS_TOKEN_DECIMALS);
+      const formattedAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);
 
       const contract = await getContract(tezos, COINFLIP_CONTRACT_ADDRESS);
       const { network_fee } = await contract.storage<CoinflipStorage>();

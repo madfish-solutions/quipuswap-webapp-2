@@ -35,7 +35,7 @@ export const useStableDividendsHarvestAll = () => {
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_HARVEST_ALL', logData);
         const operation = await stableDividendsHarvestApi(tezos, contractAdresses);
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyHarvested') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyHarvested') });
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_HARVEST_ALL_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);

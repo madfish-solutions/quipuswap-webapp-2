@@ -6,7 +6,7 @@ import { ZERO_AMOUNT } from '@config/constants';
 import { stableDividendsStakeApi } from '@modules/stableswap/api';
 import { useStableDividendsStakerBalance } from '@modules/stableswap/stabledividends/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { fromDecimals, isNull, placeUSDDecimals } from '@shared/helpers';
+import { toReal, isNull, placeUSDDecimals } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { useToasts, useConfirmOperation } from '@shared/utils';
@@ -33,10 +33,8 @@ export const useStableDividendsStake = () => {
         stableswapDividendsStake: {
           poolId: id.toNumber(),
           apr: apr.toNumber(),
-          amount: fromDecimals(amount, stakedToken).toNumber(),
-          amountUsd: placeUSDDecimals(
-            fromDecimals(amount, stakedToken).multipliedBy(stakedTokenExchangeRate)
-          ).toNumber(),
+          amount: toReal(amount, stakedToken).toNumber(),
+          amountUsd: placeUSDDecimals(toReal(amount, stakedToken).multipliedBy(stakedTokenExchangeRate)).toNumber(),
           tvl: tvl.toNumber(),
           tvlUsd: placeUSDDecimals(tvl.multipliedBy(stakedTokenExchangeRate)).toNumber(),
           hadStakeBefore: stakerBalance?.gt(ZERO_AMOUNT) ?? false
@@ -47,7 +45,7 @@ export const useStableDividendsStake = () => {
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_STAKE', logData);
         const operation = await stableDividendsStakeApi(tezos, contractAddress, amount, accountPkh);
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyStaked') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyStaked') });
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_STAKE_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);

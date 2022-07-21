@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
-import { MichelsonMap, TezosToolkit, TransferParams } from '@taquito/taquito';
+import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_TOKEN_ID } from '@config/constants';
-import { isTokenFa2, saveBigNumber } from '@shared/helpers';
+import { QUIPU_TOKEN } from '@config/tokens';
+import { isTokenFa2, saveBigNumber, toAtomic } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
 
 import { TokensValue } from '../types';
@@ -70,11 +70,17 @@ const mapStableswapFee = ({ liquidityProvidersFee, stakersFee, interfaceFee }: F
   ref_f: interfaceFee
 });
 
-const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees) => {
+const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees, creationPrice: Nullable<BigNumber>) => {
   const contractFees: FeeType = mapStableswapFee(fees);
 
   const inputTokens: Array<TokensValue> = [];
-  const amountTokenList: Array<AmountToken> = [];
+  const amountTokenList: Array<AmountToken> = [
+    // 1,000 QUIPU
+    {
+      token: QUIPU_TOKEN,
+      amount: creationPrice ? toAtomic(creationPrice, QUIPU_TOKEN) : new BigNumber('1')
+    }
+  ];
   const tokensInfo = new MichelsonMap<BigNumber, TokenInfo>();
 
   creationParams.forEach(({ token, reserves, rateF, precisionMultiplierF }, index) => {
@@ -98,35 +104,43 @@ export const createStableswapPoolApi = async (
   amplificationParameter: BigNumber,
   fees: Fees,
   accountPkh: string,
-  managers: string[] = []
+  creationPrice: Nullable<BigNumber>
 ) => {
-  const { inputTokens, tokensInfo, contractFees, amountTokenList } = prepareNewPoolData(creationParams, fees);
-
+  const { inputTokens, tokensInfo, contractFees, amountTokenList } = prepareNewPoolData(
+    creationParams,
+    fees,
+    creationPrice
+  );
   const stableswapPoolContract = await tezos.wallet.at(stableswapFactoryContractAddress);
 
-  let addPoolTransferParams: TransferParams = null as unknown as TransferParams;
-  try {
-    addPoolTransferParams = stableswapPoolContract.methods
-      .add_pool({
-        amplificationParameter,
-        inputTokens,
-        tokensInfo,
-        STABLESWAP_REFERRAL,
-        managers,
-        contractFees
-      })
-      .toTransferParams();
-  } catch (err) {
-    console.log({ inputTokens, tokensInfo, contractFees, amountTokenList });
+  const updatedContractFees = {
+    lp_f: contractFees.lp_f.toNumber(),
+    stakers_f: contractFees.stakers_f.toNumber(),
+    ref_f: contractFees.ref_f.toNumber()
+  };
 
-    console.error(err);
-  }
+  // eslint-disable-next-line no-console
+  console.log('add_pool.params', updatedContractFees);
+  const addPoolTransferParams = stableswapPoolContract.methods
+    .add_pool(
+      amplificationParameter,
+      inputTokens,
+      tokensInfo,
+      STABLESWAP_REFERRAL,
+      [],
+      contractFees.lp_f,
+      contractFees.stakers_f,
+      contractFees.ref_f
+    )
+    .toTransferParams({ storageLimit: 40000 });
 
   const inputs = new MichelsonMap();
 
   tokensInfo.forEach((value, key) => inputs.set(key, { token: inputTokens[key.toNumber()], value: value.reserves }));
 
-  const startDexTransferParams = stableswapPoolContract.methods.start_dex(inputs).toTransferParams();
+  const startDexTransferParams = stableswapPoolContract.methods
+    .start_dex(inputs)
+    .toTransferParams({ storageLimit: 40000 });
 
   return await withApproveApiForManyTokens(tezos, stableswapFactoryContractAddress, amountTokenList, accountPkh, [
     addPoolTransferParams,

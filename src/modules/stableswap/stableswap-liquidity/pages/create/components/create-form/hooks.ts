@@ -157,7 +157,7 @@ export const useRadioButtonParams = (formik: ReturnType<typeof useFormik>) => {
   return { radioButtonParams };
 };
 
-export const useHandleTokensCahange = (formik: ReturnType<typeof useFormik>) => {
+export const useHandleTokensChange = (formik: ReturnType<typeof useFormik>) => {
   const handleTokensChange = useCallback(
     (chosenTokens: Nullable<Array<Token>>) => {
       formik.setValues((prev: Record<string, string>) => {
