@@ -1,6 +1,6 @@
 @import "@styles/variables";
 
-@mixin radio-button($outline-color, $background-color) {
+@mixin radio-button($outline-color, $background-color, $highlight-color) {
   &.radioButton {
     display: grid;
     row-gap: 20px;
@@ -17,7 +17,7 @@
       position: absolute;
       left: -9999px;
       &:checked + span {
-        font-weight: 600;
+        color: $highlight-color;
         &:before {
           box-shadow: inset 0 0 0 2px $outline-color, inset 0 0 0 5px $background-color, inset 0 0 0 10px $outline-color;
         }
@@ -41,10 +41,11 @@
     }
   }
 }
+
 .light {
-  @include radio-button($hover-primary-01-fallback, $ui-01);
+  @include radio-button($hover-primary-01-fallback, $ui-01, $text-01);
 }
 
 .dark {
-  @include radio-button($hover-primary-02-fallback, $ui-07);
+  @include radio-button($hover-primary-02-fallback, $ui-07, $text-inverse);
 }
