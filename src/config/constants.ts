@@ -146,3 +146,6 @@ export const SERVER_UNAVAILABLE_ERROR_MESSAGE = '503 Service Temporarily Unavail
 export const CONTRACT_DECIMALS_PRECISION = 1e18;
 export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
+
+//TESTNET
+export const TESTNET_EXCHANGE_RATE = 1.5;
