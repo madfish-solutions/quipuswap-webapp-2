@@ -3,10 +3,11 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
+import { getLiquidityUrl } from '@shared/helpers';
 import { Nullable, Token, TokenPair } from '@shared/types';
 
 import { useDexContract } from '../hooks';
-import { findToken, getLiquidityUrl, parseUrl } from './helpers';
+import { findToken, parseUrl } from './helpers';
 import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
 const handleSearchPromise = async (
