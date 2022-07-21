@@ -6,7 +6,8 @@ import { home } from './home';
 import { liquidity } from './liquidity';
 import { settings } from './settings';
 import { stableswap } from './stable-swap';
+import { stake } from './stake';
 import { swap } from './swap';
 import { voting } from './voting';
 
-export const locales = { baker, common, farm, home, liquidity, swap, voting, settings, stableswap, coinflip };
+export const locales = { baker, common, farm, home, liquidity, swap, voting, settings, stableswap, coinflip, stake };
