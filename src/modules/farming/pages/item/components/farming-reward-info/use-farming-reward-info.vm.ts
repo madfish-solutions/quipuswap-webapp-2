@@ -1,12 +1,13 @@
-import { NO_TIMELOCK_VALUE, PRECISION_PERCENT } from '@config/constants';
+import { NO_TIMELOCK_VALUE } from '@config/constants';
 import { useBakers } from '@providers/dapp-bakers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible } from '@shared/helpers';
+import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, placeDecimals } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
 import { useFarmingItemStore, useDoHarvest, useGetFarmingItem } from '../../../../hooks';
 import { canDelegate, makeBaker } from '../../helpers';
+import { getUserReward } from './get-user-reward.helper';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
 
@@ -44,7 +45,7 @@ export const useFarmingRewardInfoViewModel = () => {
       myDelegate: null,
       delegatesLoading,
       endTimestamp: null,
-      myRewardInTokens: null,
+      myReward: null,
       myRewardInUsd: null,
       myDepositDollarEquivalent: null,
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
@@ -58,15 +59,11 @@ export const useFarmingRewardInfoViewModel = () => {
   }
 
   const myDepositDollarEquivalent = multipliedIfPossible(farmingItem.depositBalance, farmingItem.depositExchangeRate);
-  const myRewardInTokensClear =
-    farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
-  const myRewardInTokens =
-    (itemStore.data?.harvestFee
-      ? myRewardInTokensClear?.minus(
-          myRewardInTokensClear.div(PRECISION_PERCENT).multipliedBy(itemStore.data.harvestFee)
-        )
-      : myRewardInTokensClear) ?? null;
-  const myRewardInUsd = multipliedIfPossible(myRewardInTokens, farmingItem.earnExchangeRate);
+  const myRewardInAtomic = farmingItem.earnBalance
+    ? placeDecimals(farmingItem.earnBalance, farmingItem.stakedToken.metadata.decimals)
+    : null;
+  const myReward = getUserReward(myRewardInAtomic, itemStore.data?.harvestFee);
+  const myRewardInUsd = multipliedIfPossible(myReward, farmingItem.earnExchangeRate);
 
   // TODO: Move to the model
   const shouldShowCountdown = farmingItem.timelock !== NO_TIMELOCK_VALUE;
@@ -81,7 +78,7 @@ export const useFarmingRewardInfoViewModel = () => {
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
     endTimestamp,
-    myRewardInTokens,
+    myReward,
     myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
