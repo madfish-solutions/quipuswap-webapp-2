@@ -113,14 +113,6 @@ export const createStableswapPoolApi = async (
   );
   const stableswapPoolContract = await tezos.wallet.at(stableswapFactoryContractAddress);
 
-  const updatedContractFees = {
-    lp_f: contractFees.lp_f.toNumber(),
-    stakers_f: contractFees.stakers_f.toNumber(),
-    ref_f: contractFees.ref_f.toNumber()
-  };
-
-  // eslint-disable-next-line no-console
-  console.log('add_pool.params', updatedContractFees);
   const addPoolTransferParams = stableswapPoolContract.methods
     .add_pool(
       amplificationParameter,
