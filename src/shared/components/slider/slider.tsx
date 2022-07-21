@@ -40,13 +40,18 @@ const modeClass = {
 };
 
 interface Props {
+  slidesToShow?: number;
   className?: string;
 }
 
-export const Slider: CFC<Props> = ({ className, children }) => {
+export const Slider: CFC<Props> = ({ slidesToShow, className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
+
+  if (slidesToShow) {
+    SliderSettings.slidesToShow = slidesToShow;
+  }
 
   return (
     <Card className={compoundClassnames} isV2>

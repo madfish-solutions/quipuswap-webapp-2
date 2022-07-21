@@ -10,6 +10,7 @@ import { HomePage } from '@modules/home';
 import { LiquidityPage } from '@modules/liquidity';
 import { PrivacyPolicyPage } from '@modules/privacy-policy';
 import { StableswapRouter } from '@modules/stableswap/stableswap.routing';
+import { StakePage } from '@modules/stake';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
 import { TermsOfServicePage } from '@modules/terms-of-service';
 import { VotingPage } from '@modules/voting';
@@ -22,6 +23,7 @@ export const AppRouter: FC = () => (
     <Route path={`${AppRootRoutes.Send}/*`} element={<SendPage />} />
 
     <Route path={`${AppRootRoutes.Liquidity}/*`} element={<LiquidityPage />} />
+    <Route path={`${AppRootRoutes.Stake}/*`} element={<StakePage />} />
 
     <Route path={`${AppRootRoutes.Stableswap}/*`} element={<StableswapRouter />} />
 

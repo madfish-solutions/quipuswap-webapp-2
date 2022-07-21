@@ -13,7 +13,8 @@ import {
   MoreIcon,
   StableswapIcon,
   SwapIcon,
-  GameIcon
+  GameIcon,
+  NavStakeIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { i18n, Trans } from '@translation';
@@ -62,6 +63,12 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Liquidity,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
+  },
+  {
+    id: 'Stake',
+    to: AppRootRoutes.Stake,
+    label: <Trans ns="common">Stake</Trans>,
+    Icon: NavStakeIcon // rename
   },
   {
     id: 'Farming',
