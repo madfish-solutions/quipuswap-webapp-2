@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import {
   isExist,
   isNull,
@@ -11,7 +11,7 @@ import {
   getUniqArray,
   getTokenSlug,
   multipliedIfPossible,
-  fromDecimals
+  toReal
 } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -102,7 +102,7 @@ export class FarmingListStore {
   }
 
   async getQuipuPendingRewards() {
-    return (await this.getUniqTokensRewardForLastBlock(DEFAULT_TOKEN)).claimableRewardsWithFee;
+    return (await this.getUniqTokensRewardForLastBlock(QUIPU_TOKEN)).claimableRewardsWithFee;
   }
 
   makePendingRewardsLiveable() {
@@ -160,10 +160,10 @@ export class FarmingListStore {
       Date.now()
     );
 
-    const claimableAmount = fromDecimals(claimableRewardsWithoutFee, rewardToken);
+    const claimableAmount = toReal(claimableRewardsWithoutFee, rewardToken);
     const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
 
-    const skatedAmount = fromDecimals(stakedRewardsWithoutFee, rewardToken);
+    const skatedAmount = toReal(stakedRewardsWithoutFee, rewardToken);
     const skatedDollarEquivalent = multipliedIfPossible(skatedAmount, earnExchangeRate);
 
     return {

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { defined, fromDecimals } from '@shared/helpers';
+import { defined, toReal } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { FarmingItem } from '../interfaces';
@@ -13,7 +13,7 @@ export const getStakeUnstakeLogData = (
   isUnlocked: boolean
 ) => {
   const token = defined(farmingItem).stakedToken;
-  const inputAmountWithDecimals = fromDecimals(balance, token);
+  const inputAmountWithDecimals = toReal(balance, token);
 
   return { farming: { ...mapFarmingLog(farmingItem, inputAmountWithDecimals), timeout, isUnlocked } };
 };

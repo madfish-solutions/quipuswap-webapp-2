@@ -6,7 +6,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
 import { CreationParams } from '@modules/stableswap/api';
-import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, toDecimals } from '@shared/helpers';
+import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, toAtomic } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circlar dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
@@ -25,7 +25,7 @@ import {
   useInputTokenParams,
   useLiquidityProvidersFeeInputParams,
   useRadioButtonParams,
-  useHandleTokensCahange
+  useHandleTokensChange
 } from './hooks';
 
 export const useCreateFormViewModel = () => {
@@ -53,7 +53,7 @@ export const useCreateFormViewModel = () => {
           const { decimals } = token.metadata;
 
           return {
-            reserves: toDecimals(new BigNumber(value), decimals),
+            reserves: toAtomic(new BigNumber(value), decimals),
             precisionMultiplierF: new BigNumber(10).pow(
               new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
             ),
@@ -69,7 +69,8 @@ export const useCreateFormViewModel = () => {
     await createStableswapPool({
       amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
       fee: { liquidityProvidersFee: new BigNumber(values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]) },
-      creationParams
+      creationParams,
+      creationPrice
     });
 
     formik.resetForm();
@@ -84,7 +85,7 @@ export const useCreateFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  const { handleTokensChange } = useHandleTokensCahange(formik);
+  const { handleTokensChange } = useHandleTokensChange(formik);
 
   const handleSelectTokensClick = useCallback(async () => {
     const chosenTokens = await chooseTokens({
