@@ -56,4 +56,4 @@ export * from './favorite';
 export * from './bin';
 export * from './coinflip-fail-result';
 export * from './coinflip-success-result';
-export * from './stake-nav-icon';
+export * from './new-liquidity-icon';
