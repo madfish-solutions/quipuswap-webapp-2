@@ -1,12 +1,14 @@
 import { FC } from 'react';
 
-import { ListStats, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, ListItemCard, ListStats, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
+import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const NewLiquidityPage: FC = () => {
   const { stats } = useListStatsViewModel();
+  const { list } = newLiquidityListDataHelper();
   const { t } = useTranslation();
 
   return (
@@ -16,6 +18,8 @@ export const NewLiquidityPage: FC = () => {
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
 
       <ListStats stats={stats} slidesToShow={3} />
+
+      <Iterator render={ListItemCard} data={list} />
     </StateWrapper>
   );
 };
