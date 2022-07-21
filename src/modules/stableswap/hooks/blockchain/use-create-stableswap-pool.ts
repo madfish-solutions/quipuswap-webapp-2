@@ -59,6 +59,7 @@ export const useCreateStableswapPool = () => {
         await confirmOperation(operation.opHash, { message: t('stableswap|successfullyHarvested') });
       } catch (error) {
         showErrorToast(error as Error);
+        throw error;
       }
     },
     [accountPkh, confirmOperation, showErrorToast, t, tezos]

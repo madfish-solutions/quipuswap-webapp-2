@@ -145,9 +145,7 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
 export const useRadioButtonParams = (formik: ReturnType<typeof useFormik>) => {
   const radioButtonParams: RadioButtonProps = useMemo(
     () => ({
-      onChange: (value: string) => {
-        formik.setFieldValue(AMPLIFICATION_FIELD_NAME, value);
-      },
+      onChange: async (value: string) => formik.setFieldValue(AMPLIFICATION_FIELD_NAME, value),
       value: formik.values[AMPLIFICATION_FIELD_NAME],
       values: createPoolAmplification
     }),
