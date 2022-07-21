@@ -17,6 +17,7 @@ export interface StableswapList {
 
 interface AbstractStableItem {
   id: BigNumber;
+  poolId: BigNumber;
   contractAddress: string;
   tokensInfo: Array<StableswapTokensInfo>;
   isWhitelisted: boolean;

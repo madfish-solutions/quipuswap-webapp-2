@@ -8,7 +8,7 @@ import { useTranslation } from '@translation';
 import { useStableswapItemStore } from '../../../../../hooks';
 import styles from './details.module.scss';
 
-export const useDetailsVievModel = () => {
+export const useDetailsViewModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
   const { itemStore } = useStableswapItemStore();
@@ -29,7 +29,7 @@ export const useDetailsVievModel = () => {
 
     return {
       ...item,
-      poolId: item.id,
+      poolId: item.poolId.toFixed(),
       cardCellClassName,
       isLoading,
       tokensLockedData
