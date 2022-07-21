@@ -68,7 +68,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Stake',
     to: AppRootRoutes.Stake,
     label: <Trans ns="common">Stake</Trans>,
-    Icon: NavStakeIcon // rename
+    Icon: NavStakeIcon
   },
   {
     id: 'Farming',

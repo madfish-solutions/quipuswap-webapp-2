@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 
-import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
-import { ListStats } from '@shared/components/list-stats/list-stats';
+import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert, ListStats } from '@shared/components';
 
 import { EmptyFarmingList, FarmingListSkeleton, FarmingRewardsList } from './components';
 import styles from './farming-list.page.module.scss';
