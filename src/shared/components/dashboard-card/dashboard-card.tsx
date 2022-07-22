@@ -16,8 +16,9 @@ interface DashboardCardProps {
   currency?: string;
   tooltip?: string;
   hideTooltip?: boolean;
-  className?: string;
   loading?: boolean;
+  className?: string;
+  stateCurrencyClassName?: string;
 }
 
 const modeClass = {
@@ -32,8 +33,9 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   currency,
   tooltip,
   hideTooltip,
-  className,
   loading = false,
+  className,
+  stateCurrencyClassName,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -44,7 +46,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
         {label} {!hideTooltip && tooltip && <Tooltip content={tooltip} />}
       </h4>
       <StateCurrencyAmount
-        className={styles.currencyAmount}
+        className={cx(styles.currencyAmount, stateCurrencyClassName)}
         amount={volume}
         currency={currency}
         isLeftCurrency={currency === '$'}
