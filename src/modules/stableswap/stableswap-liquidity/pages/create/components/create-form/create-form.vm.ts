@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
@@ -6,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
 import { CreationParams } from '@modules/stableswap/api';
-import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, toAtomic } from '@shared/helpers';
+import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, stringToBigNumber, toAtomic } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circlar dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
@@ -54,7 +53,7 @@ export const useCreateFormViewModel = () => {
             const { decimals } = token.metadata;
 
             return {
-              reserves: toAtomic(new BigNumber(value), decimals),
+              reserves: toAtomic(stringToBigNumber(value), decimals),
               precisionMultiplierF: new BigNumber(10).pow(
                 new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
               ),
