@@ -11,7 +11,6 @@ import styles from './hot-pool-slider.module.scss';
 const SliderSettings = {
   slidesToShow: 4,
   slidesToScroll: 1,
-  dots: true,
   infinite: true,
   arrows: false,
   responsive: [
@@ -20,8 +19,7 @@ const SliderSettings = {
       settings: {
         slidesToShow: 4,
         slidesToScroll: 1,
-        infinite: true,
-        dots: true
+        infinite: true
       }
     },
     {
@@ -29,8 +27,7 @@ const SliderSettings = {
       settings: {
         slidesToShow: 3,
         slidesToScroll: 1,
-        infinite: true,
-        dots: true
+        infinite: true
       }
     },
     {
@@ -38,8 +35,7 @@ const SliderSettings = {
       settings: {
         slidesToShow: 2,
         slidesToScroll: 1,
-        infinite: true,
-        dots: true
+        infinite: true
       }
     },
     {
@@ -47,8 +43,7 @@ const SliderSettings = {
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1,
-        infinite: true,
-        dots: true
+        infinite: true
       }
     }
   ],
@@ -71,7 +66,7 @@ export const HotPoolSlider: CFC<Props> = ({ className, children }) => {
 
   return (
     <div className={compoundClassnames}>
-      <ReactSlider autoplay pauseOnHover draggable {...SliderSettings}>
+      <ReactSlider autoplay pauseOnHover className={styles.slider} draggable {...SliderSettings}>
         {children}
       </ReactSlider>
     </div>

@@ -8,6 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, DashboardCard, TokensLogos, TokensSymbols } from '@shared/components';
 import { Confettis } from '@shared/svg';
 import { Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import { HotPoolLable } from '../hot-pool-label';
 import styles from './hot-pool-card.module.scss';
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
+  const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -42,7 +44,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={tvl}
-              label={'TVL'}
+              label={t('newLiquidity|TVL')}
               currency={DOLLAR}
               data-test-id="TVL"
             />
@@ -51,9 +53,9 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={apr}
-              label={'APR up to'}
+              label={t('newLiquidity|aprUpTo')}
               currency={PERCENT}
-              data-test-id="TVL"
+              data-test-id="aprUpTo"
             />
           </div>
         </div>
