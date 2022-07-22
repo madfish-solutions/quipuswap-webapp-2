@@ -1,4 +1,5 @@
 export * from './big-number-to-string';
+export * from './string-to-big-number';
 export * from './multiplied-if-possible';
 export * from './to-real';
 export * from './to-atomic';
