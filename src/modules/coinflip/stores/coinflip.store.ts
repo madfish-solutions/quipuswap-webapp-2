@@ -17,6 +17,7 @@ import {
   getUserLastGameInfo
 } from '../api';
 import { GeneralStatsInterface } from '../api/types';
+import { getBidSize } from '../helpers';
 import { DashboardGeneralStats, GamersStats, GamersStatsRaw, UserLastGame, UserLastGameRaw } from '../interfaces';
 import { DEFAULT_GENERAL_STATS, generalStatsMapping, userLastGameMapper } from '../mapping';
 import { gamersStatsMapper } from '../mapping/gamers-stats.map';
@@ -134,6 +135,10 @@ export class CoinflipStore {
 
   get tokensWithReward(): Nullable<TokenWon[]> {
     return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
+  }
+
+  get bidSize() {
+    return getBidSize(this.generalStats?.bank, this.generalStats?.maxBetPercent);
   }
 
   get payout(): Nullable<BigNumber> {
