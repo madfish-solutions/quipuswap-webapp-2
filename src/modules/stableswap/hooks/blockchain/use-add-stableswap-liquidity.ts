@@ -6,7 +6,7 @@ import { STABLESWAP_LP_DECIMALS } from '@config/constants';
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, fromDecimals, isExist, isNull, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, toReal, isExist, isNull, toAtomic } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -54,7 +54,7 @@ export const useAddStableswapLiquidity = () => {
     const amountsAtoms = inputAmounts.map((amount, index) =>
       isNull(amount) || amount.isNaN()
         ? new BigNumber('0')
-        : toDecimals(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
+        : toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
@@ -75,7 +75,7 @@ export const useAddStableswapLiquidity = () => {
       stableswapLiquidityAdd: getStableswapLiquidityLogData(
         tokensInfo,
         inputAmounts,
-        fromDecimals(sharesWithFee, STABLESWAP_LP_DECIMALS),
+        toReal(sharesWithFee, STABLESWAP_LP_DECIMALS),
         liquiditySlippage,
         item
       )
@@ -92,7 +92,7 @@ export const useAddStableswapLiquidity = () => {
         accountPkh
       );
 
-      await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
+      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });
       amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);

@@ -6,7 +6,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
 import { CreationParams } from '@modules/stableswap/api';
-import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, toDecimals } from '@shared/helpers';
+import { getTokenIdFromSlug, isEmptyArray, isExist, isTokenEqual, toAtomic } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circlar dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
@@ -25,7 +25,7 @@ import {
   useInputTokenParams,
   useLiquidityProvidersFeeInputParams,
   useRadioButtonParams,
-  useHandleTokensCahange
+  useHandleTokensChange
 } from './hooks';
 
 export const useCreateFormViewModel = () => {
@@ -36,45 +36,53 @@ export const useCreateFormViewModel = () => {
 
   const balances = useTokensBalancesOnly(tokens);
 
-  const handleSubmit = async <T extends Record<PropertyKey, string>>(values: T, actions: FormikHelpers<T>) => {
-    if (isEmptyArray(tokens)) {
-      return;
-    }
+  const handleSubmit = useCallback(
+    async <T extends Record<PropertyKey, string>>(values: T, actions: FormikHelpers<T>) => {
+      if (isEmptyArray(tokens)) {
+        return;
+      }
 
-    actions.setSubmitting(true);
+      actions.setSubmitting(true);
 
-    const valuesArray = Object.entries(values);
+      const valuesArray = Object.entries(values);
 
-    const creationParams: Array<CreationParams> = valuesArray
-      .map(([key, value]) => {
-        const tokenId = getTokenIdFromSlug(key);
-        const token = tokens?.find(token_ => isTokenEqual(token_, tokenId));
-        if (token) {
-          const { decimals } = token.metadata;
+      const creationParams: Array<CreationParams> = valuesArray
+        .map(([key, value]) => {
+          const tokenId = getTokenIdFromSlug(key);
+          const token = tokens?.find(token_ => isTokenEqual(token_, tokenId));
+          if (token) {
+            const { decimals } = token.metadata;
 
-          return {
-            reserves: toDecimals(new BigNumber(value), decimals),
-            precisionMultiplierF: new BigNumber(10).pow(
-              new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
-            ),
-            rateF: new BigNumber(10)
-              .pow(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
-              .multipliedBy(CONTRACT_DECIMALS_PRECISION_POWER),
-            token
-          };
-        }
-      })
-      .filter(isExist);
+            return {
+              reserves: toAtomic(new BigNumber(value), decimals),
+              precisionMultiplierF: new BigNumber(10).pow(
+                new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
+              ),
+              rateF: new BigNumber(10)
+                .pow(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
+                .multipliedBy(CONTRACT_DECIMALS_PRECISION_POWER),
+              token
+            };
+          }
+        })
+        .filter(isExist);
 
-    await createStableswapPool({
-      amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
-      fee: { liquidityProvidersFee: new BigNumber(values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]) },
-      creationParams
-    });
+      try {
+        await createStableswapPool({
+          amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
+          fee: { liquidityProvidersFee: new BigNumber(values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]) },
+          creationParams,
+          creationPrice
+        });
 
-    formik.resetForm();
-    actions.setSubmitting(false);
-  };
+        actions.resetForm();
+        setTokens(null);
+      } finally {
+        actions.setSubmitting(false);
+      }
+    },
+    [createStableswapPool, creationPrice, tokens]
+  );
 
   const { validationSchema, initialValues } = useFormikParams(tokens, balances);
 
@@ -84,7 +92,7 @@ export const useCreateFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  const { handleTokensChange } = useHandleTokensCahange(formik);
+  const { handleTokensChange } = useHandleTokensChange(formik);
 
   const handleSelectTokensClick = useCallback(async () => {
     const chosenTokens = await chooseTokens({
