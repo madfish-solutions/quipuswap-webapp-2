@@ -5,6 +5,7 @@
 .tokensModalCell {
   height: 64px;
   padding: 0 24px;
+  cursor: pointer;
 
   display: flex;
   align-items: center;
@@ -46,4 +47,21 @@
   .tokenName {
     max-width: 300px;
   }
+}
+
+@mixin tokens-modal($highlight-background-color) {
+  &:hover {
+    background: $highlight-background-color;
+  }
+  &.active {
+    background: $highlight-background-color;
+  }
+}
+
+.light {
+  @include tokens-modal($hover-light-row);
+}
+
+.dark {
+  @include tokens-modal($hover-dark-row);
 }

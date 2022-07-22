@@ -3,8 +3,8 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
-import { COINFLIP_TOKENS_TO_PLAY, DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { fromDecimals, defined } from '@shared/helpers';
+import { COINFLIP_TOKENS_TO_PLAY, QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { toReal, defined } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -143,12 +143,12 @@ export class CoinflipStore {
 
   get payout(): Nullable<BigNumber> {
     return this.game.input && this.generalStats?.payoutCoefficient
-      ? this.game.input.times(Number(fromDecimals(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)))
+      ? this.game.input.times(Number(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)))
       : null;
   }
 
   get token(): Token {
-    return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : DEFAULT_TOKEN;
+    return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : QUIPU_TOKEN;
   }
 
   setToken(token: TokenToPlay) {

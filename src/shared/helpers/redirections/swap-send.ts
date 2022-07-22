@@ -1,10 +1,10 @@
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { Optional, SwapTabAction, Undefined } from '@shared/types';
 
 import { getTokenSlug } from '../tokens';
 
 const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
-const DEFAULT_TOKEN_SLUG = getTokenSlug(DEFAULT_TOKEN);
+const DEFAULT_TOKEN_SLUG = getTokenSlug(QUIPU_TOKEN);
 
 export const makeSwapOrSendRedirectionUrl = (
   query: { from: Undefined<string>; to: Undefined<string> },

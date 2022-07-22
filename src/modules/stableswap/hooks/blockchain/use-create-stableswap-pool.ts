@@ -17,6 +17,7 @@ import { useTranslation } from '@translation';
 import { createStableswapPoolApi, CreationParams, Fees } from '../../api';
 
 interface Params {
+  creationPrice: Nullable<BigNumber>;
   amplificationParameter: BigNumber;
   fee: Pick<Fees, 'liquidityProvidersFee'>;
   creationParams: Array<CreationParams>;
@@ -38,7 +39,7 @@ export const useCreateStableswapPool = () => {
   const { accountPkh } = useAuthStore();
 
   const createStableswapPool = useCallback(
-    async ({ amplificationParameter, fee, creationParams }: Params) => {
+    async ({ amplificationParameter, fee, creationParams, creationPrice }: Params) => {
       if (isNull(tezos) || isNull(accountPkh)) {
         return;
       }
@@ -51,12 +52,14 @@ export const useCreateStableswapPool = () => {
           creationParams,
           amplificationParameter,
           fees,
-          accountPkh
+          accountPkh,
+          creationPrice
         );
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyHarvested') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyHarvested') });
       } catch (error) {
         showErrorToast(error as Error);
+        throw error;
       }
     },
     [accountPkh, confirmOperation, showErrorToast, t, tezos]

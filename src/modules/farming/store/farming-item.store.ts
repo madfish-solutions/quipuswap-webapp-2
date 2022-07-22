@@ -3,7 +3,7 @@ import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { fromDecimals, isExist, isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
+import { toReal, isExist, isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
 import { balanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
@@ -80,8 +80,8 @@ export class FarmingItemStore {
     return (
       stakeItem && {
         ...stakeItem,
-        depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
-        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
+        depositBalance: userInfo && toReal(userInfo.staked, stakeItem.stakedToken),
+        earnBalance: this.pendingRewards && toReal(this.pendingRewards, stakeItem.rewardToken)
       }
     );
   }

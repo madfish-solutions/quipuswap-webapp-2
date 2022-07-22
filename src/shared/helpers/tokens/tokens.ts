@@ -4,7 +4,7 @@ import memoizee from 'memoizee';
 
 import { getAllowance } from '@blockchain';
 import { TOKENS } from '@config/config';
-import { networksDefaultTokens, TEZOS_TOKEN } from '@config/tokens';
+import { networksQuipuTokens, TEZOS_TOKEN } from '@config/tokens';
 import { getSavedTokensApi } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { InvalidTokensListError } from '@shared/errors';
@@ -75,7 +75,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
       ...TEZOS_TOKEN,
       network: network.id
     },
-    networksDefaultTokens[network.id]
+    networksQuipuTokens[network.id]
   ];
 
   if (addTokensFromLocalStorage) {
