@@ -109,6 +109,7 @@ export const useInputTokenParams = (
           error: getFormikError(formik, tokenSlug),
           value: formik.values[tokenSlug] ?? '',
           label: i18n.t('common|Input'),
+          decimals: token.metadata.decimals,
           onInputChange: (value: string) => {
             formik.setFieldValue(tokenSlug, value);
           }
