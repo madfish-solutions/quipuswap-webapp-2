@@ -68,7 +68,8 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'NewLiquidity',
     to: AppRootRoutes.NewLiquidity,
     label: i18n.t('newLiquidity|newLiquidity'),
-    Icon: NewLiquidityIcon
+    Icon: NewLiquidityIcon,
+    hide: isProd()
   },
   {
     id: 'Farming',
