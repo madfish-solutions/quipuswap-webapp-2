@@ -10,7 +10,6 @@ import { Confettis } from '@shared/svg';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { HotPoolLable } from '../hot-pool-label';
 import styles from './hot-pool-card.module.scss';
 
 const modeClass = {
@@ -30,8 +29,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
 
   return (
     <Link to={'/'}>
-      <Card className={styles.card} contentClassName={styles.cardContent}>
-        <HotPoolLable className={styles.hotPoolTape} />
+      <Card className={styles.card} contentClassName={styles.cardContent} banner="Hot Pools">
         <div className={styles.root}>
           <Confettis className={styles.confettis} />
           <div className={styles.tokensInfo}>

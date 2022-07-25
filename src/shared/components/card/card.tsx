@@ -1,4 +1,4 @@
-import { FC, HTMLProps, ReactNode, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext, useLayoutEffect, useRef } from 'react';
 
 import cx from 'classnames';
 
@@ -22,6 +22,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     status?: ActiveStatus;
     className?: string;
   };
+  banner?: string;
   additional?: ReactNode;
   footer?: ReactNode;
   contentClassName?: string;
@@ -43,17 +44,30 @@ export const Card: FC<Props> = ({
   children,
   isV2 = false,
   contentClassName,
+  banner,
   footerClassName,
   ...props
 }) => {
+  const container = useRef<HTMLDivElement>(null);
+
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const rootClassName = cx(styles.root, { [styles.banner]: banner }, modeClass[colorThemeMode], className);
+
+  useLayoutEffect(() => {
+    container.current?.style.setProperty('--hot-pools', JSON.stringify(`${banner}`));
+  }, [banner]);
+
   if (isV2) {
-    return <div className={cx(styles.root, modeClass[colorThemeMode], className)}>{children}</div>;
+    return (
+      <div ref={container} className={rootClassName}>
+        {children}
+      </div>
+    );
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
+    <div ref={container} className={rootClassName} {...props}>
       {header && (
         <div className={cx(styles.header, header.className)}>
           <span data-test-id="headerContent">{header.content}</span>
