@@ -1,11 +1,14 @@
 name: cypress
 
-on: [push, deployment, deployment_status]
+on: [deployment_status]
 jobs:
-  show-event:
+  e2e:
+    if: github.event.deployment_status.state == 'success' github.event.deployment_status.environment == 'Preview – qs-ui'
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
+      - name: Checkout 🛎
+        uses: actions/checkout@v1
+      - name: Run Cypress 🌲
+        uses: cypress-io/github-action@v2
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
