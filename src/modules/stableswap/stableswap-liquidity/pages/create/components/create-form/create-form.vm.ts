@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
 import {
   getTokenIdFromSlug,
@@ -107,6 +108,7 @@ export const useCreateFormViewModel = () => {
   const handleSelectTokensClick = useCallback(async () => {
     const chosenTokens = await chooseTokens({
       tokens,
+      disabledTokens: [TEZOS_TOKEN],
       min: MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
       max: MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
     });

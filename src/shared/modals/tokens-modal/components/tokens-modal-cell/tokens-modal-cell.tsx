@@ -16,8 +16,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+export interface ExtendTokensModalCellProps extends ManagedToken {
+  isChosen: boolean;
+  disabled: boolean;
+}
+
 export interface TokensModalCellProps {
-  token: ManagedToken & { isChosen: boolean };
+  token: ExtendTokensModalCellProps;
   onTokenClick: () => void;
   balance?: Nullable<BigNumber.Value>;
 }
@@ -28,7 +33,10 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
 
   return (
     <div
-      className={cx(modeClass[colorThemeMode], styles.tokensModalCell, { [styles.active]: token.isChosen })}
+      className={cx(modeClass[colorThemeMode], styles.tokensModalCell, {
+        [styles.active]: token.isChosen,
+        [styles.disabled]: token.disabled
+      })}
       onClick={onTokenClick}
     >
       <TokensLogos width={32} tokens={token} />
@@ -40,7 +48,7 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
 
       <div className={styles.checkboxContainer}>
         {balance && <StateCurrencyAmount amount={balance} />}
-        <Checkbox className={styles.checkbox} checked={token.isChosen} />
+        <Checkbox className={styles.checkbox} checked={token.isChosen} disabled={token.disabled} />
       </div>
     </div>
   );
