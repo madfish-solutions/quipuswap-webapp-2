@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
 import cx from 'classnames';
 
+import { usePoolCreationPrice } from '@modules/stableswap/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -15,77 +16,92 @@ const modeClass = {
 
 export const DetailsRules = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { creationPrice } = usePoolCreationPrice();
   const { t } = useTranslation();
+  const { price, halfPrice } = useMemo(
+    () => ({ price: creationPrice?.toFixed() ?? '', halfPrice: creationPrice?.dividedBy('2').toFixed() ?? '' }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [creationPrice?.toFixed()]
+  );
 
   return (
     <Card
       header={{
-        content: t('common|Pool Details')
+        content: t('stableswap|creationRules')
       }}
       className={modeClass[colorThemeMode]}
       contentClassName={styles.content}
       data-test-id="stableswapDetails"
     >
-      <div>Stable DEX liquidity pool creation rules</div>
-      <div>With the aid of this tool, you may create token pools with equal value.</div>
-      <div>Rules:</div>
+      <div>{t('stableswap|youMayCreatePool')}</div>
+
+      <h4 className={styles.rules}>{t('stableswap|rules')}</h4>
 
       <ol className={styles.orderedList}>
         <li>
-          1) Choose <span className={styles.accent}>two</span> to <span className={styles.accent}>four</span>{' '}
-          equal-value Tezos-based tokens and put the starting values in the input field.
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>1)</span> {t('stableswap|chooseTokens')}
+          </span>
         </li>
 
-        <li>2) By creating a pool, you will pay the following fees:</li>
+        <li>
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>2)</span> {t('stableswap|followingFees')}
+          </span>
+        </li>
 
         <ul className={styles.sublist}>
-          <li>Standard tezos blockchain fee for interaction with the smart-contract</li>
-          <li>
-            <span>
-              <span className={styles.accent}>400</span> QUIPU, where <span className={styles.accent}>200</span> QUIPU
-              are immediately burned, and <span className={styles.accent}>200</span> QUIPU will move to the QuipuSwap
-              dev fund.
-            </span>
-          </li>
-        </ul>
-
-        <li>3) Set up a fee that will be paid to the liquidity providers of your pool.</li>
-        <ul className={styles.sublist}>
-          <li>
-            The maximum fee is 1%, but we advise you to set the fee around 0.07% to balance out the provider's incentive
-            and low transaction fees.
-          </li>
-        </ul>
-
-        <li>4) Choose the Amplification parameters (A)</li>
-        <ul className={styles.sublist}>
-          <li>
-            The application parameter determines a pool's tolerance for the imbalance between its assets. A higher value
-            means that trades will incur slippage sooner as the assets within the pool become imbalanced.
-          </li>
+          <li>{t('stableswap|standardFee')}</li>
+          <li>{t('stableswap|ourFee', { price, halfPrice })}</li>
         </ul>
 
         <li>
-          5) Remember that QuipuSwap will charge the following fees{' '}
-          <span className={styles.normal}>for each trading operation in your pool:</span>
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>3)</span>
+            {t('stableswap|setupLiquidityProvidersFee')}
+          </span>
+        </li>
+        <p className={styles.paragraph}>{t('stableswap|maxLiquidityProviderFeeDecriptions')}</p>
+
+        <li>
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>4)</span>
+            {t('stableswap|chooseAmplification')}
+          </span>
+        </li>
+        <p className={styles.paragraph}>{t('stableswap|amplificationDecriptions')}</p>
+
+        <li>
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>5)</span>
+            <span>
+              {t('stableswap|rememberInbuiltFee')}{' '}
+              <span className={styles.normal}>{t('stableswap|forEachOperation')}</span>
+            </span>
+          </span>
           <ul className={styles.sublist}>
             <li>
-              Liquidity providers fee: <span className={cx(styles.accent, styles.leftSpace)}>custom</span>
+              {t('stableswap|liquidityProvidersFeeDecriptions')}{' '}
+              <span className={cx(styles.accent, styles.leftSpace)}>Custom</span>
             </li>
             <li>
-              Interface Fee: <span className={cx(styles.accent, styles.leftSpace)}>0.005%</span>
+              {t('stableswap|interfaceFeeDecriptions')}{' '}
+              <span className={cx(styles.accent, styles.leftSpace)}>0.005%</span>
             </li>
             <li>
-              QUIPU Stakers Fee: <span className={cx(styles.accent, styles.leftSpace)}>0.03%</span>
+              {t('stableswap|stakersFeeDecriptions')} <span className={cx(styles.accent, styles.leftSpace)}>0.03%</span>
             </li>
             <li>
-              Dev Fee: <span className={cx(styles.accent, styles.leftSpace)}>0.045%</span>
+              {t('stableswap|devFeeDecriptions')} <span className={cx(styles.accent, styles.leftSpace)}>0.045%</span>
             </li>
           </ul>
         </li>
 
         <li>
-          6) Click the <span className={styles.accent}>Create</span> button!
+          <span className={styles.liTitle}>
+            <span className={styles.accent}>6)</span> {t('stableswap|clickThe')}{' '}
+            <span className={styles.accent}>{t('stableswap|create')}</span> {t('stableswap|button')}
+          </span>
         </li>
       </ol>
     </Card>
