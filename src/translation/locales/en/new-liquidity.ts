@@ -3,8 +3,11 @@
 export const newLiquidity = {
   newLiquidity: 'New Liquidity',
   Liquidity: 'Liquidity',
+  volume: 'Volume (7d)',
+  TVL: 'TVl',
   tvl: 'Total Value Locked',
   tvlTooltip: 'tvl tooltip',
+  APR: 'APR',
   maxApr: 'Max APR',
   maxAprTooltip: 'max apr tooltip',
   pools: 'Pools',
