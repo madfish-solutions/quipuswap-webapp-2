@@ -8,3 +8,4 @@ export * from './to-fixed';
 export * from './place-decimals';
 export * from './place-usd-decimals';
 export * from './save-bignumber';
+export * from './to-percent';

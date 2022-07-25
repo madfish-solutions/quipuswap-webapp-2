@@ -20,7 +20,7 @@ import { numberAsStringSchema, NumberAsStringSchema } from '@shared/validators';
 import { i18n } from '@translation';
 
 import {
-  LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
+  LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
   AMPLIFICATION_FIELD_NAME,
   createPoolAmplification,
   UPPER_LIQUIDITY_PRODIFDERS_FEE,
@@ -55,7 +55,7 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
     ]);
 
     const liquidityProvidersFee = [
-      LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
+      LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
       numberAsStringSchema(LOWER_LIQUIDITY_PRODIFDERS_FEE, UPPER_LIQUIDITY_PRODIFDERS_FEE).required('Value is required')
     ];
 
@@ -85,7 +85,7 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
     return Object.fromEntries([
       ...tokensInputs,
       [AMPLIFICATION_FIELD_NAME, getFirstElement(createPoolAmplification).value],
-      [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, ''],
+      [LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, ''],
       [TOKEN_KEY, false]
     ]);
   }, [tokens]);
@@ -125,16 +125,16 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
   const liquidityProvidersFeeInputParams: InputProps = useMemo(
     () => ({
       label: i18n.t('stableswap|liquidityProvidersFee'),
-      error: getFormikError(formik, LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME),
-      value: isEmptyString(formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME])
-        ? formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
-        : `${formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]}${PERCENT}`,
+      error: getFormikError(formik, LIQUIDITY_PROVIDERS_FEE_FIELD_NAME),
+      value: isEmptyString(formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
+        ? formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]
+        : `${formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]}${PERCENT}`,
       onChange: (event: FormEvent<HTMLInputElement>) => {
         if (isNull(event)) {
           return;
         }
         const value = (event.target as HTMLInputElement).value.replace(PERCENT, '');
-        formik.setFieldValue(LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, value);
+        formik.setFieldValue(LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, value);
       }
     }),
     [formik]
@@ -162,7 +162,7 @@ export const useHandleTokensChange = (formik: ReturnType<typeof useFormik>) => {
       formik.setValues((prev: Record<string, string>) => {
         const mainValues = {
           [AMPLIFICATION_FIELD_NAME]: prev[AMPLIFICATION_FIELD_NAME],
-          [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]: prev[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
+          [LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]: prev[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]
         };
 
         if (chosenTokens && !isEmptyArray(chosenTokens)) {
