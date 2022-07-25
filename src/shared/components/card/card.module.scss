@@ -8,6 +8,25 @@
   overflow: hidden;
 }
 
+.banner {
+  position: relative;
+  --hot-pools: '--hot-pools';
+  &::after {
+    content: var(--hot-pools);
+    position: absolute;
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 14px;
+    top: 0;
+    right: 0;
+    transform-origin: top right;
+    transform: rotate(45deg) translate(50%, 150%);
+  }
+}
+
 .header {
   position: relative;
   display: flex;
@@ -39,6 +58,11 @@
 .light {
   background-color: $ui-01;
 
+  &.banner::after {
+    color: $text-inverse;
+    background: $brand-01;
+  }
+
   .header {
     color: $text-01;
     border-bottom: 1px solid $ui-03;
@@ -47,6 +71,11 @@
 
 .dark {
   background-color: $ui-07;
+
+  &.banner::after {
+    color: $text-01;
+    background: $brand-02;
+  }
 
   .header {
     color: $text-inverse;

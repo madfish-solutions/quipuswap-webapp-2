@@ -66,7 +66,7 @@ export const HotPoolSlider: CFC<Props> = ({ className, children }) => {
 
   return (
     <div className={compoundClassnames}>
-      <ReactSlider autoplay pauseOnHover className={styles.slider} draggable {...SliderSettings}>
+      <ReactSlider autoplay pauseOnHover draggable className={styles.slider} {...SliderSettings}>
         {children}
       </ReactSlider>
     </div>
