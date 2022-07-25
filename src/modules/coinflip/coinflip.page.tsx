@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import Lottie from 'react-lottie';
 
 import { PageTitle, TestnetAlert, StateWrapper, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -14,6 +15,7 @@ import {
   CoinflipRules,
   CoinflipResultModal
 } from './components';
+import animationData from './data.json';
 
 export const CoinflipPage: FC = observer(() => {
   const { isInitialized, result, currency, wonAmount } = useCoinflipPageViewModel();
@@ -24,6 +26,16 @@ export const CoinflipPage: FC = observer(() => {
       <TestnetAlert />
 
       <PageTitle>{t('coinflip|Game')}</PageTitle>
+
+      <Lottie
+        options={{
+          loop: true,
+          autoplay: true,
+          animationData: animationData
+        }}
+        height={500}
+        width={500}
+      />
 
       <CoinflipResultModal result={result} wonAmount={wonAmount} currency={currency} />
 
