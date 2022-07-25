@@ -1,6 +1,6 @@
 @import '@styles/_variables';
 
-@mixin textAndBackgroundColor($text-color, $background-color) {
+@mixin hot-pool-card($text-color, $background-color) {
   &.tokensSymbols {
     color: $text-color;
   }
@@ -76,9 +76,9 @@
 }
 
 .light {
-  @include textAndBackgroundColor($text-01, $brand-01);
+  @include hot-pool-card($text-01, $brand-01);
 }
 
 .dark {
-  @include textAndBackgroundColor($text-inverse, $brand-02);
+  @include hot-pool-card($text-inverse, $brand-02);
 }
