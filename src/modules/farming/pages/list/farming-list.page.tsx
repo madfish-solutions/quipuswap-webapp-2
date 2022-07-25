@@ -27,6 +27,7 @@ export const FarmsListPage = observer(() => {
           fallback={<EmptyFarmingList />}
           isGrouped
           wrapperClassName={styles.list}
+          DTI="farmingList"
         />
       </StateWrapper>
     </>
