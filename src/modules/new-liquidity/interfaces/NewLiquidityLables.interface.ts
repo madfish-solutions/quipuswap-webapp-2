@@ -1,6 +1,11 @@
+export enum Icon {
+  CASE = 'CASE',
+  MEDAL = 'MEDAL',
+  DOLLAR = 'DOLLAR'
+}
+
 export interface NewLiquidityLablesInterface {
-  visibleIcon?: boolean;
-  caseIcon?: boolean;
-  medalIcon?: boolean;
-  dollarIcon?: boolean;
+  [Icon.CASE]?: boolean;
+  [Icon.MEDAL]?: boolean;
+  [Icon.DOLLAR]?: boolean;
 }

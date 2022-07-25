@@ -1,38 +1,33 @@
 import { FC } from 'react';
 
-import { cloneArray } from '@shared/helpers';
 import { CaseIcon, DollarIcon, MedalIcon } from '@shared/svg';
 
-import { NewLiquidityLablesInterface } from '../interfaces';
+import { Icon, NewLiquidityLablesInterface } from '../interfaces';
 import styles from './new-liquidity-lables.module.scss';
 
-const lables = [MedalIcon, CaseIcon, DollarIcon];
+// TODO: Remove any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Component: any = {
+  [Icon.MEDAL]: MedalIcon,
+  [Icon.CASE]: CaseIcon,
+  [Icon.DOLLAR]: DollarIcon
+};
 
 interface Props {
   newLiquidityLablesData?: NewLiquidityLablesInterface;
 }
 
 export const NewLiquidityLables: FC<Props> = ({ newLiquidityLablesData }) => {
-  const clonedArray = cloneArray(lables);
+  const entries = Object.entries(newLiquidityLablesData ?? {});
 
-  if (newLiquidityLablesData) {
-    if (!newLiquidityLablesData.caseIcon) {
-      clonedArray.splice(1, 1);
-    }
-
-    if (!newLiquidityLablesData.medalIcon) {
-      clonedArray.shift();
-    }
-
-    if (!newLiquidityLablesData.dollarIcon) {
-      clonedArray.pop();
-    }
-  }
+  const icons: Array<FC> = entries.map(([key, value]) => {
+    return value && Component[key];
+  });
 
   return (
     <div className={styles.root}>
-      {clonedArray.map(Lable => (
-        <div>{<Lable />}</div>
+      {icons.map((Lable, index) => (
+        <div key={`icon-${index}`}>{<Lable />}</div>
       ))}
     </div>
   );

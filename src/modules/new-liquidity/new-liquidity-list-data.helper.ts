@@ -8,7 +8,8 @@ const list = [
     itemUrl: '/',
     tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
     tvlInUsd: 1000,
-    newLiquidityLablesData: { visibleIcon: true, medalIcon: true, dollarIcon: true, caseIcon: true },
+    visibleIcon: true,
+    newLiquidityLablesData: { MEDAL: true, DOLLAR: true, CASE: true },
     isNewLiquidity: true,
     liquidityProvidersFee: 1
   },
@@ -16,7 +17,7 @@ const list = [
     itemUrl: '/',
     tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
     tvlInUsd: 1000,
-    newLiquidityLablesData: { visibleIcon: true, caseIcon: true, dollarIcon: true },
+    newLiquidityLablesData: { CASE: true, DOLLAR: true },
     isNewLiquidity: true,
     liquidityProvidersFee: 1
   },
@@ -25,19 +26,21 @@ const list = [
     tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
     tvlInUsd: 1000,
     isNewLiquidity: true,
-    newLiquidityLablesData: { dollarIcon: true },
+    visibleIcon: true,
+    newLiquidityLablesData: { DOLLAR: true },
     liquidityProvidersFee: 1
   }
 ];
 
 export const newLiquidityListDataHelper = () => {
   const listData = list?.map(
-    ({ itemUrl, tokensInfo, tvlInUsd, newLiquidityLablesData, isNewLiquidity, liquidityProvidersFee }) => ({
+    ({ itemUrl, tokensInfo, tvlInUsd, newLiquidityLablesData, isNewLiquidity, visibleIcon }) => ({
       href: itemUrl,
       inputToken: tokensInfo,
       status: { status: ActiveStatus.ACTIVE, filled: true },
       isNewLiquidity,
-      newLiquidityLablesData: newLiquidityLablesData,
+      visibleIcon,
+      newLiquidityLablesData,
       itemStats: [
         {
           cellName: i18n.t('newLiquidity|TVL'),

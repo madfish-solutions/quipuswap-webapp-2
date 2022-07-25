@@ -27,6 +27,7 @@ interface Props {
   labels?: Array<StatusLabelProps>;
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
+  visibleIcon?: boolean;
   newLiquidityLablesData?: NewLiquidityLablesInterface;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
@@ -44,6 +45,7 @@ export const ListItemCard: FC<Props> = ({
   href,
   labels,
   isNewLiquidity,
+  visibleIcon,
   newLiquidityLablesData,
   status,
   isNew,
@@ -65,8 +67,7 @@ export const ListItemCard: FC<Props> = ({
           <div className={styles.logosAndSymbols}>
             <div className={cx(styles.logosContainer, { [styles.inlineIcons]: isNewLiquidity })}>
               <TokensLogos tokens={inputToken} width={32} />
-              {newLiquidityLablesData?.visibleIcon && <VisibleIcon />}
-
+              {visibleIcon && <VisibleIcon />}
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
