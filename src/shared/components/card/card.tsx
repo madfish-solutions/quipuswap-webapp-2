@@ -55,7 +55,7 @@ export const Card: FC<Props> = ({
   const rootClassName = cx(styles.root, { [styles.banner]: banner }, modeClass[colorThemeMode], className);
 
   useLayoutEffect(() => {
-    container.current?.style.setProperty('--hot-pools', JSON.stringify(`${banner}`));
+    container.current?.style.setProperty('--banner', JSON.stringify(`${banner}`));
   }, [banner]);
 
   if (isV2) {

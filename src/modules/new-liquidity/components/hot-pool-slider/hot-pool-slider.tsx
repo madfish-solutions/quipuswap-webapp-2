@@ -13,11 +13,13 @@ const SliderSettings = {
   slidesToScroll: 1,
   infinite: true,
   arrows: false,
+  className: styles.margin4cards,
   responsive: [
     {
       breakpoint: 1600,
       settings: {
         slidesToShow: 4,
+        className: styles.margin4cards,
         slidesToScroll: 1,
         infinite: true
       }
@@ -26,6 +28,7 @@ const SliderSettings = {
       breakpoint: 1370,
       settings: {
         slidesToShow: 3,
+        className: styles.margin3cards,
         slidesToScroll: 1,
         infinite: true
       }
@@ -34,6 +37,7 @@ const SliderSettings = {
       breakpoint: 900,
       settings: {
         slidesToShow: 2,
+        className: styles.margin2cards,
         slidesToScroll: 1,
         infinite: true
       }
@@ -42,6 +46,7 @@ const SliderSettings = {
       breakpoint: 610,
       settings: {
         slidesToShow: 1,
+        className: styles.margin1cards,
         slidesToScroll: 1,
         infinite: true
       }
@@ -54,7 +59,7 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-
+//className={styles.slider}
 interface Props {
   className?: string;
 }
@@ -66,7 +71,7 @@ export const HotPoolSlider: CFC<Props> = ({ className, children }) => {
 
   return (
     <div className={compoundClassnames}>
-      <ReactSlider autoplay pauseOnHover draggable className={styles.slider} {...SliderSettings}>
+      <ReactSlider autoplaySpeed={5000} pauseOnHover draggable {...SliderSettings}>
         {children}
       </ReactSlider>
     </div>
