@@ -6,6 +6,7 @@ import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { noopMap } from '@shared/mapping';
 import { isValidContractAddress } from '@shared/validators';
 
+import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import { TokensModalViewProps } from './types';
 import { useTokensModalStore } from './use-tokens-modal-store';
@@ -14,7 +15,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { chosenTokens, tokensWithChosen, minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk } =
+  const { chosenTokens, extendTokens, minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk } =
     tokensModalStore;
 
   const tokensManagerStore = useTokensManagerStore();
@@ -40,17 +41,17 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
-  const tokensModalCellParams = useMemo(() => {
+  const tokensModalCellParams: TokensModalCellProps[] = useMemo(() => {
     noopMap(chosenTokens);
 
-    return tokensWithChosen.map(token => ({
+    return extendTokens.map(token => ({
       token,
       balance: null,
       onTokenClick: () => tokensModalStore.toggleChosenToken(token)
     }));
-  }, [chosenTokens, tokensWithChosen, tokensModalStore]);
+  }, [chosenTokens, extendTokens, tokensModalStore]);
 
-  const managedTokensModalCellParams = useMemo(() => {
+  const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
       return {
         token,
