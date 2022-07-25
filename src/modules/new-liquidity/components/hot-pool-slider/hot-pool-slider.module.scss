@@ -7,8 +7,27 @@
   height: 4px;
 }
 
-.slider {
+.margin1cards,
+.margin2cards,
+.margin3cards,
+.margin4cards {
   height: 214px;
+}
+
+.margin4cards {
+  margin: 0 -1.25% 0 0;
+}
+
+.margin3cards {
+  margin: 0 -1.65% 0 0;
+}
+
+.margin2cards {
+  margin: 0 -2.5% 0 0;
+}
+
+.margin1cards {
+  margin: 0 -5% 0 0;
 }
 
 .root {
