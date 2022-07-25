@@ -5,7 +5,7 @@ on: [deployment_status]
 
 jobs:
   e2e:
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.environment == 'Production' && github.event.deployment_status.state == 'success'
+    # if: github.event_name == 'deployment_status' && github.event.deployment_status.environment == 'Production' && github.event.deployment_status.state == 'success'
 
     runs-on: ubuntu-latest
     steps: 
