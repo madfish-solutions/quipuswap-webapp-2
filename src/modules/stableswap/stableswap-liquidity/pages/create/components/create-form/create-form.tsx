@@ -63,6 +63,7 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
           <h3>{i18n.t('stableswap|cost')}</h3>
           <CreationCost total={creationPrice} />
         </div>
+
         <div className={createFormStyles.createButtonContainer}>
           <ConnectWalletOrDoSomething>
             <Button type="submit" className={createFormStyles.createButton}>
