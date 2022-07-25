@@ -4,6 +4,7 @@ import { Iterator, ListItemCard, ListStats, PageTitle, StateWrapper, TestnetAler
 import { useTranslation } from '@translation';
 
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
+import styles from './new-liquidity-page.module.scss';
 import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const NewLiquidityPage: FC = () => {
@@ -19,7 +20,7 @@ export const NewLiquidityPage: FC = () => {
 
       <ListStats stats={stats} slidesToShow={3} />
 
-      <Iterator render={ListItemCard} data={list} />
+      <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
     </StateWrapper>
   );
 };
