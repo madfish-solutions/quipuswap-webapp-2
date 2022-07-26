@@ -5,7 +5,7 @@ import { Trade } from 'swap-router-sdk';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
-import { defined, fromDecimals, getTokenSlug } from '@shared/helpers';
+import { defined, toReal, getTokenSlug } from '@shared/helpers';
 import { estimateSwapFee } from '@shared/helpers/swap';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
@@ -35,7 +35,7 @@ export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapPa
         try {
           const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, trade, recipientPkh, transactionDeadline);
 
-          return fromDecimals(rawNewFee, TEZOS_TOKEN);
+          return toReal(rawNewFee, TEZOS_TOKEN);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Estimate Fee Error:', error);

@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Optional } from '@shared/types';
 
-import { fromDecimals } from './bignumber';
+import { toReal } from './bignumber';
 
 const WHOLE_ITEM_PERCENT = 100;
 const EMPTY_OUTPUT_AMOUNT = 0;
@@ -19,6 +19,6 @@ export const getMinimalOutput = (
         outputAmount
           .times(new BigNumber(WHOLE_ITEM).minus(slippage.div(WHOLE_ITEM_PERCENT)))
           .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR),
-        fromDecimals(new BigNumber(RAW_TOKEN_ATOM_AMOUNT), tokenDecimals)
+        toReal(new BigNumber(RAW_TOKEN_ATOM_AMOUNT), tokenDecimals)
       )
     : null;

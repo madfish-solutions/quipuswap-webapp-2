@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAddCustomToken, useSearchCustomTokens, useTokens } from '@providers/dapp-tokens';
 import { fallbackToolkit } from '@providers/use-dapp';
 import { getTokenType, fa2TokenExists, getTokenSlug } from '@shared/helpers';
@@ -16,7 +16,7 @@ type TokensSlugs = [string, string];
 const DEFAULT_FA2_TOKEN_ID = 0;
 const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
 const token1FallbackSlug = TEZOS_TOKEN_SLUG;
-const token2FallbackSlug = getTokenSlug(DEFAULT_TOKEN);
+const token2FallbackSlug = getTokenSlug(QUIPU_TOKEN);
 const FALLBACK_TOKENS_SLUGS: TokensSlugs = [token1FallbackSlug, token2FallbackSlug];
 
 export const useInitialTokensSlugs = (

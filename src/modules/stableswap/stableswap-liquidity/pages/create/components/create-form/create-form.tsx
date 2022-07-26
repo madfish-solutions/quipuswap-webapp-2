@@ -2,7 +2,16 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Card, Button, Input, RadioButton, TokenInput, Iterator, AlarmMessage } from '@shared/components';
+import {
+  Card,
+  Button,
+  Input,
+  RadioButton,
+  TokenInput,
+  Iterator,
+  AlarmMessage,
+  ConnectWalletOrDoSomething
+} from '@shared/components';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import styles from '@styles/CommonContainer.module.scss';
 import { i18n } from '@translation';
@@ -10,7 +19,7 @@ import { i18n } from '@translation';
 import { FormHeader } from '../../../../../components';
 import { StableswapContentRoutes } from '../../../../../stableswap-routes.enum';
 import { CreationCost, SelectTokensButton } from '../../components';
-import createFormstyles from './create-form.module.scss';
+import createFormStyles from './create-form.module.scss';
 import { useCreateFormViewModel } from './create-form.vm';
 
 interface Props {
@@ -37,10 +46,13 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
       data-test-id="stableswapCreateForm"
     >
       <TokensModal />
-      <form className={createFormstyles.createForm} onSubmit={handleSubmit}>
+      <form className={createFormStyles.createForm} onSubmit={handleSubmit}>
         <SelectTokensButton onClick={handleSelectTokensClick} />
+
         {tokenInputsParams && <Iterator render={TokenInput} data={tokenInputsParams} />}
+
         {tokensInputValidationMessage && <AlarmMessage message={tokensInputValidationMessage} />}
+
         <h3>{i18n.t('stableswap|fees')}</h3>
         <Input {...liquidityProvidersFeeInputParams} />
 
@@ -51,10 +63,13 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
           <h3>{i18n.t('stableswap|cost')}</h3>
           <CreationCost total={creationPrice} />
         </div>
-        <div className={createFormstyles.createButtonContainer}>
-          <Button type="submit" className={createFormstyles.createButton}>
-            {i18n.t('stableswap|create')}
-          </Button>
+
+        <div className={createFormStyles.createButtonContainer}>
+          <ConnectWalletOrDoSomething>
+            <Button type="submit" className={createFormStyles.createButton}>
+              {i18n.t('stableswap|create')}
+            </Button>
+          </ConnectWalletOrDoSomething>
         </div>
       </form>
     </Card>

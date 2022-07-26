@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@config/constants';
-import { fromDecimals, isTezIncluded } from '@shared/helpers';
+import { toReal, isTezIncluded } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 import { getValidMichelTemplate, sortTokensContracts } from '../../helpers';
@@ -42,7 +42,7 @@ const loadUserLpBalanceTokens = async (
     return null;
   }
 
-  const unfrozen = fromDecimals(userLpTokenBalance.balance, LP_TOKEN_DECIMALS);
+  const unfrozen = toReal(userLpTokenBalance.balance, LP_TOKEN_DECIMALS);
 
   return {
     unfrozen,
@@ -62,8 +62,8 @@ const loadUserLpBalanceTez = async (
     return null;
   }
 
-  const unfrozen = fromDecimals(liquidityShares.unfrozen, LP_TOKEN_DECIMALS);
-  const frozen = fromDecimals(liquidityShares.frozen, LP_TOKEN_DECIMALS);
+  const unfrozen = toReal(liquidityShares.unfrozen, LP_TOKEN_DECIMALS);
+  const frozen = toReal(liquidityShares.frozen, LP_TOKEN_DECIMALS);
   const total = unfrozen.plus(frozen);
 
   return {
