@@ -19,7 +19,13 @@ export const StableDividendsListPage: FC = observer(() => {
       <StableDividendsRewardInfo />
       <StableDividendsListFilter />
       <StateWrapper loaderFallback={<></>}>
-        <Iterator render={ListItemCard} data={data} isGrouped wrapperClassName={styles.stableDividendsList} />
+        <Iterator
+          render={ListItemCard}
+          data={data}
+          isGrouped
+          wrapperClassName={styles.stableDividendsList}
+          DTI="stabledividendsList"
+        />
       </StateWrapper>
     </>
   );

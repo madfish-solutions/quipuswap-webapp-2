@@ -5,6 +5,7 @@ export interface DashboardGeneralStats {
   gamesCount: Nullable<BigNumber>;
   payoutCoefficient: Nullable<BigNumber>;
   totalWins: Nullable<BigNumber>;
+  maxBetPercent: Nullable<BigNumber>;
 }
 
 export interface DashboardGeneralStatsMapped {
@@ -12,4 +13,5 @@ export interface DashboardGeneralStatsMapped {
   gamesCount: Nullable<string>;
   payoutCoefficient: Nullable<string>;
   totalWins: Nullable<string>;
+  maxBetPercent: Nullable<string>;
 }
