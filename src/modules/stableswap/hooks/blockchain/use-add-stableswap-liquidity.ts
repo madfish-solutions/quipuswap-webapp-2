@@ -94,7 +94,7 @@ export const useAddStableswapLiquidity = () => {
           accountPkh
         );
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyAdded') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });
         amplitudeService.logEvent('STABLESWAP_LIQUIDITY_ADD_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);

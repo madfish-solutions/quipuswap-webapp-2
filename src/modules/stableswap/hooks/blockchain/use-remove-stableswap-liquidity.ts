@@ -63,7 +63,7 @@ export const useRemoveStableswapLiquidity = () => {
       const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
       const sharesAmountAtom = toAtomic(shares, lpToken);
 
-      const message = t('stableswap|sucessfullyRemoved');
+      const message = t('stableswap|successfullyRemoved');
       const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
         decreaseAmount(token, amount, fees)
       );
