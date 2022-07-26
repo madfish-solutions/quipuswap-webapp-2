@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { fromDecimals } from '@shared/helpers';
+import { toReal } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 export const useLoadTokenBalance = (token: Nullable<Token>) => {
@@ -24,7 +24,7 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
       if (userTokenABalance) {
-        setTokenBalance(fromDecimals(userTokenABalance, _token));
+        setTokenBalance(toReal(userTokenABalance, _token));
       }
 
       return userTokenABalance;

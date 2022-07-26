@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@config/constants';
-import { toDecimals } from '@shared/helpers';
+import { toAtomic } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { LiquidityShareResult } from '../../hooks';
@@ -18,7 +18,7 @@ export const getVotingParams = async (
   if (shares && lpTokenInputBN.gt(shares.unfrozen) && dex.storage) {
     const { total } = shares;
     const delta = total.minus(lpTokenInputBN);
-    const deltaWithDecimals = toDecimals(delta, LP_TOKEN_DECIMALS);
+    const deltaWithDecimals = toAtomic(delta, LP_TOKEN_DECIMALS);
 
     const { candidate } = await dex.storage.storage.voters.get(accountPkh);
 

@@ -20,7 +20,7 @@ const modeClass = {
 export const Checkbox: FC<CheckboxProps> = ({ className, checked, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);
+  const compoundClassName = cx(s.root, modeClass[colorThemeMode], className, { [s.disabled]: props.disabled });
 
   return (
     <div className={compoundClassName} data-test-id="checkbox">
