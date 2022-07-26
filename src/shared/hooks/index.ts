@@ -17,3 +17,5 @@ export * from './use-tokens-balances-only';
 export * from './use-tokens-with-balances';
 export * from './use-debounced-state';
 export * from './use-base-filter-store-converter';
+export * from './use-amount-in-usd';
+export * from './use-amplitude-service';

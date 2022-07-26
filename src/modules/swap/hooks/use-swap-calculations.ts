@@ -9,7 +9,7 @@ import {
   Trade
 } from 'swap-router-sdk';
 
-import { fromDecimals, isEmptyArray, toDecimals } from '@shared/helpers';
+import { toReal, isEmptyArray, toAtomic } from '@shared/helpers';
 import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
@@ -80,7 +80,7 @@ export const useSwapCalculations = () => {
 
   const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, routePairs);
   const bestTradeWithSlippageTolerance = useTradeWithSlippageTolerance(
-    inputAmount && toDecimals(inputAmount, inputToken),
+    inputAmount && toAtomic(inputAmount, inputToken),
     bestTrade,
     tradingSlippage
   );
@@ -103,11 +103,11 @@ export const useSwapCalculations = () => {
 
     setInputAmount(newInputAmount);
 
-    const bestTradeExact = getBestTradeExactInput(toDecimals(newInputAmount, inputToken), routePairsCombinations);
+    const bestTradeExact = getBestTradeExactInput(toAtomic(newInputAmount, inputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
     const atomicOutputAmount = getTradeOutputAmount(bestTradeExact);
-    setOutputAmount(atomicOutputAmount ? fromDecimals(atomicOutputAmount, outputToken) : null);
+    setOutputAmount(atomicOutputAmount ? toReal(atomicOutputAmount, outputToken) : null);
   };
 
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
@@ -119,11 +119,11 @@ export const useSwapCalculations = () => {
 
     setOutputAmount(newOutputAmount);
 
-    const bestTradeExact = getBestTradeExactOutput(toDecimals(newOutputAmount, outputToken), routePairsCombinations);
+    const bestTradeExact = getBestTradeExactOutput(toAtomic(newOutputAmount, outputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
 
     const atomicInputAmount = getTradeInputAmount(bestTradeExact);
-    setInputAmount(atomicInputAmount ? fromDecimals(atomicInputAmount, inputToken) : null);
+    setInputAmount(atomicInputAmount ? toReal(atomicInputAmount, inputToken) : null);
   };
 
   const onSwapPairChange = (newPair: SwapPair) => {

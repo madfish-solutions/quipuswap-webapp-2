@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { batchOperations } from '@shared/dapp';
-import { toDecimals } from '@shared/helpers';
+import { toAtomic } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getValidPairParams, getTokensResetAndUpdateOperators } from '../../helpers';
@@ -21,8 +21,8 @@ export const addPairTokenToToken = async (
 
   const tokenABN = new BigNumber(tokenAInput);
   const tokenBBN = new BigNumber(tokenBInput);
-  const tokenAAmount = toDecimals(tokenABN, tokenA);
-  const tokenBAmount = toDecimals(tokenBBN, tokenB);
+  const tokenAAmount = toAtomic(tokenABN, tokenA);
+  const tokenBAmount = toAtomic(tokenBBN, tokenB);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);

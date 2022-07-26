@@ -8,8 +8,8 @@ import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import {
-  fromDecimals,
-  toDecimals,
+  toReal,
+  toAtomic,
   getRemoveLiquidityMessage,
   getTokenSymbol,
   isUndefined,
@@ -94,7 +94,7 @@ export const useRemoveLiquidityService = (
       return;
     }
     const lpTokenInputBN = new BigNumber(lpTokenInput);
-    const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+    const lpTokenAmount = toAtomic(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
     const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
     const validatedInput = validations(
@@ -139,11 +139,11 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(validatedOutputB);
 
     if (!isNaN(amountTokenA.toNumber())) {
-      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
+      setTokenAOutput(toReal(amountTokenA, decimalsA).toFixed());
     }
 
     if (!isNaN(amountTokenB.toNumber())) {
-      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+      setTokenBOutput(toReal(amountTokenB, decimalsB).toFixed());
     }
 
     return noop;
