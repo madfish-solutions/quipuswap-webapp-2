@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 import { Earn, Farm, Trade } from '@shared/svg';
-import { Trans } from '@translation';
+import { i18n } from '@translation';
 
 interface OpportunitiesCardsDataType {
   id: number;
@@ -19,45 +19,36 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
   {
     id: 0,
     Icon: Trade,
-    title: <Trans ns="home">Trade Any Tezos-based token</Trans>,
-    description: (
-      <Trans ns="home">
-        Swap any FA1.2-FA2 tokens on the QuipuSwap DEX instantly. We have more than 150 trading pairs available and low
-        fees.
-      </Trans>
+    title: i18n.t('home|Trade Any Tezos-based token'),
+    description: i18n.t(
+      'home|Swap any FA1.2-FA2 tokens on the QuipuSwap DEX instantly. We have more than 150 trading pairs available and low fees.'
     ),
     button: {
-      label: <Trans ns="home">Start Trading</Trans>,
+      label: i18n.t('home|Start Trading'),
       href: '/swap'
     }
   },
   {
     id: 1,
     Icon: Farm,
-    title: <Trans ns="home">Farm tokens with QuipuSwap</Trans>,
-    description: (
-      <Trans ns="home">
-        You may earn extra rewards by participating in our farm projects. Add liquidity to the pool, stake your
-        Liquidity tokens in our farms, and earn rewards.
-      </Trans>
+    title: i18n.t('home|Farm tokens with QuipuSwap'),
+    description: i18n.t(
+      'home|You may earn extra rewards by participating in our farm projects. Add liquidity to the pool, stake your Liquidity tokens in our farms, and earn rewards.'
     ),
     button: {
-      label: <Trans ns="home">Start Farming</Trans>,
+      label: i18n.t('home|Start Farming'),
       href: '/farming'
     }
   },
   {
     id: 2,
     Icon: Earn,
-    title: <Trans ns="home">Earn by providing Liquidity</Trans>,
-    description: (
-      <Trans ns="home">
-        By adding your tokens to the Liquidity pool, you will earn a part of the 0.3% fee charged from each trade
-        operation in this pool as well as baking rewards.
-      </Trans>
+    title: i18n.t('home|Earn by providing Liquidity'),
+    description: i18n.t(
+      'home|By adding your tokens to the Liquidity pool, you will earn a part of the 0.3% fee charged from each trade operation in this pool as well as baking rewards.'
     ),
     button: {
-      label: <Trans ns="home">Add Liquidity</Trans>,
+      label: i18n.t('home|Add Liquidity'),
       href: '/liquidity/add'
     }
   }

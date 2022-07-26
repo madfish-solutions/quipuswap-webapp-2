@@ -8,5 +8,6 @@ export enum AppRootRoutes {
   Farming = '/farming',
   Voting = '/voting',
   Stableswap = '/stableswap',
-  Coinflip = '/coinflip'
+  Coinflip = '/coinflip',
+  NewLiquidity = '/newliquidity'
 }

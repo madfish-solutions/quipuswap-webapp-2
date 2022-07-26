@@ -7,6 +7,7 @@ import { useToasts } from '@shared/utils';
 
 import { getGameResult, Statuses } from '../helpers';
 import { useCoinflipStore } from './stores';
+import { useLastGameResultAmplitude } from './use-last-game-result-amplitude';
 
 export const useUserLastGame = () => {
   const { showErrorToast } = useToasts();
@@ -14,16 +15,19 @@ export const useUserLastGame = () => {
   const isReady = useReady();
   const lastGameResultRef = useRef<Nullable<Statuses>>(null);
   const { openCoinflipModal } = useGlobalModalsState();
+  const { lastGameLogEvent } = useLastGameResultAmplitude();
 
   useEffect(() => {
     const gameResult = getGameResult(coinflipStore?.userLastGameInfo?.data?.status);
 
+    // TODO: avoid excess render
     if (lastGameResultRef.current === Statuses.started && gameResult !== Statuses.started) {
       openCoinflipModal();
+      lastGameLogEvent();
     }
 
     lastGameResultRef.current = gameResult;
-  }, [coinflipStore?.userLastGameInfo?.data?.status, openCoinflipModal]);
+  }, [coinflipStore?.userLastGameInfo?.data?.status, lastGameLogEvent, openCoinflipModal]);
 
   const getUserLastGame = useCallback(async () => {
     if (isReady && !isNull(coinflipStore)) {
