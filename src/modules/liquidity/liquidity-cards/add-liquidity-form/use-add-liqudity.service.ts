@@ -12,7 +12,7 @@ import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,
-  fromDecimals,
+  toReal,
   getAddLiquidityMessage,
   getDollarEquivalent,
   getInitializeLiquidityMessage,
@@ -23,7 +23,7 @@ import {
   isNull,
   isTokenFa2,
   isUndefined,
-  toDecimals
+  toAtomic
 } from '@shared/helpers';
 import { useLoadingDecorator } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
@@ -427,7 +427,7 @@ export const useAddLiquidityService = (
     const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenAInput : tokenBInput;
     const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenBInput : tokenAInput;
     const tezTokenBN = new BigNumber(tezTokenInput);
-    const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
+    const tezValue = toAtomic(tezTokenBN, TEZOS_TOKEN);
 
     const tezTokenInputUsd = Number(getDollarEquivalent(tezTokenInput, exchangeRates[TEZOS_TOKEN.contractAddress]));
     const notTezTokenInputUsd = Number(getDollarEquivalent(notTezTokenInput, exchangeRates[getTokenSlug(notTezToken)]));
@@ -440,8 +440,8 @@ export const useAddLiquidityService = (
       tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const fixedTokenAPoll = Number(fromDecimals(tokenAPool, tokenA).toFixed());
-      const fixedTokenBPoll = Number(fromDecimals(tokenBPool, tokenB).toFixed());
+      const fixedTokenAPoll = Number(toReal(tokenAPool, tokenA).toFixed());
+      const fixedTokenBPoll = Number(toReal(tokenBPool, tokenB).toFixed());
       const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
       const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
 
@@ -486,7 +486,7 @@ export const useAddLiquidityService = (
         id: notTezToken.fa2TokenId
       };
       const notTezTokenBN = new BigNumber(notTezTokenInput);
-      const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
+      const tokenBValue = toAtomic(notTezTokenBN, notTezToken);
 
       const logData = {
         liquidity: {

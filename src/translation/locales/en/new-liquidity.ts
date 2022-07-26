@@ -8,6 +8,7 @@ export const newLiquidity = {
   tvl: 'Total Value Locked',
   tvlTooltip: 'tvl tooltip',
   APR: 'APR',
+  aprUpTo: 'APR up to',
   maxApr: 'Max APR',
   maxAprTooltip: 'max apr tooltip',
   pools: 'Pools',

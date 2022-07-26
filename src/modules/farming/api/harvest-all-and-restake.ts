@@ -5,7 +5,7 @@ import { withApproveApi } from '@blockchain';
 import { FARMING_REFERRER_CONTRACT } from '@config/config';
 import { DEFAULT_BAKER_FOR_NON_TEZ_LP, FARM_ID_FOR_RESTAKE } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 
 export const harvestAllAndRestake = async (
   tezos: TezosToolkit,
@@ -28,7 +28,7 @@ export const harvestAllAndRestake = async (
   return await withApproveApi(
     tezos,
     FARMING_CONTRACT_ADDRESS,
-    DEFAULT_TOKEN,
+    QUIPU_TOKEN,
     accountPkh,
     rewardsInToken,
     operationParams

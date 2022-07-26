@@ -1,12 +1,12 @@
 import { DOLLAR, PERCENT } from '@config/constants';
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
 const list = [
   {
     itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
+    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
     tvlInUsd: 1000,
     visibleIcon: true,
     newLiquidityLablesData: { MEDAL: true, DOLLAR: true, CASE: true },
@@ -15,7 +15,7 @@ const list = [
   },
   {
     itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
+    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
     tvlInUsd: 1000,
     newLiquidityLablesData: { CASE: true, DOLLAR: true },
     isNewLiquidity: true,
@@ -23,7 +23,7 @@ const list = [
   },
   {
     itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, DEFAULT_TOKEN],
+    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
     tvlInUsd: 1000,
     isNewLiquidity: true,
     visibleIcon: true,

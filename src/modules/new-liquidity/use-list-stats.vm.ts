@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { PERCENT } from '@config/constants';
 import { useTranslation } from '@translation';
 
 export const useListStatsViewModel = () => {
@@ -16,12 +17,14 @@ export const useListStatsViewModel = () => {
       title: t('newLiquidity|maxApr'),
       tooltip: t('newLiquidity|maxAprTooltip'),
       amount: new BigNumber(20),
+      currency: PERCENT,
       testId: 'statsMaxAPR'
     },
     {
       title: t('newLiquidity|pools'),
       tooltip: t('newLiquidity|poolsTooltip'),
       amount: new BigNumber(30),
+      currency: null,
       testId: 'statsPools'
     }
   ];

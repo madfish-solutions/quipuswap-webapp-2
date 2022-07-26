@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
 import { getUserBalance } from '@blockchain';
-import { defined, fromDecimals, getTokenSlug } from '@shared/helpers';
+import { defined, toReal, getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { useAccountPkh, useTezos } from './use-dapp';
@@ -31,7 +31,7 @@ export const [BalancesProvider, useBalances] = constate(() => {
         if (balance) {
           setBalances(prevValue => ({
             ...prevValue,
-            [getTokenSlug(token)]: fromDecimals(balance, token.metadata.decimals)
+            [getTokenSlug(token)]: toReal(balance, token.metadata.decimals)
           }));
         }
       }

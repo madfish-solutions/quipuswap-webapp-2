@@ -2,7 +2,7 @@ import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { i18n } from '@translation';
 
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
-import { CreateForm } from './components';
+import { CreateForm, DetailsRules } from './components';
 
 export const StableswapLiquidityCreatePage = () => {
   return (
@@ -12,6 +12,7 @@ export const StableswapLiquidityCreatePage = () => {
 
       <StickyBlock>
         <CreateForm subpath={StableswapRoutes.liquidity} />
+        <DetailsRules />
       </StickyBlock>
     </>
   );

@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { fromDecimals, getRandomId, isEmptyArray, isExist, isTokenEqual } from '@shared/helpers';
+import { toReal, getRandomId, isEmptyArray, isExist, isTokenEqual } from '@shared/helpers';
 
 import { Optional, Token } from '../types';
 import { RootStore } from './root.store';
@@ -32,7 +32,7 @@ export class TokensBalancesStore {
     if (!tokenBalance) {
       return;
     }
-    tokenBalance.balance = balance ? fromDecimals(balance, token) : null;
+    tokenBalance.balance = balance ? toReal(balance, token) : null;
   }
 
   subscribe(token: Token) {
