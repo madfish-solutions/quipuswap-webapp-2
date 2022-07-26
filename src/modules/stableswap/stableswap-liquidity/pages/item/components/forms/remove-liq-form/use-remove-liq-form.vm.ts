@@ -114,9 +114,9 @@ export const useRemoveLiqFormViewModel = () => {
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
 
-  const setValues = (lpValue: Nullable<BigNumber>, calculatedValues: Array<Nullable<BigNumber>>) => {
+  const setValues = (lpValue: Nullable<BigNumber>) => {
     formik.setValues(formikValues);
-    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue);
   };
 
   const handleBalancedInputChange = (reserves: BigNumber, index: number) => {
@@ -146,7 +146,7 @@ export const useRemoveLiqFormViewModel = () => {
       });
 
       const fixedLpValue = lpValue ? placeDecimals(lpValue, lpToken, BigNumber.ROUND_UP) : null;
-      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
+      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue);
 
       formik.setValues(formikValues);
     };
@@ -206,7 +206,7 @@ export const useRemoveLiqFormViewModel = () => {
       formikValues[getInputSlugByIndex(indexOfTokenInput)] = toFixed(amount);
     });
 
-    setValues(inputAmountBN, tokenOutputs);
+    setValues(inputAmountBN);
   };
 
   const handleSwitcherClick = (state: boolean) => {
