@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { getBestTradeExactInput, getMaxInputRoute, getTradeOutputAmount } from 'swap-router-sdk';
 
 import { ZERO_AMOUNT } from '@config/constants';
-import { fromDecimals, getRateByInputOutput, isEmptyArray, toDecimals } from '@shared/helpers';
+import { toReal, getRateByInputOutput, isEmptyArray, toAtomic } from '@shared/helpers';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
 import { useRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
@@ -34,7 +34,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
       try {
         const { value: maxReverseInput } = getMaxInputRoute(reverseRoutePairsCombinations);
         const probeReverseInput = BigNumber.minimum(
-          toDecimals(new BigNumber(DEFAULT_REVERSE_INPUT_AMOUNT), outputToken),
+          toAtomic(new BigNumber(DEFAULT_REVERSE_INPUT_AMOUNT), outputToken),
           maxReverseInput
         );
 
@@ -47,8 +47,8 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
 
         const probeReverseOutput = getTradeOutputAmount(reverseTrade)!;
 
-        return fromDecimals(probeReverseOutput, inputToken)
-          .dividedBy(fromDecimals(probeReverseInput, outputToken))
+        return toReal(probeReverseOutput, inputToken)
+          .dividedBy(toReal(probeReverseInput, outputToken))
           .decimalPlaces(inputToken.metadata.decimals);
       } catch (_) {
         // return statement is below
