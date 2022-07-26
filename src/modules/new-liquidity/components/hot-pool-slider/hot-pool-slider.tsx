@@ -59,7 +59,7 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-//className={styles.slider}
+
 interface Props {
   className?: string;
 }
@@ -71,7 +71,7 @@ export const HotPoolSlider: CFC<Props> = ({ className, children }) => {
 
   return (
     <div className={compoundClassnames}>
-      <ReactSlider autoplaySpeed={5000} pauseOnHover draggable {...SliderSettings}>
+      <ReactSlider autoplay autoplaySpeed={5000} pauseOnHover draggable {...SliderSettings}>
         {children}
       </ReactSlider>
     </div>
