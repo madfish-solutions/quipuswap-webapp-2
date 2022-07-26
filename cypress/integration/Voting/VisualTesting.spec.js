@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 
-//export PERCY_TOKEN=d6cef1e901a9a1eb8d6d32030f198e4e4ccc6de92544ce262d2dd5c39eba2aeb 
+import { MAINNET_QUIPU_TOKEN } from '../../const';
 
-describe('Visual testing of the Swap form', () => {
-    it('Should_DisplayCorrectSwapInputForm_When_OpenedSwapPage', () => {
-        cy.visit('/voting/vote/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0');
+describe('Visual testing of the Voting page', () => {
+    it('Should_DisplayCorrectSwapInputForm_When_OpenedVotingPage', () => {
+        cy.visit('/voting/vote/tez-' + MAINNET_QUIPU_TOKEN);
         cy.get('[data-test-id="acceptCookieButton"]').click();
         cy.percySnapshot('VotingPagelayout', {
             percyCSS: `
