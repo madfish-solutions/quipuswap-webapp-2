@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
-import { decreaseBySlippage, isExist, isNull, saveBigNumber, toDecimals } from '@shared/helpers';
+import { decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
@@ -57,11 +57,11 @@ export const useRemoveStableswapLiquidity = () => {
       const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
       const amountsAtoms = inputAmounts.map((amount, index) =>
-        toDecimals(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)
+        toAtomic(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)
       );
 
       const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-      const sharesAmountAtom = toDecimals(shares, lpToken);
+      const sharesAmountAtom = toAtomic(shares, lpToken);
 
       const message = t('stableswap|sucessfullyRemoved');
       const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>

@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
@@ -28,7 +28,7 @@ export const CreationCost: FC<CreationCostProps> = ({ total }) => {
     <div className={cx(modeClass[colorThemeMode], styles.cost)}>
       <div className={styles.costItem}>
         <div>{i18n.t('stableswap|totalCost')}</div>
-        <StateCurrencyAmount amount={total} currency={getTokenSymbol(DEFAULT_TOKEN)} />
+        <StateCurrencyAmount amount={total} currency={getTokenSymbol(QUIPU_TOKEN)} />
       </div>
     </div>
   );

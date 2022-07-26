@@ -7,6 +7,7 @@ import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { FarmingAlert } from '../../farming-alert';
+import { FarmingFormInvestLink } from '../../farming-form-invest-link';
 import { useStakeFormViewModel } from './use-stake-form.vm';
 
 export const StakeForm: FC = observer(() => {
@@ -24,9 +25,6 @@ export const StakeForm: FC = observer(() => {
     farmStatusError,
     disabled,
     handleBakerChange,
-    // TODO: uncomment lined below affter creating valid links
-    /* tradeHref,
-    investHref */
     handleInputAmountChange
   } = useStakeFormViewModel();
 
@@ -56,17 +54,9 @@ export const StakeForm: FC = observer(() => {
           value={bakerInputValue}
         />
       )}
-      {/* TODO: uncomment lined below affter creating valid links */}
-      {/* <div className={styles.suggestedOperationsButtons}>
-        <Button theme="underlined" href={tradeHref} data-test-id="tradeButton">
-          {t('common|Trade')}
-        </Button>
-        {!isNull(investHref) && (
-          <Button theme="underlined" href={investHref}>
-            {t('common|Invest')}
-          </Button>
-        )}
-      </div> */}
+
+      <FarmingFormInvestLink />
+
       <FarmingAlert className={styles.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
       <div className={styles.buttons}>
         <ConnectWalletOrDoSomething>

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { fromDecimals } from '@shared/helpers';
+import { toReal } from '@shared/helpers';
 import { mapBackendToken } from '@shared/mapping';
 
 import { RawStableDividendsItem, StableDividendsItem } from '../types';
@@ -40,7 +40,7 @@ export const stableDividendsItemMapper = ({
     apy: new BigNumber(apy),
     tokensInfo: readyTokensInfo,
     stakedToken: readyStakedToken,
-    tvl: fromDecimals(new BigNumber(atomicTvl), readyStakedToken),
+    tvl: toReal(new BigNumber(atomicTvl), readyStakedToken),
     stakedTokenExchangeRate: new BigNumber(stakedTokenExchangeRate)
   };
 };
