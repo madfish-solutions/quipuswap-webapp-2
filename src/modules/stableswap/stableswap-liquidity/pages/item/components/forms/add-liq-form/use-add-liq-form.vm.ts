@@ -38,10 +38,12 @@ export const useAddLiqFormViewModel = () => {
 
   const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
 
-  const isZeroInputsError = useZeroInputsError();
+  const { isZeroInputsError } = useZeroInputsError();
   const handleSubmit = useCallback(
     async (values: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
-      if (isZeroInputsError) {
+      const isZeroInputs = isZeroInputsError(values);
+
+      if (isZeroInputs) {
         return;
       }
 
