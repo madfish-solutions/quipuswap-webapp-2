@@ -2,7 +2,16 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Card, Button, Input, RadioButton, TokenInput, Iterator, AlarmMessage } from '@shared/components';
+import {
+  Card,
+  Button,
+  Input,
+  RadioButton,
+  TokenInput,
+  Iterator,
+  AlarmMessage,
+  ConnectWalletOrDoSomething
+} from '@shared/components';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import styles from '@styles/CommonContainer.module.scss';
 import { i18n } from '@translation';
@@ -54,10 +63,13 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
           <h3>{i18n.t('stableswap|cost')}</h3>
           <CreationCost total={creationPrice} />
         </div>
+
         <div className={createFormStyles.createButtonContainer}>
-          <Button type="submit" className={createFormStyles.createButton}>
-            {i18n.t('stableswap|create')}
-          </Button>
+          <ConnectWalletOrDoSomething>
+            <Button type="submit" className={createFormStyles.createButton}>
+              {i18n.t('stableswap|create')}
+            </Button>
+          </ConnectWalletOrDoSomething>
         </div>
       </form>
     </Card>

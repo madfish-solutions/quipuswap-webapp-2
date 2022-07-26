@@ -12,7 +12,7 @@ export const UPPER_LIQUIDITY_PRODIFDERS_FEE = {
 };
 
 export const AMPLIFICATION_FIELD_NAME = 'amplification';
-export const LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME = 'liquidityProvidersFee';
+export const LIQUIDITY_PROVIDERS_FEE_FIELD_NAME = 'liquidityProvidersFee';
 export const TOKEN_KEY = 'tokens';
 
 export const createPoolAmplification = [
