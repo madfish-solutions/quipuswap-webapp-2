@@ -1,8 +1,4 @@
-export enum Icon {
-  CASE = 'CASE',
-  MEDAL = 'MEDAL',
-  DOLLAR = 'DOLLAR'
-}
+import { Icon } from './icon-enum';
 
 export interface NewLiquidityLablesInterface {
   [Icon.CASE]?: boolean;
