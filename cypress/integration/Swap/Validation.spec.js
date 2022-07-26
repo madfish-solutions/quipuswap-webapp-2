@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+
 import { FIELD_WAIT_TIMEOUT } from '../../const';
 
 describe('Check input fields', () => {

@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
+import { MAINNET_QUIPU_TOKEN } from '../../const';
+
 describe('Check color of the smile in the Exchange Details section', () => {
     beforeEach(() => {
-        cy.visit('/swap');
+        cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
         cy.get('[data-test-id="acceptCookieButton"]').click();
     });
     it('Should_DisplayRedTextInPriceImpact_When_TooBigAmount', () => {
