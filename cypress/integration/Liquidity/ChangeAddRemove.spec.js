@@ -29,6 +29,5 @@ describe('When changing add tab to remove tab  and vice versa it should be the s
         cy.get('[data-test-id="buttonSelect"]').click();
         cy.get('[data-test-id="cardTab-0"]').click();
         cy.get('[data-test-id="liquidityPageTitle"]').should('contain', 'tzBTC / STKR');
-
     });
 });
