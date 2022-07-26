@@ -72,18 +72,18 @@ export const stableswap = {
   //#region creation rules
   creationRules: 'Stable DEX liquidity pool creation rules',
   youMayCreatePool: 'With the aid of this tool, you may create token pools with equal value.',
-  rules: 'Rules',
+  rules: 'Rules:',
   chooseTokens: 'Choose two to four equal-value Tezos-based tokens and put the starting values in the input field.',
   followingFees: ' By creating a pool, you will pay the following fees:',
   standardFee: 'Standard tezos blockchain fee for interaction with the smart-contract',
   ourFee:
     '{{price}} QUIPU, where {{halfPrice}} QUIPU are immediately burned, and {{halfPrice}} QUIPU will move to the QuipuSwap dev fund.',
-  setupLiquidityProvidersFee: ' Set up a fee that will be paid to the liquidity providers of yourpool.',
+  setupLiquidityProvidersFee: ' Set up a fee that will be paid to the liquidity providers of your pool.',
   maxLiquidityProviderFeeDecriptions:
     "The maximum fee is 1%, but we advise you to set the fee around 0.07% to balance out the provider's incentive and low transaction fees.",
-  chooseAmplification: 'Choose the Amplification parameters (A)',
+  chooseAmplification: 'Choose the Amplification parameters (A).',
   amplificationDecriptions:
-    "The application parameter determines a pool's tolerance for the imbalance between its assets. A higher value means that trades will incur slippage sooner as the assets within the pool become imbalanced.",
+    "The amplification parameter determines a pool's tolerance for the imbalance between its assets. A higher value means that trades will incur slippage sooner as the assets within the pool become imbalanced.",
   rememberInbuiltFee: 'Remember that QuipuSwap will charge the following fees',
   forEachOperation: 'for each trading operation in your pool:',
   liquidityProvidersFeeDecriptions: 'Liquidity providers fee:',
