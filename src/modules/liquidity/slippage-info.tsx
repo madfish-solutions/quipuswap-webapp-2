@@ -3,7 +3,7 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
@@ -42,7 +42,7 @@ export const SlippageInfo: FC<Props> = observer(({ liquidityType, tokenAInput, t
 
   const investedOrReceivedText =
     liquidityType === LiquiditySlippageType.ADD ? t('liquidity|invested') : t('liquidity|received');
-  const DEFAULT_STABLE_TOKEN = DEFAULT_TOKEN;
+  const DEFAULT_STABLE_TOKEN = QUIPU_TOKEN;
 
   return (
     <>

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS } from '@config/config';
 import { TZKT_EXPLORER_URL } from '@config/enviroment';
-import { fromDecimals, getTokenSymbol, isTezIncluded, isUndefined } from '@shared/helpers';
+import { toReal, getTokenSymbol, isTezIncluded, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { PairInfo } from '../add-liquidity-form';
@@ -14,7 +14,7 @@ import { usePairInfo } from '../hooks';
 const ONE_TOKEN = 1;
 const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
 
-const getPoolFixed = (token: Nullable<Token>, pool: Nullable<BigNumber>) => token && pool && fromDecimals(pool, token);
+const getPoolFixed = (token: Nullable<Token>, pool: Nullable<BigNumber>) => token && pool && toReal(pool, token);
 
 const getPairLink = (
   dex: Optional<FoundDex>,

@@ -4,7 +4,7 @@ import { isNull } from '@shared/helpers';
 import { CaseIcon, DollarIcon, MedalIcon } from '@shared/svg';
 import { Undefined } from '@shared/types';
 
-import { Icon, NewLiquidityLablesInterface } from '../interfaces';
+import { Icon, NewLiquidityLablesInterface } from '../../interfaces';
 import styles from './new-liquidity-lables.module.scss';
 
 const Component: Record<Icon, FC> = {

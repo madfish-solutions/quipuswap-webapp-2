@@ -23,17 +23,18 @@ export interface TokensModalViewProps {
 
 interface TokensModalInitialParamsAbstraction {
   tokens?: Nullable<Array<Token>>;
+  disabledTokens?: Nullable<Array<Token>>;
 }
-interface TokensQuiantityValidation extends TokensModalInitialParamsAbstraction {
+interface TokensQuantityValidation extends TokensModalInitialParamsAbstraction {
   min: number;
   max: number;
 }
 
-export type TokensModalInitialParams = TokensModalInitialParamsAbstraction | TokensQuiantityValidation;
+export type TokensModalInitialParams = TokensModalInitialParamsAbstraction | TokensQuantityValidation;
 
-export const isTokensQuiantityValidation = (
+export const isTokensQuantityValidation = (
   candidate: TokensModalInitialParams
-): candidate is TokensQuiantityValidation =>
+): candidate is TokensQuantityValidation =>
   'min' in candidate && Boolean(candidate.min) && 'max' in candidate && Boolean(candidate.max);
 
 export interface TokensModalAbort {

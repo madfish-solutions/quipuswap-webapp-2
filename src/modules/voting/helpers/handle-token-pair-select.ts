@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js';
 import { FACTORIES } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
-import { fromDecimals } from '@shared/helpers';
+import { toReal } from '@shared/helpers';
 import { VoterType, Nullable, TokenPair, SupportedNetworks } from '@shared/types';
 import { UseToasts } from '@shared/utils';
 
@@ -46,7 +46,7 @@ export const handleTokenPairSelect = async (
 
     if (accountPkh) {
       const res = await estimateReward(tezos, foundDex, accountPkh);
-      const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
+      const rewards = toReal(res, TEZOS_TOKEN.metadata.decimals).toString();
 
       result.rewards = rewards;
 
@@ -54,9 +54,9 @@ export const handleTokenPairSelect = async (
 
       if (voter) {
         result.voter = {
-          veto: fromDecimals(voter.veto, LP_TOKEN_DECIMALS),
+          veto: toReal(voter.veto, LP_TOKEN_DECIMALS),
           candidate: voter.candidate,
-          vote: fromDecimals(voter.vote, LP_TOKEN_DECIMALS)
+          vote: toReal(voter.vote, LP_TOKEN_DECIMALS)
         };
       } else {
         result.voter = {
@@ -67,8 +67,8 @@ export const handleTokenPairSelect = async (
       }
 
       const share = await getLiquidityShare(tezos, foundDex, accountPkh);
-      const frozenBalance = fromDecimals(share.frozen, LP_TOKEN_DECIMALS).toString();
-      const totalBalance = fromDecimals(share.total, LP_TOKEN_DECIMALS).toString();
+      const frozenBalance = toReal(share.frozen, LP_TOKEN_DECIMALS).toString();
+      const totalBalance = toReal(share.total, LP_TOKEN_DECIMALS).toString();
 
       result.tokenPair = {
         ...pair,

@@ -58,3 +58,6 @@ export * from './coinflip-fail-result';
 export * from './coinflip-success-result';
 export * from './new-liquidity-icon';
 export * from './new-liquidity';
+export * from './confetti-left';
+export * from './confetti-right';
+export * from './confettis';

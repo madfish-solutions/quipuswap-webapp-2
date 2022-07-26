@@ -15,15 +15,15 @@ const modeClass = {
 export interface RadioButtonProps {
   values: Array<RadioItemProps>;
   onChange: (value: string) => void;
-  value: string;
+  value: string | number;
   className?: string;
 }
 
 interface RadioItemProps {
   radioName: string;
-  value: string;
+  value: string | number;
   label: string;
-  checkedValue?: string;
+  checkedValue?: string | number;
 }
 
 const RadioItem: FC<RadioItemProps> = ({ radioName, value, label, checkedValue }) => (
