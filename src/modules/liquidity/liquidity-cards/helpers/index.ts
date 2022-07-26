@@ -4,7 +4,6 @@ export * from './check-is-pool-empty';
 export * from './check-is-pool-not-exists';
 export * from './find-not-tez-token';
 export * from './find-token';
-export * from './get-liquidity-url';
 export * from './get-ordered-tokens-amounts';
 export * from './get-tez-token-pair-info';
 export * from './get-tokens-reset-and-update-operators';

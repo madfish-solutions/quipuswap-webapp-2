@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
+import { DEFAULT_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { bigNumberToString, fromDecimals, isNull } from '@shared/helpers';
@@ -10,7 +11,7 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
-import { useCoinflipStore, useUserLastGame } from '../../hooks';
+import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../../hooks';
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
@@ -25,9 +26,27 @@ const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGe
 export const useCoinflipDetailsViewModel = () => {
   const exchangeRates = useExchangeRates();
   const { tezos } = useRootStore();
-  const { generalStats, tokenToPlay, gamersStats, userLastGame } = useCoinflipStore();
+  const {
+    generalStatsStore,
+    tokenToPlay,
+    gamersStats,
+    userLastGame,
+    isGamersStatsLoading,
+    isGeneralStatsLoading,
+    isUserLastGameLoading,
+    bidSize: contractBidSize
+  } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
   const { getUserLastGame } = useUserLastGame();
+  const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+
+  const updateGeneralStats = useCallback(async () => {
+    if (isNull(tezos)) {
+      return;
+    }
+
+    await getCoinflipGeneralStats();
+  }, [getCoinflipGeneralStats, tezos]);
 
   const updateUserLastGame = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh)) {
@@ -39,13 +58,15 @@ export const useCoinflipDetailsViewModel = () => {
 
   useEffect(() => {
     updateUserLastGame();
-  }, [updateUserLastGame]);
+    updateGeneralStats();
+  }, [updateUserLastGame, updateGeneralStats]);
 
   useOnBlock(tezos, updateUserLastGame);
+  useOnBlock(tezos, updateGeneralStats);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStats.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress
@@ -60,10 +81,13 @@ export const useCoinflipDetailsViewModel = () => {
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
+  const preparedBidSize =
+    Math.floor(Number(contractBidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION;
 
   return {
     bank,
     bidSize,
+    preparedBidSize,
     totalWins,
     bankInUsd,
     rewardSize,
@@ -76,6 +100,8 @@ export const useCoinflipDetailsViewModel = () => {
     totalWinsInUsd,
     rewardSizeInUsd,
     payoutCoefficient,
+    isGamersStatsLoading: isNull(generalStatsStore) || isGeneralStatsLoading,
+    isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
     status: userLastGame?.status,
     lastGameId: gamersStats?.lastGameId
   };

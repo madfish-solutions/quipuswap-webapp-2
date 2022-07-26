@@ -17,6 +17,7 @@ import {
   getUserLastGameInfo
 } from '../api';
 import { GeneralStatsInterface } from '../api/types';
+import { getBidSize } from '../helpers';
 import { DashboardGeneralStats, GamersStats, GamersStatsRaw, UserLastGame, UserLastGameRaw } from '../interfaces';
 import { DEFAULT_GENERAL_STATS, generalStatsMapping, userLastGameMapper } from '../mapping';
 import { gamersStatsMapper } from '../mapping/gamers-stats.map';
@@ -61,7 +62,7 @@ export class CoinflipStore {
     noopMap
   );
 
-  readonly generalStats = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
+  readonly generalStatsStore = new LoadingErrorData<Nullable<GeneralStatsInterface>, DashboardGeneralStats>(
     DEFAULT_GENERAL_STATS,
     async () => await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token),
     generalStatsMapping
@@ -90,8 +91,12 @@ export class CoinflipStore {
       token: computed,
       gamesCount: computed,
       tokensWon: computed,
-      gamersStats: computed,
       tokensWithReward: computed,
+      generalStats: computed,
+      gamersStats: computed,
+      userLastGame: computed,
+      isGamersStatsLoading: computed,
+      isUserLastGameLoading: computed,
 
       setToken: action,
       setInput: action
@@ -110,19 +115,35 @@ export class CoinflipStore {
     return this.gamersStatsInfo.data;
   }
 
+  get generalStats(): Nullable<DashboardGeneralStats> {
+    return this.generalStatsStore.data;
+  }
+
+  get isGamersStatsLoading() {
+    return this.gamersStatsInfo.isLoading;
+  }
+  get isGeneralStatsLoading() {
+    return this.generalStatsStore.isLoading;
+  }
+
   get userLastGame(): Nullable<UserLastGame> {
     return this.userLastGameInfo.data;
+  }
+  get isUserLastGameLoading() {
+    return this.userLastGameInfo.isLoading;
   }
 
   get tokensWithReward(): Nullable<TokenWon[]> {
     return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
   }
 
+  get bidSize() {
+    return getBidSize(this.generalStats?.bank, this.generalStats?.maxBetPercent);
+  }
+
   get payout(): Nullable<BigNumber> {
-    return this.game.input && this.generalStats.data.payoutCoefficient
-      ? this.game.input.times(
-          Number(fromDecimals(this.generalStats.data.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
-        )
+    return this.game.input && this.generalStats?.payoutCoefficient
+      ? this.game.input.times(Number(fromDecimals(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)))
       : null;
   }
 
