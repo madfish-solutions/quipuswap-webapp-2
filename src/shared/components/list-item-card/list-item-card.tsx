@@ -4,9 +4,11 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
+import { NewLiquidityLables } from '@modules/new-liquidity/components';
+import { NewLiquidityLablesInterface } from '@modules/new-liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isUndefined } from '@shared/helpers';
-import { ArrowDown } from '@shared/svg';
+import { ArrowDown, VisibleIcon } from '@shared/svg';
 import { Token } from '@shared/types';
 
 import { Card } from '../card';
@@ -24,6 +26,9 @@ interface Props {
   isNew?: boolean;
   labels?: Array<StatusLabelProps>;
   outputToken?: Token | Array<Token>;
+  isNewLiquidity?: boolean;
+  visibleIcon?: boolean;
+  newLiquidityLablesData?: NewLiquidityLablesInterface;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
   farmingItemDTI?: string;
@@ -39,6 +44,9 @@ export const ListItemCard: FC<Props> = ({
   outputToken,
   href,
   labels,
+  isNewLiquidity,
+  visibleIcon,
+  newLiquidityLablesData,
   status,
   isNew,
   itemStats,
@@ -57,9 +65,9 @@ export const ListItemCard: FC<Props> = ({
 
         <div className={styles.topContainer}>
           <div className={styles.logosAndSymbols}>
-            <div className={styles.logosContainer}>
+            <div className={cx(styles.logosContainer, { [styles.inlineIcons]: isNewLiquidity })}>
               <TokensLogos tokens={inputToken} width={32} />
-
+              {visibleIcon && <VisibleIcon />}
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
@@ -82,7 +90,8 @@ export const ListItemCard: FC<Props> = ({
           </div>
 
           <div className={styles.statusAndlabelsContainer}>
-            <StatusLabel {...status} />
+            {!isNewLiquidity && <StatusLabel {...status} />}
+            {newLiquidityLablesData && <NewLiquidityLables newLiquidityLablesData={newLiquidityLablesData} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={StatusLabel} data={labels} />

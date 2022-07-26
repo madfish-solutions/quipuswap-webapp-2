@@ -384,7 +384,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const touchedFieldsErrors = Object.entries(touched).reduce<Partial<Record<keyof SwapFormValues, string>>>(
     (errorsPart, [key, isTouched]) => ({
       ...errorsPart,
-      [key]: isTouched ? errors[key as keyof SwapFormValues] : undefined
+      [key]: isTouched ? errors[key] : undefined
     }),
     {}
   );
