@@ -38,7 +38,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
           </div>
           <div className={styles.stats}>
             <DashboardCard
-              stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
+              amountClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={tvl}
@@ -47,7 +47,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               data-test-id="TVL"
             />
             <DashboardCard
-              stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
+              amountClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={apr}
