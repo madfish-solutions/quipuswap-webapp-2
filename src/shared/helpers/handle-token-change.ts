@@ -6,7 +6,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { getUserBalance } from '@shared/api/get-user-balance';
 import { Nullable, TokenDataMap, Token } from '@shared/types';
 
-import { fromDecimals } from './bignumber';
+import { toReal } from './bignumber';
 
 export enum TokenNumber {
   FIRST = 'first',
@@ -36,7 +36,7 @@ TokenChangeType) => {
     try {
       const balance = await getUserBalance(tezos, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
       if (balance) {
-        finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
+        finalBalance = toReal(balance, token.metadata.decimals).toString();
       }
     } catch (e) {
       // eslint-disable-next-line

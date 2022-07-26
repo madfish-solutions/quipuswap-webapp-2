@@ -1,10 +1,11 @@
 /// <reference types="cypress" />
 
 import { FIELD_WAIT_TIMEOUT } from '../../const';
+import { MAINNET_QUIPU_TOKEN } from '../../const';
 
 describe('Select new tokens in the fields', () => {
     beforeEach(() => {
-        cy.visit('/swap');
+        cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
         cy.get('[data-test-id="acceptCookieButton"]').click();
         cy.get('[data-test-id="from"] [data-test-id="changeToken"]').click();
         cy.wait(FIELD_WAIT_TIMEOUT);

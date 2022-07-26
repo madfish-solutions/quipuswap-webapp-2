@@ -1,10 +1,11 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { defined, getTokenSlug, isExist, isNull, isTokenEqual } from '@shared/helpers';
+import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { ManagedToken, Token } from '@shared/types';
 
-import { isTokensQuiantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
+import { ExtendTokensModalCellProps } from './components';
+import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
 
@@ -12,6 +13,7 @@ export class TokensModalStore {
   isOpen = false;
   _chosenTokens: Nullable<Array<Token>> = null;
   initialTokens: Nullable<Array<Token>> = null;
+  _disabledTokens: Nullable<Array<Token>> = null;
   isSingle: Nullable<boolean> = null;
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
@@ -41,21 +43,19 @@ export class TokensModalStore {
     return this.tokensQuantityStatus === TokensQuantityStatus.OK;
   }
 
-  get tokensWithChosen() {
-    return this.rootStore.tokensManagerStore.filteredTokens.map(token => {
-      const isTokenChosen = this.isChosenToken(token);
-
-      return {
-        ...token,
-        isChosen: isTokenChosen
-      };
-    });
+  get extendTokens(): ExtendTokensModalCellProps[] {
+    return this.rootStore.tokensManagerStore.filteredTokens.map(token => ({
+      ...token,
+      isChosen: this.isChosenToken(token),
+      disabled: this.isDisabledToken(token)
+    }));
   }
 
   constructor(private readonly rootStore: RootStore) {
     makeObservable(this, {
       isOpen: observable,
       _chosenTokens: observable,
+      _disabledTokens: observable,
       isSingle: observable,
       maxQuantity: observable,
       minQuantity: observable,
@@ -65,7 +65,7 @@ export class TokensModalStore {
       setChosenTokens: action,
       setInitialTokens: action,
 
-      tokensWithChosen: computed,
+      extendTokens: computed,
       tokensQuantityStatus: computed,
       isTokensQuantityOk: computed
     });
@@ -83,7 +83,15 @@ export class TokensModalStore {
     this.initialTokens = tokens;
   }
 
+  setDisabledTokens(tokens: Nullable<Array<Token>>) {
+    this._disabledTokens = tokens;
+  }
+
   toggleChosenToken(token: ManagedToken) {
+    if (this.isDisabledToken(token)) {
+      return;
+    }
+
     if (!this._chosenTokens) {
       this._chosenTokens = [];
     }
@@ -111,9 +119,9 @@ export class TokensModalStore {
   }
 
   async open(params: TokensModalInitialParams = {}): Promise<Nullable<Array<Token>>> {
-    const { tokens: initialTokens } = params;
+    const { tokens: initialTokens, disabledTokens } = params;
 
-    if (isTokensQuiantityValidation(params)) {
+    if (isTokensQuantityValidation(params)) {
       this.minQuantity = params.min;
       this.maxQuantity = params.max;
     } else {
@@ -122,6 +130,7 @@ export class TokensModalStore {
 
     this.setInitialTokens(initialTokens ?? null);
     this.setChosenTokens(initialTokens ?? null);
+    this.setDisabledTokens(disabledTokens ?? null);
     this.setOpenState(true);
 
     const tokens = await new Promise<Nullable<Array<Token>>>(resolve => {
@@ -139,9 +148,11 @@ export class TokensModalStore {
   }
 
   isChosenToken(token: Token) {
-    const chosenTokensSlugs = this._chosenTokens?.map(getTokenSlug);
+    return isTokenIncludes(token, this._chosenTokens);
+  }
 
-    return Boolean(chosenTokensSlugs?.includes(getTokenSlug(token)));
+  isDisabledToken(token: Token) {
+    return isTokenIncludes(token, this._disabledTokens);
   }
 
   private checkVisibilityOfChosenTokens(chosenTokens: Nullable<Array<Token>>) {

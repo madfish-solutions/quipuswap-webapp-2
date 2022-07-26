@@ -21,7 +21,7 @@ export const TEZOS_TOKEN_DECIMALS = TEZOS_TOKEN.metadata.decimals;
 export const TEZOS_TOKEN_SYMBOL = TEZOS_TOKEN.metadata.symbol;
 export const TEZOS_TOKEN_SLUG = TEZOS_TOKEN.contractAddress;
 
-export const MAINNET_DEFAULT_TOKEN: Token = {
+export const MAINNET_QUIPU_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -34,23 +34,18 @@ export const MAINNET_DEFAULT_TOKEN: Token = {
   }
 };
 
-export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
-  ...MAINNET_DEFAULT_TOKEN,
-  contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ'
-};
-
-export const GHOSTNET_DEFAULT_TOKEN: Token = {
-  ...MAINNET_DEFAULT_TOKEN,
+const GHOSTNET_QUIPU_TOKEN: Token = {
+  ...MAINNET_QUIPU_TOKEN,
   contractAddress: 'KT19363aZDTjeRyoDkSLZhCk62pS4xfvxo6c'
 };
 
-export const networksDefaultTokens: Record<SupportedNetworks, Token> = {
-  [NetworkType.MAINNET]: MAINNET_DEFAULT_TOKEN,
-  [NetworkType.GHOSTNET]: GHOSTNET_DEFAULT_TOKEN
+export const networksQuipuTokens: Record<SupportedNetworks, Token> = {
+  [NetworkType.MAINNET]: MAINNET_QUIPU_TOKEN,
+  [NetworkType.GHOSTNET]: GHOSTNET_QUIPU_TOKEN
 };
 
-export const DEFAULT_TOKEN = networksDefaultTokens[NETWORK_ID];
+export const QUIPU_TOKEN = networksQuipuTokens[NETWORK_ID];
 
-export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, DEFAULT_TOKEN];
+export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, QUIPU_TOKEN];
 
-export const DEFAULT_TOKEN_DECIMALS_PRECISION = 1e6;
+export const QUIPU_TOKEN_DECIMALS_PRECISION = 1e6;
