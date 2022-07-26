@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { VotingTabs } from '@modules/voting/tabs.enum';
-import { toDecimals } from '@shared/helpers';
+import { toAtomic } from '@shared/helpers';
 import { VoteFormValues } from '@shared/types';
 import { UseToasts } from '@shared/utils';
 import { useConfirmOperation } from '@shared/utils/confirm-operation';
@@ -29,12 +29,7 @@ const vote = async (
   balance: number
 ): Promise<IBatchParamsAndToastText> => {
   const text = 'Vote completed!';
-  const params = await voteForBaker(
-    tezos,
-    dex,
-    baker,
-    toDecimals(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals)
-  );
+  const params = await voteForBaker(tezos, dex, baker, toAtomic(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals));
 
   return {
     text,
@@ -54,7 +49,7 @@ const unvote = async (tezos: TezosToolkit, dex: FoundDex, baker: string): Promis
 
 const veto = async (tezos: TezosToolkit, dex: FoundDex, balance: number): Promise<IBatchParamsAndToastText> => {
   const text = 'Veto completed!';
-  const params = await vetoCurrentBaker(tezos, dex, toDecimals(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals));
+  const params = await vetoCurrentBaker(tezos, dex, toAtomic(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals));
 
   return {
     text,

@@ -6,7 +6,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import { LP_INPUT_KEY } from '@config/constants';
 import {
   findBalanceToken,
-  fromDecimals,
+  toReal,
   isNull,
   numberAsString,
   placeDecimals,
@@ -156,7 +156,7 @@ export const useRemoveLiqFormViewModel = () => {
     const tokens = extractTokens(item.tokensInfo);
     const map = createAmountsMichelsonMapFormikValues(formik.values, tokens, index, inputAmount);
     const shares = await calcTokenAmountView(map);
-    const fixedShares = fromDecimals(shares, item.lpToken);
+    const fixedShares = toReal(shares, item.lpToken);
 
     return fixedShares.toFixed();
   };

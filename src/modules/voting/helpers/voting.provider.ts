@@ -5,7 +5,7 @@ import constate from 'constate';
 
 import { NETWORK } from '@config/config';
 import { NETWORK_ID } from '@config/enviroment';
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useVotingRouter } from '@modules/voting/hooks';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
@@ -45,7 +45,7 @@ const useVotingService = () => {
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
   const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
-  const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, DEFAULT_TOKEN]);
+  const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, QUIPU_TOKEN]);
   const tokensRef = useRef<[Token, Token]>([token1, token2]);
 
   const {

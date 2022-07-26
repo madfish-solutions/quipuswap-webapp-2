@@ -5,7 +5,9 @@ import { useFormik } from 'formik';
 
 import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
 import { bigNumberToString, getFormikError, isEqual } from '@shared/helpers';
+import { useAmountInUsd, useAmplitudeService } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
+import { useToasts } from '@shared/utils';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 import { useCoinflipValidation } from './use-coinflip.validation';
@@ -27,16 +29,42 @@ export const useCoinflipGameFormViewModel = (
   const { getUserLastGame } = useUserLastGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
 
+  const { showErrorToast } = useToasts();
+  const { getAmountInUsd } = useAmountInUsd();
+  const { log } = useAmplitudeService();
+
   const { decimals } = token.metadata;
 
   const validationSchema = useCoinflipValidation(tokenBalance);
 
   const handleCoinFlip = async () => {
-    await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
-    onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
-    formik.resetForm();
-    await getGamersStats();
-    await getUserLastGame();
+    const amountInUsd = getAmountInUsd(new BigNumber(inputAmount), token);
+
+    const logData = {
+      asset: tokenToPlay,
+      coinSide,
+      amount: Number(inputAmount),
+      amountInUsd: Number(amountInUsd)
+    };
+
+    try {
+      log('CLICK_FLIP_BUTTON_CLICK', logData);
+
+      await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
+      onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
+      formik.resetForm();
+      await getGamersStats();
+      await getUserLastGame();
+
+      log('CLICK_FLIP_OPERATION_SUCCESS', logData);
+    } catch (error) {
+      showErrorToast(error as Error);
+
+      log('CLICK_FLIP_OPERATION_FAILED', {
+        ...logData,
+        error
+      });
+    }
   };
 
   const formik = useFormik({
@@ -72,8 +100,13 @@ export const useCoinflipGameFormViewModel = (
 
       return;
     }
+
     onCoinSideSelect(value); // TODO: Remove when fix problem connection between store and validation
     formik.setFieldValue(FormFields.coinSide, value);
+
+    log('CLICK_FLIP_COIN_SIDE_SELECT', {
+      coinSide: value
+    });
   };
 
   const coinSideError = getFormikError(formik, FormFields.coinSide);

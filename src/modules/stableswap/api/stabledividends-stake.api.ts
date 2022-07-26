@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 
 export const stableDividendsStakeApi = async (
   tezos: TezosToolkit,
@@ -17,7 +17,7 @@ export const stableDividendsStakeApi = async (
     .add(DEFAULT_STABLESWAP_POOL_ID, amount)
     .toTransferParams();
 
-  return await withApproveApi(tezos, stableswapPoolContractAddress, DEFAULT_TOKEN, accountPkh, amount, [
+  return await withApproveApi(tezos, stableswapPoolContractAddress, QUIPU_TOKEN, accountPkh, amount, [
     swableswapLiquidityParams
   ]);
 };
