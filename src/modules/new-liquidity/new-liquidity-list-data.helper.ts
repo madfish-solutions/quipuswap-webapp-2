@@ -67,9 +67,7 @@ export const newLiquidityListDataHelper = () => {
           tooltip: 'APR tooltip',
           amounts: {
             amount: tvlInUsd,
-            currency: PERCENT,
-            dollarEquivalent: tvlInUsd,
-            dollarEquivalentOnly: true
+            currency: PERCENT
           }
         },
         {
@@ -77,9 +75,7 @@ export const newLiquidityListDataHelper = () => {
           tooltip: 'Max APR tooltip',
           amounts: {
             amount: tvlInUsd,
-            currency: PERCENT,
-            dollarEquivalent: tvlInUsd,
-            dollarEquivalentOnly: true
+            currency: PERCENT
           }
         }
       ]

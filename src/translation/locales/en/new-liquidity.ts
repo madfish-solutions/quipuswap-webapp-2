@@ -4,7 +4,7 @@ export const newLiquidity = {
   newLiquidity: 'New Liquidity',
   Liquidity: 'Liquidity',
   volume: 'Volume (7d)',
-  TVL: 'TVl',
+  TVL: 'TVL',
   tvl: 'Total Value Locked',
   tvlTooltip: 'tvl tooltip',
   APR: 'APR',
