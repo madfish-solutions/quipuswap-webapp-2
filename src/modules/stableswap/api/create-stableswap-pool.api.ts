@@ -124,7 +124,7 @@ export const createStableswapPoolApi = async (
       contractFees.stakers_f,
       contractFees.ref_f
     )
-    .toTransferParams({ storageLimit: 40000 });
+    .toTransferParams({ storageLimit: 60000 });
 
   const inputs = new MichelsonMap();
 
@@ -132,7 +132,7 @@ export const createStableswapPoolApi = async (
 
   const startDexTransferParams = stableswapPoolContract.methods
     .start_dex(inputs)
-    .toTransferParams({ storageLimit: 40000 });
+    .toTransferParams({ storageLimit: 60000 });
 
   return await withApproveApiForManyTokens(tezos, stableswapFactoryContractAddress, amountTokenList, accountPkh, [
     addPoolTransferParams,
