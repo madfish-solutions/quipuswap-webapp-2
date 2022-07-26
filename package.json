@@ -5,6 +5,10 @@
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
     "start": "yarn pre-build && craco start",
+    "start:testnet:prod": "env-cmd -f .env.ithaca.pord yarn pre-build && craco start",
+    "start:testnet:stage": "env-cmd -f .env.ithaca.stage yarn pre-build && craco start",
+    "start:mainnet:stage": "env-cmd -f .env.mainnet.stage yarn pre-build && craco start",
+    "start:mainnet:prod": "env-cmd -f .env.mainnet.prod yarn pre-build && craco start",
     "build": "yarn pre-build && craco build",
     "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
     "test": "craco test",
@@ -87,6 +91,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/react-table": "^7.7.12",
     "@types/uuid": "^8.3.4",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.16.0",
     "eslint-config-next": "^12.1.6",
     "eslint-config-react-app": "^7.0.1",
