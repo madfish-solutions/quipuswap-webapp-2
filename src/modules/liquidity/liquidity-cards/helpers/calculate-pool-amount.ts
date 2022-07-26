@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { defined, fromDecimals, isNull } from '@shared/helpers';
+import { defined, toReal, isNull } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 import { calculateTokenAmount } from './calculate-token-amount';
@@ -17,10 +17,7 @@ export const calculatePoolAmount = (
     return null;
   }
 
-  const pureRate = calculateTokenAmount(
-    fromDecimals(defined(tokenAPool), tokenA),
-    fromDecimals(defined(tokenBPool), tokenB)
-  );
+  const pureRate = calculateTokenAmount(toReal(defined(tokenAPool), tokenA), toReal(defined(tokenBPool), tokenB));
 
   const amount = amountTokenA.multipliedBy(pureRate);
 

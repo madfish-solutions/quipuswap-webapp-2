@@ -3,7 +3,7 @@ import { FC, useContext, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { MAINNET_DEFAULT_TOKEN } from '@config/tokens';
+import { MAINNET_QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { QuipuToken } from '@shared/svg';
@@ -32,7 +32,7 @@ export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
       return '???';
     }
     const rawExchangeRate = exchangeRates.find(
-      ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress
+      ({ tokenAddress }) => tokenAddress === MAINNET_QUIPU_TOKEN.contractAddress
     )?.exchangeRate;
     if (!rawExchangeRate) {
       return '???';

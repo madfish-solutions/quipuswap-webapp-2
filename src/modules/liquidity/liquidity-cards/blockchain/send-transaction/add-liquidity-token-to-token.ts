@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { batchOperations } from '@shared/dapp';
-import { getBlockchainTimestamp, increaseBySlippage, toDecimals } from '@shared/helpers';
+import { getBlockchainTimestamp, increaseBySlippage, toAtomic } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers';
@@ -32,7 +32,7 @@ export const addLiquidityTokenToToken = async (
   const { address: dexAddress } = dex.contract;
 
   const tokenAAmount = new BigNumber(tokenAInput);
-  const aTokemAtom = toDecimals(tokenAAmount, tokenA);
+  const aTokemAtom = toAtomic(tokenAAmount, tokenA);
 
   const shares = aTokemAtom.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
   const bTokemAtom = shares.multipliedBy(tokenBPool).dividedBy(totalSupply).integerValue(BigNumber.ROUND_UP);

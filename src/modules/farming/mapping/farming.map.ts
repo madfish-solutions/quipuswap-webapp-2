@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { fromDecimals, isExist, multipliedIfPossible } from '@shared/helpers';
+import { toReal, isExist, multipliedIfPossible } from '@shared/helpers';
 import { balanceMap, mapBackendToken } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
@@ -20,7 +20,7 @@ function mapRawBigNumber(raw: BigNumber.Value, decimals?: number): BigNumber;
 function mapRawBigNumber(raw: Undefined<BigNumber.Value>, decimals?: number): Undefined<BigNumber>;
 function mapRawBigNumber(raw: Nullable<BigNumber.Value>, decimals?: number): Nullable<BigNumber>;
 function mapRawBigNumber(raw: Optional<BigNumber.Value>, decimals = DEFAULT_MAP_BN_DECIMALS): Optional<BigNumber> {
-  return isExist(raw) ? fromDecimals(new BigNumber(raw), decimals) : raw;
+  return isExist(raw) ? toReal(new BigNumber(raw), decimals) : raw;
 }
 
 const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {

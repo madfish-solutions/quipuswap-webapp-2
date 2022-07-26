@@ -23,10 +23,9 @@ export const PoolCreation: FC = () => {
   return (
     <div className={cx(styles.createPool, modeClass[colorThemeMode])}>
       <div className={cx(styles.poolCreateDescription, modeClass[colorThemeMode])}>{t('stableswap|createOwnPool')}</div>
-      {/*TODO: /create*/}
       <Button
         className={styles.button}
-        href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}${StableswapLiquidityFormTabs.add}`}
+        href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.create}`}
       >
         {t('stableswap|createPool')}
       </Button>

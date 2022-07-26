@@ -5,8 +5,8 @@
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
     "start": "yarn pre-build && craco start",
-    "start:testnet:prod": "env-cmd -f .env.ithaca.pord yarn pre-build && craco start",
-    "start:testnet:stage": "env-cmd -f .env.ithaca.stage yarn pre-build && craco start",
+    "start:testnet:prod": "env-cmd -f .env.ghostnet.pord yarn pre-build && craco start",
+    "start:testnet:stage": "env-cmd -f .env.ghostnet.stage yarn pre-build && craco start",
     "start:mainnet:stage": "env-cmd -f .env.mainnet.stage yarn pre-build && craco start",
     "start:mainnet:prod": "env-cmd -f .env.mainnet.prod yarn pre-build && craco start",
     "build": "yarn pre-build && craco build",
