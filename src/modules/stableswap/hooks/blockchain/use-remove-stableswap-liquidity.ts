@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
-import { decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
+import { cloneArray, decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
@@ -68,10 +68,13 @@ export const useRemoveStableswapLiquidity = () => {
         decreaseAmount(token, amount, fees)
       );
 
+      const inputAmountsFixed = cloneArray(inputAmounts);
+      inputAmountsFixed.pop();
+
       const logData = {
         stableswapLiquidityRemove: getStableswapLiquidityLogData(
           tokensInfo,
-          inputAmounts,
+          inputAmountsFixed,
           shares,
           liquiditySlippage,
           item
