@@ -38,7 +38,18 @@ export const useStableswapLiquidityPageViewModel = () => {
   const listData = list?.map(({ stableswapItemUrl, tokensInfo, tvlInUsd, isWhitelisted, liquidityProvidersFee }) => ({
     href: `${link}/${stableswapItemUrl}`,
     inputToken: extractTokens(tokensInfo),
-    status: { status: ActiveStatus.ACTIVE, label: isWhitelisted ? t('common|whiteListed') : null, filled: true },
+    labels: isWhitelisted
+      ? [
+          {
+            status: ActiveStatus.ACTIVE,
+            label: t('common|whiteListedUpper')
+          }
+        ]
+      : [],
+    status: {
+      status: ActiveStatus.ACTIVE,
+      filled: true
+    },
     itemStats: [
       ...tokensInfo.map(({ reserves, reservesInUsd, token }) => ({
         cellName: t('common|tokenValue'),
