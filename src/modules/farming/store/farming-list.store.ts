@@ -162,9 +162,9 @@ export class FarmingListStore {
       Date.now()
     );
 
-    const correctClaimableAmount = claimableRewardsWithoutFee.isNaN() ? ZERO_BN : claimableRewardsWithoutFee;
+    const correctClaimableRewardsWithoutFee = claimableRewardsWithoutFee.isNaN() ? ZERO_BN : claimableRewardsWithoutFee;
 
-    const claimableAmount = toReal(correctClaimableAmount, rewardToken);
+    const claimableAmount = toReal(correctClaimableRewardsWithoutFee, rewardToken);
     const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
 
     const skatedAmount = toReal(stakedRewardsWithoutFee, rewardToken);
