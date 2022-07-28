@@ -1,6 +1,7 @@
 import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { Typed } from '@shared/decorators';
 import { Token } from '@shared/types';
 
 export interface StableswapStats {
@@ -71,4 +72,17 @@ export interface StableswapTokensInfo {
   reservesInUsd: BigNumber;
   token: Token;
   exchangeRate: BigNumber;
+}
+
+export class StableswapTokensInfoDto implements StableswapTokensInfo {
+  @Typed()
+  reserves!: BigNumber;
+
+  @Typed()
+  reservesInUsd!: BigNumber;
+
+  token!: Token;
+
+  @Typed()
+  exchangeRate!: BigNumber;
 }

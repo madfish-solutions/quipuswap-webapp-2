@@ -14,6 +14,9 @@ import { StableswapLiquidityFormTabs } from '../../../types';
 
 export const useStableswapLiquidityPageViewModel = () => {
   const stableswapListStore = useStableswapListStore();
+  // eslint-disable-next-line no-console
+  console.log('stableswapListStore', stableswapListStore);
+
   const isReady = useReady();
   const { getStableswapList } = useGetStableswapList();
   const { getStableswapStats } = useGetStableswapStats();
