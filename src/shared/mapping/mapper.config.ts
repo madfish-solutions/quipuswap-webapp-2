@@ -24,15 +24,7 @@ export const createConfigMap = (prototype: any) => {
   console.log('dtoFields', dtoFields);
 
   for (const dtoField of dtoFields) {
-    const dtoFieldDisignType = Reflect.getOwnMetadata(prototype, dtoField.propertyKey);
-    // eslint-disable-next-line no-console
-    console.log('dtoFieldDisignType', dtoFieldDisignType, dtoFieldDisignType === undefined);
-
-    //   if (Reflect.getOwnMetadata(TYPED_MARK_SYMBOL, dtoFieldDisignType.prototype)) {
-    //     mapperConfig[dtoField.propertyKey] = createConfigMap(dtoFieldDisignType.prototype);
-    //   } else {
-    //     mapperConfig[dtoField.propertyKey] = getMapperKind(dtoFieldDisignType);
-    //   }
+    mapperConfig[dtoField.propertyKey] = getMapperKind(dtoField.type);
   }
 
   // eslint-disable-next-line no-console
@@ -52,14 +44,52 @@ export const getMapperKind = (_type: any) => {
   }
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const mapperReader = (initialObject: Record<string, any>, mapperConfig: MapperConfig) => {
   // eslint-disable-next-line no-console
   console.log('initialObject', initialObject);
   // eslint-disable-next-line no-console
   console.log('mapperConfig', mapperConfig);
 
+  if (Array.isArray(initialObject)) {
+    return initialObject.map(obj => {
+      const initialObjetEntries = Object.entries(obj);
+      const mappedEntries: Array<[string, any]> = initialObjetEntries.map(([key, value]) => {
+        // eslint-disable-next-line no-console
+        console.log('key', key);
+        // eslint-disable-next-line no-console
+        console.log('value', value);
+
+        try {
+          const mapper = mapperFactory[mapperConfig[key] as MapperKinds];
+
+          if (mapper) {
+            return [key, mapper(value)];
+          }
+
+          return [key, value];
+        } catch (e: any) {
+          // eslint-disable-next-line no-console
+          console.error(e);
+          throw Error(e.message);
+        }
+      });
+
+      // eslint-disable-next-line no-console
+      console.log('mappedEntries', mappedEntries);
+
+      return Object.fromEntries(mappedEntries);
+    });
+  }
+
   const initialObjetEntries = Object.entries(initialObject);
+  // eslint-disable-next-line sonarjs/no-identical-functions
   const mappedEntries: Array<[string, any]> = initialObjetEntries.map(([key, value]) => {
+    // eslint-disable-next-line no-console
+    console.log('key', key);
+    // eslint-disable-next-line no-console
+    console.log('value', value);
+
     try {
       if (typeof value === 'object') {
         return [key, mapperReader(value, mapperConfig[key])];
@@ -78,6 +108,9 @@ export const mapperReader = (initialObject: Record<string, any>, mapperConfig: M
       throw Error(e.message);
     }
   });
+
+  // eslint-disable-next-line no-console
+  console.log('mappedEntries', mappedEntries);
 
   return Object.fromEntries(mappedEntries);
 };

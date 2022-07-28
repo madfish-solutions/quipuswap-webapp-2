@@ -3,16 +3,12 @@ import { TYPED_MARK_SYMBOL } from './typed-mark-symbol';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface ITyped {
   isArray?: boolean;
-  typeField?: any;
+  type?: any;
 }
 
-export const Typed = ({ isArray, typeField }: ITyped = {}) => {
+export const Typed = ({ isArray = false, type }: ITyped = {}) => {
   return (prototype: object, propertyKey: string) => {
     const existsMetadataValues = Reflect.getMetadata(TYPED_MARK_SYMBOL, prototype) ?? [];
-    Reflect.defineMetadata(
-      TYPED_MARK_SYMBOL,
-      [...existsMetadataValues, { propertyKey, isArray, typeField }],
-      prototype
-    );
+    Reflect.defineMetadata(TYPED_MARK_SYMBOL, [...existsMetadataValues, { propertyKey, isArray, type }], prototype);
   };
 };
