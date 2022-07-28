@@ -17,10 +17,10 @@ import {
 } from '../types';
 
 class StableswapListDto implements StableswapItem {
-  @Typed()
+  @Typed({ type: BigNumber })
   id!: BigNumber;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   poolId!: BigNumber;
 
   contractAddress!: string;
@@ -29,26 +29,26 @@ class StableswapListDto implements StableswapItem {
 
   isWhitelisted!: boolean;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   totalLpSupply!: BigNumber;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   tvlInUsd!: BigNumber;
 
   poolContractUrl!: string;
 
   stableswapItemUrl!: string;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   liquidityProvidersFee!: BigNumber;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   stakersFee!: BigNumber;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   interfaceFee!: BigNumber;
 
-  @Typed()
+  @Typed({ type: BigNumber })
   devFee!: BigNumber;
 
   lpToken!: Token;
