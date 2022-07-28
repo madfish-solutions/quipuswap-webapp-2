@@ -1,18 +1,63 @@
+import BigNumber from 'bignumber.js';
 import { makeObservable } from 'mobx';
 
+import { Typed } from '@shared/decorators';
+import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Nullable } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { getStableswapListApi, getStableswapStatsApi } from '../api';
-import { poolsListMapper, statsMapper } from '../mapping';
-import { RawStableswapItem, RawStableswapStats, StableswapItem, StableswapStats } from '../types';
+import { statsMapper } from '../mapping';
+import {
+  RawStableswapItem,
+  RawStableswapStats,
+  StableswapItem,
+  StableswapStats,
+  StableswapTokensInfoDto
+} from '../types';
 
+class StableswapListDto implements StableswapItem {
+  @Typed()
+  id!: BigNumber;
+
+  @Typed()
+  poolId!: BigNumber;
+
+  contractAddress!: string;
+
+  tokensInfo!: Array<StableswapTokensInfoDto>;
+
+  isWhitelisted!: boolean;
+
+  @Typed()
+  totalLpSupply!: BigNumber;
+
+  @Typed()
+  tvlInUsd!: BigNumber;
+
+  poolContractUrl!: string;
+
+  stableswapItemUrl!: string;
+
+  @Typed()
+  liquidityProvidersFee!: BigNumber;
+
+  @Typed()
+  stakersFee!: BigNumber;
+
+  @Typed()
+  interfaceFee!: BigNumber;
+
+  @Typed()
+  devFee!: BigNumber;
+
+  lpToken!: Token;
+}
+
+@ModelBuilder()
 export class StableswapListStore {
-  readonly listStore = new LoadingErrorData<Array<RawStableswapItem>, Array<StableswapItem>>(
-    [],
-    async () => await getStableswapListApi(),
-    poolsListMapper
-  );
+  @Led({ defaultData: [], getData: async () => await getStableswapListApi(), dto: StableswapListDto })
+  readonly listStore!: LoadingErrorData<Array<RawStableswapItem>, Array<StableswapItem>>;
 
   readonly statsStore = new LoadingErrorData<RawStableswapStats, Nullable<StableswapStats>>(
     null,

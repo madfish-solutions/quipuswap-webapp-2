@@ -2,6 +2,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
 
+import { MapperConfig, mapperReader } from '../../mapping/mapper.config';
 import { Undefined, Nullable } from '../../types/types';
 
 export class LoadingErrorData<RawData, Data> {
@@ -70,6 +71,62 @@ export class LoadingErrorData<RawData, Data> {
       } else {
         this.setError(error as Error);
       }
+
+      throw error;
+    } finally {
+      this.finishLoading();
+    }
+
+    return undefined;
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class LoadingErrorData2<RawData, Data> {
+  rawData: RawData | undefined;
+  data: Data;
+
+  isInitialized = false;
+  isLoading = false;
+  error2: Error | string | null = null;
+
+  constructor(private defaultData: Data, private getDate: () => Promise<RawData>, private mappingConfig: MapperConfig) {
+    this.data = defaultData;
+  }
+
+  get isReady() {
+    return !this.isLoading && this.isInitialized;
+  }
+
+  setRawData(rawData: RawData) {
+    this.error2 = null;
+    this.rawData = rawData;
+
+    this.data = mapperReader(rawData, this.mappingConfig) as unknown as Data;
+  }
+
+  setError2(error: Error | string) {
+    this.error2 = error;
+    this.rawData = undefined;
+    this.data = this.defaultData;
+  }
+
+  startLoading() {
+    this.isLoading = true;
+    this.isInitialized = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
+  }
+
+  async load() {
+    try {
+      this.startLoading();
+
+      this.setRawData(await this.getDate());
+    } catch (error) {
+      this.setError2(error as Error);
 
       throw error;
     } finally {
