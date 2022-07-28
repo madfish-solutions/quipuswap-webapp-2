@@ -130,7 +130,6 @@ export const common = {
   lessDetails: 'Less Details',
   select: 'Select',
   whiteListed: 'Whitelisted',
-  whiteListedUpper: 'WHITELISTED',
   tvl: 'TVL',
   Payout: 'Payout',
   tokenValues: 'Token Values',

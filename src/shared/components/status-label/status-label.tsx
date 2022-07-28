@@ -10,7 +10,7 @@ import styles from './status-label.module.scss';
 export interface StatusLabelProps {
   className?: string;
   status: ActiveStatus;
-  label?: Nullable<string>;
+  label?: string;
   filled?: boolean;
 }
 

@@ -24,7 +24,7 @@ interface Props {
   inputToken: Token | Array<Token>;
   status: StatusLabelProps;
   isNew?: boolean;
-  labels?: Array<StatusLabelProps> | [];
+  labels?: Array<StatusLabelProps>;
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
   visibleIcon?: boolean;
