@@ -13,8 +13,7 @@ import {
   getFormikError,
   isNull,
   isEmptyString,
-  isEmptyArray,
-  isEqual
+  isEmptyArray
 } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
@@ -29,8 +28,8 @@ import {
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
+import { setCarretPosition } from './set-carret-position.helper';
 
-const CARRET_POSITION_SHIFT = 1;
 const MAX_DECIMALS_AMOUNT = 10;
 const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PRODIFDERS_FEE.value);
 
@@ -144,16 +143,9 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
           return;
         }
         const input = document.getElementById('input-fee-field');
-        const selectionStart = (input as HTMLInputElement).selectionStart;
         const value = (event.target as HTMLInputElement).value.replace(PERCENT, '');
 
-        if (!(input as HTMLInputElement).value.includes(PERCENT)) {
-          (input as HTMLInputElement).value = `${(input as HTMLInputElement).value}${PERCENT}`;
-        }
-
-        if (isEqual(selectionStart, (input as HTMLInputElement).value.length - CARRET_POSITION_SHIFT)) {
-          (input as HTMLInputElement).setSelectionRange(selectionStart, selectionStart);
-        }
+        setCarretPosition(input as HTMLInputElement);
 
         formik.setFieldValue(LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, value);
       }
