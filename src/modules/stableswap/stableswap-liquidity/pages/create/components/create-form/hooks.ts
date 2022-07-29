@@ -13,10 +13,11 @@ import {
   getFormikError,
   isNull,
   isEmptyString,
-  isEmptyArray
+  isEmptyArray,
+  isEqual
 } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
-import { numberAsStringSchema, NumberAsStringSchema } from '@shared/validators';
+import { NumberAsStringSchema } from '@shared/validators';
 import { i18n } from '@translation';
 
 import {
@@ -24,11 +25,14 @@ import {
   AMPLIFICATION_FIELD_NAME,
   createPoolAmplification,
   UPPER_LIQUIDITY_PRODIFDERS_FEE,
-  LOWER_LIQUIDITY_PRODIFDERS_FEE,
   TOKEN_KEY,
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
+
+const CARRET_POSITION_SHIFT = 1;
+const MAX_DECIMALS_AMOUNT = 10;
+const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PRODIFDERS_FEE.value);
 
 export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<Nullable<BigNumber>>) => {
   const validationSchema = useMemo(() => {
@@ -56,7 +60,12 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
 
     const liquidityProvidersFee = [
       LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
-      numberAsStringSchema(LOWER_LIQUIDITY_PRODIFDERS_FEE, UPPER_LIQUIDITY_PRODIFDERS_FEE).required('Value is required')
+      operationAmountSchema(
+        MAX_REAL_VALUE_AMOUNT,
+        true,
+        MAX_DECIMALS_AMOUNT,
+        i18n.t('stableswap|noMoreDecimals', { decimalsAmount: MAX_DECIMALS_AMOUNT })
+      ).required('Value is required')
     ];
 
     const tokensSchema = [
@@ -124,6 +133,7 @@ export const useInputTokenParams = (
 export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof useFormik>) => {
   const liquidityProvidersFeeInputParams: InputProps = useMemo(
     () => ({
+      id: 'input-fee-field',
       label: i18n.t('stableswap|liquidityProvidersFee'),
       error: getFormikError(formik, LIQUIDITY_PROVIDERS_FEE_FIELD_NAME),
       value: isEmptyString(formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
@@ -133,7 +143,18 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
         if (isNull(event)) {
           return;
         }
+        const input = document.getElementById('input-fee-field');
+        const selectionStart = (input as HTMLInputElement).selectionStart;
         const value = (event.target as HTMLInputElement).value.replace(PERCENT, '');
+
+        if (!(input as HTMLInputElement).value.includes(PERCENT)) {
+          (input as HTMLInputElement).value = `${(input as HTMLInputElement).value}${PERCENT}`;
+        }
+
+        if (isEqual(selectionStart, (input as HTMLInputElement).value.length - CARRET_POSITION_SHIFT)) {
+          (input as HTMLInputElement).setSelectionRange(selectionStart, selectionStart);
+        }
+
         formik.setFieldValue(LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, value);
       }
     }),
