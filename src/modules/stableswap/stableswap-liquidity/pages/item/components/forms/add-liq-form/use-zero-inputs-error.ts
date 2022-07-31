@@ -10,7 +10,9 @@ export const useZeroInputsError = () => {
   const isZeroInputsError = (inputAmounts: FormikValues) => {
     const entries = Object.entries(inputAmounts);
 
-    return !formStore.isBalancedProportion && entries.every(([_, value]) => isNull(value) || !value.gt(ZERO_AMOUNT));
+    return (
+      !formStore.isBalancedProportion && entries.every(([_, value]) => isNull(value) || !(Number(value) > ZERO_AMOUNT))
+    );
   };
 
   return { isZeroInputsError };
