@@ -12,7 +12,7 @@ import {
   Card,
   ListItemCardCell,
   StateCurrencyAmount,
-  StatusLabel,
+  LabelComponent,
   TokensLogos,
   TokensSymbols
 } from '@shared/components';
@@ -65,7 +65,7 @@ export const StableDividendsCard: FC<Props> = ({
             <TokensSymbols className={styles.tokensSymbols} tokens={extractTokens(tokensInfo)} />
           </div>
 
-          {isWhitelisted && <StatusLabel className={styles.whitelistedTag} status={status} label={label} />}
+          {isWhitelisted && <LabelComponent className={styles.whitelistedTag} status={status} label={label} />}
         </div>
         <div className={styles.stats}>
           <ListItemCardCell
