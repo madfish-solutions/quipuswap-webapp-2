@@ -14,8 +14,6 @@ import { StableswapLiquidityFormTabs } from '../../../types';
 
 export const useStableswapLiquidityPageViewModel = () => {
   const stableswapListStore = useStableswapListStore();
-  // eslint-disable-next-line no-console
-  console.log('stableswapListStore', stableswapListStore);
 
   const isReady = useReady();
   const { getStableswapList } = useGetStableswapList();
@@ -38,7 +36,7 @@ export const useStableswapLiquidityPageViewModel = () => {
   const { listStore, list } = stableswapListStore;
   const { isLoading } = listStore;
 
-  const listData = list?.map(({ stableswapItemUrl, tokensInfo, tvlInUsd, liquidityProvidersFee }) => ({
+  const listData = list?.map(({ stableswapItemUrl, tokensInfo, tvlInUsd, providersFee }) => ({
     href: `${link}/${stableswapItemUrl}`,
     inputToken: extractTokens(tokensInfo),
     status: { status: ActiveStatus.ACTIVE, label: t('common|whiteListed'), filled: true },
@@ -66,7 +64,7 @@ export const useStableswapLiquidityPageViewModel = () => {
         cellName: t('stableswap|liquidityProvidersFee'),
         tooltip: t('stableswap|liquidityProvidersFeeTooltip'),
         amounts: {
-          amount: liquidityProvidersFee,
+          amount: providersFee,
           currency: PERCENT
         }
       }

@@ -18,7 +18,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
       <PageTitle>{title}</PageTitle>
       <StableswapLiquidityGeneralStats />
       <StableswapLiquidityListFilter />
-      <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
+      <StateWrapper isLoading={isLoading} loaderFallback={<div>Error</div>}>
         <Iterator
           render={ListItemCard}
           data={list}
