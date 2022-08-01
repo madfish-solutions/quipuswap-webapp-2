@@ -7,7 +7,7 @@ import { ActiveStatus } from '@shared/types';
 
 import styles from './status-label.module.scss';
 
-export interface StatusLabelProps {
+export interface LabelComponentProps {
   className?: string;
   status: ActiveStatus;
   label?: string;
@@ -20,17 +20,17 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const statusClass = {
+const labelClass = {
   [ActiveStatus.PENDING]: styles.pending,
   [ActiveStatus.DISABLED]: styles.disabled,
   [ActiveStatus.ACTIVE]: styles.active
 };
 
-export const StatusLabel: FC<StatusLabelProps> = ({ className, status, label, filled, DTI, ...props }) => {
+export const LabelComponent: FC<LabelComponentProps> = ({ className, status, label, filled, DTI, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(styles.container, themeClass[colorThemeMode], statusClass[status], className)} {...props}>
+    <div className={cx(styles.container, themeClass[colorThemeMode], labelClass[status], className)} {...props}>
       <span className={cx(styles.status, filled ? styles.filled : styles.bordered)} data-test-id={DTI}>
         {label ?? status}
       </span>
