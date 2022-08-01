@@ -28,7 +28,7 @@ import {
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
-import { setCarretPosition } from './set-carret-position.helper';
+import { setCarretPosition } from './positions.helper';
 
 const MAX_DECIMALS_AMOUNT = 10;
 const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PRODIFDERS_FEE.value);

@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
 import {
@@ -35,6 +34,7 @@ import {
   useLiquidityProvidersFeeInputParams,
   useRadioButtonParams
 } from './hooks';
+import { getPrecisionMultiplier, getPrecisionRate } from './positions.helper';
 
 export const useCreateFormViewModel = () => {
   const { creationPrice } = usePoolCreationPrice();
@@ -65,12 +65,8 @@ export const useCreateFormViewModel = () => {
 
           return {
             reserves: toAtomic(stringToBigNumber(value), decimals),
-            precisionMultiplierF: new BigNumber(10).multipliedBy(
-              new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
-            ),
-            rateF: new BigNumber(10)
-              .multipliedBy(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
-              .multipliedBy(CONTRACT_DECIMALS_PRECISION_POWER),
+            precisionMultiplierF: getPrecisionMultiplier(decimals),
+            rateF: getPrecisionRate(decimals),
             token
           };
         })
