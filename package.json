@@ -93,6 +93,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/react-table": "^7.7.12",
     "@types/uuid": "^8.3.4",
+    "cypress-wait-until": "^1.7.2",
     "env-cmd": "^10.1.0",
     "eslint": "^8.16.0",
     "eslint-config-next": "^12.1.6",
