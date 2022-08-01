@@ -17,7 +17,7 @@ export const StableswapLiquidityAddItemPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="SSLItemPageTitleAdd">{title}</PageTitle>
       <StickyBlock>
         <StableswapFormTabsCard subpath={StableswapRoutes.liquidity} tabActiveId={StableswapLiquidityFormTabs.add}>
           <AddLiqForm />

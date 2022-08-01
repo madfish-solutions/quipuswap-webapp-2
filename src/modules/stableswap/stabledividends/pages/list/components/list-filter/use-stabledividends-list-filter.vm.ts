@@ -89,6 +89,11 @@ export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => 
     }
   ];
 
+  const inputDTI = {
+    searchInputDTI: 'searchInput',
+    numberInputDTI: 'numberInput'
+  };
+
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
     numberInputPlaceholderTranslation: t('common|Token ID')
@@ -100,7 +105,8 @@ export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => 
     sortingValues,
     handleSortFieldChange,
     handleSortDirectionToggle,
-    buttonDTI: 'SSFASC/DESCSortButton'
+    buttonDTI: 'SSFASC/DESCSortButton',
+    sorterSelectDTI: 'sorterSelect'
   };
 
   return {
@@ -112,6 +118,7 @@ export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => 
     handleDecrement,
     translation,
     sorterProps,
-    switcherDataList
+    switcherDataList,
+    inputDTI
   };
 };
