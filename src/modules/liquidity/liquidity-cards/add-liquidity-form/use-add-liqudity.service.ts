@@ -440,10 +440,14 @@ export const useAddLiquidityService = (
       tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const fixedTokenAPoll = Number(toReal(tokenAPool, tokenA).toFixed());
-      const fixedTokenBPoll = Number(toReal(tokenBPool, tokenB).toFixed());
-      const fixedTokenAPollUds = Number(getDollarEquivalent(fixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)]));
-      const fixedTokenBPollUds = Number(getDollarEquivalent(fixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)]));
+      const realAndFixedTokenAPoll = Number(toReal(tokenAPool, tokenA).toFixed());
+      const realAndFixedTokenBPoll = Number(toReal(tokenBPool, tokenB).toFixed());
+      const fixedTokenAPollUds = Number(
+        getDollarEquivalent(realAndFixedTokenAPoll, exchangeRates[getTokenSlug(tokenA)])
+      );
+      const fixedTokenBPollUds = Number(
+        getDollarEquivalent(realAndFixedTokenBPoll, exchangeRates[getTokenSlug(tokenB)])
+      );
 
       const logData = {
         liquidity: {
@@ -457,8 +461,8 @@ export const useAddLiquidityService = (
           tezTokenInputUsd,
           notTezTokenInputUsd,
           liquidityUsd: tezTokenInputUsd + notTezTokenInputUsd,
-          fixedTokenAPoll,
-          fixedTokenBPoll,
+          realAndFixedTokenAPoll,
+          realAndFixedTokenBPoll,
           fixedTokenAPollUds,
           fixedTokenBPollUds,
           tvlUsd: fixedTokenAPollUds + fixedTokenBPollUds
