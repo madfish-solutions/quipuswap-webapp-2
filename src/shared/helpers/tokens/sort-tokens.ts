@@ -11,5 +11,5 @@ export const sortTokens = (tokenA: Token, tokenB: Token) => {
     return sortAddresses(getTokenStandard(tokenA), getTokenStandard(tokenB));
   }
 
-  return isTokenFa12(tokenA) ? SKIP : SWAP;
+  return isTokenFa12(tokenA) ? SWAP : SKIP;
 };
