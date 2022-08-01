@@ -94,7 +94,7 @@ export const useRemoveLiquidityService = (
       return;
     }
     const lpTokenInputBN = new BigNumber(lpTokenInput);
-    const lpTokenAmount = toAtomic(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+    const atomiclLpTokenInputAmount = toAtomic(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
     const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
     const validatedInput = validations(
@@ -129,8 +129,8 @@ export const useRemoveLiquidityService = (
 
     const tokenAPerOneLp = validTokenAPool.dividedBy(totalSupply);
     const tokenBPerOneLp = validTokenBPool.dividedBy(totalSupply);
-    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
-    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenA = tokenAPerOneLp.multipliedBy(atomiclLpTokenInputAmount).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenB = tokenBPerOneLp.multipliedBy(atomiclLpTokenInputAmount).integerValue(BigNumber.ROUND_DOWN);
 
     const validatedOutputA = validateOutputAmount(amountTokenA);
     const validatedOutputB = validateOutputAmount(amountTokenB);
