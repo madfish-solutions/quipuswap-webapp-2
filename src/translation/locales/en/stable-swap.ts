@@ -60,6 +60,7 @@ export const stableswap = {
   amplification10: '10 (uncollateralized algoritmic stablecoins)',
   amplification100: '100 (non-redeemable, collateralized assets)',
   amplification200: '200 (redeemable assets)',
+  noMoreDecimals: `The value can't be more than {{decimalsAmount}} decimals`,
   interfaceOrReferralFee: 'Interface/Referral Fee',
   cost: 'Cost',
   burnedCost: 'Burned',
