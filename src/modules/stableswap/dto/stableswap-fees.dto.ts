@@ -5,15 +5,15 @@ import { Typed } from '@shared/decorators';
 import { Fees } from '../types';
 
 export class StableswapFeesDto implements Fees {
-  @Typed({ type: BigNumber })
+  @Typed()
   liquidityProvidersFee!: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   stakersFee!: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   interfaceFee!: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   devFee!: BigNumber;
 }

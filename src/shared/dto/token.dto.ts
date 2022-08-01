@@ -7,15 +7,15 @@ export class TokenDto implements Token {
   @Typed({ type: String })
   type!: Standard;
 
-  @Typed({ type: Boolean })
+  @Typed()
   isWhitelisted!: boolean;
 
-  @Typed({ type: TokenMetadataDto })
+  @Typed()
   metadata!: TokenMetadataDto;
 
-  @Typed({ type: String })
+  @Typed()
   contractAddress!: string;
 
-  @Typed({ type: Number })
+  @Typed()
   fa2TokenId?: number;
 }

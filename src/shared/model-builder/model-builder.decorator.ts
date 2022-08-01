@@ -1,15 +1,13 @@
-import { createConfigMap, MapperConfig } from '@shared/mapping';
-
-import { LoadingErrorData2 } from '../store';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { LoadingErrorDataNew } from '../store';
 import { Constructable } from '../types';
 import { LED_METADATA_KEY } from './led-metadata-key';
+import { createConfigMap, MapperConfig } from './mapper';
 import { LedMetadataValue } from './types';
 
 export const ModelBuilder = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function <T extends Constructable<any>>(Constructor: T) {
     return class extends Constructor {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       constructor(...args: any[]) {
         super(...args);
 
@@ -19,7 +17,7 @@ export const ModelBuilder = () => {
           const mapperConfig: MapperConfig = createConfigMap(dto.prototype);
 
           // @ts-ignore
-          this[propertyKey] = new LoadingErrorData2(defaultData, getData, mapperConfig, model);
+          this[propertyKey] = new LoadingErrorDataNew(defaultData, getData, mapperConfig, model);
         });
       }
     };

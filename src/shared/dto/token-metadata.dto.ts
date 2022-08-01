@@ -2,15 +2,15 @@ import { Typed } from '@shared/decorators';
 import { TokenMetadata } from '@shared/types';
 
 export class TokenMetadataDto implements TokenMetadata {
-  @Typed({ type: Number })
+  @Typed()
   decimals!: number;
 
-  @Typed({ type: String })
+  @Typed()
   symbol!: string;
 
-  @Typed({ type: String })
+  @Typed()
   name!: string;
 
-  @Typed({ type: String })
+  @Typed()
   thumbnailUri!: string;
 }

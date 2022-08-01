@@ -6,15 +6,15 @@ import { TokenDto } from '@shared/dto';
 import { StableswapTokensInfo } from '../types';
 
 export class StableswapTokensInfoDto implements StableswapTokensInfo {
-  @Typed({ type: BigNumber })
+  @Typed()
   reserves!: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   reservesInUsd!: BigNumber;
 
-  @Typed({ type: TokenDto })
+  @Typed()
   token!: TokenDto;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   exchangeRate!: BigNumber;
 }
