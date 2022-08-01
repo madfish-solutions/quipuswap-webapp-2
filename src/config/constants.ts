@@ -148,7 +148,7 @@ export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
 export const STABLESWAP_PRECISION_FEE = 1e10;
 
-//#region defult stableswap fee
+//#region default stableswap fee
 export const CONTRACT_DECIMALS_PRECISION_POWER = 1e18;
 const DEFAULT_STABLESWAP_INTERFACE_FEE = 0.005;
 const DEFAULT_STABLESWAP_STAKERS_FEE = 0.03;
