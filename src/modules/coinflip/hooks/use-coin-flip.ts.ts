@@ -26,14 +26,14 @@ export const useCoinFlip = () => {
 
     try {
       const tokenAsset = isTezosToken(token) ? TOKEN_ASSETS.TEZOS : TOKEN_ASSETS.QUIPU;
-      const formattedAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);
+      const atomicInputAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);
 
       const contract = await getContract(tezos, COINFLIP_CONTRACT_ADDRESS);
       const { network_fee } = await contract.storage<CoinflipStorage>();
 
-      const fee = isTezosToken(token) ? network_fee.plus(formattedAmount) : network_fee;
+      const fee = isTezosToken(token) ? network_fee.plus(atomicInputAmount) : network_fee;
 
-      const operation = await betTokens(tezos, token, accountPkh, tokenAsset, formattedAmount, coinSide, fee);
+      const operation = await betTokens(tezos, token, accountPkh, tokenAsset, atomicInputAmount, coinSide, fee);
 
       await confirmOperation(operation.opHash, { message: 'Bet succesfull!' });
     } catch (error) {

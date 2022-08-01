@@ -27,8 +27,8 @@ export const useUntakeFormViewModel = (): StableDividendsFormViewProps => {
     const amount = new BigNumber(values[FormFields.inputAmount]);
 
     if (!amount.isNaN()) {
-      const amountAtoms = toAtomic(amount, token);
-      await stableDividendsUnstake(amountAtoms);
+      const atomicInputAmount = toAtomic(amount, token);
+      await stableDividendsUnstake(atomicInputAmount);
     }
 
     formik.resetForm();

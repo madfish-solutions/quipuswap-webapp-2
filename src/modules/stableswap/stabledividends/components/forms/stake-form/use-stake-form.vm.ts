@@ -31,8 +31,8 @@ export const useStakeFormViewModel = (): StableDividendsFormViewProps => {
       const amount = new BigNumber(values[FormFields.inputAmount]);
 
       if (!amount.isNaN()) {
-        const amountAtoms = toAtomic(amount, token);
-        await stableDividendsStake(amountAtoms);
+        const atomicInputAmount = toAtomic(amount, token);
+        await stableDividendsStake(atomicInputAmount);
       }
 
       actions.resetForm();
