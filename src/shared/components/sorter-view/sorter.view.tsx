@@ -19,6 +19,7 @@ export interface SorterProps {
   sortDirectionRotate: boolean;
   sortingValues: FarmingSortFieldItem[] | StableswapSortFieldItem[] | StableDividendsSortFieldItem[];
   buttonDTI: string;
+  sorterSelectDTI: string;
   handleSortFieldChange: (value: unknown) => void;
   handleSortDirectionToggle: () => void;
 }
@@ -40,6 +41,7 @@ export const SorterView: FC<Props> = observer(
     handleSortDirectionToggle,
     sortingValues,
     buttonDTI,
+    sorterSelectDTI,
     className,
     ...props
   }) => {
@@ -53,6 +55,7 @@ export const SorterView: FC<Props> = observer(
           options={sortingValues}
           isSearchable={false}
           value={sortingValue}
+          data-test-id={sorterSelectDTI}
           {...props}
         />
         <Button theme="tertiary" onClick={handleSortDirectionToggle} data-test-id={buttonDTI}>

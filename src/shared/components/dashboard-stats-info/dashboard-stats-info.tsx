@@ -15,6 +15,7 @@ interface Props {
   cards: ReactElement[];
   countOfRightElements?: number;
   contentClassName?: string;
+  DTI?: string;
   className?: string;
 }
 
@@ -28,6 +29,7 @@ export const DashboardStatsInfo: FC<Props> = ({
   countOfRightElements = ZERO,
   header,
   contentClassName,
+  DTI,
   className
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -44,6 +46,7 @@ export const DashboardStatsInfo: FC<Props> = ({
       header={cardHeader}
       contentClassName={cx(rootContentClassName, contentClassName)}
       className={cx(styles.rootCard, className)}
+      data-test-id={DTI}
     >
       {cards.map((card, index) => (
         <div className={cx(cardClassName, computedClassName(index))} key={index}>
