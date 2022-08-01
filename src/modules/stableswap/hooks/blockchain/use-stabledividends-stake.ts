@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
 import { stableDividendsStakeApi } from '@modules/stableswap/api';
-import { useStableDividendsStakerBalance } from '@modules/stableswap/stabledividends/hooks';
+import { useRealStableDividendsStakerBalance } from '@modules/stableswap/stabledividends/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { toReal, isNull, placeUSDDecimals } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
@@ -21,7 +21,7 @@ export const useStableDividendsStake = () => {
   const confirmOperation = useConfirmOperation();
   const { item } = useStableDividendsItemStore();
   const { accountPkh } = useAuthStore();
-  const stakerBalance = useStableDividendsStakerBalance();
+  const stakerBalance = useRealStableDividendsStakerBalance();
 
   const stableDividendsStake = useCallback(
     async (amount: BigNumber) => {

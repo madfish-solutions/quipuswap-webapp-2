@@ -47,8 +47,8 @@ export const useRemoveLiquidityService = (
   const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
-  const [tokenAOutput, setTokenAOutput] = useState<string>('');
-  const [tokenBOutput, setTokenBOutput] = useState<string>('');
+  const [realTokenAOutput, setRealTokenAOutput] = useState<string>('');
+  const [realTokenBOutput, setRealTokenBOutput] = useState<string>('');
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
@@ -59,8 +59,8 @@ export const useRemoveLiquidityService = (
 
   useEffect(() => {
     if (!tokenA || !tokenB) {
-      setTokenAOutput('');
-      setTokenBOutput('');
+      setRealTokenAOutput('');
+      setRealTokenBOutput('');
       setValidatedInputMessage(undefined);
 
       return;
@@ -71,8 +71,8 @@ export const useRemoveLiquidityService = (
       token2: tokenB,
       dex
     });
-    setTokenAOutput('');
-    setTokenBOutput('');
+    setRealTokenAOutput('');
+    setRealTokenBOutput('');
     setValidatedInputMessage(undefined);
     setValidatedOutputMessageA(undefined);
     setValidatedOutputMessageB(undefined);
@@ -87,8 +87,8 @@ export const useRemoveLiquidityService = (
 
   useEffect(() => {
     if (!dex || !tokenA || !tokenB || lpTokenInput === '') {
-      setTokenAOutput('');
-      setTokenBOutput('');
+      setRealTokenAOutput('');
+      setRealTokenBOutput('');
       setValidatedInputMessage(undefined);
 
       return;
@@ -108,8 +108,8 @@ export const useRemoveLiquidityService = (
     setValidatedInputMessage(validatedInput);
 
     if (validatedInput === INVALID_INPUT) {
-      setTokenAOutput('');
-      setTokenBOutput('');
+      setRealTokenAOutput('');
+      setRealTokenBOutput('');
 
       return;
     }
@@ -139,11 +139,11 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(validatedOutputB);
 
     if (!isNaN(amountTokenA.toNumber())) {
-      setTokenAOutput(toReal(amountTokenA, decimalsA).toFixed());
+      setRealTokenAOutput(toReal(amountTokenA, decimalsA).toFixed());
     }
 
     if (!isNaN(amountTokenB.toNumber())) {
-      setTokenBOutput(toReal(amountTokenB, decimalsB).toFixed());
+      setRealTokenBOutput(toReal(amountTokenB, decimalsB).toFixed());
     }
 
     return noop;
@@ -176,8 +176,8 @@ export const useRemoveLiquidityService = (
           tokenBSlug: getTokenSlug(tokenB),
           tokenASymbol: getTokenSymbol(tokenA),
           tokenBSymbol: getTokenSymbol(tokenB),
-          pairInputA: Number(tokenAOutput),
-          pairInputB: Number(tokenBOutput),
+          pairInputA: Number(realTokenAOutput),
+          pairInputB: Number(realTokenBOutput),
           totalSupply: Number(pairInfo.totalSupply.toFixed()),
           tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
           tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
@@ -193,8 +193,8 @@ export const useRemoveLiquidityService = (
           dex,
           id,
           lpTokenInput,
-          tokenAOutput,
-          tokenBOutput,
+          realTokenAOutput,
+          realTokenBOutput,
           tokenA,
           tokenB,
           transactionDeadline,
@@ -229,8 +229,8 @@ export const useRemoveLiquidityService = (
           tokenBSlug: getTokenSlug(tokenB),
           tokenASymbol: getTokenSymbol(tokenA),
           tokenBSymbol: getTokenSymbol(tokenB),
-          pairInputA: Number(tokenAOutput),
-          pairInputB: Number(tokenBOutput),
+          pairInputA: Number(realTokenAOutput),
+          pairInputB: Number(realTokenBOutput),
           totalSupply: Number(pairInfo.totalSupply.toFixed()),
           tokenAPool: Number(pairInfo.tokenAPool.toFixed()),
           tokenBPool: Number(pairInfo.tokenBPool.toFixed()),
@@ -276,8 +276,8 @@ export const useRemoveLiquidityService = (
     tokenPair,
     accountPkh,
     lpTokenInput,
-    tokenAOutput,
-    tokenBOutput,
+    tokenAOutput: realTokenAOutput,
+    tokenBOutput: realTokenBOutput,
     tokenABalance,
     tokenBBalance,
     share,

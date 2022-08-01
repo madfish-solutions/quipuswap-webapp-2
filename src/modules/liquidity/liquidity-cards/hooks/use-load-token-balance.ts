@@ -11,7 +11,7 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
+  const [realTokenBalance, setRealTokenBalance] = useState<Nullable<BigNumber>>(null);
 
   const getTokenBalance = useCallback(
     async (_token: Nullable<Token>) => {
@@ -24,7 +24,7 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
       if (userTokenABalance) {
-        setTokenBalance(toReal(userTokenABalance, _token));
+        setRealTokenBalance(toReal(userTokenABalance, _token));
       }
 
       return userTokenABalance;
@@ -32,12 +32,12 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
     [accountPkh, tezos]
   );
 
-  const clearBalance = useCallback(() => setTokenBalance(null), []);
+  const clearBalance = useCallback(() => setRealTokenBalance(null), []);
 
   useEffect(() => {
     void getTokenBalance(token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, token]);
 
-  return { tokenBalance, updateTokenBalance: getTokenBalance, clearBalance };
+  return { tokenBalance: realTokenBalance, updateTokenBalance: getTokenBalance, clearBalance };
 };

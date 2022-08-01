@@ -12,7 +12,7 @@ interface Storage {
   };
 }
 
-export const getPoolCreationCostApi = async (tezos: TezosToolkit) => {
+export const getRealPoolCreationCostApi = async (tezos: TezosToolkit) => {
   const stableswapFactoryContractStorage = await getStorageInfo<Storage>(tezos, STABLESWAP_FACTORY_CONTRACT_ADDRESS);
 
   return toReal(stableswapFactoryContractStorage.storage.init_price, QUIPU_TOKEN);

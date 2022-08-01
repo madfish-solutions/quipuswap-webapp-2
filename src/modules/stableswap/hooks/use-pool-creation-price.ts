@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 
-import { getPoolCreationCostApi } from '../api';
+import { getRealPoolCreationCostApi } from '../api';
 
 export const usePoolCreationPrice = () => {
   const [creationPrice, setCreationPrice] = useState<Nullable<BigNumber>>(null);
@@ -16,7 +16,7 @@ export const usePoolCreationPrice = () => {
     if (isNull(tezos)) {
       return;
     }
-    getPoolCreationCostApi(tezos).then(setCreationPrice);
+    getRealPoolCreationCostApi(tezos).then(setCreationPrice);
   }, [tezos]);
 
   return { creationPrice };

@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import { useTezos, useAccountPkh } from '@providers/use-dapp';
 import { Nullable, Optional, Token } from '@shared/types';
 
-import { loadUserLpBalance } from '../blockchain/getters';
+import { loadRealUserLpBalance } from '../blockchain/getters';
 
 export const useLoadLpTokenBalance = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const tezos = useTezos();
@@ -23,10 +23,10 @@ export const useLoadLpTokenBalance = (dex: Optional<FoundDex>, tokenA: Nullable<
         return;
       }
 
-      const userLpTokenBalance = await loadUserLpBalance(tezos, accountPkh, dex, tokenA, tokenB);
+      const realUserLpTokenBalance = await loadRealUserLpBalance(tezos, accountPkh, dex, tokenA, tokenB);
 
       if (isMounted) {
-        setLpTokenBalance(userLpTokenBalance);
+        setLpTokenBalance(realUserLpTokenBalance);
       }
     };
 
