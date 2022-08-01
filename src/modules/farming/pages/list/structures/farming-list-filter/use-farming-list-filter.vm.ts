@@ -89,6 +89,11 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     }
   ];
 
+  const inputDTI = {
+    searchInputDTI: 'searchInput',
+    numberInputDTI: 'numberInput'
+  };
+
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
     numberInputPlaceholderTranslation: t('common|Token ID'),
@@ -102,7 +107,8 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     sortingValues,
     handleSortFieldChange,
     handleSortDirectionToggle,
-    buttonDTI: 'FarmingASC/DESCSortButton'
+    buttonDTI: 'FarmingASC/DESCSortButton',
+    sorterSelectDTI: 'sorterSelect'
   };
 
   return {
@@ -114,6 +120,7 @@ export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
     handleDecrement,
     translation,
     sorterProps,
-    switcherDataList
+    switcherDataList,
+    inputDTI
   };
 };

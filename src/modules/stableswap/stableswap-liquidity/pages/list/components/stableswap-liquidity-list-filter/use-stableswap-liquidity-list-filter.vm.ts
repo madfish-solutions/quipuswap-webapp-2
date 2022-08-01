@@ -65,6 +65,11 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     }
   ];
 
+  const inputDTI = {
+    searchInputDTI: 'searchInput',
+    numberInputDTI: 'numberInput'
+  };
+
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
     numberInputPlaceholderTranslation: t('common|Token ID')
@@ -76,7 +81,8 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     sortingValues,
     handleSortFieldChange,
     handleSortDirectionToggle,
-    buttonDTI: 'SSLASC/DESCSortButton'
+    buttonDTI: 'SSLASC/DESCSortButton',
+    sorterSelectDTI: 'sorterSelect'
   };
 
   return {
@@ -88,6 +94,7 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps
     handleDecrement,
     translation,
     sorterProps,
-    switcherDataList
+    switcherDataList,
+    inputDTI
   };
 };
