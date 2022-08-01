@@ -47,7 +47,7 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
   return (
     <span className={cx(styles.dollarEquivalent, modeClass[colorThemeMode], className)}>
       <span className={styles.nowrap}>{APPROXIMATELY_EQUAL_DOLLAR}</span>
-      <span className={styles.dollarEquivalentInner} title={title}>
+      <span className={styles.dollarEquivalentInner} title={title} data-test-id="dollarEquivalent">
         <StateWrapper
           isLoading={wrapIsLoading}
           loaderFallback={wrapLoaderFallback}
