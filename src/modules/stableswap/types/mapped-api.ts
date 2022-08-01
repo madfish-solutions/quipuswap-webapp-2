@@ -1,7 +1,6 @@
 import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { Typed } from '@shared/decorators';
 import { Token } from '@shared/types';
 
 export interface StableswapStats {
@@ -33,6 +32,22 @@ export interface StableswapItem extends AbstractStableItem {
   stakersFee: BigNumber;
   interfaceFee: BigNumber;
   devFee: BigNumber;
+  lpToken: Token;
+}
+
+export interface Fees {
+  liquidityProvidersFee: BigNumber;
+  stakersFee: BigNumber;
+  interfaceFee: BigNumber;
+  devFee: BigNumber;
+}
+
+export interface StableswapItemNew extends AbstractStableItem {
+  totalLpSupply: BigNumber;
+  tvlInUsd: BigNumber;
+  poolContractUrl: string;
+  stableswapItemUrl: string;
+  fees: Fees;
   lpToken: Token;
 }
 
@@ -72,17 +87,4 @@ export interface StableswapTokensInfo {
   reservesInUsd: BigNumber;
   token: Token;
   exchangeRate: BigNumber;
-}
-
-export class StableswapTokensInfoDto implements StableswapTokensInfo {
-  @Typed()
-  reserves!: BigNumber;
-
-  @Typed()
-  reservesInUsd!: BigNumber;
-
-  token!: Token;
-
-  @Typed()
-  exchangeRate!: BigNumber;
 }

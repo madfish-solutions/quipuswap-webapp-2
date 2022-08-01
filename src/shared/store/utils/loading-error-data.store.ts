@@ -1,9 +1,9 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
+import { Undefined, Nullable, Constructable } from '@shared/types';
 
 import { MapperConfig, mapperReader } from '../../mapping/mapper.config';
-import { Undefined, Nullable } from '../../types/types';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
@@ -82,16 +82,37 @@ export class LoadingErrorData<RawData, Data> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class LoadingErrorData2<RawData, Data> {
+export class LoadingErrorData2<ModelType extends object, Data = any, RawData = any> {
   rawData: RawData | undefined;
   data: Data;
 
   isInitialized = false;
   isLoading = false;
   error2: Error | string | null = null;
+  model: Undefined<ModelType>;
 
-  constructor(private defaultData: Data, private getDate: () => Promise<RawData>, private mappingConfig: MapperConfig) {
+  constructor(
+    private defaultData: Data,
+    private getDate: () => Promise<RawData>,
+    private mappingConfig: MapperConfig,
+    private modelRef: Constructable<ModelType>
+  ) {
     this.data = defaultData;
+
+    makeObservable(this, {
+      rawData: observable,
+      data: observable,
+      isInitialized: observable,
+      isLoading: observable,
+      error2: observable,
+      model: observable,
+
+      setRawData: action,
+      startLoading: action,
+      finishLoading: action,
+
+      isReady: computed
+    });
   }
 
   get isReady() {
@@ -101,8 +122,9 @@ export class LoadingErrorData2<RawData, Data> {
   setRawData(rawData: RawData) {
     this.error2 = null;
     this.rawData = rawData;
-
     this.data = mapperReader(rawData, this.mappingConfig) as unknown as Data;
+
+    this.model = new this.modelRef(this.data);
   }
 
   setError2(error: Error | string) {
