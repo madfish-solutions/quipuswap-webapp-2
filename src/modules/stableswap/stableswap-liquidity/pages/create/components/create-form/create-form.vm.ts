@@ -65,11 +65,11 @@ export const useCreateFormViewModel = () => {
 
           return {
             reserves: toAtomic(stringToBigNumber(value), decimals),
-            precisionMultiplierF: new BigNumber(10).pow(
+            precisionMultiplierF: new BigNumber(10).multipliedBy(
               new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
             ),
             rateF: new BigNumber(10)
-              .pow(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
+              .multipliedBy(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
               .multipliedBy(CONTRACT_DECIMALS_PRECISION_POWER),
             token
           };
