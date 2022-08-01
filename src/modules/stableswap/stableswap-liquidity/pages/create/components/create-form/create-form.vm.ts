@@ -10,12 +10,13 @@ import {
   isEmptyArray,
   isExist,
   isTokenEqual,
+  sortTokens,
   stringToBigNumber,
   toAtomic,
   toPercent
 } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
-//TODO: fix circlar dependencies
+//TODO: fix circular dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Token } from '@shared/types';
 
@@ -70,7 +71,8 @@ export const useCreateFormViewModel = () => {
             token
           };
         })
-        .filter(isExist);
+        .filter(isExist)
+        .sort((a, b) => sortTokens(a.token, b.token));
 
       try {
         await createStableswapPool({
