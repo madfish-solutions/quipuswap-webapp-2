@@ -13,8 +13,8 @@ import { Token } from '@shared/types';
 
 import { Card } from '../card';
 import { Iterator } from '../iterator';
+import { LabelComponent, LabelComponentProps } from '../label-component';
 import { StateListItemCardCell, StateListItemCardCellProps } from '../state-list-item-card-cell';
-import { LabelComponent, LabelComponentProps } from '../status-label';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
 import styles from './list-item-card.module.scss';

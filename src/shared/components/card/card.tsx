@@ -3,7 +3,7 @@ import { FC, HTMLProps, ReactNode, useContext, useLayoutEffect, useRef } from 'r
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { LabelComponent } from '@shared/components/status-label';
+import { LabelComponent } from '@shared/components/label-component';
 import { ActiveStatus } from '@shared/types';
 
 import styles from './card.module.scss';

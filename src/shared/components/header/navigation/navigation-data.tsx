@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { AppRootRoutes } from '@app.router';
 // It's important to import entities from modules directly from files
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
-import { LabelComponent } from '@shared/components/status-label';
+import { LabelComponent } from '@shared/components/label-component';
 import {
   AnalyticsIcon,
   FarmIcon,
