@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { ActiveStatus } from '@shared/types';
 
-import styles from './status-label.module.scss';
+import styles from './label-component.module.scss';
 
 export interface LabelComponentProps {
   className?: string;
