@@ -12,6 +12,7 @@ export interface StatusLabelProps {
   status: ActiveStatus;
   label?: string;
   filled?: boolean;
+  DTI?: string;
 }
 
 const themeClass = {
@@ -25,12 +26,14 @@ const statusClass = {
   [ActiveStatus.ACTIVE]: styles.active
 };
 
-export const StatusLabel: FC<StatusLabelProps> = ({ className, status, label, filled, ...props }) => {
+export const StatusLabel: FC<StatusLabelProps> = ({ className, status, label, filled, DTI, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode], statusClass[status], className)} {...props}>
-      <span className={cx(styles.status, filled ? styles.filled : styles.bordered)}>{label ?? status}</span>
+      <span className={cx(styles.status, filled ? styles.filled : styles.bordered)} data-test-id={DTI}>
+        {label ?? status}
+      </span>
     </div>
   );
 };

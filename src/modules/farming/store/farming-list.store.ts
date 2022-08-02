@@ -30,6 +30,8 @@ import {
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
 
+const ZERO_BN = new BigNumber(ZERO_AMOUNT);
+
 interface RewardAmount {
   amount: BigNumber;
   dollarEquivalent: Nullable<BigNumber>;
@@ -160,7 +162,9 @@ export class FarmingListStore {
       Date.now()
     );
 
-    const claimableAmount = toReal(claimableRewardsWithoutFee, rewardToken);
+    const correctClaimableRewardsWithoutFee = claimableRewardsWithoutFee.isNaN() ? ZERO_BN : claimableRewardsWithoutFee;
+
+    const claimableAmount = toReal(correctClaimableRewardsWithoutFee, rewardToken);
     const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
 
     const skatedAmount = toReal(stakedRewardsWithoutFee, rewardToken);
