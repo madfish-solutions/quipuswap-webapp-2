@@ -35,7 +35,7 @@ import {
   useLiquidityProvidersFeeInputParams,
   useRadioButtonParams
 } from './hooks';
-import { getPrecisionMultiplier, getPrecisionRate } from './positions.helper';
+import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 
 export const useCreateFormViewModel = () => {
   const { creationPrice } = usePoolCreationPrice();
