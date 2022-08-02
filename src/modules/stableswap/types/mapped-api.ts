@@ -46,7 +46,6 @@ export interface StableswapItemNew extends AbstractStableItem {
   totalLpSupply: BigNumber;
   tvlInUsd: BigNumber;
   poolContractUrl: string;
-  stableswapItemUrl: string;
   fees: Fees;
   lpToken: Token;
 }
