@@ -37,7 +37,8 @@ export const useStableswapLiquidityPageViewModel = () => {
   const { listStore, list } = stableswapListStore;
   const { isLoading } = listStore;
 
-  const listData = list?.map(({ id, stableswapItemUrl, tokensInfo, tvlInUsd, isWhitelisted, providersFee }) => {
+  const listData = list?.map(({ id, tokensInfo, tvlInUsd, isWhitelisted, providersFee }) => {
+    const idFixed = id.toFixed();
     const labels: Array<StatusLabelProps> = [];
 
     if (isWhitelisted) {
@@ -49,8 +50,8 @@ export const useStableswapLiquidityPageViewModel = () => {
     }
 
     return {
-      farmingItemDTI: `farming-item-${id}`,
-      href: `${link}/${stableswapItemUrl}`,
+      farmingItemDTI: `farming-item-${idFixed}`,
+      href: `${link}/${idFixed}`,
       inputToken: extractTokens(tokensInfo),
       labels,
       status: {
