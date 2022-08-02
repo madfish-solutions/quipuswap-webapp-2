@@ -16,6 +16,6 @@ export const getMapperKind = (_type: unknown) => {
     case Standard:
       return MapperKinds.STRING;
     default:
-      return {};
+      throw TypeError();
   }
 };
