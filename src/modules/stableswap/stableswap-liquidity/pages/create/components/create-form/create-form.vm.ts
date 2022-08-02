@@ -10,6 +10,7 @@ import {
   isEmptyArray,
   isExist,
   isTokenEqual,
+  prepareNumberAsString,
   sortTokens,
   stringToBigNumber,
   toAtomic,
@@ -78,7 +79,7 @@ export const useCreateFormViewModel = () => {
         await createStableswapPool({
           amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
           fee: {
-            liquidityProvidersFee: toPercent(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
+            liquidityProvidersFee: toPercent(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
           },
           creationParams,
           creationPrice

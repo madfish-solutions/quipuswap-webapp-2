@@ -23,7 +23,7 @@ import {
   LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
   AMPLIFICATION_FIELD_NAME,
   createPoolAmplification,
-  UPPER_LIQUIDITY_PRODIFDERS_FEE,
+  UPPER_LIQUIDITY_PROVIDERS_FEE,
   TOKEN_KEY,
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
@@ -31,7 +31,7 @@ import {
 import { setCaretPosition } from './positions.helper';
 
 const MAX_DECIMALS_AMOUNT = 10;
-const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PRODIFDERS_FEE.value);
+const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PROVIDERS_FEE.value);
 
 export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<Nullable<BigNumber>>) => {
   const validationSchema = useMemo(() => {
@@ -133,7 +133,7 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
   const liquidityProvidersFeeInputParams: InputProps = useMemo(
     () => ({
       id: 'input-fee-field',
-      label: i18n.t('stableswap|liquidityProvidersFee'),
+      label: `${i18n.t('stableswap|liquidityProvidersFee')} (0–1%)`,
       error: getFormikError(formik, LIQUIDITY_PROVIDERS_FEE_FIELD_NAME),
       value: isEmptyString(formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
         ? formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]
