@@ -63,8 +63,8 @@ export class StableDividendsListStore {
       yourReward?.forEach((value, tokenIndex) => {
         const { token, exchangeRate } = tokensInfo[tokenIndex.toNumber()];
 
-        const tokenValue = toReal(value, token);
-        yourEarnedInUsd = yourEarnedInUsd.plus(tokenValue.multipliedBy(exchangeRate));
+        const realTokenReward = toReal(value, token);
+        yourEarnedInUsd = yourEarnedInUsd.plus(realTokenReward.multipliedBy(exchangeRate));
       });
 
       return {
