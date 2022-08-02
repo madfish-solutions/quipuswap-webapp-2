@@ -16,12 +16,14 @@ import { useTranslation } from '@translation';
 import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
+import { TempleWalletButton } from './temple-wallet-button';
 import { WalletButton } from './wallet-button';
 import styles from './wallet-modal.module.scss';
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
+
   const [isTermsAccepted, setIsTermsAccepted] = useState(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useGlobalModalsState();
@@ -131,7 +133,7 @@ export const WalletModal: FC = () => {
         </div>
       </div>
       <div className={styles.wallets}>
-        <WalletButton
+        <TempleWalletButton
           available={isTempleInstalled}
           id={Temple.id}
           Icon={Temple.Icon}
