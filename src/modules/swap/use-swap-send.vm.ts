@@ -27,7 +27,7 @@ import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { useSwapCalculations } from './hooks/use-swap-calculations';
-import { useSwapDetails } from './hooks/use-swap-details';
+import { useRealSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
 import { useRoutePairs } from './providers/route-pairs-provider';
 import { useSwapLimits } from './providers/swap-limits-provider';
@@ -122,7 +122,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     });
   }, [formik.outputAmount, validateField, setFieldTouched]);
 
-  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useRealSwapDetails({
     inputToken: formik.inputToken,
     outputToken: formik.outputToken,
     inputAmount: formik.inputAmount,

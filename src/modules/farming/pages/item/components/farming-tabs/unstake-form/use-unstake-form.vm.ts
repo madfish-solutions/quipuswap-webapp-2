@@ -25,8 +25,8 @@ export const useUnstakeFormViewModel = () => {
   const handleUnstakeSubmit = async (_: UnstakeFormValues, actions: FormikHelpers<UnstakeFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(farmingItem).stakedToken;
-    const inputAmountWithDecimals = toAtomic(defined(inputAmount), token);
-    await doUnstake(defined(farmingItem), inputAmountWithDecimals);
+    const atomicInputAmount = toAtomic(defined(inputAmount), token);
+    await doUnstake(defined(farmingItem), atomicInputAmount);
 
     formik.resetForm();
     actions.setSubmitting(false);

@@ -152,5 +152,5 @@ export const getEndTimestamp = (farmingItem: FarmingItem, lastStakedTime: Nullab
 export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
   endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
 
-export const getDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
+export const getRealDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
   toReal(fromRewardPrecision(rewardPerSecond).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken);
