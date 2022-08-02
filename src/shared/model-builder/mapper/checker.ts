@@ -1,7 +1,6 @@
 import { isNull, isUndefined } from '@shared/helpers';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const checker = (arg: any, optional: boolean, nullable: boolean) => {
+export const checker = <T>(arg: T, optional: boolean, nullable: boolean) => {
   if (isUndefined(arg) && optional) {
     return true;
   }

@@ -6,14 +6,14 @@ import { Fees } from '../types';
 
 export class StableswapFeesDto implements Fees {
   @Typed()
-  liquidityProvidersFee!: BigNumber;
+  liquidityProvidersFee: BigNumber;
 
   @Typed()
-  stakersFee!: BigNumber;
+  stakersFee: BigNumber;
 
   @Typed()
-  interfaceFee!: BigNumber;
+  interfaceFee: BigNumber;
 
   @Typed()
-  devFee!: BigNumber;
+  devFee: BigNumber;
 }

@@ -3,14 +3,14 @@ import { TokenMetadata } from '@shared/types';
 
 export class TokenMetadataDto implements TokenMetadata {
   @Typed()
-  decimals!: number;
+  decimals: number;
 
   @Typed()
-  symbol!: string;
+  symbol: string;
 
   @Typed()
-  name!: string;
+  name: string;
 
   @Typed()
-  thumbnailUri!: string;
+  thumbnailUri: string;
 }

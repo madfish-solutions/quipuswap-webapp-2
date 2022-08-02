@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable } from 'mobx';
+import { makeObservable } from 'mobx';
 
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorDataNew, RootStore } from '@shared/store';
@@ -16,7 +16,7 @@ export class StableswapListStore {
     dto: StableswapListDto,
     model: StableswapListModel
   })
-  readonly listStore!: LoadingErrorDataNew<StableswapListModel>;
+  readonly listStore: LoadingErrorDataNew<StableswapListModel>;
 
   @Led({
     defaultData: null,
@@ -24,13 +24,10 @@ export class StableswapListStore {
     dto: StableswapStatsDto,
     model: StableswapStatsModel
   })
-  readonly statsStore!: LoadingErrorDataNew<StableswapStatsModel>;
+  readonly statsStore: LoadingErrorDataNew<StableswapStatsModel>;
 
   constructor(private rootStore: RootStore) {
-    makeObservable(this, {
-      listStore: observable,
-      list: computed
-    });
+    makeObservable(this, {});
   }
 
   get stats() {

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 import { isDev } from '@shared/helpers';
+import { NotFound } from '@shared/svg';
 
 import { PoolCreation, StableswapLiquidityGeneralStats, StableswapLiquidityListFilter } from './components';
 import styles from './stableswap-liquidity-list.page.module.scss';
@@ -18,7 +19,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
       <PageTitle data-test-id="SSLPageTitle">{title}</PageTitle>
       <StableswapLiquidityGeneralStats />
       <StableswapLiquidityListFilter />
-      <StateWrapper isLoading={isLoading} loaderFallback={<div>Error</div>}>
+      <StateWrapper isLoading={isLoading} loaderFallback={<NotFound />}>
         <Iterator
           render={ListItemCard}
           data={list}

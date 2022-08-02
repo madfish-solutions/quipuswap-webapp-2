@@ -9,35 +9,35 @@ import { StableswapTokensInfoDto } from './stableswap-tokens-info.dto';
 
 export class StableswapItemDto implements StableswapItemNew {
   @Typed()
-  id!: BigNumber;
+  id: BigNumber;
 
   @Typed()
-  poolId!: BigNumber;
+  poolId: BigNumber;
 
   @Typed()
-  contractAddress!: string;
+  contractAddress: string;
 
   @Typed({ type: StableswapTokensInfoDto, isArray: true })
-  tokensInfo!: Array<StableswapTokensInfoDto>;
+  tokensInfo: Array<StableswapTokensInfoDto>;
 
   @Typed()
-  isWhitelisted!: boolean;
+  isWhitelisted: boolean;
 
   @Typed()
-  totalLpSupply!: BigNumber;
+  totalLpSupply: BigNumber;
 
   @Typed()
-  tvlInUsd!: BigNumber;
+  tvlInUsd: BigNumber;
 
   @Typed()
-  poolContractUrl!: string;
+  poolContractUrl: string;
 
   @Typed()
-  stableswapItemUrl!: string;
+  stableswapItemUrl: string;
 
   @Typed()
-  fees!: StableswapFeesDto;
+  fees: StableswapFeesDto;
 
   @Typed()
-  lpToken!: TokenDto;
+  lpToken: TokenDto;
 }

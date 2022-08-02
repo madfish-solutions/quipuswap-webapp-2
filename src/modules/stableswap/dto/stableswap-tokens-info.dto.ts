@@ -7,14 +7,14 @@ import { StableswapTokensInfo } from '../types';
 
 export class StableswapTokensInfoDto implements StableswapTokensInfo {
   @Typed()
-  reserves!: BigNumber;
+  reserves: BigNumber;
 
   @Typed()
-  reservesInUsd!: BigNumber;
+  reservesInUsd: BigNumber;
 
   @Typed()
-  token!: TokenDto;
+  token: TokenDto;
 
   @Typed()
-  exchangeRate!: BigNumber;
+  exchangeRate: BigNumber;
 }

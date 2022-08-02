@@ -6,7 +6,6 @@ declare global {
   }
 
   namespace Reflect {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    function getOwnMetadata<Return>(metadataKey: any, target: object): Return;
+    function getOwnMetadata<Return>(metadataKey: PropertyKey, target: object): Return;
   }
 }
