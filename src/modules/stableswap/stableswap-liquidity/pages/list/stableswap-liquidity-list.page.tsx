@@ -15,7 +15,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="SSLPageTitle">{title}</PageTitle>
       <StableswapLiquidityGeneralStats />
       <StableswapLiquidityListFilter />
       <StateWrapper isLoading={isLoading} loaderFallback={<div>Error</div>}>

@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
+import { StatusLabelProps } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -36,40 +37,61 @@ export const useStableswapLiquidityPageViewModel = () => {
   const { listStore, list } = stableswapListStore;
   const { isLoading } = listStore;
 
-  const listData = list?.map(({ stableswapItemUrl, tokensInfo, tvlInUsd, providersFee }) => ({
-    href: `${link}/${stableswapItemUrl}`,
-    inputToken: extractTokens(tokensInfo),
-    status: { status: ActiveStatus.ACTIVE, label: t('common|whiteListed'), filled: true },
-    itemStats: [
-      ...tokensInfo.map(({ reserves, reservesInUsd, token }) => ({
-        cellName: t('common|tokenValue'),
-        tooltip: t('stableswap|tokenValuesTooltip'),
-        amounts: {
-          amount: reserves,
-          dollarEquivalent: reservesInUsd,
-          currency: getTokenSymbol(token)
-        }
-      })),
-      {
-        cellName: t('common|tvl'),
-        tooltip: t('stableswap|tvlPoolTooltip'),
-        amounts: {
-          amount: tvlInUsd,
-          currency: DOLLAR,
-          dollarEquivalent: tvlInUsd,
-          dollarEquivalentOnly: true
-        }
+  const listData = list?.map(({ id, stableswapItemUrl, tokensInfo, tvlInUsd, isWhitelisted, providersFee }) => {
+    const labels: Array<StatusLabelProps> = [];
+
+    if (isWhitelisted) {
+      labels.push({
+        status: ActiveStatus.ACTIVE,
+        label: t('common|whiteListed').toUpperCase(),
+        DTI: 'whitelistedLabel'
+      });
+    }
+
+    return {
+      farmingItemDTI: `farming-item-${id}`,
+      href: `${link}/${stableswapItemUrl}`,
+      inputToken: extractTokens(tokensInfo),
+      labels,
+      status: {
+        status: ActiveStatus.ACTIVE,
+        DTI: 'activeLabel',
+        filled: true
       },
-      {
-        cellName: t('stableswap|liquidityProvidersFee'),
-        tooltip: t('stableswap|liquidityProvidersFeeTooltip'),
-        amounts: {
-          amount: providersFee,
-          currency: PERCENT
+      itemStats: [
+        ...tokensInfo.map(({ reserves, reservesInUsd, token }, index) => ({
+          cellName: t('common|tokenValue'),
+          tooltip: t('stableswap|tokenValuesTooltip'),
+          DTI: `tokenValues-${index}`,
+          amounts: {
+            amount: reserves,
+            dollarEquivalent: reservesInUsd,
+            currency: getTokenSymbol(token)
+          }
+        })),
+        {
+          cellName: t('common|tvl'),
+          tooltip: t('stableswap|tvlPoolTooltip'),
+          DTI: 'tvlPool',
+          amounts: {
+            amount: tvlInUsd,
+            currency: DOLLAR,
+            dollarEquivalent: tvlInUsd,
+            dollarEquivalentOnly: true
+          }
+        },
+        {
+          cellName: t('stableswap|liquidityProvidersFee'),
+          tooltip: t('stableswap|liquidityProvidersFeeTooltip'),
+          DTI: 'lpFee',
+          amounts: {
+            amount: providersFee,
+            currency: PERCENT
+          }
         }
-      }
-    ]
-  }));
+      ]
+    };
+  });
 
   return {
     isLoading,
