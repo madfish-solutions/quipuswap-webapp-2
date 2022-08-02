@@ -19,6 +19,8 @@ export const useStableTokenInputViewModel = (
     return null;
   }
 
+  const tokenInputDTI = `tokenInputContainer-${index}`;
+
   const { tokensInfo } = item;
 
   const token = tokensInfo[index].token;
@@ -36,6 +38,7 @@ export const useStableTokenInputViewModel = (
     error,
     token,
     hiddenPercentSelector,
+    tokenInputDTI,
     dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent
   };
 };
