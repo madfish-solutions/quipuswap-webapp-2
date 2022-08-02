@@ -6,5 +6,5 @@ import { StableswapStats } from '../types';
 
 export class StableswapStatsDto implements StableswapStats {
   @Typed()
-  totalTvlInUsd!: BigNumber;
+  totalTvlInUsd: BigNumber;
 }

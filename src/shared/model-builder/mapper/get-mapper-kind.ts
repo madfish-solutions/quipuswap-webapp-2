@@ -4,8 +4,7 @@ import { Standard } from '@shared/types';
 
 import { MapperKinds } from './mapper-kinds.enum';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getMapperKind = (_type: any) => {
+export const getMapperKind = (_type: unknown) => {
   switch (_type) {
     case Number:
       return MapperKinds.NUMBER;

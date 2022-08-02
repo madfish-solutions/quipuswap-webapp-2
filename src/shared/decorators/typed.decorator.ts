@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Constructable } from '../types';
 import { TYPED_MARK_SYMBOL } from './typed-mark-symbol';
 
 interface ITyped {
   isArray?: boolean;
-  type?: any;
+  type?: Constructable;
   optional?: boolean;
   nullable?: boolean;
 }

@@ -5,16 +5,16 @@ import { TokenMetadataDto } from './token-metadata.dto';
 
 export class TokenDto implements Token {
   @Typed({ type: String })
-  type!: Standard;
+  type: Standard;
 
   @Typed()
-  isWhitelisted!: boolean;
+  isWhitelisted: boolean;
 
   @Typed()
-  metadata!: TokenMetadataDto;
+  metadata: TokenMetadataDto;
 
   @Typed()
-  contractAddress!: string;
+  contractAddress: string;
 
   @Typed()
   fa2TokenId?: number;
