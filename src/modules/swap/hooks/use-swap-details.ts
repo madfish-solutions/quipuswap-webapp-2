@@ -10,14 +10,14 @@ import { useRoutePairs } from '../providers/route-pairs-provider';
 import { useRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
 import { SwapDetailsParams } from '../utils/types';
 import { usePriceImpact } from './use-price-impact';
-import { useSwapFee } from './use-swap-fee';
+import { useRealSwapFee } from './use-swap-fee';
 
 const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
-export const useSwapDetails = (params: SwapDetailsParams) => {
+export const useRealSwapDetails = (params: SwapDetailsParams) => {
   const { trade, inputToken, outputToken, inputAmount, outputAmount } = params;
   const priceImpact = usePriceImpact(trade);
-  const { data: swapFee = null, error: swapFeeError } = useSwapFee(params);
+  const { data: swapFee = null, error: swapFeeError } = useRealSwapFee(params);
   const { routePairs } = useRoutePairs();
   const reverseRoutePairsCombinations = useRoutePairsCombinations(outputToken, inputToken, routePairs);
 
@@ -29,7 +29,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
     [inputAmount, inputToken, outputAmount, outputToken]
   );
 
-  const buyRate = useMemo(() => {
+  const realBuyRate = useMemo(() => {
     if (inputToken && outputToken && outputAmount?.gt(ZERO_AMOUNT) && trade && !isEmptyArray(trade)) {
       try {
         const { value: maxReverseInput } = getMaxInputRoute(reverseRoutePairsCombinations);
@@ -62,7 +62,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
     swapFee,
     swapFeeError,
     priceImpact,
-    buyRate,
+    buyRate: realBuyRate,
     sellRate
   };
 };

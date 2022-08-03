@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { AppRootRoutes } from '@app.router';
 // It's important to import entities from modules directly from files
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
-import { StatusLabel } from '@shared/components/status-label';
+import { LabelComponent } from '@shared/components/label-component';
 import {
   AnalyticsIcon,
   FarmIcon,
@@ -96,7 +96,12 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
         label: i18n.t('common|Dividends'),
         status: (
-          <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
+          <LabelComponent
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={newLabelText}
+            className={styles.navigationStatus}
+          />
         )
       },
       {
@@ -104,7 +109,12 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
         to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
         label: i18n.t('common|Liquidity'),
         status: (
-          <StatusLabel status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
+          <LabelComponent
+            status={ActiveStatus.ACTIVE}
+            filled
+            label={newLabelText}
+            className={styles.navigationStatus}
+          />
         )
       }
     ]

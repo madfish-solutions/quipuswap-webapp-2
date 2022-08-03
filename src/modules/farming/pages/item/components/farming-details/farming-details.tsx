@@ -10,7 +10,7 @@ import {
   DetailsCardCell,
   StateCurrencyAmount,
   StatePercentage,
-  StatusLabel
+  LabelComponent
 } from '@shared/components';
 import { ExternalLink } from '@shared/svg/external-link';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
@@ -66,10 +66,14 @@ export const FarmingDetails: FC = observer(() => {
         <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
           <div className={styles.tags}>
             {shouldShowLockPeriod && (
-              <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} data-test-id="timeLockLabel" />
+              <LabelComponent label={`${timeLockLabel} LOCK`} status={stakeStatus} data-test-id="timeLockLabel" />
             )}
             {shouldShowWithdrawalFee && (
-              <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} data-test-id="withdrawalFee" />
+              <LabelComponent
+                label={`${withdrawalFee}% UNLOCK FEE`}
+                status={stakeStatus}
+                data-test-id="withdrawalFee"
+              />
             )}
           </div>
         </DetailsCardCell>

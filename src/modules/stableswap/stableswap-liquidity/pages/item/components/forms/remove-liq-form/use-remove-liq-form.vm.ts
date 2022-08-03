@@ -147,9 +147,9 @@ export const useRemoveLiqFormViewModel = () => {
     const tokens = extractTokens(item.tokensInfo);
     const map = createAmountsMichelsonMapFormikValues(formik.values, tokens, index, inputAmount);
     const shares = await calcTokenAmountView(map);
-    const fixedShares = toReal(shares, item.lpToken);
+    const realShares = toReal(shares, item.lpToken);
 
-    return fixedShares.toFixed();
+    return realShares.toFixed();
   };
 
   const handleImbalancedInputChange = (index: number) => {

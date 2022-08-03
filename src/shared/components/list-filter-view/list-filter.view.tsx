@@ -18,6 +18,11 @@ interface InputPlaceholder {
   numberInputPlaceholderTranslation: string;
 }
 
+interface InputDTI {
+  searchInputDTI: string;
+  numberInputDTI: string;
+}
+
 export interface ListFilterViewProps {
   search: string;
   tokenIdValue: string;
@@ -28,6 +33,7 @@ export interface ListFilterViewProps {
   translation: InputPlaceholder;
   switcherDataList: Array<SwitcherLabelProps>;
   sorterProps: SorterProps;
+  inputDTI: InputDTI;
 }
 
 export const ListFilterView: FC<ListFilterViewProps> = ({
@@ -39,12 +45,14 @@ export const ListFilterView: FC<ListFilterViewProps> = ({
   handleDecrement,
   translation,
   sorterProps,
-  switcherDataList
+  switcherDataList,
+  inputDTI
 }) => {
   const { inputPlaceholderTranslation, numberInputPlaceholderTranslation } = translation;
+  const { searchInputDTI, numberInputDTI } = inputDTI;
 
   return (
-    <Card contentClassName={styles.cardContent} className={styles.filterCard}>
+    <Card contentClassName={styles.cardContent} className={styles.filterCard} data-test-id="ListFilterView">
       <Input
         value={search}
         onChange={onSearchChange}
@@ -52,6 +60,7 @@ export const ListFilterView: FC<ListFilterViewProps> = ({
         StartAdornment={Search}
         placeholder={inputPlaceholderTranslation}
         readOnly={false}
+        data-test-id={searchInputDTI}
       />
 
       <NumberInput
@@ -64,6 +73,7 @@ export const ListFilterView: FC<ListFilterViewProps> = ({
         max={MAX_TOKEN_ID}
         onIncrementClick={handleIncrement}
         onDecrementClick={handleDecrement}
+        data-test-id={numberInputDTI}
       />
 
       <Iterator render={SwitcherLabel} data={switcherDataList} />
