@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { toReal, getRandomId, isEmptyArray, isExist, isTokenEqual } from '@shared/helpers';
+import { toReal, getRandomId, isEmptyArray, isExist, isTokenEqual, saveBigNumber } from '@shared/helpers';
 
 import { Optional, Token } from '../types';
 import { RootStore } from './root.store';
@@ -79,7 +79,7 @@ export class TokensBalancesStore {
   async loadTokenBalance(token: Token) {
     if (this.rootStore.authStore.accountPkh && this.rootStore.tezos) {
       const balance = await getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, token);
-      this.setRealBalance(token, balance);
+      this.setRealBalance(token, saveBigNumber(balance, new BigNumber('0')));
     }
   }
 
