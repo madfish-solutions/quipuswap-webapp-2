@@ -3,7 +3,7 @@ name: cypress
 on: [deployment_status]
 jobs:
   e2e:
-    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Preview – qs-ui'
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Production – qs-ui'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
