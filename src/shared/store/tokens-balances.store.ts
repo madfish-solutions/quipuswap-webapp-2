@@ -20,14 +20,14 @@ export class TokensBalancesStore {
     makeObservable(this, {
       tokensBalances: observable,
 
-      setBalance: action,
+      setRealBalance: action,
       subscribe: action,
       unsubscribe: action,
       clearBalances: action
     });
   }
 
-  setBalance(token: Token, balance: Nullable<BigNumber>) {
+  setRealBalance(token: Token, balance: Nullable<BigNumber>) {
     const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
     if (!tokenBalance) {
       return;
@@ -79,7 +79,7 @@ export class TokensBalancesStore {
   async loadTokenBalance(token: Token) {
     if (this.rootStore.authStore.accountPkh && this.rootStore.tezos) {
       const balance = await getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, token);
-      this.setBalance(token, balance);
+      this.setRealBalance(token, balance);
     }
   }
 

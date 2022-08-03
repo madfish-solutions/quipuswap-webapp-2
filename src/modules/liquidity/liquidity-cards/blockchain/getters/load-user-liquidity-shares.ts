@@ -42,12 +42,12 @@ const loadUserLpBalanceTokens = async (
     return null;
   }
 
-  const unfrozen = toReal(userLpTokenBalance.balance, LP_TOKEN_DECIMALS);
+  const realUnfrozenLpTokenBalance = toReal(userLpTokenBalance.balance, LP_TOKEN_DECIMALS);
 
   return {
-    unfrozen,
+    unfrozen: realUnfrozenLpTokenBalance,
     frozen: new BigNumber(EMPTY_POOL_AMOUNT),
-    total: unfrozen
+    total: realUnfrozenLpTokenBalance
   };
 };
 
@@ -62,14 +62,14 @@ const loadUserLpBalanceTez = async (
     return null;
   }
 
-  const unfrozen = toReal(liquidityShares.unfrozen, LP_TOKEN_DECIMALS);
-  const frozen = toReal(liquidityShares.frozen, LP_TOKEN_DECIMALS);
-  const total = unfrozen.plus(frozen);
+  const realUnfrozenShares = toReal(liquidityShares.unfrozen, LP_TOKEN_DECIMALS);
+  const realFrozenShares = toReal(liquidityShares.frozen, LP_TOKEN_DECIMALS);
+  const total = realUnfrozenShares.plus(realFrozenShares);
 
   return {
     total,
-    frozen,
-    unfrozen
+    frozen: realFrozenShares,
+    unfrozen: realUnfrozenShares
   };
 };
 

@@ -1,8 +1,7 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
-
-import { Undefined, Nullable } from '../../types/types';
+import { Undefined, Nullable } from '@shared/types';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
