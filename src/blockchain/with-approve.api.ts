@@ -1,7 +1,7 @@
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { isExist, isTezosToken, isTokenFa12, toArray } from '@shared/helpers';
+import { isExist, isTezosToken, isTokenEqual, isTokenFa12, toArray } from '@shared/helpers';
 import { AmountToken, Token, TokenAddress } from '@shared/types';
 
 import { getAllowance } from './get-allowance';
@@ -62,7 +62,7 @@ const getFA2ApproveParams = async (
   return [addOperatorParams, ...operationParams, removeOperatorParams];
 };
 
-export const getApproveParams = async (
+const getApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token | TokenAddress,
@@ -127,6 +127,20 @@ export const withApproveApi = async (
 
   return await withFA2ApproveApi(tezos, contractAddress, token, accountPkh, operationParams);
 };
+
+const mergeTokensAmount = (tokensAmount: AmountToken[]): AmountToken[] =>
+  tokensAmount.reduce((acc, tokenAmount) => {
+    const foundTokenAmount = acc.find(_tokensAmount => isTokenEqual(_tokensAmount.token, tokenAmount.token));
+
+    if (foundTokenAmount) {
+      foundTokenAmount.amount.plus(tokenAmount.amount);
+    } else {
+      acc.push(tokenAmount);
+    }
+
+    return acc;
+  }, [] as AmountToken[]);
+
 export const withApproveApiForManyTokens = async (
   tezos: TezosToolkit,
   contractAddress: string,
@@ -134,7 +148,7 @@ export const withApproveApiForManyTokens = async (
   accountPkh: string,
   operationParams: TransferParams[]
 ) => {
-  const tokensAndAmountsArray = toArray(tokensAndAmounts);
+  const tokensAndAmountsArray = mergeTokensAmount(toArray(tokensAndAmounts));
 
   let accumParams: TransferParams[] = operationParams;
   for (const { token, amount } of tokensAndAmountsArray) {

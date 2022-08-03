@@ -6,7 +6,7 @@ export const stableswap = {
   apy: 'APY',
   deposit: 'Deposit',
   earned: 'Earned',
-  liquidityProvidersFee: 'Liquidity providers fee (0–1%)',
+  liquidityProvidersFee: 'Liquidity providers fee',
   'Whitelisted Only': 'Whitelisted Only',
   stakedOnly: 'Staked Only',
   'Total LP Supply': 'Total LP Supply',
