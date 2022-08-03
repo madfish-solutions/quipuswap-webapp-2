@@ -1,4 +1,4 @@
-name: cypress
+name: Cypress
 
 on:
   pull_request:
@@ -20,7 +20,6 @@ jobs:
           environment: 'Preview – qs-ui'
   e2e:
     needs: setup
-    name: Cypress tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
