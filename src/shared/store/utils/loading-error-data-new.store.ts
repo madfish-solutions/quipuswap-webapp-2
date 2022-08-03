@@ -1,28 +1,33 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
-import { Undefined, Nullable } from '@shared/types';
+import { mapperReader, MapperConfig } from '@shared/model-builder';
+import { Undefined, Constructable } from '@shared/types';
 
-export class LoadingErrorData<RawData, Data> {
-  rawData: Undefined<RawData>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class LoadingErrorDataNew<ModelType extends object, Data = any, RawData = any> {
+  rawData: RawData | undefined;
   data: Data;
 
   isInitialized = false;
   isLoading = false;
-  error: Nullable<Error | string> = null;
+  error2: Error | string | null = null;
+  model: Undefined<ModelType>;
 
   constructor(
     private defaultData: Data,
     private getDate: () => Promise<RawData>,
-    private mapping: (data: RawData) => Data
+    private mappingConfig: MapperConfig,
+    private modelRef: Constructable<ModelType>
   ) {
     this.data = defaultData;
+
     makeObservable(this, {
       rawData: observable,
       data: observable,
       isInitialized: observable,
       isLoading: observable,
-      error: observable,
+      error2: observable,
+      model: observable,
 
       setRawData: action,
       startLoading: action,
@@ -37,13 +42,15 @@ export class LoadingErrorData<RawData, Data> {
   }
 
   setRawData(rawData: RawData) {
-    this.error = null;
+    this.error2 = null;
     this.rawData = rawData;
-    this.data = this.mapping(rawData);
+    this.data = mapperReader(rawData, this.mappingConfig) as unknown as Data;
+
+    this.model = new this.modelRef(this.data);
   }
 
-  setError(error: Error | string) {
-    this.error = error;
+  setError2(error: Error | string) {
+    this.error2 = error;
     this.rawData = undefined;
     this.data = this.defaultData;
   }
@@ -60,15 +67,10 @@ export class LoadingErrorData<RawData, Data> {
   async load() {
     try {
       this.startLoading();
+
       this.setRawData(await this.getDate());
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('error', error);
-      if (error instanceof Error && error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
-        this.setError(SERVER_UNAVAILABLE_MESSAGE);
-      } else {
-        this.setError(error as Error);
-      }
+      this.setError2(error as Error);
 
       throw error;
     } finally {
