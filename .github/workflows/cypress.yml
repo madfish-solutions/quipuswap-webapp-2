@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
-      environment: ${{ steps.waitForVercelPreviewDeployment.outputs.environment }}
     steps:
       - name: Wait for Vercel preview deployment to be ready
         uses: madfish-solutions/wait-for-vercel-preview@main
@@ -18,10 +17,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 600
+          environment: 'Preview – qs-ui'
   e2e:
     needs: setup
     name: Cypress tests
-    if: needs.setup.outputs.environment == 'Preview – qs-ui'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
