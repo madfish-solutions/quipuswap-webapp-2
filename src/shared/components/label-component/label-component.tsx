@@ -5,9 +5,9 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { ActiveStatus } from '@shared/types';
 
-import styles from './status-label.module.scss';
+import styles from './label-component.module.scss';
 
-export interface StatusLabelProps {
+export interface LabelComponentProps {
   className?: string;
   status: ActiveStatus;
   label?: string;
@@ -26,7 +26,7 @@ const statusClass = {
   [ActiveStatus.ACTIVE]: styles.active
 };
 
-export const StatusLabel: FC<StatusLabelProps> = ({ className, status, label, filled, DTI, ...props }) => {
+export const LabelComponent: FC<LabelComponentProps> = ({ className, status, label, filled, DTI, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

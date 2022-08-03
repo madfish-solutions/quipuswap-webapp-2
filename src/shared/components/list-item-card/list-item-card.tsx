@@ -13,8 +13,8 @@ import { Token } from '@shared/types';
 
 import { Card } from '../card';
 import { Iterator } from '../iterator';
+import { LabelComponent, LabelComponentProps } from '../label-component';
 import { StateListItemCardCell, StateListItemCardCellProps } from '../state-list-item-card-cell';
-import { StatusLabel, StatusLabelProps } from '../status-label';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
 import styles from './list-item-card.module.scss';
@@ -22,9 +22,9 @@ import styles from './list-item-card.module.scss';
 interface Props {
   href: string;
   inputToken: Token | Array<Token>;
-  status: StatusLabelProps;
+  status: LabelComponentProps;
   isNew?: boolean;
-  labels?: Array<StatusLabelProps>;
+  labels?: Array<LabelComponentProps>;
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
   visibleIcon?: boolean;
@@ -90,11 +90,11 @@ export const ListItemCard: FC<Props> = ({
           </div>
 
           <div className={styles.statusAndlabelsContainer}>
-            {!isNewLiquidity && <StatusLabel {...status} />}
+            {!isNewLiquidity && <LabelComponent {...status} />}
             {newLiquidityLablesData && <NewLiquidityLables newLiquidityLablesData={newLiquidityLablesData} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
-                <Iterator render={StatusLabel} data={labels} />
+                <Iterator render={LabelComponent} data={labels} />
               </div>
             )}
           </div>

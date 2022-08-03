@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Button, Card, DetailsCardCell, StatePercentage, StatusLabel } from '@shared/components';
+import { Button, Card, DetailsCardCell, StatePercentage, LabelComponent } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -28,7 +28,11 @@ export const Details: FC = observer(() => {
       <DetailsCardCell cellName={t('stableswap|Tags')} className={cardCellClassName} data-test-id="tags">
         <div className={styles.tags}>
           {whitelistedTag && (
-            <StatusLabel label={whitelistedTag?.label} status={whitelistedTag?.status} data-test-id="timeLockLabel" />
+            <LabelComponent
+              label={whitelistedTag?.label}
+              status={whitelistedTag?.status}
+              data-test-id="timeLockLabel"
+            />
           )}
         </div>
       </DetailsCardCell>
