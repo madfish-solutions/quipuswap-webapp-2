@@ -20,7 +20,6 @@ import { useStableswapLiquidityRouterViewModel } from './stableswap-liquidity.ro
 
 export const StableswapLiquidityRouter: FC = observer(() => {
   const { pathname } = useLocation();
-
   const { isInitialazied, error } = useStableswapLiquidityRouterViewModel();
 
   const routerParts = getRouterParts(pathname);

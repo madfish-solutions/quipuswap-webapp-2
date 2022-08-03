@@ -11,5 +11,9 @@ interface Props {
 }
 
 export const TokensSymbols: FC<Props> = ({ tokens, className }) => {
-  return <div className={className}>{getSymbolsString(tokens)}</div>;
+  return (
+    <div className={className} data-test-id="tokensSymbols">
+      {getSymbolsString(tokens)}
+    </div>
+  );
 };

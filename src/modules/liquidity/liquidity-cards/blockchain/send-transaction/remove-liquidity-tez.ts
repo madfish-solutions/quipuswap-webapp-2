@@ -15,7 +15,8 @@ export const removeLiquidityTez = async (
 ) => {
   const slippageInDecimals = slippagePercentage.dividedBy(PERCENTAGE);
   const lpTokenBN = new BigNumber(lpTokenInput);
-  const shares = toAtomic(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+  // TODO: atomicLPTokenShares - is Shares neccessary?
+  const atomicLPTokenShares = toAtomic(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-  return await getRemoveLiquidityParams(tezos, dex, shares, slippageInDecimals);
+  return await getRemoveLiquidityParams(tezos, dex, atomicLPTokenShares, slippageInDecimals);
 };

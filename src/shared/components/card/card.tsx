@@ -3,7 +3,7 @@ import { FC, HTMLProps, ReactNode, useContext, useLayoutEffect, useRef } from 'r
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { StatusLabel } from '@shared/components/status-label';
+import { LabelComponent } from '@shared/components/label-component';
 import { ActiveStatus } from '@shared/types';
 
 import styles from './card.module.scss';
@@ -71,10 +71,8 @@ export const Card: FC<Props> = ({
       {header && (
         <div className={cx(styles.header, header.className)}>
           <span data-test-id="headerContent">{header.content}</span>
-          <span data-test-id="statusLabelCard">
-            <span data-test-id="statusLabel">
-              {header.status ? <StatusLabel filled status={header.status} /> : null}
-            </span>
+          <span data-test-id="labelCard">
+            <span data-test-id="label">{header.status ? <LabelComponent filled status={header.status} /> : null}</span>
           </span>
           {header.button}
         </div>
@@ -82,9 +80,9 @@ export const Card: FC<Props> = ({
       {subheader && (
         <div className={cx(styles.header, subheader.className)}>
           <span data-test-id="headerContent">{subheader.content}</span>
-          <span data-test-id="statusLabelCard">
-            <span data-test-id="statusLabel">
-              {subheader.status ? <StatusLabel filled status={subheader.status} /> : null}
+          <span data-test-id="labelCard">
+            <span data-test-id="label">
+              {subheader.status ? <LabelComponent filled status={subheader.status} /> : null}
             </span>
           </span>
           {subheader.button}

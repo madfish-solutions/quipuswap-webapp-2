@@ -49,13 +49,13 @@ export const useCoinflipPageViewModel = () => {
   }, [rootStore]);
 
   const wonAmount = useMemo(() => {
-    const payoutCoefficient = toReal(
+    const realPayoutCoefficient = toReal(
       coinflipStore?.generalStatsStore.data?.payoutCoefficient ?? ZERO_BN,
       COINFLIP_CONTRACT_DECIMALS
     );
-    const bidSize = toReal(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
+    const realBidSize = toReal(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
 
-    return payoutCoefficient.multipliedBy(bidSize);
+    return realPayoutCoefficient.multipliedBy(realBidSize);
   }, [coinflipStore?.generalStatsStore.data?.payoutCoefficient, coinflipStore?.userLastGameInfo.data?.bidSize, token]);
 
   return {

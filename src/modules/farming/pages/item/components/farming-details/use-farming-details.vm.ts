@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/enviroment';
-import { getDailyDistribution } from '@modules/farming/helpers';
+import { getRealDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
@@ -78,9 +78,9 @@ export const useFarmingDetailsViewModel = () => {
     stakeStatus
   } = farmingItem;
 
-  const dailyDistribution = bigNumberToString(getDailyDistribution(rewardPerSecond, rewardToken));
+  const realDailyDistribution = bigNumberToString(getRealDailyDistribution(rewardPerSecond, rewardToken));
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
-    ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
+    ? getDollarEquivalent(realDailyDistribution, earnExchangeRate)
     : null;
   const currentDelegate = makeBaker(farmingItem.currentDelegate, bakers);
   const nextDelegate = makeBaker(farmingItem.nextDelegate, bakers);
@@ -98,7 +98,7 @@ export const useFarmingDetailsViewModel = () => {
     shouldShowWithdrawalFee,
     endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent: tvlDollarEquivalent && bigNumberToString(tvlDollarEquivalent),
-    dailyDistribution,
+    dailyDistribution: realDailyDistribution,
     distributionDollarEquivalent,
     apr: apr ? bigNumberToString(apr) : null,
     dailyApr: apr ? bigNumberToString(apr.dividedBy(DAYS_IN_YEAR)) : null,

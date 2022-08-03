@@ -18,11 +18,11 @@ export const getVotingParams = async (
   if (shares && lpTokenInputBN.gt(shares.unfrozen) && dex.storage) {
     const { total } = shares;
     const delta = total.minus(lpTokenInputBN);
-    const deltaWithDecimals = toAtomic(delta, LP_TOKEN_DECIMALS);
+    const atomicDelta = toAtomic(delta, LP_TOKEN_DECIMALS);
 
     const { candidate } = await dex.storage.storage.voters.get(accountPkh);
 
-    return await voteForBaker(tezos, dex, candidate, deltaWithDecimals);
+    return await voteForBaker(tezos, dex, candidate, atomicDelta);
   }
 
   return [];
