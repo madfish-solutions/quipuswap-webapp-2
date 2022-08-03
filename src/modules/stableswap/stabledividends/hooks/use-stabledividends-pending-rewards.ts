@@ -21,11 +21,11 @@ export const useStableDividendsPendingRewards = () => {
       if (value.isGreaterThan('0')) {
         const tokenInfo = tokensInfo[key.toNumber()];
         const { token, exchangeRate } = tokenInfo;
-        const amount = toReal(value, token);
+        const realRewardAmount = toReal(value, token);
         helperArray.push({
           claimable: {
-            amount,
-            dollarEquivalent: amount.multipliedBy(exchangeRate)
+            amount: realRewardAmount,
+            dollarEquivalent: realRewardAmount.multipliedBy(exchangeRate)
           },
           token
         });

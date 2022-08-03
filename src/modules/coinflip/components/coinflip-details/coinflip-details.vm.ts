@@ -73,10 +73,10 @@ export const useCoinflipDetailsViewModel = () => {
   );
   const bankBN = new BigNumber(bank ?? '0');
   const bankInUsd = bankBN.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const bidSize = userLastGame?.bidSize && toReal(userLastGame.bidSize, tokenInstance);
-  const bidSizeInUsd = accountPkh && bidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
+  const realBidSize = userLastGame?.bidSize && toReal(userLastGame.bidSize, tokenInstance);
+  const bidSizeInUsd = accountPkh && realBidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const totalWinsInUsd = totalWins?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const rewardSize = bidSize?.multipliedBy(payoutCoefficient ?? '0');
+  const rewardSize = realBidSize?.multipliedBy(payoutCoefficient ?? '0');
   const rewardSizeInUsd = accountPkh && rewardSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
@@ -86,7 +86,7 @@ export const useCoinflipDetailsViewModel = () => {
 
   return {
     bank,
-    bidSize,
+    bidSize: realBidSize,
     preparedBidSize,
     totalWins,
     bankInUsd,

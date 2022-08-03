@@ -21,7 +21,7 @@ const ZERO = 0;
 
 export const DexDashboard: FC = () => {
   const { t } = useTranslation(['home']);
-  const [totalSupply, setTotalSupply] = useState<BigNumber>();
+  const [realTotalSupply, setRealTotalSupply] = useState<BigNumber>();
 
   useEffect(() => {
     const asyncLoad = async () => {
@@ -30,7 +30,7 @@ export const DexDashboard: FC = () => {
       const contract = await getStorageInfo(tezos, MAINNET_QUIPU_TOKEN.contractAddress);
       // @ts-ignore
       const rawTotalSupply = await contract?.token_info.get(ZERO);
-      setTotalSupply(toReal(rawTotalSupply, MAINNET_QUIPU_TOKEN));
+      setRealTotalSupply(toReal(rawTotalSupply, MAINNET_QUIPU_TOKEN));
     };
     void asyncLoad();
   }, []);
@@ -43,7 +43,7 @@ export const DexDashboard: FC = () => {
       totalLiquidity={null}
       xtzUsdQuote={null}
       transactionsCount24h={null}
-      totalSupply={totalSupply}
+      totalSupply={realTotalSupply}
       loading={false}
     />
   );

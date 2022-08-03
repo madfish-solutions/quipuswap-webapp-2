@@ -23,7 +23,7 @@
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.6.1",
     "@quipuswap/sdk": "^3.0.0",
-    "@quipuswap/tokens-whitelist": "^1.0.4",
+    "@quipuswap/tokens-whitelist": "^1.0.6",
     "@taquito/beacon-wallet": "13.0.0",
     "@taquito/taquito": "13.0.0",
     "@temple-wallet/dapp": "^7.0.0",

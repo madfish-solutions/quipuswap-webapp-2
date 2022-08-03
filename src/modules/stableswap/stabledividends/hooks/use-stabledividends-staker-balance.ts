@@ -7,7 +7,7 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 
 import { useStableDividendsItemStore } from '../../hooks';
 
-export const useStableDividendsStakerBalance = () => {
+export const useRealStableDividendsStakerBalance = () => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
   const stableDividendsItemStore = useStableDividendsItemStore();
