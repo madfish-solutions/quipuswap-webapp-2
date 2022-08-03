@@ -146,5 +146,6 @@ export const common = {
   amountShouldBeSmallerThanBid: `The amount should be smaller than {{amount}} {{tokenSymbol}}. Try another bid.`,
   cantBeZeroAmount: "Amount can't be zero",
   mustBeANumber: 'Must be a number',
-  amountRequired: 'Amount is required'
+  amountRequired: 'Amount is required',
+  chooseYourWallet: 'Choose your wallet'
 } as const;
