@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
-import { StatusLabelProps } from '@shared/components';
+import { LabelComponentProps } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -39,7 +39,7 @@ export const useStableswapLiquidityPageViewModel = () => {
 
   const listData = list?.map(({ id, tokensInfo, tvlInUsd, isWhitelisted, providersFee }) => {
     const idFixed = id.toFixed();
-    const labels: Array<StatusLabelProps> = [];
+    const labels: Array<LabelComponentProps> = [];
 
     if (isWhitelisted) {
       labels.push({
