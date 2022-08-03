@@ -16,7 +16,9 @@
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
     "e2e": "npx cypress run --record --key f271c554-5264-44d3-89e2-a309096fa019",
     "eject": "react-scripts eject",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^3.1.0",
@@ -80,6 +82,16 @@
   },
   "devDependencies": {
     "@percy/cypress": "^3.1.2",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack5": "^6.5.9",
+    "@storybook/manager-webpack5": "^6.5.9",
+    "@storybook/node-logger": "^6.5.9",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/react": "^6.5.9",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^14.2.0",
@@ -94,6 +106,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/react-table": "^7.7.12",
     "@types/uuid": "^8.3.4",
+    "babel-plugin-named-exports-order": "^0.0.2",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "env-cmd": "^10.1.0",
     "eslint": "^8.16.0",
@@ -108,16 +121,29 @@
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
     "eslint-plugin-sonarjs": "^0.13.0",
+    "eslint-plugin-storybook": "^0.6.3",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
     "prettier": "^2.6.2",
+    "prop-types": "^15.8.1",
     "sass": "^1.52.1",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "webpack": "^5.74.0"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "browserslist": {
