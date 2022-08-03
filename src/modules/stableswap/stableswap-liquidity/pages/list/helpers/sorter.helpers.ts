@@ -1,12 +1,12 @@
 import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { StableswapItem } from '../../../../types';
+import { StableswapItemModel } from '../../../../models';
 import { StableswapSortField } from '../types';
 
-const sortById = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>
+const sortById = (first: StableswapItemModel, second: StableswapItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);
 
-const sortByTvl = (first: StableswapItem, second: StableswapItem, sortDirection: SortDirection) =>
+const sortByTvl = (first: StableswapItemModel, second: StableswapItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const stableswapSorts = {
@@ -15,14 +15,14 @@ const stableswapSorts = {
 };
 
 const sortStableswap = (
-  first: StableswapItem,
-  second: StableswapItem,
+  first: StableswapItemModel,
+  second: StableswapItemModel,
   sortField: StableswapSortField,
   sortDirection: SortDirection
 ) => stableswapSorts[sortField](first, second, sortDirection);
 
 export const sortStableswapList = (
-  list: Array<StableswapItem>,
+  list: Array<StableswapItemModel>,
   sortField: StableswapSortField,
   sortDirection: SortDirection
 ) => {

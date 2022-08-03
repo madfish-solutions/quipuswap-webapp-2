@@ -2,11 +2,7 @@ import { i18n } from '@translation';
 
 export const MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL = 2;
 export const MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL = 4;
-export const LOWER_LIQUIDITY_PRODIFDERS_FEE = {
-  value: 0,
-  isInclusive: true
-};
-export const UPPER_LIQUIDITY_PRODIFDERS_FEE = {
+export const UPPER_LIQUIDITY_PROVIDERS_FEE = {
   value: 1,
   isInclusive: true
 };

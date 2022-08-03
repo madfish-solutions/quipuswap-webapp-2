@@ -17,7 +17,7 @@ export const StableswapLiquidityRemoveItemPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="SSLItemPageTitleRemove">{title}</PageTitle>
       <StickyBlock>
         <StableswapFormTabsCard subpath={StableswapRoutes.liquidity} tabActiveId={StableswapLiquidityFormTabs.remove}>
           <RemoveLiqForm />

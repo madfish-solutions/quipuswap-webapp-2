@@ -35,6 +35,21 @@ export interface StableswapItem extends AbstractStableItem {
   lpToken: Token;
 }
 
+export interface Fees {
+  liquidityProvidersFee: BigNumber;
+  stakersFee: BigNumber;
+  interfaceFee: BigNumber;
+  devFee: BigNumber;
+}
+
+export interface StableswapItemNew extends AbstractStableItem {
+  totalLpSupply: BigNumber;
+  tvlInUsd: BigNumber;
+  poolContractUrl: string;
+  fees: Fees;
+  lpToken: Token;
+}
+
 export interface StableDividendsItem extends AbstractStableItem {
   tvl: BigNumber;
   stakedTokenExchangeRate: BigNumber;

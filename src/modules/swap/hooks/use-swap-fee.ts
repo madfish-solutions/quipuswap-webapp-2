@@ -22,14 +22,14 @@ interface SwapParams {
   recipient: Undefined<string>;
 }
 
-export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapParams) => {
+export const useRealSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
   const tezos = useEstimationToolkit();
   const {
     settings: { transactionDeadline }
   } = useSettingsStore();
 
-  const updateSwapFee = useCallback(
+  const updateRealSwapFee = useCallback(
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
       if (senderPkh && inputToken && trade && inputAmount) {
         try {
@@ -57,6 +57,6 @@ export const useSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapPa
       inputAmount?.toFixed(),
       inputToken && getTokenSlug(inputToken)
     ],
-    updateSwapFee
+    updateRealSwapFee
   );
 };

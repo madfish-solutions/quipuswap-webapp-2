@@ -43,7 +43,7 @@ const loadUserLpBalanceTez = async (tezos: TezosToolkit, accountPkh: string, dex
   return getUserBalance(tezos, accountPkh, address, type, fa2TokenId);
 };
 
-export const loadUserLpBalance = async (
+export const loadRealUserLpBalance = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,

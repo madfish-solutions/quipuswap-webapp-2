@@ -16,7 +16,7 @@ import { useTranslation } from '@translation';
 import { DonationFormValues } from './types';
 
 const TOKEN_ATOM_RAW_AMOUNT = 1;
-const MIN_INPUT_AMOUNT = toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), TEZOS_TOKEN_DECIMALS);
+const REAL_MIN_INPUT_AMOUNT = toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), TEZOS_TOKEN_DECIMALS);
 const EMPTY_BALANCE_AMOUNT = 0;
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
@@ -46,7 +46,7 @@ export const useDonationFormik = () => {
       isInclusive: false
     },
     max && { value: max, isInclusive: true },
-    max && t('common|valueOutOfRangeError', { min: MIN_INPUT_AMOUNT.toFixed(), max: max.toFixed() })
+    max && t('common|valueOutOfRangeError', { min: REAL_MIN_INPUT_AMOUNT.toFixed(), max: max.toFixed() })
   )
     .test(
       'input-decimals-amount',

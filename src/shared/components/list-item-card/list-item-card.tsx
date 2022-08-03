@@ -4,15 +4,17 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
+import { NewLiquidityLables } from '@modules/new-liquidity/components';
+import { NewLiquidityLablesInterface } from '@modules/new-liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isUndefined } from '@shared/helpers';
-import { ArrowDown } from '@shared/svg';
+import { ArrowDown, VisibleIcon } from '@shared/svg';
 import { Token } from '@shared/types';
 
 import { Card } from '../card';
 import { Iterator } from '../iterator';
+import { LabelComponent, LabelComponentProps } from '../label-component';
 import { StateListItemCardCell, StateListItemCardCellProps } from '../state-list-item-card-cell';
-import { StatusLabel, StatusLabelProps } from '../status-label';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
 import styles from './list-item-card.module.scss';
@@ -20,10 +22,13 @@ import styles from './list-item-card.module.scss';
 interface Props {
   href: string;
   inputToken: Token | Array<Token>;
-  status: StatusLabelProps;
+  status: LabelComponentProps;
   isNew?: boolean;
-  labels?: Array<StatusLabelProps>;
+  labels?: Array<LabelComponentProps>;
   outputToken?: Token | Array<Token>;
+  isNewLiquidity?: boolean;
+  visibleIcon?: boolean;
+  newLiquidityLablesData?: NewLiquidityLablesInterface;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
   farmingItemDTI?: string;
@@ -39,6 +44,9 @@ export const ListItemCard: FC<Props> = ({
   outputToken,
   href,
   labels,
+  isNewLiquidity,
+  visibleIcon,
+  newLiquidityLablesData,
   status,
   isNew,
   itemStats,
@@ -57,9 +65,9 @@ export const ListItemCard: FC<Props> = ({
 
         <div className={styles.topContainer}>
           <div className={styles.logosAndSymbols}>
-            <div className={styles.logosContainer}>
+            <div className={cx(styles.logosContainer, { [styles.inlineIcons]: isNewLiquidity })}>
               <TokensLogos tokens={inputToken} width={32} />
-
+              {visibleIcon && <VisibleIcon />}
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
@@ -82,10 +90,11 @@ export const ListItemCard: FC<Props> = ({
           </div>
 
           <div className={styles.statusAndlabelsContainer}>
-            <StatusLabel {...status} />
+            {!isNewLiquidity && <LabelComponent {...status} />}
+            {newLiquidityLablesData && <NewLiquidityLables newLiquidityLablesData={newLiquidityLablesData} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
-                <Iterator render={StatusLabel} data={labels} />
+                <Iterator render={LabelComponent} data={labels} />
               </div>
             )}
           </div>
