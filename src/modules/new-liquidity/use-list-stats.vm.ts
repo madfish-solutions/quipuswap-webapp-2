@@ -1,19 +1,14 @@
 import { PERCENT } from '@config/constants';
 import { useTranslation } from '@translation';
 
-import { useNewLiquidityStore } from './hooks/store';
-
-const DEFAULT_DATA = {
-  totalValueLocked: null,
-  maxApr: null,
-  poolsCount: null
-};
+import { useNewLiquidityStatsStore } from './hooks/store';
+import { DEFAULT_DATA } from './store';
 
 export const useListStatsViewModel = () => {
-  const newLiquidityStore = useNewLiquidityStore();
+  const newLiquidityStatsStore = useNewLiquidityStatsStore();
   const { t } = useTranslation();
 
-  const { maxApr, totalValueLocked, poolsCount } = newLiquidityStore?.stats ?? DEFAULT_DATA;
+  const { maxApr, totalValueLocked, poolsCount } = newLiquidityStatsStore?.stats ?? DEFAULT_DATA;
 
   const stats = [
     {
