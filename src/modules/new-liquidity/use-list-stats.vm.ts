@@ -1,29 +1,38 @@
-import { BigNumber } from 'bignumber.js';
-
 import { PERCENT } from '@config/constants';
 import { useTranslation } from '@translation';
 
+import { useNewLiquidityStore } from './hooks/store';
+
+const DEFAULT_DATA = {
+  totalValueLocked: null,
+  maxApr: null,
+  poolsCount: null
+};
+
 export const useListStatsViewModel = () => {
+  const newLiquidityStore = useNewLiquidityStore();
   const { t } = useTranslation();
+
+  const { maxApr, totalValueLocked, poolsCount } = newLiquidityStore?.stats ?? DEFAULT_DATA;
 
   const stats = [
     {
       title: t('newLiquidity|tvl'),
       tooltip: t('newLiquidity|tvlTooltip'),
-      amount: new BigNumber(10),
+      amount: totalValueLocked,
       testId: 'statsTVL'
     },
     {
       title: t('newLiquidity|maxApr'),
       tooltip: t('newLiquidity|maxAprTooltip'),
-      amount: new BigNumber(20),
+      amount: maxApr,
       currency: PERCENT,
       testId: 'statsMaxAPR'
     },
     {
       title: t('newLiquidity|pools'),
       tooltip: t('newLiquidity|poolsTooltip'),
-      amount: new BigNumber(30),
+      amount: poolsCount,
       currency: null,
       testId: 'statsPools'
     }
