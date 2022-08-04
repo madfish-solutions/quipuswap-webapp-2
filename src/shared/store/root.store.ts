@@ -7,6 +7,7 @@ import {
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
+import { NewLiquidityListStore as INewLiquidityListStore } from '@modules/new-liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
@@ -49,6 +50,8 @@ export class RootStore {
   stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
   stableDividendsItemStore: Nullable<IStableDividendsItemStore> = null;
 
+  newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
+
   coinflipStore: Nullable<ICoinflipStore> = null;
 
   tezos: Nullable<TezosToolkit> = null;
@@ -78,6 +81,8 @@ export class RootStore {
       stableDividendsFilterStore: observable,
       stableDividendsItemStore: observable,
 
+      newLiquidityListStore: observable,
+
       coinflipStore: observable,
 
       setTezos: action,
@@ -99,6 +104,13 @@ export class RootStore {
 
   setTezos(tezos: Nullable<TezosToolkit>) {
     this.tezos = tezos;
+  }
+
+  async createNewLiquidityListStore() {
+    if (isNull(this.newLiquidityListStore)) {
+      const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
+      this.newLiquidityListStore = new NewLiquidityListStore(this);
+    }
   }
 
   async createStableDividendsListStore() {
