@@ -7,8 +7,14 @@ import { getNewLiquidityStatsApi } from '../api';
 import { NewLiquidityStatsDto } from '../dto';
 import { NewLiquidityStatsModel } from '../models';
 
+export const DEFAULT_DATA = {
+  totalValueLocked: null,
+  maxApr: null,
+  poolsCount: null
+};
+
 @ModelBuilder()
-export class NewLiquidityStore {
+export class NewLiquidityStatsStore {
   @Led({
     defaultData: null,
     getData: async () => await getNewLiquidityStatsApi(),

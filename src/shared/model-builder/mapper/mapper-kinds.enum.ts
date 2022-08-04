@@ -2,5 +2,6 @@ export enum MapperKinds {
   NUMBER,
   BIGNUMBER,
   BOOLEAN,
-  STRING
+  STRING,
+  DATE
 }

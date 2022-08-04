@@ -10,8 +10,8 @@ export const useNewLiquidityViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.newLiquidityStore)) {
-          await rootStore.createNewLiquidityStore();
+        if (isNull(rootStore.newLiquidityStatsStore)) {
+          await rootStore.createNewLiquidityStatsStore();
         }
       } finally {
         setIsInitialazied(true);

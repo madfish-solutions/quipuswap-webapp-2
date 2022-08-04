@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useNewLiquidityStore } from './store';
+import { useNewLiquidityStatsStore } from './store';
 
 export const useGetNewLiquidityStats = () => {
   const { showErrorToast } = useToasts();
-  const newLiquidityStore = useNewLiquidityStore();
+  const newLiquidityStatsStore = useNewLiquidityStatsStore();
   const isReady = useReady();
 
   const getNewLiquidityStats = useCallback(async () => {
@@ -16,11 +16,11 @@ export const useGetNewLiquidityStats = () => {
     }
 
     try {
-      await newLiquidityStore?.statsStore.load();
+      await newLiquidityStatsStore?.statsStore.load();
     } catch (error) {
       showErrorToast(error as Error);
     }
-  }, [isReady, showErrorToast, newLiquidityStore?.statsStore]);
+  }, [isReady, showErrorToast, newLiquidityStatsStore?.statsStore]);
 
   return { getNewLiquidityStats };
 };
