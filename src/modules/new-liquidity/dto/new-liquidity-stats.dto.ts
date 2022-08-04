@@ -11,13 +11,4 @@ export class NewLiquidityStatsDto {
 
   @Typed()
   poolsCount: BigNumber;
-
-  @Typed()
-  level: number;
-
-  @Typed()
-  hash: string;
-
-  @Typed()
-  timestamp: Date;
 }
