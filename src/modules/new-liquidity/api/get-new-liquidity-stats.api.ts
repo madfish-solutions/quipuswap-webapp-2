@@ -7,5 +7,5 @@ export const getNewLiquidityStatsApi = async () => {
 
   const { stats, blockInfo } = (await response.json()) as NewLiquidityStatsResponse;
 
-  return { stats, blockInfo };
+  return { ...stats, ...blockInfo };
 };

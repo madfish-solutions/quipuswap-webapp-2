@@ -10,7 +10,10 @@ import { NewLiquidityStatsModel } from '../models';
 export const DEFAULT_DATA = {
   totalValueLocked: null,
   maxApr: null,
-  poolsCount: null
+  poolsCount: null,
+  level: null,
+  hash: null,
+  timestamp: null
 };
 
 @ModelBuilder()
@@ -28,6 +31,6 @@ export class NewLiquidityStatsStore {
   }
 
   get stats() {
-    return this.statsStore.data;
+    return this.statsStore.model;
   }
 }
