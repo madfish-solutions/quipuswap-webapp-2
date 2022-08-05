@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
-import { FARMING_API_URL, NETWORK_ID, NEW_LIQUIDITY_API_URL, STABLESWAP_API_URL } from './enviroment';
+import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL } from './enviroment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -94,7 +94,7 @@ export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 export const STABLEDIVIDENDS_LIST_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${LIST}`;
 export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${STATS}`;
 
-export const NEW_LIQUIDITY_STATS_API_URL = `${NEW_LIQUIDITY_API_URL}/${STATS}`;
+export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
 //#endregion
 
 //TODO: assort mix
