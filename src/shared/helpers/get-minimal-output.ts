@@ -8,7 +8,7 @@ const WHOLE_ITEM_PERCENT = 100;
 const EMPTY_OUTPUT_AMOUNT = 0;
 const WHOLE_ITEM = 1;
 const RAW_TOKEN_ATOM_AMOUNT = 1;
-// think
+
 export const getMinimalOutput = (
   outputAmount: Optional<BigNumber>,
   slippage: Optional<BigNumber>,
