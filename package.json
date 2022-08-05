@@ -22,7 +22,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^3.1.0",
     "@craco/craco": "^6.4.3",
-    "@percy/cli": "^1.6.1",
+    "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.0",
     "@quipuswap/tokens-whitelist": "^1.0.6",
     "@taquito/beacon-wallet": "13.0.0",
@@ -96,6 +96,7 @@
     "@types/react-table": "^7.7.12",
     "@types/uuid": "^8.3.4",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
+    "cypress-wait-until": "^1.7.2",
     "env-cmd": "^10.1.0",
     "eslint": "^8.16.0",
     "eslint-config-next": "^12.1.6",
