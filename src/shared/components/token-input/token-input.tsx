@@ -39,6 +39,7 @@ export const TokenInput: FC<TokenInputProps> = ({
   readOnly,
   balanceText,
   decimals,
+  tokenInputDTI,
   onInputChange,
   onSelectorClick
 }) => {
@@ -82,7 +83,7 @@ export const TokenInput: FC<TokenInputProps> = ({
       onKeyPress={focusInput}
       role="button"
       tabIndex={0}
-      data-test-id="tokenInputContainer"
+      data-test-id={tokenInputDTI}
     >
       <label htmlFor={id} className={styles.label} data-test-id="tokenInputLabel">
         {label}

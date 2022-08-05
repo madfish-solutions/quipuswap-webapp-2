@@ -28,7 +28,8 @@ export const StableTokenInput: FC<Props> = observer(
       return null;
     }
 
-    const { inputSlug, value, error, token, hiddenPercentSelector, dollarEquivalent } = outputComponentViewModel;
+    const { inputSlug, value, error, token, hiddenPercentSelector, tokenInputDTI, dollarEquivalent } =
+      outputComponentViewModel;
 
     return (
       <TokenInput
@@ -42,6 +43,7 @@ export const StableTokenInput: FC<Props> = observer(
         onInputChange={onInputChange}
         balance={balance}
         error={error}
+        tokenInputDTI={tokenInputDTI}
         hiddenPercentSelector={hiddenPercentSelector}
       />
     );
