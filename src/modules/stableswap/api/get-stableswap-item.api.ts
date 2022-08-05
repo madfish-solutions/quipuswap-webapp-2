@@ -7,6 +7,8 @@ import { Nullable } from '@shared/types';
 import { StableswapItemResponse } from '../types';
 
 export const getStableswapItemApi = async (poolId: Nullable<BigNumber>) => {
+  // eslint-disable-next-line no-console
+  console.log('poolId', poolId);
   if (!poolId) {
     throw new NoPoolIdError();
   }

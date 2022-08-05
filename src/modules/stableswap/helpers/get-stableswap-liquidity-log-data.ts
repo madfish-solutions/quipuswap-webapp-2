@@ -3,14 +3,15 @@ import BigNumber from 'bignumber.js';
 import { ZERO_AMOUNT } from '@config/constants';
 import { getTokenSlug } from '@shared/helpers';
 
-import { StableswapItem, StableswapTokensInfo } from '../types';
+import { StableswapItemModel } from '../models';
+import { StableswapTokensInfo } from '../types';
 
 export const getStableswapLiquidityLogData = (
   tokensInfo: StableswapTokensInfo[],
   inputAmounts: Array<Nullable<BigNumber>>,
   shares: BigNumber,
   liquiditySlippage: BigNumber,
-  item: StableswapItem
+  item: StableswapItemModel
 ) => {
   const [token1Info, token2Info, token3Info, token4Info] = tokensInfo;
 

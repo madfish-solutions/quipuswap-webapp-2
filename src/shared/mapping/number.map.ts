@@ -1,6 +1,8 @@
+import { Undefined } from '@shared/types';
+
 import { checker } from '../model-builder';
 
-export const numberMapper = (arg: unknown, optional: boolean, nullable: boolean) => {
+export const numberMapper = (arg: unknown, optional: Undefined<boolean>, nullable: Undefined<boolean>) => {
   if (checker(arg, optional, nullable)) {
     return arg;
   }

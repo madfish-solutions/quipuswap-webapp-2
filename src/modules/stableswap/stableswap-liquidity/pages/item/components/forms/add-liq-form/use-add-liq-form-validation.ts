@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { StableswapItem } from '@modules/stableswap/types';
+import { StableswapItemModel } from '@modules/stableswap/models';
 import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
@@ -12,7 +12,7 @@ import { getInputSlugByIndex } from '../../../../../../helpers';
 
 export const useAddLiqFormValidation = (
   userBalance: Array<Nullable<BigNumber>>,
-  stableswapItem: Nullable<StableswapItem>,
+  stableswapItem: Nullable<StableswapItemModel>,
   isBalancedProportion: boolean
 ) => {
   const { t } = useTranslation();

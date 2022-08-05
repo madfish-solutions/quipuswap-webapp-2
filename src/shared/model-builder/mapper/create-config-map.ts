@@ -5,11 +5,11 @@ import { getMapperKind } from './get-mapper-kind';
 
 export const createConfigMap = (prototype: any) => {
   const mapperConfig: Record<any, any> = {};
-  const dtoFields = Reflect.getOwnMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, prototype);
+  const dtoFields = Reflect.getMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, prototype);
 
   for (const dtoField of dtoFields) {
     const type = dtoField.type ?? Reflect.getMetadata('design:type', prototype, dtoField.propertyKey);
-    const dtoFieldMetadata = Reflect.getOwnMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, type.prototype);
+    const dtoFieldMetadata = Reflect.getMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, type.prototype);
 
     mapperConfig[dtoField.propertyKey] = {
       isArray: dtoField.isArray,
