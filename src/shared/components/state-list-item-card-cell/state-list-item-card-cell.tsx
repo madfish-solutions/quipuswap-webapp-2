@@ -9,6 +9,7 @@ export interface StateListItemCardCellProps {
   cellNameClassName?: string;
   cardCellClassName?: string;
   amounts: StateCurrencyAmountProps;
+  DTI?: string;
   tooltip?: string;
 }
 
@@ -17,6 +18,7 @@ export const StateListItemCardCell: FC<StateListItemCardCellProps> = ({
   cellName,
   cardCellClassName = styles.cardCell,
   cellNameClassName = styles.cardCellHeader,
+  DTI,
   tooltip
 }) => (
   <ListItemCardCell
@@ -24,6 +26,7 @@ export const StateListItemCardCell: FC<StateListItemCardCellProps> = ({
     tooltip={tooltip}
     cellNameClassName={cellNameClassName}
     cardCellClassName={cardCellClassName}
+    data-test-id={DTI}
   >
     <StateCurrencyAmount {...amounts} />
   </ListItemCardCell>

@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
+import { MAINNET_QUIPU_TOKEN } from '../../const';
+
 describe('Send', () => {
   beforeEach(() => {
-    cy.visit('/swap');
+    cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
     cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="cardTab-1"]').click();
 });

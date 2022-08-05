@@ -7,17 +7,17 @@ import { isExist } from './type-checks';
 const ZERO = 0;
 
 export const operationAmountSchema = (
-  balance: Nullable<BigNumber>,
+  value: Nullable<BigNumber>,
   isZeroInclusive = false,
   maxDecimals?: Nullable<number>,
   decimalsOverflowError?: string
 ) => {
-  const baseSchema = balance
+  const baseSchema = value
     ? numberAsStringSchema(
         { value: ZERO, isInclusive: isZeroInclusive },
-        { value: balance, isInclusive: true },
+        { value, isInclusive: true },
         isZeroInclusive ? 'The value should be non-negative.' : 'The value should be greater than zero.',
-        `Max available value is ${balance.toNumber()}`
+        `Max available value is ${value.toNumber()}`
       )
     : numberAsStringSchema();
 
@@ -25,7 +25,7 @@ export const operationAmountSchema = (
     return baseSchema.test(
       'input-decimals-amount',
       () => decimalsOverflowError,
-      makeNumberAsStringTestFn(value => value.decimalPlaces() <= maxDecimals)
+      makeNumberAsStringTestFn(_value => _value.decimalPlaces() <= maxDecimals)
     );
   }
 

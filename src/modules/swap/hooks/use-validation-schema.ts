@@ -39,9 +39,9 @@ export const useValidationSchema = () => {
           inputTokenBalance,
           outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]
         );
-        const min = toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
+        const realMin = toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
-          return bigNumberSchema(min)
+          return bigNumberSchema(realMin)
             .test(
               'balance',
               () => t('common|Insufficient funds'),
@@ -52,10 +52,10 @@ export const useValidationSchema = () => {
         }
 
         return bigNumberSchema(
-          min,
+          realMin,
           max,
           max && isTezosToken(inputToken)
-            ? t('swap|valueOutOfRangeError', { min: min.toFixed(), max: max.toFixed() })
+            ? t('swap|valueOutOfRangeError', { min: realMin.toFixed(), max: max.toFixed() })
             : undefined
         )
           .test(

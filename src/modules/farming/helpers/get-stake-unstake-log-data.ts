@@ -13,7 +13,7 @@ export const getStakeUnstakeLogData = (
   isUnlocked: boolean
 ) => {
   const token = defined(farmingItem).stakedToken;
-  const inputAmountWithDecimals = toReal(balance, token);
+  const realTokenBalance = toReal(balance, token);
 
-  return { farming: { ...mapFarmingLog(farmingItem, inputAmountWithDecimals), timeout, isUnlocked } };
+  return { farming: { ...mapFarmingLog(farmingItem, realTokenBalance), timeout, isUnlocked } };
 };

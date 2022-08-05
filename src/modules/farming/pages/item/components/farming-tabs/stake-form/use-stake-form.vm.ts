@@ -41,8 +41,8 @@ export const useStakeFormViewModel = () => {
     if (isStakingAvailable) {
       const token = defined(farmingItem).stakedToken;
       // TODO: Move to model
-      const inputAmountWithDecimals = toAtomic(defined(inputAmount), token);
-      await doStake(defined(farmingItem), inputAmountWithDecimals, token, defined(selectedBaker));
+      const atomicInputAmount = toAtomic(defined(inputAmount), token);
+      await doStake(defined(farmingItem), atomicInputAmount, token, defined(selectedBaker));
     }
 
     formik.resetForm();

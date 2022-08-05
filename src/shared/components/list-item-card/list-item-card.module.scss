@@ -77,6 +77,13 @@
   }
 }
 
+.inlineIcons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+}
+
 @include media('>Lphone') {
   .statsContainer {
     flex-direction: row;

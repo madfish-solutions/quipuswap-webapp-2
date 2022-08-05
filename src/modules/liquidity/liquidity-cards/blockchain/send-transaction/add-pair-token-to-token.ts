@@ -21,13 +21,21 @@ export const addPairTokenToToken = async (
 
   const tokenABN = new BigNumber(tokenAInput);
   const tokenBBN = new BigNumber(tokenBInput);
-  const tokenAAmount = toAtomic(tokenABN, tokenA);
-  const tokenBAmount = toAtomic(tokenBBN, tokenB);
+  const atomicTokenAInputAmount = toAtomic(tokenABN, tokenA);
+  const atomicTokenBInputAmount = toAtomic(tokenBBN, tokenB);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
-    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
+    await getTokensResetAndUpdateOperators(
+      tezos,
+      tokenA,
+      tokenB,
+      dexAddress,
+      accountPkh,
+      atomicTokenAInputAmount,
+      atomicTokenBInputAmount
+    );
 
-  const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
+  const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, atomicTokenAInputAmount, atomicTokenBInputAmount);
 
   if (!validAddPairParams) {
     return;

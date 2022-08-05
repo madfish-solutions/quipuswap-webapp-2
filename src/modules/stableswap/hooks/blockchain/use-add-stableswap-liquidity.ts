@@ -51,14 +51,14 @@ export const useAddStableswapLiquidity = () => {
       const { contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
 
       const tokens = extractTokens(tokensInfo);
-      const amountsAtoms = inputAmounts.map((amount, index) =>
+      const atomicInputAmounts = inputAmounts.map((amount, index) =>
         isNull(amount) || amount.isNaN()
           ? new BigNumber('0')
           : toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
       );
 
-      const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-      const shares = await calculateShares(amountsAtoms);
+      const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
+      const shares = await calculateShares(atomicInputAmounts);
 
       const sharesWithFee = apllyStableswapFee(shares, [
         liquidityProvidersFee,

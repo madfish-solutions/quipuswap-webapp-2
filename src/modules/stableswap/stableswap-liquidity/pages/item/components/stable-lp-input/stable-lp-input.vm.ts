@@ -17,6 +17,8 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
 
   const { lpToken } = item;
 
+  const lpTokenInputDTI = 'lpTokenInput';
+
   const value = formik.values[LP_INPUT_KEY];
   const error = formik.errors[LP_INPUT_KEY];
   const hiddenPercentSelector = !Boolean(accountPkh);
@@ -27,6 +29,7 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
     value,
     error,
     lpToken,
+    lpTokenInputDTI,
     dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
     hiddenPercentSelector
   };

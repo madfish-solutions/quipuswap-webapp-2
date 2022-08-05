@@ -9,6 +9,7 @@ import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button } from '@shared/components';
 import { Checkbox } from '@shared/elements';
 import { NoTempleWallet } from '@shared/errors';
+import { useMobileDetect } from '@shared/hooks';
 import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
@@ -16,12 +17,15 @@ import { useTranslation } from '@translation';
 import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
+import { TempleWalletButton } from './temple-wallet-button';
 import { WalletButton } from './wallet-button';
 import styles from './wallet-modal.module.scss';
 
 export const WalletModal: FC = () => {
+  const { isMobile } = useMobileDetect();
   const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
+
   const [isTermsAccepted, setIsTermsAccepted] = useState(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useGlobalModalsState();
@@ -131,7 +135,7 @@ export const WalletModal: FC = () => {
         </div>
       </div>
       <div className={styles.wallets}>
-        <WalletButton
+        <TempleWalletButton
           available={isTempleInstalled}
           id={Temple.id}
           Icon={Temple.Icon}
@@ -140,8 +144,8 @@ export const WalletModal: FC = () => {
               Temple.label
             ) : (
               <>
-                Install Temple
-                <br /> Extension
+                {Temple.label}
+                <br /> extension
               </>
             )
           }
@@ -152,7 +156,7 @@ export const WalletModal: FC = () => {
         <WalletButton
           id={Beacon.id}
           Icon={Beacon.Icon}
-          label={Beacon.label}
+          label={isMobile ? t('common|chooseYourWallet') : Beacon.label}
           onClick={handleConnectClick}
           disabled={!isTermsAccepted}
           available={true}

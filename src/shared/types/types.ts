@@ -232,3 +232,8 @@ export interface AmountToken {
   token: Token;
   amount: BigNumber;
 }
+
+export interface Constructable<T extends object = object> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new (...args: any): T;
+}

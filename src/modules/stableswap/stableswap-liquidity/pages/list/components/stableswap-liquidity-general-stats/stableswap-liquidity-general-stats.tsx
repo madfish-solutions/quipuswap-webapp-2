@@ -17,6 +17,7 @@ export const StableswapLiquidityGeneralStats: FC = observer(() => {
       cards={[<Tvl amount={tvl} />]}
       contentClassName={styles.cardContent}
       className={styles.dashboardStatsInfoMB}
+      DTI="SSLDashboardStatsInfo"
     />
   );
 });

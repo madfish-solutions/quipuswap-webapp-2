@@ -30,14 +30,17 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputBN = new BigNumber(tokenAOutput);
   const tokenBOutputBN = new BigNumber(tokenBOutput);
 
-  const shares = toAtomic(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
-  const aTokenAtom = toAtomic(tokenAOutputBN, tokenA);
-  const bTokenAtom = toAtomic(tokenBOutputBN, tokenB);
+  // TODO: atomicLPTokenShares - is Shares neccessary?
+  const atomicLPTokenShares = toAtomic(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+  const atomicTokenAOutput = toAtomic(tokenAOutputBN, tokenA);
+  const atomicTokenBOutput = toAtomic(tokenBOutputBN, tokenB);
 
-  const withSlippageA = decreaseBySlippage(aTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withSlippageB = decreaseBySlippage(bTokenAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageA = decreaseBySlippage(atomicTokenAOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(atomicTokenBOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 
-  return dex.contract.methods.divest(id, orderedAmountA, orderedAmountB, shares, transactionDeadline).send();
+  return dex.contract.methods
+    .divest(id, orderedAmountA, orderedAmountB, atomicLPTokenShares, transactionDeadline)
+    .send();
 };

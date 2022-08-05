@@ -24,8 +24,8 @@ export const createAmountsMichelsonMapFormikValues = (
         amount = '0';
       }
 
-      const fixedAmount = toAtomic(new BigNumber(amount), tokens[inputIndex]);
-      map.set(new BigNumber(inputIndex), fixedAmount);
+      const atomicInputAmount = toAtomic(new BigNumber(amount), tokens[inputIndex]);
+      map.set(new BigNumber(inputIndex), atomicInputAmount);
     }
   });
 
