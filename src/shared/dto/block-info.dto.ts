@@ -1,8 +1,6 @@
 import { Typed } from '@shared/decorators';
 
-import { BlockInfo } from '../types';
-
-export class BlockInfoDto implements BlockInfo {
+export class BlockInfoDto {
   @Typed()
   level: number;
 
@@ -10,5 +8,5 @@ export class BlockInfoDto implements BlockInfo {
   hash: string;
 
   @Typed()
-  timestamp: string;
+  timestamp: string; //should be Date?
 }
