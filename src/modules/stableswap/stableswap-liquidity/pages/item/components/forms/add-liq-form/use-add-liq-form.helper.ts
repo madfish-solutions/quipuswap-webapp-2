@@ -10,8 +10,8 @@ export const useAddLiqFormHelper = (formik: IFormik) => {
   const label = t('common|Input');
   const tooltip = t('stableswap|coinsBalancedProportion');
   const isSubmitting = formik.isSubmitting;
-  const isZeroInputsError = useZeroInputsError();
-  const shouldShowZeroInputsAlert = isZeroInputsError && !isEmptyArray(Object.entries(formik.touched));
+  const { isZeroInputsError } = useZeroInputsError();
+  const shouldShowZeroInputsAlert = isZeroInputsError(formik.values) && !isEmptyArray(Object.entries(formik.touched));
 
   const disabled = shouldShowZeroInputsAlert || isSubmitting || hasFormikError(formik.errors);
 

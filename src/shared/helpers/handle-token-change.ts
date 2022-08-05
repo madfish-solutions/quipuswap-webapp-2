@@ -6,7 +6,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { getUserBalance } from '@shared/api/get-user-balance';
 import { Nullable, TokenDataMap, Token } from '@shared/types';
 
-import { fromDecimals } from './bignumber';
+import { toReal } from './bignumber';
 
 export enum TokenNumber {
   FIRST = 'first',
@@ -31,12 +31,13 @@ export const handleTokenChange = async ({
   setTokensData
 }: // eslint-disable-next-line sonarjs/cognitive-complexity
 TokenChangeType) => {
-  let finalBalance: Nullable<string> = null;
+  let realBalance: Nullable<string> = null;
+
   if (tezos && accountPkh) {
     try {
       const balance = await getUserBalance(tezos, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
       if (balance) {
-        finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
+        realBalance = toReal(balance, token.metadata.decimals).toString();
       }
     } catch (e) {
       // eslint-disable-next-line
@@ -54,7 +55,7 @@ TokenChangeType) => {
           id: token.fa2TokenId,
           decimals: token.metadata.decimals
         },
-        balance: finalBalance,
+        balance: realBalance,
         exchangeRate: tokenExchangeRate?.exchangeRate ?? null
       }
     };

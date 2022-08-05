@@ -1,13 +1,13 @@
 import { useCallback, useEffect } from 'react';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
-import { fromDecimals, isNull } from '@shared/helpers';
+import { toReal, isNull } from '@shared/helpers';
 import { useAuthStore, useOnBlock } from '@shared/hooks';
 
 import { useStableDividendsItemStore } from '../../hooks';
 
-export const useStableDividendsStakerBalance = () => {
+export const useRealStableDividendsStakerBalance = () => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
   const stableDividendsItemStore = useStableDividendsItemStore();
@@ -28,5 +28,5 @@ export const useStableDividendsStakerBalance = () => {
 
   useOnBlock(tezos, updateStakerBalance);
 
-  return userInfo ? fromDecimals(userInfo.yourDeposit, DEFAULT_TOKEN) : null;
+  return userInfo ? toReal(userInfo.yourDeposit, QUIPU_TOKEN) : null;
 };

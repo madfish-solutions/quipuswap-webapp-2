@@ -11,6 +11,7 @@ interface Stats {
   title: string;
   amount: Optional<BigNumber>;
   tooltip: string;
+  currency?: Nullable<string>;
 }
 interface Props {
   slidesToShow?: number;
@@ -23,8 +24,8 @@ export const ListStats: FC<Props> = ({ stats, slidesToShow = DEFAULT_SLIDES_TO_S
   return (
     <div className={styles.listStats} data-test-id="farmingListStats">
       <Slider slidesToShow={slidesToShow}>
-        {stats.map(({ title, amount, tooltip }) => (
-          <TopStats title={title} amount={amount} key={title} tooltip={tooltip} />
+        {stats.map(({ title, amount, tooltip, currency }) => (
+          <TopStats title={title} amount={amount} currency={currency} key={title} tooltip={tooltip} />
         ))}
       </Slider>
     </div>

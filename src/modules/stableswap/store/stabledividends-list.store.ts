@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { computed, makeObservable } from 'mobx';
 
-import { fromDecimals, isEmptyArray } from '@shared/helpers';
+import { toReal, isEmptyArray } from '@shared/helpers';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getStableDividendsListApi, getStableDividendsStatsApi, getStakerInfo } from '../api';
@@ -63,8 +63,8 @@ export class StableDividendsListStore {
       yourReward?.forEach((value, tokenIndex) => {
         const { token, exchangeRate } = tokensInfo[tokenIndex.toNumber()];
 
-        const tokenValue = fromDecimals(value, token);
-        yourEarnedInUsd = yourEarnedInUsd.plus(tokenValue.multipliedBy(exchangeRate));
+        const realTokenReward = toReal(value, token);
+        yourEarnedInUsd = yourEarnedInUsd.plus(realTokenReward.multipliedBy(exchangeRate));
       });
 
       return {

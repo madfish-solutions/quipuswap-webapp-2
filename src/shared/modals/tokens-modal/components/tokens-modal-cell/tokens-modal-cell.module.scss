@@ -5,6 +5,7 @@
 .tokensModalCell {
   height: 64px;
   padding: 0 24px;
+  cursor: pointer;
 
   display: flex;
   align-items: center;
@@ -33,7 +34,6 @@
   display: flex;
   align-items: center;
   column-gap: 16px;
-  cursor: pointer;
 }
 
 .tokenSymbol,
@@ -41,9 +41,34 @@
   max-width: 200px;
 }
 
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @include media(">tablet") {
   .tokenSymbol,
   .tokenName {
     max-width: 300px;
   }
+}
+
+@mixin tokens-modal($highlight-background-color) {
+  &:hover {
+    background: $highlight-background-color;
+  }
+  &.active {
+    background: $highlight-background-color;
+  }
+  &.disabled:hover {
+    background: none;
+  }
+}
+
+.light {
+  @include tokens-modal($hover-light-row);
+}
+
+.dark {
+  @include tokens-modal($hover-dark-row);
 }

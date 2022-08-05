@@ -6,11 +6,11 @@ import cx from 'classnames';
 
 import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
 import { RPC_URL } from '@config/enviroment';
-import { MAINNET_DEFAULT_TOKEN } from '@config/tokens';
+import { MAINNET_QUIPU_TOKEN } from '@config/tokens';
 import { Card } from '@shared/components/card';
 import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
-import { fromDecimals } from '@shared/helpers';
+import { toReal } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { Section } from '../section';
@@ -21,16 +21,16 @@ const ZERO = 0;
 
 export const DexDashboard: FC = () => {
   const { t } = useTranslation(['home']);
-  const [totalSupply, setTotalSupply] = useState<BigNumber>();
+  const [realTotalSupply, setRealTotalSupply] = useState<BigNumber>();
 
   useEffect(() => {
     const asyncLoad = async () => {
       // TODO: change after deploy token to testnet
       const tezos = new TezosToolkit(RPC_URL);
-      const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
+      const contract = await getStorageInfo(tezos, MAINNET_QUIPU_TOKEN.contractAddress);
       // @ts-ignore
       const rawTotalSupply = await contract?.token_info.get(ZERO);
-      setTotalSupply(fromDecimals(rawTotalSupply, MAINNET_DEFAULT_TOKEN));
+      setRealTotalSupply(toReal(rawTotalSupply, MAINNET_QUIPU_TOKEN));
     };
     void asyncLoad();
   }, []);
@@ -43,7 +43,7 @@ export const DexDashboard: FC = () => {
       totalLiquidity={null}
       xtzUsdQuote={null}
       transactionsCount24h={null}
-      totalSupply={totalSupply}
+      totalSupply={realTotalSupply}
       loading={false}
     />
   );

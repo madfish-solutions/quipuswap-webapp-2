@@ -3,8 +3,8 @@ import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { fromDecimals, isExist, isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
-import { balanceMap, noopMap } from '@shared/mapping';
+import { toReal, isExist, isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
+import { realBalanceMap, noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
@@ -28,7 +28,7 @@ export class FarmingItemStore {
   readonly availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
-    balance => balanceMap(balance, this.itemStore.data?.stakedToken)
+    balance => realBalanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
   readonly userInfoStore = new LoadingErrorData<Nullable<RawUsersInfoValue>, Nullable<UsersInfoValue>>(
@@ -80,8 +80,8 @@ export class FarmingItemStore {
     return (
       stakeItem && {
         ...stakeItem,
-        depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
-        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
+        depositBalance: userInfo && toReal(userInfo.staked, stakeItem.stakedToken),
+        earnBalance: this.pendingRewards && toReal(this.pendingRewards, stakeItem.rewardToken)
       }
     );
   }

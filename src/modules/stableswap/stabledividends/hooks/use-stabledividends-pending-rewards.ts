@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { fromDecimals, isNull } from '@shared/helpers';
+import { toReal, isNull } from '@shared/helpers';
 
 import { useStableDividendsItemStore } from '../../hooks';
 import { StableDividendsRewardDetailsParams } from '../components/stabledividends-reward-details/types';
@@ -21,11 +21,11 @@ export const useStableDividendsPendingRewards = () => {
       if (value.isGreaterThan('0')) {
         const tokenInfo = tokensInfo[key.toNumber()];
         const { token, exchangeRate } = tokenInfo;
-        const amount = fromDecimals(value, token);
+        const realRewardAmount = toReal(value, token);
         helperArray.push({
           claimable: {
-            amount,
-            dollarEquivalent: amount.multipliedBy(exchangeRate)
+            amount: realRewardAmount,
+            dollarEquivalent: realRewardAmount.multipliedBy(exchangeRate)
           },
           token
         });

@@ -3,10 +3,10 @@ import { useCallback, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
-import { DEFAULT_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
+import { QUIPU_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
-import { bigNumberToString, fromDecimals, isNull } from '@shared/helpers';
+import { bigNumberToString, toReal, isNull } from '@shared/helpers';
 import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
@@ -15,12 +15,12 @@ import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../.
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
-  bank: bank ? bigNumberToString(fromDecimals(bank, COINFLIP_TOKEN_DECIMALS)) : null,
+  bank: bank ? bigNumberToString(toReal(bank, COINFLIP_TOKEN_DECIMALS)) : null,
   gamesCount: gamesCount ? bigNumberToString(gamesCount) : null,
   payoutCoefficient: payoutCoefficient
-    ? bigNumberToString(fromDecimals(payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
+    ? bigNumberToString(toReal(payoutCoefficient, COINFLIP_CONTRACT_DECIMALS))
     : null,
-  totalWins: totalWins ? fromDecimals(totalWins, token) : null
+  totalWins: totalWins ? toReal(totalWins, token) : null
 });
 
 export const useCoinflipDetailsViewModel = () => {
@@ -73,20 +73,20 @@ export const useCoinflipDetailsViewModel = () => {
   );
   const bankBN = new BigNumber(bank ?? '0');
   const bankInUsd = bankBN.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const bidSize = userLastGame?.bidSize && fromDecimals(userLastGame.bidSize, tokenInstance);
-  const bidSizeInUsd = accountPkh && bidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
+  const realBidSize = userLastGame?.bidSize && toReal(userLastGame.bidSize, tokenInstance);
+  const bidSizeInUsd = accountPkh && realBidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const totalWinsInUsd = totalWins?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const rewardSize = bidSize?.multipliedBy(payoutCoefficient ?? '0');
+  const rewardSize = realBidSize?.multipliedBy(payoutCoefficient ?? '0');
   const rewardSizeInUsd = accountPkh && rewardSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const gameResult = getGameResult(userLastGame?.status);
   const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
   const shouldHideData = isNull(accountPkh);
   const preparedBidSize =
-    Math.floor(Number(contractBidSize) * DEFAULT_TOKEN_DECIMALS_PRECISION) / DEFAULT_TOKEN_DECIMALS_PRECISION;
+    Math.floor(Number(contractBidSize) * QUIPU_TOKEN_DECIMALS_PRECISION) / QUIPU_TOKEN_DECIMALS_PRECISION;
 
   return {
     bank,
-    bidSize,
+    bidSize: realBidSize,
     preparedBidSize,
     totalWins,
     bankInUsd,

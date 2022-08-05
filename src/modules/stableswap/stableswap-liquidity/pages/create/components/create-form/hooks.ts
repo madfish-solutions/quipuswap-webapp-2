@@ -16,19 +16,22 @@ import {
   isEmptyArray
 } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
-import { numberAsStringSchema, NumberAsStringSchema } from '@shared/validators';
+import { NumberAsStringSchema } from '@shared/validators';
 import { i18n } from '@translation';
 
 import {
-  LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
+  LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
   AMPLIFICATION_FIELD_NAME,
   createPoolAmplification,
-  UPPER_LIQUIDITY_PRODIFDERS_FEE,
-  LOWER_LIQUIDITY_PRODIFDERS_FEE,
+  UPPER_LIQUIDITY_PROVIDERS_FEE,
   TOKEN_KEY,
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
+import { setCaretPosition } from './positions.helper';
+
+const MAX_DECIMALS_AMOUNT = 10;
+const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PROVIDERS_FEE.value);
 
 export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<Nullable<BigNumber>>) => {
   const validationSchema = useMemo(() => {
@@ -55,8 +58,13 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
     ]);
 
     const liquidityProvidersFee = [
-      LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME,
-      numberAsStringSchema(LOWER_LIQUIDITY_PRODIFDERS_FEE, UPPER_LIQUIDITY_PRODIFDERS_FEE).required('Value is required')
+      LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
+      operationAmountSchema(
+        MAX_REAL_VALUE_AMOUNT,
+        true,
+        MAX_DECIMALS_AMOUNT,
+        i18n.t('stableswap|noMoreDecimals', { decimalsAmount: MAX_DECIMALS_AMOUNT })
+      ).required('Value is required')
     ];
 
     const tokensSchema = [
@@ -85,7 +93,7 @@ export const useFormikParams = (tokens: Nullable<Array<Token>>, balances: Array<
     return Object.fromEntries([
       ...tokensInputs,
       [AMPLIFICATION_FIELD_NAME, getFirstElement(createPoolAmplification).value],
-      [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, ''],
+      [LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, ''],
       [TOKEN_KEY, false]
     ]);
   }, [tokens]);
@@ -109,6 +117,7 @@ export const useInputTokenParams = (
           error: getFormikError(formik, tokenSlug),
           value: formik.values[tokenSlug] ?? '',
           label: i18n.t('common|Input'),
+          decimals: token.metadata.decimals,
           onInputChange: (value: string) => {
             formik.setFieldValue(tokenSlug, value);
           }
@@ -123,17 +132,22 @@ export const useInputTokenParams = (
 export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof useFormik>) => {
   const liquidityProvidersFeeInputParams: InputProps = useMemo(
     () => ({
-      label: i18n.t('stableswap|liquidityProvidersFee'),
-      error: getFormikError(formik, LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME),
-      value: isEmptyString(formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME])
-        ? formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
-        : `${formik.values[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]}${PERCENT}`,
+      id: 'input-fee-field',
+      label: `${i18n.t('stableswap|liquidityProvidersFee')} (0–1%)`,
+      error: getFormikError(formik, LIQUIDITY_PROVIDERS_FEE_FIELD_NAME),
+      value: isEmptyString(formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
+        ? formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]
+        : `${formik.values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]}${PERCENT}`,
       onChange: (event: FormEvent<HTMLInputElement>) => {
         if (isNull(event)) {
           return;
         }
+        const input = document.getElementById('input-fee-field');
         const value = (event.target as HTMLInputElement).value.replace(PERCENT, '');
-        formik.setFieldValue(LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME, value);
+
+        setCaretPosition(input as HTMLInputElement);
+
+        formik.setFieldValue(LIQUIDITY_PROVIDERS_FEE_FIELD_NAME, value);
       }
     }),
     [formik]
@@ -145,9 +159,7 @@ export const useLiquidityProvidersFeeInputParams = (formik: ReturnType<typeof us
 export const useRadioButtonParams = (formik: ReturnType<typeof useFormik>) => {
   const radioButtonParams: RadioButtonProps = useMemo(
     () => ({
-      onChange: (value: string) => {
-        formik.setFieldValue(AMPLIFICATION_FIELD_NAME, value);
-      },
+      onChange: async (value: string) => formik.setFieldValue(AMPLIFICATION_FIELD_NAME, value),
       value: formik.values[AMPLIFICATION_FIELD_NAME],
       values: createPoolAmplification
     }),
@@ -157,13 +169,13 @@ export const useRadioButtonParams = (formik: ReturnType<typeof useFormik>) => {
   return { radioButtonParams };
 };
 
-export const useHandleTokensCahange = (formik: ReturnType<typeof useFormik>) => {
+export const useHandleTokensChange = (formik: ReturnType<typeof useFormik>) => {
   const handleTokensChange = useCallback(
     (chosenTokens: Nullable<Array<Token>>) => {
       formik.setValues((prev: Record<string, string>) => {
         const mainValues = {
           [AMPLIFICATION_FIELD_NAME]: prev[AMPLIFICATION_FIELD_NAME],
-          [LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]: prev[LIQUIDITY_PRODIFDERS_FEE_FIELD_NAME]
+          [LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]: prev[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]
         };
 
         if (chosenTokens && !isEmptyArray(chosenTokens)) {

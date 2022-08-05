@@ -2,7 +2,7 @@ import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { isEmptyString, toDecimals } from '@shared/helpers';
+import { isEmptyString, toAtomic } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getIndexByInputSlug } from './get-input-slug-by-index';
@@ -24,8 +24,8 @@ export const createAmountsMichelsonMapFormikValues = (
         amount = '0';
       }
 
-      const fixedAmount = toDecimals(new BigNumber(amount), tokens[inputIndex]);
-      map.set(new BigNumber(inputIndex), fixedAmount);
+      const atomicInputAmount = toAtomic(new BigNumber(amount), tokens[inputIndex]);
+      map.set(new BigNumber(inputIndex), atomicInputAmount);
     }
   });
 

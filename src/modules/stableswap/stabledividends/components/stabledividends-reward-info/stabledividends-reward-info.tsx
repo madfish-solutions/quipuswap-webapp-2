@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR } from '@config/constants';
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
@@ -49,7 +49,7 @@ export const StableDividendsRewardInfo = observer(() => {
         <StateCurrencyAmount
           amount={shares}
           className={styles.statsValueText}
-          currency={getTokenSymbol(DEFAULT_TOKEN)}
+          currency={getTokenSymbol(QUIPU_TOKEN)}
           dollarEquivalent={sharesDollarEquivalent}
           labelSize="large"
         />
