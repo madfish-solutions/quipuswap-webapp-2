@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { CONTRACT_DECIMALS_PRECISION_POWER } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
 import {
@@ -11,12 +10,14 @@ import {
   isEmptyArray,
   isExist,
   isTokenEqual,
+  prepareNumberAsString,
+  sortTokens,
   stringToBigNumber,
   toAtomic,
   toPercent
 } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
-//TODO: fix circlar dependencies
+//TODO: fix circular dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Token } from '@shared/types';
 
@@ -35,6 +36,7 @@ import {
   useLiquidityProvidersFeeInputParams,
   useRadioButtonParams
 } from './hooks';
+import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 
 export const useCreateFormViewModel = () => {
   const { creationPrice } = usePoolCreationPrice();
@@ -65,22 +67,19 @@ export const useCreateFormViewModel = () => {
 
           return {
             reserves: toAtomic(stringToBigNumber(value), decimals),
-            precisionMultiplierF: new BigNumber(10).pow(
-              new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals)
-            ),
-            rateF: new BigNumber(10)
-              .pow(new BigNumber(CONTRACT_DECIMALS_PRECISION_POWER).minus(decimals))
-              .multipliedBy(CONTRACT_DECIMALS_PRECISION_POWER),
+            precisionMultiplierF: getPrecisionMultiplier(decimals),
+            rateF: getPrecisionRate(decimals),
             token
           };
         })
-        .filter(isExist);
+        .filter(isExist)
+        .sort((a, b) => sortTokens(a.token, b.token));
 
       try {
         await createStableswapPool({
           amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
           fee: {
-            liquidityProvidersFee: toPercent(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME])
+            liquidityProvidersFee: toPercent(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
           },
           creationParams,
           creationPrice

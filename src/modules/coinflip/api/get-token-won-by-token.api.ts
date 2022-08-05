@@ -19,7 +19,7 @@ export const getTokenWonByTokenApi = async (tezos: Nullable<TezosToolkit>, accou
   const tokenAsset = getCoinflipAssetId(token);
 
   const stats = await coinFlipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
-  const amount = stats ? toReal(stats.total_won_amt, token) : null;
+  const realTotalWonAmount = stats ? toReal(stats.total_won_amt, token) : null;
 
-  return { token, amount };
+  return { token, amount: realTotalWonAmount };
 };

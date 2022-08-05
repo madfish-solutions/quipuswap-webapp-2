@@ -3,8 +3,10 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { isDev } from '@shared/helpers';
+import { NotFound } from '@shared/svg';
 
-import { StableswapLiquidityListFilter, StableswapLiquidityGeneralStats, PoolCreation } from './components';
+import { PoolCreation, StableswapLiquidityGeneralStats, StableswapLiquidityListFilter } from './components';
 import styles from './stableswap-liquidity-list.page.module.scss';
 import { useStableswapLiquidityPageViewModel } from './use-stableswap-liquidity-list.page.vm';
 
@@ -14,13 +16,19 @@ export const StableswapLiquidityListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="SSLPageTitle">{title}</PageTitle>
       <StableswapLiquidityGeneralStats />
       <StableswapLiquidityListFilter />
-      <StateWrapper isLoading={isLoading} loaderFallback={<></>}>
-        <Iterator render={ListItemCard} data={list} wrapperClassName={styles.list} isGrouped />
+      <StateWrapper isLoading={isLoading} loaderFallback={<NotFound />}>
+        <Iterator
+          render={ListItemCard}
+          data={list}
+          wrapperClassName={styles.list}
+          isGrouped
+          DTI="stableliquidityList"
+        />
       </StateWrapper>
-      <PoolCreation />
+      {isDev() ? <PoolCreation /> : null}
     </>
   );
 });

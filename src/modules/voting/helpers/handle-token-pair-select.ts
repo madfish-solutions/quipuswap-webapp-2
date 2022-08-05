@@ -46,9 +46,9 @@ export const handleTokenPairSelect = async (
 
     if (accountPkh) {
       const res = await estimateReward(tezos, foundDex, accountPkh);
-      const rewards = toReal(res, TEZOS_TOKEN.metadata.decimals).toString();
+      const realRewards = toReal(res, TEZOS_TOKEN.metadata.decimals).toString();
 
-      result.rewards = rewards;
+      result.rewards = realRewards;
 
       const voter = await foundDex.storage.storage.voters.get(accountPkh);
 
@@ -67,13 +67,13 @@ export const handleTokenPairSelect = async (
       }
 
       const share = await getLiquidityShare(tezos, foundDex, accountPkh);
-      const frozenBalance = toReal(share.frozen, LP_TOKEN_DECIMALS).toString();
-      const totalBalance = toReal(share.total, LP_TOKEN_DECIMALS).toString();
+      const realFrozenBalance = toReal(share.frozen, LP_TOKEN_DECIMALS).toString();
+      const realTotalBalance = toReal(share.total, LP_TOKEN_DECIMALS).toString();
 
       result.tokenPair = {
         ...pair,
-        frozenBalance,
-        balance: totalBalance,
+        frozenBalance: realFrozenBalance,
+        balance: realTotalBalance,
         dex: foundDex
       };
     } else {

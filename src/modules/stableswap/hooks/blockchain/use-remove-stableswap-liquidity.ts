@@ -56,12 +56,12 @@ export const useRemoveStableswapLiquidity = () => {
       const tokens = tokensInfo.map(({ token }) => token);
       const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
-      const amountsAtoms = inputAmounts.map((amount, index) =>
+      const atomicInputAmounts = inputAmounts.map((amount, index) =>
         toAtomic(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)
       );
 
-      const tokensAndAmounts = tokensAndAmountsMapper(tokens, amountsAtoms);
-      const sharesAmountAtom = toAtomic(shares, lpToken);
+      const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
+      const atomicShares = toAtomic(shares, lpToken);
 
       const message = t('stableswap|successfullyRemoved');
       const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
@@ -88,7 +88,7 @@ export const useRemoveStableswapLiquidity = () => {
               tezos,
               contractAddress,
               decreasedTokensAndAmounts,
-              sharesAmountAtom,
+              atomicShares,
               deadline,
               accountPkh
             )
@@ -96,7 +96,7 @@ export const useRemoveStableswapLiquidity = () => {
               tezos,
               contractAddress,
               decreasedTokensAndAmounts,
-              sharesAmountAtom,
+              atomicShares,
               deadline,
               accountPkh
             );

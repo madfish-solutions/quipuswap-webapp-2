@@ -2,9 +2,9 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
 
+import { StableswapItemModel } from '../models';
 import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers';
 import { StableswapSortField } from '../stableswap-liquidity/pages/list/types';
-import { StableswapItem } from '../types';
 
 export class StableswapFilterStore extends BaseFilterStore {
   whitelistedOnly = true;
@@ -22,7 +22,7 @@ export class StableswapFilterStore extends BaseFilterStore {
     });
   }
 
-  filterAndSort(list: Array<StableswapItem>) {
+  filterAndSort(list: Array<StableswapItemModel>) {
     let localList = [...list];
     if (this.whitelistedOnly) {
       localList = localList.filter(({ isWhitelisted }) => isWhitelisted);

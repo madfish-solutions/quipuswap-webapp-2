@@ -12,11 +12,11 @@ interface WalletProps {
 export const Temple: WalletProps = {
   id: WalletType.TEMPLE,
   Icon: TempleIcon,
-  label: 'Temple Wallet'
+  label: 'Temple wallet'
 };
 
 export const Beacon: WalletProps = {
   id: WalletType.BEACON,
   Icon: BeaconIcon,
-  label: 'Beacon'
+  label: 'Other wallets'
 };

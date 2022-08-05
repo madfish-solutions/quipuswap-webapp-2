@@ -21,19 +21,19 @@ export const getVotingInfo = (dex: Nullable<FoundDex>): VotingInfo => {
     };
   }
 
-  const totalVotes = toReal(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
+  const realTotalVotes = toReal(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
 
-  const totalVeto = toReal(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
+  const realTotalVeto = toReal(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
 
-  const votesToVetoBN = toReal(
+  const realVotesToVetoBN = toReal(
     dex.storage.storage.total_votes.dividedToIntegerBy(3).minus(dex.storage.storage.veto),
     TEZOS_TOKEN.metadata.decimals
   );
-  const votesToVeto = BigNumber.maximum(votesToVetoBN, ZERO).toFixed();
+  const votesToVeto = BigNumber.maximum(realVotesToVetoBN, ZERO).toFixed();
 
   return {
-    totalVotes,
-    totalVeto,
+    totalVotes: realTotalVotes,
+    totalVeto: realTotalVeto,
     votesToVeto
   };
 };

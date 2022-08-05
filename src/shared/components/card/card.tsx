@@ -1,9 +1,9 @@
-import { FC, HTMLProps, ReactNode, useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext, useLayoutEffect, useRef } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { StatusLabel } from '@shared/components/status-label';
+import { LabelComponent } from '@shared/components/label-component';
 import { ActiveStatus } from '@shared/types';
 
 import styles from './card.module.scss';
@@ -22,6 +22,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     status?: ActiveStatus;
     className?: string;
   };
+  banner?: string;
   additional?: ReactNode;
   footer?: ReactNode;
   contentClassName?: string;
@@ -43,24 +44,35 @@ export const Card: FC<Props> = ({
   children,
   isV2 = false,
   contentClassName,
+  banner,
   footerClassName,
   ...props
 }) => {
+  const container = useRef<HTMLDivElement>(null);
+
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const rootClassName = cx(styles.root, { [styles.banner]: banner }, modeClass[colorThemeMode], className);
+
+  useLayoutEffect(() => {
+    container.current?.style.setProperty('--banner', JSON.stringify(`${banner}`));
+  }, [banner]);
+
   if (isV2) {
-    return <div className={cx(styles.root, modeClass[colorThemeMode], className)}>{children}</div>;
+    return (
+      <div ref={container} className={rootClassName}>
+        {children}
+      </div>
+    );
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
+    <div ref={container} className={rootClassName} {...props}>
       {header && (
         <div className={cx(styles.header, header.className)}>
           <span data-test-id="headerContent">{header.content}</span>
-          <span data-test-id="statusLabelCard">
-            <span data-test-id="statusLabel">
-              {header.status ? <StatusLabel filled status={header.status} /> : null}
-            </span>
+          <span data-test-id="labelCard">
+            <span data-test-id="label">{header.status ? <LabelComponent filled status={header.status} /> : null}</span>
           </span>
           {header.button}
         </div>
@@ -68,9 +80,9 @@ export const Card: FC<Props> = ({
       {subheader && (
         <div className={cx(styles.header, subheader.className)}>
           <span data-test-id="headerContent">{subheader.content}</span>
-          <span data-test-id="statusLabelCard">
-            <span data-test-id="statusLabel">
-              {subheader.status ? <StatusLabel filled status={subheader.status} /> : null}
+          <span data-test-id="labelCard">
+            <span data-test-id="label">
+              {subheader.status ? <LabelComponent filled status={subheader.status} /> : null}
             </span>
           </span>
           {subheader.button}

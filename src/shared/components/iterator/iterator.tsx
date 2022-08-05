@@ -10,6 +10,7 @@ interface IteratorProps<T> {
   separator?: ReactElement;
   isGrouped?: boolean;
   wrapperClassName?: string;
+  DTI?: string;
   keyFn?: (item: T) => Undefined<string | number>;
 }
 
@@ -22,7 +23,8 @@ export const Iterator: IteratorComponent = ({
   fallback,
   separator,
   isGrouped,
-  wrapperClassName
+  wrapperClassName,
+  DTI
 }) => {
   if (isExist(fallback) && isEmptyArray(data)) {
     return fallback;
@@ -43,5 +45,15 @@ export const Iterator: IteratorComponent = ({
     );
   });
 
-  return <Fragment>{isGrouped ? <div className={wrapperClassName}>{content}</div> : content}</Fragment>;
+  return (
+    <Fragment>
+      {isGrouped ? (
+        <div className={wrapperClassName} data-test-id={DTI}>
+          {content}
+        </div>
+      ) : (
+        content
+      )}
+    </Fragment>
+  );
 };
