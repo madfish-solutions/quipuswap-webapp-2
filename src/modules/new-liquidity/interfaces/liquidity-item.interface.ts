@@ -7,8 +7,12 @@ import { Opportunity } from './opportunities.interface';
 
 export interface LiquidityItem {
   id: BigNumber;
-  tvl: BigNumber;
+  type: string;
+  tvlInUsd: BigNumber;
+  apr: Nullable<number>;
   totalSupply: BigNumber;
+  maxApr: Nullable<number>;
+  poolLabels: Array<string>;
   tokensInfo: Array<LiquidityTokenInfo>;
   opportunities?: Array<Opportunity>;
 }

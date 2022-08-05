@@ -5,7 +5,5 @@ import { LiquidityItemWrap } from '../interfaces';
 export const getNewLiquidityListApi = async (): Promise<{ list: Array<LiquidityItemWrap> }> => {
   const response = await fetch(LIQUIDITY_LIST_API_URL);
 
-  const list = (await response.json()) as Array<LiquidityItemWrap>;
-
-  return { list };
+  return (await response.json()) as { list: Array<LiquidityItemWrap> };
 };
