@@ -12,19 +12,22 @@ export const Typography: FC<Props> = ({ label }) => (
     <h4>{label ? label : 'Typography H4'}</h4>
     <h5>{label ? label : 'Typography H5'}</h5>
     <h6>{label ? label : 'Typography H6'}</h6>
-    <p>Paragraph</p>
+    <p>{label ? label : 'Paragraph'}</p>
+    <hr />
     <ul>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
+      <li>{label ? label : 'List item 1'}</li>
+      <li>{label ? label : 'List item 2'}</li>
+      <li>{label ? label : 'List item 3'}</li>
+      <li>{label ? label : 'List item 4'}</li>
     </ul>
+    <hr />
     <ol>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
+      <li>{label ? label : 'List item 1'}</li>
+      <li>{label ? label : 'List item 2'}</li>
+      <li>{label ? label : 'List item 3'}</li>
+      <li>{label ? label : 'List item 4'}</li>
     </ol>
+    <hr />
     <p>
       Lollipop jelly beans liquorice. Ice cream gummies cheesecake. Chocolate cake lemon drops icing. Chocolate cake
       lemon drops icing.
