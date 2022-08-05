@@ -30,6 +30,7 @@ export const useListStatsViewModel = () => {
   ];
 
   return {
-    stats
+    stats,
+    slidesToShow: 3
   };
 };

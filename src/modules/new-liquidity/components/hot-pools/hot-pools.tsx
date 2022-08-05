@@ -1,14 +1,19 @@
 import { FC } from 'react';
 
+import { HotPoolInterface } from '@modules/new-liquidity/interfaces';
+
 import { HotPoolCard } from '../hot-pool-card';
 import { HotPoolSlider } from '../hot-pool-slider';
-import { HotPoolsData } from './hot-pools-data';
 
-export const HotPools: FC = () => {
+interface Props {
+  pools: Array<HotPoolInterface>;
+}
+
+export const HotPools: FC<Props> = ({ pools }) => {
   return (
     <HotPoolSlider>
-      {HotPoolsData.map(({ id, tvl, apr, tokens }) => (
-        <HotPoolCard key={id} tvl={tvl} apr={apr} tokens={tokens} />
+      {pools.map(({ id, tvl, apr, tokensInfo }) => (
+        <HotPoolCard key={id} tvl={tvl} apr={apr} tokens={tokensInfo} />
       ))}
     </HotPoolSlider>
   );

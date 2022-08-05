@@ -1,39 +1,14 @@
 import { DOLLAR, PERCENT } from '@config/constants';
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
-const list = [
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    visibleIcon: true,
-    newLiquidityLablesData: { MEDAL: true, DOLLAR: true, CASE: true },
-    isNewLiquidity: true,
-    liquidityProvidersFee: 1
-  },
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    newLiquidityLablesData: { CASE: true, DOLLAR: true },
-    isNewLiquidity: true,
-    liquidityProvidersFee: 1
-  },
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    isNewLiquidity: true,
-    visibleIcon: true,
-    newLiquidityLablesData: { DOLLAR: true },
-    liquidityProvidersFee: 1
-  }
-];
+import { isHotPool } from './helpers/is-hot-pool.helper';
+import { POOLS_DATA } from './hot-pools-data';
 
 export const newLiquidityListDataHelper = () => {
-  const listData = list?.map(
+  const hotPools = POOLS_DATA.filter(item => isHotPool(item));
+
+  const listData = POOLS_DATA.map(
     ({ itemUrl, tokensInfo, tvlInUsd, newLiquidityLablesData, isNewLiquidity, visibleIcon }) => ({
       href: itemUrl,
       inputToken: tokensInfo,
@@ -83,6 +58,7 @@ export const newLiquidityListDataHelper = () => {
   );
 
   return {
-    list: listData
+    list: listData,
+    hotPools
   };
 };
