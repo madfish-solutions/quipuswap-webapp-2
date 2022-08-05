@@ -7,21 +7,17 @@ import { getNewLiquidityStatsApi } from '../api';
 import { NewLiquidityResponseDto } from '../dto';
 import { NewLiquidityResponseModel } from '../models';
 
-export const DEFAULT_STATS_DATA = {
-  totalValueLocked: null,
-  maxApr: null,
-  poolsCount: null
-};
-
-const DEFAULT_BLOCK_INFO_DATA = {
-  level: null,
-  hash: null,
-  timestamp: null
-};
-
 const DEFAULT_RESPONSE_DATA = {
-  stats: DEFAULT_STATS_DATA,
-  blockInfo: DEFAULT_BLOCK_INFO_DATA
+  stats: {
+    totalValueLocked: null,
+    maxApr: null,
+    poolsCount: null
+  },
+  blockInfo: {
+    level: null,
+    hash: null,
+    timestamp: null
+  }
 };
 
 @ModelBuilder()
