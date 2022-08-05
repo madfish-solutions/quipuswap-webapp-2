@@ -5,23 +5,20 @@ import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
 
 import { getStableswapListApi, getStableswapStatsApi } from '../api';
-import { StableswapListDto, StableswapStatsDto } from '../dto';
 import { StableswapItemModel, StableswapListModel, StableswapStatsModel } from '../models';
 
 @ModelBuilder()
 export class StableswapListStore {
   @Led({
-    defaultData: [],
-    getData: async () => await getStableswapListApi(),
-    dto: StableswapListDto,
+    default: [],
+    loader: async () => await getStableswapListApi(),
     model: StableswapListModel
   })
   readonly listStore: LoadingErrorDataNew<StableswapListModel>;
 
   @Led({
-    defaultData: null,
-    getData: async () => await getStableswapStatsApi(),
-    dto: StableswapStatsDto,
+    default: null,
+    loader: async () => await getStableswapStatsApi(),
     model: StableswapStatsModel
   })
   readonly statsStore: LoadingErrorDataNew<StableswapStatsModel>;

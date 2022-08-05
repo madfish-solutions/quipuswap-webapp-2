@@ -1,16 +1,19 @@
+import { BigNumber } from 'bignumber.js';
+
 import { StableswapItemDto } from '../dto';
 
 export class StableswapItemModel extends StableswapItemDto {
+  [key: string]: StableswapItemDto[keyof StableswapItemDto];
+
   constructor(dto: StableswapItemDto) {
     super();
 
     for (const key in dto) {
-      //@ts-ignore
-      this[key] = dto[key];
+      this[key] = dto[key as keyof StableswapItemDto];
     }
   }
 
-  get providersFee() {
+  get providersFee(): BigNumber {
     return this.fees.liquidityProvidersFee;
   }
 

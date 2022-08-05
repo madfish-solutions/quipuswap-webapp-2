@@ -2,7 +2,6 @@
 import { isUndefined } from '@shared/helpers';
 
 import { MapperConfig } from './mapper-config.type';
-import { MapperKinds } from './mapper-kinds.enum';
 import { mapperFactory } from './mapper.factory';
 
 export const mapperReader = (
@@ -25,7 +24,7 @@ export const mapperReader = (
         return [key, mapperReader(value, shape)];
       }
 
-      const mapper = mapperFactory[configMapper as MapperKinds];
+      const mapper = mapperFactory[configMapper];
 
       if (mapper) {
         return [key, mapper(value, optional, nullable)];

@@ -1,12 +1,12 @@
 import { StableswapStatsDto } from '../dto';
 
 export class StableswapStatsModel extends StableswapStatsDto {
+  [key: string]: StableswapStatsDto[keyof StableswapStatsDto];
   constructor(dto: StableswapStatsDto) {
     super();
 
     for (const key in dto) {
-      //@ts-ignore
-      this[key] = dto[key];
+      this[key] = dto[key as keyof StableswapStatsDto];
     }
   }
 }

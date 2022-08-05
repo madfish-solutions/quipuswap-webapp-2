@@ -4,7 +4,6 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorDataNew, RootStore } from '@shared/store';
 
 import { getNewLiquidityStatsApi } from '../api';
-import { NewLiquidityResponseDto } from '../dto';
 import { NewLiquidityResponseModel } from '../models';
 
 const DEFAULT_RESPONSE_DATA = {
@@ -23,9 +22,8 @@ const DEFAULT_RESPONSE_DATA = {
 @ModelBuilder()
 export class NewLiquidityStatsStore {
   @Led({
-    defaultData: DEFAULT_RESPONSE_DATA,
-    getData: async () => await getNewLiquidityStatsApi(),
-    dto: NewLiquidityResponseDto,
+    default: DEFAULT_RESPONSE_DATA,
+    loader: async () => await getNewLiquidityStatsApi(),
     model: NewLiquidityResponseModel
   })
   readonly statsStore: LoadingErrorDataNew<NewLiquidityResponseModel>;
