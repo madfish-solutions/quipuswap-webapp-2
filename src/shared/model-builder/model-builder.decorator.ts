@@ -1,4 +1,5 @@
-import { LoadingErrorDataNew } from '../store';
+import { LoadingErrorDataNew } from '@shared/store';
+
 import { Constructable } from '../types';
 import { LED_METADATA_KEY } from './led-metadata-key';
 import { createConfigMap, MapperConfig } from './mapper';

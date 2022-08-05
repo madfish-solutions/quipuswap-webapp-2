@@ -33,7 +33,7 @@ export const ToastWrapper: FC = () => {
       position="top-center"
       className={cx(modeClass[colorThemeMode], styles.notificationContainer)}
       bodyClassName={styles.toastBody}
-      closeButton={CustomCloseButton}
+      closeButton={CustomCloseButton as never}
       toastClassName={styles.notification}
       pauseOnHover
       closeOnClick={false}
