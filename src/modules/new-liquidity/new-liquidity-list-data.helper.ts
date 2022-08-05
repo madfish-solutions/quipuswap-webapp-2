@@ -6,7 +6,7 @@ import { isHotPool } from './helpers/is-hot-pool.helper';
 import { POOLS_DATA } from './hot-pools-data';
 
 export const newLiquidityListDataHelper = () => {
-  const hotPools = POOLS_DATA.filter(item => isHotPool(item));
+  const hotPools = POOLS_DATA.filter(isHotPool);
 
   const listData = POOLS_DATA.map(
     ({ itemUrl, tokensInfo, tvlInUsd, newLiquidityLablesData, isNewLiquidity, visibleIcon }) => ({
