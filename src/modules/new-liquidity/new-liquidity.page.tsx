@@ -1,16 +1,14 @@
 import { FC } from 'react';
 
-import { Iterator, ListItemCard, ListStats, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { HotPools } from './components';
+import { HotPools, NewLiquidityStats } from './components';
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 import styles from './new-liquidity-page.module.scss';
-import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const NewLiquidityPage: FC = () => {
-  const { stats } = useListStatsViewModel();
-  const { list } = newLiquidityListDataHelper();
+  const { list, hotPools } = newLiquidityListDataHelper();
   const { t } = useTranslation();
 
   return (
@@ -19,9 +17,9 @@ export const NewLiquidityPage: FC = () => {
 
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
 
-      <ListStats stats={stats} slidesToShow={3} />
+      <NewLiquidityStats />
 
-      <HotPools />
+      <HotPools pools={hotPools} />
 
       <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
     </StateWrapper>
