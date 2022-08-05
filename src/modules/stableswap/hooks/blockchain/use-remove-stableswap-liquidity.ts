@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
-import { decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
+import { cloneArray, decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
@@ -28,7 +28,7 @@ export const useRemoveStableswapLiquidity = () => {
   } = useSettingsStore();
   const { accountPkh } = useAuthStore();
   const { item } = useStableswapItemStore();
-  const { shares, inputAmounts, isBalancedProportion } = useStableswapItemFormStore();
+  const { shares, isBalancedProportion } = useStableswapItemFormStore();
 
   const decreaseAmount = useCallback(
     (token: Token, amount: BigNumber, fees: Array<BigNumber>) => {
@@ -44,77 +44,84 @@ export const useRemoveStableswapLiquidity = () => {
     [liquiditySlippage]
   );
 
-  const removeStableswapLiquidity = useCallback(async () => {
-    if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
-      return;
-    }
-    const { lpToken, contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
+  const removeStableswapLiquidity = useCallback(
+    async (inputAmounts: Nullable<BigNumber>[]) => {
+      if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
+        return;
+      }
+      const { lpToken, contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
 
-    const fees = [liquidityProvidersFee, stakersFee, interfaceFee, devFee];
+      const fees = [liquidityProvidersFee, stakersFee, interfaceFee, devFee];
 
-    const tokens = tokensInfo.map(({ token }) => token);
-    const deadline = await getStableswapDeadline(tezos, transactionDeadline);
+      const tokens = tokensInfo.map(({ token }) => token);
+      const deadline = await getStableswapDeadline(tezos, transactionDeadline);
 
-    const atomicInputAmounts = inputAmounts.map((amount, index) =>
-      toAtomic(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)
-    );
+      const atomicInputAmounts = inputAmounts.map((amount, index) =>
+        toAtomic(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)
+      );
 
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
-    const atomicShares = toAtomic(shares, lpToken);
+      const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
+      const atomicShares = toAtomic(shares, lpToken);
 
-    const message = t('stableswap|successfullyRemoved');
-    const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) => decreaseAmount(token, amount, fees));
+      const message = t('stableswap|successfullyRemoved');
+      const decreasedTokensAndAmounts = tokensAndAmounts.map(({ token, amount }) =>
+        decreaseAmount(token, amount, fees)
+      );
 
-    const logData = {
-      stableswapLiquidityRemove: getStableswapLiquidityLogData(
-        tokensInfo,
-        inputAmounts,
-        shares,
-        liquiditySlippage,
-        item
-      )
-    };
+      const inputAmountsFixed = cloneArray(inputAmounts);
+      inputAmountsFixed.pop();
 
-    try {
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE', logData);
-      const operation = isBalancedProportion
-        ? await removeStableswapLiquidityBalancedApi(
-            tezos,
-            contractAddress,
-            decreasedTokensAndAmounts,
-            atomicShares,
-            deadline,
-            accountPkh
-          )
-        : await removeStableswapLiquidityImbalancedApi(
-            tezos,
-            contractAddress,
-            decreasedTokensAndAmounts,
-            atomicShares,
-            deadline,
-            accountPkh
-          );
+      const logData = {
+        stableswapLiquidityRemove: getStableswapLiquidityLogData(
+          tokensInfo,
+          inputAmountsFixed,
+          shares,
+          liquiditySlippage,
+          item
+        )
+      };
 
-      await confirmOperation(operation.opHash, { message });
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_SUCCESS', logData);
-    } catch (error) {
-      showErrorToast(error as Error);
-      amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_FAILED', { ...logData, error });
-    }
-  }, [
-    accountPkh,
-    confirmOperation,
-    decreaseAmount,
-    inputAmounts,
-    isBalancedProportion,
-    liquiditySlippage,
-    item,
-    shares,
-    showErrorToast,
-    t,
-    tezos,
-    transactionDeadline
-  ]);
+      try {
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE', logData);
+        const operation = isBalancedProportion
+          ? await removeStableswapLiquidityBalancedApi(
+              tezos,
+              contractAddress,
+              decreasedTokensAndAmounts,
+              atomicShares,
+              deadline,
+              accountPkh
+            )
+          : await removeStableswapLiquidityImbalancedApi(
+              tezos,
+              contractAddress,
+              decreasedTokensAndAmounts,
+              atomicShares,
+              deadline,
+              accountPkh
+            );
+
+        await confirmOperation(operation.opHash, { message });
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_SUCCESS', logData);
+      } catch (error) {
+        showErrorToast(error as Error);
+        amplitudeService.logEvent('STABLESWAP_LIQUIDITY_REMOVE_FAILED', { ...logData, error });
+      }
+    },
+    [
+      accountPkh,
+      confirmOperation,
+      decreaseAmount,
+      isBalancedProportion,
+      liquiditySlippage,
+      item,
+      shares,
+      showErrorToast,
+      t,
+      tezos,
+      transactionDeadline
+    ]
+  );
 
   return { removeStableswapLiquidity };
 };
