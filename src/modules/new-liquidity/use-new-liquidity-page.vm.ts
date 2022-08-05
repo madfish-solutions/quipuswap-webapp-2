@@ -6,13 +6,12 @@ import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useGetNewLiquidityList, useNewLiquidityListStore } from './hooks';
+import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 
 export const useNewLiquidityPageViewModel = () => {
   const isReady = useReady();
   const rootStore = useRootStore();
   const newLiquidityListStore = useNewLiquidityListStore();
-  // eslint-disable-next-line no-console
-  console.log('newLiquidityListStore: ', newLiquidityListStore);
   const { getNewLiquidityList } = useGetNewLiquidityList();
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -40,13 +39,12 @@ export const useNewLiquidityPageViewModel = () => {
     }
   }, [getNewLiquidityList, isReady]);
 
-  // eslint-disable-next-line no-console
-  newLiquidityListStore?.list?.forEach(item => console.log('item: ', item));
+  const dataList = newLiquidityListStore?.list?.map(newLiquidityListDataHelper) ?? [];
 
   return {
     isInitialized,
     isLoading: false,
-    list: [],
+    list: dataList,
     title
   };
 };

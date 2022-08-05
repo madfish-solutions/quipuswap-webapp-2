@@ -12,10 +12,22 @@ export class LiquidityItemDto implements LiquidityItem {
   id: BigNumber;
 
   @Typed()
-  tvl: BigNumber;
+  type: string;
+
+  @Typed()
+  tvlInUsd: BigNumber;
 
   @Typed()
   totalSupply: BigNumber;
+
+  @Typed({ type: Number, nullable: true })
+  apr: Nullable<number>;
+
+  @Typed({ type: Number, nullable: true })
+  maxApr: Nullable<number>;
+
+  @Typed({ type: String, isArray: true })
+  poolLabels: Array<string>;
 
   @Typed({ type: LiquidityTokenInfoDto, isArray: true })
   tokensInfo: Array<LiquidityTokenInfoDto>;

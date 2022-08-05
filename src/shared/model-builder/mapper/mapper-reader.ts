@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isUndefined } from '@shared/helpers';
+import { isNull, isUndefined } from '@shared/helpers';
 
 import { MapperConfig } from './mapper-config.type';
 import { MapperKinds } from './mapper-kinds.enum';
@@ -21,7 +21,7 @@ export const mapperReader = (
         return [key, value.map((value2: any) => mapperReader(value2, shape))];
       }
 
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && !isNull(value)) {
         return [key, mapperReader(value, shape)];
       }
 
