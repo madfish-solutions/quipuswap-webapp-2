@@ -1,5 +1,5 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
+@import '@styles/variables';
+@import '@styles/breakpoints';
 
 .terms {
   margin-bottom: 40px;
@@ -59,6 +59,7 @@
   }
   .wallets {
     display: flex;
+    justify-content: center;
     align-items: center;
   }
 }

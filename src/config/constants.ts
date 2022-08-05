@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
-import { FARMING_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
+import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL } from './enviroment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -93,6 +93,8 @@ export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 export const STABLEDIVIDENDS_LIST_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${LIST}`;
 export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${STATS}`;
+
+export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
 //#endregion
 
 //TODO: assort mix
@@ -146,6 +148,20 @@ export const SERVER_UNAVAILABLE_ERROR_MESSAGE = '503 Service Temporarily Unavail
 export const CONTRACT_DECIMALS_PRECISION = 1e18;
 export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
+export const STABLESWAP_PRECISION_FEE = 1e10;
+
+//#region default stableswap fee
+export const CONTRACT_DECIMALS_PRECISION_POWER = 18; // 1e18
+const DEFAULT_STABLESWAP_INTERFACE_FEE = 0.005;
+const DEFAULT_STABLESWAP_STAKERS_FEE = 0.03;
+
+export const DEFAULT_STABLESWAP_INTERFACE_FEE_WITH_PRECISION = new BigNumber(DEFAULT_STABLESWAP_INTERFACE_FEE)
+  .multipliedBy(STABLESWAP_PRECISION_FEE)
+  .div(PERCENTAGE);
+export const DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION = new BigNumber(DEFAULT_STABLESWAP_STAKERS_FEE)
+  .multipliedBy(STABLESWAP_PRECISION_FEE)
+  .div(PERCENTAGE);
+//#endregion
 
 //TESTNET
 export const TESTNET_EXCHANGE_RATE = 1.5;

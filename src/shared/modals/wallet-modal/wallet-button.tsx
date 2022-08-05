@@ -7,7 +7,7 @@ import styles from './wallet-modal.module.scss';
 
 const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 
-interface Props {
+export interface WalletButtonProps {
   className?: string;
   id: WalletType;
   Icon: FC<{ className?: string }>;
@@ -17,7 +17,15 @@ interface Props {
   available?: boolean;
 }
 
-export const WalletButton: FC<Props> = ({ id, Icon, label, onClick, disabled = false, available, ...props }) => {
+export const WalletButton: FC<WalletButtonProps> = ({
+  id,
+  Icon,
+  label,
+  onClick,
+  disabled = false,
+  available,
+  ...props
+}) => {
   return (
     <Button
       className={styles.button}

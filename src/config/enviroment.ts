@@ -29,3 +29,4 @@ export const DEX_POOL_URL = process.env.REACT_APP_POOLS_URL!;
 
 export const FARMING_API_URL = process.env.REACT_APP_FARMING_API_URL!;
 export const STABLESWAP_API_URL = process.env.REACT_APP_STABLESWAP_API_URL!;
+export const LIQUIDITY_API_URL = process.env.REACT_APP_LIQUIDITY_API_URL!;

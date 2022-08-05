@@ -8,15 +8,7 @@ import { DEFAULT_DECIMALS } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoStake } from '@modules/farming/hooks/blockchain/use-do-stake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
-import {
-  bigNumberToString,
-  toDecimals,
-  defined,
-  isNull,
-  isExist,
-  getFormikError,
-  numberAsString
-} from '@shared/helpers';
+import { bigNumberToString, toAtomic, defined, isNull, isExist, getFormikError, numberAsString } from '@shared/helpers';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
 
 import { canDelegate } from '../../../helpers';
@@ -49,8 +41,8 @@ export const useStakeFormViewModel = () => {
     if (isStakingAvailable) {
       const token = defined(farmingItem).stakedToken;
       // TODO: Move to model
-      const inputAmountWithDecimals = toDecimals(defined(inputAmount), token);
-      await doStake(defined(farmingItem), inputAmountWithDecimals, token, defined(selectedBaker));
+      const atomicInputAmount = toAtomic(defined(inputAmount), token);
+      await doStake(defined(farmingItem), atomicInputAmount, token, defined(selectedBaker));
     }
 
     formik.resetForm();

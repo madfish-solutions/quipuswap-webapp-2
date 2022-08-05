@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
 import { useBalances } from '@providers/balances-provider';
-import { fromDecimals, getTokenSlug, isTezosToken } from '@shared/helpers';
+import { toReal, getTokenSlug, isTezosToken } from '@shared/helpers';
 import { SwapTabAction, Token } from '@shared/types';
 import { addressSchema, bigNumberSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
@@ -39,9 +39,9 @@ export const useValidationSchema = () => {
           inputTokenBalance,
           outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]
         );
-        const min = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
+        const realMin = toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
-          return bigNumberSchema(min)
+          return bigNumberSchema(realMin)
             .test(
               'balance',
               () => t('common|Insufficient funds'),
@@ -52,10 +52,10 @@ export const useValidationSchema = () => {
         }
 
         return bigNumberSchema(
-          min,
+          realMin,
           max,
           max && isTezosToken(inputToken)
-            ? t('swap|valueOutOfRangeError', { min: min.toFixed(), max: max.toFixed() })
+            ? t('swap|valueOutOfRangeError', { min: realMin.toFixed(), max: max.toFixed() })
             : undefined
         )
           .test(
@@ -81,7 +81,7 @@ export const useValidationSchema = () => {
         const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
+        return bigNumberSchema(toReal(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
           .test(
             'output-decimals-amount',
             () =>

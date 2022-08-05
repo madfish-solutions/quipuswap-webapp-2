@@ -1,9 +1,13 @@
 /// <reference types="cypress" />
 
+import { FIELD_WAIT_TIMEOUT } from '../../const';
+import { MAINNET_QUIPU_TOKEN } from '../../const';
+
 describe('Title', () => {
   beforeEach(() => {
-    cy.visit('/swap');
+    cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
     cy.get('[data-test-id="acceptCookieButton"]').click();
+    cy.wait(FIELD_WAIT_TIMEOUT)
   });
   it('Should_DisplayCorrectTitle_When_OpenedSwapPage', () => {
     cy.get('[data-test-id="swapPageTitle"]').should('contain', 'Swap TEZ / QUIPU');

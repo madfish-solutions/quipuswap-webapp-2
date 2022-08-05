@@ -4,7 +4,7 @@ import { isEmptyArray, multipliedIfPossible } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableDividendsHarvest, useStableDividendsItemStore } from '../../../hooks';
-import { useStableDividendsPendingRewards, useStableDividendsStakerBalance } from '../../hooks';
+import { useStableDividendsPendingRewards, useRealStableDividendsStakerBalance } from '../../hooks';
 
 export const useStableDividendsRewardInfoViewModel = () => {
   const { t } = useTranslation();
@@ -15,7 +15,7 @@ export const useStableDividendsRewardInfoViewModel = () => {
 
   const hadleHarvest = useCallback(async () => await harvest(), [harvest]);
 
-  const shares = useStableDividendsStakerBalance();
+  const shares = useRealStableDividendsStakerBalance();
   const sharesDollarEquivalent = multipliedIfPossible(quipuExchangeRates, shares);
 
   const { rawData, claimablePendingRewards } = useStableDividendsPendingRewards();

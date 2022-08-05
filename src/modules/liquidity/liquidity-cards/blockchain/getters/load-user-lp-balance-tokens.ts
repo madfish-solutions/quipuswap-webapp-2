@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
-import { fromDecimals, isTezIncluded } from '@shared/helpers';
+import { toReal, isTezIncluded } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 import { findNotTezToken, getValidMichelTemplate, sortTokensContracts } from '../../helpers';
@@ -43,7 +43,7 @@ const loadUserLpBalanceTez = async (tezos: TezosToolkit, accountPkh: string, dex
   return getUserBalance(tezos, accountPkh, address, type, fa2TokenId);
 };
 
-export const loadUserLpBalance = async (
+export const loadRealUserLpBalance = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
@@ -58,5 +58,5 @@ export const loadUserLpBalance = async (
       ? await loadUserLpBalanceTez(tezos, accountPkh, dex, notTezToken)
       : await loadUserLpBalanceTokens(tezos, accountPkh, dex, tokenA, tokenB);
 
-  return balance ? fromDecimals(balance, LP_TOKEN_DECIMALS) : null;
+  return balance ? toReal(balance, LP_TOKEN_DECIMALS) : null;
 };

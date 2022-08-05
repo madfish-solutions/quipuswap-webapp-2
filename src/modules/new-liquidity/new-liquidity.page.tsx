@@ -1,21 +1,29 @@
 import { FC } from 'react';
 
-import { ListStats, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { observer } from 'mobx-react-lite';
+
+import { Iterator, ListItemCard, ListStats, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { useListStatsViewModel } from './use-list-stats.vm';
+import { HotPools } from './components';
+import styles from './new-liquidity-page.module.scss';
+import { useNewLiquidityViewModel } from './new-liquidity-page.vm';
 
-export const NewLiquidityPage: FC = () => {
-  const { stats } = useListStatsViewModel();
+export const NewLiquidityPage: FC = observer(() => {
+  const { isInitialazied, stats, list } = useNewLiquidityViewModel();
   const { t } = useTranslation();
 
   return (
-    <StateWrapper loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
 
       <ListStats stats={stats} slidesToShow={3} />
+
+      <HotPools />
+
+      <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
     </StateWrapper>
   );
-};
+});

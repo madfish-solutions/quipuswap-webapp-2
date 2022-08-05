@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { DEFAULT_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import {
   isExist,
   isNull,
@@ -11,7 +11,7 @@ import {
   getUniqArray,
   getTokenSlug,
   multipliedIfPossible,
-  fromDecimals
+  toReal
 } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -29,6 +29,8 @@ import {
 } from '../helpers';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '../interfaces';
 import { mapFarmingItems, mapFarmingStats } from '../mapping';
+
+const ZERO_BN = new BigNumber(ZERO_AMOUNT);
 
 interface RewardAmount {
   amount: BigNumber;
@@ -102,7 +104,7 @@ export class FarmingListStore {
   }
 
   async getQuipuPendingRewards() {
-    return (await this.getUniqTokensRewardForLastBlock(DEFAULT_TOKEN)).claimableRewardsWithFee;
+    return (await this.getUniqTokensRewardForLastBlock(QUIPU_TOKEN)).claimableRewardsWithFee;
   }
 
   makePendingRewardsLiveable() {
@@ -160,20 +162,22 @@ export class FarmingListStore {
       Date.now()
     );
 
-    const claimableAmount = fromDecimals(claimableRewardsWithoutFee, rewardToken);
-    const claimableDollarEquivalent = multipliedIfPossible(claimableAmount, earnExchangeRate);
+    const correctClaimableRewardsWithoutFee = claimableRewardsWithoutFee.isNaN() ? ZERO_BN : claimableRewardsWithoutFee;
 
-    const skatedAmount = fromDecimals(stakedRewardsWithoutFee, rewardToken);
-    const skatedDollarEquivalent = multipliedIfPossible(skatedAmount, earnExchangeRate);
+    const realClaimableAmount = toReal(correctClaimableRewardsWithoutFee, rewardToken);
+    const claimableDollarEquivalent = multipliedIfPossible(realClaimableAmount, earnExchangeRate);
+
+    const realStakedAmount = toReal(stakedRewardsWithoutFee, rewardToken);
+    const skatedDollarEquivalent = multipliedIfPossible(realStakedAmount, earnExchangeRate);
 
     return {
       token: rewardToken,
       staked: {
-        amount: skatedAmount,
+        amount: realStakedAmount,
         dollarEquivalent: skatedDollarEquivalent
       },
       claimable: {
-        amount: claimableAmount,
+        amount: realClaimableAmount,
         dollarEquivalent: claimableDollarEquivalent
       }
     };

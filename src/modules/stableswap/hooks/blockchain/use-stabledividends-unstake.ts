@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { stableDividendsUnstakeApi } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
-import { fromDecimals, isNull, placeUSDDecimals } from '@shared/helpers';
+import { toReal, isNull, placeUSDDecimals } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
@@ -28,10 +28,8 @@ export const useStableDividendsUnstake = () => {
         stableswapDividendsUnstake: {
           poolId: id.toNumber(),
           apr: apr.toNumber(),
-          amount: fromDecimals(amount, stakedToken).toNumber(),
-          amountUsd: placeUSDDecimals(
-            fromDecimals(amount, stakedToken).multipliedBy(stakedTokenExchangeRate)
-          ).toNumber(),
+          amount: toReal(amount, stakedToken).toNumber(),
+          amountUsd: placeUSDDecimals(toReal(amount, stakedToken).multipliedBy(stakedTokenExchangeRate)).toNumber(),
           tvl: tvl.toNumber(),
           tvlUsd: placeUSDDecimals(tvl.multipliedBy(stakedTokenExchangeRate)).toNumber()
         }
@@ -41,7 +39,7 @@ export const useStableDividendsUnstake = () => {
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_UNSTAKE', logData);
         const operation = await stableDividendsUnstakeApi(tezos, contractAddress, amount);
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|sucessfullyUnstaked') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyUnstaked') });
         amplitudeService.logEvent('STABLESWAP_DIVIDENDS_UNSTAKE_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);

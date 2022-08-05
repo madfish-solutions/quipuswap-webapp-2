@@ -1,6 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
+import 'reflect-metadata';
+
 import { BalancesProvider } from '@providers/balances-provider';
 import { ColorThemeProvider } from '@providers/color-theme-context';
 import { DAppBakerProvider } from '@providers/dapp-bakers';

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { HIDE_ANALYTICS } from '@config/config';
-import { DEFAULT_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import {
   Card,
   DashPlug,
@@ -57,7 +57,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   }, [inputToken, route]);
 
   const fallbackInputToken = TEZOS_TOKEN;
-  const fallbackOutputToken = DEFAULT_TOKEN;
+  const fallbackOutputToken = QUIPU_TOKEN;
   const inputTokenWithFallback = inputToken ?? fallbackInputToken;
   const outputTokenWithFallback = outputToken ?? fallbackOutputToken;
 

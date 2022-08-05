@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
@@ -6,7 +6,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import { LP_INPUT_KEY } from '@config/constants';
 import {
   findBalanceToken,
-  fromDecimals,
+  toReal,
   isNull,
   numberAsString,
   placeDecimals,
@@ -33,10 +33,12 @@ import {
   useCalcTokenAmountView
 } from '../../../../../../hooks';
 import { StableswapItem } from '../../../../../../types';
+import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
 const DEFAULT_LP_BALANCE = null;
+
 export interface RemoveLiqFormValues {
   [key: string]: string;
 }
@@ -75,13 +77,20 @@ export const useRemoveLiqFormViewModel = () => {
     stableswapItemFormStore.isBalancedProportion
   );
 
-  const handleSubmit = async (_: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
-    actions.setSubmitting(true);
-    await removeStableswapLiquidity();
-    formik.resetForm();
-    stableswapItemFormStore.clearStore();
-    actions.setSubmitting(false);
-  };
+  const handleSubmit = useCallback(
+    async (values: RemoveLiqFormValues, actions: FormikHelpers<RemoveLiqFormValues>) => {
+      actions.setSubmitting(true);
+
+      const inputAmounts = getInputsAmountFormFormikValues(values);
+      await removeStableswapLiquidity(inputAmounts);
+
+      actions.resetForm();
+      stableswapItemFormStore.clearStore();
+
+      actions.setSubmitting(false);
+    },
+    [removeStableswapLiquidity, stableswapItemFormStore]
+  );
 
   const formik = useFormik({
     validationSchema,
@@ -105,9 +114,9 @@ export const useRemoveLiqFormViewModel = () => {
 
   const formikValues = getFormikInitialValues(tokensInfo.length);
 
-  const setValues = (lpValue: Nullable<BigNumber>, calculatedValues: Array<Nullable<BigNumber>>) => {
+  const setValues = (lpValue: Nullable<BigNumber>) => {
     formik.setValues(formikValues);
-    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue, calculatedValues);
+    stableswapItemFormStore.setLpAndTokenInputAmounts(lpValue);
   };
 
   const handleBalancedInputChange = (reserves: BigNumber, index: number) => {
@@ -137,7 +146,7 @@ export const useRemoveLiqFormViewModel = () => {
       });
 
       const fixedLpValue = lpValue ? placeDecimals(lpValue, lpToken, BigNumber.ROUND_UP) : null;
-      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue, calculatedValues);
+      stableswapItemFormStore.setLpAndTokenInputAmounts(fixedLpValue);
 
       formik.setValues(formikValues);
     };
@@ -147,9 +156,9 @@ export const useRemoveLiqFormViewModel = () => {
     const tokens = extractTokens(item.tokensInfo);
     const map = createAmountsMichelsonMapFormikValues(formik.values, tokens, index, inputAmount);
     const shares = await calcTokenAmountView(map);
-    const fixedShares = fromDecimals(shares, item.lpToken);
+    const realShares = toReal(shares, item.lpToken);
 
-    return fixedShares.toFixed();
+    return realShares.toFixed();
   };
 
   const handleImbalancedInputChange = (index: number) => {
@@ -158,13 +167,11 @@ export const useRemoveLiqFormViewModel = () => {
 
     return async (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = saveBigNumber(fixedValue, new BigNumber('0'));
-      formik.setFieldValue(getInputSlugByIndex(index), inputAmount);
+      formik.setFieldValue(getInputSlugByIndex(index), fixedValue);
 
       const shares = await calculateShares(index, realValue);
       formik.setFieldValue(LP_INPUT_KEY, shares);
 
-      stableswapItemFormStore.setInputAmount(inputAmountBN, index);
       stableswapItemFormStore.setShares(new BigNumber(shares));
     };
   };
@@ -199,7 +206,7 @@ export const useRemoveLiqFormViewModel = () => {
       formikValues[getInputSlugByIndex(indexOfTokenInput)] = toFixed(amount);
     });
 
-    setValues(inputAmountBN, tokenOutputs);
+    setValues(inputAmountBN);
   };
 
   const handleSwitcherClick = (state: boolean) => {

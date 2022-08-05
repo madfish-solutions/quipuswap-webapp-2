@@ -33,7 +33,7 @@ export * from './slider';
 export * from './slippage-input';
 export * from './smiles';
 export * from './state-components';
-export * from './status-label';
+export * from './label-component';
 export * from './sticky-block';
 export * from './swap-button';
 export * from './switcher';

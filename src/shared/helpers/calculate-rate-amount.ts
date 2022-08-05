@@ -2,10 +2,10 @@ import { BigNumber } from 'bignumber.js';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 
-import { fromDecimals } from './bignumber';
+import { toReal } from './bignumber';
 
-export const calculateRateAmount = (value: BigNumber.Value, xtzUsdQuote: string) =>
-  fromDecimals(new BigNumber(value), TEZOS_TOKEN.metadata.decimals)
+export const calculateRealRateAmount = (value: BigNumber.Value, xtzUsdQuote: string) =>
+  toReal(new BigNumber(value), TEZOS_TOKEN.metadata.decimals)
     .multipliedBy(new BigNumber(xtzUsdQuote))
     .integerValue()
     .toString();

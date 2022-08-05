@@ -1,12 +1,12 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { DEFAULT_TOKEN } from '@config/tokens';
-import { numberAsString, getFormikError, isExist, toDecimals } from '@shared/helpers';
+import { QUIPU_TOKEN } from '@config/tokens';
+import { numberAsString, getFormikError, isExist, toAtomic } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useStableDividendsUnstake } from '../../../../hooks';
-import { useFormValidation, useStableDividendsStakerBalance } from '../../../hooks';
+import { useFormValidation, useRealStableDividendsStakerBalance } from '../../../hooks';
 import { FormFields, FormValues } from '../../../types';
 import { StableDividendsFormViewProps } from '../stabledividends-form-view';
 
@@ -15,9 +15,9 @@ export const useUntakeFormViewModel = (): StableDividendsFormViewProps => {
 
   const { stableDividendsUnstake } = useStableDividendsUnstake();
 
-  const token = DEFAULT_TOKEN;
+  const token = QUIPU_TOKEN;
 
-  const balance = useStableDividendsStakerBalance();
+  const balance = useRealStableDividendsStakerBalance();
 
   const validationSchema = useFormValidation(balance ?? null);
 
@@ -27,8 +27,8 @@ export const useUntakeFormViewModel = (): StableDividendsFormViewProps => {
     const amount = new BigNumber(values[FormFields.inputAmount]);
 
     if (!amount.isNaN()) {
-      const amountAtoms = toDecimals(amount, token);
-      await stableDividendsUnstake(amountAtoms);
+      const atomicInputAmount = toAtomic(amount, token);
+      await stableDividendsUnstake(atomicInputAmount);
     }
 
     formik.resetForm();

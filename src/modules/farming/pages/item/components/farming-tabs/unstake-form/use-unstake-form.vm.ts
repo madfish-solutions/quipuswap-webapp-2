@@ -5,7 +5,7 @@ import { DEFAULT_DECIMALS } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoUnstake } from '@modules/farming/hooks/blockchain/use-do-unstake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
-import { bigNumberToString, defined, getFormikError, isExist, numberAsString, toDecimals } from '@shared/helpers';
+import { bigNumberToString, defined, getFormikError, isExist, numberAsString, toAtomic } from '@shared/helpers';
 
 import { UnstakeFormFields, UnstakeFormValues } from './unstake-form.interface';
 import { useUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
@@ -25,8 +25,8 @@ export const useUnstakeFormViewModel = () => {
   const handleUnstakeSubmit = async (_: UnstakeFormValues, actions: FormikHelpers<UnstakeFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(farmingItem).stakedToken;
-    const inputAmountWithDecimals = toDecimals(defined(inputAmount), token);
-    await doUnstake(defined(farmingItem), inputAmountWithDecimals);
+    const atomicInputAmount = toAtomic(defined(inputAmount), token);
+    await doUnstake(defined(farmingItem), atomicInputAmount);
 
     formik.resetForm();
     actions.setSubmitting(false);
