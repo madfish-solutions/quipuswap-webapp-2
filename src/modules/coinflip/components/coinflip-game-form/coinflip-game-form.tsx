@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { noop } from 'rxjs';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { Noop, Token } from '@shared/types';
+import { Token } from '@shared/types';
 import commonStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -15,6 +15,7 @@ import styles from './coinflip-game-form.module.scss';
 import { useCoinflipGameFormViewModel } from './use-coinflip-game-form.vm';
 
 interface Props {
+  isLoading: boolean;
   token: Token;
   payout: Nullable<BigNumber>;
   amountBalance: Nullable<BigNumber>;
@@ -22,11 +23,21 @@ interface Props {
   coinSide: Nullable<CoinSide>;
   onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void;
   onAmountInputChange: (amountInput: string) => void;
-  handleSubmit: Noop;
+  handleSubmit: (coinSide: string, input: BigNumber) => void;
 }
 
 export const CoinflipGameForm: FC<Props> = observer(
-  ({ handleSubmit, amountBalance, payout, token, onAmountInputChange, tokenToPlay, coinSide, onCoinSideSelect }) => {
+  ({
+    isLoading,
+    handleSubmit,
+    amountBalance,
+    payout,
+    token,
+    onAmountInputChange,
+    tokenToPlay,
+    coinSide,
+    onCoinSideSelect
+  }) => {
     const { t } = useTranslation();
     const {
       inputAmountError,
@@ -40,11 +51,20 @@ export const CoinflipGameForm: FC<Props> = observer(
       coinSideError,
       handleInputAmountChange,
       handleCoinSideSelect
-    } = useCoinflipGameFormViewModel(tokenToPlay, token, amountBalance, payout, onAmountInputChange, onCoinSideSelect);
+    } = useCoinflipGameFormViewModel(
+      tokenToPlay,
+      token,
+      amountBalance,
+      payout,
+      onAmountInputChange,
+      onCoinSideSelect,
+      handleSubmit
+    );
 
     return (
       <form onSubmit={handleFormSubmit} data-test-id="coinflip-form" className={styles.root}>
         <CoinflipGameSelect
+          isLoading={isLoading}
           tokenToPlay={tokenToPlay}
           coinSide={coinSide}
           handleSelectCoinSide={handleCoinSideSelect}
@@ -72,6 +92,15 @@ export const CoinflipGameForm: FC<Props> = observer(
           className={styles.input}
         />
         <div className={commonStyles.buttons}>
+          <Button
+            type="submit"
+            className={commonStyles.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            data-test-id="flipButton"
+          >
+            {t('coinflip|Flip')}
+          </Button>
           <ConnectWalletOrDoSomething>
             <Button
               type="submit"
