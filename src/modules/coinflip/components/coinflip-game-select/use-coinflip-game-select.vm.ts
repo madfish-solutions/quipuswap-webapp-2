@@ -13,6 +13,7 @@ import { CoinSide, TokenToPlay } from '../../stores';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 
 export const useCoinflipGameSelectViewModel = ({
+  isLoading,
   error,
   tokenToPlay,
   coinSide,
@@ -36,6 +37,7 @@ export const useCoinflipGameSelectViewModel = ({
   const handleSelectSideB = () => handleSelectCoinSide(CoinSide.Back);
 
   return {
+    isLoading,
     error,
     handleSelectSideA,
     handleSelectSideB,

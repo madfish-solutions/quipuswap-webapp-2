@@ -1,21 +1,56 @@
 import BigNumber from 'bignumber.js';
 
-import { useTokenBalance } from '@shared/hooks';
+import { useAmountInUsd, useAmplitudeService, useTokenBalance } from '@shared/hooks';
+import { useToasts } from '@shared/utils';
 
-import { useCoinflipStore } from '../../hooks';
+import { useCoinFlip, useCoinflipStore, useGamersStats, useUserLastGame } from '../../hooks';
 import { CoinSide } from '../../stores';
 
 export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { tokenToPlay, game, token, payout } = coinflipStore;
+  const { tokenToPlay, game, token, payout, isLoading } = coinflipStore;
 
   const tokenBalance = useTokenBalance(token) ?? null;
 
-  const handleSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('submit', { ...game });
-    // TODO
-    // flipApi();
+  const { getGamersStats } = useGamersStats();
+  const { getUserLastGame } = useUserLastGame();
+  const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
+
+  const { showErrorToast } = useToasts();
+  const { getAmountInUsd } = useAmountInUsd();
+  const { log } = useAmplitudeService();
+
+  const handleSubmit = async (coinSide: string, input: BigNumber) => {
+    coinflipStore.startLoading();
+
+    const amountInUsd = getAmountInUsd(input, token);
+
+    const logData = {
+      asset: tokenToPlay,
+      coinSide,
+      amount: input.toNumber(),
+      amountInUsd: amountInUsd
+    };
+
+    try {
+      log('CLICK_FLIP_BUTTON_CLICK', logData);
+
+      await handleCoinFlipPure(input, coinSide);
+
+      await getGamersStats();
+      await getUserLastGame();
+
+      log('CLICK_FLIP_OPERATION_SUCCESS', logData);
+    } catch (error) {
+      showErrorToast(error as Error);
+
+      log('CLICK_FLIP_OPERATION_FAILED', {
+        ...logData,
+        error
+      });
+    }
+
+    coinflipStore.finishLoading();
   };
 
   const handleSelectCoinSide = (coinSide: Nullable<CoinSide>) => {
@@ -28,6 +63,7 @@ export const useCoinflipGameViewModel = () => {
   };
 
   return {
+    isLoading,
     tokenToPlay,
     tokenBalance,
     game,

@@ -45,8 +45,8 @@ const DEFAULT_COINFLIP_GAME: CoinflipGame = {
 };
 
 export class CoinflipStore {
+  isLoading = false;
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
-
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
   readonly gamesCountStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
@@ -161,6 +161,14 @@ export class CoinflipStore {
 
   setInput(input: Nullable<BigNumber>) {
     this.game.input = input;
+  }
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
   }
 
   private async getGamesCount() {
