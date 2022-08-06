@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { IconProps } from '@shared/types';
 
-export const CoinSideATezosIcon: FC<IconProps> = ({ ...props }) => {
+export const TezosFaceActiveIcon: FC<IconProps> = ({ ...props }) => {
   return (
     <svg fill="none" viewBox="0 0 145 145" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
