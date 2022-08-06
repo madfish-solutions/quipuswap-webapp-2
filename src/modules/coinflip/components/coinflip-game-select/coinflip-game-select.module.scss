@@ -6,23 +6,13 @@
 }
 
 .button {
-  position: relative;
+  margin: 0 10px;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.icon {
-  margin: 20px;
-  width: 88px;
-  height: 88px;
-}
-
-.selected {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 88px;
-  height: 88px;
-}
-
 .error {
   margin-top: -24px;
   text-align: center;
@@ -33,16 +23,6 @@
 }
 
 @include media('>tablet') {
-  .icon {
-    margin: 40px;
-    width: 128px;
-    height: 128px;
-  }
-
-  .selected {
-    top: 40px;
-    left: 40px;
-    width: 128px;
-    height: 128px;
+  .button {
   }
 }

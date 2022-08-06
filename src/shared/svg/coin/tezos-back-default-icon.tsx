@@ -4,7 +4,7 @@ import { IconProps } from '@shared/types';
 
 import { useSvgHelper } from '../../hooks';
 
-export const CoinSideBTezosIcon: FC<IconProps> = ({ ...props }) => {
+export const TezosBackDefaultIcon: FC<IconProps> = ({ ...props }) => {
   const { getId, getUrl } = useSvgHelper('CoinSideBQuipuIconNew');
 
   return (
