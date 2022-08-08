@@ -7,12 +7,10 @@ import { useTranslation } from '@translation';
 
 import { HotPools } from './components';
 import styles from './new-liquidity-page.module.scss';
-import { useListStatsViewModel } from './use-list-stats.vm';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-page.vm';
 
 export const NewLiquidityPage: FC = observer(() => {
-  const { list, isInitialized } = useNewLiquidityPageViewModel();
-  const { stats } = useListStatsViewModel();
+  const { list, stats, isInitialized } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (

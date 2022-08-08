@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { PERCENT } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
@@ -26,9 +27,6 @@ export const useNewLiquidityPageViewModel = () => {
         if (isNull(rootStore.newLiquidityListStore)) {
           await rootStore.createNewLiquidityListStore();
         }
-        if (isNull(rootStore.newLiquidityStatsStore)) {
-          await rootStore.createNewLiquidityStatsStore();
-        }
       } finally {
         setIsInitialized(true);
       }
@@ -47,10 +45,34 @@ export const useNewLiquidityPageViewModel = () => {
 
   const dataList = newLiquidityListStore?.list?.map(newLiquidityListDataHelper) ?? [];
 
+  const stats = [
+    {
+      title: t('newLiquidity|tvl'),
+      tooltip: t('newLiquidity|tvlTooltip'),
+      amount: newLiquidityListStore?.stats?.totalValueLocked ?? null,
+      testId: 'statsTVL'
+    },
+    {
+      title: t('newLiquidity|maxApr'),
+      tooltip: t('newLiquidity|maxAprTooltip'),
+      amount: newLiquidityListStore?.stats?.maxApr ?? null,
+      currency: PERCENT,
+      testId: 'statsMaxAPR'
+    },
+    {
+      title: t('newLiquidity|pools'),
+      tooltip: t('newLiquidity|poolsTooltip'),
+      amount: newLiquidityListStore?.stats?.poolsCount ?? null,
+      currency: null,
+      testId: 'statsPools'
+    }
+  ];
+
   return {
+    title,
+    stats,
     isInitialized,
-    isLoading: false,
     list: dataList,
-    title
+    isLoading: false
   };
 };

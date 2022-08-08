@@ -1,8 +1,8 @@
 import { Typed } from '@shared/decorators';
 
-import { LiquidityItemWrapDto } from './liquidity-item.dto';
+import { LiquidityItemResponseDto } from './liquidity-item.dto';
 
 export class LiquidityListDto {
-  @Typed({ type: LiquidityItemWrapDto, isArray: true })
-  list: Array<LiquidityItemWrapDto>;
+  @Typed({ type: LiquidityItemResponseDto, isArray: true })
+  list: Array<LiquidityItemResponseDto>;
 }
