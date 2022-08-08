@@ -23,8 +23,10 @@ export const useNewLiquidityPageViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.newLiquidityListStore) || isNull(rootStore.newLiquidityStatsStore)) {
+        if (isNull(rootStore.newLiquidityListStore)) {
           await rootStore.createNewLiquidityListStore();
+        }
+        if (isNull(rootStore.newLiquidityStatsStore)) {
           await rootStore.createNewLiquidityStatsStore();
         }
       } finally {
