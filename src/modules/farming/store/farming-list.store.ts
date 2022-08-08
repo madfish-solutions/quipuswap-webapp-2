@@ -232,9 +232,6 @@ export class FarmingListStore {
 
     const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
 
-    // eslint-disable-next-line no-console
-    console.log(userInfo);
-
     return { userInfo };
   }
 

@@ -5,8 +5,7 @@ export class UserInfoResponseModel extends UserInfoResponseDto {
   userInfo: Array<UserInfoModel>;
   constructor(dto: UserInfoResponseDto) {
     super();
-    // eslint-disable-next-line no-console
-    console.log(dto);
+
     this.userInfo = dto.userInfo.map(userInfo => new UserInfoModel(userInfo));
   }
 }
