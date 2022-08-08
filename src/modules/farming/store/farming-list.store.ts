@@ -218,8 +218,6 @@ export class FarmingListStore {
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(list)) {
       return null;
     }
-    // eslint-disable-next-line no-console
-    console.log('getUserInfo');
 
     return await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
   }
@@ -263,13 +261,6 @@ export class FarmingListStore {
       this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
       this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
       this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
-      // eslint-disable-next-line no-console
-      console.log(
-        this.tokensRewardList.map(item => ({
-          claimable: item.claimable.amount.toFixed(),
-          staked: item.staked.amount.toFixed()
-        }))[0]
-      );
     }
   }
 
