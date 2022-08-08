@@ -87,7 +87,8 @@ export const STATS = 'stats';
 // TODO: change api address => change farm => dividends (if needed)
 export const DIVIDENDS = 'farm';
 
-export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
+export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
+export const FARMING_NEW_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
