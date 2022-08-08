@@ -1,11 +1,14 @@
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
+import { isNull } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
 import { LiquidityItemWrap } from './interfaces';
 
-export const newLiquidityListDataHelper = ({ item: { id, tokensInfo, tvlInUsd, apr, maxApr } }: LiquidityItemWrap) => ({
+export const newLiquidityListDataHelper = ({
+  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek }
+}: LiquidityItemWrap) => ({
   href: `${AppRootRoutes.NewLiquidity}/${id.toFixed()}`,
   inputToken: tokensInfo.map(({ token }) => token),
   status: { status: ActiveStatus.ACTIVE, filled: true },
@@ -24,10 +27,11 @@ export const newLiquidityListDataHelper = ({ item: { id, tokensInfo, tvlInUsd, a
       cellName: i18n.t('newLiquidity|volume'),
       tooltip: 'Volume tooltip',
       amounts: {
-        amount: tvlInUsd,
+        amount: volumeForWeek,
         currency: DOLLAR,
-        dollarEquivalent: tvlInUsd,
-        dollarEquivalentOnly: true
+        dollarEquivalent: volumeForWeek,
+        dollarEquivalentOnly: true,
+        isError: isNull(volumeForWeek)
       }
     },
     {
@@ -35,7 +39,8 @@ export const newLiquidityListDataHelper = ({ item: { id, tokensInfo, tvlInUsd, a
       tooltip: 'APR tooltip',
       amounts: {
         amount: apr,
-        currency: PERCENT
+        currency: PERCENT,
+        isError: isNull(apr)
       }
     },
     {
@@ -43,7 +48,8 @@ export const newLiquidityListDataHelper = ({ item: { id, tokensInfo, tvlInUsd, a
       tooltip: 'Max APR tooltip',
       amounts: {
         amount: maxApr,
-        currency: PERCENT
+        currency: PERCENT,
+        isError: isNull(maxApr)
       }
     }
   ]
