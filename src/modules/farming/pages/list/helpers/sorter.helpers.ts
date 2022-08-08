@@ -1,35 +1,47 @@
-import { FarmingItem } from '@modules/farming/interfaces';
+import { FarmingItemBalancesModel, FarmingItemModel } from '@modules/farming/models';
 import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { FarmingSortField } from '../types';
 
-const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+const sortById = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);
 
-const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+const sortByApr = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.apr, second.apr, sortDirection);
 
-const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+const sortByApy = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.apy, second.apy, sortDirection);
 
-const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) =>
+const sortByTvl = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
-const sortByBalance = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
+const sortByBalance = (
+  first: FarmingItemModel & FarmingItemBalancesModel,
+  second: FarmingItemModel & FarmingItemBalancesModel,
+  sortDirection: SortDirection
+) => {
   const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);
   const balanceB = multipliedIfPossible(second.myBalance, second.depositExchangeRate);
 
   return sortBigNumber(balanceA, balanceB, sortDirection);
 };
 
-const sortByDeposit = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
+const sortByDeposit = (
+  first: FarmingItemModel & FarmingItemBalancesModel,
+  second: FarmingItemModel & FarmingItemBalancesModel,
+  sortDirection: SortDirection
+) => {
   const depositA = multipliedIfPossible(first.depositBalance, first.depositExchangeRate);
   const depositB = multipliedIfPossible(second.depositBalance, second.depositExchangeRate);
 
   return sortBigNumber(depositA, depositB, sortDirection);
 };
 
-const sortByEarned = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
+const sortByEarned = (
+  first: FarmingItemModel & FarmingItemBalancesModel,
+  second: FarmingItemModel & FarmingItemBalancesModel,
+  sortDirection: SortDirection
+) => {
   const earnA = multipliedIfPossible(first.earnBalance, first.earnExchangeRate);
   const earnB = multipliedIfPossible(second.earnBalance, second.earnExchangeRate);
 
@@ -47,14 +59,14 @@ const farmingSorts = {
 };
 
 const sortFarming = (
-  first: FarmingItem,
-  second: FarmingItem,
+  first: FarmingItemModel & FarmingItemBalancesModel,
+  second: FarmingItemModel & FarmingItemBalancesModel,
   sortField: FarmingSortField,
   sortDirection: SortDirection
 ) => farmingSorts[sortField](first, second, sortDirection);
 
 export const sortFarmingList = (
-  list: Array<FarmingItem>,
+  list: Array<FarmingItemModel & FarmingItemBalancesModel>,
   sortField: FarmingSortField,
   sortDirection: SortDirection
 ) => {

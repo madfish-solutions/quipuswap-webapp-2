@@ -1,10 +1,11 @@
+/* eslint-disable import/order,  import/no-unresolved */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
 
 import { NETWORK } from '@config/config';
-import { NETWORK_ID } from '@config/enviroment';
+import { NETWORK_ID } from '@config/environment';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useVotingRouter } from '@modules/voting/hooks';
 import { VotingTabs } from '@modules/voting/tabs.enum';

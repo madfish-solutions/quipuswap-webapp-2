@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { TZKT_EXPLORER_URL } from '@config/enviroment';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { Button } from '@shared/components';
 import { shortize } from '@shared/helpers';
 

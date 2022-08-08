@@ -1,6 +1,6 @@
 import amplitude from 'amplitude-js';
 
-import { AMPLITUDE_API_KEY } from '@config/enviroment';
+import { AMPLITUDE_API_KEY } from '@config/environment';
 
 import { hash, isDev } from '../helpers';
 import { Nullable, Optional } from '../types';

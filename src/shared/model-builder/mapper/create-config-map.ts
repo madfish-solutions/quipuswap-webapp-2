@@ -8,7 +8,10 @@ export const createConfigMap = (prototype: any) => {
   const dtoFields = Reflect.getMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, prototype);
 
   for (const dtoField of dtoFields) {
-    const type = dtoField.type ?? Reflect.getMetadata('design:type', prototype, dtoField.propertyKey);
+    const type = dtoField.isEnum
+      ? String
+      : dtoField.type ?? Reflect.getMetadata('design:type', prototype, dtoField.propertyKey);
+
     const dtoFieldMetadata = Reflect.getMetadata<Array<IMetadataVales>>(TYPED_MARK_SYMBOL, type.prototype);
 
     mapperConfig[dtoField.propertyKey] = {

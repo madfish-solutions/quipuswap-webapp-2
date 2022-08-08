@@ -1,19 +1,21 @@
 import { TezosToolkit } from '@taquito/taquito';
+import { BigNumber } from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
 import { FARMING_LIST_API_URL } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
-import { bigNumberToString, isNull } from '@shared/helpers';
-import { Nullable, Standard } from '@shared/types';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
+import { isEmptyArray, isNull, saveBigNumber } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { getUserFarmBalances } from '../helpers';
-import { FarmingContractStorageWrapper, RawFarmingItem, FarmingListResponse } from '../interfaces';
+import { FarmingContractStorageWrapper, FarmingListResponse } from '../interfaces';
+import { FarmingItemModel } from '../models';
 
-const farmingListFetch = async () => {
+//TODO: change name
+export const farmingListFetch = async () => {
   const response = await fetch(FARMING_LIST_API_URL);
-  const data = (await response.json()) as FarmingListResponse;
 
-  return data.list;
+  return (await response.json()) as FarmingListResponse;
 };
 
 interface UserBalances {
@@ -22,7 +24,7 @@ interface UserBalances {
   earnBalance?: string;
 }
 
-const injectBalance = async (list: Array<RawFarmingItem>, accountPkh: string, tezos: TezosToolkit) => {
+const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
@@ -35,11 +37,11 @@ const injectBalance = async (list: Array<RawFarmingItem>, accountPkh: string, te
       const { stakedToken } = item;
       const { contractAddress, type, fa2TokenId } = stakedToken;
 
-      const balanceBN = await getUserBalance(tezos, accountPkh, contractAddress, type as Standard, fa2TokenId);
+      const balanceBN = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
-      const balance = isNull(balanceBN) ? '0' : bigNumberToString(balanceBN);
+      const balance = saveBigNumber(balanceBN, new BigNumber(0));
 
-      balances.set(item.id, { myBalance: balance });
+      balances.set(item.id.toFixed(), { myBalance: balance.toFixed() });
     })
   );
 
@@ -50,15 +52,17 @@ const injectBalance = async (list: Array<RawFarmingItem>, accountPkh: string, te
     balances.set(key, { ...balance, ...userBalance });
   });
 
-  return list.map(item => ({ ...item, ...balances.get(item.id) }));
+  return { list: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
 };
 
-export const getFarmingListApi = async (accountPkh: Nullable<string>, tezos: Nullable<TezosToolkit>) => {
-  const fetchResult = await farmingListFetch();
-
-  if (isNull(accountPkh) || isNull(tezos)) {
-    return fetchResult;
-  } else {
-    return await injectBalance(fetchResult, accountPkh, tezos);
+export const getFarmingListApi = async (
+  accountPkh: Nullable<string>,
+  tezos: Nullable<TezosToolkit>,
+  farmings: Array<FarmingItemModel>
+) => {
+  if (isNull(accountPkh) || isNull(tezos) || isEmptyArray(farmings)) {
+    return null;
   }
+
+  return await injectBalance(farmings, accountPkh, tezos);
 };

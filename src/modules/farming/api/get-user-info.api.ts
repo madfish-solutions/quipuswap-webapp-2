@@ -1,13 +1,14 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 
 import { DEFAULT_RAW_USER_INFO, getAllFarmUserInfo } from '../helpers';
-import { FarmingContractStorageWrapper, FarmingItem, RawUsersInfoValue } from '../interfaces';
+import { FarmingContractStorageWrapper, RawUsersInfoValue } from '../interfaces';
+import { FarmingItemModel } from '../models';
 
 export const getUserInfoApi = async (
-  item: FarmingItem,
+  item: FarmingItemModel,
   accountPkh: string,
   tezos: TezosToolkit
 ): Promise<RawUsersInfoValue> => {

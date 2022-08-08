@@ -15,7 +15,7 @@ export const ModelBuilder = () => {
         const ledFields = Reflect.getOwnMetadata<Array<LedMetadataValue>>(LED_METADATA_KEY, Constructor.prototype);
 
         ledFields.forEach(({ propertyKey, default: defaultData, loader, model }) => {
-          const mapperConfig: MapperConfig = createConfigMap(model.prototype);
+          const mapperConfig: MapperConfig = createConfigMap(model.prototype)!;
 
           this[propertyKey] = new LoadingErrorDataNew(defaultData, async () => loader(this), mapperConfig, model);
         });

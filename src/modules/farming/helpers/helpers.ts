@@ -5,15 +5,9 @@ import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE, PERCENTAGE_100 } from 
 import { defined, isExist, toReal } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import {
-  UsersInfoValue,
-  RawUsersInfoValue,
-  FarmingItem,
-  RawFarmingItem,
-  FarmingContractStorage,
-  UsersInfoKey
-} from '../interfaces';
-import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
+import { UsersInfoValue, RawUsersInfoValue, FarmingContractStorage, UsersInfoKey } from '../interfaces';
+import { mapUsersInfoValue } from '../mapping';
+import { FarmingItemModel } from '../models';
 
 export interface UserBalances {
   depositBalance: string;
@@ -52,23 +46,27 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem, timestamp: number = Date.now()) => {
-  const { staked: totalStaked, rewardPerSecond } = item;
+export const getUserPendingReward = (
+  userInfo: UsersInfoValue,
+  farmingItemModel: FarmingItemModel,
+  timestamp: number = Date.now()
+) => {
+  const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return ZERO_BN;
   }
 
-  const timeFrom = Math.min(timestamp, new Date(item.endTime).getTime());
-  let reward = new BigNumber(Math.floor((timeFrom - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
-    rewardPerSecond
-  );
+  const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime).getTime());
+  let reward = new BigNumber(
+    Math.floor((timeFrom - new Date(farmingItemModel.udp).getTime()) / MS_IN_SECOND)
+  ).multipliedBy(rewardPerSecond);
 
   if (reward.isNegative()) {
     reward = ZERO_BN;
   }
 
-  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
+  const rewardPerShare = farmingItemModel.rewardPerShare.plus(reward.dividedBy(totalStaked));
 
   const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
 
@@ -77,7 +75,7 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
 
 export const getUserPendingRewardWithFee = (
   userInfo: UsersInfoValue,
-  item: FarmingItem,
+  item: FarmingItemModel,
   timestamp: number = Date.now()
 ) => {
   const fixedHarvestFee = PERCENTAGE_100.minus(item.harvestFee).dividedBy(PERCENTAGE_100);
@@ -89,7 +87,7 @@ export const getUserPendingRewardWithFee = (
   };
 };
 
-export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {
+export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingItemModel: FarmingItemModel) => {
   if (!userInfo) {
     return {
       depositBalance: '0',
@@ -97,7 +95,7 @@ export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: Raw
     };
   }
 
-  const reward = getUserPendingReward(userInfo, mapFarmingItem(item));
+  const reward = getUserPendingReward(userInfo, farmingItemModel);
 
   return {
     depositBalance: userInfo.staked.toFixed(),
@@ -125,12 +123,12 @@ export const getAllFarmUserInfo = async (storage: FarmingContractStorage, accoun
 export const getUserFarmBalances = async (
   accountAddress: string,
   storage: FarmingContractStorage,
-  list: Array<RawFarmingItem>
+  list: Array<FarmingItemModel>
 ) => {
   const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
 
   const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
-    const farm = list.find(item => item.id === index.toString());
+    const farm = list.find(item => item.id.toFixed() === index.toString());
     if (farm) {
       const balance = getBalances(usersInfoValue, farm);
 
@@ -146,8 +144,8 @@ export const getUserFarmBalances = async (
 export const getUserInfoLastStakedTime = (userInfo: Nullable<UsersInfoValue>) =>
   userInfo ? new Date(userInfo.last_staked).getTime() : null;
 
-export const getEndTimestamp = (farmingItem: FarmingItem, lastStakedTime: Nullable<number>) =>
-  isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
+export const getEndTimestamp = (farmingItem: Undefined<FarmingItemModel>, lastStakedTime: Nullable<number>) =>
+  isExist(lastStakedTime) && isExist(farmingItem) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
 
 export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
   endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;

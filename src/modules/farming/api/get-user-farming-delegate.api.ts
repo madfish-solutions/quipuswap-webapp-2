@@ -1,7 +1,8 @@
-import { TezosToolkit } from '@taquito/taquito';
+/* eslint-disable import/order,  import/no-unresolved */
 import BigNumber from 'bignumber.js';
+import { TezosToolkit } from '@taquito/taquito';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 
 import { FarmingStorage } from '../interfaces';

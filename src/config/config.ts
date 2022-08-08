@@ -4,7 +4,7 @@ import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap
 
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { NETWORK_ID } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 

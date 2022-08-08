@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
+import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 
 // TODO
 export const flipApi = async (tezos: TezosToolkit, farmingId: BigNumber, rewardsReceiver: string) => {

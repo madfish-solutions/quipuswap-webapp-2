@@ -12,7 +12,5 @@ export const getFarmingItemApi = async (farmingId: Nullable<BigNumber>) => {
 
   const response = await fetch(`${FARMING_LIST_API_URL}/${farmingId.toFixed()}`);
 
-  const data = (await response.json()) as FarmingItemResponse;
-
-  return data.item;
+  return (await response.json()) as FarmingItemResponse;
 };

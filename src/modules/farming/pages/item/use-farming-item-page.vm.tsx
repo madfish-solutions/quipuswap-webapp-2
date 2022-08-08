@@ -45,7 +45,9 @@ export const useFarmingItemPageViewModel = () => {
     return () => farmingItemStore.clearIntervals();
   }, [farmingItemStore]);
 
-  const { data: farmingItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
+  const { isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
+  const farmingItem = farmingItemStore.item;
+
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   const getTitle = () => {

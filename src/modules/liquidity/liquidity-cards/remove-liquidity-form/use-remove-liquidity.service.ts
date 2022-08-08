@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { noop } from 'rxjs';
 
 import { LP_TOKEN_DECIMALS } from '@config/constants';
-import { TOKEN_TO_TOKEN_DEX } from '@config/enviroment';
+import { TOKEN_TO_TOKEN_DEX } from '@config/environment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import {
   toReal,

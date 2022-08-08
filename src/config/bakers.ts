@@ -2,7 +2,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 
 import { SupportedNetworks, WhitelistedBaker } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { NETWORK_ID } from './environment';
 
 export const GHOSTNET_BAKERS: WhitelistedBaker[] = [
   {
