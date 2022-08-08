@@ -6,6 +6,7 @@ import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useGetNewLiquidityList, useNewLiquidityListStore } from './hooks';
+import { useGetNewLiquidityStats } from './hooks/use-get-new-liquidity-stats';
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 
 export const useNewLiquidityPageViewModel = () => {
@@ -13,6 +14,7 @@ export const useNewLiquidityPageViewModel = () => {
   const rootStore = useRootStore();
   const newLiquidityListStore = useNewLiquidityListStore();
   const { getNewLiquidityList } = useGetNewLiquidityList();
+  const { getNewLiquidityStats } = useGetNewLiquidityStats();
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { t } = useTranslation();
@@ -21,8 +23,9 @@ export const useNewLiquidityPageViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.newLiquidityListStore)) {
+        if (isNull(rootStore.newLiquidityListStore) || isNull(rootStore.newLiquidityStatsStore)) {
           await rootStore.createNewLiquidityListStore();
+          await rootStore.createNewLiquidityStatsStore();
         }
       } finally {
         setIsInitialized(true);
@@ -36,8 +39,9 @@ export const useNewLiquidityPageViewModel = () => {
   useEffect(() => {
     if (isReady) {
       void getNewLiquidityList();
+      void getNewLiquidityStats();
     }
-  }, [getNewLiquidityList, isReady]);
+  }, [getNewLiquidityList, getNewLiquidityStats, isReady]);
 
   const dataList = newLiquidityListStore?.list?.map(newLiquidityListDataHelper) ?? [];
 
