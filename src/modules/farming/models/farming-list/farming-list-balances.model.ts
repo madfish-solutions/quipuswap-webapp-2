@@ -1,5 +1,5 @@
-import { FarmingListBalancesDto } from '../dto';
-import { FarmingItemBalancesModel } from './farming-item-balances.model';
+import { FarmingListBalancesDto } from '../../dto';
+import { FarmingItemBalancesModel } from '../farming-item';
 
 export class FarmingListBalancesModel extends FarmingListBalancesDto {
   balances: FarmingItemBalancesModel[];

@@ -1,4 +1,4 @@
-import { FarmingItemResponseDto } from '../dto';
+import { FarmingItemResponseDto } from '../../dto';
 import { FarmingItemModel } from './farming-item.model';
 
 export class FarmingItemResponseModel extends FarmingItemResponseDto {
