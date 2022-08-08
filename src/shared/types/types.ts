@@ -23,7 +23,8 @@ export enum QSNetworkType {
 
 export enum SwapTabAction {
   SWAP = 'swap',
-  SEND = 'send'
+  SEND = 'send',
+  E = 'E'
 }
 
 export enum ConnectType {
