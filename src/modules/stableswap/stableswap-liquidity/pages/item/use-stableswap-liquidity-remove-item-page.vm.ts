@@ -9,8 +9,6 @@ import { isUndefined } from '@shared/helpers';
 import { getStableswapTitle } from '../../../helpers';
 import { useStableswapItemFormStore, useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
 
-const ZERO_LENGTH = 0;
-
 export const useStableswapLiquidityRemoveItemPageViewModel = () => {
   const params = useParams();
   const dAppReady = useReady();
@@ -32,9 +30,6 @@ export const useStableswapLiquidityRemoveItemPageViewModel = () => {
 
       await getStableswapItem(new BigNumber(`${poolId}`));
 
-      const length = stableswapItemStore.item?.tokensInfo.length ?? ZERO_LENGTH;
-
-      stableswapItemFormStore.initInputAmounts(length);
       prevAccountPkhRef.current = accountPkh;
     };
 
