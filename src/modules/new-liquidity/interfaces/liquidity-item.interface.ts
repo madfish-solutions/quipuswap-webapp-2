@@ -12,6 +12,7 @@ export interface LiquidityItem {
   apr: Nullable<number>;
   totalSupply: BigNumber;
   maxApr: Nullable<number>;
+  volumeForWeek: Nullable<BigNumber>;
   poolLabels: Array<string>;
   tokensInfo: Array<LiquidityTokenInfo>;
   opportunities?: Array<Opportunity>;

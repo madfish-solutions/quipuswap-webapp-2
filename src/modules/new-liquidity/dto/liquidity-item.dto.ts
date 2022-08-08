@@ -29,6 +29,9 @@ export class LiquidityItemDto implements LiquidityItem {
   @Typed({ type: String, isArray: true })
   poolLabels: Array<string>;
 
+  @Typed({ type: BigNumber, nullable: true })
+  volumeForWeek: Nullable<BigNumber>;
+
   @Typed({ type: LiquidityTokenInfoDto, isArray: true })
   tokensInfo: Array<LiquidityTokenInfoDto>;
 
