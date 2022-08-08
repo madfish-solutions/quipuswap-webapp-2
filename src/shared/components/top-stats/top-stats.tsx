@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR } from '@config/constants';
-import { isEqual } from '@shared/helpers';
+import { isEqual, isExist } from '@shared/helpers';
 import { Optional } from '@shared/types';
 
 import { StateCurrencyAmount } from '../state-components';
@@ -19,6 +19,7 @@ interface TopStatsProps {
 
 export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, currency = DOLLAR }) => {
   const isDollar = isEqual(currency, DOLLAR);
+  const loading = !isExist(amount);
 
   return (
     <div className={styles.container} data-test-id={title}>
@@ -29,6 +30,7 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, currency =
       <StateCurrencyAmount
         className={styles.currencyAmount}
         currency={currency}
+        isLoading={loading}
         amount={amount || null}
         isLeftCurrency={isDollar}
       />
