@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
-import { isDev } from '@shared/helpers';
 import { NotFound } from '@shared/svg';
 
 import { PoolCreation, StableswapLiquidityGeneralStats, StableswapLiquidityListFilter } from './components';
@@ -28,7 +27,7 @@ export const StableswapLiquidityListPage: FC = observer(() => {
           DTI="stableliquidityList"
         />
       </StateWrapper>
-      {isDev() ? <PoolCreation /> : null}
+      <PoolCreation />
     </>
   );
 });
