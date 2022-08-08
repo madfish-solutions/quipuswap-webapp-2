@@ -56,6 +56,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <DetailsCardCell
           className={styles.cardCell}
           cellName={t('coinflip|payoutCoefficient')}
+          tooltipContent={t('coinflip|payoutCoefficientTooltip')}
           data-test-id="valueLocked"
         >
           <StateCurrencyAmount
@@ -67,7 +68,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|bank')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|bank')}
+          tooltipContent={t('coinflip|bankTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
@@ -78,7 +84,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|totalWins')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|totalWins')}
+          tooltipContent={t('coinflip|totalWinsTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
@@ -89,11 +100,21 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gamesCount')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|gamesCount')}
+          tooltipContent={t('coinflip|gamesCountTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|maxBetAmount')} data-test-id="maxBetAmount">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|maxBetAmount')}
+          tooltipContent={t('coinflip|maxBetAmountTooltip')}
+          data-test-id="maxBetAmount"
+        >
           <StateCurrencyAmount
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
@@ -106,7 +127,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
       <div className={styles.lastGameResult}>
         <h3 className={styles.h3}>Your last game result</h3>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|gameId')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|gameId')}
+          tooltipContent={t('coinflip|gameIdTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount
             isError={shouldHideData || !isExist(lastGameId)}
             errorFallback={<DashPlug animation={false} />}
@@ -116,7 +142,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|betSize')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|betSize')}
+          tooltipContent={t('coinflip|betSizeTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(bidSizeInUsd) })}
             isError={shouldHideData || !isExist(bidSizeInUsd)}
@@ -129,7 +160,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|rewardSize')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|rewardSize')}
+          tooltipContent={t('coinflip|rewardSizeTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(rewardSizeInUsd) })}
             isError={shouldHideData || !isExist(rewardSizeInUsd)}
@@ -141,7 +177,12 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|result')} data-test-id="valueLocked">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|result')}
+          tooltipContent={t('coinflip|resultTooltip')}
+          data-test-id="valueLocked"
+        >
           <StateWrapper
             isError={shouldHideData || !isExist(betCoinSide) || !isExist(gameResult)}
             errorFallback={<DashPlug animation={false} />}
