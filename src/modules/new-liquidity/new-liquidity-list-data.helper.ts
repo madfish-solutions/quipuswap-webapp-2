@@ -30,51 +30,63 @@ export const newLiquidityListDataHelper = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type }
 }: LiquidityItemResponse) => {
   const tokens = tokensInfo.map(({ token }) => token);
+  const itemStats = [];
+  const newLiquidityLablesData = { MEDAL: true, CASE: true, DOLLAR: true };
+
+  if (!isNull(tvlInUsd)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|TVL'),
+      tooltip: 'TVL tooltip',
+      amounts: {
+        amount: tvlInUsd,
+        currency: DOLLAR,
+        dollarEquivalent: tvlInUsd,
+        dollarEquivalentOnly: true
+      }
+    });
+  }
+
+  if (!isNull(volumeForWeek)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|volume'),
+      tooltip: 'Volume tooltip',
+      amounts: {
+        amount: volumeForWeek,
+        currency: DOLLAR,
+        dollarEquivalent: volumeForWeek,
+        dollarEquivalentOnly: true
+      }
+    });
+  }
+
+  if (!isNull(apr)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|APR'),
+      tooltip: 'APR tooltip',
+      amounts: {
+        amount: apr,
+        currency: PERCENT
+      }
+    });
+  }
+
+  if (!isNull(maxApr)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|maxApr'),
+      tooltip: 'Max APR tooltip',
+      amounts: {
+        amount: maxApr,
+        currency: PERCENT
+      }
+    });
+  }
 
   return {
-    href: getLiquidityHref(id, type, tokens),
+    itemStats,
+    newLiquidityLablesData,
+    visibleIcon: true,
     inputToken: tokens,
-    status: { status: ActiveStatus.ACTIVE, filled: true },
-    itemStats: [
-      {
-        cellName: i18n.t('newLiquidity|TVL'),
-        tooltip: 'TVL tooltip',
-        amounts: {
-          amount: tvlInUsd,
-          currency: DOLLAR,
-          dollarEquivalent: tvlInUsd,
-          dollarEquivalentOnly: true
-        }
-      },
-      {
-        cellName: i18n.t('newLiquidity|volume'),
-        tooltip: 'Volume tooltip',
-        amounts: {
-          amount: volumeForWeek,
-          currency: DOLLAR,
-          dollarEquivalent: volumeForWeek,
-          dollarEquivalentOnly: true,
-          isError: isNull(volumeForWeek)
-        }
-      },
-      {
-        cellName: i18n.t('newLiquidity|APR'),
-        tooltip: 'APR tooltip',
-        amounts: {
-          amount: apr,
-          currency: PERCENT,
-          isError: isNull(apr)
-        }
-      },
-      {
-        cellName: i18n.t('newLiquidity|maxApr'),
-        tooltip: 'Max APR tooltip',
-        amounts: {
-          amount: maxApr,
-          currency: PERCENT,
-          isError: isNull(maxApr)
-        }
-      }
-    ]
+    href: getLiquidityHref(id, type, tokens),
+    status: { status: ActiveStatus.ACTIVE, filled: true }
   };
 };
