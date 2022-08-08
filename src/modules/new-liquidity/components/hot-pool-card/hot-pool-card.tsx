@@ -24,11 +24,13 @@ interface Props {
   tokens: Array<Token>;
 }
 
+const ZERO_APR = '0';
+
 export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const aprExist = apr?.toString() ?? null;
+  const fixedApr = apr?.toString() ?? ZERO_APR;
 
   return (
     <Link to={'/'}>
@@ -53,11 +55,10 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
-              volume={aprExist}
+              volume={fixedApr}
               label={t('newLiquidity|aprUpTo')}
               currency={PERCENT}
               data-test-id="aprUpTo"
-              loading={Boolean(aprExist)}
             />
           </div>
         </div>
