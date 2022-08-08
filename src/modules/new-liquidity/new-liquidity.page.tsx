@@ -10,7 +10,7 @@ import styles from './new-liquidity-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-page.vm';
 
 export const NewLiquidityPage: FC = observer(() => {
-  const { isInitialized, list } = useNewLiquidityPageViewModel();
+  const { isInitialized, list, hotPools } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (
@@ -21,7 +21,7 @@ export const NewLiquidityPage: FC = observer(() => {
 
       <NewLiquidityStats />
 
-      <HotPools pools={[]} />
+      <HotPools pools={hotPools} />
 
       <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
     </StateWrapper>
