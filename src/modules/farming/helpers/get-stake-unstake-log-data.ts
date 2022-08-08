@@ -3,11 +3,11 @@ import BigNumber from 'bignumber.js';
 import { defined, toReal } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { FarmingItem } from '../interfaces';
 import { mapFarmingLog } from '../mapping';
+import { FarmingItemModel } from '../models';
 
 export const getStakeUnstakeLogData = (
-  farmingItem: FarmingItem,
+  farmingItem: FarmingItemModel & { depositBalance: Nullable<BigNumber>; earnBalance: Nullable<BigNumber> },
   balance: BigNumber,
   timeout: Nullable<number>,
   isUnlocked: boolean

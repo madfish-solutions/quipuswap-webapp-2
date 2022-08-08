@@ -21,8 +21,7 @@ export const useFarmingFormTabsCardViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const navigate = useNavigate();
 
-  const { itemStore, currentTab } = farmingItemStore;
-  const { data: farmingItem } = itemStore;
+  const { item: farmingItem, currentTab } = farmingItemStore;
 
   useEffect(() => {
     return () => {

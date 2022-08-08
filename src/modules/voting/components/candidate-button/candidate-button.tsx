@@ -1,4 +1,4 @@
-import { TZKT_EXPLORER_URL } from '@config/enviroment';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { Button } from '@shared/components/button';
 import { DashPlug } from '@shared/components/dash-plug';
 import { getWhitelistedBakerName, isExist } from '@shared/helpers';

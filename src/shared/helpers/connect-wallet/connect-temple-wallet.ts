@@ -1,7 +1,8 @@
+/* eslint-disable import/order,  import/no-unresolved */
 import { TempleWallet } from '@temple-wallet/dapp';
 
 import { APP_NAME } from '@config/config';
-import { RPC_URL } from '@config/enviroment';
+import { RPC_URL } from '@config/environment';
 import { LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoTempleWallet } from '@shared/errors';
 import { LastUsedConnectionKey, QSNetwork } from '@shared/types';

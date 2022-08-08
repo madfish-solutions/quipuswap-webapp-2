@@ -1,4 +1,5 @@
-import { RPC_URL } from '@config/enviroment';
+/* eslint-disable import/order,  import/no-unresolved */
+import { RPC_URL } from '@config/environment';
 
 import { FastRpcClient } from '../taquito-fast-rpc';
 

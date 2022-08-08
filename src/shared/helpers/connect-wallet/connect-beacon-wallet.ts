@@ -1,9 +1,10 @@
+/* eslint-disable import/order,  import/no-unresolved */
 import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { APP_NAME, IS_NETWORK_MAINNET, NETWORK } from '@config/config';
-import { BASE_URL, NETWORK_ID, RPC_URL } from '@config/enviroment';
+import { BASE_URL, NETWORK_ID, RPC_URL } from '@config/environment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { NoBeaconWallet, WalletNotConnected } from '@shared/errors';
 import { ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';

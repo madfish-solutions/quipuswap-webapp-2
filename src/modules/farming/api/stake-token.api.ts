@@ -1,9 +1,10 @@
+/* eslint-disable import/order,  import/no-unresolved */
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
 import { FARMING_REFERRER_CONTRACT } from '@config/config';
-import { FARMING_CONTRACT_ADDRESS } from '@config/enviroment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { Token } from '@shared/types';
 
 export const stakeTokenApi = async (

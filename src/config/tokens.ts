@@ -3,7 +3,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { SupportedNetworks, Standard, Token } from '@shared/types';
 
 import { IPFS_GATEWAY } from './config';
-import { NETWORK_ID } from './enviroment';
+import { NETWORK_ID } from './environment';
 
 export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,

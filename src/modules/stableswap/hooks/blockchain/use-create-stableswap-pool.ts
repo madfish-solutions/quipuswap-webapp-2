@@ -7,7 +7,7 @@ import {
   DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION,
   STABLESWAP_PRECISION_FEE
 } from '@config/constants';
-import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/enviroment';
+import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/environment';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';

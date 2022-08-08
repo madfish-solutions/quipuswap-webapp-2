@@ -1,6 +1,6 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
+import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
 

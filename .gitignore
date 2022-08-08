@@ -34,5 +34,5 @@ yarn-error.log*
 # vscode
 .vscode
 
-#enviroment
+#environment
 .env

@@ -4,7 +4,7 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { NETWORK } from '@config/config';
-import { NETWORK_ID } from '@config/enviroment';
+import { NETWORK_ID } from '@config/environment';
 import { getTokenMetadata, saveCustomTokenApi } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { InvalidFa2TokenIdError, TokenMetadataError } from '@shared/errors';

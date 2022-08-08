@@ -1,5 +1,5 @@
 import { ZERO_ADDRESS } from '@config/constants';
-import { FarmingItem } from '@modules/farming/interfaces';
+import { FarmingItemModel } from '@modules/farming/models';
 import { isTezosToken } from '@shared/helpers';
 import { Optional, WhitelistedBaker } from '@shared/types';
 
@@ -11,4 +11,4 @@ export const makeBaker = (delegateAddress: Optional<string>, knownBakers: Whitel
   return null;
 };
 
-export const canDelegate = (farmingItem: FarmingItem) => farmingItem.tokens.some(isTezosToken);
+export const canDelegate = (farmingItem: FarmingItemModel) => farmingItem.tokens.some(isTezosToken);
