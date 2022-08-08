@@ -18,7 +18,7 @@ export interface LiquidityItem {
   opportunities?: Array<Opportunity>;
 }
 
-export interface LiquidityItemWrap {
+export interface LiquidityItemResponse {
   item: LiquidityItem;
   blockInfo: BlockInfo;
 }

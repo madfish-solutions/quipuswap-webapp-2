@@ -8,7 +8,7 @@ import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../liquidity';
 import { StableswapRoutes } from '../stableswap';
-import { LiquidityItemWrap } from './interfaces';
+import { LiquidityItemResponse } from './interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const aToken = tokens[0];
@@ -28,7 +28,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 
 export const newLiquidityListDataHelper = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type }
-}: LiquidityItemWrap) => {
+}: LiquidityItemResponse) => {
   const tokens = tokensInfo.map(({ token }) => token);
 
   return {

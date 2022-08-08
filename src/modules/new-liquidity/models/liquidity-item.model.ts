@@ -1,7 +1,7 @@
-import { LiquidityItemWrapDto } from '../dto';
+import { LiquidityItemResponseDto } from '../dto';
 
-export class LiquidityItemModel extends LiquidityItemWrapDto {
-  constructor(dto: LiquidityItemWrapDto) {
+export class LiquidityItemModel extends LiquidityItemResponseDto {
+  constructor(dto: LiquidityItemResponseDto) {
     super();
 
     for (const key in dto) {
