@@ -12,6 +12,8 @@ export const getMapperKind = (_type: unknown) => {
       return MapperKinds.BIGNUMBER;
     case Boolean:
       return MapperKinds.BOOLEAN;
+    case Date:
+      return MapperKinds.DATE;
     case String:
     case Standard:
       return MapperKinds.STRING;

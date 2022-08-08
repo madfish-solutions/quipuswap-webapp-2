@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
@@ -18,6 +18,7 @@ import {
   useStableswapItemStore,
   useStableswapTokensBalances
 } from '../../../../../../hooks';
+import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 import { useZeroInputsError } from './use-zero-inputs-error';
@@ -37,20 +38,24 @@ export const useAddLiqFormViewModel = () => {
 
   const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
 
-  const isZeroInputsError = useZeroInputsError();
-  const handleSubmit = async (_: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
-    if (isZeroInputsError) {
-      return;
-    }
+  const { isZeroInputsError } = useZeroInputsError();
+  const handleSubmit = useCallback(
+    async (values: AddLiqFormValues, actions: FormikHelpers<AddLiqFormValues>) => {
+      const isZeroInputs = isZeroInputsError(values);
 
-    actions.setSubmitting(true);
+      if (isZeroInputs) {
+        return;
+      }
 
-    await addStableswapLiquidity();
-    formStore.clearStore();
-
-    formik.resetForm();
-    actions.setSubmitting(false);
-  };
+      actions.setSubmitting(true);
+      const inputAmounts = getInputsAmountFormFormikValues(values);
+      await addStableswapLiquidity(inputAmounts);
+      formStore.clearStore();
+      actions.resetForm();
+      actions.setSubmitting(false);
+    },
+    [addStableswapLiquidity, formStore, isZeroInputsError]
+  );
 
   const formik = useFormik({
     validationSchema,
@@ -79,10 +84,8 @@ export const useAddLiqFormViewModel = () => {
     return async (inputAmount: string) => {
       const { fixedValue } = numberAsString(inputAmount, localTokenDecimals);
       const formikKey = getInputSlugByIndex(index);
-      const inputAmountBN = saveBigNumber(fixedValue, null);
 
-      formik.setFieldValue(formikKey, inputAmount);
-      formStore.setInputAmount(inputAmountBN, index);
+      formik.setFieldValue(formikKey, fixedValue);
     };
   };
 
@@ -111,9 +114,7 @@ export const useAddLiqFormViewModel = () => {
           formikValues[getInputSlugByIndex(indexOfCalculatedInput)] = toFixed(calculatedValue);
         }
       });
-
       formik.setValues(formikValues);
-      formStore.setInputAmounts(calculatedValues);
     };
   };
 
