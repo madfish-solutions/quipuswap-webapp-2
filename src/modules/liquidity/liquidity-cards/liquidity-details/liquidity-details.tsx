@@ -158,9 +158,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         <>
           <DetailsCardCell
             cellName={t('liquidity|Your Total LP')}
-            tooltipContent={t(
-              "liquidity|Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool."
-            )}
+            tooltipContent={t('liquidity|yourTotalLPTooltip')}
             className={styles.LiquidityDetails_CardCell}
             data-test-id="yourTotalLp"
           >
@@ -173,9 +171,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
           <DetailsCardCell
             cellName={t('liquidity|Your Frozen LP')}
-            tooltipContent={t(
-              'liquidity|Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.'
-            )}
+            tooltipContent={t('liquidity|yourFrozenLPTooltip')}
             className={styles.LiquidityDetails_CardCell}
             data-test-id="yourFrozenLP"
           >
