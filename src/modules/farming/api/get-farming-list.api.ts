@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
-import { FARMING_LIST_API_URL } from '@config/constants';
+import { FARMING_NEW_LIST_API_URL } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { isEmptyArray, isNull, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -13,7 +13,7 @@ import { FarmingItemModel } from '../models';
 
 //TODO: change name
 export const farmingListFetch = async () => {
-  const response = await fetch(FARMING_LIST_API_URL);
+  const response = await fetch(FARMING_NEW_LIST_API_URL);
 
   return (await response.json()) as FarmingListResponse;
 };
