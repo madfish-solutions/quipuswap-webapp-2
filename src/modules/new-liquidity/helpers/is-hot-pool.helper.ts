@@ -1,8 +1,10 @@
+import { BigNumber } from 'bignumber.js';
+
 import { HOT_POOLS } from '@config/config';
 import { isEqual } from '@shared/helpers';
 
-import { HotPoolInterface, PoolType } from '../interfaces';
+import { PoolType } from '../interfaces';
 
-export const isHotPool = (item: HotPoolInterface) => {
-  return HOT_POOLS.includes(String(item.id)) && isEqual(item.type, PoolType.DEX_TWO);
+export const isHotPool = (id: BigNumber, type: string) => {
+  return HOT_POOLS.includes(id.toString()) && isEqual(type, PoolType.DEX_TWO);
 };

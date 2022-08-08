@@ -5,6 +5,7 @@ import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { isHotPool } from './helpers';
 import { useGetNewLiquidityList, useNewLiquidityListStore } from './hooks';
 import { useGetNewLiquidityStats } from './hooks/use-get-new-liquidity-stats';
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
@@ -44,11 +45,13 @@ export const useNewLiquidityPageViewModel = () => {
   }, [getNewLiquidityList, getNewLiquidityStats, isReady]);
 
   const dataList = newLiquidityListStore?.list?.map(newLiquidityListDataHelper) ?? [];
+  const hotPools = dataList.filter(({ id, type }) => isHotPool(id, type));
 
   return {
     isInitialized,
     isLoading: false,
     list: dataList,
-    title
+    title,
+    hotPools
   };
 };
