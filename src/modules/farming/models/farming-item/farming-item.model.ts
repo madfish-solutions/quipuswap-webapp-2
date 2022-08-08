@@ -1,7 +1,7 @@
 import { FARMING_FEES_PERCENTAGE_PRECISION } from '@config/constants';
 import { toReal } from '@shared/helpers';
 
-import { FarmingItemDto } from '../dto';
+import { FarmingItemDto } from '../../dto';
 
 export class FarmingItemModel extends FarmingItemDto {
   constructor(dto: FarmingItemDto) {

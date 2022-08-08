@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Typed } from '@shared/decorators';
 
-import { FarmingStats } from '../interfaces';
+import { FarmingStats } from '../../interfaces';
 
 export class FarmingStatsDto implements FarmingStats {
   @Typed()

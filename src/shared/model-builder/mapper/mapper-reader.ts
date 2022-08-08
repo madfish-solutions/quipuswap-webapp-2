@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BigNumber } from 'bignumber.js';
+
 import { isUndefined } from '@shared/helpers';
 
 import { MapperConfig } from './mapper-config.type';
 import { mapperFactory } from './mapper.factory';
+
+const isObject = (value: any) => {
+  return typeof value === 'object' && value !== null && !(value instanceof BigNumber) && !(value instanceof Date);
+};
 
 export const mapperReader = (
   initialObject: Record<string, any> | Array<Record<string, any>>,
@@ -20,7 +26,7 @@ export const mapperReader = (
         return [key, value.map((value2: any) => mapperReader(value2, shape))];
       }
 
-      if (typeof value === 'object') {
+      if (isObject(value)) {
         return [key, mapperReader(value, shape)];
       }
 

@@ -16,9 +16,8 @@ import {
   isEmptyArray,
   saveBigNumber
 } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorData, LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
 import { farmingListFetch, getAllFarmsUserInfoApi, getFarmingListApi, getFarmingStatsApi } from '../api';
@@ -26,7 +25,6 @@ import {
   getRewardsInUsd,
   getEndTimestamp,
   getPendingRewards,
-  UsersInfoValueWithId,
   getIsHarvestAvailable,
   getUserInfoLastStakedTime,
   getUserPendingRewardWithFee
@@ -38,7 +36,9 @@ import {
   FarmingItemResponseModel,
   FarmingListBalancesModel,
   FarmingListResponseModel,
-  FarmingStatsResponseModel
+  FarmingStatsResponseModel,
+  UserInfoModel,
+  UserInfoResponseModel
 } from '../models';
 
 const ZERO_BN = new BigNumber(ZERO_AMOUNT);
@@ -70,6 +70,10 @@ const defaultList = {
 
 const defaultListBalances = {
   balances: [] as Array<FarmingItemBalancesModel>
+};
+
+const defaultUserInfo = {
+  userInfo: []
 };
 
 @ModelBuilder()
@@ -155,11 +159,18 @@ export class FarmingListStore {
 
   //#endregion farming list balances store
 
-  readonly userInfo = new LoadingErrorData<Nullable<UsersInfoValueWithId[]>, Nullable<UsersInfoValueWithId[]>>(
-    [],
-    async () => await this.getUserInfo(),
-    noopMap
-  );
+  //#region farming list user info
+  @Led({
+    default: defaultUserInfo,
+    loader: async (self: FarmingListStore) => await self.getUserInfo(),
+    model: UserInfoResponseModel
+  })
+  readonly _userInfo: LoadingErrorDataNew<UserInfoResponseModel, typeof defaultUserInfo>;
+
+  get userInfo(): Array<UserInfoModel> {
+    return this._userInfo.model.userInfo;
+  }
+  //#endregion farming list user info
 
   get farmingItemsWithBalances() {
     if (isEmptyArray(this.listBalances)) {
@@ -187,7 +198,7 @@ export class FarmingListStore {
   tokensRewardList: Array<TokensReward> = [];
 
   readonly updateUserInfoInterval = new MakeInterval(
-    async () => await this.userInfo.load(),
+    async () => await this._userInfo.load(),
     FARM_REWARD_UPDATE_INTERVAL
   );
   readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
@@ -219,7 +230,12 @@ export class FarmingListStore {
       return null;
     }
 
-    return await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
+    const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
+
+    // eslint-disable-next-line no-console
+    console.log(userInfo);
+
+    return { userInfo };
   }
 
   async getQuipuPendingRewards() {
@@ -237,13 +253,13 @@ export class FarmingListStore {
   }
 
   findUserInfo(id: Undefined<string>) {
-    return this.userInfo.data?.find(_userInfo => id === _userInfo.id.toFixed()) || null;
+    return this.userInfo?.find(_userInfo => id === _userInfo.id.toFixed()) || null;
   }
 
   updatePendingRewards() {
     const isBalanceLoaded = this.listBalances.some(({ earnBalance }) => isExist(earnBalance));
 
-    if (!isBalanceLoaded || !this.userInfo.data) {
+    if (!isBalanceLoaded || isEmptyArray(this.userInfo)) {
       this.totalPendingRewards = null;
       this.claimablePendingRewards = null;
       this.tokensRewardList = [];
@@ -312,7 +328,7 @@ export class FarmingListStore {
    */
   private getUniqTokensRewardSync(token: Token, timestamp: number) {
     const isBalanceLoaded = this.listBalances.some(({ earnBalance }) => isExist(earnBalance));
-    if (!isBalanceLoaded || !this.userInfo.data) {
+    if (!isBalanceLoaded || isEmptyArray(this.userInfo)) {
       return DEFAULT_REWARDS;
     }
 

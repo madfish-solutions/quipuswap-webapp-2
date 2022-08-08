@@ -1,4 +1,4 @@
-import { FarmingStatsDto } from '../dto';
+import { FarmingStatsDto } from '../../dto';
 
 export class FarmingStatsModel extends FarmingStatsDto {
   constructor(dto: FarmingStatsDto) {
