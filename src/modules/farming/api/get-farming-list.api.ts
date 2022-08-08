@@ -52,7 +52,7 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
     balances.set(key, { ...balance, ...userBalance });
   });
 
-  return { list: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
+  return { balances: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
 };
 
 export const getFarmingListApi = async (
@@ -61,7 +61,7 @@ export const getFarmingListApi = async (
   farmings: Array<FarmingItemModel>
 ) => {
   if (isNull(accountPkh) || isNull(tezos) || isEmptyArray(farmings)) {
-    return null;
+    return { balances: [] };
   }
 
   return await injectBalance(farmings, accountPkh, tezos);

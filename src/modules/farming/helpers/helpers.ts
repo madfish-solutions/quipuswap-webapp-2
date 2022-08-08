@@ -1,4 +1,3 @@
-import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE, PERCENTAGE_100 } from '@config/constants';
@@ -15,7 +14,7 @@ export interface UserBalances {
 }
 
 export interface UsersInfoValueWithId extends UsersInfoValue {
-  id: MichelsonMapKey;
+  id: BigNumber;
 }
 
 const ZERO = 0;
@@ -113,8 +112,9 @@ export const getAllFarmUserInfo = async (storage: FarmingContractStorage, accoun
 
   usersInfoValuesMap.forEach((userInfoValue, key) => {
     const value = defined(mapUsersInfoValue(userInfoValue ? userInfoValue : DEFAULT_RAW_USER_INFO));
+    const id = (key as UsersInfoKey)[0];
 
-    return usersInfoValues.push({ id: key, ...value });
+    return usersInfoValues.push({ id, ...value });
   });
 
   return usersInfoValues;
@@ -132,11 +132,11 @@ export const getUserFarmBalances = async (
     if (farm) {
       const balance = getBalances(usersInfoValue, farm);
 
-      acc.set(farm.id, balance);
+      acc.set(farm.id.toFixed(), balance);
     }
 
     return acc;
-  }, new Map());
+  }, new Map<string, UserBalances>());
 
   return balances;
 };

@@ -139,6 +139,8 @@ export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 export const STABLESWAP_DIVIDENDS_ACCUM_PRECISION = 10_000_000_000;
+
+export const FARMING_FEES_PERCENTAGE_PRECISION = 16;
 //#endregion
 
 // error constant

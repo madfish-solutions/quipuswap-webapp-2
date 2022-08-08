@@ -12,7 +12,9 @@ import {
   getTokenSlug,
   multipliedIfPossible,
   toReal,
-  defined
+  defined,
+  isEmptyArray,
+  saveBigNumber
 } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
@@ -112,7 +114,31 @@ export class FarmingListStore {
   readonly listBalancesStore: LoadingErrorDataNew<FarmingListBalancesModel, typeof defaultListBalances>;
 
   get listBalances() {
-    return this.listBalancesStore.model.balances;
+    const balances = this.listBalancesStore.model.balances;
+
+    return balances.map(balance => {
+      const farmingItemModel = this.getFarmingItemModelById(balance.id);
+
+      const myBalance =
+        farmingItemModel && balance.myBalance
+          ? toReal(saveBigNumber(balance.myBalance, new BigNumber('0')), farmingItemModel.stakedToken)
+          : null;
+      const depositBalance =
+        farmingItemModel && balance.depositBalance
+          ? toReal(saveBigNumber(balance.depositBalance, new BigNumber('0')), farmingItemModel.stakedToken)
+          : null;
+      const earnBalance =
+        farmingItemModel && balance.earnBalance
+          ? toReal(saveBigNumber(balance.earnBalance, new BigNumber('0')), farmingItemModel.rewardToken)
+          : null;
+
+      return {
+        ...balance,
+        myBalance,
+        depositBalance,
+        earnBalance
+      };
+    });
   }
 
   get accountPkh() {
@@ -136,7 +162,7 @@ export class FarmingListStore {
   );
 
   get farmingItemsWithBalances() {
-    if (this.accountPkh) {
+    if (isEmptyArray(this.listBalances)) {
       return this.listList;
     }
 
@@ -146,7 +172,7 @@ export class FarmingListStore {
         `FarmingListStore: 140, id: ${balances.id}`
       );
 
-      return Object.assign(balances, farmingItem);
+      return { ...balances, ...farmingItem };
     });
   }
 
@@ -175,7 +201,13 @@ export class FarmingListStore {
       updatePendingRewards: action,
 
       list: computed,
-      stats: computed
+      stats: computed,
+      listList: computed,
+      listBalances: computed,
+      farmingItemsWithBalances: computed,
+
+      accountPkh: computed,
+      tezos: computed
     });
   }
 
@@ -186,6 +218,8 @@ export class FarmingListStore {
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(list)) {
       return null;
     }
+    // eslint-disable-next-line no-console
+    console.log('getUserInfo');
 
     return await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
   }
@@ -205,8 +239,7 @@ export class FarmingListStore {
   }
 
   findUserInfo(id: Undefined<string>) {
-    //@ts-ignore
-    return this.userInfo.data?.find(_userInfo => id?.eq(_userInfo.id[0])) || null;
+    return this.userInfo.data?.find(_userInfo => id === _userInfo.id.toFixed()) || null;
   }
 
   updatePendingRewards() {
@@ -229,7 +262,14 @@ export class FarmingListStore {
 
       this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
       this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
-      this.tokensRewardList = this.getTokensRewardList(claimableFarmingsIds);
+      this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
+      // eslint-disable-next-line no-console
+      console.log(
+        this.tokensRewardList.map(item => ({
+          claimable: item.claimable.amount.toFixed(),
+          staked: item.staked.amount.toFixed()
+        }))[0]
+      );
     }
   }
 
