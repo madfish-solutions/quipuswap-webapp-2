@@ -1,88 +1,92 @@
+import { BigNumber } from 'bignumber.js';
+
+import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { ActiveStatus } from '@shared/types';
+import { getTokenPairSlug, isNull } from '@shared/helpers';
+import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
 
-const list = [
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    visibleIcon: true,
-    newLiquidityLablesData: { MEDAL: true, DOLLAR: true, CASE: true },
-    isNewLiquidity: true,
-    liquidityProvidersFee: 1
-  },
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    newLiquidityLablesData: { CASE: true, DOLLAR: true },
-    isNewLiquidity: true,
-    liquidityProvidersFee: 1
-  },
-  {
-    itemUrl: '/',
-    tokensInfo: [TEZOS_TOKEN, QUIPU_TOKEN],
-    tvlInUsd: 1000,
-    isNewLiquidity: true,
-    visibleIcon: true,
-    newLiquidityLablesData: { DOLLAR: true },
-    liquidityProvidersFee: 1
-  }
-];
+import { LiquidityTabs } from '../liquidity';
+import { StableswapRoutes } from '../stableswap';
+import { LiquidityItemResponse } from './interfaces';
 
-export const newLiquidityListDataHelper = () => {
-  const listData = list?.map(
-    ({ itemUrl, tokensInfo, tvlInUsd, newLiquidityLablesData, isNewLiquidity, visibleIcon }) => ({
-      href: itemUrl,
-      inputToken: tokensInfo,
-      status: { status: ActiveStatus.ACTIVE, filled: true },
-      isNewLiquidity,
-      visibleIcon,
-      newLiquidityLablesData,
-      itemStats: [
-        {
-          cellName: i18n.t('newLiquidity|TVL'),
-          tooltip: 'TVL tooltip',
-          amounts: {
-            amount: tvlInUsd,
-            currency: DOLLAR,
-            dollarEquivalent: tvlInUsd,
-            dollarEquivalentOnly: true
-          }
-        },
-        {
-          cellName: i18n.t('newLiquidity|volume'),
-          tooltip: 'Volume tooltip',
-          amounts: {
-            amount: tvlInUsd,
-            currency: DOLLAR,
-            dollarEquivalent: tvlInUsd,
-            dollarEquivalentOnly: true
-          }
-        },
-        {
-          cellName: i18n.t('newLiquidity|APR'),
-          tooltip: 'APR tooltip',
-          amounts: {
-            amount: tvlInUsd,
-            currency: PERCENT
-          }
-        },
-        {
-          cellName: i18n.t('newLiquidity|maxApr'),
-          tooltip: 'Max APR tooltip',
-          amounts: {
-            amount: tvlInUsd,
-            currency: PERCENT
-          }
-        }
-      ]
-    })
-  );
+const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
+  const aToken = tokens[0];
+  const bToken = tokens[1];
+
+  switch (type) {
+    case 'DEX_TWO':
+      return `${AppRootRoutes.Liquidity}/cpmm/${getTokenPairSlug(aToken, bToken)}`;
+    case 'TOKEN_TOKEN':
+      return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
+    case 'STABLESWAP':
+      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${id.toFixed()}`;
+    default:
+      return `${AppRootRoutes.Liquidity}`;
+  }
+};
+
+export const newLiquidityListDataHelper = ({
+  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type }
+}: LiquidityItemResponse) => {
+  const tokens = tokensInfo.map(({ token }) => token);
+  const itemStats = [];
+  const newLiquidityLablesData = { MEDAL: true, CASE: true, DOLLAR: true };
+
+  if (!isNull(tvlInUsd)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|TVL'),
+      tooltip: 'TVL tooltip',
+      amounts: {
+        amount: tvlInUsd,
+        currency: DOLLAR,
+        dollarEquivalent: tvlInUsd,
+        dollarEquivalentOnly: true
+      }
+    });
+  }
+
+  if (!isNull(volumeForWeek)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|volume'),
+      tooltip: 'Volume tooltip',
+      amounts: {
+        amount: volumeForWeek,
+        currency: DOLLAR,
+        dollarEquivalent: volumeForWeek,
+        dollarEquivalentOnly: true
+      }
+    });
+  }
+
+  if (!isNull(apr)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|APR'),
+      tooltip: 'APR tooltip',
+      amounts: {
+        amount: apr,
+        currency: PERCENT
+      }
+    });
+  }
+
+  if (!isNull(maxApr)) {
+    itemStats.push({
+      cellName: i18n.t('newLiquidity|maxApr'),
+      tooltip: 'Max APR tooltip',
+      amounts: {
+        amount: maxApr,
+        currency: PERCENT
+      }
+    });
+  }
 
   return {
-    list: listData
+    itemStats,
+    newLiquidityLablesData,
+    visibleIcon: true,
+    inputToken: tokens,
+    href: getLiquidityHref(id, type, tokens),
+    status: { status: ActiveStatus.ACTIVE, filled: true }
   };
 };
