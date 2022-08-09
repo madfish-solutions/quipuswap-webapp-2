@@ -10,7 +10,7 @@ import styles from './new-liquidity-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-page.vm';
 
 export const NewLiquidityPage: FC = observer(() => {
-  const { isInitialized, list, hotPools } = useNewLiquidityPageViewModel();
+  const { list, isInitialized, hotPools } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (

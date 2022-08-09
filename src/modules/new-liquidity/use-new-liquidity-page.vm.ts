@@ -24,9 +24,8 @@ export const useNewLiquidityPageViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (isNull(rootStore.newLiquidityListStore) || isNull(rootStore.newLiquidityStatsStore)) {
+        if (isNull(rootStore.newLiquidityListStore)) {
           await rootStore.createNewLiquidityListStore();
-          await rootStore.createNewLiquidityStatsStore();
         }
       } finally {
         setIsInitialized(true);
@@ -48,10 +47,9 @@ export const useNewLiquidityPageViewModel = () => {
   const hotPools = dataList.filter(({ id, type }) => isHotPool(id, type));
 
   return {
-    isInitialized,
-    isLoading: false,
-    list: dataList,
     title,
+    isInitialized,
+    list: dataList,
     hotPools
   };
 };

@@ -8,5 +8,5 @@ export class BlockInfoDto {
   hash: string;
 
   @Typed()
-  timestamp: string; //should be Date?
+  timestamp: Date;
 }
