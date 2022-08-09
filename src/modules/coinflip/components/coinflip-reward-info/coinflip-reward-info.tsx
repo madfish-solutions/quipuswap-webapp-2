@@ -7,15 +7,17 @@ import { RewardInfo } from '../reward-info';
 import { useCoinflipRewardInfoViewModel } from './use-coinflip-reward-info.vm';
 
 export const CoinflipRewardInfo: FC = observer(() => {
-  const { tokensExchangeRateDollarEquivalent, gamesCount, tokensWon, isGamesCount, hasTokensReward } =
+  const { tokensExchangeRateDollarEquivalent, gamesCount, tokensWon, isGamesCount, hasTokensReward, translation } =
     useCoinflipRewardInfoViewModel();
+
+  const { rewardTooltip, yourGamesTooltip } = translation;
 
   return (
     <RewardInfo
       userReward={tokensExchangeRateDollarEquivalent}
       gamesCount={gamesCount}
-      rewardTooltip="Reward Tooltip"
-      yourGamesTooltip="Your Games Tooltip"
+      rewardTooltip={rewardTooltip}
+      yourGamesTooltip={yourGamesTooltip}
       currency="$"
       hasTokensReward={hasTokensReward}
       isError={isGamesCount}

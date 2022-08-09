@@ -7,7 +7,7 @@ export const farm = {
   'Next Delegate': 'Next Delegate',
   farmingEndsIn: 'Ends in',
   'Lock Period': 'Lock Period',
-  'Withdrawal Fee': 'Withdrawal Fee',
+  'Unlock Fee': 'Unlock Fee',
   'Interface Fee': 'Interface Fee',
   'Token Contract': 'Token Contract',
   'Farming Contract': 'Farming Contract',
@@ -20,23 +20,23 @@ export const farm = {
   'Earn extra income with QuipuSwap': 'Earn extra income with QuipuSwap',
   'Connect Wallet now!': 'Connect Wallet now!',
   valueLockedTooltip: 'Total amount of assets locked in the farm.',
-  dailyDistributionTooltip: 'A portion of the farming rewards that can be claimed/compounded daily.',
+  dailyDistributionTooltip: 'The total number of tokens that are released by the farm in 24 hours.',
   aprTooltip: 'Annual Percentage Rate. An estimation of the annual rate of return.',
   dailyAprTooltip: 'Daily rate of return as the percentage of your initial stake.',
   currentDelegateTooltip: 'The farm votes for this baker on the Dex pool with all deposited tokens.',
   nextDelegateTooltip: 'The next candidate to become the baker chosen and voted by the farm.',
   farmingEndsInTooltip: 'The amount of time until the current farming ends.',
   lockPeriodTooltip:
-    "The minimum amount of time locked assets should not be withdrawn. If withdrawn earlier, all earned rewards will be burned. Some pools, as noted in the farm's details, also apply an early withdrawal fee, substracting a portion of deposited tokens.",
-  withdrawalFeeTooltip:
-    'A fee incurred on withdrawal of assets from a running farm. The fee is charged from the deposit amount and is re-staked in the name of the farm, while accumulated rewards are exchanged to QUIPU and burnt.',
+    "The minimum amount of time locked assets should not be withdrawn. If withdrawn earlier, all earned rewards will be burned. Some pools, as noted in the farm's details, also apply an early unlock fee, substracting a portion of deposited tokens.",
+  unlockFeeTooltip:
+    'The fee will be charged from your deposit amount if you withdraw your assets before the farm locked period ends. All unlock fees may be used to buy back and burn QUIPU.',
   interfaceFeeTooltip: 'Percentage of earned tokens charged for providing an interface.',
   'Back to the list': 'Back to the list',
   yourShareTooltip: 'Current value of your stake in this farm.',
   yourDelegateTooltip:
     'The baker you prefer to vote for with your tokens on the Dex to increase chances this baker will be chosen as the delegate for the pool.',
   feeEndsInTooltip:
-    'Countdown till the moment when the stake can be withdrawn without paying the withdrawal fee and without burning earned rewards.',
+    'Countdown till the moment when the stake can be withdrawn without paying the unlock fee and without burning earned rewards.',
   singleFarmRewardTooltip: 'Your unclaimed farming reward from this farm.',
   select: 'Select',
   fullCardTooltip: 'Add Liquidity to the selected liquidity pool, stake liquidity tokens here, earn rewards.',
@@ -84,13 +84,13 @@ export const farm = {
   confirmationUpdateStake:
     'If you make the new stake, your lock countdown will be reset but all rewards will be saved. Your lock countdown ends in {{days}} days {{hours}} hours {{minutes}} minutes.',
   confirmationUnstake:
-    'If you make the withdrawal now, the {{persent}}% withdrawal fee will be charged from your deposit and all your rewards will be lost. You can wait {{days}} days {{hours}} hours to make the free withdrawal.',
+    'If you make the withdrawal now, the {{persent}}% unlock fee will be charged from your deposit and all your rewards will be lost. You can wait {{days}} days {{hours}} hours to make the free withdrawal.',
   confirmationUnstakeZero:
     'If you make the withdrawal now, all your rewards will be lost. You can wait {{days}} days {{hours}} hours to make the free withdrawal.',
   Tags: 'Tags',
   'Wanna earn more?': 'Wanna earn more?',
   increaseYourIncome:
-    'Increase your income by reinvesting the rewards to QUIPU pool with no lock periods and withdrawal fees. The compound effect is your best friend.',
+    'Increase your income by reinvesting the rewards to QUIPU pool with no lock periods and unlock fees. The compound effect is your best friend.',
   JustHarvest: 'Just harvest',
   iAmIn: 'Yes, I am in!',
   'Harvest successful': 'Harvest successful',

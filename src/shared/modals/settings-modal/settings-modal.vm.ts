@@ -130,7 +130,7 @@ export const useSettingModalViewModel = () => {
     liquiditySlippageTooltipTranslation: t('settings|slippageTooltip'),
 
     tradingSlippageTitleTranslation: t('settings|tradingSlippage'),
-    tradingSlippageTooltipTranslation: t('settings|slippageTooltip'),
+    tradingSlippageTooltipTranslation: t('settings|tradingTooltip'),
 
     resetTranslation: t('settings|reset'),
     saveTranslation: t('settings|save')
