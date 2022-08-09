@@ -1,4 +1,4 @@
-import { makeObservable } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorDataNew, RootStore } from '@shared/store';
@@ -40,6 +40,9 @@ export class StableswapListStore {
   //#endregion stableswap stats store
 
   constructor(private rootStore: RootStore) {
-    makeObservable(this, {});
+    makeObservable(this, {
+      list: computed,
+      stats: computed
+    });
   }
 }
