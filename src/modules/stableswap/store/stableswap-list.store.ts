@@ -7,31 +7,39 @@ import { Undefined } from '@shared/types';
 import { getStableswapListApi, getStableswapStatsApi } from '../api';
 import { StableswapItemModel, StableswapListModel, StableswapStatsModel } from '../models';
 
+const defaultStableswapList = {
+  list: []
+};
+
 @ModelBuilder()
 export class StableswapListStore {
+  //#region stableswap list store
   @Led({
-    default: [],
-    loader: async () => await getStableswapListApi(),
+    default: defaultStableswapList,
+    loader: getStableswapListApi,
     model: StableswapListModel
   })
-  readonly listStore: LoadingErrorDataNew<StableswapListModel>;
+  readonly listStore: LoadingErrorDataNew<StableswapListModel, typeof defaultStableswapList>;
 
+  get list(): Undefined<Array<StableswapItemModel>> {
+    return this.rootStore.stableswapFilterStore?.filterAndSort(this.listStore.model.list);
+  }
+  //#endregion stableswap list store
+
+  //#region stableswap stats store
   @Led({
     default: null,
-    loader: async () => await getStableswapStatsApi(),
+    loader: getStableswapStatsApi,
     model: StableswapStatsModel
   })
-  readonly statsStore: LoadingErrorDataNew<StableswapStatsModel>;
-
-  constructor(private rootStore: RootStore) {
-    makeObservable(this, {});
-  }
+  readonly statsStore: LoadingErrorDataNew<StableswapStatsModel, null>;
 
   get stats() {
     return this.statsStore.model;
   }
+  //#endregion stableswap stats store
 
-  get list(): Undefined<Array<StableswapItemModel>> {
-    return this.rootStore.stableswapFilterStore?.filterAndSort(this.listStore.model?.list ?? []);
+  constructor(private rootStore: RootStore) {
+    makeObservable(this, {});
   }
 }
