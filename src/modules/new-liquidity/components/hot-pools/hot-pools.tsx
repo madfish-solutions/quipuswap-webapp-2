@@ -12,6 +12,7 @@ interface Item {
   tvlInUsd: BigNumber;
   maxApr: Nullable<number>;
   inputToken: Array<Token>;
+  href: string;
 }
 interface Props {
   pools: Array<Item>;
@@ -20,8 +21,8 @@ interface Props {
 export const HotPools: FC<Props> = ({ pools }) => {
   return (
     <HotPoolSlider>
-      {pools.map(({ id, tvlInUsd, maxApr, inputToken }) => (
-        <HotPoolCard key={id.toString()} tvl={tvlInUsd} apr={maxApr} tokens={inputToken} />
+      {pools.map(({ id, tvlInUsd, maxApr, inputToken, href }) => (
+        <HotPoolCard key={id.toString()} tvl={tvlInUsd} apr={maxApr} tokens={inputToken} href={href} />
       ))}
     </HotPoolSlider>
   );

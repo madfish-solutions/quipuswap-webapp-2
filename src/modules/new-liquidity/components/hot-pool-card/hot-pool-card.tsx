@@ -22,11 +22,12 @@ interface Props {
   tvl: BigNumber;
   apr: Nullable<number>;
   tokens: Array<Token>;
+  href: string;
 }
 
 const ZERO_APR = '0';
 
-export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
+export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens, href }) => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -34,7 +35,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
   const fixedApr = apr?.toString() ?? ZERO_APR;
 
   return (
-    <Link to={'/'}>
+    <Link to={href}>
       <Card className={styles.card} contentClassName={styles.cardContent} banner="Hot Pools">
         <div className={styles.root}>
           <Confettis className={styles.confettis} />
