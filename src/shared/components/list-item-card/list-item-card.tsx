@@ -4,8 +4,8 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
-import { NewLiquidityLables } from '@modules/new-liquidity/components';
-import { NewLiquidityLablesInterface } from '@modules/new-liquidity/interfaces';
+import { NewLiquidityLabels } from '@modules/new-liquidity/components';
+import { NewLiquidityLabelsInterface } from '@modules/new-liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isUndefined } from '@shared/helpers';
 import { ArrowDown, VisibleIcon } from '@shared/svg';
@@ -28,7 +28,7 @@ export interface Props {
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
   visibleIcon?: boolean;
-  newLiquidityLablesData?: NewLiquidityLablesInterface;
+  newLiquidityLabelsData?: NewLiquidityLabelsInterface;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
   farmingItemDTI?: string;
@@ -46,7 +46,7 @@ export const ListItemCard: FC<Props> = ({
   labels,
   isNewLiquidity,
   visibleIcon,
-  newLiquidityLablesData,
+  newLiquidityLabelsData,
   status,
   isNew,
   itemStats,
@@ -91,7 +91,7 @@ export const ListItemCard: FC<Props> = ({
 
           <div className={styles.statusAndlabelsContainer}>
             {!isNewLiquidity && <LabelComponent {...status} />}
-            {newLiquidityLablesData && <NewLiquidityLables newLiquidityLablesData={newLiquidityLablesData} />}
+            {newLiquidityLabelsData && <NewLiquidityLabels newLiquidityLabelsData={newLiquidityLabelsData} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={LabelComponent} data={labels} />
