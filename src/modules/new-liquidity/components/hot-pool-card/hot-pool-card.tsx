@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
@@ -18,17 +19,23 @@ const modeClass = {
 };
 
 interface Props {
-  tvl: string;
-  apr: string;
+  tvl: BigNumber;
+  apr: Nullable<number>;
   tokens: Array<Token>;
+  href: string;
 }
 
-export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
+const ZERO_APR = '0';
+
+export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens, href }) => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const fixedTvl = tvl.toString();
+  const fixedApr = apr?.toString() ?? ZERO_APR;
+
   return (
-    <Link to={'/'}>
+    <Link to={href}>
       <Card className={styles.card} contentClassName={styles.cardContent} banner="Hot Pools">
         <div className={styles.root}>
           <Confettis className={styles.confettis} />
@@ -41,7 +48,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
-              volume={tvl}
+              volume={fixedTvl}
               label={t('newLiquidity|TVL')}
               currency={DOLLAR}
               data-test-id="TVL"
@@ -50,7 +57,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
-              volume={apr}
+              volume={fixedApr}
               label={t('newLiquidity|aprUpTo')}
               currency={PERCENT}
               data-test-id="aprUpTo"

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { PERCENT } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { isHotPool } from './helpers';
 import { useGetNewLiquidityList, useNewLiquidityListStore } from './hooks';
 import { useGetNewLiquidityStats } from './hooks/use-get-new-liquidity-stats';
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
@@ -44,35 +44,12 @@ export const useNewLiquidityPageViewModel = () => {
   }, [getNewLiquidityList, getNewLiquidityStats, isReady]);
 
   const dataList = newLiquidityListStore?.list?.map(newLiquidityListDataHelper) ?? [];
-
-  const stats = [
-    {
-      title: t('newLiquidity|tvl'),
-      tooltip: t('newLiquidity|tvlTooltip'),
-      amount: newLiquidityListStore?.stats?.totalValueLocked ?? null,
-      testId: 'statsTVL'
-    },
-    {
-      title: t('newLiquidity|maxApr'),
-      tooltip: t('newLiquidity|maxAprTooltip'),
-      amount: newLiquidityListStore?.stats?.maxApr ?? null,
-      currency: PERCENT,
-      testId: 'statsMaxAPR'
-    },
-    {
-      title: t('newLiquidity|pools'),
-      tooltip: t('newLiquidity|poolsTooltip'),
-      amount: newLiquidityListStore?.stats?.poolsCount ?? null,
-      currency: null,
-      testId: 'statsPools'
-    }
-  ];
+  const hotPools = dataList.filter(({ id, type }) => isHotPool(id, type));
 
   return {
     title,
-    stats,
     isInitialized,
     list: dataList,
-    isLoading: false
+    hotPools
   };
 };

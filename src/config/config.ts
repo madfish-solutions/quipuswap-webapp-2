@@ -90,6 +90,9 @@ export const YOUVES_FARMINGS = ['5', '6'];
 // Link to the Youves site
 export const YOUVES_LINK = 'https://app.youves.com/earn';
 
+// Hot Pools
+export const HOT_POOLS = ['0', '1', '2', '3'];
+
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
