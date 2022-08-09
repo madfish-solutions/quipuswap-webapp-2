@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { unstakeAssetsApi } from '@modules/farming/api/unstake-assets.api';
-import { FarmingItemModel } from '@modules/farming/models';
+import { FarmingItemWithBalances } from '@modules/farming/pages/list/types';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -19,10 +19,7 @@ export const useDoUnstake = () => {
   const { timeout, isUnlocked } = useFarmingTimeout();
 
   const doUnstake = useCallback(
-    async (
-      farmingItem: FarmingItemModel & { depositBalance: Nullable<BigNumber>; earnBalance: Nullable<BigNumber> },
-      balance: BigNumber
-    ) => {
+    async (farmingItem: FarmingItemWithBalances, balance: BigNumber) => {
       const logData = getStakeUnstakeLogData(farmingItem, balance, timeout, isUnlocked);
 
       try {

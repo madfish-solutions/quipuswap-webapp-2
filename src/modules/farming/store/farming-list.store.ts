@@ -20,7 +20,7 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import { farmingListFetch, getAllFarmsUserInfoApi, getFarmingListApi, getFarmingStatsApi } from '../api';
+import { getFarmingListApi, getAllFarmsUserInfoApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
 import {
   getRewardsInUsd,
   getEndTimestamp,
@@ -94,7 +94,7 @@ export class FarmingListStore {
   //#region farming list store
   @Led({
     default: defaultList,
-    loader: farmingListFetch,
+    loader: getFarmingListApi,
     model: FarmingListResponseModel
   })
   readonly listStore: LoadingErrorDataNew<FarmingListResponseModel, typeof defaultList>;
@@ -112,7 +112,7 @@ export class FarmingListStore {
   //#region farming list balances store
   @Led({
     default: defaultListBalances,
-    loader: async (self: FarmingListStore) => getFarmingListApi(self.accountPkh, self.tezos, self.listList),
+    loader: async (self: FarmingListStore) => getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorDataNew<FarmingListBalancesModel, typeof defaultListBalances>;

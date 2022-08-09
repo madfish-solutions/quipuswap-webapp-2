@@ -13,8 +13,9 @@ import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../ap
 import { getUserPendingReward } from '../helpers';
 import { RawUsersInfoValue, UsersInfoValue } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
-import { FarmingItemModel, FarmingItemResponseModel } from '../models';
+import { FarmingItemResponseModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
+import { FarmingItemWithBalances } from '../pages/list/types';
 
 const DEFAULT_INPUT_AMOUNT = 0;
 
@@ -70,9 +71,7 @@ export class FarmingItemStore {
     FARM_USER_INFO_UPDATE_INTERVAL
   );
 
-  get farmingItem(): Nullable<
-    FarmingItemModel & { depositBalance: Nullable<BigNumber>; earnBalance: Nullable<BigNumber> }
-  > {
+  get farmingItem(): Nullable<FarmingItemWithBalances> {
     const stakeItem = this.item;
     const { data: userInfo } = this.userInfoStore;
 
@@ -106,16 +105,15 @@ export class FarmingItemStore {
   async getPendingRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
     const { tezos } = this.rootStore;
     const { data: userInfo } = this.userInfoStore;
-    const item = this.item;
 
-    if (!isExist(tezos) || !isExist(userInfo) || !isExist(item)) {
+    if (!isExist(tezos) || !isExist(userInfo) || !isExist(this.item)) {
       return null;
     }
 
     const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
     const blockTimestampMS = new Date(blockTimestamp).getTime();
 
-    return getUserPendingReward(userInfo, item, blockTimestampMS).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
+    return getUserPendingReward(userInfo, this.item, blockTimestampMS).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
   }
 
   makePendingRewardsLiveable() {
@@ -125,9 +123,8 @@ export class FarmingItemStore {
 
   updatePendingRewards() {
     const { data: userInfo } = this.userInfoStore;
-    const item = this.item;
 
-    this.pendingRewards = userInfo && item && getUserPendingReward(userInfo, item);
+    this.pendingRewards = userInfo && this.item && getUserPendingReward(userInfo, this.item);
   }
 
   clearIntervals() {
@@ -157,34 +154,31 @@ export class FarmingItemStore {
 
   private async getUserInfo() {
     const { tezos, authStore } = this.rootStore;
-    const item = this.item;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
       return null;
     }
 
-    return await getUserInfoApi(item, authStore.accountPkh, tezos);
+    return await getUserInfoApi(this.item, authStore.accountPkh, tezos);
   }
 
   private async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
-    const item = this.item;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
       return null;
     }
 
-    return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
+    return await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken);
   }
 
   private async getUserFarmingDelegate() {
     const { tezos, authStore } = this.rootStore;
-    const item = this.item;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
       return null;
     }
 
-    return await getUserFarmingDelegate(tezos, authStore.accountPkh, item.id);
+    return await getUserFarmingDelegate(tezos, authStore.accountPkh, this.item.id);
   }
 }

@@ -1,7 +1,7 @@
-import { FarmingItemBalancesModel, FarmingItemModel } from '@modules/farming/models';
+import { FarmingItemModel } from '@modules/farming/models';
 import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
-import { FarmingSortField } from '../types';
+import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
 const sortById = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.id, second.id, sortDirection);
@@ -16,8 +16,8 @@ const sortByTvl = (first: FarmingItemModel, second: FarmingItemModel, sortDirect
   sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const sortByBalance = (
-  first: FarmingItemModel & FarmingItemBalancesModel,
-  second: FarmingItemModel & FarmingItemBalancesModel,
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
   sortDirection: SortDirection
 ) => {
   const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);
@@ -27,8 +27,8 @@ const sortByBalance = (
 };
 
 const sortByDeposit = (
-  first: FarmingItemModel & FarmingItemBalancesModel,
-  second: FarmingItemModel & FarmingItemBalancesModel,
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
   sortDirection: SortDirection
 ) => {
   const depositA = multipliedIfPossible(first.depositBalance, first.depositExchangeRate);
@@ -38,8 +38,8 @@ const sortByDeposit = (
 };
 
 const sortByEarned = (
-  first: FarmingItemModel & FarmingItemBalancesModel,
-  second: FarmingItemModel & FarmingItemBalancesModel,
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
   sortDirection: SortDirection
 ) => {
   const earnA = multipliedIfPossible(first.earnBalance, first.earnExchangeRate);
@@ -59,14 +59,14 @@ const farmingSorts = {
 };
 
 const sortFarming = (
-  first: FarmingItemModel & FarmingItemBalancesModel,
-  second: FarmingItemModel & FarmingItemBalancesModel,
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
   sortField: FarmingSortField,
   sortDirection: SortDirection
 ) => farmingSorts[sortField](first, second, sortDirection);
 
 export const sortFarmingList = (
-  list: Array<FarmingItemModel & FarmingItemBalancesModel>,
+  list: Array<FarmingListItemWithBalances>,
   sortField: FarmingSortField,
   sortDirection: SortDirection
 ) => {
