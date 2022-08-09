@@ -82,6 +82,10 @@ export const newLiquidityListDataHelper = ({
   }
 
   return {
+    id,
+    type,
+    tvlInUsd,
+    maxApr,
     itemStats,
     newLiquidityLablesData,
     visibleIcon: true,
