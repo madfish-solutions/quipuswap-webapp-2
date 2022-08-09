@@ -11,8 +11,7 @@ import { StableswapRoutes } from '../stableswap';
 import { LiquidityItemResponse } from './interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
-  const aToken = tokens[0];
-  const bToken = tokens[1];
+  const [aToken, bToken] = tokens;
 
   switch (type) {
     case 'DEX_TWO':
@@ -31,7 +30,7 @@ export const newLiquidityListDataHelper = ({
 }: LiquidityItemResponse) => {
   const tokens = tokensInfo.map(({ token }) => token);
   const itemStats = [];
-  const newLiquidityLablesData = { MEDAL: true, CASE: true, DOLLAR: true };
+  const newLiquidityLabelsData = { MEDAL: true, CASE: true, DOLLAR: true };
 
   if (!isNull(tvlInUsd)) {
     itemStats.push({
@@ -87,7 +86,7 @@ export const newLiquidityListDataHelper = ({
     tvlInUsd,
     maxApr,
     itemStats,
-    newLiquidityLablesData,
+    newLiquidityLabelsData,
     visibleIcon: true,
     inputToken: tokens,
     href: getLiquidityHref(id, type, tokens),

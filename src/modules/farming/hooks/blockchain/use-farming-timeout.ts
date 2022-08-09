@@ -18,8 +18,8 @@ const getTimeout = (lastStaked: Undefined<Date>, timelock: Undefined<string>) =>
 };
 
 export const useFarmingTimeout = () => {
-  const { farmingItem, userInfoStore } = useFarmingItemStore();
-  const timelock = farmingItem?.timelock;
+  const { item, userInfoStore } = useFarmingItemStore();
+  const timelock = item?.timelock;
   const lastStaked = userInfoStore.data?.last_staked;
 
   const timeout = getTimeout(lastStaked, timelock);

@@ -15,5 +15,6 @@ export const getStableswapItemApi = async (poolId: Nullable<BigNumber>) => {
 
   const data = (await response.json()) as StableswapItemResponse;
 
+  //TODO: make model with blockInfo
   return data.item;
 };

@@ -4,9 +4,8 @@ import { isExist } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
 import { ActiveStatus } from '@shared/types';
 
-import { FarmingItem } from '../interfaces';
 import { sortFarmingList } from '../pages/list/helpers'; //TODO
-import { FarmingSortField } from '../pages/list/types';
+import { FarmingListItemWithBalances, FarmingSortField } from '../pages/list/types';
 
 export class FarmingFilterStore extends BaseFilterStore {
   stakedOnly = false;
@@ -28,11 +27,11 @@ export class FarmingFilterStore extends BaseFilterStore {
     });
   }
 
-  filterAndSort(list: Array<FarmingItem>) {
+  filterAndSort(list: Array<FarmingListItemWithBalances>) {
     let localList = [...list];
     if (this.stakedOnly) {
       localList = localList.filter(
-        ({ depositBalance }) => isExist(depositBalance) && depositBalance.isGreaterThan('0')
+        localItem => isExist(localItem.depositBalance) && localItem.depositBalance.isGreaterThan('0')
       );
     }
 

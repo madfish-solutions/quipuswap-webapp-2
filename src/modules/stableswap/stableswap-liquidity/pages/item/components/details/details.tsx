@@ -28,7 +28,7 @@ export const Details: FC = observer(() => {
     contractAddress,
     poolId,
     totalLpSupply,
-    liquidityProvidersFee,
+    providersFee,
     interfaceFee,
     stakersFee,
     devFee,
@@ -96,7 +96,7 @@ export const Details: FC = observer(() => {
         className={cardCellClassName}
         data-test-id="liquidityProvidersFee"
       >
-        <StatePercentage isLoading={isLoading} value={liquidityProvidersFee} />
+        <StatePercentage isLoading={isLoading} value={providersFee} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('stableswap|Interface Fee')}

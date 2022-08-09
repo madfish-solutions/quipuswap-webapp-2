@@ -1,10 +1,10 @@
 import { getSymbolsString, isExist } from '@shared/helpers';
 import { i18n } from '@translation';
 
-import { StableswapItem } from '../types';
+import { StableswapItemModel } from '../models';
 import { extractTokens } from './extract-tokens';
 
-export const getStableswapTitle = (stableswapItem: Nullable<StableswapItem>) => {
+export const getStableswapTitle = (stableswapItem: Nullable<StableswapItemModel>) => {
   if (isExist(stableswapItem)) {
     const { tokensInfo } = stableswapItem;
     const tokenSymbols = getSymbolsString(extractTokens(tokensInfo));

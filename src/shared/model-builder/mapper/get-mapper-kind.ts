@@ -1,7 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Standard } from '@shared/types';
-
 import { MapperKinds } from './mapper-kinds.enum';
 
 export const getMapperKind = (_type: unknown) => {
@@ -15,7 +13,6 @@ export const getMapperKind = (_type: unknown) => {
     case Date:
       return MapperKinds.DATE;
     case String:
-    case Standard:
       return MapperKinds.STRING;
     default:
       throw TypeError();
