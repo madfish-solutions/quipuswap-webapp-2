@@ -7,14 +7,14 @@ import { useTranslation } from '@translation';
 
 import { HotPools } from './components';
 import styles from './new-liquidity-page.module.scss';
-import { useNewLiquidityViewModel } from './new-liquidity-page.vm';
+import { useNewLiquidityPageViewModel } from './use-new-liquidity-page.vm';
 
 export const NewLiquidityPage: FC = observer(() => {
-  const { isInitialazied, stats, list } = useNewLiquidityViewModel();
+  const { list, stats, isInitialized } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (
-    <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
