@@ -30,6 +30,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const fixedTvl = tvl.toString();
   const fixedApr = apr?.toString() ?? ZERO_APR;
 
   return (
@@ -46,7 +47,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens }) => {
               stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
-              volume={tvl.toString()}
+              volume={fixedTvl}
               label={t('newLiquidity|TVL')}
               currency={DOLLAR}
               data-test-id="TVL"
