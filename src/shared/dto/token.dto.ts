@@ -4,7 +4,7 @@ import { Standard, Token } from '@shared/types';
 import { TokenMetadataDto } from './token-metadata.dto';
 
 export class TokenDto implements Token {
-  @Typed({ type: String })
+  @Typed({ isEnum: true })
   type: Standard;
 
   @Typed()

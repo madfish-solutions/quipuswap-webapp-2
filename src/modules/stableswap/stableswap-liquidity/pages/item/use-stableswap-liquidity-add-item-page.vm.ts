@@ -18,7 +18,7 @@ export const useStableswapLiquiditAddItemPageViewModel = () => {
   const { getStableswapItem } = useGetStableswapItem();
   const stableswapItemStore = useStableswapItemStore();
   const { itemStore } = stableswapItemStore;
-  const { data: stableswapItem } = itemStore;
+  const { model: stableswapItem } = itemStore;
 
   const poolId = params.poolId;
 

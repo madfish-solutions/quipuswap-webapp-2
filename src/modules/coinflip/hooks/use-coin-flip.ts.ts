@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
+import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
 import { useCoinflipStore } from '@modules/coinflip/hooks';

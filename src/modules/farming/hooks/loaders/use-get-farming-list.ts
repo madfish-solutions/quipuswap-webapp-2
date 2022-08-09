@@ -14,19 +14,20 @@ export const useGetFarmingList = () => {
   const authStore = useAuthStore();
   const isReady = useReady();
   const farmingListStore = useFarmingListStore();
-  const { listStore } = farmingListStore;
+  const { listStore, listBalancesStore } = farmingListStore;
 
   const getFarmingList = useCallback(async () => {
     if (isReady) {
       try {
         await listStore.load();
+        await listBalancesStore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }
     }
     // We need it only for dependency for loading list based on it.
     noopMap(authStore.accountPkh);
-  }, [isReady, authStore.accountPkh, listStore, showErrorToast]);
+  }, [isReady, authStore.accountPkh, listStore, showErrorToast, listBalancesStore]);
 
   const delayedGetFarmingList = useCallback(async () => {
     await sleep(DELAY_BEFORE_DATA_UPDATE);

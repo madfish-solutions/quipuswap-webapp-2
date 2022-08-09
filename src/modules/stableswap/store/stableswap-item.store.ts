@@ -1,21 +1,23 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { LoadingErrorData, RootStore } from '@shared/store';
+import { Led, ModelBuilder } from '@shared/model-builder';
+import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getStableswapItemApi } from '../api';
-import { poolItemMapper } from '../mapping';
-import { IRawStableswapItem, StableswapItem } from '../types';
+import { StableswapItemModel } from '../models';
 
+@ModelBuilder()
 export class StableswapItemStore {
   poolId: Nullable<BigNumber> = null;
 
-  readonly itemStore = new LoadingErrorData<IRawStableswapItem['item'], Nullable<StableswapItem>>(
-    null,
-    async () => await getStableswapItemApi(this.poolId),
-    poolItemMapper
-  );
+  @Led({
+    default: null,
+    loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId),
+    model: StableswapItemModel
+  })
+  readonly itemStore: LoadingErrorDataNew<StableswapItemModel, null>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -28,7 +30,7 @@ export class StableswapItemStore {
   }
 
   get item() {
-    return this.itemStore.data;
+    return this.itemStore.model;
   }
 
   setPoolId(poolId: BigNumber) {

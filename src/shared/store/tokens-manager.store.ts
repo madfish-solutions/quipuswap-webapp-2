@@ -3,7 +3,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { NETWORK } from '@config/config';
 import { DEFAULT_TOKEN_ID } from '@config/constants';
-import { NETWORK_ID } from '@config/enviroment';
+import { NETWORK_ID } from '@config/environment';
 import {
   getTokenMetadata,
   getFavoritesTokensSlugsApi,

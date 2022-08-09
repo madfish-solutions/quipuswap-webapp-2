@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
-import { FARMING_API_URL, LIQUIDITY_API_URL, NETWORK_ID, STABLESWAP_API_URL } from './enviroment';
+import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL } from './environment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -82,11 +82,13 @@ export const SKIP = -1;
 
 //#region API
 export const LIST = 'list';
+export const NEW_LIST = 'new-list';
 export const STATS = 'stats';
 // TODO: change api address => change farm => dividends (if needed)
 export const DIVIDENDS = 'farm';
 
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
+export const FARMING_NEW_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
@@ -139,6 +141,8 @@ export const DEFAULT_BAKER_FOR_NON_TEZ_LP = null;
 export const DEFAULT_STABLESWAP_POOL_ID = 0;
 
 export const STABLESWAP_DIVIDENDS_ACCUM_PRECISION = 10_000_000_000;
+
+export const FARMING_FEES_PERCENTAGE_PRECISION = 16;
 //#endregion
 
 // error constant

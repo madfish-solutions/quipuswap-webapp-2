@@ -9,8 +9,7 @@ import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getFirstElement, getLiquidityUrl, getTokenPairSlug, isNull, isSingleElement } from '@shared/helpers';
 
 export const useFarmingFormInvestLinkViewModel = () => {
-  const { itemStore } = useFarmingItemStore();
-  const { data: farmingItem } = itemStore;
+  const { item: farmingItem } = useFarmingItemStore();
 
   const { investHref, tradeHref } = useMemo(() => {
     if (isNull(farmingItem)) {

@@ -4,8 +4,8 @@ import { isNull } from '@shared/helpers';
 import { CaseIcon, DollarIcon, MedalIcon } from '@shared/svg';
 import { Undefined } from '@shared/types';
 
-import { Icon, NewLiquidityLablesInterface } from '../../interfaces';
-import styles from './new-liquidity-lables.module.scss';
+import { Icon, NewLiquidityLabelsInterface } from '../../interfaces';
+import styles from './new-liquidity-labels.module.scss';
 
 const Component: Record<Icon, FC> = {
   [Icon.MEDAL]: MedalIcon,
@@ -14,11 +14,11 @@ const Component: Record<Icon, FC> = {
 };
 
 interface Props {
-  newLiquidityLablesData?: NewLiquidityLablesInterface;
+  newLiquidityLabelsData?: NewLiquidityLabelsInterface;
 }
 
-export const NewLiquidityLables: FC<Props> = ({ newLiquidityLablesData }) => {
-  const entries = Object.entries<Undefined<boolean>, Icon>(newLiquidityLablesData ?? {});
+export const NewLiquidityLabels: FC<Props> = ({ newLiquidityLabelsData }) => {
+  const entries = Object.entries<Undefined<boolean>, Icon>(newLiquidityLabelsData ?? {});
 
   const icons: Array<Nullable<FC>> = entries.map(([key, value]) => {
     return (value && Component[key]) || null;
@@ -26,8 +26,8 @@ export const NewLiquidityLables: FC<Props> = ({ newLiquidityLablesData }) => {
 
   return (
     <div className={styles.root}>
-      {icons.map((Lable, index) => (
-        <div key={`icon-${index}`}>{!isNull(Lable) ? <Lable /> : null}</div>
+      {icons.map((Label, index) => (
+        <div key={`icon-${index}`}>{!isNull(Label) ? <Label /> : null}</div>
       ))}
     </div>
   );
