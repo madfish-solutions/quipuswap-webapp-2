@@ -1,4 +1,3 @@
-/* eslint-disable import/order,  import/no-unresolved */
 import { TempleWallet } from '@temple-wallet/dapp';
 
 import { APP_NAME } from '@config/config';

@@ -1,4 +1,3 @@
-/* eslint-disable import/order,  import/no-unresolved */
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 

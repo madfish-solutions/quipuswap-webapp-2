@@ -1,4 +1,3 @@
-/* eslint-disable import/order,  import/no-unresolved */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
