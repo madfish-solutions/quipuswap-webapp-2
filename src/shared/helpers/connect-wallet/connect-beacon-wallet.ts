@@ -1,4 +1,3 @@
-/* eslint-disable import/order,  import/no-unresolved */
 import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';

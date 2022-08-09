@@ -1,4 +1,3 @@
-/* eslint-disable import/order,  import/no-unresolved */
 import { useCallback, useMemo, useState } from 'react';
 
 import constate from 'constate';
