@@ -1,0 +1,6 @@
+export enum PoolType {
+  STABLESWAP = 'STABLESWAP',
+  DEX_TWO = 'DEX_TWO',
+  TEZ_TOKEN = 'TEZ_TOKEN',
+  TOKEN_TOKEN = 'TOKEN_TOKEN'
+}
