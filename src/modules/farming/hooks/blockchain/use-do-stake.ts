@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { stakeTokenApi } from '@modules/farming/api/stake-token.api';
-import { FarmingItemModel } from '@modules/farming/models';
+import { FarmingItemWithBalances } from '@modules/farming/pages/list/types';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -21,7 +21,7 @@ export const useDoStake = () => {
 
   const doStake = useCallback(
     async (
-      farmingItem: FarmingItemModel & { depositBalance: Nullable<BigNumber>; earnBalance: Nullable<BigNumber> },
+      farmingItem: FarmingItemWithBalances,
       balance: BigNumber,
       tokenAddress: Token,
       selectedBaker: WhitelistedBaker

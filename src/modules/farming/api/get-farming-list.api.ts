@@ -12,7 +12,7 @@ import { FarmingContractStorageWrapper, FarmingListResponse } from '../interface
 import { FarmingItemModel } from '../models';
 
 //TODO: change name
-export const farmingListFetch = async () => {
+export const getFarmingListApi = async () => {
   const response = await fetch(FARMING_NEW_LIST_API_URL);
 
   return (await response.json()) as FarmingListResponse;
@@ -55,7 +55,7 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
   return { balances: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
 };
 
-export const getFarmingListApi = async (
+export const getFarmingListUserBalances = async (
   accountPkh: Nullable<string>,
   tezos: Nullable<TezosToolkit>,
   farmings: Array<FarmingItemModel>

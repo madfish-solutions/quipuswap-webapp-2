@@ -4,10 +4,10 @@ import { defined, toReal } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { mapFarmingLog } from '../mapping';
-import { FarmingItemModel } from '../models';
+import { FarmingItemWithBalances } from '../pages/list/types';
 
 export const getStakeUnstakeLogData = (
-  farmingItem: FarmingItemModel & { depositBalance: Nullable<BigNumber>; earnBalance: Nullable<BigNumber> },
+  farmingItem: FarmingItemWithBalances,
   balance: BigNumber,
   timeout: Nullable<number>,
   isUnlocked: boolean

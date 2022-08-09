@@ -1,15 +1,13 @@
 import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
-import { FarmingItemBalancesModel, FarmingItemModel } from '@modules/farming/models';
 import { getTimeLockDescription, getTokenSymbol, isNull } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import { FarmingListItemWithBalances } from './types';
+
 const ZERO = 0;
 
-export const farmingListDataHelper = (
-  item: FarmingItemModel & FarmingItemBalancesModel,
-  accountPkh: Nullable<string>
-) => {
+export const farmingListDataHelper = (item: FarmingListItemWithBalances, accountPkh: Nullable<string>) => {
   const statedTokenSymbol = getTokenSymbol(item.stakedToken);
   const timeLockLabel = getTimeLockDescription(item.timelock);
   const withdrawalFeeLabel = item.withdrawalFee.toFixed();
