@@ -19,7 +19,7 @@ import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
 import styles from './list-item-card.module.scss';
 
-interface Props {
+export interface Props {
   href: string;
   inputToken: Token | Array<Token>;
   status: LabelComponentProps;

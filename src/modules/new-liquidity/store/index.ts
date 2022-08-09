@@ -1,1 +1,1 @@
-export * from './new-liquidity-stats.store';
+export * from './new-liquidity-list.store';
