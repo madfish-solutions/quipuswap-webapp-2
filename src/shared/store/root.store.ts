@@ -8,7 +8,6 @@ import {
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
 import { NewLiquidityListStore as INewLiquidityListStore } from '@modules/new-liquidity';
-import { NewLiquidityStatsStore as INewLiquidityStatsStore } from '@modules/new-liquidity/store';
 import {
   StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
@@ -52,7 +51,6 @@ export class RootStore {
   stableDividendsItemStore: Nullable<IStableDividendsItemStore> = null;
 
   newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
-  newLiquidityStatsStore: Nullable<INewLiquidityStatsStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -87,8 +85,6 @@ export class RootStore {
 
       coinflipStore: observable,
 
-      newLiquidityStatsStore: observable,
-
       setTezos: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,
@@ -102,9 +98,7 @@ export class RootStore {
 
       createStableDividendsListStore: action,
       createStableDividendsFilterStore: action,
-      createStableDividendsItemStore: action,
-
-      createNewLiquidityStatsStore: action
+      createStableDividendsItemStore: action
     });
   }
 
@@ -195,12 +189,5 @@ export class RootStore {
     }
     const { CoinflipStore } = await import('@modules/coinflip');
     this.coinflipStore = new CoinflipStore(this);
-  }
-
-  async createNewLiquidityStatsStore() {
-    if (isNull(this.newLiquidityStatsStore)) {
-      const { NewLiquidityStatsStore } = await import('@modules/new-liquidity/store/new-liquidity-stats.store');
-      this.newLiquidityStatsStore = new NewLiquidityStatsStore(this);
-    }
   }
 }
