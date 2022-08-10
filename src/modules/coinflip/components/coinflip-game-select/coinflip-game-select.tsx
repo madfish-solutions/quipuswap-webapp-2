@@ -4,18 +4,10 @@ import Lottie from 'react-lottie';
 
 import { Button } from '@shared/components';
 
-import animationData from '../../animations/amination-coin-flip.json';
+import animationData from '../../animations/anim.json';
 import styles from './coinflip-game-select.module.scss';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
-
-const animation = {
-  animationData,
-  realWidth: 1056,
-  realHeight: 600,
-  width: 600,
-  getHeight: () => Math.round((animation.width * animation.realHeight) / animation.realWidth)
-};
 
 export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
   const { error, isLoading, handleSelectSideA, handleSelectSideB, FaceIcon, BackIcon } =
@@ -25,15 +17,15 @@ export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
     <div className={styles.root}>
       <div className={styles.buttons}>
         {isLoading ? (
-          <div className={styles.button}>
+          <div className={styles.animation}>
             <Lottie
               options={{
                 loop: true,
                 autoplay: true,
-                animationData: animation.animationData
+                animationData
               }}
-              height={animation.getHeight()}
-              width={animation.width}
+              height={160}
+              width={160}
             />
           </div>
         ) : (
