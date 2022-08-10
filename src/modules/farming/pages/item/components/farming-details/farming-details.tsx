@@ -177,8 +177,8 @@ export const FarmingDetails: FC = observer(() => {
 
       {shouldShowWithdrawalFee && (
         <DetailsCardCell
-          cellName={t('farm|Withdrawal Fee')}
-          tooltipContent={t('farm|withdrawalFeeTooltip')}
+          cellName={t('farm|Unlock Fee')}
+          tooltipContent={t('farm|unlockFeeTooltip')}
           className={CardCellClassName}
           data-test-id="withdrawalFee"
         >

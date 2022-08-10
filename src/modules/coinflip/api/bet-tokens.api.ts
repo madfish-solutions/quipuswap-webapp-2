@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { COINFLIP_CONTRACT_ADDRESS } from '@config/enviroment';
+import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { Token } from '@shared/types';
 
 export const betTokens = async (

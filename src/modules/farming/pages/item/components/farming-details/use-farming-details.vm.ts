@@ -2,7 +2,7 @@ import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/enviroment';
+import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/environment';
 import { getRealDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
@@ -19,18 +19,14 @@ const NO_WITHDRAWAL_FEE_VALUE = 0;
 export const useFarmingDetailsViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const dAppReady = useReady();
-  const {
-    data: farmingItem,
-    isLoading: dataLoading,
-    isInitialized: dataInitialized,
-    error
-  } = farmingItemStore.itemStore;
+  const { isLoading: dataLoading, isInitialized: dataInitialized, error2 } = farmingItemStore.itemStore;
+  const { item } = farmingItemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
 
-  if (!farmingItem) {
+  if (!item) {
     return {
       shouldShowDelegates: true,
       shouldShowLockPeriod: true,
@@ -76,14 +72,14 @@ export const useFarmingDetailsViewModel = () => {
     harvestFee,
     depositTokenUrl,
     stakeStatus
-  } = farmingItem;
+  } = item;
 
   const realDailyDistribution = bigNumberToString(getRealDailyDistribution(rewardPerSecond, rewardToken));
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
     ? getDollarEquivalent(realDailyDistribution, earnExchangeRate)
     : null;
-  const currentDelegate = makeBaker(farmingItem.currentDelegate, bakers);
-  const nextDelegate = makeBaker(farmingItem.nextDelegate, bakers);
+  const currentDelegate = makeBaker(item.currentDelegate, bakers);
+  const nextDelegate = makeBaker(item.nextDelegate, bakers);
 
   const timeLockLabel = getTimeLockDescription(timelock);
 
@@ -93,7 +89,7 @@ export const useFarmingDetailsViewModel = () => {
   const shouldShowTags = shouldShowLockPeriod || shouldShowWithdrawalFee;
 
   return {
-    shouldShowDelegates: canDelegate(farmingItem),
+    shouldShowDelegates: canDelegate(item),
     shouldShowLockPeriod,
     shouldShowWithdrawalFee,
     endTime: new Date(endTime).getTime(),
@@ -119,7 +115,7 @@ export const useFarmingDetailsViewModel = () => {
     harvestFee,
     depositTokenUrl,
     isLoading,
-    isError: Boolean(error),
+    isError: Boolean(error2),
     stakeStatus
   };
 };

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
+import { FarmingItemModel } from '@modules/farming/models';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, isNull } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -9,7 +10,6 @@ import { useTranslation } from '@translation';
 
 import { harvestAllAndRestake } from '../../api';
 import { getUserInfoLastStakedTime, getEndTimestamp, getIsHarvestAvailable } from '../../helpers';
-import { FarmingItem } from '../../interfaces';
 import { useFarmingListStore } from '../stores';
 
 const ZERO_AMOUNT = 0;
@@ -22,17 +22,20 @@ export const useDoHarvestAllAndRestake = () => {
   const confirmOperation = useConfirmOperation();
 
   const doHarvestAllAndRestake = useCallback(
-    async (stakeList: FarmingItem[]) => {
+    async (stakeList: Array<FarmingItemModel>) => {
       if (isNull(farmingListStore)) {
         return;
       }
 
       const rewardsInQuipu = await farmingListStore.getQuipuPendingRewards();
 
+      //TODO: same code in "use-do-harvest-all" make helper
       const farmingIds: BigNumber[] = stakeList
-        .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
+        .filter(({ id }) =>
+          farmingListStore.getFarmingItemBalancesModelById(id.toFixed())?.earnBalance?.gt(ZERO_AMOUNT)
+        )
         .filter(farmingItem => {
-          const userInfo = farmingListStore.findUserInfo(farmingItem);
+          const userInfo = farmingListStore.findUserInfo(farmingItem.id.toFixed());
           const lastStakedTime = getUserInfoLastStakedTime(userInfo);
           const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
 

@@ -4,33 +4,31 @@ import { useTranslation } from '@translation';
 
 export const useListStatsViewModel = () => {
   const { t } = useTranslation(['farm']);
-  const farmingStore = useFarmingListStore();
-
-  const amount = farmingStore.statsStore.data;
+  const { stats: amounts } = useFarmingListStore();
 
   const stats = [
     {
       title: t('farm|totalValueLocked'),
       tooltip: t('farm|totalValueLockedTooltip'),
-      amount: amount?.totalValueLocked,
+      amount: amounts?.totalValueLocked,
       testId: FarmingListStatsDTA.TOTAL_VALUE_LOCKED
     },
     {
       title: t('farm|totalDailyReward'),
       tooltip: t('farm|totalDailyRewardTooltip'),
-      amount: amount?.totalDailyReward,
+      amount: amounts?.totalDailyReward,
       testId: FarmingListStatsDTA.TOTAL_DAILY_REWARD
     },
     {
       title: t('farm|totalPendingReward'),
       tooltip: t('farm|totalPendingRewardTooltip'),
-      amount: amount?.totalPendingReward,
+      amount: amounts?.totalPendingReward,
       testId: FarmingListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
       title: t('farm|totalClaimedReward'),
       tooltip: t('farm|totalClaimedRewardTooltip'),
-      amount: amount?.totalClaimedReward,
+      amount: amounts?.totalClaimedReward,
       testId: FarmingListStatsDTA.TOTAL_CLAIMED_REWARD
     }
   ];
