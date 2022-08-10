@@ -12,6 +12,7 @@ import {
   RawUsersInfoValue,
   UsersInfoValue
 } from '../interfaces';
+import { FarmingItemWithBalances } from '../pages/list/types';
 
 const DEFAULT_MAP_BN_DECIMALS = 0;
 const FEES_PERCENTAGE_PRECISION = 16;
@@ -78,7 +79,7 @@ export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<Us
     last_staked: new Date(raw.last_staked)
   };
 
-export const clearFarmingItem = (farmingItem: FarmingItem) => {
+export const clearFarmingItem = (farmingItem: FarmingItemWithBalances) => {
   return {
     id: farmingItem.id.toFixed(),
     apr: farmingItem.apr?.toFixed(),
@@ -90,7 +91,7 @@ export const clearFarmingItem = (farmingItem: FarmingItem) => {
   };
 };
 
-export const mapFarmingLog = (farmingItem: FarmingItem, balance: BigNumber) => {
+export const mapFarmingLog = (farmingItem: FarmingItemWithBalances, balance: BigNumber) => {
   const balanceInUsd = multipliedIfPossible(balance, farmingItem.earnExchangeRate)?.toFixed();
 
   return {

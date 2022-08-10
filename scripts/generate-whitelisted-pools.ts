@@ -4,7 +4,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { loadT2tDex } from '@modules/liquidity/hooks/helpers/load-t2t-dex';
 import { loadTokenToTokenPairInfo } from '@modules/liquidity/liquidity-cards/blockchain/getters';
 
-import { NETWORK_ID } from '../src/config/enviroment';
+import { NETWORK_ID } from '../src/config/environment';
 import { loadTezDex } from '../src/modules/liquidity/hooks/helpers/load-tez-dex';
 import { isExist, rpcClient } from '../src/shared/helpers';
 import { Token, TokenMetadata } from '../src/shared/types';

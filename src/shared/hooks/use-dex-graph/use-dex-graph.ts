@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import constate from 'constate';
 
-import { DEX_POOL_URL } from '@config/enviroment';
+import { DEX_POOL_URL } from '@config/environment';
 import { useTokens } from '@providers/dapp-tokens';
 import { Nullable } from '@shared/types';
 import { useToasts } from '@shared/utils';

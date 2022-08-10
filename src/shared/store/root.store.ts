@@ -7,7 +7,7 @@ import {
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore
 } from '@modules/farming/store';
-import { NewLiquidityStatsStore as INewLiquidityStatsStore } from '@modules/new-liquidity/store';
+import { NewLiquidityListStore as INewLiquidityListStore } from '@modules/new-liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
@@ -50,7 +50,7 @@ export class RootStore {
   stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
   stableDividendsItemStore: Nullable<IStableDividendsItemStore> = null;
 
-  newLiquidityStatsStore: Nullable<INewLiquidityStatsStore> = null;
+  newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -81,9 +81,9 @@ export class RootStore {
       stableDividendsFilterStore: observable,
       stableDividendsItemStore: observable,
 
-      coinflipStore: observable,
+      newLiquidityListStore: observable,
 
-      newLiquidityStatsStore: observable,
+      coinflipStore: observable,
 
       setTezos: action,
       createFarmingListStore: action,
@@ -98,14 +98,19 @@ export class RootStore {
 
       createStableDividendsListStore: action,
       createStableDividendsFilterStore: action,
-      createStableDividendsItemStore: action,
-
-      createNewLiquidityStatsStore: action
+      createStableDividendsItemStore: action
     });
   }
 
   setTezos(tezos: Nullable<TezosToolkit>) {
     this.tezos = tezos;
+  }
+
+  async createNewLiquidityListStore() {
+    if (isNull(this.newLiquidityListStore)) {
+      const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
+      this.newLiquidityListStore = new NewLiquidityListStore(this);
+    }
   }
 
   async createStableDividendsListStore() {
@@ -184,12 +189,5 @@ export class RootStore {
     }
     const { CoinflipStore } = await import('@modules/coinflip');
     this.coinflipStore = new CoinflipStore(this);
-  }
-
-  async createNewLiquidityStatsStore() {
-    if (isNull(this.newLiquidityStatsStore)) {
-      const { NewLiquidityStatsStore } = await import('@modules/new-liquidity/store/new-liquidity-stats.store');
-      this.newLiquidityStatsStore = new NewLiquidityStatsStore(this);
-    }
   }
 }

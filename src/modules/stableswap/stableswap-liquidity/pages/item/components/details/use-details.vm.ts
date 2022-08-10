@@ -12,7 +12,7 @@ export const useDetailsViewModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
   const { itemStore } = useStableswapItemStore();
-  const { data: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
+  const { model: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
 
   const isLoading = isDataLoading || !isDataInitialized || !dAppReady;
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
@@ -29,6 +29,10 @@ export const useDetailsViewModel = () => {
 
     return {
       ...item,
+      providersFee: item.providersFee,
+      devFee: item.devFee,
+      interfaceFee: item.interfaceFee,
+      stakersFee: item.stakersFee,
       poolId: item.poolId.toFixed(),
       cardCellClassName,
       isLoading,
@@ -46,7 +50,7 @@ export const useDetailsViewModel = () => {
     contractAddress: null,
     stableswapItemUrl: null,
     isWhitelisted: null,
-    liquidityProvidersFee: null,
+    providersFee: null,
     stakersFee: null,
     interfaceFee: null,
     poolContractUrl: undefined,

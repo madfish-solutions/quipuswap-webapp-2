@@ -15,7 +15,10 @@ export const useFarmingRewardsListViewModel = () => {
 
   const handleHarvestAll = async () => {
     amplitudeService.logEvent('HARVEST_ALL_CLICK');
-    await doHarvestAll(farmingListStore.listStore.data);
+    if (!farmingListStore.list) {
+      return;
+    }
+    await doHarvestAll(farmingListStore.list);
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   };
 

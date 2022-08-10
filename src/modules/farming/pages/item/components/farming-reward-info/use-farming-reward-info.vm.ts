@@ -13,7 +13,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
+  const { itemStore, item, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -62,7 +62,7 @@ export const useFarmingRewardInfoViewModel = () => {
   const myRewardInAtomic = farmingItem.earnBalance
     ? placeDecimals(farmingItem.earnBalance, farmingItem.stakedToken.metadata.decimals)
     : null;
-  const myReward = getUserReward(myRewardInAtomic, itemStore.data?.harvestFee);
+  const myReward = getUserReward(myRewardInAtomic, item?.harvestFee);
   const myRewardInUsd = multipliedIfPossible(myReward, farmingItem.earnExchangeRate);
 
   // TODO: Move to the model

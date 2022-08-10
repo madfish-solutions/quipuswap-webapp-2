@@ -13,7 +13,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeStableswapLiquidityBalancedApi, removeStableswapLiquidityImbalancedApi } from '../../api';
-import { apllyStableswapFee, getStableswapDeadline } from '../../helpers';
+import { applyStableswapFee, getStableswapDeadline } from '../../helpers';
 import { tokensAndAmountsMapper } from '../../mapping';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../store';
 
@@ -34,7 +34,7 @@ export const useRemoveStableswapLiquidity = () => {
     (token: Token, amount: BigNumber, fees: Array<BigNumber>) => {
       const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
-      const decreasedAmountWithFee = apllyStableswapFee(decreasedAmount, fees).integerValue(BigNumber.ROUND_DOWN);
+      const decreasedAmountWithFee = applyStableswapFee(decreasedAmount, fees).integerValue(BigNumber.ROUND_DOWN);
 
       return {
         token,
@@ -49,9 +49,9 @@ export const useRemoveStableswapLiquidity = () => {
       if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
         return;
       }
-      const { lpToken, contractAddress, tokensInfo, liquidityProvidersFee, stakersFee, interfaceFee, devFee } = item;
+      const { lpToken, contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
 
-      const fees = [liquidityProvidersFee, stakersFee, interfaceFee, devFee];
+      const fees = [providersFee, stakersFee, interfaceFee, devFee];
 
       const tokens = tokensInfo.map(({ token }) => token);
       const deadline = await getStableswapDeadline(tezos, transactionDeadline);

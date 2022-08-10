@@ -32,11 +32,11 @@ export const useFarmingListViewModel = () => {
   const { listStore, list } = farmingListStore;
   const { isLoading } = listStore;
 
-  const data2 = list?.map(item => farmingListDataHelper(item, accountPkh));
+  const data = list?.map(item => farmingListDataHelper(item, accountPkh));
 
   return {
     isLoading,
-    list: data2 ?? [],
+    list: data ?? [],
     title
   };
 };

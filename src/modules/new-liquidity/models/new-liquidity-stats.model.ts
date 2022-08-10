@@ -6,7 +6,7 @@ export class NewLiquidityStatsModel extends NewLiquidityStatsDto {
 
     for (const key in dto) {
       //@ts-ignore
-      this[key] = dto[key];
+      this[key] = dto[key as keyof NewLiquidityStatsDto];
     }
   }
 }

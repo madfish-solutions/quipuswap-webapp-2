@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { stakeTokenApi } from '@modules/farming/api/stake-token.api';
-import { FarmingItem } from '@modules/farming/interfaces';
+import { FarmingItemWithBalances } from '@modules/farming/pages/list/types';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -20,7 +20,12 @@ export const useDoStake = () => {
   const { timeout, isUnlocked } = useFarmingTimeout();
 
   const doStake = useCallback(
-    async (farmingItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
+    async (
+      farmingItem: FarmingItemWithBalances,
+      balance: BigNumber,
+      tokenAddress: Token,
+      selectedBaker: WhitelistedBaker
+    ) => {
       const logData = getStakeUnstakeLogData(farmingItem, balance, timeout, isUnlocked);
       try {
         amplitudeService.logEvent('STAKE', logData);

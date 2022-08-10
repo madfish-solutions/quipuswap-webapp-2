@@ -6,7 +6,7 @@ export class StableswapStatsModel extends StableswapStatsDto {
 
     for (const key in dto) {
       //@ts-ignore
-      this[key] = dto[key];
+      this[key] = dto[key as keyof StableswapStatsDto];
     }
   }
 }
