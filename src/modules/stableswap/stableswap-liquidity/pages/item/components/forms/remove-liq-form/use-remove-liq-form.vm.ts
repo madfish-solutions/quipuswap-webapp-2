@@ -128,7 +128,9 @@ export const useRemoveLiqFormViewModel = () => {
       const inputAmountBN = saveBigNumber(fixedValue, null);
 
       formikValues[getInputSlugByIndex(index)] = realValue;
-      const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply);
+      const lpValue = calculateLpValue(inputAmountBN, reserves, totalLpSupply)?.decimalPlaces(
+        lpToken.metadata.decimals
+      );
       formikValues[LP_INPUT_KEY] = toFixed(lpValue);
 
       const calculatedValues = tokensInfo.map(({ reserves: calculatedReserve, token }, indexOfCalculatedInput) => {
