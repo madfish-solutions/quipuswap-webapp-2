@@ -6,7 +6,7 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { APP_NAME, NETWORK } from '@config/config';
-import { NETWORK_ID, networksBaseUrls, RPC_URL } from '@config/enviroment';
+import { NETWORK_ID, networksBaseUrls, RPC_URL } from '@config/environment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import {
   beaconWallet,

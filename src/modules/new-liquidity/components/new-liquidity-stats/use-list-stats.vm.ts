@@ -1,10 +1,9 @@
 import { PERCENT } from '@config/constants';
+import { useNewLiquidityListStore } from '@modules/new-liquidity/hooks';
 import { useTranslation } from '@translation';
 
-import { useNewLiquidityStatsStore } from './hooks/store';
-
 export const useListStatsViewModel = () => {
-  const newLiquidityStatsStore = useNewLiquidityStatsStore();
+  const newLiquidityStatsStore = useNewLiquidityListStore();
   const { t } = useTranslation();
 
   const stats = [
@@ -31,6 +30,7 @@ export const useListStatsViewModel = () => {
   ];
 
   return {
-    stats
+    stats,
+    slidesToShow: 3
   };
 };

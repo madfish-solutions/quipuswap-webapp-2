@@ -225,7 +225,7 @@ export interface BlockInfoWrap {
 export interface BlockInfo {
   level: number;
   hash: string;
-  timestamp: string;
+  timestamp: Date;
 }
 
 export interface AmountToken {

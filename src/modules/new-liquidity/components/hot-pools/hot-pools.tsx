@@ -1,14 +1,28 @@
 import { FC } from 'react';
 
+import BigNumber from 'bignumber.js';
+
+import { Token } from '@shared/types';
+
 import { HotPoolCard } from '../hot-pool-card';
 import { HotPoolSlider } from '../hot-pool-slider';
-import { HotPoolsData } from './hot-pools-data';
 
-export const HotPools: FC = () => {
+interface Item {
+  id: BigNumber;
+  tvlInUsd: BigNumber;
+  maxApr: Nullable<number>;
+  inputToken: Array<Token>;
+  href: string;
+}
+interface Props {
+  pools: Array<Item>;
+}
+
+export const HotPools: FC<Props> = ({ pools }) => {
   return (
     <HotPoolSlider>
-      {HotPoolsData.map(({ id, tvl, apr, tokens }) => (
-        <HotPoolCard key={id} tvl={tvl} apr={apr} tokens={tokens} />
+      {pools.map(({ id, tvlInUsd, maxApr, inputToken, href }) => (
+        <HotPoolCard key={id.toString()} tvl={tvlInUsd} apr={maxApr} tokens={inputToken} href={href} />
       ))}
     </HotPoolSlider>
   );

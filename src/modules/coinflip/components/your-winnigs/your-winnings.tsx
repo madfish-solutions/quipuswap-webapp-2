@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { USD_DECIMALS } from '@config/constants';
-import { NETWORK_ID } from '@config/enviroment';
+import { NETWORK_ID } from '@config/environment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { isEqual } from '@shared/helpers';

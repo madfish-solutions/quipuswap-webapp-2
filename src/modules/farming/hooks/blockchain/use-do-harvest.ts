@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { harvestAssetsApi } from '@modules/farming/api';
-import { FarmingItem } from '@modules/farming/interfaces';
+import { FarmingItemWithBalances } from '@modules/farming/pages/list/types';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -18,7 +18,7 @@ export const useDoHarvest = () => {
   const { showErrorToast } = useToasts();
 
   const doHarvest = useCallback(
-    async (farmingItem: FarmingItem) => {
+    async (farmingItem: FarmingItemWithBalances) => {
       const rewardsInToken =
         farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? ZERO_BN;
       const exchangeRate = farmingItem.earnExchangeRate ?? ZERO_BN;

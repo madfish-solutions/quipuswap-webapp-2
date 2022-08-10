@@ -23,8 +23,8 @@ export const useStakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
-  const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = farmingItemStore;
-  const { data: farmingItem } = itemStore;
+  const { farmingItem, inputAmount, selectedBaker, availableBalanceStore } = farmingItemStore;
+
   const { data: availableBalance } = availableBalanceStore;
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;

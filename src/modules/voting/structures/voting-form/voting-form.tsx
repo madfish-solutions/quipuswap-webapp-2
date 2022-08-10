@@ -8,7 +8,7 @@ import { Field, FormSpy } from 'react-final-form';
 
 import { FACTORIES } from '@config/config';
 import { LP_TOKEN_DECIMALS } from '@config/constants';
-import { NETWORK_ID } from '@config/enviroment';
+import { NETWORK_ID } from '@config/environment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { UnvoteButton } from '@modules/voting/components';
 import { getCandidateInfo } from '@modules/voting/helpers';

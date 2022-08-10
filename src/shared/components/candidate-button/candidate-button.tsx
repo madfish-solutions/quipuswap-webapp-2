@@ -1,4 +1,4 @@
-import { TZKT_EXPLORER_URL } from '@config/enviroment';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getWhitelistedBakerName, isExist } from '@shared/helpers';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 

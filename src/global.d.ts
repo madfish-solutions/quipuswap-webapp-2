@@ -7,5 +7,6 @@ declare global {
 
   namespace Reflect {
     function getOwnMetadata<Return>(metadataKey: PropertyKey, target: object): Return;
+    function getMetadata<Return>(metadataKey: PropertyKey, target: object): Return;
   }
 }
