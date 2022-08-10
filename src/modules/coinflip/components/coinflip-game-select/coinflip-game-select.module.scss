@@ -1,5 +1,11 @@
 @import '@styles/breakpoints';
 
+.root {
+  background: top center url('./bg.png') no-repeat;
+  background-size: 100%;
+  margin-bottom: 10px;
+}
+
 .buttons {
   display: flex;
   justify-content: center;
