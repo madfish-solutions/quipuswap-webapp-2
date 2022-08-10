@@ -6,11 +6,11 @@ export const liquidity = {
   'The amount of token B locked in the pool by liquidity providers.':
     'The amount of token B locked in the pool by liquidity providers.',
   'Your Total LP': 'Your Total LP',
-  "Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.":
-    "Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.",
+  yourTotalLPTooltip:
+    "It's the number of liquidity tokens you currently hold in your wallet and stake in the Voting section.",
   'Your Frozen LP': 'Your Frozen LP',
-  'Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.':
-    'Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.',
+  yourFrozenLPTooltip:
+    'Shows how many your liquidity tokens were staked in the Voting section. If you want to unstake them - please, visit the Voting section and check the Vote and Veto tabs for this pool.',
   "Note! The pool doesn't exist. You will create the new one.":
     "Note! The pool doesn't exist. You will create the new one.",
   '{{tokenBSymbol}} Locked': '{{tokenBSymbol}} Locked',

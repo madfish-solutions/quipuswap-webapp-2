@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
-import { RPC_URL } from '@config/enviroment';
+import { RPC_URL } from '@config/environment';
 import { MAINNET_QUIPU_TOKEN } from '@config/tokens';
 import { Card } from '@shared/components/card';
 import { Slider } from '@shared/components/slider';

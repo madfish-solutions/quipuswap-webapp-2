@@ -4,7 +4,7 @@ import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap
 
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID } from './enviroment';
+import { NETWORK_ID } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
@@ -89,6 +89,9 @@ export const NEW_FARMINGS = ['20', '21'];
 export const YOUVES_FARMINGS = ['5', '6'];
 // Link to the Youves site
 export const YOUVES_LINK = 'https://app.youves.com/earn';
+
+// Hot Pools
+export const HOT_POOLS = ['0', '1', '2', '3'];
 
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;

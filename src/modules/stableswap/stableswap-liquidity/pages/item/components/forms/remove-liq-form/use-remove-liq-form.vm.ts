@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
+import { StableswapItemModel } from '@modules/stableswap/models';
 import {
   findBalanceToken,
   toReal,
@@ -32,7 +33,6 @@ import {
   useStableswapItemStore,
   useCalcTokenAmountView
 } from '../../../../../../hooks';
-import { StableswapItem } from '../../../../../../types';
 import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
@@ -43,7 +43,7 @@ export interface RemoveLiqFormValues {
   [key: string]: string;
 }
 
-const useRemoveLiqFormService = (item: Nullable<StableswapItem>, isBalancedProportion: boolean) => {
+const useRemoveLiqFormService = (item: Nullable<StableswapItemModel>, isBalancedProportion: boolean) => {
   const lpBalance = useTokenBalance(item?.lpToken);
   const fixedLpBalance = lpBalance ?? DEFAULT_LP_BALANCE;
 
