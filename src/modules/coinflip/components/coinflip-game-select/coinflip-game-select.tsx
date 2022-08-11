@@ -25,6 +25,7 @@ export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
               }}
               height={160}
               width={160}
+              isClickToPauseDisabled
             />
           </div>
         ) : (
