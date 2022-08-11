@@ -9,6 +9,8 @@ import {
   TezosBackActiveIcon
 } from '@shared/svg';
 
+import animationQuipuData from '../../animations/quipu.json';
+import animationTezosData from '../../animations/xtz.json';
 import { CoinSide, TokenToPlay } from '../../stores';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 
@@ -36,9 +38,12 @@ export const useCoinflipGameSelectViewModel = ({
   const handleSelectSideA = () => handleSelectCoinSide(CoinSide.Face);
   const handleSelectSideB = () => handleSelectCoinSide(CoinSide.Back);
 
+  const animationData = isTez ? animationTezosData : animationQuipuData;
+
   return {
     isLoading,
     error,
+    animationData,
     handleSelectSideA,
     handleSelectSideB,
     FaceIcon: getFaceIcon(),

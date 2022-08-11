@@ -4,13 +4,12 @@ import Lottie from 'react-lottie';
 
 import { Button } from '@shared/components';
 
-import animationData from '../../animations/anim.json';
 import styles from './coinflip-game-select.module.scss';
 import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
 
 export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
-  const { error, isLoading, handleSelectSideA, handleSelectSideB, FaceIcon, BackIcon } =
+  const { error, isLoading, handleSelectSideA, handleSelectSideB, FaceIcon, BackIcon, animationData } =
     useCoinflipGameSelectViewModel(props);
 
   return (
