@@ -30,8 +30,8 @@ export enum TokenToPlay {
 const DEFAULT_TOKEN_TO_PLAY = TokenToPlay.Quipu;
 
 export enum CoinSide {
-  Face = 'Face-head',
-  Back = 'Back-tail'
+  Face = 'head',
+  Back = 'tail'
 }
 
 export interface CoinflipGame {
