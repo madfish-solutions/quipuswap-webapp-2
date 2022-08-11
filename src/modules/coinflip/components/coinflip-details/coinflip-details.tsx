@@ -109,12 +109,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
         </DetailsCardCell>
 
-        <DetailsCardCell
-          className={styles.cardCell}
-          cellName={t('coinflip|maxBetAmount')}
-          tooltipContent={t('coinflip|maxBetAmountTooltip')}
-          data-test-id="maxBetAmount"
-        >
+        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|maxBetAmount')} data-test-id="maxBetAmount">
           <StateCurrencyAmount
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
