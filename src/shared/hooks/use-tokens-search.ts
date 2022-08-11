@@ -5,7 +5,6 @@ import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from '@config/con
 import { useSearchCustomTokens, useSearchTokens, useTokens } from '@providers/dapp-tokens';
 import { useTezos } from '@providers/use-dapp';
 import {
-  fixTokenNetworkValue,
   getTokenSlug,
   getTokenType,
   getUniqArray,
@@ -33,8 +32,6 @@ export const useTokensSearch = (
   const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
 
-  const tokensWithFixedNetworkValue = tokens.map(fixTokenNetworkValue);
-
   const [debouncedSearchInputValue, debouncedSetSearchInputValue] = useDebouncedState(DEBOUNCE_MS, searchInputValue);
   const [debouncedTokenId, debouncedSetTokenId] = useDebouncedState(DEBOUNCE_MS, tokenId);
 
@@ -46,7 +43,7 @@ export const useTokensSearch = (
         return [];
       }
 
-      const isTokens = tokensWithFixedNetworkValue.filter(token =>
+      const isTokens = tokens.filter(token =>
         localSearchToken(token as TokenWithRequiredNetwork, NETWORK, newInputValue, newTokenId)
       );
 
@@ -57,7 +54,7 @@ export const useTokensSearch = (
 
       return isExist(foundToken) ? isTokens.concat(foundToken) : isTokens;
     },
-    [searchCustomToken, tezos, tokensWithFixedNetworkValue]
+    [searchCustomToken, tezos, tokens]
   );
 
   const knownTokensSWRKey = useMemo(() => tokens.map(getTokenSlug).join(','), [tokens]);
