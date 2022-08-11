@@ -43,7 +43,7 @@ export const useTokensSearch = (
         return [];
       }
 
-      const isTokens = tokens.filter((token: Token) =>
+      const isTokens = tokens.filter(token =>
         localSearchToken(token as TokenWithRequiredNetwork, NETWORK, newInputValue, newTokenId)
       );
 
