@@ -19,8 +19,7 @@ import {
 import { GeneralStatsInterface } from '../api/types';
 import { getBidSize } from '../helpers';
 import { DashboardGeneralStats, GamersStats, GamersStatsRaw, UserLastGame, UserLastGameRaw } from '../interfaces';
-import { DEFAULT_GENERAL_STATS, generalStatsMapping, userLastGameMapper } from '../mapping';
-import { gamersStatsMapper } from '../mapping/gamers-stats.map';
+import { DEFAULT_GENERAL_STATS, generalStatsMapping, userLastGameMapper, gamersStatsMapper } from '../mapping';
 import { TokenWon } from '../types';
 
 export enum TokenToPlay {
@@ -31,8 +30,8 @@ export enum TokenToPlay {
 const DEFAULT_TOKEN_TO_PLAY = TokenToPlay.Quipu;
 
 export enum CoinSide {
-  A = 'head',
-  B = 'tail'
+  Face = 'head',
+  Back = 'tail'
 }
 
 export interface CoinflipGame {
@@ -46,8 +45,8 @@ const DEFAULT_COINFLIP_GAME: CoinflipGame = {
 };
 
 export class CoinflipStore {
+  isLoading = false;
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
-
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
   readonly gamesCountStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
@@ -162,6 +161,14 @@ export class CoinflipStore {
 
   setInput(input: Nullable<BigNumber>) {
     this.game.input = input;
+  }
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
   }
 
   private async getGamesCount() {

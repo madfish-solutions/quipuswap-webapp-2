@@ -16,8 +16,6 @@ export const coinflip = {
   gamesCount: 'Games count',
   gamesCountTooltip: 'The overall count of coinflips.',
   maxBetAmount: 'Max bet amount',
-  // TODO: maxBetAmountTooltip
-  maxBetAmountTooltip: '',
   gameId: 'Game ID',
   gameIdTooltip: 'For the sake of transarency, each coinflip is tagged by a unique trackable Game ID.',
   betSize: 'Bet size',
