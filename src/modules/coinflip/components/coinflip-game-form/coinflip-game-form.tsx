@@ -92,15 +92,6 @@ export const CoinflipGameForm: FC<Props> = observer(
           className={styles.input}
         />
         <div className={commonStyles.buttons}>
-          <Button
-            type="submit"
-            className={commonStyles.button}
-            disabled={disabled}
-            loading={isSubmitting}
-            data-test-id="flipButton"
-          >
-            {t('coinflip|Flip')}
-          </Button>
           <ConnectWalletOrDoSomething>
             <Button
               type="submit"
