@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { QuipuSwapVideo } from '@config/constants';
+import { eQuipuSwapVideo } from '@config/youtube';
 import {
   Button,
   CandidateButton,
@@ -15,6 +15,7 @@ import {
   Tabs,
   YouTube
 } from '@shared/components';
+import { useYoutubeTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -24,11 +25,13 @@ import { StateData } from '../state-data';
 import { TimespanView } from '../timespan-view';
 import styles from './farming-details.module.scss';
 import { useFarmingDetailsViewModel } from './use-farming-details.vm';
-import { useTabs } from './use-tabs.vm';
 
 export const FarmingDetails: FC = observer(() => {
-  const { t } = useTranslation(['farm']);
-  const { isDetails, tabsContent, activeId, setTabId } = useTabs();
+  const { t } = useTranslation();
+  const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
+    detailsLabel: t('farm|Farming Details'),
+    page: t('common|Farming')
+  });
 
   const {
     endTime,
@@ -239,7 +242,7 @@ export const FarmingDetails: FC = observer(() => {
           </div>
         </>
       ) : (
-        <YouTube videoId={QuipuSwapVideo.HowDoIStartFarmingOnQuipuSwap} />
+        <YouTube video={eQuipuSwapVideo.HowDoIStartFarmingOnQuipuSwap} />
       )}
     </Card>
   );

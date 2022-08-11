@@ -170,20 +170,3 @@ export const DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION = new BigNumber(DEFAU
 
 //TESTNET
 export const TESTNET_EXCHANGE_RATE = 1.5;
-
-export enum QuipuSwapVideo {
-  //Swap
-  HowToSwapUnlistedTokens = 'HO-b6riZiJc',
-  //Voting
-  HowToVoteForTheLPBacker = 'Hyvj26-d-Do',
-  HowToCollectRewardsForBaking = 'l4-hX_Z1MV4',
-  //Liquidity
-  HowToSeeLPTokensInYourWallet = '-WyCelXkk_c',
-  HowToAddLiquidityToAnExistingLiquidityPool = 'iWpFrHHGZVg',
-  HowToRemoveLiquidityFromTheLiquidityPool = 'xQOzBD1SRsk',
-  HowToAddANewLiquidityPoolToQuipuSwap = 'rW2jKnrF5Ew',
-  //Farming
-  HowDoIStartFarmingOnQuipuSwap = 'RxHdTYThI_k',
-  //Stableswap
-  HowToAddLiquidityToTheStableSwap = 'bEulMMvSqBc'
-}

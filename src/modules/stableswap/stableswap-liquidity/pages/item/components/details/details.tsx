@@ -2,17 +2,22 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { QuipuSwapVideo } from '@config/constants';
+import { eQuipuSwapVideo } from '@config/youtube';
 import { Card, Tabs, YouTube } from '@shared/components';
+import { useYoutubeTabs } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { DetailsInfo } from '../details-info';
 import { useDetailsViewModel } from './use-details.vm';
-import { useTabs } from './use-tabs.vm';
 
 export const Details: FC = observer(() => {
   const detailsInfoParams = useDetailsViewModel();
-  const { isDetails, tabsContent, activeId, setTabId } = useTabs();
+  const { t } = useTranslation();
+  const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
+    detailsLabel: t('common|Pool Details'),
+    page: t('common|Stableswap') + t('common|Liquidity')
+  });
 
   return (
     <Card
@@ -33,7 +38,7 @@ export const Details: FC = observer(() => {
       {isDetails ? (
         <DetailsInfo {...detailsInfoParams} />
       ) : (
-        <YouTube videoId={QuipuSwapVideo.HowToAddLiquidityToTheStableSwap} />
+        <YouTube video={eQuipuSwapVideo.HowToAddLiquidityToTheStableSwap} />
       )}
     </Card>
   );

@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { HIDE_ANALYTICS } from '@config/config';
-import { QuipuSwapVideo } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { eQuipuSwapVideo } from '@config/youtube';
 import {
   Card,
   DashPlug,
@@ -18,13 +18,13 @@ import {
   YouTube
 } from '@shared/components';
 import { isEmptyArray } from '@shared/helpers';
+import { useYoutubeTabs } from '@shared/hooks';
 import { DexPair, Nullable, Token, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
-import { useTabs } from './use-tabs.vm';
 
 interface SwapDetailsProps {
   fee: Nullable<BigNumber>;
@@ -51,9 +51,11 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   sellRate,
   shouldHideRouteRow
 }) => {
-  const { t } = useTranslation(['common', 'swap']);
-
-  const { isDetails, tabsContent, activeId, setTabId } = useTabs();
+  const { t } = useTranslation();
+  const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
+    detailsLabel: t('swap|exchangeDetails'),
+    page: t('common|Swap')
+  });
 
   const routes = useMemo(() => {
     if (route) {
@@ -142,7 +144,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
           )}
         </>
       ) : (
-        <YouTube videoId={QuipuSwapVideo.HowToSwapUnlistedTokens} />
+        <YouTube video={eQuipuSwapVideo.HowToSwapUnlistedTokens} />
       )}
     </Card>
   );
