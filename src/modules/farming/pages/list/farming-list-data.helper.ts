@@ -1,6 +1,9 @@
+import { BigNumber } from 'bignumber.js';
+
 import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
 import { getTimeLockDescription, getTokenSymbol, isNull } from '@shared/helpers';
+import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
 import { FarmingListItemWithBalances } from './types';
@@ -27,7 +30,16 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     labels.push({ status: item.stakeStatus, label: `${withdrawalFeeLabel}% UNLOCK FEE` });
   }
 
-  const itemStats = [
+  const itemStats: Array<{
+    cellName: string;
+    amounts: {
+      currency: string;
+      amountDecimals?: number;
+      amount: Nullable<BigNumber>;
+      dollarEquivalentOnly?: boolean;
+      dollarEquivalent?: Nullable<BigNumber>;
+    };
+  }> = [
     {
       cellName: i18n.t('farm|tvl'),
       amounts: {
@@ -36,24 +48,29 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
         currency: statedTokenSymbol,
         dollarEquivalentOnly: true
       }
-    },
-    {
-      cellName: i18n.t('farm|apr'),
-      amounts: {
-        amount: item.apr,
-        currency: PERCENT,
-        amountDecimals: 2
-      }
-    },
-    {
-      cellName: i18n.t('farm|apy'),
-      amounts: {
-        amount: item.apy,
-        currency: PERCENT,
-        amountDecimals: 2
-      }
     }
   ];
+
+  if (item.stakeStatus === ActiveStatus.ACTIVE) {
+    itemStats.push(
+      {
+        cellName: i18n.t('farm|apr'),
+        amounts: {
+          amount: item.apr,
+          currency: PERCENT,
+          amountDecimals: 2
+        }
+      },
+      {
+        cellName: i18n.t('farm|apy'),
+        amounts: {
+          amount: item.apy,
+          currency: PERCENT,
+          amountDecimals: 2
+        }
+      }
+    );
+  }
 
   const userStats = shouldShowUserStats
     ? [
