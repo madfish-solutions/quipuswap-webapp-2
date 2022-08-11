@@ -35,6 +35,12 @@ export const READ_ONLY_SIGNER_PK = 'edpkvWbk81uh1DEvdWKR4g1bjyTGhdu1mDvznPUFE2zD
 export const READ_ONLY_SIGNER_PK_HASH = 'tz1fVQangAfb9J1hRRMP2bSB6LvASD6KpY8A';
 //#endregion READ_ONLY_SIGNER
 
+//#region MAP TESTNET TOKENS ARRAY (change network value ithacanet => ghostnet);
+for (const item of GhostnetWhitelistTokens.tokens) {
+  item['network'] = NetworkType.GHOSTNET;
+}
+//#endregion
+
 //#region TOKENS
 const TOKENS_MAP = {
   [NetworkType.MAINNET]: MainnetWhitelistTokens,
