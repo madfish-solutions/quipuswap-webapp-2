@@ -4,7 +4,7 @@ import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, placeDecimals } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 
-import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
+import { getMinEndTime, getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
 import { useFarmingItemStore, useDoHarvest, useGetFarmingItem } from '../../../../hooks';
 import { canDelegate, makeBaker } from '../../helpers';
 import { getUserReward } from './get-user-reward.helper';
@@ -42,6 +42,7 @@ export const useFarmingRewardInfoViewModel = () => {
     return {
       shouldShowCandidate: true,
       farmingItem,
+      endTime: null,
       myDelegate: null,
       delegatesLoading,
       endTimestamp: null,
@@ -69,12 +70,15 @@ export const useFarmingRewardInfoViewModel = () => {
   const shouldShowCountdown = farmingItem.timelock !== NO_TIMELOCK_VALUE;
   const shouldShowCountdownValue = farmingItem.depositBalance ? !farmingItem.depositBalance.isZero() : false;
   const lastStakedTime = getUserInfoLastStakedTime(userInfo);
+  const endTime = farmingItem.endTime;
   const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
-  const isHarvestAvailable = getIsHarvestAvailable(endTimestamp);
+  const minEndTime = getMinEndTime(endTime, endTimestamp);
+  const isHarvestAvailable = getIsHarvestAvailable(minEndTime);
 
   return {
     shouldShowCandidate: canDelegate(farmingItem),
     farmingItem,
+    endTime: minEndTime ?? Number(NO_TIMELOCK_VALUE),
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
     endTimestamp,
