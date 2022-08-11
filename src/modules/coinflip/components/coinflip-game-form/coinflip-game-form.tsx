@@ -80,6 +80,7 @@ export const CoinflipGameForm: FC<Props> = observer(
           decimals={decimals}
           onInputChange={handleInputAmountChange}
           className={styles.input}
+          disabled={isLoading}
         />
         <TokenInput
           id="coinflip-form-payout"
@@ -97,7 +98,7 @@ export const CoinflipGameForm: FC<Props> = observer(
               type="submit"
               className={commonStyles.button}
               disabled={disabled}
-              loading={isSubmitting}
+              loading={isSubmitting || isLoading}
               data-test-id="flipButton"
             >
               {t('coinflip|Flip')}

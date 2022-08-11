@@ -3,12 +3,13 @@ import BigNumber from 'bignumber.js';
 import { useAmountInUsd, useAmplitudeService, useTokenBalance } from '@shared/hooks';
 import { useToasts } from '@shared/utils';
 
+import { getGameResult, Statuses } from '../../helpers';
 import { useCoinFlip, useCoinflipStore, useGamersStats, useUserLastGame } from '../../hooks';
 import { CoinSide } from '../../stores';
 
 export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
-  const { tokenToPlay, game, token, payout, isLoading } = coinflipStore;
+  const { tokenToPlay, game, token, payout, isLoading, isUserLastGameLoading, userLastGame } = coinflipStore;
 
   const tokenBalance = useTokenBalance(token) ?? null;
 
@@ -62,8 +63,10 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setInput(!input.isNaN() ? input : null);
   };
 
+  const gameResult = getGameResult(userLastGame?.status);
+
   return {
-    isLoading,
+    isLoading: isLoading || isUserLastGameLoading || gameResult === Statuses.started,
     tokenToPlay,
     tokenBalance,
     game,
