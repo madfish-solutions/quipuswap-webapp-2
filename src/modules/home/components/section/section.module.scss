@@ -1,6 +1,10 @@
 @import "@styles/variables";
 @import "@styles/breakpoints";
 
+.root {
+  padding-bottom: 20px;
+}
+
 .header {
   font-weight: 600;
   font-size: 1.286rem;
@@ -17,7 +21,7 @@
 
 @include media('>Lphone') {
   .root {
-    padding: 0 0 32px 0;
+    padding-bottom: 32px;
   }
 
   .header {
