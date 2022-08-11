@@ -3,11 +3,9 @@ import { useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { useCoinFlip, useGamersStats, useUserLastGame } from '@modules/coinflip/hooks';
-import { bigNumberToString, getFormikError, isEqual } from '@shared/helpers';
-import { useAmountInUsd, useAmplitudeService } from '@shared/hooks';
+import { bigNumberToString, getFormikError, isEqual, stringToBigNumber } from '@shared/helpers';
+import { useAmplitudeService } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
-import { useToasts } from '@shared/utils';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 import { useCoinflipValidation } from './use-coinflip.validation';
@@ -23,48 +21,22 @@ export const useCoinflipGameFormViewModel = (
   tokenBalance: Nullable<BigNumber>,
   payout: Nullable<BigNumber>,
   onAmountInputChange: (amountInput: string) => void,
-  onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void
+  onCoinSideSelect: (coinSide: Nullable<CoinSide>) => void,
+  onSubmit: (coinSide: string, input: BigNumber) => void
 ) => {
-  const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
-  const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
-
-  const { showErrorToast } = useToasts();
-  const { getAmountInUsd } = useAmountInUsd();
   const { log } = useAmplitudeService();
 
   const { decimals } = token.metadata;
 
   const validationSchema = useCoinflipValidation(tokenBalance);
 
-  const handleCoinFlip = async () => {
-    const amountInUsd = getAmountInUsd(new BigNumber(inputAmount), token);
+  const handleSubmit = async () => {
+    const input = stringToBigNumber(formik.values[FormFields.inputAmount]);
 
-    const logData = {
-      asset: tokenToPlay,
-      coinSide,
-      amount: Number(inputAmount),
-      amountInUsd: Number(amountInUsd)
-    };
+    onSubmit(formik.values[FormFields.coinSide], input);
 
-    try {
-      log('CLICK_FLIP_BUTTON_CLICK', logData);
-
-      await handleCoinFlipPure(new BigNumber(inputAmount), coinSide);
-      onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
-      formik.resetForm();
-      await getGamersStats();
-      await getUserLastGame();
-
-      log('CLICK_FLIP_OPERATION_SUCCESS', logData);
-    } catch (error) {
-      showErrorToast(error as Error);
-
-      log('CLICK_FLIP_OPERATION_FAILED', {
-        ...logData,
-        error
-      });
-    }
+    onCoinSideSelect(null); // TODO: Remove when fix problem connection between store and validation
+    formik.resetForm();
   };
 
   const formik = useFormik({
@@ -73,7 +45,7 @@ export const useCoinflipGameFormViewModel = (
       [FormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleCoinFlip
+    onSubmit: handleSubmit
   });
 
   const inputAmount = formik.values[FormFields.inputAmount];

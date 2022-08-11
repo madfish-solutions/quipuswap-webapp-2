@@ -41,6 +41,10 @@ export const CoinflipResultModal: FC<Props> = ({ result, wonAmount, currency }) 
   const title = isResultSuccess ? t('coinflip|congratulations') : t('coinflip|youLost');
   const subTitle = isResultSuccess ? t('coinflip|wonRound') : t('coinflip|youLost');
 
+  if (gameResult === Statuses.started) {
+    return null;
+  }
+
   return (
     <Modal
       isOpen={coinflipModalOpen}

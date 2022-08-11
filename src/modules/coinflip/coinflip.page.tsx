@@ -35,6 +35,7 @@ export const CoinflipPage: FC = observer(() => {
         <CoinflipGame />
         <CoinflipDetails />
       </StickyBlock>
+
       <CoinflipRules />
     </StateWrapper>
   );
