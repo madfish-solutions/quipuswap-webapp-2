@@ -2,7 +2,7 @@
 @import "@styles/breakpoints";
 
 .root {
-  padding: 0 0 20px 0;
+  padding-bottom: 20px;
 }
 
 .header {
@@ -21,7 +21,7 @@
 
 @include media('>Lphone') {
   .root {
-    padding: 0 0 32px 0;
+    padding-bottom: 32px;
   }
 
   .header {
