@@ -1,15 +1,15 @@
 import BigNumber from 'bignumber.js';
 
-import { isNull } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { isExist } from '@shared/helpers';
+import { Optional, Token } from '@shared/types';
 
 export const calculateOutputWithToken = (
-  shares: Nullable<BigNumber>,
+  shares: Optional<BigNumber>,
   totalLpSupply: BigNumber,
   outReserve: BigNumber,
   token: Token
 ) => {
-  if (isNull(shares)) {
+  if (!isExist(shares)) {
     return null;
   }
 
