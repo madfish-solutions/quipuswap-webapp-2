@@ -11,6 +11,7 @@ import { useCoinflipGameViewModel } from './coinflip-game.vm';
 export const CoinflipGame: FC = observer(() => {
   const { t } = useTranslation(['coinflip']);
   const {
+    isLoading,
     tokenToPlay,
     tokenBalance,
     game,
@@ -29,6 +30,7 @@ export const CoinflipGame: FC = observer(() => {
       data-test-id="coinflipDetails"
     >
       <CoinflipGameForm
+        isLoading={isLoading}
         token={token}
         amountBalance={tokenBalance}
         payout={payout}
