@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 
 import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS } from '@config/config';
-import { QuipuSwapVideo } from '@config/constants';
+import { eQuipuSwapVideo } from '@config/youtube';
 import { useTokensPair, useVoter, useVotingDex, useVotingLoading } from '@modules/voting/helpers/voting.provider';
 import { useBakers } from '@providers/dapp-bakers';
 import {
@@ -17,17 +17,20 @@ import {
 } from '@shared/components';
 import { Button } from '@shared/components/button';
 import { isNull } from '@shared/helpers';
+import { useYoutubeTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg';
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { getCandidateInfo, getVotingInfo } from '../../helpers';
-import { useTabs } from './use-tabs.vm';
 import styles from './voting-details.module.scss';
 
 export const VotingDetails: FC = () => {
-  const { isDetails, tabsContent, activeId, setTabId } = useTabs();
   const { t } = useTranslation();
+  const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
+    detailsLabel: t('voting|Voting Details'),
+    page: t('common|Voting')
+  });
   const { data: bakers } = useBakers();
   const { candidate } = useVoter();
   const { tokenPair } = useTokensPair();
@@ -142,8 +145,8 @@ export const VotingDetails: FC = () => {
           wrapperClassName={s.youtubeList}
           render={YouTube}
           data={[
-            { videoId: QuipuSwapVideo.HowToVoteForTheLPBacker },
-            { videoId: QuipuSwapVideo.HowToCollectRewardsForBaking }
+            { video: eQuipuSwapVideo.HowToVoteForTheLPBacker },
+            { video: eQuipuSwapVideo.HowToCollectRewardsForBaking }
           ]}
         />
       )}
