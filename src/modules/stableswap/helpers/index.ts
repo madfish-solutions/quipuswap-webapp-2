@@ -6,6 +6,7 @@ export * from './create-amount-michelson-map';
 export * from './extract-tokens';
 export * from './formik';
 export * from './get-input-slug-by-index';
+export * from './get-not-null-fixed-value';
 export * from './get-stableswap-deadline';
 export * from './get-stableswap-title';
 export * from './apply-stableswap-fee';
