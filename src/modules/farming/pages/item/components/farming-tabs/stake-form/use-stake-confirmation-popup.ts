@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@config/constants';
