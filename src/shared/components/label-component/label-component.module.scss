@@ -1,4 +1,5 @@
 @import "@styles/variables";
+@import "@styles/text";
 
 .container {
   padding: 1px;
@@ -6,6 +7,23 @@
   border-radius: 8px;
   white-space: nowrap;
 }
+
+.orLabelContainer {
+  display: flex;
+  column-gap: 8px;
+}
+.light {
+  .orLabel {
+    @include background-text-color($brand-01)
+  }
+}
+
+.dark {
+  .orLabel {
+    @include background-text-color($brand-02)
+  }
+}
+
 
 .status {
   display: block;
