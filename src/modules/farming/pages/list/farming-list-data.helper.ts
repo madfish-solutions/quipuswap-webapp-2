@@ -22,12 +22,19 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
   const farmingItemDTI = `farming-item-${item.id}`;
 
   const labels = [];
-  if (shouldShowLockPeriod) {
-    labels.push({ status: item.stakeStatus, label: `${timeLockLabel} LOCK` });
-  }
+  if (shouldShowLockPeriod && shouldShowWithdrawalFee) {
+    labels.push({
+      status: item.stakeStatus,
+      label: [`${timeLockLabel} LOCK`, `${withdrawalFeeLabel}% UNLOCK FEE`] as [string, string]
+    });
+  } else {
+    if (shouldShowLockPeriod) {
+      labels.push({ status: item.stakeStatus, label: `${timeLockLabel} LOCK` });
+    }
 
-  if (shouldShowWithdrawalFee) {
-    labels.push({ status: item.stakeStatus, label: `${withdrawalFeeLabel}% UNLOCK FEE` });
+    if (shouldShowWithdrawalFee) {
+      labels.push({ status: item.stakeStatus, label: `${withdrawalFeeLabel}% UNLOCK FEE` });
+    }
   }
 
   const itemStats: Array<{
