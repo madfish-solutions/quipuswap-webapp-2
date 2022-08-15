@@ -40,6 +40,7 @@ export const Opportunity: FC<Props> = ({ apr, href, index = 1 }) => {
             className={styles.stateCurrencyAmount}
             amountClassName={styles.amountClassName}
             currencyClassName={styles.currencyClassName}
+            amountDecimals={2}
           />
         </span>
         <span className={styles.aprOnQs}>APR on Quipuswap</span>
