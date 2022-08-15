@@ -1,5 +1,6 @@
 @import "@styles/_variables.scss";
 @import "@styles/breakpoints";
+@import "@styles/_text.scss";
 
 .root {
   position: relative;
@@ -74,9 +75,7 @@
   }
 
   .stateCurrencyAmount {
-    background: $brand-01;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-01);
   }
 }
 
@@ -86,9 +85,7 @@
   }
 
   .stateCurrencyAmount {
-    background: $brand-02;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-02);
   }
 }
 
