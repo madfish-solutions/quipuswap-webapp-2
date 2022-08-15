@@ -3,8 +3,6 @@ import { YupanaLogo } from '@shared/svg';
 
 import styles from './advertising.module.scss';
 
-// eslint-disable-next-line no-console
-console.log(Yupana);
 export const Advertising = () => {
   return (
     <div className={styles.container} style={{ background: `url(${Yupana})` }}>

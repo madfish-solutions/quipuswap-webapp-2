@@ -34,7 +34,6 @@
   font-family: "Inter";
   font-weight: 700;
   font-size: clamp(14px, 3vw, 32px);
-  /* identical to box height */
 
   color: #ffc700;
 
@@ -51,10 +50,3 @@
 
   text-shadow: 0px 0px 2px #00cdee;
 }
-
-// @include media("<tablet") {
-//   .yupanaLogo {
-//     width: 82px;
-//     height: 28px;
-//   }
-// }
