@@ -4,16 +4,15 @@ import { observable, makeObservable, action, computed } from 'mobx';
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { isExist, isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
-import { realBalanceMap, noopMap } from '@shared/mapping';
+import { realBalanceMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
+import { NullableStringWrapperModel } from '@shared/models';
 import { LoadingErrorData, LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
 import { getUserPendingReward } from '../helpers';
-import { RawUsersInfoValue, UsersInfoValue } from '../interfaces';
-import { mapUsersInfoValue } from '../mapping';
-import { FarmingItemResponseModel } from '../models';
+import { FarmingItemResponseModel, UsersInfoResponseModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 import { FarmingItemWithBalances } from '../pages/list/types';
 
@@ -37,7 +36,7 @@ export class FarmingItemStore {
   readonly itemStore: LoadingErrorDataNew<FarmingItemResponseModel, typeof defaultItem>;
 
   get item() {
-    return this.itemStore.model?.item;
+    return this.itemStore.model.item;
   }
   //#endregion item store region
 
@@ -47,17 +46,27 @@ export class FarmingItemStore {
     balance => realBalanceMap(balance, this.item?.stakedToken)
   );
 
-  readonly userInfoStore = new LoadingErrorData<Nullable<RawUsersInfoValue>, Nullable<UsersInfoValue>>(
-    null,
-    async () => await this.getUserInfo(),
-    mapUsersInfoValue
-  );
+  @Led({
+    default: { value: null },
+    loader: async self => await self.getUserInfo(),
+    model: UsersInfoResponseModel
+  })
+  readonly userInfoStore: LoadingErrorDataNew<UsersInfoResponseModel, { value: null }>;
 
-  readonly userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
-    null,
-    async () => await this.getUserFarmingDelegate(),
-    noopMap
-  );
+  get userInfo() {
+    return this.userInfoStore.model.value;
+  }
+
+  @Led({
+    default: { value: null },
+    loader: async self => await self.getUserFarmingDelegate(),
+    model: NullableStringWrapperModel
+  })
+  readonly userFarmingDelegateStore: LoadingErrorDataNew<NullableStringWrapperModel, { value: null }>;
+
+  get userFarmingDelegateAddress() {
+    return this.userFarmingDelegateStore.model.value ?? null;
+  }
 
   currentTab: FarmingFormTabs = FarmingFormTabs.stake;
 
@@ -73,7 +82,7 @@ export class FarmingItemStore {
 
   get farmingItem(): Nullable<FarmingItemWithBalances> {
     const stakeItem = this.item;
-    const { data: userInfo } = this.userInfoStore;
+    const userInfo = this.userInfo;
 
     return (
       stakeItem && {
@@ -97,14 +106,16 @@ export class FarmingItemStore {
       setSelectedBaker: action,
       updatePendingRewards: action,
 
-      item: computed
+      item: computed,
+      userFarmingDelegateAddress: computed,
+      userInfo: computed
     });
     this.clearBalance();
   }
 
   async getPendingRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
     const { tezos } = this.rootStore;
-    const { data: userInfo } = this.userInfoStore;
+    const userInfo = this.userInfo;
 
     if (!isExist(tezos) || !isExist(userInfo) || !isExist(this.item)) {
       return null;
@@ -122,7 +133,7 @@ export class FarmingItemStore {
   }
 
   updatePendingRewards() {
-    const { data: userInfo } = this.userInfoStore;
+    const userInfo = this.userInfo;
 
     this.pendingRewards = userInfo && this.item && getUserPendingReward(userInfo, this.item);
   }
@@ -152,14 +163,16 @@ export class FarmingItemStore {
     this.farmingId = farmingId;
   }
 
-  private async getUserInfo() {
+  async getUserInfo() {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return null;
+      return { value: null };
     }
 
-    return await getUserInfoApi(this.item, authStore.accountPkh, tezos);
+    return {
+      value: await getUserInfoApi(this.item, authStore.accountPkh, tezos)
+    };
   }
 
   private async getUserTokenBalance() {
@@ -172,13 +185,15 @@ export class FarmingItemStore {
     return await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken);
   }
 
-  private async getUserFarmingDelegate() {
+  async getUserFarmingDelegate() {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return null;
+      return { value: null };
     }
 
-    return await getUserFarmingDelegate(tezos, authStore.accountPkh, this.item.id);
+    return {
+      value: await getUserFarmingDelegate(tezos, authStore.accountPkh, this.item.id)
+    };
   }
 }
