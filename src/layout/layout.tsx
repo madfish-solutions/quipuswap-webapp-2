@@ -1,7 +1,7 @@
 import cx from 'classnames';
 
 import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
-import { Sidebar, Header, AmplitudeSubscription } from '@shared/components';
+import { Sidebar, Header, AmplitudeSubscription, Advertising } from '@shared/components';
 import { CookiesNotification } from '@shared/components/cookie-notification';
 import { AccountModal, DonationModal, SettingsModal, WalletModal } from '@shared/modals';
 import { CFC } from '@shared/types';
@@ -31,6 +31,7 @@ export const Layout: CFC<LayoutProps> = ({ title, description, image, className,
               <div className={cx(styles.mainWrapper, isDarkTheme ? styles.dark : styles.light)}>
                 <main className={cx(styles.wrapper, className)}>
                   <ToastWrapper />
+                  <Advertising />
                   {children}
                 </main>
               </div>
