@@ -8,6 +8,7 @@ import { isUndefined } from '@shared/helpers';
 
 import { getStableswapTitle } from '../../../helpers';
 import { useStableswapItemFormStore, useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
+import { opportunityHelper } from './opportunity.helper';
 
 export const useStableswapLiquiditAddItemPageViewModel = () => {
   const params = useParams();
@@ -37,6 +38,7 @@ export const useStableswapLiquiditAddItemPageViewModel = () => {
   }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore]);
 
   const title = getStableswapTitle(stableswapItem);
+  const opportunities = stableswapItem?.opportunities?.map(opportunityHelper);
 
-  return { title };
+  return { title, opportunities: opportunities ?? [] };
 };

@@ -1,0 +1,159 @@
+@import "@styles/_variables.scss";
+@import "@styles/breakpoints";
+
+.root {
+  position: relative;
+  display: block;
+  height: auto;
+}
+
+.opportunityText, .leftWrapper {
+  position: absolute;
+}
+
+.leftWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  left: 10%;
+  height: 95%;
+  width: 68%;
+}
+
+.opportunityText {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 6px;
+  height: 95%;
+  width: 32%;
+  right: 0;
+  font-weight: 600;
+  font-size: 0.429rem;
+  line-height: 1.5;
+}
+
+.earnExtra {
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
+  top: 24px;
+  left: 64px;
+}
+
+.earnExtra,
+.amountClassName,
+.currencyClassName {
+  font-size: 1rem;
+  line-height: 1.286;
+  font-weight: 600;
+}
+
+.aprOnQs {
+  font-weight: 400;
+  font-size: 0.429rem;
+  line-height: 1.5;
+}
+
+.index {
+  font-weight: 700;
+  font-size: 1.143rem;
+  line-height: 1;
+}
+
+.ticket {
+  width: 100%;
+  height: auto;
+}
+
+.light {
+  .index, .aprOnQs {
+    color: $ui-07;
+  }
+
+  .stateCurrencyAmount {
+    background: $brand-01;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.dark {
+  .index, .aprOnQs {
+    color: $text-inverse;
+  }
+
+  .stateCurrencyAmount {
+    background: $brand-02;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@include media(">phone") {
+  .earnExtra,
+  .amountClassName,
+  .currencyClassName,
+  .index {
+    font-size: 1.286rem;
+  }
+  .aprOnQs,
+  .opportunityText {
+    font-size: 0.857rem;
+  }
+}
+
+@include media(">Lphone") {
+  .opportunityText {
+    font-size: 1rem;
+  }
+
+  .earnExtra,
+  .amountClassName,
+  .currencyClassName,
+  .index {
+    font-size: 1.714rem;
+  }
+}
+
+@include media(">tablet") {
+  .earnExtra,
+  .amountClassName,
+  .currencyClassName{
+    font-size: 1rem;
+  }
+
+  .index {
+    font-size: 1.143rem;
+  }
+
+  .aprOnQs,
+  .opportunityText {
+    font-size: 0.429rem;
+  }
+}
+
+@include media(">Ltablet") {
+  .opportunityText {
+    font-size: 1rem;
+  }
+
+  .aprOnQs {
+    font-size: 0.857rem;
+  }
+
+  .earnExtra,
+  .amountClassName,
+  .currencyClassName,
+  .index {
+    font-size: 1.714rem;
+  }
+}
+
+@include media(">desktop") {
+  .index {
+    font-size: 2.286rem;
+  }
+}
