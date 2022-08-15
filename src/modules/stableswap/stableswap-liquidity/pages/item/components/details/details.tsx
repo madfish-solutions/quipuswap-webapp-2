@@ -5,10 +5,11 @@ import { observer } from 'mobx-react-lite';
 import { eQuipuSwapVideo } from '@config/youtube';
 import { Card, Tabs, YouTube } from '@shared/components';
 import { useYoutubeTabs } from '@shared/hooks';
+import { CaseIcon, DollarIcon, MedalIcon, VisibleIcon } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { DetailsInfo } from '../details-info';
+import { DetailsView } from '../details-view';
 import { useDetailsViewModel } from './use-details.vm';
 
 export const Details: FC = observer(() => {
@@ -23,12 +24,20 @@ export const Details: FC = observer(() => {
     <Card
       header={{
         content: (
-          <Tabs
-            values={tabsContent}
-            activeId={activeId}
-            setActiveId={setTabId}
-            className={commonContainerStyles.tabs}
-          />
+          <>
+            <Tabs
+              values={tabsContent}
+              activeId={activeId}
+              setActiveId={setTabId}
+              className={commonContainerStyles.tabs}
+            />
+            <div>
+              <VisibleIcon />
+              <MedalIcon />
+              <CaseIcon />
+              <DollarIcon />
+            </div>
+          </>
         ),
         className: commonContainerStyles.header
       }}
@@ -36,7 +45,7 @@ export const Details: FC = observer(() => {
       data-test-id="stableswapDetails"
     >
       {isDetails ? (
-        <DetailsInfo {...detailsInfoParams} />
+        <DetailsView {...detailsInfoParams} />
       ) : (
         <YouTube video={eQuipuSwapVideo.HowToAddLiquidityToTheStableSwap} />
       )}
