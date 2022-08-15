@@ -90,10 +90,10 @@
 }
 
 @include media(">phone") {
+  .index,
   .earnExtra,
   .amountClassName,
-  .currencyClassName,
-  .index {
+  .currencyClassName {
     font-size: 1.286rem;
   }
   .aprOnQs,
