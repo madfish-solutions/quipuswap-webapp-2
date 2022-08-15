@@ -81,7 +81,10 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
     label: i18n.t('common|Game'),
-    Icon: GameIcon
+    Icon: GameIcon,
+    status: (
+      <LabelComponent status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
+    )
   },
   {
     id: 'Stableswap',
