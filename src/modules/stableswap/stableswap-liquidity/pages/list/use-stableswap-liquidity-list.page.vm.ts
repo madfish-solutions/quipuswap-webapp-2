@@ -37,7 +37,9 @@ export const useStableswapLiquidityPageViewModel = () => {
   const { listStore, list } = stableswapListStore;
   const { isLoading } = listStore;
 
-  const listData = list?.map(({ id, tokensInfo, tvlInUsd, isWhitelisted, providersFee }) => {
+  const listData = list?.map(({ id, tokensInfo, tvlInUsd, isWhitelisted, providersFee, opportunities }) => {
+    // eslint-disable-next-line no-console
+    console.log('opportunities', opportunities);
     const idFixed = id.toFixed();
     const labels: Array<LabelComponentProps> = [];
 

@@ -22,6 +22,7 @@ export * from './logo-button';
 export * from './modal-cell';
 export * from './network-select';
 export * from './number-input';
+export * from './opportunity';
 export * from './page-title';
 export * from './pending-rewards';
 export * from './presets-amount-input';
