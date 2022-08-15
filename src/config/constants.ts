@@ -102,6 +102,9 @@ export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
 
 //TODO: assort mix
 //#region mix
+export const FIRST_TUPLE_INDEX = 0;
+export const SECOND_TUPLE_INDEX = 1;
+
 export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
 export const TAB_INDEX = 0;
 

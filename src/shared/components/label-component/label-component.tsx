@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { ActiveStatus } from '@shared/types';
 
@@ -25,9 +26,6 @@ const statusClass = {
   [ActiveStatus.DISABLED]: styles.disabled,
   [ActiveStatus.ACTIVE]: styles.active
 };
-
-const FIRST_TUPLE_INDEX = 0;
-const SECOND_TUPLE_INDEX = 1;
 
 const OrLabel: FC<{ label: string | [string, string] }> = ({ label }) => {
   if (Array.isArray(label)) {
