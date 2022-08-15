@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, DashPlug, DetailsCardCell, StateCurrencyAmount, StateWrapper } from '@shared/components';
-import { isExist } from '@shared/helpers';
+import { defined, isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-details.module.scss';
@@ -189,7 +189,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
-              <span className={styles.yourSide}>(Your side is: {t(`coinflip|${betCoinSide!}`)})</span>
+              <span className={styles.yourSide}>(Your side is: {t(`coinflip|${defined(betCoinSide)}`)})</span>
               <span className={styles.result}>{gameResult}</span>
             </div>
           </StateWrapper>
