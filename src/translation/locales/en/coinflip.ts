@@ -32,5 +32,7 @@ export const coinflip = {
   Ok: 'Ok',
   oneMoreTime: 'Try your luck one more time!',
   rewardTooltip: 'Your all-time Coinflip winnings.',
-  yourGamesTooltip: 'The number of coins flipped by you.'
+  yourGamesTooltip: 'The number of coins flipped by you.',
+  head: 'Head',
+  tail: 'Tail'
 } as const;

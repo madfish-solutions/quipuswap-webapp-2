@@ -185,7 +185,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
-              <span className={styles.yourSide}>(Your side is: {betCoinSide})</span>
+              <span className={styles.yourSide}>(Your side is: {t(`coinflip|${betCoinSide!}`)})</span>
               <span className={styles.result}>{gameResult}</span>
             </div>
           </StateWrapper>
