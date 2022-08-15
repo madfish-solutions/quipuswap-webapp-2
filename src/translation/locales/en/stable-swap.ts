@@ -92,6 +92,7 @@ export const stableswap = {
   stakersFeeDecriptions: 'QUIPU Stakers Fee:',
   devFeeDecriptions: 'Dev Fee:',
   clickThe: 'Click the',
-  button: 'button!'
+  button: 'button!',
+  weeklyVolume: 'Volume(7d)'
   //#endregion creation rules
 } as const;

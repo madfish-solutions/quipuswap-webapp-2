@@ -18,6 +18,8 @@ export const useDetailsViewModel = () => {
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
   if (isExist(item)) {
+    const { providersFee, stakersFee, devFee, interfaceFee, totalLpSupply, tvlInUsd } = item;
+
     const tokensLockedData = item.tokensInfo.map(({ token, reserves, exchangeRate }) => ({
       tokenSymbol: getTokenSymbol(token),
       amount: reserves,
@@ -28,33 +30,25 @@ export const useDetailsViewModel = () => {
     }));
 
     return {
-      ...item,
-      providersFee: item.providersFee,
-      devFee: item.devFee,
-      interfaceFee: item.interfaceFee,
-      stakersFee: item.stakersFee,
-      poolId: item.poolId.toFixed(),
-      cardCellClassName,
+      tvlInUsd,
       isLoading,
-      tokensLockedData
+      totalLpSupply,
+      tokensLockedData,
+      cardCellClassName,
+      apr: null,
+      weeklyVolume: null,
+      feesRate: providersFee.plus(stakersFee.plus(devFee.plus(interfaceFee)))
     };
   }
 
   return {
     isLoading,
     cardCellClassName,
-    poolId: null,
-    tokensInfo: null,
-    totalLpSupply: null,
+    apr: null,
     tvlInUsd: null,
-    contractAddress: null,
-    stableswapItemUrl: null,
-    isWhitelisted: null,
-    providersFee: null,
-    stakersFee: null,
-    interfaceFee: null,
-    poolContractUrl: undefined,
-    devFee: null,
+    feesRate: null,
+    weeklyVolume: null,
+    totalLpSupply: null,
     tokensLockedData: []
   };
 };

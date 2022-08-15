@@ -69,11 +69,18 @@ export const Card: FC<Props> = ({
   return (
     <div ref={container} className={rootClassName} {...props}>
       {header && (
-        <div className={cx(styles.header, header.className)}>
-          <span data-test-id="headerContent">{header.content}</span>
-          <span data-test-id="labelCard">
-            <span data-test-id="label">{header.status ? <LabelComponent filled status={header.status} /> : null}</span>
-          </span>
+        <div className={styles.header}>
+          <div data-test-id="headerContent" className={header.className}>
+            {header.content}
+          </div>
+          {header.status && (
+            <span data-test-id="labelCard">
+              <span data-test-id="label">
+                {header.status ? <LabelComponent filled status={header.status} /> : null}
+              </span>
+            </span>
+          )}
+
           {header.button}
         </div>
       )}
