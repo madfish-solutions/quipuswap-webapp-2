@@ -116,6 +116,8 @@ export const USD_DECIMALS = 2;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_HOPS_COUNT = 3;
 
+export const NO_WITHDRAWAL_FEE_VALUE = 0;
+
 export const NO_TIMELOCK_VALUE = '0';
 
 export const TEZ_TO_LEAVE = new BigNumber('0.1');
