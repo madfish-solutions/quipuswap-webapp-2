@@ -15,7 +15,7 @@ export const coinflip = {
   totalWinsTooltip: 'The count of coinflip wins so far.',
   gamesCount: 'Games count',
   gamesCountTooltip: 'The overall count of coinflips.',
-  maxBetAmount: 'Max bet amount',
+  maxAllowableBid: 'Maximum allowable bid',
   gameId: 'Game ID',
   gameIdTooltip: 'For the sake of transarency, each coinflip is tagged by a unique trackable Game ID.',
   betSize: 'Bet size',
@@ -32,5 +32,7 @@ export const coinflip = {
   Ok: 'Ok',
   oneMoreTime: 'Try your luck one more time!',
   rewardTooltip: 'Your all-time Coinflip winnings.',
-  yourGamesTooltip: 'The number of coins flipped by you.'
+  yourGamesTooltip: 'The number of coins flipped by you.',
+  head: 'Head',
+  tail: 'Tail'
 } as const;
