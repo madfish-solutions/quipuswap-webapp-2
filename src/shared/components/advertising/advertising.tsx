@@ -1,3 +1,4 @@
+import { YUPANA_URL } from '@config/config';
 import Yupana from '@images/yupana.png';
 import { YupanaLogo } from '@shared/svg';
 
@@ -5,7 +6,13 @@ import styles from './advertising.module.scss';
 
 export const Advertising = () => {
   return (
-    <div className={styles.container} style={{ background: `url(${Yupana})` }}>
+    <a
+      href={YUPANA_URL}
+      target="_blank"
+      className={styles.container}
+      style={{ background: `url(${Yupana})` }}
+      rel="noreferrer"
+    >
       <div className={styles.yupanaLogoContainer}>
         <YupanaLogo className={styles.yupanaLogo} />
       </div>
@@ -13,6 +20,6 @@ export const Advertising = () => {
         <div className={styles.launched}>Already launched!</div>
         <div className={styles.income}>Get passive income now!</div>
       </div>
-    </div>
+    </a>
   );
 };
