@@ -9,6 +9,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { OpportunityTicket } from '@shared/svg';
 import { Optional } from '@shared/types';
+import { useTranslation } from '@translation';
 
 import styles from './opportunity.module.scss';
 
@@ -20,6 +21,7 @@ interface Props {
 
 export const Opportunity: FC<Props> = ({ apr, href, index = 1 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation();
 
   return (
     <Link
@@ -31,7 +33,7 @@ export const Opportunity: FC<Props> = ({ apr, href, index = 1 }) => {
     >
       <span className={styles.leftWrapper}>
         <span className={styles.earnExtra}>
-          Earn extra
+          {t('common|earnExtra')}
           <StateCurrencyAmount
             amount={apr}
             currency={PERCENT}
@@ -43,7 +45,7 @@ export const Opportunity: FC<Props> = ({ apr, href, index = 1 }) => {
         <span className={styles.aprOnQs}>APR on Quipuswap</span>
       </span>
       <span className={styles.opportunityText}>
-        Opportunity
+        {t('common|opportunity')}
         <span className={styles.index}># {index}</span>
       </span>
       <OpportunityTicket className={styles.ticket} />
