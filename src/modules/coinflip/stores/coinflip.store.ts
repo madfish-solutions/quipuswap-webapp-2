@@ -2,9 +2,10 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
+import { ZERO_AMOUNT } from '@config/constants';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { COINFLIP_TOKENS_TO_PLAY, QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { toReal, defined } from '@shared/helpers';
+import { toReal, defined, placeDecimals } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -142,7 +143,10 @@ export class CoinflipStore {
 
   get payout(): Nullable<BigNumber> {
     return this.game.input && this.generalStats?.payoutCoefficient
-      ? this.game.input.times(Number(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)))
+      ? placeDecimals(
+          this.game.input.times(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)),
+          this.token
+        )
       : null;
   }
 
@@ -172,11 +176,14 @@ export class CoinflipStore {
   }
 
   private async getGamesCount() {
-    return await getGamesCountByTokenApi(
-      this.rootStore.tezos,
-      defined(this.rootStore.authStore.accountPkh),
-      this.token
+    const allTokens = [TEZOS_TOKEN, QUIPU_TOKEN];
+    const gamesAmounts = await Promise.all(
+      allTokens.map(async token =>
+        getGamesCountByTokenApi(this.rootStore.tezos, defined(this.rootStore.authStore.accountPkh), token)
+      )
     );
+
+    return gamesAmounts.reduce((acc, item) => acc.plus(item), new BigNumber(ZERO_AMOUNT));
   }
 
   private async getTokensWon() {
