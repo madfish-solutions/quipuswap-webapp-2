@@ -1,64 +1,66 @@
-import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
+import { FormikErrors, FormikValues, useFormik } from 'formik';
 
-import { QUIPU_TOKEN } from '@config/tokens';
-import { getFormikError } from '@shared/helpers';
+import { numberAsString } from '@shared/helpers';
+import { useTranslation } from '@translation';
 
+import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
+import { MOCK_ITEM } from './mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
-export enum Input {
-  FIRST = 'firstInput',
-  SECOND = 'secondInput'
+enum Input {
+  FIRST_ADD_LIQ_INPUT = 'add-liq-input-0',
+  SECOND_ADD_LIQ_INPUT = 'add-liq-input-1'
 }
 
 export const useDexTwoAddLiqFormViewModel = () => {
-  const quipuBalance = new BigNumber(20);
+  const { t } = useTranslation();
+  const userBalances = getUserBalances(MOCK_ITEM.tokensInfo);
 
   const handleSubmit = () => {
     // eslint-disable-next-line no-console
     console.log('submit');
   };
 
-  const onFirstInputChange = (value: string) => {
-    formik.setFieldValue(Input.FIRST, value);
-  };
-
-  const onSecondtInputChange = (value: string) => {
-    formik.setFieldValue(Input.SECOND, value);
-  };
-
-  const validationSchema = useDexTwoAddLiqValidation(QUIPU_TOKEN, quipuBalance);
+  const validationSchema = useDexTwoAddLiqValidation(userBalances, MOCK_ITEM);
 
   const formik = useFormik({
     validationSchema,
     initialValues: {
-      [Input.FIRST]: '',
-      [Input.SECOND]: ''
+      [Input.FIRST_ADD_LIQ_INPUT]: '',
+      [Input.SECOND_ADD_LIQ_INPUT]: ''
     },
     onSubmit: handleSubmit
   });
 
-  const firstInputAmountError = getFormikError(formik, Input.FIRST);
-  const secondInputAmountError = getFormikError(formik, Input.SECOND);
+  const handleInputChange = (index: number) => {
+    const localToken = extractTokens(MOCK_ITEM.tokensInfo)[index];
+    const localTokenDecimals = localToken.metadata.decimals;
 
-  const data = [
-    {
-      value: formik.values[Input.FIRST],
-      label: 'Input',
-      onInputChange: onFirstInputChange,
-      tokens: QUIPU_TOKEN,
-      balance: quipuBalance,
-      error: firstInputAmountError
-    },
-    {
-      value: formik.values[Input.SECOND],
-      label: 'Input',
-      onInputChange: onSecondtInputChange,
-      tokens: QUIPU_TOKEN,
-      balance: quipuBalance,
-      error: secondInputAmountError
-    }
-  ];
+    return async (inputAmount: string) => {
+      const { realValue } = numberAsString(inputAmount, localTokenDecimals);
+      const formikKey = getInputSlugByIndex(index);
+
+      formik.setFieldValue(formikKey, realValue);
+    };
+  };
+
+  const data = MOCK_ITEM.tokensInfo.map((_, index) => {
+    const inputSlug = getInputSlugByIndex(index);
+    const value = (formik.values as FormikValues)[inputSlug];
+    const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
+    const token = MOCK_ITEM.tokensInfo[index].token;
+
+    return {
+      value,
+      error,
+      index,
+      decimals: token.metadata.decimals,
+      tokens: token,
+      label: t('common|Input'),
+      balance: userBalances[index],
+      onInputChange: handleInputChange(index)
+    };
+  });
 
   return { data, onSubmit: formik.handleSubmit };
 };
