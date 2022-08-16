@@ -8,7 +8,7 @@ import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation
 
 export enum Input {
   FIRST = 'firstInput',
-  SECOND = 'secindInput'
+  SECOND = 'secondInput'
 }
 
 export const useDexTwoAddLiqFormViewModel = () => {
