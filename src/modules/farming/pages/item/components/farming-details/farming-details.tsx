@@ -13,7 +13,8 @@ import {
   StatePercentage,
   LabelComponent,
   Tabs,
-  YouTube
+  YouTube,
+  Iterator
 } from '@shared/components';
 import { useYoutubeTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
@@ -43,7 +44,8 @@ export const FarmingDetails: FC = observer(() => {
     currentDelegate,
     nextDelegate,
     timelock,
-    timeLockLabel,
+    shouldShowLockPeriod,
+    shouldShowWithdrawalFee,
     shouldShowTags,
     CardCellClassName,
     stakeUrl,
@@ -56,9 +58,8 @@ export const FarmingDetails: FC = observer(() => {
     isLoading,
     isError,
     shouldShowDelegates,
-    shouldShowLockPeriod,
-    shouldShowWithdrawalFee,
-    stakeStatus
+    stakeStatus,
+    labels
   } = useFarmingDetailsViewModel();
 
   return (
@@ -83,16 +84,7 @@ export const FarmingDetails: FC = observer(() => {
           {shouldShowTags && (
             <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
               <div className={styles.tags}>
-                {shouldShowLockPeriod && (
-                  <LabelComponent label={`${timeLockLabel} LOCK`} status={stakeStatus} data-test-id="timeLockLabel" />
-                )}
-                {shouldShowWithdrawalFee && (
-                  <LabelComponent
-                    label={`${withdrawalFee}% UNLOCK FEE`}
-                    status={stakeStatus}
-                    data-test-id="withdrawalFee"
-                  />
-                )}
+                <Iterator render={LabelComponent} data={labels} />
               </div>
             </DetailsCardCell>
           )}
