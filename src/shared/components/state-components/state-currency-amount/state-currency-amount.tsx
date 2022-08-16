@@ -16,6 +16,7 @@ import styles from './state-currency-amount.module.scss';
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amountClassName?: string;
+  currencyClassName?: string;
   amount: Optional<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
@@ -44,8 +45,8 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
-  <span className={styles.currency} {...props}>
+export const Currency: FC<CurrencyProps> = ({ children, className, ...props }) => (
+  <span className={cx(className, styles.currency)} {...props}>
     {children}
   </span>
 );
@@ -53,6 +54,7 @@ export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
   amountClassName,
+  currencyClassName,
   labelSize = 'small',
   amount,
   currency,
@@ -109,7 +111,11 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency data-test-id="rightVisibleCurrency">{currency}</Currency>}
+      {isRightVisible && (
+        <Currency data-test-id="rightVisibleCurrency" className={currencyClassName}>
+          {currency}
+        </Currency>
+      )}
     </span>
   );
 
