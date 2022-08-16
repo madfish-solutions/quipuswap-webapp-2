@@ -6,11 +6,8 @@
   row-gap: 6px;
   margin-bottom: 12px;
   align-items: center;
-}
 
-.cardHeaderWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
