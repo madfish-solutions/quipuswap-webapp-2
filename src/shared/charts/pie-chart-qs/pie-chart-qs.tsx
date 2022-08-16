@@ -1,46 +1,43 @@
-import { PieChart, Pie, Cell } from 'recharts';
+import { FC, useContext } from 'react';
 
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 }
-];
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+import cx from 'classnames';
+import { Cell, Pie, PieChart } from 'recharts';
 
-export const PieChartQs = () => {
+import { COLORS } from '@config/constants';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+
+import styles from './pie-chart-qs.module.scss';
+
+interface Props {
+  data: Array<{ value: number; tokenSymbol: string }>;
+}
+
+export const PieChartQs: FC<Props> = ({ data }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
-    <PieChart width={800} height={400}>
-      <Pie
-        data={data}
-        cx={120}
-        cy={200}
-        innerRadius={60}
-        outerRadius={80}
-        fill="#8884d8"
-        paddingAngle={5}
-        dataKey="value"
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+    <div
+      className={cx(styles.chartWrapper, {
+        [styles.dark]: colorThemeMode === ColorModes.Dark,
+        [styles.light]: colorThemeMode === ColorModes.Light
+      })}
+    >
+      <PieChart width={200} height={200}>
+        <Pie data={data} innerRadius={80} outerRadius={100} dataKey="value" stroke="none">
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+      </PieChart>
+      <ul>
+        {data.map(({ value, tokenSymbol }, index) => (
+          <li key={index} className={styles.li}>
+            <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+            <span className={styles.tokenSymbol}>{tokenSymbol}</span>
+            <span className={styles.tokenAmount}>{value}</span>
+          </li>
         ))}
-      </Pie>
-      <Pie
-        data={data}
-        cx={420}
-        cy={200}
-        startAngle={180}
-        endAngle={0}
-        innerRadius={60}
-        outerRadius={80}
-        fill="#8884d8"
-        paddingAngle={5}
-        dataKey="value"
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
+      </ul>
+    </div>
   );
 };

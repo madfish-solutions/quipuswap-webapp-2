@@ -170,3 +170,6 @@ export const DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION = new BigNumber(DEFAU
 
 //TESTNET
 export const TESTNET_EXCHANGE_RATE = 1.5;
+
+//Charts
+export const COLORS = ['#1373E4', '#2ED33E', '#F9A605', '#FF8042'];
