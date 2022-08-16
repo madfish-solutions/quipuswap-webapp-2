@@ -61,4 +61,5 @@ export * from './new-liquidity';
 export * from './confetti-left';
 export * from './confetti-right';
 export * from './confettis';
+export * from './yupana-logo';
 export * from './opportunity-ticket';

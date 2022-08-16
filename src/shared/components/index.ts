@@ -65,3 +65,4 @@ export * from './sorter-view';
 export * from './radio-button';
 export * from './list-stats';
 export * from './youtube';
+export * from './advertising';
