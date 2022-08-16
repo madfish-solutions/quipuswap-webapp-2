@@ -21,22 +21,22 @@ export const useCoinflipGameSelectViewModel = ({
   coinSide,
   handleSelectCoinSide
 }: CoinflipGameSelectProps) => {
-  const iSelectedFace = coinSide === CoinSide.Face;
-  const iSelectedBack = coinSide === CoinSide.Back;
+  const isHeadSelected = coinSide === CoinSide.Head;
+  const isTailSelected = coinSide === CoinSide.Tail;
 
   const isTez = tokenToPlay === TokenToPlay.Tezos;
 
-  const getQuipuSwapFaceIcon = () => (iSelectedFace ? QuipuSwapFaceActiveIcon : QuipuSwapFaceDefaultIcon);
-  const getQuipuSwapBackIcon = () => (iSelectedBack ? QuipuSwapBackActiveIcon : QuipuSwapBackDefaultIcon);
+  const getQuipuSwapFaceIcon = () => (isHeadSelected ? QuipuSwapFaceActiveIcon : QuipuSwapFaceDefaultIcon);
+  const getQuipuSwapBackIcon = () => (isTailSelected ? QuipuSwapBackActiveIcon : QuipuSwapBackDefaultIcon);
 
-  const getTezosFaceIcon = () => (iSelectedFace ? TezosFaceActiveIcon : TezosFaceDefaultIcon);
-  const getTezosBackIcon = () => (iSelectedBack ? TezosBackActiveIcon : TezosBackDefaultIcon);
+  const getTezosFaceIcon = () => (isHeadSelected ? TezosFaceActiveIcon : TezosFaceDefaultIcon);
+  const getTezosBackIcon = () => (isTailSelected ? TezosBackActiveIcon : TezosBackDefaultIcon);
 
   const getFaceIcon = () => (isTez ? getTezosFaceIcon() : getQuipuSwapFaceIcon());
   const getBackIcon = () => (isTez ? getTezosBackIcon() : getQuipuSwapBackIcon());
 
-  const handleSelectSideA = () => handleSelectCoinSide(CoinSide.Face);
-  const handleSelectSideB = () => handleSelectCoinSide(CoinSide.Back);
+  const handleSelectSideA = () => handleSelectCoinSide(CoinSide.Head);
+  const handleSelectSideB = () => handleSelectCoinSide(CoinSide.Tail);
 
   const animationData = isTez ? animationTezosData : animationQuipuData;
 

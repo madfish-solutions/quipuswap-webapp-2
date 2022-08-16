@@ -109,7 +109,11 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
         </DetailsCardCell>
 
-        <DetailsCardCell className={styles.cardCell} cellName={t('coinflip|maxBetAmount')} data-test-id="maxBetAmount">
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|maxAllowableBid')}
+          data-test-id="maxAllowableBid"
+        >
           <StateCurrencyAmount
             className={cx(styles.amount)}
             isLoading={isGamersStatsLoading}
@@ -185,7 +189,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
-              <span className={styles.yourSide}>(Your side is: {betCoinSide})</span>
+              {betCoinSide && <span className={styles.yourSide}>(Your side is: {t(`coinflip|${betCoinSide}`)})</span>}
               <span className={styles.result}>{gameResult}</span>
             </div>
           </StateWrapper>

@@ -1,9 +1,9 @@
 import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@config/constants';
+import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE, NO_WITHDRAWAL_FEE_VALUE } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/environment';
-import { getRealDailyDistribution } from '@modules/farming/helpers';
+import { getFarmingLabel, getRealDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
@@ -13,8 +13,6 @@ import s from '@styles/CommonContainer.module.scss';
 
 import { canDelegate, makeBaker } from '../../helpers';
 import styles from './farming-details.module.scss';
-
-const NO_WITHDRAWAL_FEE_VALUE = 0;
 
 export const useFarmingDetailsViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
@@ -31,6 +29,7 @@ export const useFarmingDetailsViewModel = () => {
       shouldShowDelegates: true,
       shouldShowLockPeriod: true,
       shouldShowWithdrawalFee: true,
+      labels: [],
       endTime: null,
       tvlDollarEquivalent: null,
       dailyDistribution: null,
@@ -86,10 +85,13 @@ export const useFarmingDetailsViewModel = () => {
   const shouldShowLockPeriod = timelock !== NO_TIMELOCK_VALUE;
   const shouldShowWithdrawalFee = !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE);
 
+  const labels = getFarmingLabel(item);
+
   const shouldShowTags = shouldShowLockPeriod || shouldShowWithdrawalFee;
 
   return {
     shouldShowDelegates: canDelegate(item),
+    labels,
     shouldShowLockPeriod,
     shouldShowWithdrawalFee,
     endTime: new Date(endTime).getTime(),
