@@ -1,7 +1,11 @@
 import { FC } from 'react';
 
-import { Card, SettingsButton, Tabs } from '@shared/components';
+import { eQuipuSwapVideo } from '@config/youtube';
+import { Card, Iterator, SettingsButton, Tabs, YouTube } from '@shared/components';
+import { useYoutubeTabs } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
+import s from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import styles from '../liquidity.module.scss';
 import { AddLiquidityForm } from './add-liquidity-form';
@@ -15,6 +19,8 @@ interface Props {
 }
 
 export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
+  const { t } = useTranslation();
+
   const {
     dex,
     tab,
@@ -27,7 +33,10 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
     handleChangeTokenB,
     handleChangeTokensPair
   } = useLiquidityFormService({ onTokensChange });
-
+  const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
+    detailsLabel: t('liquidity|poolDetails'),
+    page: t('common|Liquidity')
+  });
   const isAddTabActive = tab.id === 'add';
 
   return (
@@ -64,16 +73,27 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
       </Card>
       <Card
         header={{
-          content: (
-            <div className={styles.poolDetailsHeader}>
-              <span className={styles.poolDetailsHeader_Title}>Pool Details</span>
-            </div>
-          )
+          content: <Tabs values={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
+          className: s.header
         }}
         contentClassName={styles.LiquidityDetails}
         data-test-id="poolDetails"
       >
-        <LiquidityDetails dex={dex} tokenA={tokenA} tokenB={tokenB} />
+        {isDetails ? (
+          <LiquidityDetails dex={dex} tokenA={tokenA} tokenB={tokenB} />
+        ) : (
+          <Iterator
+            isGrouped
+            wrapperClassName={s.youtubeList}
+            render={YouTube}
+            data={[
+              { video: eQuipuSwapVideo.HowToAddLiquidityToAnExistingLiquidityPool },
+              { video: eQuipuSwapVideo.HowToSeeLPTokensInYourWallet },
+              { video: eQuipuSwapVideo.HowToRemoveLiquidityFromTheLiquidityPool },
+              { video: eQuipuSwapVideo.HowToAddANewLiquidityPoolToQuipuSwap }
+            ]}
+          />
+        )}
       </Card>
     </>
   );

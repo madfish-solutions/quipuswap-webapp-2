@@ -2,7 +2,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
-import { getTimeLockDescription, getTokenSymbol, isNull } from '@shared/helpers';
+import { getFarmingLabel } from '@modules/farming/helpers';
+import { getTokenSymbol, isNull } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -12,23 +13,12 @@ const ZERO = 0;
 
 export const farmingListDataHelper = (item: FarmingListItemWithBalances, accountPkh: Nullable<string>) => {
   const statedTokenSymbol = getTokenSymbol(item.stakedToken);
-  const timeLockLabel = getTimeLockDescription(item.timelock);
-  const withdrawalFeeLabel = item.withdrawalFee.toFixed();
 
   const shouldShowUserStats = !isNull(accountPkh) && (item.depositBalance?.gt(ZERO) || item.earnBalance?.gt(ZERO));
-  const shouldShowLockPeriod = !!Number(item.timelock);
-  const shouldShowWithdrawalFee = !item.withdrawalFee.eq(ZERO);
 
   const farmingItemDTI = `farming-item-${item.id}`;
 
-  const labels = [];
-  if (shouldShowLockPeriod) {
-    labels.push({ status: item.stakeStatus, label: `${timeLockLabel} LOCK` });
-  }
-
-  if (shouldShowWithdrawalFee) {
-    labels.push({ status: item.stakeStatus, label: `${withdrawalFeeLabel}% UNLOCK FEE` });
-  }
+  const labels = getFarmingLabel(item);
 
   const itemStats: Array<{
     cellName: string;

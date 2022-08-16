@@ -2,20 +2,25 @@ import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
+import { NewLiquidityRoutes } from '@modules/new-liquidity/new-liquidity-routes.enum';
+import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { getTokenPairSlug, isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
 
-import { LiquidityTabs } from '../liquidity';
-import { StableswapRoutes } from '../stableswap';
-import { LiquidityItemResponse } from './interfaces';
+import { LiquidityTabs } from '../../../liquidity';
+import { StableswapRoutes } from '../../../stableswap';
+import { LiquidityItemResponse } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;
 
   switch (type) {
     case 'DEX_TWO':
-      return `${AppRootRoutes.Liquidity}/cpmm/${getTokenPairSlug(aToken, bToken)}`;
+      return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${getTokenPairSlug(
+        aToken,
+        bToken
+      )}`;
     case 'TOKEN_TOKEN':
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
     case 'STABLESWAP':

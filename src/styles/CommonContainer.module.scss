@@ -1,5 +1,12 @@
 @import "@styles/variables";
 @import "@styles/breakpoints";
+
+.youtubeList {
+  display: flex;
+  flex-direction:  column;
+  row-gap: 16px;
+}
+
 //TODO
 .rotation {
   -webkit-transition: all 2s ease;
