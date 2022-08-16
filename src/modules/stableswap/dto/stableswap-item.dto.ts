@@ -4,6 +4,7 @@ import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 
 import { StableswapItemNew } from '../types';
+import { OpportunityDto } from './opportunity.dto';
 import { StableswapFeesDto } from './stableswap-fees.dto';
 import { StableswapTokensInfoDto } from './stableswap-tokens-info.dto';
 
@@ -40,4 +41,7 @@ export class StableswapItemDto implements StableswapItemNew {
 
   @Typed()
   lpToken: TokenDto;
+
+  @Typed({ type: OpportunityDto, isArray: true, optional: true })
+  opportunities?: Array<OpportunityDto>;
 }

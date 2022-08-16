@@ -148,5 +148,7 @@ export const common = {
   mustBeANumber: 'Must be a number',
   amountRequired: 'Amount is required',
   chooseYourWallet: 'Choose your wallet',
-  guides: 'Guides'
+  guides: 'Guides',
+  earnExtra: 'Earn extra',
+  opportunity: 'Opportunity'
 } as const;
