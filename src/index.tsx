@@ -13,7 +13,7 @@ import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-
 import { DexGraphProvider } from '@shared/hooks';
 
 import { App } from './app';
-
+//
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 require('dotenv').config();
 
