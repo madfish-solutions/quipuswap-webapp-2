@@ -27,6 +27,8 @@ export const BAKERS_API = 'https://api.baking-bad.org/v2/bakers';
 export const EXCHANGE_RATES_URL = 'https://api.templewallet.com/api/exchange-rates';
 export const IPFS_GATEWAY = 'https://cloudflare-ipfs.com/ipfs';
 
+export const YUPANA_URL = 'https://yupana.finance/';
+
 export const STABLESWAP_REFERRAL = 'tz1Sw2mFAUzbkm7dkGCDrbeBsJTTtV7JD8Ey';
 export const FARMING_REFERRER_CONTRACT = 'tz1Sw2mFAUzbkm7dkGCDrbeBsJTTtV7JD8Ey';
 
@@ -34,6 +36,12 @@ export const FARMING_REFERRER_CONTRACT = 'tz1Sw2mFAUzbkm7dkGCDrbeBsJTTtV7JD8Ey';
 export const READ_ONLY_SIGNER_PK = 'edpkvWbk81uh1DEvdWKR4g1bjyTGhdu1mDvznPUFE2zDwNsLXrEb9K';
 export const READ_ONLY_SIGNER_PK_HASH = 'tz1fVQangAfb9J1hRRMP2bSB6LvASD6KpY8A';
 //#endregion READ_ONLY_SIGNER
+
+//#region CHANGE TESTNET TOKENS NETWORK VALUE (ithacanet => ghostnet)
+for (const item of GhostnetWhitelistTokens.tokens) {
+  item['network'] = NetworkType.GHOSTNET;
+}
+//#endregion
 
 //#region TOKENS
 const TOKENS_MAP = {

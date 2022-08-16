@@ -31,7 +31,7 @@ export const FarmingRewardInfo: FC = observer(() => {
     farmingItem,
     myDelegate,
     delegatesLoading,
-    endTimestamp,
+    endTime,
     myDepositDollarEquivalent,
     myReward,
     myRewardInUsd,
@@ -108,7 +108,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           tooltipContent={t('farm|feeEndsInTooltip')}
           data-test-id="lockPeriodEndsIn"
         >
-          <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
+          <StateData data={endTime} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}
           </StateData>
         </FarmingStatsItem>

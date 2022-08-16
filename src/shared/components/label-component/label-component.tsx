@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { ActiveStatus } from '@shared/types';
 
@@ -10,7 +11,7 @@ import styles from './label-component.module.scss';
 export interface LabelComponentProps {
   className?: string;
   status: ActiveStatus;
-  label?: string;
+  label?: string | [string, string];
   filled?: boolean;
   DTI?: string;
 }
@@ -26,13 +27,27 @@ const statusClass = {
   [ActiveStatus.ACTIVE]: styles.active
 };
 
+const OrLabel: FC<{ label: string | [string, string] }> = ({ label }) => {
+  if (Array.isArray(label)) {
+    return (
+      <div className={styles.orLabelContainer}>
+        {label[FIRST_TUPLE_INDEX]}
+        <div className={styles.orLabel}>or</div>
+        {label[SECOND_TUPLE_INDEX]}
+      </div>
+    );
+  } else {
+    return <>{label}</>;
+  }
+};
+
 export const LabelComponent: FC<LabelComponentProps> = ({ className, status, label, filled, DTI, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode], statusClass[status], className)} {...props}>
       <span className={cx(styles.status, filled ? styles.filled : styles.bordered)} data-test-id={DTI}>
-        {label ?? status}
+        {label ? <OrLabel label={label} /> : status}
       </span>
     </div>
   );

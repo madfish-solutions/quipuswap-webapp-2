@@ -98,5 +98,7 @@ export const farm = {
   Token: 'Token',
   Full: 'Full',
   Claimable: 'Claimable',
-  YouvesCheckout: 'Check out alternative farming on Youves'
+  YouvesCheckout: 'Check out alternative farming on Youves',
+  lock: '{{timelock}} LOCK',
+  unlockFee: '{{unlockFee}}% UNLOCK FEE'
 } as const;
