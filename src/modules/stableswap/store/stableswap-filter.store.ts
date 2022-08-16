@@ -7,7 +7,7 @@ import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers';
 import { StableswapSortField } from '../stableswap-liquidity/pages/list/types';
 
 export class StableswapFilterStore extends BaseFilterStore {
-  whitelistedOnly = true;
+  whitelistedOnly = false;
   sortField: StableswapSortField = StableswapSortField.ID;
 
   constructor() {
