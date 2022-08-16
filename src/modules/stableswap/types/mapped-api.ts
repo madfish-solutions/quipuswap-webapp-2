@@ -3,6 +3,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { Token } from '@shared/types';
 
+import { Opportunity } from './opportunities.interface';
+
 export interface StableswapStats {
   totalTvlInUsd: BigNumber;
 }
@@ -48,6 +50,7 @@ export interface StableswapItemNew extends AbstractStableItem {
   poolContractUrl: string;
   fees: Fees;
   lpToken: Token;
+  opportunities?: Array<Opportunity>;
 }
 
 export interface StableDividendsItem extends AbstractStableItem {

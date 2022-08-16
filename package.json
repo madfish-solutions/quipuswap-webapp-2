@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp",
-  "version": "3.1.28",
+  "version": "3.1.29",
   "private": true,
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
@@ -24,7 +24,7 @@
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.0",
-    "@quipuswap/tokens-whitelist": "^1.0.6",
+    "@quipuswap/tokens-whitelist": "^1.0.7",
     "@taquito/beacon-wallet": "13.0.0",
     "@taquito/taquito": "13.0.0",
     "@temple-wallet/dapp": "^7.0.0",
