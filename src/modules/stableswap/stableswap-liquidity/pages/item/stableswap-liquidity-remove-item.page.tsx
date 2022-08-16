@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Iterator, Opportunity, PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
-import { isStableswapOpportunitiesReleased } from '@shared/feature-flags';
+import { isProd } from '@shared/helpers';
 
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
@@ -25,7 +25,7 @@ export const StableswapLiquidityRemoveItemPage: FC = observer(() => {
           <RemoveLiqForm />
         </StableswapFormTabsCard>
         <div>
-          {isStableswapOpportunitiesReleased && (
+          {!isProd() && (
             <Iterator
               render={Opportunity}
               data={opportunities}
