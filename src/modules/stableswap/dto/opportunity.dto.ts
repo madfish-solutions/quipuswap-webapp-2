@@ -1,14 +1,16 @@
+import { BigNumber } from 'bignumber.js';
+
 import { Typed } from '@shared/decorators';
 
-import { Opportunity } from '../interfaces';
+import { Opportunity } from '../types';
 
 export class OpportunityDto implements Opportunity {
   @Typed()
   id: string;
 
   @Typed()
-  apr: number;
+  apr: BigNumber;
 
   @Typed()
-  apy: number;
+  apy: BigNumber;
 }
