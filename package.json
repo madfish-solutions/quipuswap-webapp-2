@@ -68,6 +68,7 @@
     "react-textarea-autosize": "^8.3.4",
     "react-toastify": "^9.0.1",
     "react-youtube": "^9.0.3",
+    "recharts": "^2.1.13",
     "reflect-metadata": "^0.1.13",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
