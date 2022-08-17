@@ -1,11 +1,11 @@
 import { FormikErrors, FormikValues, useFormik } from 'formik';
 
+import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { isTezosToken, numberAsString } from '@shared/helpers';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
-import { MOCK_ITEM } from './mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
 export enum Input {
@@ -16,14 +16,15 @@ export enum Input {
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
-  const userBalances = getUserBalances(MOCK_ITEM.tokensInfo);
+  const { item } = useNewLiquidityItemStore();
+  const userBalances = getUserBalances(item!.tokensInfo);
 
   const handleSubmit = () => {
     // eslint-disable-next-line no-console
     console.log('submit');
   };
 
-  const validationSchema = useDexTwoAddLiqValidation(userBalances, MOCK_ITEM);
+  const validationSchema = useDexTwoAddLiqValidation(userBalances, item!);
 
   const formik = useFormik({
     validationSchema,
@@ -36,7 +37,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   });
 
   const handleInputChange = (index: number) => {
-    const localToken = extractTokens(MOCK_ITEM.tokensInfo)[index];
+    const localToken = extractTokens(item!.tokensInfo)[index];
     const localTokenDecimals = localToken.metadata.decimals;
 
     return async (inputAmount: string) => {
@@ -51,11 +52,11 @@ export const useDexTwoAddLiqFormViewModel = () => {
     formik.setFieldValue(Input.BAKER_INPUT, baker.address);
   };
 
-  const data = MOCK_ITEM.tokensInfo.map((_, index) => {
+  const data = item!.tokensInfo.map((_, index) => {
     const inputSlug = getInputSlugByIndex(index);
     const value = (formik.values as FormikValues)[inputSlug];
     const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
-    const token = MOCK_ITEM.tokensInfo[index].token;
+    const token = item!.tokensInfo[index].token;
 
     return {
       value,
@@ -73,7 +74,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
     value: (formik.values as FormikValues)[Input.BAKER_INPUT],
     error: (formik.errors as FormikErrors<FormikValues>)[Input.BAKER_INPUT] as string,
     handleChange: onBakerChange,
-    shouldShowBakerInput: MOCK_ITEM.tokensInfo.some(({ token }) => isTezosToken(token))
+    shouldShowBakerInput: item!.tokensInfo.some(({ token }) => isTezosToken(token))
   };
 
   return { data, onSubmit: formik.handleSubmit, bakerData };
