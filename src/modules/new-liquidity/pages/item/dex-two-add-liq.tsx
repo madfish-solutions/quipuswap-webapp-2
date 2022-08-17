@@ -2,8 +2,12 @@ import { FC } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { PageTitle } from '@shared/components';
+import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
+import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
+import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
+
+import { DexTwoAddLiqForm } from './components';
 
 export const DexTwoAddLiq: FC = () => {
   const { t } = useTranslation();
@@ -12,8 +16,13 @@ export const DexTwoAddLiq: FC = () => {
   return (
     <>
       <PageTitle data-test-id="dexTwoAddLiqTitle">
-        {t('newLiquidity|Add')} {pairSlug}
+        {t('common|Add')} {pairSlug}
       </PageTitle>
+      <StickyBlock>
+        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
+          <DexTwoAddLiqForm />
+        </NewLiquidityFormTabsCard>
+      </StickyBlock>
     </>
   );
 };
