@@ -28,6 +28,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   noSpace?: boolean;
   dollarEquivalentOnly?: boolean;
   testId?: string;
+  maxAmountWithoutLetters?: number;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -69,6 +70,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   noSpace,
   dollarEquivalentOnly,
   testId = 'amount',
+  maxAmountWithoutLetters,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -90,7 +92,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const formattedAmount = amount ? formatValueBalance(amount, amountDecimals ?? undefined) : null;
+  const formattedAmount = amount
+    ? formatValueBalance(amount, amountDecimals ?? undefined, maxAmountWithoutLetters)
+    : null;
 
   const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
