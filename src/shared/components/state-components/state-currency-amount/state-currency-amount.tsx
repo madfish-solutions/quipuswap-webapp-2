@@ -52,6 +52,8 @@ export const Currency: FC<CurrencyProps> = ({ children, className, ...props }) =
   </span>
 );
 
+const MAX_AMOUNT_WITHOUT_LETTERS = 1e6;
+
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
   amountClassName,
@@ -70,7 +72,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   noSpace,
   dollarEquivalentOnly,
   testId = 'amount',
-  maxAmountWithoutLetters,
+  maxAmountWithoutLetters = MAX_AMOUNT_WITHOUT_LETTERS,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
