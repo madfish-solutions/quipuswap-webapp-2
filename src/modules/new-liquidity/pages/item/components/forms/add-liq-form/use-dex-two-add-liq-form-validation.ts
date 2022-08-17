@@ -3,15 +3,15 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { LiquidityItem } from '@modules/new-liquidity/interfaces';
+import { LiquidityItemDto } from '@modules/new-liquidity/dto';
 import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from '../helpers/forms.helpers';
 import { Input } from './use-dex-two-add-liq-form.vm';
-
-export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItem) => {
+// TODO: check if this really LiquidityItemDto (not LiquidityItem)
+export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItemDto) => {
   const { t } = useTranslation();
 
   return useMemo(() => {
