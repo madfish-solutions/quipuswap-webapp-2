@@ -14,7 +14,7 @@ import { Button } from '../button';
 import { ComplexError } from '../complex-error';
 import s from './ComplexInput.module.scss';
 
-interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
+export interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   className?: string;
   label?: string;
   error?: string;

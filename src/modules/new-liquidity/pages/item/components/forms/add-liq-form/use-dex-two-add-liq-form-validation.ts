@@ -9,6 +9,7 @@ import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from '../helpers/forms.helpers';
+import { Input } from './use-dex-two-add-liq-form.vm';
 
 export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItem) => {
   const { t } = useTranslation();
@@ -34,6 +35,8 @@ export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], d
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
+
+    shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
 
     return yup.object().shape(shape);
   }, [dexTwoItem.tokensInfo, t, userBalances]);
