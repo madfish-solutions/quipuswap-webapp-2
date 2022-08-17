@@ -12,7 +12,5 @@ export const newLiquidity = {
   maxApr: 'Max APR',
   maxAprTooltip: 'max apr tooltip',
   pools: 'Pools',
-  poolsTooltip: 'pools tooltip',
-  Add: 'Add',
-  Remove: 'Remove'
+  poolsTooltip: 'pools tooltip'
 } as const;
