@@ -1,15 +1,17 @@
 import { FormikErrors, FormikValues, useFormik } from 'formik';
 
-import { numberAsString } from '@shared/helpers';
+import { isTezosToken, numberAsString } from '@shared/helpers';
+import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from './mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
-enum Input {
+export enum Input {
   FIRST_ADD_LIQ_INPUT = 'add-liq-input-0',
-  SECOND_ADD_LIQ_INPUT = 'add-liq-input-1'
+  SECOND_ADD_LIQ_INPUT = 'add-liq-input-1',
+  BAKER_INPUT = 'baker-input'
 }
 
 export const useDexTwoAddLiqFormViewModel = () => {
@@ -27,7 +29,8 @@ export const useDexTwoAddLiqFormViewModel = () => {
     validationSchema,
     initialValues: {
       [Input.FIRST_ADD_LIQ_INPUT]: '',
-      [Input.SECOND_ADD_LIQ_INPUT]: ''
+      [Input.SECOND_ADD_LIQ_INPUT]: '',
+      [Input.BAKER_INPUT]: ''
     },
     onSubmit: handleSubmit
   });
@@ -42,6 +45,10 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
       formik.setFieldValue(formikKey, realValue);
     };
+  };
+
+  const onBakerChange = (baker: WhitelistedBaker) => {
+    formik.setFieldValue(Input.BAKER_INPUT, baker.address);
   };
 
   const data = MOCK_ITEM.tokensInfo.map((_, index) => {
@@ -62,5 +69,12 @@ export const useDexTwoAddLiqFormViewModel = () => {
     };
   });
 
-  return { data, onSubmit: formik.handleSubmit };
+  const bakerData = {
+    value: (formik.values as FormikValues)[Input.BAKER_INPUT],
+    error: (formik.errors as FormikErrors<FormikValues>)[Input.BAKER_INPUT] as string,
+    handleChange: onBakerChange,
+    shouldShowBakerInput: MOCK_ITEM.tokensInfo.some(({ token }) => isTezosToken(token))
+  };
+
+  return { data, onSubmit: formik.handleSubmit, bakerData };
 };
