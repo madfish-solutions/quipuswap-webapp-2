@@ -12,7 +12,7 @@ export const DexTwoRemoveLiq: FC = () => {
   return (
     <>
       <PageTitle data-test-id="dexTwoRemoveLiqTitle">
-        {t('newLiquidity|Remove')} {pairSlug}
+        {t('common|Remove')} {pairSlug}
       </PageTitle>
     </>
   );
