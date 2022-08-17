@@ -8,7 +8,7 @@ import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
 import Ukraine from '@images/ukraine_outline.png';
 import { useBalances } from '@providers/balances-provider';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useAccountPkh } from '@providers/use-dapp';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { Button, TokenSelect, ConnectWalletButton } from '@shared/components';
 import { isExist, isNull } from '@shared/helpers';
@@ -31,7 +31,6 @@ export const DonationModal: FC = () => {
   const compoundClassName = cx(styles.modal, modeClass[colorThemeMode]);
 
   const accountPkh = useAccountPkh();
-  const tezos = useTezos();
   const { balances, updateBalance } = useBalances();
   const { errors, submitForm, handleChange, values, resetForm } = useDonationFormik();
   const submitDisabled = !isEmptyArray(Object.keys(errors));
@@ -43,7 +42,7 @@ export const DonationModal: FC = () => {
   }, [donationModalOpen, accountPkh, updateBalance]);
 
   useEffect(() => updateTezosBalance(), [updateTezosBalance]);
-  useOnBlock(tezos, updateTezosBalance);
+  useOnBlock(updateTezosBalance);
   const tezosBalance = balances[TEZOS_TOKEN_SLUG];
 
   const handleRequestClose = () => {
