@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useNewLiquidityListStore } from './use-new-liquidity-list.store';
+import { useNewLiquidityListStore } from '../store';
 
 export const useGetNewLiquidityStats = () => {
   const { showErrorToast } = useToasts();

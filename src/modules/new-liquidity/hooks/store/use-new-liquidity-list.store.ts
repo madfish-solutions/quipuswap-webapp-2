@@ -1,6 +1,6 @@
 import { useRootStore } from '@providers/root-store-provider';
 
-import { NewLiquidityListStore } from '../store';
+import { NewLiquidityListStore } from '../../store';
 
 export const useNewLiquidityListStore = () => {
   const { newLiquidityListStore } = useRootStore();

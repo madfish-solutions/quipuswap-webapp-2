@@ -52,6 +52,7 @@ export const DashboardCard: FC<DashboardCardProps> = ({
         isLeftCurrency={currency === '$'}
         labelSize={size}
         isLoading={loading}
+        maxAmountWithoutLetters={1e9}
         {...props}
       />
     </div>
