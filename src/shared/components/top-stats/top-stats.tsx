@@ -33,6 +33,7 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, currency =
         isLoading={loading}
         amount={amount || null}
         isLeftCurrency={isDollar}
+        maxAmountWithoutLetters={1e9}
       />
     </div>
   );
