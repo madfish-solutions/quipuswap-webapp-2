@@ -3,15 +3,18 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { LiquidityItemDto } from '@modules/new-liquidity/dto';
+import { LiquidityItem } from '@modules/new-liquidity/interfaces';
 import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from '../helpers/forms.helpers';
 import { Input } from './use-dex-two-add-liq-form.vm';
-// TODO: check if this really LiquidityItemDto (not LiquidityItem)
-export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItemDto) => {
+export const useDexTwoAddLiqValidation = (
+  userBalances: Nullable<BigNumber>[],
+  dexTwoItem: LiquidityItem,
+  shouldShowBakerInput: boolean
+) => {
   const { t } = useTranslation();
 
   return useMemo(() => {
@@ -36,8 +39,10 @@ export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], d
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
-    shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
+    if (shouldShowBakerInput) {
+      shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
+    }
 
     return yup.object().shape(shape);
-  }, [dexTwoItem.tokensInfo, t, userBalances]);
+  }, [dexTwoItem.tokensInfo, shouldShowBakerInput, t, userBalances]);
 };
