@@ -1,18 +1,20 @@
+import BigNumber from 'bignumber.js';
 import { FormikErrors, FormikValues, useFormik } from 'formik';
 
 import { numberAsString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
+import { extractTokens, getInputSlugByIndex, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
-import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
+import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
 
-enum Input {
+export enum Input {
+  LP_INPUT = 'lpInput',
   FIRST_ADD_LIQ_INPUT = 'add-liq-input-0',
   SECOND_ADD_LIQ_INPUT = 'add-liq-input-1'
 }
 
-export const useDexTwoAddLiqFormViewModel = () => {
+export const useDexTwoRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
   const userBalances = getUserBalances(MOCK_ITEM.tokensInfo);
 
@@ -20,12 +22,13 @@ export const useDexTwoAddLiqFormViewModel = () => {
     // eslint-disable-next-line no-console
     console.log('submit');
   };
-
-  const validationSchema = useDexTwoAddLiqValidation(userBalances, MOCK_ITEM);
+  // TODO: validation for lpInput
+  const validationSchema = useDexTwoRemoveLiqValidation(userBalances, MOCK_ITEM);
 
   const formik = useFormik({
     validationSchema,
     initialValues: {
+      [Input.LP_INPUT]: '',
       [Input.FIRST_ADD_LIQ_INPUT]: '',
       [Input.SECOND_ADD_LIQ_INPUT]: ''
     },
@@ -43,6 +46,14 @@ export const useDexTwoAddLiqFormViewModel = () => {
       formik.setFieldValue(formikKey, realValue);
     };
   };
+  // TODO: check is this a good way to transfer data to LP
+  const lpData = {
+    disabled: false,
+    formik,
+    label: t('common|Input'),
+    balance: new BigNumber(10),
+    onInputChange: handleInputChange
+  };
 
   const data = MOCK_ITEM.tokensInfo.map((_, index) => {
     const inputSlug = getInputSlugByIndex(index);
@@ -56,11 +67,12 @@ export const useDexTwoAddLiqFormViewModel = () => {
       index,
       decimals: token.metadata.decimals,
       tokens: token,
-      label: t('common|Input'),
+      label: t('common|Output'),
       balance: userBalances[index],
+      hiddenPercentSelector: true,
       onInputChange: handleInputChange(index)
     };
   });
 
-  return { data, onSubmit: formik.handleSubmit };
+  return { data, onSubmit: formik.handleSubmit, lpData };
 };
