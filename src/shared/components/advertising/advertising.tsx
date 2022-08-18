@@ -18,7 +18,7 @@ export const Advertising = () => {
       </div>
       <div className={styles.text}>
         <div className={styles.launched}>Already launched!</div>
-        <div className={styles.income}>Borrow, Land, Earn now!</div>
+        <div className={styles.income}>Borrow, Lend, Earn now!</div>
       </div>
     </a>
   );
