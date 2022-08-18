@@ -25,21 +25,19 @@ export const useAddLiquidity = () => {
   const { item } = useNewLiquidityItemStore();
 
   const addLiquidity = async (inputAmounts: FormikValues, candidate: string) => {
-    if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
+    if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
       return;
     }
     const itemId = item.id;
     const tokens = extractTokens(item);
 
     const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
-      isNull(amount) || amount.isNaN()
-        ? new BigNumber('0')
-        : toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
+      toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
     const shares = atomicInputAmounts[0]
-      .multipliedBy(item?.totalSupply)
+      .multipliedBy(item.totalSupply)
       .dividedToIntegerBy(item?.tokensInfo[0].atomicTokenTvl);
 
     // TODO: Fees for shares
