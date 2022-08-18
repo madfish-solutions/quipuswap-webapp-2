@@ -63,7 +63,7 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setInput(!input.isNaN() ? input : null);
   };
 
-  const gameResult = getGameResult(userLastGame?.status);
+  const gameResult = getGameResult(userLastGame.status);
 
   return {
     isLoading: isLoading || isUserLastGameLoading || gameResult === Statuses.started,

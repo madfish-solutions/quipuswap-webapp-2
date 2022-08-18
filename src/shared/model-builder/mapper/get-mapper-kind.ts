@@ -14,6 +14,8 @@ export const getMapperKind = (_type: unknown) => {
       return MapperKinds.DATE;
     case String:
       return MapperKinds.STRING;
+    case Symbol:
+      return MapperKinds.SYMBOL;
     default:
       throw TypeError();
   }

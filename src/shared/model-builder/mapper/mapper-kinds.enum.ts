@@ -3,5 +3,6 @@ export enum MapperKinds {
   BIGNUMBER,
   BOOLEAN,
   STRING,
-  DATE
+  DATE,
+  SYMBOL
 }
