@@ -8,31 +8,26 @@ import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
+import { MOCK_ITEM } from './mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
-
-export enum Input {
-  FIRST_ADD_LIQ_INPUT = 'add-liq-input-0',
-  SECOND_ADD_LIQ_INPUT = 'add-liq-input-1',
-  BAKER_INPUT = 'baker-input'
-}
+import { Input, NewLiquidityAddFormValues } from './use-dex-two-add-liq-form.interface';
 
 export const getInputsAmountFormFormikValues = <T extends { [key: string]: string }>(values: T) =>
   Object.values(values).map(value => saveBigNumber(value, new BigNumber('0')));
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
-  const { item } = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const item = newLiquidityItemStore.item ?? MOCK_ITEM;
   const { addLiquidity } = useAddLiquidity();
 
-  // TODO: remove any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = (values: FormikValues, actions: FormikHelpers<any>) => {
+  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<NewLiquidityAddFormValues>) => {
     actions.setSubmitting(true);
 
     const candidate = values[Input.BAKER_INPUT];
     const inputAmounts = getInputsAmountFormFormikValues(values);
 
-    addLiquidity(inputAmounts, candidate);
+    await addLiquidity(inputAmounts, candidate);
 
     actions.resetForm();
     actions.setSubmitting(false);

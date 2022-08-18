@@ -4,7 +4,6 @@ import { computed, makeObservable } from 'mobx';
 import { RootStore } from '@shared/store';
 
 import { PoolType } from '../interfaces';
-import { MOCK_ITEM } from '../pages/item/components/forms/add-liq-form/mock-item';
 
 export class NewLiquidityItemStore {
   id: BigNumber = new BigNumber(0);
@@ -17,10 +16,8 @@ export class NewLiquidityItemStore {
   }
 
   get item() {
-    return (
-      this.rootStore.newLiquidityListStore?.list.filter(
-        ({ item: { id, type } }) => Number(id) === Number(this.id) && type === this.type
-      )[0].item ?? MOCK_ITEM
-    );
+    return this.rootStore.newLiquidityListStore?.list.filter(
+      ({ item: { id, type } }) => Number(id) === Number(this.id) && type === this.type
+    )[0].item;
   }
 }
