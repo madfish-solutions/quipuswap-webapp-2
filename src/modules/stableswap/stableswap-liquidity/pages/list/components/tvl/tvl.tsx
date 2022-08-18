@@ -21,7 +21,13 @@ export const Tvl: FC<Props> = ({ amount }) => {
         {t('stableswap|tvl')}
         <Tooltip content={t('stableswap|tvlProtocolTooltip')} />
       </div>
-      <StateCurrencyAmount amount={amount} currency={DOLLAR} isLeftCurrency className={styles.amount} />
+      <StateCurrencyAmount
+        amount={amount}
+        currency={DOLLAR}
+        isLeftCurrency
+        className={styles.amount}
+        maxAmountWithoutLetters={1e9}
+      />
     </div>
   );
 };

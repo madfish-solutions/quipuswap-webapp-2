@@ -5,7 +5,6 @@ import { BlockInfoDto } from '@shared/dto';
 
 import { LiquidityItem, LiquidityItemResponse } from '../interfaces';
 import { LiquidityTokenInfoDto } from './liquidity-token-info.dto';
-import { OpportunityDto } from './opportunity.dto';
 
 export class LiquidityItemDto implements LiquidityItem {
   @Typed()
@@ -34,9 +33,6 @@ export class LiquidityItemDto implements LiquidityItem {
 
   @Typed({ type: LiquidityTokenInfoDto, isArray: true })
   tokensInfo: Array<LiquidityTokenInfoDto>;
-
-  @Typed({ type: OpportunityDto, isArray: true, optional: true })
-  opportunities?: Array<OpportunityDto>;
 }
 
 export class LiquidityItemResponseDto implements LiquidityItemResponse {
