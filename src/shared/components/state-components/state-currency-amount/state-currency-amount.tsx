@@ -16,6 +16,7 @@ import styles from './state-currency-amount.module.scss';
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amountClassName?: string;
+  currencyClassName?: string;
   amount: Optional<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
@@ -27,6 +28,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   noSpace?: boolean;
   dollarEquivalentOnly?: boolean;
   testId?: string;
+  maxAmountWithoutLetters?: number;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -44,15 +46,18 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC<CurrencyProps> = ({ children, ...props }) => (
-  <span className={styles.currency} {...props}>
+export const Currency: FC<CurrencyProps> = ({ children, className, ...props }) => (
+  <span className={cx(className, styles.currency)} {...props}>
     {children}
   </span>
 );
 
+const MAX_AMOUNT_WITHOUT_LETTERS = 1e6;
+
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
   amountClassName,
+  currencyClassName,
   labelSize = 'small',
   amount,
   currency,
@@ -67,6 +72,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   noSpace,
   dollarEquivalentOnly,
   testId = 'amount',
+  maxAmountWithoutLetters = MAX_AMOUNT_WITHOUT_LETTERS,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -88,7 +94,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const formattedAmount = amount ? formatValueBalance(amount, amountDecimals ?? undefined) : null;
+  const formattedAmount = amount
+    ? formatValueBalance(amount, amountDecimals ?? undefined, maxAmountWithoutLetters)
+    : null;
 
   const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
@@ -109,7 +117,11 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         </span>
       </StateWrapper>
 
-      {isRightVisible && <Currency data-test-id="rightVisibleCurrency">{currency}</Currency>}
+      {isRightVisible && (
+        <Currency data-test-id="rightVisibleCurrency" className={currencyClassName}>
+          {currency}
+        </Currency>
+      )}
     </span>
   );
 

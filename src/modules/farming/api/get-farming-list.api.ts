@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { getUserBalance } from '@blockchain';
 import { FARMING_NEW_LIST_API_URL } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
-import { isEmptyArray, isNull, saveBigNumber } from '@shared/helpers';
+import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { getUserFarmBalances } from '../helpers';
@@ -37,7 +37,9 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
       const { stakedToken } = item;
       const { contractAddress, type, fa2TokenId } = stakedToken;
 
-      const balanceBN = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
+      const balanceBN = await retry(
+        async () => await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId)
+      );
 
       const balance = saveBigNumber(balanceBN, new BigNumber(0));
 
@@ -45,7 +47,7 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
     })
   );
 
-  const userBalances = await getUserFarmBalances(accountPkh, storage, list);
+  const userBalances = await retry(async () => await getUserFarmBalances(accountPkh, storage, list));
 
   userBalances.forEach((userBalance, key) => {
     const balance = balances.get(key) as UserBalances;

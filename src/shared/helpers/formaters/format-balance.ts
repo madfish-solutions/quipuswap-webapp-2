@@ -73,9 +73,13 @@ export const formatBalance = (value: string, amountDecimals?: number): string =>
   }
 };
 
-export const formatValueBalance = (amount: BigNumber.Value, amountDecimals?: number): string => {
+export const formatValueBalance = (
+  amount: BigNumber.Value,
+  amountDecimals?: number,
+  maxAmountWithoutLetters = MAX_AMOUNT_WITHOUT_LETTERS
+): string => {
   const bn = new BigNumber(amount);
-  if (bn.gte(MAX_AMOUNT_WITHOUT_LETTERS)) {
+  if (bn.gte(maxAmountWithoutLetters)) {
     return shortNumberWithLetters(amount, amountDecimals);
   }
 

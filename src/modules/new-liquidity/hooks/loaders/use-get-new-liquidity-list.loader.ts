@@ -7,7 +7,7 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useNewLiquidityListStore } from './use-new-liquidity-list.store';
+import { useNewLiquidityListStore } from '../store';
 
 export const useGetNewLiquidityList = () => {
   const { showErrorToast } = useToasts();
