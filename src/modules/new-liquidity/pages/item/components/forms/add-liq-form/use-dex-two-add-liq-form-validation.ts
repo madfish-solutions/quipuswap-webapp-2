@@ -8,7 +8,7 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndex } from '../helpers/forms.helpers';
+import { getInputSlugByIndexAdd } from '../helpers/forms.helpers';
 
 export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItem) => {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], d
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndex(index), item.required('Amount is required!')];
+      return [getInputSlugByIndexAdd(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);

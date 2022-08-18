@@ -5,4 +5,3 @@ export * from './new-liquidity-labels';
 export * from './new-liquidity-stats';
 export * from './form-header';
 export * from './new-liquidity-form-tabs-card';
-export * from './stable-lp-input';
