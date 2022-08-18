@@ -179,9 +179,9 @@ export class CoinflipStore {
   get payout(): Nullable<BigNumber> {
     return this.game.input && this.generalStats.payoutCoefficient
       ? placeDecimals(
-        this.game.input.times(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)),
-        this.token
-      )
+          this.game.input.times(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)),
+          this.token
+        )
       : null;
   }
 
