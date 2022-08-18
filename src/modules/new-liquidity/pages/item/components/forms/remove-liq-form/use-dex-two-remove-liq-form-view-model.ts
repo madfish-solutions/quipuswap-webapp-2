@@ -26,7 +26,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     // eslint-disable-next-line no-console
     console.log('submit');
   };
-  // TODO: validation for lpInput
+
   const validationSchema = useDexTwoRemoveLiqValidation(userBalances, MOCK_ITEM, lpTokenBalance!, lpTokenMetadata);
 
   const formik = useFormik({
@@ -60,7 +60,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
       formik.setFieldValue(formikKey, realValue);
     };
   };
-  // TODO: check is this a good way to transfer data to LP
+
   const lpData = {
     disabled: false,
     value: (formik.values as FormikValues)[Input.LP_INPUT],
