@@ -3,9 +3,8 @@ import { useEffect, useRef } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
-import { extractTokens } from '@modules/stableswap/helpers';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { getSymbolsString, isUndefined } from '@shared/helpers';
+import { extractTokens, getSymbolsString, isUndefined } from '@shared/helpers';
 
 import { useGetStableDividendsItem, useStableDividendsItemStore } from '../../../hooks';
 

@@ -1,13 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { addNewLiquidityApi } from '@modules/new-liquidity/api/add-liquidity.api';
-import { extractTokens, getNewLiquidityDeadline } from '@modules/new-liquidity/helpers';
-import { tokensAndAmountsMapper } from '@modules/new-liquidity/mapping';
+import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, isExist, isNull, toAtomic } from '@shared/helpers';
+import { decreaseBySlippage, extractTokens, getTransactionDeadline, isExist, isNull, toAtomic } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -29,7 +28,7 @@ export const useAddLiquidity = () => {
       return;
     }
     const itemId = item.id;
-    const tokens = extractTokens(item);
+    const tokens = extractTokens(item.tokensInfo);
 
     const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
@@ -44,10 +43,10 @@ export const useAddLiquidity = () => {
 
     const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN); // should be shares with fee
 
-    const deadline = await getNewLiquidityDeadline(tezos, transactionDeadline);
+    const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
     try {
-      const operation = await addNewLiquidityApi(
+      const operation = await addDexTwoLiquidityApi(
         tezos,
         sharesWithSlippage,
         tokensAndAmounts,

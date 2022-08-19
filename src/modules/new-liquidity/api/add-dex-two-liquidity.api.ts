@@ -3,14 +3,12 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { isGreaterThanZero } from '@shared/helpers';
+import { isGreaterThanZero, sortTokensAmounts } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
-
-import { sortTokensAmounts } from '../helpers/sort-tokens-amount';
 
 const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
-export const addNewLiquidityApi = async (
+export const addDexTwoLiquidityApi = async (
   tezos: TezosToolkit,
   shares: BigNumber,
   tokensAndAmounts: Array<AmountToken>,
