@@ -7,7 +7,7 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useAccountPkh } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
@@ -144,7 +144,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   );
 
   const { balances, updateBalance } = useBalances();
-  const tezos = useTezos();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === formik.action)!;
@@ -257,7 +256,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     prevRoutePairsRef.current = routePairs;
   }, [routePairs, formik.inputToken, formik.outputToken, updateSwapLimits, updateCalculations]);
 
-  useOnBlock(tezos, updateSelectedTokensBalances);
+  useOnBlock(updateSelectedTokensBalances);
 
   const resetTokensAmounts = useCallback(() => {
     setFieldTouched(SwapField.INPUT_AMOUNT, false);

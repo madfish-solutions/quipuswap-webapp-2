@@ -1,21 +1,24 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { RpcClientInterface } from '@taquito/rpc';
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
 import { APP_NAME, NETWORK } from '@config/config';
-import { NETWORK_ID, networksBaseUrls, RPC_URL } from '@config/environment';
-import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
+import { MS_IN_MINUTES } from '@config/constants';
+import { NETWORK_ID, networksBaseUrls, RPC_URLS } from '@config/environment';
+import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY, PREFERRED_RPC_URL } from '@config/localstorage';
 import {
   beaconWallet,
   connectWalletBeacon,
   connectWalletTemple,
+  FastRpcClient,
+  getPreferredRpcUrl,
   getTempleWalletState,
   michelEncoder,
-  ReadOnlySigner,
-  rpcClient
+  ReadOnlySigner
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNetwork } from '@shared/types';
 
@@ -28,10 +31,19 @@ export interface DAppType {
   isLoading: boolean;
 }
 
-export const fallbackToolkit = new TezosToolkit(rpcClient);
+export function makeBasicToolkit(clientOrUrl?: RpcClientInterface | string) {
+  const tezos = new TezosToolkit(clientOrUrl ?? new FastRpcClient(getPreferredRpcUrl()));
+  tezos.setPackerProvider(michelEncoder);
 
-fallbackToolkit.setPackerProvider(michelEncoder);
+  return tezos;
+}
 
+const BLOCK_POLLING_INTERVAL = 5000;
+const DISCONNECTION_TIMEOUT = MS_IN_MINUTES;
+const RPC_URLS_INDEX_INCREMENT = 1;
+
+// TODO: reduce cognitive complexity
+// eslint-disable-next-line sonarjs/cognitive-complexity
 function useDApp() {
   const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
     useState<DAppType>({
@@ -48,7 +60,7 @@ function useDApp() {
       setState(prevState => ({
         ...prevState,
         connectionType: null,
-        tezos: prevState.tezos ?? fallbackToolkit
+        tezos: prevState.tezos ?? makeBasicToolkit()
       })),
     []
   );
@@ -91,7 +103,7 @@ function useDApp() {
           } else {
             setState(prevState => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkit,
+              tezos: prevState.tezos ?? makeBasicToolkit(),
               templeWallet: wlt
             }));
           }
@@ -125,8 +137,7 @@ function useDApp() {
             return;
           }
 
-          const toolkit = new TezosToolkit(rpcClient);
-          toolkit.setPackerProvider(michelEncoder);
+          const toolkit = makeBasicToolkit();
           toolkit.setWalletProvider(beaconWallet);
 
           setState(prevState => ({
@@ -157,9 +168,9 @@ function useDApp() {
   }, [setFallbackState, templeInitialAvailable]);
 
   useEffect(() => {
-    if (!tezos || tezos.rpc.getRpcUrl() !== RPC_URL) {
+    if (!tezos || tezos.rpc.getRpcUrl() !== getPreferredRpcUrl()) {
       const wlt = new TempleWallet(APP_NAME, null);
-      const fallbackTzTk = fallbackToolkit;
+      const fallbackTzTk = makeBasicToolkit();
       setState(prevState => ({
         ...prevState,
         templeWallet: wlt,
@@ -179,7 +190,7 @@ function useDApp() {
           setState(prevState => ({
             ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
-            tezos: fallbackToolkit,
+            tezos: makeBasicToolkit(),
             accountPkh: null,
             accountPublicKey: null,
             connectionType: null
@@ -216,10 +227,10 @@ function useDApp() {
     }));
   }, []);
 
-  const disconnect = useCallback(async () => {
+  const disconnect = useCallback(() => {
     setState(prevState => ({
       ...prevState,
-      tezos: fallbackToolkit,
+      tezos: makeBasicToolkit(),
       accountPkh: null,
       accountPublicKey: null,
       connectionType: null
@@ -239,7 +250,7 @@ function useDApp() {
       accountPkh: null,
       accountPublicKey: null,
       connectionType: null,
-      tezos: fallbackToolkit,
+      tezos: makeBasicToolkit(),
       isLoading: false
     }));
   }, []);
@@ -249,8 +260,7 @@ function useDApp() {
       if (!tezos?.rpc) {
         throw new Error('Tezos RPC in undefined');
       }
-      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
-      cloneTezosToolkit.setPackerProvider(michelEncoder);
+      const cloneTezosToolkit = makeBasicToolkit(tezos.rpc);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 
       return cloneTezosToolkit;
@@ -258,6 +268,83 @@ function useDApp() {
 
     return tezos;
   }, [tezos, connectionType, accountPkh, accountPublicKey]);
+
+  const blockSubscriptions = useRef(new Set<(hash: string) => void>());
+  const subscribeToBlock = useCallback((cb: (hash: string) => void) => {
+    blockSubscriptions.current.add(cb);
+  }, []);
+  const unsubscribeFromBlock = useCallback((cb: (hash: string) => void) => {
+    blockSubscriptions.current.delete(cb);
+  }, []);
+
+  const lastBlockFetchSuccessTimestampRef = useRef<number>(Date.now());
+  const [shouldReconnect, setShouldReconnect] = useState(false);
+
+  const currentRpcUrl = tezos ? tezos.rpc.getRpcUrl() : getPreferredRpcUrl();
+  const nextRpcUrl = useMemo(() => {
+    const currentRpcUrlIndex = RPC_URLS.indexOf(currentRpcUrl);
+    const newRpcUrlIndex = (currentRpcUrlIndex + RPC_URLS_INDEX_INCREMENT) % RPC_URLS.length;
+
+    return RPC_URLS[newRpcUrlIndex];
+  }, [currentRpcUrl]);
+
+  const reconnect = useCallback(async () => {
+    if (!tezos) {
+      return;
+    }
+
+    localStorage.setItem(PREFERRED_RPC_URL, nextRpcUrl);
+    setShouldReconnect(false);
+    lastBlockFetchSuccessTimestampRef.current = Date.now();
+    if (accountPkh) {
+      const lastUsedConnection = localStorage.getItem(LAST_USED_CONNECTION_KEY);
+      disconnect();
+      if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
+        await connectWithTemple(true);
+      } else {
+        await connectWithBeacon(true);
+      }
+    } else {
+      setState(prevState => ({
+        ...prevState,
+        connectionType: null,
+        tezos: makeBasicToolkit()
+      }));
+    }
+  }, [tezos, accountPkh, nextRpcUrl, disconnect, connectWithTemple, connectWithBeacon]);
+
+  const blockHashRef = useRef<string>();
+  useEffect(() => {
+    if (!tezos) {
+      return () => undefined;
+    }
+
+    const blockPollingInterval = setInterval(async () => {
+      try {
+        const blockHash = await tezos.rpc.getBlockHash();
+        lastBlockFetchSuccessTimestampRef.current = Date.now();
+        if (blockHash !== blockHashRef.current) {
+          blockHashRef.current = blockHash;
+          blockSubscriptions.current.forEach(cb => cb(blockHash));
+        }
+      } catch (e) {
+        const now = Date.now();
+        const lastBlockFetchSuccessTimestamp = lastBlockFetchSuccessTimestampRef.current;
+        if (now - lastBlockFetchSuccessTimestamp > DISCONNECTION_TIMEOUT) {
+          setShouldReconnect(true);
+        }
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    }, BLOCK_POLLING_INTERVAL);
+
+    return () => clearInterval(blockPollingInterval);
+  }, [tezos]);
+
+  const rejectReconnection = useCallback(() => {
+    setShouldReconnect(false);
+    lastBlockFetchSuccessTimestampRef.current = Date.now();
+  }, []);
 
   return {
     connectionType,
@@ -270,7 +357,14 @@ function useDApp() {
     connectWithBeacon,
     connectWithTemple,
     disconnect,
-    changeNetwork
+    changeNetwork,
+    subscribeToBlock,
+    unsubscribeFromBlock,
+    shouldReconnect,
+    currentRpcUrl,
+    nextRpcUrl,
+    reconnect,
+    rejectReconnection
   };
 }
 
@@ -286,7 +380,14 @@ export const [
   useDisconnect,
   useChangeNetwork,
   useEstimationToolkit,
-  useIsLoading
+  useIsLoading,
+  useSubscribeToBlock,
+  useUnsubscribeFromBlock,
+  useShouldReconnect,
+  useCurrentRpcUrl,
+  useNextRpcUrl,
+  useReconnect,
+  useRejectReconnection
 ] = constate(
   useDApp,
   v => v.connectionType,
@@ -299,5 +400,12 @@ export const [
   v => v.disconnect,
   v => v.changeNetwork,
   v => v.estimationToolkit,
-  v => v.isLoading
+  v => v.isLoading,
+  v => v.subscribeToBlock,
+  v => v.unsubscribeFromBlock,
+  v => v.shouldReconnect,
+  v => v.currentRpcUrl,
+  v => v.nextRpcUrl,
+  v => v.reconnect,
+  v => v.rejectReconnection
 );
