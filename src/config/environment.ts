@@ -15,7 +15,7 @@ export const networksBaseUrls: Record<SupportedNetworks, string> = {
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
 //#endregion BASE_URL
 
-export const RPC_URL = process.env.REACT_APP_RPC_URL!;
+export const RPC_URLS = process.env.REACT_APP_RPC_URLS?.split(',') ?? [process.env.REACT_APP_RPC_URL!];
 
 export const TZKT_EXPLORER_URL = process.env.REACT_APP_TZKT_EXPLORER_URL!;
 
