@@ -1,13 +1,17 @@
-import { Component, ErrorInfo, PropsWithChildren } from 'react';
+import { ErrorInfo, PropsWithChildren, ReactElement } from 'react';
+
+import { ErrorBoundary, ErrorBoundaryProps } from '@sentry/react';
+
+import { Console } from '@shared/services';
 
 import { ErrorBoundaryInnerProps } from './error-boundary.types';
 
-export class ErrorBoundaryInner extends Component<ErrorBoundaryInnerProps> {
-  state: { error: Error | null } = { error: null };
-
-  constructor(props: PropsWithChildren<ErrorBoundaryInnerProps>) {
+export class ErrorBoundaryInner extends ErrorBoundary {
+  isError = false;
+  constructor(props: PropsWithChildren<ErrorBoundaryInnerProps> & ErrorBoundaryProps) {
     super(props);
 
+    this.isError = Boolean(props.isError);
     this.showErrorToast = props.showErrorToast;
   }
 
@@ -15,19 +19,18 @@ export class ErrorBoundaryInner extends Component<ErrorBoundaryInnerProps> {
   showErrorToast(err: string | Error) { }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // eslint-disable-next-line no-console
-    console.error('O_O', error, errorInfo);
-    this.setState({
-      error
-    });
+    super.componentDidCatch(error, errorInfo);
+
+    Console.error({ error, errorInfo });
+
     this.showErrorToast(error);
   }
 
   render() {
-    if (this.state.error != null || this.props.isError) {
-      return this.props.fallback;
+    if (this.isError) {
+      return (this.props.fallback ?? null) as ReactElement;
     }
 
-    return this.props.children;
+    return super.render();
   }
 }

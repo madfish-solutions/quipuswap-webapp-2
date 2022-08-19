@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
-import { Routes, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+
+import { SentryRoutes } from '@shared/services';
 
 import { VotingProvider } from './helpers/voting.provider';
 import { VotingInner } from './voting-inner';
@@ -12,10 +14,10 @@ interface VotingProps {
 export const VotingPage: FC<VotingProps> = ({ className }) => {
   return (
     <VotingProvider>
-      <Routes>
+      <SentryRoutes>
         <Route path="/" element={<VotingInner className={className} />} />
         <Route path=":method/:fromTo" element={<VotingInner className={className} />} />
-      </Routes>
+      </SentryRoutes>
     </VotingProvider>
   );
 };
