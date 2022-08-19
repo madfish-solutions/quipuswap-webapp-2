@@ -2,45 +2,42 @@
 @import '@styles/breakpoints';
 
 .text {
-  font-weight: 600;
-  color: $text-03;
-  font-size: 1.125rem;
-  line-height: 1.5;
+  font-weight: 400;
+  font-size: 0.857rem;
+  line-height: 1.33;
+  margin: 24px 0 40px;
 }
 
 .modal {
-  padding: 16px 24px 24px;
+  padding: 16px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  max-width: 332px;
 }
 
 .button {
-  margin-top: 40px;
   background: $support-error !important;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon {
-  margin-right: 8px;
+  max-width: 128px;
 }
 
 .light {
   .button {
     color: $text-01;
   }
+  .text {
+    color: $text-02;
+  }
 }
 
 .dark {
   .button {
-    color: $text-inverse;
+    color: $ui-01;
   }
-}
-
-@include media('>tablet') {
-  .button {
-    max-width: none;
+  .text {
+    color: $ui-01;
   }
 }

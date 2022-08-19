@@ -1,5 +1,8 @@
-import { FC, useCallback, useRef, useEffect } from 'react';
+import { FC, useCallback, useRef, useEffect, useContext } from 'react';
 
+import cx from 'classnames';
+
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
   useAccountPkh,
   useCurrentRpcUrl,
@@ -19,7 +22,13 @@ import styles from './reconnect-modal.module.scss';
 
 const MS = 0;
 
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const ReconnectModal: FC = () => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation();
   const accountPkh = useAccountPkh();
   const reconnect = useReconnect();
@@ -81,17 +90,14 @@ export const ReconnectModal: FC = () => {
 
   return (
     <Modal
-      contentClassName={styles.modal}
+      containerClassName={styles.container}
+      contentClassName={cx(styles.modal, modeClass[colorThemeMode])}
       title="Reconnection"
       isOpen={reconnectModalOpen}
       onRequestClose={handleRequestClose}
       data-test-id="reconnectWalletModal"
     >
-      <div className={styles.row}>
-        <div className={styles.text} title={accountPkh}>
-          {t('common|reconnectionModalText', { currentRpcUrl, nextRpcUrl })}
-        </div>
-      </div>
+      <div className={styles.text}>{t('common|reconnectionModalText', { currentRpcUrl, nextRpcUrl })}</div>
       <Button className={styles.button} theme="secondary" onClick={handleReconnectClick} data-test-id="buttonReconnect">
         {t('common|Reconnect')}
       </Button>
