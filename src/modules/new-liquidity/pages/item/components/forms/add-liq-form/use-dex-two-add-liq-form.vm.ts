@@ -1,19 +1,15 @@
-import BigNumber from 'bignumber.js';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useAddLiquidity } from '@modules/new-liquidity/hooks/blockchain';
-import { isTezosToken, numberAsString, saveBigNumber } from '@shared/helpers';
+import { extractTokens, getInputsAmountFormFormikValues, isTezosToken, numberAsString } from '@shared/helpers';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndex, extractTokens, getUserBalances } from '../helpers/forms.helpers';
+import { getInputSlugByIndex, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from './mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 import { Input, NewLiquidityAddFormValues } from './use-dex-two-add-liq-form.interface';
-
-export const getInputsAmountFormFormikValues = <T extends { [key: string]: string }>(values: T) =>
-  Object.values(values).map(value => saveBigNumber(value, new BigNumber('0')));
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
