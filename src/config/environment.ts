@@ -3,6 +3,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { SupportedNetworks } from '@shared/types';
 
 export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY!;
+export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN!;
 
 export const NETWORK_ID = (process.env.REACT_APP_NETWORK! ?? NetworkType.MAINNET) as SupportedNetworks;
 

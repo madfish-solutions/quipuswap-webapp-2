@@ -25,6 +25,8 @@
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.0",
     "@quipuswap/tokens-whitelist": "^1.0.7",
+    "@sentry/react": "^7.11.1",
+    "@sentry/tracing": "^7.11.1",
     "@taquito/beacon-wallet": "13.0.0",
     "@taquito/taquito": "13.0.0",
     "@temple-wallet/dapp": "^7.0.0",
