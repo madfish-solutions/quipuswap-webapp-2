@@ -14,10 +14,11 @@
     "test": "craco test",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
-    "e2e": "npx cypress run --record --key f271c554-5264-44d3-89e2-a309096fa019 --parallel",
+    "e2e": "npx cypress run --record --key f271c554-5264-44d3-89e2-a309096fa019",
     "e2e:parallel": "npx cypress run --record --key f271c554-5264-44d3-89e2-a309096fa019 --parallel",
     "eject": "react-scripts eject",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "cy:run_browser": "npx cypress run e2e:parallel -- --browser chrome --group Chrome & npx cypress run e2e -- --browser firefox --group Firefox"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^3.1.0",
