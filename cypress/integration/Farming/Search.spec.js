@@ -1,11 +1,10 @@
 /// <reference types="cypress" />
 
-import { FIELD_WAIT_TIMEOUT } from '../../const';
-
 describe('Search section', () => {
   beforeEach(() => {
     cy.visit('/farming');
-    cy.wait(FIELD_WAIT_TIMEOUT);
+    cy.waitUntil(() => (cy.get('[data-test-id="activeOnlySwitcherTranslation"]')
+    .invoke('text').then((text) => text ==='Active Only')))
     cy.get('[data-test-id="acceptCookieButton"]').click();
   });
   it('Should_SwitchActiveOnly_When_ClickingOnIt', () => {
