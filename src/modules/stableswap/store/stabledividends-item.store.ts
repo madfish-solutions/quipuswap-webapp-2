@@ -3,7 +3,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getFirstElement, isNull } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getStableDividendsItemApi, getStakerInfo } from '../api';
@@ -18,14 +18,14 @@ export class StableDividendsItemStore {
     loader: async self => ({ item: await getStableDividendsItemApi(self.poolId) }),
     model: StableswapDividendsItemResponseModel
   })
-  readonly itemStore: LoadingErrorDataNew<StableswapDividendsItemResponseModel, { item: null }>;
+  readonly itemStore: LoadingErrorData<StableswapDividendsItemResponseModel, { item: null }>;
 
   @Led({
     default: { item: null },
     loader: async self => await self.getstakerInfo(),
     model: StakerInfoResponseModel
   })
-  readonly stakerInfoStore: LoadingErrorDataNew<StakerInfoResponseModel, { item: null }>;
+  readonly stakerInfoStore: LoadingErrorData<StakerInfoResponseModel, { item: null }>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {

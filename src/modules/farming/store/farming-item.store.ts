@@ -6,7 +6,7 @@ import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUN
 import { isExist, isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableStringWrapperModel } from '@shared/models';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
@@ -36,7 +36,7 @@ export class FarmingItemStore {
     loader: async self => await getFarmingItemApi(self.farmingId),
     model: FarmingItemResponseModel
   })
-  readonly itemStore: LoadingErrorDataNew<FarmingItemResponseModel, typeof defaultItem>;
+  readonly itemStore: LoadingErrorData<FarmingItemResponseModel, typeof defaultItem>;
 
   get item() {
     return this.itemStore.model.item;
@@ -48,14 +48,14 @@ export class FarmingItemStore {
     loader: async self => await self.getUserTokenBalance(),
     model: UserTokenBalanceModel
   })
-  readonly availableBalanceStore: LoadingErrorDataNew<UserTokenBalanceModel, typeof defaultAvailableBalance>;
+  readonly availableBalanceStore: LoadingErrorData<UserTokenBalanceModel, typeof defaultAvailableBalance>;
 
   @Led({
     default: { value: null },
     loader: async self => await self.getUserInfo(),
     model: UsersInfoResponseModel
   })
-  readonly userInfoStore: LoadingErrorDataNew<UsersInfoResponseModel, { value: null }>;
+  readonly userInfoStore: LoadingErrorData<UsersInfoResponseModel, { value: null }>;
 
   get userInfo() {
     return this.userInfoStore.model.value;
@@ -70,7 +70,7 @@ export class FarmingItemStore {
     loader: async self => await self.getUserFarmingDelegate(),
     model: NullableStringWrapperModel
   })
-  readonly userFarmingDelegateStore: LoadingErrorDataNew<NullableStringWrapperModel, { value: null }>;
+  readonly userFarmingDelegateStore: LoadingErrorData<NullableStringWrapperModel, { value: null }>;
 
   get userFarmingDelegateAddress() {
     return this.userFarmingDelegateStore.model.value ?? null;
