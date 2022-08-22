@@ -1,4 +1,4 @@
-import { BigNumber } from 'bignumber.js';
+import BigNumber from 'bignumber.js';
 
 import { saveBigNumber } from '@shared/helpers';
 import { Token } from '@shared/types';
