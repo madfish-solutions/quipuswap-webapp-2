@@ -1,10 +1,10 @@
 import { FormikErrors, FormikValues, useFormik } from 'formik';
 
-import { numberAsString } from '@shared/helpers';
+import { extractTokens, numberAsString } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { extractTokens, getInputSlugByIndexRemove, getUserBalances } from '../helpers/forms.helpers';
+import { getInputSlugByIndexRemove, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { LP_TOKEN } from '../helpers/mock-lp-token';
 import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
