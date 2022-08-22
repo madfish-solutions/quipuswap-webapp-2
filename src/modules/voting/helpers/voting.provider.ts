@@ -148,7 +148,7 @@ const useVotingService = () => {
     }
   }, [tezos, tokenPair, getBalances]);
 
-  useOnBlock(tezos, updateBalances);
+  useOnBlock(updateBalances);
 
   const isVotingLoading = useMemo(() => {
     return !urlLoaded || !initialLoad || isTokenChanging || isNull(dex);

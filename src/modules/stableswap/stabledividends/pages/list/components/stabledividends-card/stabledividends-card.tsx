@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import {
@@ -16,6 +15,7 @@ import {
   TokensLogos,
   TokensSymbols
 } from '@shared/components';
+import { extractTokens } from '@shared/helpers';
 
 import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '../../../../../types';
 import styles from './stabledividends-card.module.scss';

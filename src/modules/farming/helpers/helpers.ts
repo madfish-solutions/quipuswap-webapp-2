@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE, PERCENTAGE_100 } from '@config/constants';
-import { defined, isExist, toReal } from '@shared/helpers';
+import { defined, isExist, isNull, toReal } from '@shared/helpers';
 import { Nullable, Token, Undefined } from '@shared/types';
 
 import { UsersInfoValue, RawUsersInfoValue, FarmingContractStorage, UsersInfoKey } from '../interfaces';
@@ -102,10 +102,14 @@ export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingIt
   };
 };
 
-export const getAllFarmUserInfo = async (storage: FarmingContractStorage, accountAddress: string) => {
-  const farmsCount = storage.farms_count;
-  const farmIds = fillIndexArray(farmsCount.toNumber());
-  const userInfoKeys = farmIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
+export const getAllFarmUserInfo = async (
+  storage: FarmingContractStorage,
+  accountAddress: string,
+  farmsWithBalanceIds: Nullable<Array<BigNumber>> = null
+) => {
+  const farmsIds = isNull(farmsWithBalanceIds) ? fillIndexArray(storage.farms_count.toNumber()) : farmsWithBalanceIds;
+
+  const userInfoKeys = farmsIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
   const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
 
   const usersInfoValues: Array<UsersInfoValueWithId> = [];
