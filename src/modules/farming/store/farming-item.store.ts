@@ -73,7 +73,7 @@ export class FarmingItemStore {
   readonly userFarmingDelegateStore: LoadingErrorData<NullableStringWrapperModel, { value: null }>;
 
   get userFarmingDelegateAddress() {
-    return this.userFarmingDelegateStore.model.value ?? null;
+    return this.userFarmingDelegateStore.model.value;
   }
 
   currentTab: FarmingFormTabs = FarmingFormTabs.stake;

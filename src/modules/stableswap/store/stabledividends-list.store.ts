@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { computed, makeObservable } from 'mobx';
 
-import { toReal, isEmptyArray } from '@shared/helpers';
+import { toReal, isEmptyArray, defined } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
@@ -60,7 +60,7 @@ export class StableDividendsListStore {
       return [];
     }
 
-    return stakerInfoList!.map(({ yourReward, yourDeposit }: RawStakerInfo, infoIndex) => {
+    return defined(stakerInfoList).map(({ yourReward, yourDeposit }: RawStakerInfo, infoIndex) => {
       let yourEarnedInUsd = new BigNumber('0');
       const { tokensInfo } = this.list[infoIndex];
 

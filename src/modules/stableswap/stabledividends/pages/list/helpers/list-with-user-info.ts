@@ -5,7 +5,8 @@ export const listWithUserInfo = (listStore: Array<StableDividendsItem>, stakerIn
     return {
       ...item,
       ...stakerInfo[index],
-      tvl: item.tvl
+      tvl: item.tvl,
+      stableDividendsItemUrl: item.stableDividendsItemUrl
     };
   });
 };
