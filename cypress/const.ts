@@ -3,3 +3,4 @@ export const REPEAT_WAIT_TIMEOUT = 10000;
 export const FIELD_WAIT_TIMEOUT = 1000;
 export const MICRO_WAIT_TIMEOUT = 1000;
 export const MAINNET_QUIPU_TOKEN = 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0';
+export const MAINNET_KUSD_TOKEN = 'KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV';

@@ -4,7 +4,7 @@ import { GlobalModalsStateProvider } from '@providers/use-global-modals-state';
 import { Sidebar, Header, AmplitudeSubscription, Advertising } from '@shared/components';
 import { CookiesNotification } from '@shared/components/cookie-notification';
 import { isMainnet } from '@shared/helpers';
-import { AccountModal, DonationModal, SettingsModal, WalletModal } from '@shared/modals';
+import { AccountModal, DonationModal, ReconnectModal, SettingsModal, WalletModal } from '@shared/modals';
 import { CFC } from '@shared/types';
 import { ConfirmationModalProvider, ToastWrapper } from '@shared/utils';
 
@@ -44,6 +44,7 @@ export const Layout: CFC<LayoutProps> = ({ title, description, image, className,
             <AccountModal />
             <AmplitudeSubscription />
             <SettingsModal />
+            <ReconnectModal />
           </ConfirmationModalProvider>
         </GlobalModalsStateProvider>
       ) : (

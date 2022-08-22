@@ -4,17 +4,25 @@ import { BigNumber } from 'bignumber.js';
 
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
-import { cloneArray, decreaseBySlippage, isExist, isNull, saveBigNumber, toAtomic } from '@shared/helpers';
+import {
+  cloneArray,
+  decreaseBySlippage,
+  getTransactionDeadline,
+  isExist,
+  isNull,
+  saveBigNumber,
+  toAtomic
+} from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { tokensAndAmountsMapper } from '@shared/mapping';
 import { amplitudeService } from '@shared/services';
 import { Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeStableswapLiquidityBalancedApi, removeStableswapLiquidityImbalancedApi } from '../../api';
-import { applyStableswapFee, getStableswapDeadline } from '../../helpers';
-import { tokensAndAmountsMapper } from '../../mapping';
+import { applyStableswapFee } from '../../helpers';
 import { useStableswapItemFormStore, useStableswapItemStore } from '../store';
 
 export const useRemoveStableswapLiquidity = () => {
@@ -54,7 +62,7 @@ export const useRemoveStableswapLiquidity = () => {
       const fees = [providersFee, stakersFee, interfaceFee, devFee];
 
       const tokens = tokensInfo.map(({ token }) => token);
-      const deadline = await getStableswapDeadline(tezos, transactionDeadline);
+      const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
         toAtomic(saveBigNumber(amount, new BigNumber('0')), tokens[index]).integerValue(BigNumber.ROUND_DOWN)

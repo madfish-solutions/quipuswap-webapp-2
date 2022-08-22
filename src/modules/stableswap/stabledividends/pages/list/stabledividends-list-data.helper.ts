@@ -2,10 +2,9 @@ import BigNumber from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { extractTokens } from '@modules/stableswap/helpers';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '@modules/stableswap/types';
-import { isNull } from '@shared/helpers';
+import { extractTokens, isNull } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
