@@ -2,6 +2,11 @@ import { NetworkType } from '@airgap/beacon-sdk';
 
 import { SupportedNetworks } from '@shared/types';
 
+import PACKAGE_JSON from '../../package.json';
+
+export const PROJECT_NAME = process.env.PROJECT_NAME ?? PACKAGE_JSON.name;
+export const VERSION = process.env.VERSION ?? PACKAGE_JSON.version;
+
 export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY!;
 export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN!;
 
