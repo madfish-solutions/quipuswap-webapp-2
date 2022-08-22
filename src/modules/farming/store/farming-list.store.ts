@@ -259,9 +259,6 @@ export class FarmingListStore {
   }
 
   updatePendingRewards() {
-    if (Math.random() > 0.2) {
-      throw new Error('azaza');
-    }
     const isBalanceLoaded = this.listBalances.some(({ earnBalance }) => isExist(earnBalance));
 
     if (!isBalanceLoaded || isEmptyArray(this.userInfo)) {
