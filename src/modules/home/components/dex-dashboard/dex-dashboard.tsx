@@ -5,12 +5,11 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { HIDE_ANALYTICS, IS_NETWORK_MAINNET } from '@config/config';
-import { RPC_URL } from '@config/environment';
-import { MAINNET_QUIPU_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN } from '@config/tokens';
 import { Card } from '@shared/components/card';
 import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
-import { toReal } from '@shared/helpers';
+import { getPreferredRpcUrl, toReal } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { Section } from '../section';
@@ -26,11 +25,11 @@ export const DexDashboard: FC = () => {
   useEffect(() => {
     const asyncLoad = async () => {
       // TODO: change after deploy token to testnet
-      const tezos = new TezosToolkit(RPC_URL);
-      const contract = await getStorageInfo(tezos, MAINNET_QUIPU_TOKEN.contractAddress);
+      const tezos = new TezosToolkit(getPreferredRpcUrl());
+      const contract = await getStorageInfo(tezos, QUIPU_TOKEN.contractAddress);
       // @ts-ignore
       const rawTotalSupply = await contract?.token_info.get(ZERO);
-      setRealTotalSupply(toReal(rawTotalSupply, MAINNET_QUIPU_TOKEN));
+      setRealTotalSupply(toReal(rawTotalSupply, QUIPU_TOKEN));
     };
     void asyncLoad();
   }, []);
