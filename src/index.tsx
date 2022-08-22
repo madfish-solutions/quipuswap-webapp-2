@@ -11,7 +11,7 @@ import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppProvider } from '@providers/use-dapp';
 import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
 import { DexGraphProvider } from '@shared/hooks';
-import { SentryService } from '@shared/services';
+import { sentryService } from '@shared/services';
 
 import { App } from './app';
 
@@ -20,7 +20,7 @@ require('dotenv').config();
 
 const container = document.getElementById('root');
 
-new SentryService().init();
+sentryService.init();
 
 if (container) {
   const root = createRoot(container);
