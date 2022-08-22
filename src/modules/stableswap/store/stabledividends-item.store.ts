@@ -2,28 +2,42 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getFirstElement, isNull } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
+import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getStableDividendsItemApi, getStakerInfo } from '../api';
-import { stableDividendsItemMapper } from '../mapping';
-import { IRawStableDividendsItem, RawStakerInfo, StableDividendsItem } from '../types';
+import { StableswapDividendsItemResponseModel, StableswapDividendsItemModel, StakerInfoResponseModel } from '../models';
 
+@ModelBuilder()
 export class StableDividendsItemStore {
   poolId: Nullable<BigNumber> = null;
 
-  readonly itemStore = new LoadingErrorData<IRawStableDividendsItem['item'], Nullable<StableDividendsItem>>(
-    null,
-    async () => await getStableDividendsItemApi(this.poolId),
-    stableDividendsItemMapper
-  );
+  //#region item store
+  @Led({
+    default: { item: null },
+    loader: async self => ({ item: await getStableDividendsItemApi(self.poolId) }),
+    model: StableswapDividendsItemResponseModel
+  })
+  readonly itemStore: LoadingErrorData<StableswapDividendsItemResponseModel, { item: null }>;
 
-  readonly stakerInfoStore = new LoadingErrorData<Nullable<RawStakerInfo>, Nullable<RawStakerInfo>>(
-    null,
-    async () => await this.getstakerInfo(),
-    noopMap
-  );
+  get item(): Nullable<StableswapDividendsItemModel> {
+    return this.itemStore.model.item;
+  }
+  //#endregion item store
+
+  //#region staker info store
+  @Led({
+    default: { item: null },
+    loader: async self => await self.getstakerInfo(),
+    model: StakerInfoResponseModel
+  })
+  readonly stakerInfoStore: LoadingErrorData<StakerInfoResponseModel, { item: null }>;
+
+  get userInfo() {
+    return this.stakerInfoStore.model.item;
+  }
+  //#endregion staker info store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -36,25 +50,19 @@ export class StableDividendsItemStore {
     });
   }
 
-  get item() {
-    return this.itemStore.data;
-  }
-
-  get userInfo() {
-    return this.stakerInfoStore.data;
-  }
-
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
   }
 
-  private async getstakerInfo() {
+  async getstakerInfo() {
     if (isNull(this.item)) {
-      return null;
+      return { item: null };
     }
 
     const stakerInfo = await getStakerInfo(this.rootStore.tezos, this.item, this.rootStore.authStore.accountPkh);
 
-    return getFirstElement(stakerInfo);
+    return {
+      item: getFirstElement(stakerInfo)
+    };
   }
 }

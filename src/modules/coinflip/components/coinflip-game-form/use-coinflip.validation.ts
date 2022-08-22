@@ -10,8 +10,8 @@ import { FormFields } from './use-coinflip-game-form.vm';
 
 export const useCoinflipValidation = (balance: Nullable<BigNumber>) => {
   const { token, generalStats } = useCoinflipStore();
-  const bank = generalStats?.bank;
-  const maxBetPercent = generalStats?.maxBetPercent;
+  const bank = generalStats.bank;
+  const maxBetPercent = generalStats.maxBetPercent;
 
   const bidSize = getBidSize(bank, maxBetPercent);
 

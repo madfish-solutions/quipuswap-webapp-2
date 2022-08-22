@@ -11,7 +11,7 @@ import { Undefined } from '@shared/types';
 export const useCoinflipRulesViewModel = () => {
   const { tezos } = useRootStore();
   const { generalStats } = useCoinflipStore();
-  const maxBetPercentFromContract = generalStats?.maxBetPercent;
+  const maxBetPercentFromContract = generalStats.maxBetPercent;
 
   const [networkFee, setNetworkFee] = useState<Undefined<BigNumber>>();
 
