@@ -6,19 +6,19 @@ export class UsersInfoDto {
   @Typed()
   last_staked: Date;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   staked: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   earned: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   claimed: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   prev_earned: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   prev_staked: BigNumber;
 
   @Typed({ isArray: true, type: String })

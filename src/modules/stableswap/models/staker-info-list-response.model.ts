@@ -2,7 +2,7 @@ import { StakerInfoListResponseDto } from '../dto';
 import { StakerInfoModel } from './staker-info.model';
 
 export class StakerInfoListResponseModel extends StakerInfoListResponseDto {
-  item: StakerInfoModel;
+  list: StakerInfoModel[];
 
   constructor(dto: StakerInfoListResponseDto) {
     super();

@@ -8,5 +8,5 @@ export class TokenWonDto {
   token: TokenDto;
 
   @Typed({ nullable: true, type: BigNumber })
-  amount: BigNumber;
+  amount: Nullable<BigNumber>;
 }

@@ -5,10 +5,10 @@ import { Typed } from '@shared/decorators';
 import { StableswapTokensInfoDto } from './stableswap-tokens-info.dto';
 
 export abstract class AbstractStableItemDto {
-  @Typed({ type: BigNumber })
+  @Typed()
   id: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   poolId: BigNumber;
 
   @Typed()

@@ -4,7 +4,6 @@ import { GameStatusModel } from './status.model';
 
 export class LastGameModel extends LastGameDto {
   betCoinSide: Nullable<BetCoinSideModel>;
-
   status: Nullable<GameStatusModel>;
 
   constructor(dto: LastGameDto) {

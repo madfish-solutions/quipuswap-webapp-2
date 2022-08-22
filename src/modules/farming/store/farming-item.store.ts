@@ -4,10 +4,9 @@ import { observable, makeObservable, action, computed } from 'mobx';
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { isExist, isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
-// import { realBalanceMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableStringWrapperModel } from '@shared/models';
-import { /* LoadingErrorData, */ LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
@@ -115,6 +114,7 @@ export class FarmingItemStore {
       setSelectedBaker: action,
       updatePendingRewards: action,
 
+      availableBalance: computed,
       item: computed,
       userFarmingDelegateAddress: computed,
       userInfo: computed

@@ -54,7 +54,6 @@ export const useCoinflipPageViewModel = () => {
       COINFLIP_CONTRACT_DECIMALS
     );
     const realBidSize = toReal(coinflipStore?.userLastGameInfo.model.bidSize ?? ZERO_BN, token);
-    // const realBidSize = toReal(coinflipStore?.userLastGameInfo.data.bidSize ?? ZERO_BN, token);
 
     return realPayoutCoefficient.multipliedBy(realBidSize);
   }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.userLastGameInfo.model.bidSize, token]);
