@@ -8,7 +8,7 @@ import { COINFLIP_TOKENS_TO_PLAY, QUIPU_TOKEN, TEZOS_TOKEN } from '@config/token
 import { toReal, defined, placeDecimals } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableBigNumberWrapperModel } from '@shared/models/nullable-bignumber-wrapper.model';
-import { RootStore, LoadingErrorDataNew } from '@shared/store';
+import { RootStore, LoadingErrorData } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
 import {
@@ -78,35 +78,35 @@ export class CoinflipStore {
     loader: async self => await self.getGamesCount(),
     model: NullableBigNumberWrapperModel
   })
-  readonly gamesCountStore: LoadingErrorDataNew<NullableBigNumberWrapperModel, { value: null }>;
+  readonly gamesCountStore: LoadingErrorData<NullableBigNumberWrapperModel, { value: null }>;
 
   @Led({
     default: { list: null },
     loader: async self => await self.getTokensWon(),
     model: TokensWonListResponseModel
   })
-  readonly tokensWonStore: LoadingErrorDataNew<TokensWonListResponseModel, { list: null }>;
+  readonly tokensWonStore: LoadingErrorData<TokensWonListResponseModel, { list: null }>;
 
   @Led({
     default: DEFAULT_GENERAL_STATS,
     loader: async self => await self.getCoinflipGeneralStats(),
     model: GeneralStatsModel
   })
-  readonly generalStatsStore: LoadingErrorDataNew<GeneralStatsModel, typeof DEFAULT_GENERAL_STATS>;
+  readonly generalStatsStore: LoadingErrorData<GeneralStatsModel, typeof DEFAULT_GENERAL_STATS>;
 
   @Led({
     default: DEFAULT_GAMERS_STATS,
     loader: async self => await self.getGamersStats(),
     model: GamersStatsModel
   })
-  readonly gamersStatsInfo: LoadingErrorDataNew<GamersStatsModel, typeof DEFAULT_GAMERS_STATS>;
+  readonly gamersStatsInfo: LoadingErrorData<GamersStatsModel, typeof DEFAULT_GAMERS_STATS>;
 
   @Led({
     default: DEFAULT_USER_LAST_GAME,
     loader: async self => self.getUserLastGameInfo(),
     model: LastGameModel
   })
-  readonly userLastGameInfo: LoadingErrorDataNew<LastGameModel, typeof DEFAULT_USER_LAST_GAME>;
+  readonly userLastGameInfo: LoadingErrorData<LastGameModel, typeof DEFAULT_USER_LAST_GAME>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {

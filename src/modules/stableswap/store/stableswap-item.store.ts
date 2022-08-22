@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getStableswapItemApi } from '../api';
@@ -17,7 +17,7 @@ export class StableswapItemStore {
     loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId),
     model: StableswapItemModel
   })
-  readonly itemStore: LoadingErrorDataNew<StableswapItemModel, null>;
+  readonly itemStore: LoadingErrorData<StableswapItemModel, null>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
