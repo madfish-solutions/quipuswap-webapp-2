@@ -29,3 +29,17 @@ jobs:
         run: yarn e2e:parallel
         env:
           CYPRESS_BASE_URL: ${{ needs.setup.outputs.preview_url }}
+  e2e-run_browser:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: yarn
+      - name: Run tests
+        run: cy:run_browser
+        env:
+          CYPRESS_BASE_URL: ${{ needs.setup.outputs.preview_url }}
