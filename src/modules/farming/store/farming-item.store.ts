@@ -4,15 +4,15 @@ import { observable, makeObservable, action, computed } from 'mobx';
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { isExist, isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
-import { realBalanceMap } from '@shared/mapping';
+// import { realBalanceMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableStringWrapperModel } from '@shared/models';
-import { LoadingErrorData, LoadingErrorDataNew, RootStore } from '@shared/store';
+import { /* LoadingErrorData, */ LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
 import { getUserPendingReward } from '../helpers';
-import { FarmingItemResponseModel, UsersInfoResponseModel } from '../models';
+import { FarmingItemResponseModel, UsersInfoResponseModel, UserTokenBalanceModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 import { FarmingItemWithBalances } from '../pages/list/types';
 
@@ -21,6 +21,10 @@ const DEFAULT_INPUT_AMOUNT = 0;
 const defaultItem = {
   item: null,
   blockInfo: null
+};
+
+const defaultAvailableBalance = {
+  balance: null
 };
 
 @ModelBuilder()
@@ -40,11 +44,12 @@ export class FarmingItemStore {
   }
   //#endregion item store region
 
-  readonly availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
-    null,
-    async () => await this.getUserTokenBalance(),
-    balance => realBalanceMap(balance, this.item?.stakedToken)
-  );
+  @Led({
+    default: defaultAvailableBalance,
+    loader: async self => await self.getUserTokenBalance(),
+    model: UserTokenBalanceModel
+  })
+  readonly availableBalanceStore: LoadingErrorDataNew<UserTokenBalanceModel, typeof defaultAvailableBalance>;
 
   @Led({
     default: { value: null },
@@ -55,6 +60,10 @@ export class FarmingItemStore {
 
   get userInfo() {
     return this.userInfoStore.model.value;
+  }
+
+  get availableBalance() {
+    return this.availableBalanceStore.model.balance;
   }
 
   @Led({
@@ -175,14 +184,17 @@ export class FarmingItemStore {
     };
   }
 
-  private async getUserTokenBalance() {
+  async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return null;
+      return defaultAvailableBalance;
     }
 
-    return await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken);
+    return {
+      balance: await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken),
+      token: this.item.stakedToken
+    };
   }
 
   async getUserFarmingDelegate() {
