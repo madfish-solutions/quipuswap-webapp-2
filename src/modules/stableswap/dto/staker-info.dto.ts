@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { Typed } from '@shared/decorators';
 
 export class StakerInfoDto {
-  @Typed({ type: BigNumber })
+  @Typed()
   yourDeposit: BigNumber;
 
   @Typed({ nullable: true, type: MichelsonMap })

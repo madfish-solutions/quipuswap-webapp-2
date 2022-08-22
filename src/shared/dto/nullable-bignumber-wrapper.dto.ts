@@ -4,5 +4,5 @@ import { Typed } from '@shared/decorators';
 
 export class NullableBigNumberWrapperDto {
   @Typed({ type: BigNumber, nullable: true })
-  value: BigNumber;
+  value: Nullable<BigNumber>;
 }

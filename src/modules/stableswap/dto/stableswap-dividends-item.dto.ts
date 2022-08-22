@@ -6,13 +6,13 @@ import { TokenDto } from '@shared/dto';
 import { AbstractStableItemDto } from './abstract-stable-item.dto';
 
 export class StableswapDividendsItemDto extends AbstractStableItemDto {
-  @Typed({ type: BigNumber })
+  @Typed()
   apr: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   apy: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   atomicTvl: BigNumber;
 
   @Typed({ type: TokenDto })
@@ -21,6 +21,6 @@ export class StableswapDividendsItemDto extends AbstractStableItemDto {
   @Typed()
   farmContractUrl: string;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   stakedTokenExchangeRate: BigNumber;
 }
