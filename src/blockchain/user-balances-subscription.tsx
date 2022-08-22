@@ -1,14 +1,13 @@
 import { FC, useEffect } from 'react';
 
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useAccountPkh } from '@providers/use-dapp';
 import { useOnBlock, useTokensBalancesStore } from '@shared/hooks';
 
 export const UserBalancesSubscription: FC = () => {
-  const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const tokensBalancesStore = useTokensBalancesStore();
 
-  useOnBlock(tezos, async () => tokensBalancesStore.loadBalances());
+  useOnBlock(async () => tokensBalancesStore.loadBalances());
 
   useEffect(() => {
     if (accountPkh) {
