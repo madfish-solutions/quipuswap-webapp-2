@@ -1,12 +1,11 @@
 /// <reference types="cypress" />
 
+import { MAINNET_QUIPU_TOKEN } from '../../const';
+
 describe('Form exists', () => {
   beforeEach(() => {
     // Go to the remove page from home page
-    cy.visit('/');
-    cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
-    cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="cardTab-1"]').click();
+    cy.visit(`/liquidity/remove/tez-${MAINNET_QUIPU_TOKEN}`);
     cy.get('[data-test-id="acceptCookieButton"]').click();
   });
   it('Should_DisplayExchangeDetails_When_OpenedRLiquidityPage', () => {    

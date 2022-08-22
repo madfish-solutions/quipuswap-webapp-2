@@ -1,19 +1,18 @@
 /// <reference types="cypress" />
 
-import { DEFAULT_WAIT_TIMEOUT } from '../../const';
+import { MICRO_WAIT_TIMEOUT } from '../../const';
+import { MAINNET_QUIPU_TOKEN } from '../../const';
 
 describe('Remove liquidity tab, calculating field', () => {
   beforeEach(() => {
     // Go to the remove page from home page
-    cy.visit('/');
-    cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
-    cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="cardTab-1"]').click();
+    cy.visit(`/liquidity/remove/tez-${MAINNET_QUIPU_TOKEN}`);
     cy.get('[data-test-id="acceptCookieButton"]').click();
   });
   it('Should_DisplayOutputFields_When_InputIs1', () => {
     cy.get('[data-test-id="positionSelectInput"]').click().type('1');
-    cy.wait(DEFAULT_WAIT_TIMEOUT);
+    cy.waitUntil(() => (cy.get('[data-test-id="outputA"] [data-test-id="outputA"]')
+    .invoke('val').then(parseFloat).then((val) => !Number.isNaN(val))))
     cy.get('[data-test-id="outputA"] [data-test-id="outputA"]').invoke('val').then(parseFloat).should('be.gte', 0);
     cy.get('[data-test-id="outputB"] [data-test-id="outputB"]').invoke('val').then(parseFloat).should('be.gte', 0);
   });
@@ -35,7 +34,8 @@ describe('Remove liquidity tab, calculating field', () => {
     cy.get('[data-test-id="KUSD"] [data-test-id="checkbox"]').click();
     cy.get('[data-test-id="buttonSelect"]').click();
     cy.get('[data-test-id="positionSelectInput"]').click().type('1');
-    cy.wait(DEFAULT_WAIT_TIMEOUT);
+    cy.waitUntil(() => (cy.get('[data-test-id="outputA"] [data-test-id="outputA"]')
+    .invoke('val').then(parseFloat).then((val) => !Number.isNaN(val))))
     cy.get('[data-test-id="amount"]').invoke('text').then(parseFloat).should('be.gte', 0);
     cy.get('[data-test-id="amount"]').eq(1).invoke('text').then(parseFloat).should('be.gte', 0);
   });
@@ -43,11 +43,13 @@ describe('Remove liquidity tab, calculating field', () => {
     cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="positionSelectInput"] [data-test-id="selectLPButton"]')
       .click();
     //Sell price in pool details section 1 quipu
-    cy.wait(DEFAULT_WAIT_TIMEOUT);
+    cy.wait(MICRO_WAIT_TIMEOUT);
     cy.get('[data-test-id="TEZ"] [data-test-id="checkbox"]').click();
     cy.get('[data-test-id="KUSD"] [data-test-id="checkbox"]').click();
     cy.get('[data-test-id="buttonSelect"]').click();
     cy.get('[data-test-id="positionSelectInput"]').click().type('1');
+    cy.waitUntil(() => (cy.get('[data-test-id="outputA"] [data-test-id="outputA"]')
+    .invoke('val').then(parseFloat).then((val) => !Number.isNaN(val))))
     cy.get('[data-test-id="detailsCardCells"] [data-test-id="amount"]')
       .eq(0).invoke('text').then(parseFloat).should('be.eq', 1);
     cy.get('[data-test-id="detailsCardCells"] [data-test-id="rightVisibleCurrency"]')
@@ -66,7 +68,7 @@ describe('Remove liquidity tab, calculating field', () => {
   it('Should_DisplayNotification_When_PoolDoesntExist', () => {
     cy.get('[data-test-id="liquidityPageTokenSelect"] [data-test-id="positionSelectInput"] [data-test-id="selectLPButton"]')
       .click();
-      cy.wait(DEFAULT_WAIT_TIMEOUT);
+      cy.wait(MICRO_WAIT_TIMEOUT);
     cy.get('[data-test-id="QUIPU"] [data-test-id="checkbox"]').click();
     cy.get('[data-test-id="WRAP"] [data-test-id="checkbox"]').click();
     cy.get('[data-test-id="TEZ"] [data-test-id="checkbox"]').click();
