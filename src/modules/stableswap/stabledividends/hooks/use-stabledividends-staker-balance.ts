@@ -26,7 +26,7 @@ export const useRealStableDividendsStakerBalance = () => {
     updateStakerBalance();
   }, [updateStakerBalance]);
 
-  useOnBlock(tezos, updateStakerBalance);
+  useOnBlock(updateStakerBalance);
 
   return userInfo ? toReal(userInfo.yourDeposit, QUIPU_TOKEN) : null;
 };

@@ -1,20 +1,10 @@
 /// <reference types="cypress" />
 
-import { FIELD_WAIT_TIMEOUT } from '../../const';
-import { MAINNET_QUIPU_TOKEN } from '../../const';
-
 describe('Select new tokens in the fields', () => {
   beforeEach(() => {
-    cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
-    cy.get('[data-test-id="acceptCookieButton"]').click();
-    cy.get('[data-test-id="from"] [data-test-id="changeToken"]').click();
-    cy.wait(FIELD_WAIT_TIMEOUT);
-    cy.get('[data-test-id="KUSD"]').click();
-    cy.get('[data-test-id="from"] [data-test-id="changeToken"]')
-      .should('contain', 'KUSD');
-    cy.get('[data-test-id="to"] [data-test-id="changeToken"]').click();
-    cy.wait(FIELD_WAIT_TIMEOUT);
-    cy.get('[data-test-id="CRUNCH"]').click();
+    cy.visit('/swap/KT1K9gCRgaLRFKTErYt1wVxA3Frb9FjasjTV-KT1BHCumksALJQJ8q8to2EPigPW6qpyTr7Ng_0');
+    cy.waitUntil(() => (cy.get('[data-test-id="from"] [data-test-id="changeToken"]')
+      .invoke('text').then((text) => text === 'KUSD')))
   });
   it('Should_DisplayNewTokens_When_SelectIt', () => {
     cy.get('[data-test-id="to"] [data-test-id="changeToken"]')
@@ -34,7 +24,6 @@ describe('Select new tokens in the fields', () => {
       .should('contain', 'CRUNCH');
   });
   it('Should_ChangeToken_When_ClickOnSwapArrow', () => {
-    // Check if right token are selected
     cy.get('[data-test-id="swapButton"]').click();
     cy.get('[data-test-id="from"] [data-test-id="changeToken"]')
       .should('contain', 'CRUNCH');

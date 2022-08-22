@@ -44,7 +44,7 @@ function useUpdateOnBlockSWR<Data = any, Error = any, SWRKey extends Key = null>
   const response = useSWR<Data, Error, SWRKey>(key, ...args);
 
   const refresh = useCallback(async () => mutate(key), [mutate, key]);
-  useOnBlock(tezos, refresh);
+  useOnBlock(refresh);
 
   return response;
 }

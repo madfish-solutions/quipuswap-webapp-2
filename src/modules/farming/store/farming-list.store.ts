@@ -166,6 +166,7 @@ export class FarmingListStore {
     model: UserInfoResponseModel
   })
   readonly _userInfo: LoadingErrorDataNew<UserInfoResponseModel, typeof defaultUserInfo>;
+  private farmsWithBalancesIsd: Nullable<Array<BigNumber>> = null;
 
   get userInfo(): Array<UserInfoModel> {
     return this._userInfo.model.userInfo;
@@ -230,7 +231,11 @@ export class FarmingListStore {
       return null;
     }
 
-    const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
+    const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh, this.farmsWithBalancesIsd);
+
+    if (isNull(this.farmsWithBalancesIsd)) {
+      this.farmsWithBalancesIsd = userInfo.filter(info => info.staked.gt(ZERO_AMOUNT)).map(item => item.id);
+    }
 
     return { userInfo };
   }
