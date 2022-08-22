@@ -6,8 +6,19 @@ import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigati
 
 import { SENTRY_DSN } from '@config/environment';
 
+import { getFullEnvName } from '../helpers';
+
 export class SentryService {
+  static _instance: SentryService;
   constructor() {
+    if (SentryService._instance) {
+      return SentryService._instance;
+    }
+
+    SentryService._instance = this;
+  }
+
+  init() {
     init({
       dsn: SENTRY_DSN,
       integrations: [
@@ -21,7 +32,8 @@ export class SentryService {
           )
         })
       ],
-      tracesSampleRate: 1.0
+      tracesSampleRate: 1.0,
+      environment: getFullEnvName()
     });
   }
 }

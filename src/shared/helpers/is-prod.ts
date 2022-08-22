@@ -1,3 +1,4 @@
+import { NETWORK_ID } from '@config/environment';
 import { IS_DEV_KEY, IS_PROD_KEY } from '@config/localstorage';
 
 import { isProdDomain } from './is-prod-domain';
@@ -15,3 +16,7 @@ export const isProd = () => {
 };
 
 export const isDev = () => !isProd();
+
+export const getEnvName = () => (isProd() ? 'PROD' : 'DEV');
+
+export const getFullEnvName = () => `${getEnvName()}_${NETWORK_ID}`;
