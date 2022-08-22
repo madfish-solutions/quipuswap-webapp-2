@@ -6,10 +6,9 @@ import { ZERO_AMOUNT } from '@config/constants';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { COINFLIP_TOKENS_TO_PLAY, QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { toReal, defined, placeDecimals } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { NullableBigNumberWrapperModel } from '@shared/models';
-import { RootStore, LoadingErrorDataNew, LoadingErrorData } from '@shared/store';
+import { NullableBigNumberWrapperModel } from '@shared/models/nullable-bignumber-wrapper.model';
+import { RootStore, LoadingErrorDataNew } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
 import {
@@ -17,14 +16,11 @@ import {
   getGamesCountByTokenApi,
   getTokenWonByTokenApi,
   getGamersStatsApi,
-  getUserLastGameInfo,
-  DEFAULT_GENERAL_STATS,
-  DEFAULT_GAMERS_STATS,
-  DEFAULT_USER_LAST_GAME
+  getUserLastGameInfo
 } from '../api';
 import { getBidSize } from '../helpers';
 import { DashboardGeneralStats, GamersStats, UserLastGame } from '../interfaces';
-import { /* GamersStatsModel, GeneralStatsModel, LastGameModel, */ TokensWonListResponseModel } from '../models';
+import { GamersStatsModel, GeneralStatsModel, LastGameModel, TokensWonListResponseModel } from '../models';
 import { TokenWon } from '../types';
 
 export enum TokenToPlay {
@@ -49,6 +45,28 @@ const DEFAULT_COINFLIP_GAME: CoinflipGame = {
   input: null
 };
 
+const DEFAULT_GENERAL_STATS = {
+  bank: null,
+  gamesCount: null,
+  payoutCoefficient: null,
+  totalWins: null,
+  maxBetPercent: null
+};
+
+const DEFAULT_USER_LAST_GAME = {
+  bidSize: null,
+  betCoinSide: null,
+  status: null
+};
+
+const DEFAULT_GAMERS_STATS = {
+  lastGameId: null,
+  gamesCount: null,
+  totalWonAmount: null,
+  totalLostAmount: null,
+  totalBetsAmount: null
+};
+
 @ModelBuilder()
 export class CoinflipStore {
   isLoading = false;
@@ -69,41 +87,26 @@ export class CoinflipStore {
   })
   readonly tokensWonStore: LoadingErrorDataNew<TokensWonListResponseModel, { list: null }>;
 
-  /* @Led({
+  @Led({
     default: DEFAULT_GENERAL_STATS,
     loader: async self => await self.getCoinflipGeneralStats(),
     model: GeneralStatsModel
   })
-  readonly generalStatsStore: LoadingErrorDataNew<GeneralStatsModel, typeof DEFAULT_GENERAL_STATS>; */
-  readonly generalStatsStore = new LoadingErrorData<DashboardGeneralStats, DashboardGeneralStats>(
-    DEFAULT_GENERAL_STATS,
-    async () => await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token),
-    noopMap
-  );
+  readonly generalStatsStore: LoadingErrorDataNew<GeneralStatsModel, typeof DEFAULT_GENERAL_STATS>;
 
-  /* @Led({
+  @Led({
     default: DEFAULT_GAMERS_STATS,
-    loader: async self => getGamersStatsApi(self.rootStore.tezos, self.rootStore.authStore.accountPkh, self.token),
+    loader: async self => await self.getGamersStats(),
     model: GamersStatsModel
   })
-  readonly gamersStatsInfo: LoadingErrorDataNew<GamersStatsModel, typeof DEFAULT_GAMERS_STATS>; */
-  readonly gamersStatsInfo = new LoadingErrorData<GamersStats, GamersStats>(
-    DEFAULT_GAMERS_STATS,
-    async () => await getGamersStatsApi(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.token),
-    noopMap
-  );
+  readonly gamersStatsInfo: LoadingErrorDataNew<GamersStatsModel, typeof DEFAULT_GAMERS_STATS>;
 
-  /* @Led({
+  @Led({
     default: DEFAULT_USER_LAST_GAME,
-    loader: async self => getUserLastGameInfo(self.rootState.tezos, self.gamersStatsInfo.model.lastGameId),
+    loader: async self => self.getUserLastGameInfo(),
     model: LastGameModel
   })
-  readonly userLastGameInfo: LoadingErrorDataNew<LastGameModel, typeof DEFAULT_USER_LAST_GAME>; */
-  readonly userLastGameInfo = new LoadingErrorData<UserLastGame, UserLastGame>(
-    DEFAULT_USER_LAST_GAME,
-    async () => await getUserLastGameInfo(this.rootStore.tezos, this.gamersStatsInfo.data?.lastGameId ?? null),
-    noopMap
-  );
+  readonly userLastGameInfo: LoadingErrorDataNew<LastGameModel, typeof DEFAULT_USER_LAST_GAME>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -136,18 +139,12 @@ export class CoinflipStore {
     return this.tokensWonStore.model.list;
   }
 
-  /* get gamersStats(): Nullable<GamersStats> {
-    return this.gamersStatsInfo.model;
-  } */
   get gamersStats(): Nullable<GamersStats> {
-    return this.gamersStatsInfo.data;
+    return this.gamersStatsInfo.model;
   }
 
-  /* get generalStats(): DashboardGeneralStats {
-    return this.generalStatsStore.model;
-  } */
   get generalStats(): DashboardGeneralStats {
-    return this.generalStatsStore.data;
+    return this.generalStatsStore.model;
   }
 
   get isGamersStatsLoading() {
@@ -157,11 +154,8 @@ export class CoinflipStore {
     return this.generalStatsStore.isLoading;
   }
 
-  /* get userLastGame(): UserLastGame {
-    return this.userLastGameInfo.model;
-  } */
   get userLastGame(): UserLastGame {
-    return this.userLastGameInfo.data;
+    return this.userLastGameInfo.model;
   }
 
   get isUserLastGameLoading() {
@@ -232,5 +226,25 @@ export class CoinflipStore {
         )
       )
     };
+  }
+
+  async getCoinflipGeneralStats() {
+    return (
+      (await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token)) ??
+      DEFAULT_GENERAL_STATS
+    );
+  }
+
+  async getGamersStats() {
+    return (
+      (await getGamersStatsApi(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.token)) ??
+      DEFAULT_GAMERS_STATS
+    );
+  }
+
+  async getUserLastGameInfo() {
+    return (
+      (await getUserLastGameInfo(this.rootStore.tezos, this.gamersStatsInfo.model.lastGameId)) ?? DEFAULT_USER_LAST_GAME
+    );
   }
 }

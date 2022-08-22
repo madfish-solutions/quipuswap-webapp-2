@@ -1,3 +1,4 @@
+import { michelsonMapMapper } from '@shared/mapping/michelson-map.map';
 import { Undefined } from '@shared/types';
 
 import { bigNumberMapper } from '../../mapping/big-number.map';
@@ -17,5 +18,6 @@ export const mapperFactory: Record<
   [MapperKinds.BOOLEAN]: booleanMapper,
   [MapperKinds.STRING]: stringMapper,
   [MapperKinds.DATE]: dateMapper,
-  [MapperKinds.SYMBOL]: symbolMapper
+  [MapperKinds.SYMBOL]: symbolMapper,
+  [MapperKinds.MICHELSON_MAP]: michelsonMapMapper
 };

@@ -9,30 +9,22 @@ import { GamersStatsRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';
 import { CoinflipStorage } from './types';
 
-export const DEFAULT_GAMERS_STATS = {
-  lastGameId: null,
-  gamesCount: null,
-  totalWonAmount: null,
-  totalLostAmount: null,
-  totalBetsAmount: null
-};
-
 export const getGamersStatsApi = async (tezos: Nullable<TezosToolkit>, accountPkh: Nullable<string>, token: Token) => {
   if (isNull(tezos) || isNull(accountPkh)) {
-    return DEFAULT_GAMERS_STATS;
+    return null;
   }
 
   const coinFlipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);
 
   if (isNull(coinFlipStorage)) {
-    return DEFAULT_GAMERS_STATS;
+    return null;
   }
   const tokenAsset = getCoinflipAssetId(token);
 
   const gamerStats = await coinFlipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
   if (!gamerStats) {
-    return DEFAULT_GAMERS_STATS;
+    return null;
   }
 
   const {

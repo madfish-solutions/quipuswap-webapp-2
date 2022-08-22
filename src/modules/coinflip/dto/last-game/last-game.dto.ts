@@ -9,7 +9,7 @@ export class LastGameDto {
   @Typed({ type: BigNumber, nullable: true })
   bidSize: Nullable<BigNumber>;
 
-  @Typed({ nullable: true })
+  @Typed({ type: BetCoinSideDto, nullable: true })
   betCoinSide: Nullable<BetCoinSideDto>;
 
   @Typed({ type: GameStatusDto, nullable: true })
