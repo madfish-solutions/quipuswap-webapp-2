@@ -2,11 +2,11 @@ import { Typed } from '@shared/decorators';
 
 export class GameStatusDto {
   @Typed({ optional: true })
-  lost: symbol;
+  lost?: symbol;
 
   @Typed({ optional: true })
-  started: symbol;
+  started?: symbol;
 
   @Typed({ optional: true })
-  won: symbol;
+  won?: symbol;
 }
