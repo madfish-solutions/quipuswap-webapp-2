@@ -2,26 +2,31 @@ import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { DOLLAR, PERCENT } from '@config/constants';
+import { DOLLAR } from '@config/constants';
 import { PieChartQs } from '@shared/charts';
 import { Button, DashPlug, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
+import { Optional } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import styles from './dex-two-details-view.module.scss';
 
 interface Props {
-  feesRate: BigNumber;
-  tvlInUsd: BigNumber;
-  isLoading: boolean;
-  totalLpSupply: BigNumber;
+  isLoading?: boolean;
   poolContractUrl: string;
   cardCellClassName: string;
+  apr: Optional<BigNumber>;
+  feesRate: Optional<BigNumber>;
+  tvlInUsd: Optional<BigNumber>;
+  weeklyVolume: Optional<BigNumber>;
+  totalLpSupply: Optional<BigNumber>;
   pieChartData: Array<{ value: number; tokenSymbol: string }>;
 }
 
 export const DexTwoDetailsView: FC<Props> = ({
+  apr,
+  weeklyVolume,
   feesRate,
   tvlInUsd,
   isLoading,
@@ -35,12 +40,7 @@ export const DexTwoDetailsView: FC<Props> = ({
   return (
     <>
       <div className={styles.cellsWrapper}>
-        <DetailsCardCell
-          cellName={t('stableswap|tvl')}
-          tooltipContent={t('stableswap|tvlPoolTooltip')}
-          className={cardCellClassName}
-          data-test-id="tvlInUsd"
-        >
+        <DetailsCardCell cellName={t('stableswap|tvl')} className={cardCellClassName} data-test-id="tvlInUsd">
           <StateCurrencyAmount
             amount={tvlInUsd}
             isLoading={isLoading}
@@ -52,25 +52,24 @@ export const DexTwoDetailsView: FC<Props> = ({
           />
         </DetailsCardCell>
         <DetailsCardCell
+          cellName={t('stableswap|weeklyVolume')}
+          className={cardCellClassName}
+          data-test-id="totalLpSupply"
+        >
+          <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
+        </DetailsCardCell>
+        <DetailsCardCell
           cellName={t('stableswap|Total LP Supply')}
-          tooltipContent={t('stableswap|totalLPSupply')}
           className={cardCellClassName}
           data-test-id="totalLpSupply"
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
-        <DetailsCardCell
-          cellName={t('stableswap|feesRate')}
-          tooltipContent={t('stableswap|feesRate')}
-          className={cardCellClassName}
-          data-test-id="feesRate"
-        >
-          <StateCurrencyAmount
-            amount={feesRate}
-            isLoading={isLoading}
-            loaderFallback={<DashPlug />}
-            currency={PERCENT}
-          />
+        <DetailsCardCell cellName={t('stableswap|feesRate')} className={cardCellClassName} data-test-id="totalLpSupply">
+          <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
+        </DetailsCardCell>
+        <DetailsCardCell cellName={t('stableswap|apr')} className={cardCellClassName} data-test-id="totalLpSupply">
+          <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
       </div>
       <PieChartQs data={pieChartData} />
