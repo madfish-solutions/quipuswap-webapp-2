@@ -43,6 +43,7 @@ export class FarmingItemStore {
   }
   //#endregion item store region
 
+  //#region available balance store
   @Led({
     default: defaultAvailableBalance,
     loader: async self => await self.getUserTokenBalance(),
@@ -50,6 +51,12 @@ export class FarmingItemStore {
   })
   readonly availableBalanceStore: LoadingErrorData<UserTokenBalanceModel, typeof defaultAvailableBalance>;
 
+  get availableBalance() {
+    return this.availableBalanceStore.model.balance;
+  }
+  //#endregion available balance store
+
+  //#region user info store
   @Led({
     default: { value: null },
     loader: async self => await self.getUserInfo(),
@@ -60,11 +67,9 @@ export class FarmingItemStore {
   get userInfo() {
     return this.userInfoStore.model.value;
   }
+  //#endregion user info store
 
-  get availableBalance() {
-    return this.availableBalanceStore.model.balance;
-  }
-
+  //#region user farming delegate store
   @Led({
     default: { value: null },
     loader: async self => await self.getUserFarmingDelegate(),
@@ -75,6 +80,7 @@ export class FarmingItemStore {
   get userFarmingDelegateAddress() {
     return this.userFarmingDelegateStore.model.value;
   }
+  //#endregion user farming delegate store
 
   currentTab: FarmingFormTabs = FarmingFormTabs.stake;
 

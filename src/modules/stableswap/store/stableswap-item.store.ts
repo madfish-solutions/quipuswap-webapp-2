@@ -12,12 +12,18 @@ import { StableswapItemModel } from '../models';
 export class StableswapItemStore {
   poolId: Nullable<BigNumber> = null;
 
+  //#region item store
   @Led({
     default: null,
     loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId),
     model: StableswapItemModel
   })
   readonly itemStore: LoadingErrorData<StableswapItemModel, null>;
+
+  get item() {
+    return this.itemStore.model;
+  }
+  //#endregion item store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -27,10 +33,6 @@ export class StableswapItemStore {
 
       item: computed
     });
-  }
-
-  get item() {
-    return this.itemStore.model;
   }
 
   setPoolId(poolId: BigNumber) {

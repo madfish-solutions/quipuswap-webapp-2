@@ -73,6 +73,7 @@ export class CoinflipStore {
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
 
+  //#region games count store
   @Led({
     default: { value: null },
     loader: async self => await self.getGamesCount(),
@@ -80,6 +81,12 @@ export class CoinflipStore {
   })
   readonly gamesCountStore: LoadingErrorData<NullableBigNumberWrapperModel, { value: null }>;
 
+  get gamesCount(): Nullable<BigNumber> {
+    return this.gamesCountStore.model.value;
+  }
+  //#endregion games count store
+
+  //#region tokens won store
   @Led({
     default: { list: null },
     loader: async self => await self.getTokensWon(),
@@ -87,6 +94,16 @@ export class CoinflipStore {
   })
   readonly tokensWonStore: LoadingErrorData<TokensWonListResponseModel, { list: null }>;
 
+  get tokensWon(): Nullable<TokenWon[]> {
+    return this.tokensWonStore.model.list;
+  }
+
+  get tokensWithReward(): Nullable<TokenWon[]> {
+    return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
+  }
+  //#endregion tokens won store
+
+  //#region general stats store
   @Led({
     default: DEFAULT_GENERAL_STATS,
     loader: async self => await self.getCoinflipGeneralStats(),
@@ -94,6 +111,29 @@ export class CoinflipStore {
   })
   readonly generalStatsStore: LoadingErrorData<GeneralStatsModel, typeof DEFAULT_GENERAL_STATS>;
 
+  get generalStats(): DashboardGeneralStats {
+    return this.generalStatsStore.model;
+  }
+
+  get isGeneralStatsLoading() {
+    return this.generalStatsStore.isLoading;
+  }
+
+  get bidSize() {
+    return getBidSize(this.generalStats.bank, this.generalStats.maxBetPercent);
+  }
+
+  get payout(): Nullable<BigNumber> {
+    return this.game.input && this.generalStats.payoutCoefficient
+      ? placeDecimals(
+          this.game.input.times(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)),
+          this.token
+        )
+      : null;
+  }
+  //#endregion general stats store
+
+  //#region gamers stats info store
   @Led({
     default: DEFAULT_GAMERS_STATS,
     loader: async self => await self.getGamersStats(),
@@ -101,12 +141,31 @@ export class CoinflipStore {
   })
   readonly gamersStatsInfo: LoadingErrorData<GamersStatsModel, typeof DEFAULT_GAMERS_STATS>;
 
+  get gamersStats(): Nullable<GamersStats> {
+    return this.gamersStatsInfo.model;
+  }
+
+  get isGamersStatsLoading() {
+    return this.gamersStatsInfo.isLoading;
+  }
+  //#endregion gamers stats info store
+
+  //#region user last game info store
   @Led({
     default: DEFAULT_USER_LAST_GAME,
     loader: async self => self.getUserLastGameInfo(),
     model: LastGameModel
   })
   readonly userLastGameInfo: LoadingErrorData<LastGameModel, typeof DEFAULT_USER_LAST_GAME>;
+
+  get userLastGame(): UserLastGame {
+    return this.userLastGameInfo.model;
+  }
+
+  get isUserLastGameLoading() {
+    return this.userLastGameInfo.isLoading;
+  }
+  //#endregion user last game info store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -129,54 +188,6 @@ export class CoinflipStore {
       setToken: action,
       setInput: action
     });
-  }
-
-  get gamesCount(): Nullable<BigNumber> {
-    return this.gamesCountStore.model.value;
-  }
-
-  get tokensWon(): Nullable<TokenWon[]> {
-    return this.tokensWonStore.model.list;
-  }
-
-  get gamersStats(): Nullable<GamersStats> {
-    return this.gamersStatsInfo.model;
-  }
-
-  get generalStats(): DashboardGeneralStats {
-    return this.generalStatsStore.model;
-  }
-
-  get isGamersStatsLoading() {
-    return this.gamersStatsInfo.isLoading;
-  }
-  get isGeneralStatsLoading() {
-    return this.generalStatsStore.isLoading;
-  }
-
-  get userLastGame(): UserLastGame {
-    return this.userLastGameInfo.model;
-  }
-
-  get isUserLastGameLoading() {
-    return this.userLastGameInfo.isLoading;
-  }
-
-  get tokensWithReward(): Nullable<TokenWon[]> {
-    return this.tokensWon?.filter(item => item.amount?.isGreaterThan('0')) ?? [];
-  }
-
-  get bidSize() {
-    return getBidSize(this.generalStats.bank, this.generalStats.maxBetPercent);
-  }
-
-  get payout(): Nullable<BigNumber> {
-    return this.game.input && this.generalStats.payoutCoefficient
-      ? placeDecimals(
-          this.game.input.times(toReal(this.generalStats.payoutCoefficient, COINFLIP_CONTRACT_DECIMALS)),
-          this.token
-        )
-      : null;
   }
 
   get token(): Token {

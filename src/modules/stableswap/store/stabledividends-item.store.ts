@@ -13,6 +13,7 @@ import { StableswapDividendsItemResponseModel, StableswapDividendsItemModel, Sta
 export class StableDividendsItemStore {
   poolId: Nullable<BigNumber> = null;
 
+  //#region item store
   @Led({
     default: { item: null },
     loader: async self => ({ item: await getStableDividendsItemApi(self.poolId) }),
@@ -20,12 +21,23 @@ export class StableDividendsItemStore {
   })
   readonly itemStore: LoadingErrorData<StableswapDividendsItemResponseModel, { item: null }>;
 
+  get item(): Nullable<StableswapDividendsItemModel> {
+    return this.itemStore.model.item;
+  }
+  //#endregion item store
+
+  //#region staker info store
   @Led({
     default: { item: null },
     loader: async self => await self.getstakerInfo(),
     model: StakerInfoResponseModel
   })
   readonly stakerInfoStore: LoadingErrorData<StakerInfoResponseModel, { item: null }>;
+
+  get userInfo() {
+    return this.stakerInfoStore.model.item;
+  }
+  //#endregion staker info store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -36,14 +48,6 @@ export class StableDividendsItemStore {
       item: computed,
       userInfo: computed
     });
-  }
-
-  get item(): Nullable<StableswapDividendsItemModel> {
-    return this.itemStore.model.item;
-  }
-
-  get userInfo() {
-    return this.stakerInfoStore.model.item;
   }
 
   setPoolId(poolId: BigNumber) {

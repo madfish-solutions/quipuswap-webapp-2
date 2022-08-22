@@ -16,6 +16,7 @@ import { RawStakerInfo, StakerInfo } from '../types';
 
 @ModelBuilder()
 export class StableDividendsListStore {
+  //#region stats store
   @Led({
     default: { item: null },
     loader: async () => ({ item: await getStableDividendsStatsApi() }),
@@ -23,31 +24,18 @@ export class StableDividendsListStore {
   })
   readonly statsStore: LoadingErrorData<StableswapDividendsStatsResponseModel, { item: null }>;
 
+  get stats() {
+    return this.statsStore.model.item;
+  }
+  //#endregion stats store
+
+  //#region list store
   @Led({
     default: { list: [] },
     loader: async () => ({ list: await getStableDividendsListApi() }),
     model: StableswapDividendsListModel
   })
   readonly listStore: LoadingErrorData<StableswapDividendsListModel, { list: [] }>;
-
-  @Led({
-    default: { list: null },
-    loader: async self => self.getStakerInfo(),
-    model: StakerInfoListResponseModel
-  })
-  readonly stakerInfo: LoadingErrorData<StakerInfoListResponseModel, { list: null }>;
-
-  constructor(private rootStore: RootStore) {
-    makeObservable(this, {
-      stats: computed,
-      list: computed,
-      info: computed
-    });
-  }
-
-  get stats() {
-    return this.statsStore.model.item;
-  }
 
   get list() {
     return this.listStore.model.list;
@@ -84,6 +72,22 @@ export class StableDividendsListStore {
 
   get filteredList() {
     return this.rootStore.stableDividendsFilterStore?.filterAndSort(this.listWithUserInfo);
+  }
+  //#endregion list store
+
+  @Led({
+    default: { list: null },
+    loader: async self => self.getStakerInfo(),
+    model: StakerInfoListResponseModel
+  })
+  readonly stakerInfo: LoadingErrorData<StakerInfoListResponseModel, { list: null }>;
+
+  constructor(private rootStore: RootStore) {
+    makeObservable(this, {
+      stats: computed,
+      list: computed,
+      info: computed
+    });
   }
 
   async getStakerInfo() {
