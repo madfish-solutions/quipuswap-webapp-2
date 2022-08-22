@@ -5,7 +5,7 @@ import useSWR from 'swr';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAddCustomToken, useSearchCustomTokens, useTokens } from '@providers/dapp-tokens';
-import { fallbackToolkit } from '@providers/use-dapp';
+import { makeBasicToolkit } from '@providers/use-dapp';
 import { getTokenType, fa2TokenExists, getTokenSlug } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { Standard } from '@shared/types';
@@ -32,7 +32,7 @@ export const useInitialTokensSlugs = (
     // eslint-disable-next-line sonarjs/cognitive-complexity
     async (_key: string, tokensSlug = ''): Promise<TokensSlugs> => {
       const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-');
-      const tezos = fallbackToolkit;
+      const tezos = makeBasicToolkit();
 
       const tokensSlugs = await Promise.all(
         [rawSlug1, rawSlug2].map(async (rawSlug, index) => {

@@ -7,7 +7,6 @@ describe('Check error notification', () => {
   beforeEach(() => {
     cy.visit('/swap/tez-' + MAINNET_QUIPU_TOKEN);
     cy.get('[data-test-id="acceptCookieButton"]').click();
-    cy.intercept('GET', 'https://metadata.templewallet.com/metadata/' + MAINNET_QUIPU_TOKEN).as('load')
   });
   it('Should_DisplayError_When_FromTokenHaveTooManyDecimals', () => {
     cy.get('[for="swap-send-from"]').click().type('1.33332222221');

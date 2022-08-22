@@ -9,7 +9,8 @@ describe('Input fields are recalculating after entering in another field data', 
   });
   it('Should_DisplayDataInOutput_When_InputIs1', () => {
     cy.get('[id="lp-input"]').click().type('1');
-    cy.wait(DEFAULT_WAIT_TIMEOUT)
+    cy.waitUntil(() => (cy.get('[id="stableswap-input-0"]')
+    .invoke('val').then(parseFloat).then((val) => !Number.isNaN(val))))
     cy.get('[id="stableswap-input-0"]')
       .invoke('val')
       .then(parseFloat)
@@ -22,7 +23,8 @@ describe('Input fields are recalculating after entering in another field data', 
   });
   it('Should_DisplayDataInInput_When_OutputIs1', () => {
     cy.get('[id="stableswap-input-1"]').click().type('1');
-    cy.wait(DEFAULT_WAIT_TIMEOUT)
+    cy.waitUntil(() => (cy.get('[id="lp-input"]')
+    .invoke('val').then(parseFloat).then((val) => !Number.isNaN(val))))
     cy.get('[id="lp-input"]')
       .invoke('val')
       .then(parseFloat)
