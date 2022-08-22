@@ -1,16 +1,22 @@
+import * as Sentry from '@sentry/react';
+
 import { CFC } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
-import { ErrorBoundaryInner } from './error-boundary-inner';
 import { ErrorBoundaryProps } from './error-boundary.types';
 
-export const ErrorBoundary: CFC<ErrorBoundaryProps> = ({ isError, fallback, children }) => {
+export const ErrorBoundary: CFC<ErrorBoundaryProps> = ({ fallback, children }) => {
   const { showErrorToast } = useToasts();
 
+  const onError = (error: Error, componentStack: string, eventId: string) => {
+    showErrorToast(error);
+    // eslint-disable-next-line no-console
+    console.error(eventId, error, componentStack);
+  };
+
   return (
-    //@ts-ignore
-    <ErrorBoundaryInner showErrorToast={showErrorToast} isError={isError} fallback={fallback}>
+    <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
       {children}
-    </ErrorBoundaryInner>
+    </Sentry.ErrorBoundary>
   );
 };
