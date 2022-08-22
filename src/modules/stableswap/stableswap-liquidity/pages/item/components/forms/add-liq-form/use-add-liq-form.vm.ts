@@ -3,12 +3,19 @@ import { useCallback, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { isNull, numberAsString, placeDecimals, saveBigNumber, toFixed } from '@shared/helpers';
+import {
+  extractTokens,
+  getInputsAmountFormFormikValues,
+  isNull,
+  numberAsString,
+  placeDecimals,
+  saveBigNumber,
+  toFixed
+} from '@shared/helpers';
 
 import {
   calculateOutputWithToken,
   calculateShares,
-  extractTokens,
   getFormikInitialValues,
   getInputSlugByIndex
 } from '../../../../../../helpers';
@@ -18,7 +25,6 @@ import {
   useStableswapItemStore,
   useStableswapTokensBalances
 } from '../../../../../../hooks';
-import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 import { useZeroInputsError } from './use-zero-inputs-error';
