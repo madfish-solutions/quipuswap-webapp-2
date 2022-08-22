@@ -41,9 +41,9 @@ export const DexTwoRemoveLiqFormView: FC<Props> = ({ data, onSubmit, lpData }) =
             className={stylesCommonContainer.button}
             disabled={false}
             loading={false}
-            data-test-id="dexTwoAddLiqButton"
+            data-test-id="dexTwoRemoveLiqButton"
           >
-            {t('common|Add')}
+            {t('common|Remove')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
