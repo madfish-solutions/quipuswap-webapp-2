@@ -6,15 +6,23 @@ import { STABLESWAP_LP_DECIMALS } from '@config/constants';
 import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-stableswap-liquidity-log-data';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, toReal, isExist, isNull, toAtomic } from '@shared/helpers';
+import {
+  decreaseBySlippage,
+  toReal,
+  isExist,
+  isNull,
+  toAtomic,
+  extractTokens,
+  getTransactionDeadline
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { tokensAndAmountsMapper } from '@shared/mapping';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { addStableswapLiquidityApi } from '../../api';
-import { extractTokens, getStableswapDeadline, createAmountsMichelsonMap, applyStableswapFee } from '../../helpers';
-import { tokensAndAmountsMapper } from '../../mapping';
+import { createAmountsMichelsonMap, applyStableswapFee } from '../../helpers';
 import { useStableswapItemStore } from '../store';
 import { useCalcTokenAmountView } from '../use-calc-token-amount';
 
@@ -68,7 +76,7 @@ export const useAddStableswapLiquidity = () => {
         BigNumber.ROUND_DOWN
       );
 
-      const deadline = await getStableswapDeadline(tezos, transactionDeadline);
+      const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
       const logData = {
         stableswapLiquidityAdd: getStableswapLiquidityLogData(

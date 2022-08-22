@@ -8,13 +8,17 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndexAdd } from '../helpers/forms.helpers';
-import { Input } from './use-dex-two-add-liq-form.interface';
+import { getInputSlugByIndexRemove } from '../helpers/forms.helpers';
+import { Input } from './use-dex-two-remove-liq-form-view-model';
 
-export const useDexTwoAddLiqValidation = (
+export const useDexTwoRemoveLiqValidation = (
   userBalances: Nullable<BigNumber>[],
   dexTwoItem: LiquidityItem,
-  shouldShowBakerInput: boolean
+  lpTokenBalance: BigNumber,
+  lpTokenMetadata: {
+    symbol: string;
+    decimals: number;
+  }
 ) => {
   const { t } = useTranslation();
 
@@ -35,15 +39,22 @@ export const useDexTwoAddLiqValidation = (
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndexAdd(index), item.required('Amount is required!')];
+      return [getInputSlugByIndexRemove(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
-    if (shouldShowBakerInput) {
-      shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
-    }
-
-    return yup.object().shape(shape);
-  }, [dexTwoItem.tokensInfo, shouldShowBakerInput, t, userBalances]);
+    return yup.object().shape({
+      ...shape,
+      [Input.LP_INPUT]: operationAmountSchema(
+        lpTokenBalance,
+        false,
+        lpTokenMetadata.decimals,
+        t('common|tokenDecimalsOverflowError', {
+          tokenSymbol: lpTokenMetadata.symbol,
+          decimalPlaces: lpTokenMetadata.decimals
+        })
+      ).required('Amount is required')
+    });
+  }, [dexTwoItem.tokensInfo, lpTokenBalance, lpTokenMetadata.decimals, lpTokenMetadata.symbol, t, userBalances]);
 };

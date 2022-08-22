@@ -1,43 +1,39 @@
 import { FC } from 'react';
 
-import { Plus } from '@shared/svg';
+import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { Button } from '../button';
-import { ComplexBaker, ComplexBakerProps } from '../ComplexInput';
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { Iterator } from '../iterator';
 import { TokenInput, TokenInputProps } from '../token-input';
-import styles from './dex-two-add-liq-form-view.module.scss';
-
-interface BakerProps extends ComplexBakerProps {
-  shouldShowBakerInput: boolean;
-}
+import styles from './dex-two-remove-liq-form-view.module.scss';
 
 interface Props {
   data: TokenInputProps[];
-  bakerData: BakerProps;
   onSubmit: () => void;
+  lpData: TokenInputProps;
 }
 
-export const DexTwoAddLiqFormView: FC<Props> = ({ data, onSubmit, bakerData }) => {
+export const DexTwoRemoveLiqFormView: FC<Props> = ({ data, onSubmit, lpData }) => {
   const { t } = useTranslation();
 
-  const { value, error, handleChange, shouldShowBakerInput } = bakerData;
+  const { value, label, error, balance, tokens, onInputChange } = lpData;
 
   return (
     <form onSubmit={onSubmit}>
+      <TokenInput
+        value={value}
+        label={label}
+        error={error}
+        balance={balance}
+        tokens={tokens}
+        onInputChange={onInputChange}
+      />
+
+      <ArrowDown className={styles.svg} />
       <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
-      {shouldShowBakerInput && (
-        <ComplexBaker
-          value={value}
-          error={error}
-          handleChange={handleChange}
-          label={t('common|Baker')}
-          className={stylesCommonContainer.mt24}
-        />
-      )}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
@@ -45,9 +41,9 @@ export const DexTwoAddLiqFormView: FC<Props> = ({ data, onSubmit, bakerData }) =
             className={stylesCommonContainer.button}
             disabled={false}
             loading={false}
-            data-test-id="dexTwoAddLiqButton"
+            data-test-id="dexTwoRemoveLiqButton"
           >
-            {t('common|Add')}
+            {t('common|Remove')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
