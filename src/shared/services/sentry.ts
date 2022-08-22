@@ -4,7 +4,7 @@ import { init, reactRouterV6Instrumentation, withSentryReactRouterV6Routing } fr
 import { BrowserTracing } from '@sentry/tracing';
 import { createRoutesFromChildren, matchRoutes, Routes, useLocation, useNavigationType } from 'react-router-dom';
 
-import { SENTRY_DSN } from '@config/environment';
+import { PROJECT_NAME, SENTRY_DSN, VERSION } from '@config/environment';
 
 import { getFullEnvName } from '../helpers';
 
@@ -33,7 +33,8 @@ export class SentryService {
         })
       ],
       tracesSampleRate: 1.0,
-      environment: getFullEnvName()
+      environment: getFullEnvName(),
+      release: `${PROJECT_NAME}@${VERSION}`
     });
   }
 }
