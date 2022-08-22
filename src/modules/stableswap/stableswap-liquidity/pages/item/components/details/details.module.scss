@@ -6,4 +6,8 @@
   row-gap: 6px;
   margin-bottom: 12px;
   align-items: center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
