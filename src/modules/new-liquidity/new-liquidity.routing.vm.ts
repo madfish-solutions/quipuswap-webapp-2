@@ -14,6 +14,10 @@ export const useNewLiquidityViewModel = () => {
         if (isNull(rootStore.newLiquidityListStore)) {
           await rootStore.createNewLiquidityListStore();
         }
+
+        if (isNull(rootStore.newLiquidityItemStore)) {
+          await rootStore.createNewLiquidityItemStore();
+        }
         setIsInitialized(true);
       } catch (_error) {
         setError(_error as Error);
