@@ -17,7 +17,8 @@
     "e2e": "npx cypress run --record --key $(grep CYPRESS_KEY .env | cut -d '=' -f2)",
     "e2e:parallel": "npx cypress run --record --key $(grep CYPRESS_KEY .env | cut -d '=' -f2) --parallel",
     "eject": "react-scripts eject",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "cy:run_browser": "npx cypress run e2e:parallel -- --browser chrome --group Chrome & npx cypress run e2e -- --browser firefox --group Firefox"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^3.1.0",

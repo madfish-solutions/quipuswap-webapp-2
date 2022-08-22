@@ -25,7 +25,7 @@ export const useRealStableDividendsStakerBalance = () => {
     updateStakerBalance();
   }, [updateStakerBalance]);
 
-  useOnBlock(tezos, updateStakerBalance);
+  useOnBlock(updateStakerBalance);
 
   return userInfo?.yourDeposit ?? null;
 };

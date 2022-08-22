@@ -13,7 +13,9 @@ import {
   numberAsString,
   placeDecimals,
   saveBigNumber,
-  toFixed
+  toFixed,
+  extractTokens,
+  getInputsAmountFormFormikValues
 } from '@shared/helpers';
 import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -22,7 +24,6 @@ import {
   calculateShares as calculateLpValue,
   calculateOutputWithLp,
   calculateOutputWithToken,
-  extractTokens,
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
   getInputSlugByIndex,
@@ -34,7 +35,6 @@ import {
   useStableswapItemStore,
   useCalcTokenAmountView
 } from '../../../../../../hooks';
-import { getInputsAmountFormFormikValues } from '../fomrs.helpers';
 import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;

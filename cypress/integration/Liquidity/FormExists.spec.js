@@ -2,10 +2,8 @@
 
 describe('Form exists', () => {
   beforeEach(() => {
-    //before each 'it' go to liquidity tab'
-    cy.visit('/');
-    cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
+    cy.visit('/liquidity');
+    cy.get('[data-test-id="acceptCookieButton"]').click();
   });
   it('Should_DisplayExchangeDetails_When_OpenedLiquidityPage', () => {
     // Check if Title 'Pool Details' ok

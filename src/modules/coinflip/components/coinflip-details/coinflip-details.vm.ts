@@ -61,8 +61,8 @@ export const useCoinflipDetailsViewModel = () => {
     updateGeneralStats();
   }, [updateUserLastGame, updateGeneralStats]);
 
-  useOnBlock(tezos, updateUserLastGame);
-  useOnBlock(tezos, updateGeneralStats);
+  useOnBlock(updateUserLastGame);
+  useOnBlock(updateGeneralStats);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
