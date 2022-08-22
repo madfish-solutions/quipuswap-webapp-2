@@ -150,5 +150,8 @@ export const common = {
   chooseYourWallet: 'Choose your wallet',
   guides: 'Guides',
   earnExtra: 'Earn extra',
-  opportunity: 'Opportunity'
+  opportunity: 'Opportunity',
+  reconnectionModalText:
+    'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
+  Reconnect: 'Reconnect'
 } as const;
