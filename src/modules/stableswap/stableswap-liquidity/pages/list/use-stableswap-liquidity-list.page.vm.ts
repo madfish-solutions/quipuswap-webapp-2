@@ -4,11 +4,10 @@ import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { LabelComponentProps } from '@shared/components';
-import { getTokenSymbol } from '@shared/helpers';
+import { extractTokens, getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { extractTokens } from '../../../helpers';
 import { useStableswapListStore, useGetStableswapList, useGetStableswapStats } from '../../../hooks';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { StableswapLiquidityFormTabs } from '../../../types';

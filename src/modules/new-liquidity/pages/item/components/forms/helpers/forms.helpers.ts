@@ -5,10 +5,6 @@ const ADD_LIQ_INPUT = 'add-liq-input';
 
 export const getInputSlugByIndex = (index: number): string => `${ADD_LIQ_INPUT}-${index}`;
 
-export const extractTokens = (tokensInfo: Array<LiquidityTokenInfo>) => {
-  return tokensInfo.map(({ token }) => token);
-};
-
 export const getUserBalances = (tokensInfo: Array<LiquidityTokenInfo>) => {
   return tokensInfo.map(({ token }) => useTokenBalance(token) ?? null);
 };
