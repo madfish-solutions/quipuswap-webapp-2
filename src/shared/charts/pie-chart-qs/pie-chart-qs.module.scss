@@ -1,0 +1,61 @@
+@import "@styles/_variables";
+
+.chartWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding-top: 40px;
+}
+
+.li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.tokenSymbol {
+  display: inline-block;
+  margin-right: auto;
+}
+
+.legend {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+}
+
+.tokenAmount {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.dark {
+  .tokenAmount {
+    color: $text-inverse;
+  }
+}
+
+.light {
+  .tokenAmount {
+    color: $text-01;
+  }
+}
+
+.dark.chartWrapper {
+  border-top: 1px solid $text-01;
+}
+
+.light.chartWrapper {
+  border-top: 1px solid $ui-03;
+}

@@ -8,7 +8,7 @@ import { useYoutubeTabs } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { DetailsInfo } from '../details-info';
+import { DetailsView } from '../details-view';
 import { useDetailsViewModel } from './use-details.vm';
 
 export const Details: FC = observer(() => {
@@ -36,7 +36,7 @@ export const Details: FC = observer(() => {
       data-test-id="stableswapDetails"
     >
       {isDetails ? (
-        <DetailsInfo {...detailsInfoParams} />
+        <DetailsView {...detailsInfoParams} />
       ) : (
         <YouTube video={eQuipuSwapVideo.HowToAddLiquidityToTheStableSwap} />
       )}
