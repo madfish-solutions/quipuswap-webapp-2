@@ -1,5 +1,6 @@
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
+import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useAddLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import { extractTokens, getInputsAmountFormFormikValues, isTezosToken, numberAsString } from '@shared/helpers';
@@ -17,6 +18,10 @@ export const useDexTwoAddLiqFormViewModel = () => {
   const item = newLiquidityItemStore.item ?? MOCK_ITEM;
   const { addLiquidity } = useAddLiquidity();
 
+  const tokensInfo = item.tokensInfo.map(tokenInfo =>
+    isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo
+  );
+
   const handleSubmit = async (values: FormikValues, actions: FormikHelpers<NewLiquidityAddFormValues>) => {
     actions.setSubmitting(true);
 
@@ -29,9 +34,9 @@ export const useDexTwoAddLiqFormViewModel = () => {
     actions.setSubmitting(false);
   };
 
-  const userBalances = getUserBalances(item.tokensInfo);
+  const userBalances = getUserBalances(tokensInfo);
 
-  const shouldShowBakerInput = item.tokensInfo.some(({ token }) => isTezosToken(token));
+  const shouldShowBakerInput = tokensInfo.some(({ token }) => isTezosToken(token));
 
   const validationSchema = useDexTwoAddLiqValidation(userBalances, item, shouldShowBakerInput);
 
@@ -46,7 +51,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   });
 
   const handleInputChange = (index: number) => {
-    const localToken = extractTokens(item.tokensInfo)[index];
+    const localToken = extractTokens(tokensInfo)[index];
     const localTokenDecimals = localToken.metadata.decimals;
 
     return async (inputAmount: string) => {
@@ -61,11 +66,11 @@ export const useDexTwoAddLiqFormViewModel = () => {
     formik.setFieldValue(Input.BAKER_INPUT, baker.address);
   };
 
-  const data = item.tokensInfo.map((_, index) => {
+  const data = tokensInfo.map((_, index) => {
     const inputSlug = getInputSlugByIndex(index);
     const value = (formik.values as FormikValues)[inputSlug];
     const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
-    const token = item.tokensInfo[index].token;
+    const token = tokensInfo[index].token;
 
     return {
       value,
