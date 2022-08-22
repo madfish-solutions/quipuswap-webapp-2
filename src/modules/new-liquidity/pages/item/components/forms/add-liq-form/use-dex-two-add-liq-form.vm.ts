@@ -7,7 +7,7 @@ import { extractTokens, getInputsAmountFormFormikValues, isTezosToken, numberAsS
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndexAdd, extractTokens, getUserBalances } from '../helpers/forms.helpers';
+import { getInputSlugByIndexAdd, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 import { Input, NewLiquidityAddFormValues } from './use-dex-two-add-liq-form.interface';
@@ -67,7 +67,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   };
 
   const data = tokensInfo.map((_, index) => {
-    const inputSlug = getInputSlugByIndex(index);
+    const inputSlug = getInputSlugByIndexAdd(index);
     const value = (formik.values as FormikValues)[inputSlug];
     const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
     const token = tokensInfo[index].token;
