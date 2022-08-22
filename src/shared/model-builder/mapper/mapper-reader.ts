@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { isUndefined } from '@shared/helpers';
@@ -7,7 +8,13 @@ import { MapperConfig } from './mapper-config.type';
 import { mapperFactory } from './mapper.factory';
 
 const isObject = (value: any) => {
-  return typeof value === 'object' && value !== null && !(value instanceof BigNumber) && !(value instanceof Date);
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !(value instanceof BigNumber) &&
+    !(value instanceof Date) &&
+    !(value instanceof MichelsonMap)
+  );
 };
 
 export const mapperReader = (
