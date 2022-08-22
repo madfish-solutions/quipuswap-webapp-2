@@ -1,3 +1,4 @@
+import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { MapperKinds } from './mapper-kinds.enum';
@@ -16,6 +17,8 @@ export const getMapperKind = (_type: unknown) => {
       return MapperKinds.STRING;
     case Symbol:
       return MapperKinds.SYMBOL;
+    case MichelsonMap:
+      return MapperKinds.MICHELSON_MAP;
     default:
       throw TypeError();
   }

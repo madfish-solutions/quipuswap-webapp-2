@@ -66,8 +66,7 @@ export const useCoinflipDetailsViewModel = () => {
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  // const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.model, tokenInstance);
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.model, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress

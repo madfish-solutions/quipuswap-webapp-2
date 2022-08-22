@@ -18,7 +18,7 @@ export const useUserLastGame = () => {
   const { lastGameLogEvent } = useLastGameResultAmplitude();
 
   useEffect(() => {
-    const gameResult = getGameResult(coinflipStore?.userLastGameInfo?.data?.status);
+    const gameResult = getGameResult(coinflipStore?.userLastGameInfo?.model?.status);
 
     // TODO: avoid excess render
     if (lastGameResultRef.current === Statuses.started && gameResult !== Statuses.started) {
@@ -27,7 +27,7 @@ export const useUserLastGame = () => {
     }
 
     lastGameResultRef.current = gameResult;
-  }, [coinflipStore?.userLastGameInfo?.data?.status, lastGameLogEvent, openCoinflipModal]);
+  }, [coinflipStore?.userLastGameInfo?.model?.status, lastGameLogEvent, openCoinflipModal]);
 
   const getUserLastGame = useCallback(async () => {
     if (isReady && !isNull(coinflipStore)) {

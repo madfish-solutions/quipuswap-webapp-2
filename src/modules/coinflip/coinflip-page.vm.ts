@@ -50,21 +50,19 @@ export const useCoinflipPageViewModel = () => {
 
   const wonAmount = useMemo(() => {
     const realPayoutCoefficient = toReal(
-      // coinflipStore?.generalStatsStore.model.payoutCoefficient ?? ZERO_BN,
-      coinflipStore?.generalStatsStore.data.payoutCoefficient ?? ZERO_BN,
+      coinflipStore?.generalStatsStore.model.payoutCoefficient ?? ZERO_BN,
       COINFLIP_CONTRACT_DECIMALS
     );
-    // const realBidSize = toReal(coinflipStore?.userLastGameInfo.model.bidSize ?? ZERO_BN, token);
-    const realBidSize = toReal(coinflipStore?.userLastGameInfo.data.bidSize ?? ZERO_BN, token);
+    const realBidSize = toReal(coinflipStore?.userLastGameInfo.model.bidSize ?? ZERO_BN, token);
+    // const realBidSize = toReal(coinflipStore?.userLastGameInfo.data.bidSize ?? ZERO_BN, token);
 
     return realPayoutCoefficient.multipliedBy(realBidSize);
-    // }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.userLastGameInfo.model.bidSize, token]);
-  }, [coinflipStore?.generalStatsStore.data.payoutCoefficient, coinflipStore?.userLastGameInfo.data.bidSize, token]);
+  }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.userLastGameInfo.model.bidSize, token]);
 
   return {
     isInitialized,
     wonAmount,
-    result: coinflipStore?.userLastGameInfo.data.status,
+    result: coinflipStore?.userLastGameInfo.model.status,
     currency: token?.metadata.symbol
   };
 };

@@ -2,28 +2,30 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getFirstElement, isNull } from '@shared/helpers';
-import { noopMap } from '@shared/mapping';
-import { LoadingErrorData, RootStore } from '@shared/store';
+import { Led, ModelBuilder } from '@shared/model-builder';
+import { LoadingErrorDataNew, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { getStableDividendsItemApi, getStakerInfo } from '../api';
-import { stableDividendsItemMapper } from '../mapping';
-import { IRawStableDividendsItem, RawStakerInfo, StableDividendsItem } from '../types';
+import { StableswapDividendsItemResponseModel, StableswapDividendsItemModel, StakerInfoResponseModel } from '../models';
 
+@ModelBuilder()
 export class StableDividendsItemStore {
   poolId: Nullable<BigNumber> = null;
 
-  readonly itemStore = new LoadingErrorData<IRawStableDividendsItem['item'], Nullable<StableDividendsItem>>(
-    null,
-    async () => await getStableDividendsItemApi(this.poolId),
-    stableDividendsItemMapper
-  );
+  @Led({
+    default: { item: null },
+    loader: async self => ({ item: await getStableDividendsItemApi(self.poolId) }),
+    model: StableswapDividendsItemResponseModel
+  })
+  readonly itemStore: LoadingErrorDataNew<StableswapDividendsItemResponseModel, { item: null }>;
 
-  readonly stakerInfoStore = new LoadingErrorData<Nullable<RawStakerInfo>, Nullable<RawStakerInfo>>(
-    null,
-    async () => await this.getstakerInfo(),
-    noopMap
-  );
+  @Led({
+    default: { item: null },
+    loader: async self => await self.getstakerInfo(),
+    model: StakerInfoResponseModel
+  })
+  readonly stakerInfoStore: LoadingErrorDataNew<StakerInfoResponseModel, { item: null }>;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -36,25 +38,27 @@ export class StableDividendsItemStore {
     });
   }
 
-  get item() {
-    return this.itemStore.data;
+  get item(): Nullable<StableswapDividendsItemModel> {
+    return this.itemStore.model.item;
   }
 
   get userInfo() {
-    return this.stakerInfoStore.data;
+    return this.stakerInfoStore.model.item;
   }
 
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
   }
 
-  private async getstakerInfo() {
+  async getstakerInfo() {
     if (isNull(this.item)) {
-      return null;
+      return { item: null };
     }
 
     const stakerInfo = await getStakerInfo(this.rootStore.tezos, this.item, this.rootStore.authStore.accountPkh);
 
-    return getFirstElement(stakerInfo);
+    return {
+      item: getFirstElement(stakerInfo)
+    };
   }
 }

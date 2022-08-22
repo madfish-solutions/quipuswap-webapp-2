@@ -7,21 +7,13 @@ import { Token } from '@shared/types';
 import { getCoinflipAssetId } from '../helpers';
 import { CoinflipStorage, GeneralStatsInterface } from './types';
 
-export const DEFAULT_GENERAL_STATS = {
-  bank: null,
-  gamesCount: null,
-  payoutCoefficient: null,
-  totalWins: null,
-  maxBetPercent: null
-};
-
 export const getCoinflipGeneralStatsApi = async (
   tezos: Nullable<TezosToolkit>,
   contractAddress: string,
   token: Token
 ) => {
   if (isNull(tezos)) {
-    return DEFAULT_GENERAL_STATS;
+    return null;
   }
 
   const tokenAsset = getCoinflipAssetId(token);
@@ -30,7 +22,7 @@ export const getCoinflipGeneralStatsApi = async (
   const rawGeneralStats = await storage.id_to_asset.get<GeneralStatsInterface>(tokenAsset);
 
   if (!rawGeneralStats) {
-    return DEFAULT_GENERAL_STATS;
+    return null;
   }
 
   const {

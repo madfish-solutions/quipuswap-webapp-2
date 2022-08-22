@@ -4,5 +4,6 @@ export enum MapperKinds {
   BOOLEAN,
   STRING,
   DATE,
-  SYMBOL
+  SYMBOL,
+  MICHELSON_MAP
 }
