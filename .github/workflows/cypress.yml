@@ -1,10 +1,7 @@
 name: Cypress
 
-on:
-  pull_request:
-    types: [opened]
-    branches: [main]
-
+on: [push]
+  
 jobs:
   setup:
     runs-on: ubuntu-latest
