@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 import * as Sentry from '@sentry/react';
 
 import { CFC } from '@shared/types';
@@ -10,17 +8,8 @@ import { ErrorBoundaryProps } from './error-boundary.types';
 export const ErrorBoundary: CFC<ErrorBoundaryProps> = ({ fallback, children }) => {
   const { showErrorToast } = useToasts();
 
-  const onError = useCallback(
-    (error: Error, componentStack?: string, eventId?: string) => {
-      showErrorToast(error);
-      // eslint-disable-next-line no-console
-      console.error(eventId, error, componentStack);
-    },
-    [showErrorToast]
-  );
-
   return (
-    <Sentry.ErrorBoundary fallback={fallback} onError={onError}>
+    <Sentry.ErrorBoundary fallback={fallback} onError={showErrorToast}>
       {children}
     </Sentry.ErrorBoundary>
   );
