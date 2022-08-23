@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react';
 import { CFC } from '../../../types';
 import { useToasts } from '../../../utils';
 
-export interface Props {
+interface Props {
   fallback: ReactElement;
 }
 
