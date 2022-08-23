@@ -17,7 +17,7 @@ import styles from './farming-details.module.scss';
 export const useFarmingDetailsViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const dAppReady = useReady();
-  const { isLoading: dataLoading, isInitialized: dataInitialized, error2 } = farmingItemStore.itemStore;
+  const { isLoading: dataLoading, isInitialized: dataInitialized, error } = farmingItemStore.itemStore;
   const { item } = farmingItemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
   const { data: bakers } = useBakers();
@@ -117,7 +117,7 @@ export const useFarmingDetailsViewModel = () => {
     harvestFee,
     depositTokenUrl,
     isLoading,
-    isError: Boolean(error2),
+    isError: Boolean(error),
     stakeStatus
   };
 };

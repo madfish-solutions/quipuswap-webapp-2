@@ -9,7 +9,7 @@ export class LoadingErrorDataNew<ModelType extends object, Default = any, RawDat
 
   isInitialized = false;
   isLoading = false;
-  error2: Error | string | null = null;
+  error: Error | string | null = null;
   model: ModelType | Default;
 
   constructor(
@@ -24,12 +24,13 @@ export class LoadingErrorDataNew<ModelType extends object, Default = any, RawDat
       rawData: observable,
       isInitialized: observable,
       isLoading: observable,
-      error2: observable,
+      error: observable,
       model: observable,
 
       setRawData: action,
       startLoading: action,
       finishLoading: action,
+      setError: action,
 
       isReady: computed
     });
@@ -40,15 +41,15 @@ export class LoadingErrorDataNew<ModelType extends object, Default = any, RawDat
   }
 
   setRawData(rawData: RawData) {
-    this.error2 = null;
+    this.error = null;
     this.rawData = rawData;
     const data = mapperReader(rawData, this.mappingConfig) as unknown as Default;
 
     this.model = new this.modelRef(data);
   }
 
-  setError2(error: Error | string) {
-    this.error2 = error;
+  setError(error: Error | string) {
+    this.error = error;
     this.rawData = undefined;
     this.model = this.defaultData;
   }
@@ -68,7 +69,7 @@ export class LoadingErrorDataNew<ModelType extends object, Default = any, RawDat
 
       this.setRawData(await this.getDate());
     } catch (error) {
-      this.setError2(error as Error);
+      this.setError(error as Error);
 
       throw error;
     } finally {
