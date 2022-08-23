@@ -8,8 +8,7 @@ import { isProd } from '@shared/helpers';
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { StableswapLiquidityFormTabs } from '../../../types';
-import { Details } from './components';
-import { RemoveLiqForm } from './components/forms';
+import { Details, RemoveLiqForm } from './components';
 import styles from './stableswap-liquidity-item.module.scss';
 import { useStableswapLiquidityRemoveItemPageViewModel } from './use-stableswap-liquidity-remove-item-page.vm';
 

@@ -1,11 +1,12 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
 import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@shared/helpers';
+import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../../errors';
 import { StableswapRoutes } from '../stableswap-routes.enum';
@@ -41,7 +42,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
-      <Routes>
+      <SentryRoutes>
         <Route path={`/${StableswapLiquidityFormTabs.create}`} element={<StableswapLiquidityCreatePage />} />
         <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
         <Route
@@ -52,7 +53,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
         <Route path={'/'} element={<StableswapLiquidityListPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
-      </Routes>
+      </SentryRoutes>
     </StateWrapper>
   );
 });
