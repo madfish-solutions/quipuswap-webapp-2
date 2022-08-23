@@ -13,10 +13,10 @@ import { NewLiquidityListPage } from './pages/list';
 import { NewLiquidityFormTabs } from './types';
 
 export const NewLiquidityPageRouter: FC = () => {
-  const { isInitialized, error } = useNewLiquidityViewModel();
+  const { isInitialized } = useNewLiquidityViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>} isError={!!error}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <SentryRoutes>
         <Route path={NewLiquidityRoutes.root} element={<NewLiquidityListPage />} />
 
