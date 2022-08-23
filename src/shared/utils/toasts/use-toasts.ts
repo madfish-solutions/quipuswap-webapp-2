@@ -28,9 +28,9 @@ export const useToasts = (): UseToasts => {
 
   const showErrorToast = useCallback(
     (error: Error | string) => {
-      captureException(error);
-
       if (typeof error === 'string') {
+        captureException(new Error(error));
+
         updateToast({
           type: 'error',
           render: error
@@ -40,6 +40,8 @@ export const useToasts = (): UseToasts => {
       }
 
       if (error instanceof Error) {
+        captureException(error);
+
         let knownErrorMessage = knownErrorsMessages[error.message];
 
         if (error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
@@ -54,9 +56,11 @@ export const useToasts = (): UseToasts => {
         return;
       }
 
+      const errorMessage = `${JSON.stringify(error)}`;
+      captureException(new Error(errorMessage));
       updateToast({
         type: 'error',
-        render: `${JSON.stringify(error)}`
+        render: errorMessage
       });
     },
     [updateToast, knownErrorsMessages]
