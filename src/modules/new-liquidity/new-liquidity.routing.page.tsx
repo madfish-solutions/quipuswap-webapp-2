@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { StateWrapper } from '@shared/components';
+import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../errors';
 import { NewLiquidityRoutes } from './new-liquidity-routes.enum';
@@ -12,11 +13,11 @@ import { NewLiquidityListPage } from './pages/list';
 import { NewLiquidityFormTabs } from './types';
 
 export const NewLiquidityPageRouter: FC = () => {
-  const { isInitialized, error } = useNewLiquidityViewModel();
+  const { isInitialized } = useNewLiquidityViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>} isError={!!error}>
-      <Routes>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
+      <SentryRoutes>
         <Route path={NewLiquidityRoutes.root} element={<NewLiquidityListPage />} />
 
         <Route path={`${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
@@ -26,7 +27,7 @@ export const NewLiquidityPageRouter: FC = () => {
         />
 
         <Route path="*" element={<PageNotFoundPage />} />
-      </Routes>
+      </SentryRoutes>
     </StateWrapper>
   );
 };

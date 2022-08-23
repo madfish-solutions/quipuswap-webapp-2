@@ -1,5 +1,5 @@
 {
-  "name": "quipuswap-webapp",
+  "name": "quipuswap-webapp-2",
   "version": "3.1.30",
   "private": true,
   "scripts": {
@@ -26,6 +26,8 @@
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.0",
     "@quipuswap/tokens-whitelist": "^1.0.7",
+    "@sentry/react": "^7.11.1",
+    "@sentry/tracing": "^7.11.1",
     "@taquito/beacon-wallet": "13.0.0",
     "@taquito/taquito": "13.0.0",
     "@temple-wallet/dapp": "^7.0.0",
@@ -100,6 +102,7 @@
     "@types/react-slick": "^0.23.8",
     "@types/react-table": "^7.7.12",
     "@types/react-youtube": "^7.10.0",
+    "@types/recharts": "^1.8.23",
     "@types/uuid": "^8.3.4",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "cypress-wait-until": "^1.7.2",
