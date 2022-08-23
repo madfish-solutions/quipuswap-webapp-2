@@ -9,12 +9,10 @@ import { AppRouter } from './app.router';
 import './styles/globals.scss';
 
 export const App = sentryService.withProfiler(
-  observer(() => {
-    return (
-      <Layout>
-        <AppRouter />
-        <UserBalancesSubscription />
-      </Layout>
-    );
-  })
+  observer(() => (
+    <Layout>
+      <AppRouter />
+      <UserBalancesSubscription />
+    </Layout>
+  ))
 );
