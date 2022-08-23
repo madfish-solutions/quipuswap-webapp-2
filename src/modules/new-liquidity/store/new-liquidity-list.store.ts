@@ -1,7 +1,7 @@
 import { computed, makeObservable } from 'mobx';
 
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getNewLiquidityStatsApi, getNewLiquidityListApi } from '../api';
 import { LiquidityListModel, NewLiquidityResponseModel } from '../models';
@@ -31,7 +31,7 @@ export class NewLiquidityListStore {
     loader: getNewLiquidityListApi,
     model: LiquidityListModel
   })
-  readonly listStore: LoadingErrorDataNew<LiquidityListModel, typeof defaultList>;
+  readonly listStore: LoadingErrorData<LiquidityListModel, typeof defaultList>;
 
   get list() {
     return this.listStore.model.list;
@@ -44,7 +44,7 @@ export class NewLiquidityListStore {
     loader: getNewLiquidityStatsApi,
     model: NewLiquidityResponseModel
   })
-  readonly statsStore: LoadingErrorDataNew<NewLiquidityResponseModel, typeof DEFAULT_RESPONSE_DATA>;
+  readonly statsStore: LoadingErrorData<NewLiquidityResponseModel, typeof DEFAULT_RESPONSE_DATA>;
 
   get stats() {
     return this.statsStore.model.stats;
