@@ -1,3 +1,4 @@
+import { isExist } from '@shared/helpers';
 import { Optional } from '@shared/types';
 
 import { Status } from '../interfaces';
@@ -9,19 +10,19 @@ export enum Statuses {
 }
 
 export const getGameResult = (status: Optional<Status>) => {
-  const isResultWon = Object.hasOwn(status ?? {}, Statuses.won);
+  const isResultWon = isExist(status?.[Statuses.won]);
 
   if (isResultWon) {
     return Statuses.won;
   }
 
-  const isResultLost = Object.hasOwn(status ?? {}, Statuses.lost);
+  const isResultLost = isExist(status?.[Statuses.lost]);
 
   if (isResultLost) {
     return Statuses.lost;
   }
 
-  const isResultStarted = Object.hasOwn(status ?? {}, Statuses.started);
+  const isResultStarted = isExist(status?.[Statuses.started]);
 
   if (isResultStarted) {
     return Statuses.started;

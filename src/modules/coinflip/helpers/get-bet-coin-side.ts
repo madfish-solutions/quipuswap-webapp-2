@@ -1,3 +1,4 @@
+import { isExist } from '@shared/helpers';
 import { Optional } from '@shared/types';
 
 import { BetCoinSide } from '../interfaces';
@@ -8,13 +9,13 @@ export enum BetCoinSides {
 }
 
 export const getBetCoinSide = (betCoinSide: Optional<BetCoinSide>) => {
-  const isResultHead = Object.hasOwn(betCoinSide ?? {}, BetCoinSides.head);
+  const isResultHead = isExist(betCoinSide?.[BetCoinSides.head]);
 
   if (isResultHead) {
     return BetCoinSides.head;
   }
 
-  const isResultTail = Object.hasOwn(betCoinSide ?? {}, BetCoinSides.tail);
+  const isResultTail = isExist(betCoinSide?.[BetCoinSides.tail]);
 
   if (isResultTail) {
     return BetCoinSides.tail;
