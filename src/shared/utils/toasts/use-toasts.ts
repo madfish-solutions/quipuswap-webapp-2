@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { captureException } from '@sentry/react';
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
 import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
@@ -9,7 +10,7 @@ import { useUpdateToast } from './use-update-toast';
 
 export interface UseToasts {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;
-  showErrorToast: (err: Error | string) => void;
+  showErrorToast: (error: Error | string) => void;
   showSuccessToast: (render: ToastContent) => void;
   showInfoToast: (render: ToastContent) => void;
 }
@@ -28,6 +29,8 @@ export const useToasts = (): UseToasts => {
   const showErrorToast = useCallback(
     (error: Error | string) => {
       if (typeof error === 'string') {
+        captureException(new Error(error));
+
         updateToast({
           type: 'error',
           render: error
@@ -37,6 +40,8 @@ export const useToasts = (): UseToasts => {
       }
 
       if (error instanceof Error) {
+        captureException(error);
+
         let knownErrorMessage = knownErrorsMessages[error.message];
 
         if (error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
@@ -51,9 +56,11 @@ export const useToasts = (): UseToasts => {
         return;
       }
 
+      const errorMessage = `${JSON.stringify(error)}`;
+      captureException(new Error(errorMessage));
       updateToast({
         type: 'error',
-        render: `${JSON.stringify(error)}`
+        render: errorMessage
       });
     },
     [updateToast, knownErrorsMessages]

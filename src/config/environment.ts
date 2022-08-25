@@ -2,7 +2,13 @@ import { NetworkType } from '@airgap/beacon-sdk';
 
 import { SupportedNetworks } from '@shared/types';
 
+import PACKAGE_JSON from '../../package.json';
+
+export const PROJECT_NAME = process.env.PROJECT_NAME ?? PACKAGE_JSON.name;
+export const VERSION = process.env.VERSION ?? PACKAGE_JSON.version;
+
 export const AMPLITUDE_API_KEY = process.env.REACT_APP_AMPLITUDE_API_KEY!;
+export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN!;
 
 export const NETWORK_ID = (process.env.REACT_APP_NETWORK! ?? NetworkType.MAINNET) as SupportedNetworks;
 
@@ -15,13 +21,14 @@ export const networksBaseUrls: Record<SupportedNetworks, string> = {
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
 //#endregion BASE_URL
 
-export const RPC_URL = process.env.REACT_APP_RPC_URL!;
+export const RPC_URLS = process.env.REACT_APP_RPC_URLS?.split(',') ?? [process.env.REACT_APP_RPC_URL!];
 
 export const TZKT_EXPLORER_URL = process.env.REACT_APP_TZKT_EXPLORER_URL!;
 
 export const TOKEN_TO_TOKEN_DEX = process.env.REACT_APP_TTDEX_CONTRACT!;
 export const FARMING_CONTRACT_ADDRESS = process.env.REACT_APP_FARMING_CONTRACT!;
 export const COINFLIP_CONTRACT_ADDRESS = process.env.REACT_APP_COINFLIP_CONTRACT!;
+export const DEX_TWO_CONTRACT_ADDRESS = process.env.REACT_APP_DEX_TWO_CONTRACT_ADDRESS!;
 export const STABLESWAP_FACTORY_CONTRACT_ADDRESS = process.env.REACT_APP_STABLESWAP_FACTORY_CONTRACT_ADDRESS!;
 
 export const METADATA_API = process.env.REACT_APP_METADATA_API_URL!;

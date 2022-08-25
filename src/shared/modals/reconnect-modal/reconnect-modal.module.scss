@@ -1,0 +1,43 @@
+@import '@styles/_variables';
+@import '@styles/breakpoints';
+
+.text {
+  font-weight: 400;
+  font-size: 0.857rem;
+  line-height: 1.33;
+  margin: 24px 0 40px;
+}
+
+.modal {
+  padding: 16px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  max-width: 332px;
+}
+
+.button {
+  background: $support-error !important;
+  max-width: 128px;
+}
+
+.light {
+  .button {
+    color: $text-01;
+  }
+  .text {
+    color: $text-02;
+  }
+}
+
+.dark {
+  .button {
+    color: $ui-01;
+  }
+  .text {
+    color: $ui-01;
+  }
+}

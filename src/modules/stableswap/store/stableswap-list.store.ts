@@ -1,7 +1,7 @@
 import { computed, makeObservable } from 'mobx';
 
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
 
 import { getStableswapListApi, getStableswapStatsApi } from '../api';
@@ -19,7 +19,7 @@ export class StableswapListStore {
     loader: getStableswapListApi,
     model: StableswapListModel
   })
-  readonly listStore: LoadingErrorDataNew<StableswapListModel, typeof defaultStableswapList>;
+  readonly listStore: LoadingErrorData<StableswapListModel, typeof defaultStableswapList>;
 
   get list(): Undefined<Array<StableswapItemModel>> {
     return this.rootStore.stableswapFilterStore?.filterAndSort(this.listStore.model.list);
@@ -32,7 +32,7 @@ export class StableswapListStore {
     loader: getStableswapStatsApi,
     model: StableswapStatsModel
   })
-  readonly statsStore: LoadingErrorDataNew<StableswapStatsModel, null>;
+  readonly statsStore: LoadingErrorData<StableswapStatsModel, null>;
 
   get stats() {
     return this.statsStore.model;

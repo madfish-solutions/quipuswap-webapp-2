@@ -46,10 +46,9 @@ const getConfirmationMessage = (
 export const useStakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
   const farmingItemStore = useFarmingItemStore();
-  const { userInfoStore } = farmingItemStore;
   const timelock = farmingItemStore.farmingItem?.timelock;
   const endTime = farmingItemStore.farmingItem?.endTime;
-  const lastStaked = userInfoStore.data?.last_staked;
+  const lastStaked = farmingItemStore.userInfo?.last_staked;
 
   if (timelock === NO_TIMELOCK_VALUE) {
     return async (callback: () => Promise<void>) => callback();

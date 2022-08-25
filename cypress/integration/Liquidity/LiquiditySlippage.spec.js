@@ -4,9 +4,7 @@ import { MICRO_WAIT_TIMEOUT } from '../../const';
 
 describe('Select different slippage and check if max invested is ok', () => {
   beforeEach(() => {
-    cy.visit('/');
-    cy.get('[data-test-id="header"] [data-test-id="menuButton"]').click();
-    cy.get('[data-test-id="menu"] [data-test-id="navigationButton-Liquidity"]').click();
+    cy.visit('/liquidity');
     cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.get('[data-test-id="addLiquidityTokenA"] [data-test-id="tokenSelectButton"]').click();
     cy.wait(MICRO_WAIT_TIMEOUT);

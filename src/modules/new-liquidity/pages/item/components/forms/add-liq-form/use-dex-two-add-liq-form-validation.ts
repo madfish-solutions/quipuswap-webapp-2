@@ -8,9 +8,14 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndex } from '../helpers/forms.helpers';
+import { getInputSlugByIndexAdd } from '../helpers/forms.helpers';
+import { Input } from './use-dex-two-add-liq-form.interface';
 
-export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], dexTwoItem: LiquidityItem) => {
+export const useDexTwoAddLiqValidation = (
+  userBalances: Nullable<BigNumber>[],
+  dexTwoItem: LiquidityItem,
+  shouldShowBakerInput: boolean
+) => {
   const { t } = useTranslation();
 
   return useMemo(() => {
@@ -30,11 +35,15 @@ export const useDexTwoAddLiqValidation = (userBalances: Nullable<BigNumber>[], d
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndex(index), item.required('Amount is required!')];
+      return [getInputSlugByIndexAdd(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
+    if (shouldShowBakerInput) {
+      shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
+    }
+
     return yup.object().shape(shape);
-  }, [dexTwoItem.tokensInfo, t, userBalances]);
+  }, [dexTwoItem.tokensInfo, shouldShowBakerInput, t, userBalances]);
 };
