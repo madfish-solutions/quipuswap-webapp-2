@@ -61,25 +61,25 @@ export const useCoinflipDetailsViewModel = () => {
     updateGeneralStats();
   }, [updateUserLastGame, updateGeneralStats]);
 
-  useOnBlock(tezos, updateUserLastGame);
-  useOnBlock(tezos, updateGeneralStats);
+  useOnBlock(updateUserLastGame);
+  useOnBlock(updateGeneralStats);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.model, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress
   );
   const bankBN = new BigNumber(bank ?? '0');
   const bankInUsd = bankBN.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const realBidSize = userLastGame?.bidSize && toReal(userLastGame.bidSize, tokenInstance);
+  const realBidSize = userLastGame.bidSize && toReal(userLastGame.bidSize, tokenInstance);
   const bidSizeInUsd = accountPkh && realBidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const totalWinsInUsd = totalWins?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const rewardSize = realBidSize?.multipliedBy(payoutCoefficient ?? '0');
   const rewardSizeInUsd = accountPkh && rewardSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const gameResult = getGameResult(userLastGame?.status);
-  const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
+  const gameResult = getGameResult(userLastGame.status);
+  const betCoinSide = getBetCoinSide(userLastGame.betCoinSide);
   const shouldHideData = isNull(accountPkh);
   const preparedBidSize =
     Math.floor(Number(contractBidSize) * QUIPU_TOKEN_DECIMALS_PRECISION) / QUIPU_TOKEN_DECIMALS_PRECISION;
@@ -102,7 +102,7 @@ export const useCoinflipDetailsViewModel = () => {
     payoutCoefficient,
     isGamersStatsLoading: isNull(generalStatsStore) || isGeneralStatsLoading,
     isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
-    status: userLastGame?.status,
+    status: userLastGame.status,
     lastGameId: gamersStats?.lastGameId
   };
 };
