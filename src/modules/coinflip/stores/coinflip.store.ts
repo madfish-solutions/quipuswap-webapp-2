@@ -199,6 +199,8 @@ export class CoinflipStore {
       userLastGame: computed,
       isGamersStatsLoading: computed,
       isUserLastGameLoading: computed,
+      pendingGame: computed,
+      pendingGameToken: computed,
 
       setToken: action,
       setInput: action,
