@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
+import { removeDexTwoLiquidityApi } from '@modules/new-liquidity/api';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -13,7 +13,9 @@ import { useTranslation } from '@translation';
 
 import { useNewLiquidityItemStore } from '../store';
 
-export const useAddLiquidity = () => {
+// const MOCK_SHARES = new BigNumber(1000000);
+
+export const useRemoveLiquidity = () => {
   const { tezos } = useRootStore();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -24,8 +26,14 @@ export const useAddLiquidity = () => {
   const accountPkh = useAccountPkh();
   const { item } = useNewLiquidityItemStore();
 
-  const addLiquidity = async (inputAmounts: FormikValues, candidate: string) => {
-    if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
+  const removeLiquidity = async (inputAmounts: FormikValues, lpTokenBalance: Nullable<BigNumber>) => {
+    if (
+      isNull(tezos) ||
+      !isExist(item) ||
+      isNull(lpTokenBalance) ||
+      isNull(accountPkh) ||
+      !inputAmounts.every(isExist)
+    ) {
       return;
     }
     const itemId = item.id;
@@ -36,32 +44,30 @@ export const useAddLiquidity = () => {
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
-    const shares = atomicInputAmounts[0]
-      .multipliedBy(item.totalSupply)
-      .idiv(item.tokensInfo[0].atomicTokenTvl)
-      .decimalPlaces(LP_TOKEN.metadata.decimals);
+    const atomicLpTokenBalance = toAtomic(lpTokenBalance, LP_TOKEN);
 
     // TODO: Fees for shares
 
-    const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN); // should be shares with fee
+    const sharesWithSlippage = decreaseBySlippage(atomicLpTokenBalance, liquiditySlippage).integerValue(
+      BigNumber.ROUND_DOWN
+    ); // should be shares with fee
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
     try {
-      const operation = await addDexTwoLiquidityApi(
+      const operation = await removeDexTwoLiquidityApi(
         tezos,
         sharesWithSlippage,
         tokensAndAmounts,
         deadline,
         accountPkh,
-        candidate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });
+      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyRemoved') });
     } catch (error) {
       showErrorToast(error as Error);
     }
   };
 
-  return { addLiquidity };
+  return { removeLiquidity };
 };
