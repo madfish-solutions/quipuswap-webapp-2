@@ -15,11 +15,13 @@ const ZERO_BN = new BigNumber('0');
 export const useCoinflipPageViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const coinflipStore = useCoinflipStore();
-  const token = coinflipStore?.token;
+  const token = coinflipStore?.pendingGameToken;
+  const selectedToken = coinflipStore?.token;
   const rootStore = useRootStore();
   const dAppReady = useReady();
   const { accountPkh } = useAuthStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const prevSelectedTokenRef = useRef(token);
   const { getGamesUserInfo } = useGamesUserInfo();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
   const { getGamersStats } = useGamersStats();
@@ -35,8 +37,17 @@ export const useCoinflipPageViewModel = () => {
       await getGamersStats();
       await getUserLastGame();
       prevAccountPkhRef.current = accountPkh;
+      prevSelectedTokenRef.current = selectedToken;
     })();
-  }, [getGamesUserInfo, getCoinflipGeneralStats, getGamersStats, getUserLastGame, dAppReady, accountPkh, token]);
+  }, [
+    getGamesUserInfo,
+    getCoinflipGeneralStats,
+    getGamersStats,
+    getUserLastGame,
+    dAppReady,
+    accountPkh,
+    selectedToken
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -53,15 +64,15 @@ export const useCoinflipPageViewModel = () => {
       coinflipStore?.generalStatsStore.model.payoutCoefficient ?? ZERO_BN,
       COINFLIP_CONTRACT_DECIMALS
     );
-    const realBidSize = toReal(coinflipStore?.userLastGameInfo.model.bidSize ?? ZERO_BN, token);
+    const realBidSize = toReal(coinflipStore?.pendingGameStore.model.bidSize ?? ZERO_BN, token);
 
     return realPayoutCoefficient.multipliedBy(realBidSize);
-  }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.userLastGameInfo.model.bidSize, token]);
+  }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.pendingGameStore.model.bidSize, token]);
 
   return {
     isInitialized,
     wonAmount,
-    result: coinflipStore?.userLastGameInfo.model.status,
+    result: coinflipStore?.pendingGameStore.model.status,
     currency: token?.metadata.symbol
   };
 };
