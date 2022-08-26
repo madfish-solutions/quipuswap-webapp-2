@@ -9,7 +9,7 @@ import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndexAdd } from '../helpers/forms.helpers';
-import { Input } from './use-dex-two-add-liq-form.interface';
+import { Input } from './dex-two-add-liq-form.interface';
 
 export const useDexTwoAddLiqValidation = (
   userBalances: Nullable<BigNumber>[],

@@ -11,3 +11,5 @@ export * from './get-tokens-names';
 export * from './is-token-includes';
 export * from './sort-tokens';
 export * from './extract-tokens';
+export * from './calculate-shares';
+export * from './calculate-output-with-token';
