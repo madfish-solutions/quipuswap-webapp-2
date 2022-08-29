@@ -12,9 +12,6 @@ export const addLiquidityTez = async (
   tezValue: BigNumber,
   tokenValue: BigNumber
 ) => {
-  // eslint-disable-next-line no-console
-  console.log('addLiquidityTez');
-
   return await withApproveApiForManyTokens(
     tezos,
     dex.contract.address,
