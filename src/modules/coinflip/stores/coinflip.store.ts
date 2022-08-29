@@ -72,6 +72,7 @@ export class CoinflipStore {
   isLoading = false;
   tokenToPlay: TokenToPlay = DEFAULT_TOKEN_TO_PLAY;
   game: CoinflipGame = { ...DEFAULT_COINFLIP_GAME };
+  pendingGameTokenToPlay = DEFAULT_TOKEN_TO_PLAY;
 
   //#region games count store
   @Led({
@@ -167,12 +168,26 @@ export class CoinflipStore {
   }
   //#endregion user last game info store
 
+  //#region pending game store
+  @Led({
+    default: DEFAULT_USER_LAST_GAME,
+    loader: async self => self.getPendingGameInfo(),
+    model: LastGameModel
+  })
+  readonly pendingGameStore: LoadingErrorData<LastGameModel, typeof DEFAULT_USER_LAST_GAME>;
+
+  get pendingGame(): UserLastGame {
+    return this.pendingGameStore.model;
+  }
+  //#endregion pending game store
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokenToPlay: observable,
       game: observable,
       gamersStatsInfo: observable,
       userLastGameInfo: observable,
+      pendingGameTokenToPlay: observable,
 
       payout: computed,
       token: computed,
@@ -184,14 +199,21 @@ export class CoinflipStore {
       userLastGame: computed,
       isGamersStatsLoading: computed,
       isUserLastGameLoading: computed,
+      pendingGame: computed,
+      pendingGameToken: computed,
 
       setToken: action,
-      setInput: action
+      setInput: action,
+      setPendingGameTokenToPlay: action
     });
   }
 
   get token(): Token {
     return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : QUIPU_TOKEN;
+  }
+
+  get pendingGameToken() {
+    return this.pendingGameTokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : QUIPU_TOKEN;
   }
 
   setToken(token: TokenToPlay) {
@@ -213,6 +235,10 @@ export class CoinflipStore {
 
   finishLoading() {
     this.isLoading = false;
+  }
+
+  setPendingGameTokenToPlay(token: TokenToPlay) {
+    this.pendingGameTokenToPlay = token;
   }
 
   async getGamesCount() {
@@ -257,5 +283,21 @@ export class CoinflipStore {
     return (
       (await getUserLastGameInfo(this.rootStore.tezos, this.gamersStatsInfo.model.lastGameId)) ?? DEFAULT_USER_LAST_GAME
     );
+  }
+
+  async getPendingGameInfo() {
+    const gamersStats = await getGamersStatsApi(
+      this.rootStore.tezos,
+      this.rootStore.authStore.accountPkh,
+      this.pendingGameToken
+    );
+
+    if (!gamersStats) {
+      return DEFAULT_USER_LAST_GAME;
+    }
+
+    const lastGameInfo = await getUserLastGameInfo(this.rootStore.tezos, gamersStats.lastGameId);
+
+    return lastGameInfo ?? DEFAULT_USER_LAST_GAME;
   }
 }
