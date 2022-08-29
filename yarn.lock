@@ -2541,10 +2541,10 @@
   dependencies:
     bignumber.js "^9.0.2"
 
-"@quipuswap/tokens-whitelist@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.7.tgz#2a61ca69a75c2fc979c18fa0ef1d49ccd6558447"
-  integrity sha512-DBnkJNDIg7gROiAyH7WIrjjK2OvBWJ87wNLpvg1dauxANFwz1TuyHkHVR5QMdkT1hpM+43eSgTCxZIg6B3ukVA==
+"@quipuswap/tokens-whitelist@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.0.8.tgz#c1bb48dd979975275f4ee8e8839db0ae22d85886"
+  integrity sha512-S12GVtRj3ndXgPBjSTkbCFp1Ps6Nh5r2saG8/GM7nqPr3bWP0tTX0jIn5mGNUoYTohLy1vI7fgLuv9eL4R/Kzg==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
