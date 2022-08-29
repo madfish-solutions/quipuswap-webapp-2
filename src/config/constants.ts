@@ -88,6 +88,7 @@ export const STATS = 'stats';
 export const DIVIDENDS = 'farm';
 
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
+export const FARMING_LIST_API_URL_V2 = `${FARMING_API_URL}/v2/${LIST}`;
 export const FARMING_NEW_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 

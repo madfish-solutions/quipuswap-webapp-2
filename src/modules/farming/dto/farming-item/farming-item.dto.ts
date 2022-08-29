@@ -76,4 +76,7 @@ export class FarmingItemDto {
 
   @Typed()
   withdrawalFee: BigNumber;
+
+  @Typed()
+  old: boolean;
 }

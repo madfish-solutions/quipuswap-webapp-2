@@ -16,7 +16,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
 
   const shouldShowUserStats = !isNull(accountPkh) && (item.depositBalance?.gt(ZERO) || item.earnBalance?.gt(ZERO));
 
-  const farmingItemDTI = `farming-item-${item.id}`;
+  const farmingItemDTI = item.old ? `farming-item-v1-${item.id}` : `farming-item-${item.id}`;
 
   const labels = getFarmingLabel(item);
 
@@ -89,7 +89,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     labels,
     itemStats,
     userStats,
-    href: `${item.id}`,
+    href: item.old ? `v1/${item.id}` : `${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),

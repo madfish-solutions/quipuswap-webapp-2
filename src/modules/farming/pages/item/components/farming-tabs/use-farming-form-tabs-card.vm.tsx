@@ -33,7 +33,10 @@ export const useFarmingFormTabsCardViewModel = () => {
 
   const changeTabHandle = (tab: FarmingFormTabs) => {
     farmingItemStore.setTab(tab);
-    navigate(`/farming/${farmingItem?.id}/${tab}`);
+    const navigateUrl = farmingItemStore.old
+      ? `/farming/v1/${farmingItem?.id}/${tab}`
+      : `/farming/${farmingItem?.id}/${tab}`;
+    navigate(navigateUrl);
   };
 
   return {
