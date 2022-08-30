@@ -31,6 +31,7 @@ export const ButtonsSelector: FC<Props> = ({ buttons, activeId, onChange }) => {
     <div className={cx(styles.root, modeClass[colorThemeMode])}>
       {buttons.map(({ id, label, Icon }) => (
         <button
+          data-test-id={id}
           key={id}
           onClick={() => onChange(id)}
           className={cx(styles.buttonWrapper, modeClass[colorThemeMode], computedClassName(id, activeId))}
