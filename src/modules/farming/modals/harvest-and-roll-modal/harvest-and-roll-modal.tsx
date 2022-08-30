@@ -15,7 +15,7 @@ const modeClass = {
 };
 
 export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
-  const { onClose, onNoClick, onYesClick, texts } = useHarvestAndRollModal();
+  const { onClose, onFlipClick, onHarvestAllClick, texts } = useHarvestAndRollModal();
 
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.modal, modeClass[colorThemeMode]);
@@ -34,10 +34,10 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
         your rewards instead of the usual harvesting. Pay attention: losing bets will be lost. Fortune favors the brave!
       </div>
       <div className={styles.buttons}>
-        <Button theme="secondary" onClick={onNoClick}>
+        <Button theme="secondary" onClick={onHarvestAllClick}>
           Harvest all
         </Button>
-        <Button onClick={onYesClick}>Flip</Button>
+        <Button onClick={onFlipClick}>Flip</Button>
       </div>
     </Modal>
   );
