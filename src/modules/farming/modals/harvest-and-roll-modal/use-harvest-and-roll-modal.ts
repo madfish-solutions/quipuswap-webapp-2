@@ -1,28 +1,30 @@
 import { useTranslation } from '@translation';
 
-import { useHarvestAndRollStore } from '../../hooks';
+import { useDoHarvestAll, useHarvestAndRollStore } from '../../hooks';
 
 export const useHarvestAndRollModal = () => {
   const { t } = useTranslation(['common', 'farm']);
 
   const harvestAndRollStore = useHarvestAndRollStore();
+  const { doHarvestAll } = useDoHarvestAll();
 
   const onClose = () => {
     harvestAndRollStore.close();
   };
 
-  const onNoClick = () => {
+  const onHarvestAllClick = async () => {
+    await doHarvestAll();
     onClose();
   };
 
-  const onYesClick = () => {
+  const onFlipClick = async () => {
     onClose();
   };
 
   return {
     onClose,
-    onNoClick,
-    onYesClick,
+    onHarvestAllClick,
+    onFlipClick,
     texts: {
       harvestOrRoll: t('farm|harvestOrRoll')
     }
