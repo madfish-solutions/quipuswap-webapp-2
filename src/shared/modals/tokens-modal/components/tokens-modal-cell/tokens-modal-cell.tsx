@@ -9,6 +9,7 @@ import { Checkbox } from '@shared/elements';
 import { getTokenName, getTokenSymbol } from '@shared/helpers';
 import { ManagedToken } from '@shared/types';
 
+import { useTokensModalStore } from '../../use-tokens-modal-store';
 import styles from './tokens-modal-cell.module.scss';
 
 const modeClass = {
@@ -25,11 +26,11 @@ export interface TokensModalCellProps {
   token: ExtendTokensModalCellProps;
   onTokenClick: () => void;
   balance?: Nullable<BigNumber.Value>;
-  isMultipleTokenChoose: boolean;
 }
 const BIG_SLICE_AMOUNT = 50;
 
-export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance, isMultipleTokenChoose }) => {
+export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance }) => {
+  const { isMultipleTokenChoose } = useTokensModalStore();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

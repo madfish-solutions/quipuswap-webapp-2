@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
+import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import {
   extractTokens,
   getInputsAmountFormFormikValues,
@@ -15,9 +16,7 @@ import {
 } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useChooseTokens } from '@shared/modals/tokens-modal';
-import { SINGLE_TOKEN_VALUE } from '@shared/modals/tokens-modal/tokens-modal.store';
 import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-modal-store';
-import { Token } from '@shared/types';
 
 import {
   calculateOutputWithToken,
@@ -46,14 +45,10 @@ export const useAddLiqFormViewModel = () => {
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
 
-  const itemTokens = extractTokens(item?.tokensInfo ?? []);
-  const itemBalances = useTokensWithBalances(itemTokens);
+  const itemTokensAndBalances = useTokensWithBalances(item?.tokens ?? []);
+  const choosedTokensAndBalances = useTokensWithBalances(tokensModalStore.singleChoosenTokens.filter(isExist));
 
-  const choosedTokensBalances = useTokensWithBalances(tokensModalStore.singleChoosenTokens.filter(isExist));
-
-  const userCurrentTokensAndBalances = getCurrentTokensAndBalances(itemBalances, choosedTokensBalances);
-
-  const [choosedToken, setChoosedToken] = useState<Nullable<Array<Token>>>(null);
+  const userCurrentTokensAndBalances = getCurrentTokensAndBalances(itemTokensAndBalances, choosedTokensAndBalances);
 
   const validationSchema = useAddLiqFormValidation(userCurrentTokensAndBalances, formStore.isBalancedProportion);
 
@@ -144,16 +139,17 @@ export const useAddLiqFormViewModel = () => {
     formStore.isBalancedProportion ? handleBalancedInputChange(reserves, index) : handleImbalancedInputChange(index);
 
   const handleSelectTokensClick = async () => {
+    const preparedToken = tokensModalStore.lastChoosenToken ? [tokensModalStore.lastChoosenToken] : null;
+
     const chosenTokens = await chooseTokens({
-      tokens: choosedToken,
+      tokens: preparedToken,
       disabledTokens: tokensModalStore.singleChoosenTokens.filter(isExist),
       min: SINGLE_TOKEN_VALUE,
       max: SINGLE_TOKEN_VALUE
     });
 
-    tokensModalStore.setChooseToken(chosenTokens?.[0]);
-
-    setChoosedToken(chosenTokens);
+    tokensModalStore.setLastChoosenToken(chosenTokens?.[0]);
+    tokensModalStore.setChooseToken(tokensModalStore.lastChoosenToken);
   };
 
   const data = tokensInfo.map(({ reserves }, index) => ({

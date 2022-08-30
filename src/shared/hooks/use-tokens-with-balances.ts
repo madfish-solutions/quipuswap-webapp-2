@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-
 import { getTokenSlug, isExist, toArray } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { BalanceToken, Optional, Token } from '@shared/types';
 
 import { useAuthStore } from './use-auth-store';
 import { useTokensBalancesStore } from './use-tokens-balances-store';
-
-export interface BalanceToken {
-  balance: Optional<BigNumber>;
-  token: Token;
-}
 
 const uniqSlugs = (tokens: Optional<Array<Token>>) => {
   return tokens?.reduce((acc, token) => {

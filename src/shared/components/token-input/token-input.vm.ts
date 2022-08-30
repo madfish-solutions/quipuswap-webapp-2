@@ -49,13 +49,13 @@ export const useTokenInputViewModel = ({
   const shownPercentSelector = !hiddenPercentSelector && isFormReady;
   const shownBalance = Boolean(accountPkh) && !hiddenBalance;
 
-  const onSelectButtonClick = (index: Optional<number>) => {
-    if (!isExist(index)) {
+  const handleSelectClick = (index: Optional<number>) => {
+    if (!isExist(index) || !isExist(onSelectorClick)) {
       return;
     }
 
-    tokensModalStore.setInputNumber(index);
-    onSelectorClick!();
+    tokensModalStore.setInputIndex(index);
+    onSelectorClick();
   };
 
   return {
@@ -69,7 +69,7 @@ export const useTokenInputViewModel = ({
 
     amountCap,
 
-    onSelectButtonClick,
+    handleSelectClick,
 
     focusInput,
     handleInputFocus,

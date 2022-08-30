@@ -1,30 +1,50 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
+import { Button } from '@shared/components';
 import { isEmptyArray } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
+import { i18n } from '@translation';
 
-import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
+import { ManagedTokensModalCellProps, TokensModalCellProps, TokensQuantityInfo } from './components';
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
+import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
 import { useTokensModalStore } from './use-tokens-modal-store';
+
+interface Props {
+  setTokens: () => void;
+}
+
+export const TokensModalFooter: React.FC<Props> = ({ setTokens }) => {
+  const tokensModalStore = useTokensModalStore();
+  const { minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk, isMultipleTokenChoose } =
+    tokensModalStore;
+
+  const tokensQuantityInfoParams = {
+    minQuantity,
+    maxQuantity,
+    tokensQuantityStatus
+  };
+
+  return isMultipleTokenChoose ? (
+    <div className={styles.footerContent}>
+      <TokensQuantityInfo {...tokensQuantityInfoParams} />
+      <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
+        {i18n.t('common|select')}
+      </Button>
+    </div>
+  ) : null;
+};
 
 export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const {
-    chosenTokens,
-    extendTokens,
-    minQuantity,
-    maxQuantity,
-    tokensQuantityStatus,
-    isTokensQuantityOk,
-    isMultipleTokenChoose
-  } = tokensModalStore;
+  const { chosenTokens, extendTokens, isMultipleTokenChoose } = tokensModalStore;
 
   const tokensManagerStore = useTokensManagerStore();
 
@@ -66,10 +86,9 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     return extendTokens.map(token => ({
       token,
       balance: null,
-      onTokenClick: () => handleTokenClick(token),
-      isMultipleTokenChoose
+      onTokenClick: () => handleTokenClick(token)
     }));
-  }, [chosenTokens, extendTokens, handleTokenClick, isMultipleTokenChoose]);
+  }, [chosenTokens, extendTokens, handleTokenClick]);
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
@@ -99,20 +118,22 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const showTokenIdInput = isValidContractAddress(search);
 
+  // isMultipleTokenChoose && (
+  //   <div className={styles.footerContent}>
+  //     <TokensQuantityInfo {...tokensQuantityInfoParams} />
+  //     <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
+  //       {i18n.t('common|select')}
+  //     </Button>
+  //   </div>
+
   return {
     isSearching,
     setTokens,
     tokensModalCellParams,
     managedTokensModalCellParams,
     isModalOpen: tokensModalStore.isOpen,
-    isTokensQuantityOk,
-    isMultipleTokenChoose,
     closeTokensModal,
-    tokensQuantityInfoParams: {
-      tokensQuantityStatus,
-      minQuantity,
-      maxQuantity
-    },
+    tokensModalFooter: <TokensModalFooter setTokens={setTokens} />,
     headerProps: {
       tabsProps,
 

@@ -1,6 +1,8 @@
+import { ReactNode } from 'react';
+
 import { Token } from '@shared/types';
 
-import { ManagedTokensModalCellProps, TokensModalCellProps, TokensQuantityInfoProps } from './components';
+import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
 import { TokensModalHeaderProps } from './components/tokens-modal-header';
 
 export enum TokensQuantityStatus {
@@ -14,16 +16,14 @@ export interface TokensModalViewProps {
   setTokens: () => void;
   isModalOpen: boolean;
   closeTokensModal: () => void;
-  isTokensQuantityOk: boolean;
-  isMultipleTokenChoose: boolean;
   tokensModalCellParams: Array<TokensModalCellProps>;
   managedTokensModalCellParams: Array<ManagedTokensModalCellProps>;
   headerProps: TokensModalHeaderProps;
-  tokensQuantityInfoParams: TokensQuantityInfoProps;
+  tokensModalFooter: ReactNode;
 }
 
 interface TokensModalInitialParamsAbstraction {
-  tokens?: Nullable<Array<Token>>;
+  tokens?: Nullable<Array<Token>>; //
   disabledTokens?: Nullable<Array<Token>>;
 }
 interface TokensQuantityValidation extends TokensModalInitialParamsAbstraction {

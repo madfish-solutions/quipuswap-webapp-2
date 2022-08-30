@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import * as yup from 'yup';
 
 import { operationAmountSchema } from '@shared/helpers';
-import { BalanceToken } from '@shared/hooks';
+import { BalanceToken } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 

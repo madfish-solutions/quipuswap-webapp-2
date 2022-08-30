@@ -1,38 +1,28 @@
 import { FC, useMemo } from 'react';
 
-import { Button, Iterator, Skeleton } from '@shared/components';
+import { Iterator, Skeleton } from '@shared/components';
 import { i18n } from '@translation';
 
 import { Modal } from '../modal';
-import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader, TokensQuantityInfo } from './components';
+import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader } from './components';
 import { TokensModalTab } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
 
 export const TokensModalView: FC<TokensModalViewProps> = ({
   isSearching,
-  setTokens,
   isModalOpen,
   closeTokensModal,
-  isTokensQuantityOk,
   tokensModalCellParams,
   managedTokensModalCellParams,
-  isMultipleTokenChoose,
-  headerProps,
-  tokensQuantityInfoParams
+  tokensModalFooter,
+  headerProps
 }) => {
   const { footer, content } = useMemo(() => {
     switch (headerProps.tabsProps.activeId) {
       case TokensModalTab.TOKENS:
         return {
-          footer: isMultipleTokenChoose && (
-            <div className={styles.footerContent}>
-              <TokensQuantityInfo {...tokensQuantityInfoParams} />
-              <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
-                {i18n.t('common|select')}
-              </Button>
-            </div>
-          ),
+          footer: tokensModalFooter,
           content: <Iterator render={TokensModalCell} data={tokensModalCellParams} />
         };
       case TokensModalTab.MANAGE:
@@ -41,15 +31,7 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
           content: <Iterator render={ManagedTokensModalCell} data={managedTokensModalCellParams} />
         };
     }
-  }, [
-    headerProps.tabsProps.activeId,
-    isMultipleTokenChoose,
-    isTokensQuantityOk,
-    managedTokensModalCellParams,
-    setTokens,
-    tokensModalCellParams,
-    tokensQuantityInfoParams
-  ]);
+  }, [headerProps.tabsProps.activeId, managedTokensModalCellParams, tokensModalCellParams, tokensModalFooter]);
 
   return (
     <Modal
