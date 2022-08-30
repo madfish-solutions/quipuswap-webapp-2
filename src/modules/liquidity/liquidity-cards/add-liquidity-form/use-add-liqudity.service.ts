@@ -428,6 +428,7 @@ export const useAddLiquidityService = (
     const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN_SLUG ? tokenBInput : tokenAInput;
     const tezTokenBN = new BigNumber(tezTokenInput);
     const atomicTezTokenInputAmount = toAtomic(tezTokenBN, TEZOS_TOKEN);
+    const atomicNotTezTokenInputAmount = toAtomic(new BigNumber(notTezTokenInput), notTezToken);
 
     const tezTokenInputUsd = Number(getDollarEquivalent(tezTokenInput, exchangeRates[TEZOS_TOKEN.contractAddress]));
     const notTezTokenInputUsd = Number(getDollarEquivalent(notTezTokenInput, exchangeRates[getTokenSlug(notTezToken)]));
@@ -471,7 +472,13 @@ export const useAddLiquidityService = (
 
       try {
         amplitudeService.logEvent('LIQUIDITY_ADD', logData);
-        const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, atomicTezTokenInputAmount, estimatedTezos);
+        const addLiquidityTezOperation = await addLiquidityTez(
+          tezos,
+          dex,
+          notTezToken,
+          atomicTezTokenInputAmount,
+          atomicNotTezTokenInputAmount
+        );
 
         const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
