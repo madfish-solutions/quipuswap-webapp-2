@@ -36,8 +36,12 @@ body {
   min-width: 320px;
 }
 
-body * {
-  font-family: $font;
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
 }
 
 svg,
