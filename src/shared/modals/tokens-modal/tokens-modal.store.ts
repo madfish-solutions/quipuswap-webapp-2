@@ -1,5 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { ManagedToken, Optional, Token } from '@shared/types';
@@ -7,7 +8,6 @@ import { ManagedToken, Optional, Token } from '@shared/types';
 import { ExtendTokensModalCellProps } from './components';
 import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
 
-export const SINGLE_TOKEN_VALUE = 1;
 const MAX_INPUT_COUNT = 4;
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
@@ -21,6 +21,7 @@ export class TokensModalStore {
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
 
+  lastChoosenToken: Nullable<Token> = null;
   inputNumber: Nullable<number> = null;
   singleChoosenTokens: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
 
@@ -70,6 +71,7 @@ export class TokensModalStore {
       maxQuantity: observable,
       minQuantity: observable,
 
+      lastChoosenToken: observable,
       inputNumber: observable,
       singleChoosenTokens: observable,
 
@@ -78,8 +80,9 @@ export class TokensModalStore {
       setChosenTokens: action,
       setInitialTokens: action,
 
-      setInputNumber: action,
+      setInputIndex: action,
       setChooseToken: action,
+      setLastChoosenToken: action,
       clearChooseToken: action,
 
       extendTokens: computed,
@@ -94,9 +97,17 @@ export class TokensModalStore {
     this.isOpen = isOpen;
   }
 
-  setInputNumber(index: number) {
+  setInputIndex(index: number) {
     this.inputNumber = index;
   }
+
+  setLastChoosenToken = (token: Optional<Token>) => {
+    if (!isExist(token)) {
+      return;
+    }
+
+    this.lastChoosenToken = token;
+  };
 
   setChooseToken(token: Optional<Token>) {
     if (!isExist(this.inputNumber) || !isExist(token)) {

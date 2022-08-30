@@ -58,7 +58,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
       shownBalance,
       amountCap,
 
-      onSelectButtonClick,
+      handleSelectClick,
 
       focusInput,
       handleInputFocus,
@@ -122,7 +122,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
                 className={compoundSelectorClassName}
                 textClassName={styles.selectorInner}
                 data-test-id="tokenInputSelectButton"
-                onClick={() => onSelectButtonClick(index)}
+                onClick={() => handleSelectClick(index)}
               >
                 <TokensLogos tokens={tokens} />
                 <TokensSymbols tokens={tokens} />

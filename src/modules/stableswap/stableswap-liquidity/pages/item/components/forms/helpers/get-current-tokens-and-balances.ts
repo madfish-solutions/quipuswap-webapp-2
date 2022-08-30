@@ -1,5 +1,5 @@
 import { isEmptyArray, isExist } from '@shared/helpers';
-import { BalanceToken } from '@shared/hooks';
+import { BalanceToken } from '@shared/types';
 
 export const getCurrentTokensAndBalances = (
   itemBalances: BalanceToken[],

@@ -49,6 +49,11 @@ export enum WalletType {
   TEMPLE = 'temple'
 }
 
+export interface BalanceToken {
+  balance: Optional<BigNumber>;
+  token: Token;
+}
+
 export interface TokenPair {
   balance?: Nullable<string>;
   frozenBalance?: Nullable<string>;
