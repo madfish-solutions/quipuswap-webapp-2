@@ -25,10 +25,11 @@ export interface TokensModalCellProps {
   token: ExtendTokensModalCellProps;
   onTokenClick: () => void;
   balance?: Nullable<BigNumber.Value>;
+  isMultipleTokenChoose: boolean;
 }
 const BIG_SLICE_AMOUNT = 50;
 
-export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance }) => {
+export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance, isMultipleTokenChoose }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -48,7 +49,9 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
 
       <div className={styles.checkboxContainer}>
         {balance && <StateCurrencyAmount amount={balance} />}
-        <Checkbox className={styles.checkbox} checked={token.isChosen} disabled={token.disabled} />
+        {isMultipleTokenChoose && (
+          <Checkbox className={styles.checkbox} checked={token.isChosen} disabled={token.disabled} />
+        )}
       </div>
     </div>
   );

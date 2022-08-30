@@ -2,10 +2,13 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
-import { ManagedToken, Token } from '@shared/types';
+import { ManagedToken, Optional, Token } from '@shared/types';
 
 import { ExtendTokensModalCellProps } from './components';
 import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
+
+export const SINGLE_TOKEN_VALUE = 1;
+const MAX_INPUT_COUNT = 4;
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
 
@@ -17,6 +20,9 @@ export class TokensModalStore {
   isSingle: Nullable<boolean> = null;
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
+
+  inputNumber: Nullable<number> = null;
+  singleChoosenTokens: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
@@ -37,6 +43,10 @@ export class TokensModalStore {
     }
 
     return TokensQuantityStatus.OK;
+  }
+
+  get isMultipleTokenChoose() {
+    return !(this.maxQuantity === SINGLE_TOKEN_VALUE && this.minQuantity === SINGLE_TOKEN_VALUE);
   }
 
   get isTokensQuantityOk() {
@@ -60,19 +70,45 @@ export class TokensModalStore {
       maxQuantity: observable,
       minQuantity: observable,
 
+      inputNumber: observable,
+      singleChoosenTokens: observable,
+
       setOpenState: action,
       toggleChosenToken: action,
       setChosenTokens: action,
       setInitialTokens: action,
 
+      setInputNumber: action,
+      setChooseToken: action,
+      clearChooseToken: action,
+
       extendTokens: computed,
       tokensQuantityStatus: computed,
-      isTokensQuantityOk: computed
+      isTokensQuantityOk: computed,
+
+      isMultipleTokenChoose: computed
     });
   }
 
   setOpenState(isOpen: boolean) {
     this.isOpen = isOpen;
+  }
+
+  setInputNumber(index: number) {
+    this.inputNumber = index;
+  }
+
+  setChooseToken(token: Optional<Token>) {
+    if (!isExist(this.inputNumber) || !isExist(token)) {
+      return;
+    }
+
+    this.singleChoosenTokens[this.inputNumber] = token;
+    this.close();
+  }
+
+  clearChooseToken() {
+    this.singleChoosenTokens = new Array(MAX_INPUT_COUNT).fill(null);
   }
 
   setChosenTokens(tokens: Nullable<Array<Token>>) {

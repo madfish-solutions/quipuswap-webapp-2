@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
@@ -6,12 +6,18 @@ import { FormikHelpers, useFormik } from 'formik';
 import {
   extractTokens,
   getInputsAmountFormFormikValues,
+  isExist,
   isNull,
   numberAsString,
   placeDecimals,
   saveBigNumber,
   toFixed
 } from '@shared/helpers';
+import { useTokensWithBalances } from '@shared/hooks';
+import { useChooseTokens } from '@shared/modals/tokens-modal';
+import { SINGLE_TOKEN_VALUE } from '@shared/modals/tokens-modal/tokens-modal.store';
+import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-modal-store';
+import { Token } from '@shared/types';
 
 import {
   calculateOutputWithToken,
@@ -19,12 +25,8 @@ import {
   getFormikInitialValues,
   getInputSlugByIndex
 } from '../../../../../../helpers';
-import {
-  useAddStableswapLiquidity,
-  useStableswapItemFormStore,
-  useStableswapItemStore,
-  useStableswapTokensBalances
-} from '../../../../../../hooks';
+import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
+import { getCurrentTokensAndBalances } from '../helpers';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 import { useZeroInputsError } from './use-zero-inputs-error';
@@ -35,14 +37,25 @@ export interface AddLiqFormValues {
   [key: string]: string;
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useAddLiqFormViewModel = () => {
+  const tokensModalStore = useTokensModalStore();
+  const { chooseTokens } = useChooseTokens();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
-  const userBalances = useStableswapTokensBalances(item);
 
-  const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
+  const itemTokens = extractTokens(item?.tokensInfo ?? []);
+  const itemBalances = useTokensWithBalances(itemTokens);
+
+  const choosedTokensBalances = useTokensWithBalances(tokensModalStore.singleChoosenTokens.filter(isExist));
+
+  const userCurrentTokensAndBalances = getCurrentTokensAndBalances(itemBalances, choosedTokensBalances);
+
+  const [choosedToken, setChoosedToken] = useState<Nullable<Array<Token>>>(null);
+
+  const validationSchema = useAddLiqFormValidation(userCurrentTokensAndBalances, formStore.isBalancedProportion);
 
   const { isZeroInputsError } = useZeroInputsError();
   const handleSubmit = useCallback(
@@ -72,8 +85,11 @@ export const useAddLiqFormViewModel = () => {
   const { label, tooltip, disabled, isSubmitting, shouldShowZeroInputsAlert } = useAddLiqFormHelper(formik);
 
   useEffect(() => {
-    return () => formStore.clearStore();
-  }, [formStore]);
+    return () => {
+      tokensModalStore.clearChooseToken();
+      formStore.clearStore();
+    };
+  }, [formStore, tokensModalStore]);
 
   if (isNull(item)) {
     return null;
@@ -127,12 +143,26 @@ export const useAddLiqFormViewModel = () => {
   const handleInputChange = (reserves: BigNumber, index: number) =>
     formStore.isBalancedProportion ? handleBalancedInputChange(reserves, index) : handleImbalancedInputChange(index);
 
+  const handleSelectTokensClick = async () => {
+    const chosenTokens = await chooseTokens({
+      tokens: choosedToken,
+      disabledTokens: tokensModalStore.singleChoosenTokens.filter(isExist),
+      min: SINGLE_TOKEN_VALUE,
+      max: SINGLE_TOKEN_VALUE
+    });
+
+    tokensModalStore.setChooseToken(chosenTokens?.[0]);
+
+    setChoosedToken(chosenTokens);
+  };
+
   const data = tokensInfo.map(({ reserves }, index) => ({
     index,
     label,
     formik,
-    balance: userBalances[index],
-    onInputChange: handleInputChange(reserves, index)
+    balance: userCurrentTokensAndBalances[index]?.balance,
+    onInputChange: handleInputChange(reserves, index),
+    onSelectorClick: handleSelectTokensClick
   }));
 
   const handleSwitcherClick = (state: boolean) => formStore.setIsBalancedProportion(state);
@@ -143,6 +173,7 @@ export const useAddLiqFormViewModel = () => {
     disabled,
     isSubmitting,
     isZeroInputsError,
+    handleSelectTokensClick,
     shouldShowZeroInputsAlert,
     switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
