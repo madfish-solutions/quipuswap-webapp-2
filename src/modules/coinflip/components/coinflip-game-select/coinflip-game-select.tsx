@@ -30,17 +30,31 @@ export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
           </div>
         ) : (
           <>
-            <Button onClick={handleSelectSideA} theme="clean" className={styles.button}>
+            <Button
+              data-test-id="coinflipHeadButton"
+              onClick={handleSelectSideA}
+              theme="clean"
+              className={styles.button}
+            >
               <FaceIcon />
             </Button>
 
-            <Button onClick={handleSelectSideB} theme="clean" className={styles.button}>
+            <Button
+              data-test-id="coinflipTailButton"
+              onClick={handleSelectSideB}
+              theme="clean"
+              className={styles.button}
+            >
               <BackIcon />
             </Button>
           </>
         )}
       </div>
-      {error ? <div className={styles.error}>{error}</div> : null}
+      {error ? (
+        <div className={styles.error} data-test-id="coinflipGameSelectError">
+          {error}
+        </div>
+      ) : null}
     </div>
   );
 };
