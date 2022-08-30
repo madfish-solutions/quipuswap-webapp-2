@@ -100,5 +100,6 @@ export const farm = {
   Claimable: 'Claimable',
   YouvesCheckout: 'Check out alternative farming on Youves',
   lock: '{{timelock}} LOCK',
-  unlockFee: '{{unlockFee}}% UNLOCK FEE'
+  unlockFee: '{{unlockFee}}% UNLOCK FEE',
+  harvestOrRoll: 'Harvest or Roll'
 } as const;
