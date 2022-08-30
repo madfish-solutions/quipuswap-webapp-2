@@ -77,7 +77,12 @@ export const YourWinningsReward: FC<Props> = observer(
           ) : (
             <div className={styles.alternativeTitle}>
               <div className={styles.title}>{t('coinflip|connectWallet')}</div>
-              <div className={cx(styles.description, modeClass[colorThemeMode])}>{t('coinflip|yourReward')}</div>
+              <div
+                className={cx(styles.description, modeClass[colorThemeMode])}
+                data-test-id="coinflipHereCanBeYourReward"
+              >
+                {t('coinflip|yourReward')}
+              </div>
             </div>
           )}
         </div>
