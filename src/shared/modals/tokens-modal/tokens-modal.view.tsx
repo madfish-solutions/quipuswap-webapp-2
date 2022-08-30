@@ -17,6 +17,7 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
   isTokensQuantityOk,
   tokensModalCellParams,
   managedTokensModalCellParams,
+  isMultipleTokenChoose,
   headerProps,
   tokensQuantityInfoParams
 }) => {
@@ -24,7 +25,7 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
     switch (headerProps.tabsProps.activeId) {
       case TokensModalTab.TOKENS:
         return {
-          footer: (
+          footer: isMultipleTokenChoose && (
             <div className={styles.footerContent}>
               <TokensQuantityInfo {...tokensQuantityInfoParams} />
               <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
@@ -42,6 +43,7 @@ export const TokensModalView: FC<TokensModalViewProps> = ({
     }
   }, [
     headerProps.tabsProps.activeId,
+    isMultipleTokenChoose,
     isTokensQuantityOk,
     managedTokensModalCellParams,
     setTokens,

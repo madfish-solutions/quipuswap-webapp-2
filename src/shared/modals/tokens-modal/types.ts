@@ -15,6 +15,7 @@ export interface TokensModalViewProps {
   isModalOpen: boolean;
   closeTokensModal: () => void;
   isTokensQuantityOk: boolean;
+  isMultipleTokenChoose: boolean;
   tokensModalCellParams: Array<TokensModalCellProps>;
   managedTokensModalCellParams: Array<ManagedTokensModalCellProps>;
   headerProps: TokensModalHeaderProps;

@@ -4,6 +4,7 @@ import { isEmptyArray } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { noopMap } from '@shared/mapping';
+import { Token } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
 import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
@@ -15,10 +16,28 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { chosenTokens, extendTokens, minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk } =
-    tokensModalStore;
+  const {
+    chosenTokens,
+    extendTokens,
+    minQuantity,
+    maxQuantity,
+    tokensQuantityStatus,
+    isTokensQuantityOk,
+    isMultipleTokenChoose
+  } = tokensModalStore;
 
   const tokensManagerStore = useTokensManagerStore();
+
+  const handleTokenClick = useCallback(
+    (token: Token) => {
+      if (isMultipleTokenChoose) {
+        tokensModalStore.toggleChosenToken(token);
+      } else {
+        tokensModalStore.setChooseToken(token);
+      }
+    },
+    [isMultipleTokenChoose, tokensModalStore]
+  );
 
   const {
     search,
@@ -47,9 +66,10 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     return extendTokens.map(token => ({
       token,
       balance: null,
-      onTokenClick: () => tokensModalStore.toggleChosenToken(token)
+      onTokenClick: () => handleTokenClick(token),
+      isMultipleTokenChoose
     }));
-  }, [chosenTokens, extendTokens, tokensModalStore]);
+  }, [chosenTokens, extendTokens, handleTokenClick, isMultipleTokenChoose]);
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
@@ -86,6 +106,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     managedTokensModalCellParams,
     isModalOpen: tokensModalStore.isOpen,
     isTokensQuantityOk,
+    isMultipleTokenChoose,
     closeTokensModal,
     tokensQuantityInfoParams: {
       tokensQuantityStatus,
