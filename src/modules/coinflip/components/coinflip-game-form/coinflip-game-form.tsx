@@ -81,6 +81,7 @@ export const CoinflipGameForm: FC<Props> = observer(
           onInputChange={handleInputAmountChange}
           className={styles.input}
           disabled={isLoading}
+          tokenInputDTI="coinflipFormAmount"
         />
         <TokenInput
           id="coinflip-form-payout"
@@ -91,6 +92,7 @@ export const CoinflipGameForm: FC<Props> = observer(
           tokens={token}
           onInputChange={noop}
           className={styles.input}
+          tokenInputDTI="coinflipFormPayout"
         />
         <div className={commonStyles.buttons}>
           <ConnectWalletOrDoSomething>
