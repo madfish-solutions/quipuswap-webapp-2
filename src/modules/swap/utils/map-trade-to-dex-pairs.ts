@@ -13,7 +13,7 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
     case DexTypeEnum.QuipuSwapTokenToTokenDex:
       return DexPairType.TokenToToken;
     case DexTypeEnum.QuipuSwap20:
-      return DexPairType.QuipuSwap20;
+      return DexPairType.QuipuSwapDexTwo;
     default:
       throw new UnsupportedDexType();
   }
