@@ -110,7 +110,8 @@ export interface TokenMetadata {
 
 export enum DexPairType {
   TokenToToken = 'TokenToToken',
-  TokenToXtz = 'TokenToXtz'
+  TokenToXtz = 'TokenToXtz',
+  QuipuSwap20 = 'QuipuSwap20'
 }
 
 interface CommonDexPairProps {
@@ -132,7 +133,12 @@ export interface TokenXtzDexPairProps extends CommonDexPairProps {
   type: DexPairType.TokenToXtz;
 }
 
-export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
+export interface QuipuswapDex20PairProps extends CommonDexPairProps {
+  id: number;
+  type: DexPairType.QuipuSwap20;
+}
+
+export type DexPair = TTDexPairProps | TokenXtzDexPairProps | QuipuswapDex20PairProps;
 
 export interface VoterType {
   vote: Nullable<BigNumber>;
