@@ -1,6 +1,6 @@
 import { FormikValues, useFormik } from 'formik';
 
-import { numberAsString } from '@shared/helpers';
+import { canDelegate, numberAsString } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -19,12 +19,12 @@ export const useNewLiquidityCreatePageViewModel = () => {
 
   const userBalances = useTokensBalancesOnly(MOCK_CHOOSED_TOKENS);
 
-  // const shouldShowBakerInput = canDelegate(MOCK_CHOOSED_TOKENS);
+  const shouldShowBakerInput = canDelegate(MOCK_CHOOSED_TOKENS);
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     // eslint-disable-next-line no-console
     console.log('submit');
-  };
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -58,10 +58,10 @@ export const useNewLiquidityCreatePageViewModel = () => {
   }));
 
   const bakerData = {
-    value: '',
+    value: (formik.values as FormikValues)[Input.BAKER_INPUT],
     error: '',
     handleChange: handleBakerChange,
-    shouldShowBakerInput: true
+    shouldShowBakerInput
   };
 
   return { data, bakerData, onSubmit: formik.handleSubmit };
