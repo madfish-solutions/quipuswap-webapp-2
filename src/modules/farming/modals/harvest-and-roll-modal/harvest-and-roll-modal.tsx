@@ -2,14 +2,15 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Button } from '@shared/components';
+import { Button, StateCurrencyAmount } from '@shared/components';
 import { Modal } from '@shared/modals';
 
 import { TokenToPlay } from '../../../coinflip';
 import { CoinflipGameSelect } from '../../../coinflip/components';
 import styles from './harvest-and-roll-modal.module.scss';
-import { useHarvestAndRollModal } from './use-harvest-and-roll-modal';
+import { useHarvestAndRollModalViewModel } from './use-harvest-and-roll-modal.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -17,11 +18,25 @@ const modeClass = {
 };
 
 export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
-  const { isLoading, coinSide, coinSideError, onCoinSideSelect, onClose, onFlipClick, onHarvestAllClick, texts } =
-    useHarvestAndRollModal();
+  const {
+    claimablePendingRewards,
+    claimablePendingRewardsInUsd,
+    isLoading,
+    coinSide,
+    coinSideError,
+    onCoinSideSelect,
+    onClose,
+    onFlipClick,
+    onHarvestAllClick,
+    texts
+  } = useHarvestAndRollModalViewModel();
 
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.modal, modeClass[colorThemeMode]);
+
+  if (!opened || !claimablePendingRewardsInUsd) {
+    return null;
+  }
 
   return (
     <Modal
@@ -44,6 +59,17 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
         handleSelectCoinSide={onCoinSideSelect}
         error={coinSideError}
       />
+
+      <div>
+        <StateCurrencyAmount
+          className={styles.amount}
+          amount={claimablePendingRewards}
+          currency={QUIPU_TOKEN.metadata.symbol}
+          dollarEquivalent={claimablePendingRewardsInUsd}
+          isLeftCurrency
+          data-test-id="yourClaimableReward"
+        />
+      </div>
 
       <div className={styles.buttons}>
         <Button theme="secondary" onClick={onHarvestAllClick}>

@@ -4,10 +4,13 @@ import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { CoinSide } from '../../../coinflip';
-import { useDoHarvestAll, useHarvestAndRollStore } from '../../hooks';
+import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
-export const useHarvestAndRollModal = () => {
+export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
+
+  const farmingListStore = useFarmingListStore();
+  const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
 
   const harvestAndRollStore = useHarvestAndRollStore();
   const { doHarvestAll } = useDoHarvestAll();
@@ -36,6 +39,9 @@ export const useHarvestAndRollModal = () => {
   };
 
   return {
+    claimablePendingRewards,
+    claimablePendingRewardsInUsd,
+
     isLoading,
     coinSide,
     coinSideError,
