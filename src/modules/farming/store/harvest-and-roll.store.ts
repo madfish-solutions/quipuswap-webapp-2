@@ -2,19 +2,37 @@ import { action, makeObservable, observable } from 'mobx';
 import { noop } from 'rxjs';
 
 import { BaseFilterStore, RootStore } from '@shared/store';
+import { Nullable } from '@shared/types';
+
+import { CoinSide } from '../../coinflip';
 
 export class HarvestAndRollStore extends BaseFilterStore {
   opened = false;
   private _resolveOnClose: (value: void) => void = noop;
+
+  coinSide: Nullable<CoinSide> = null;
+  coinSideError: Nullable<string> = null;
+  isLoading = false;
+  isLoadingHarvest = false;
 
   constructor(private rootStore: RootStore) {
     super();
 
     makeObservable(this, {
       opened: observable,
+      coinSide: observable,
+      coinSideError: observable,
+      isLoading: observable,
+      isLoadingHarvest: observable,
 
       open: action,
-      close: action
+      close: action,
+      setCoinSide: action,
+      setCoinSideError: action,
+      startLoading: action,
+      finishLoading: action,
+      startHarvestLoading: action,
+      finishHarvestLoading: action
     });
   }
 
@@ -29,5 +47,29 @@ export class HarvestAndRollStore extends BaseFilterStore {
   close() {
     this.opened = false;
     this._resolveOnClose();
+  }
+
+  setCoinSide(coinSide: Nullable<CoinSide>) {
+    this.coinSide = coinSide;
+  }
+
+  setCoinSideError(coinSideError: Nullable<string>) {
+    this.coinSideError = coinSideError;
+  }
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
+  }
+
+  startHarvestLoading() {
+    this.isLoadingHarvest = true;
+  }
+
+  finishHarvestLoading() {
+    this.isLoadingHarvest = false;
   }
 }

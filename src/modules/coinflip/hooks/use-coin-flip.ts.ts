@@ -35,7 +35,7 @@ export const useCoinFlip = () => {
 
       const operation = await betTokens(tezos, token, accountPkh, tokenAsset, atomicInputAmount, coinSide, fee);
 
-      await confirmOperation(operation.opHash, { message: 'Bet succesfull!' });
+      await confirmOperation(operation.opHash, { message: 'Bet Bet successful!' });
     } catch (error) {
       showErrorToast(error as Error);
     }

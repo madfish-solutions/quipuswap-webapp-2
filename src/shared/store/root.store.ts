@@ -191,8 +191,9 @@ export class RootStore {
       const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
     }
+  }
 
-    // Second store in the page
+  async createHarvestAndRollStore() {
     if (isNull(this.harvestAndRollStore)) {
       const { HarvestAndRollStore } = await import('@modules/farming/store/harvest-and-roll.store');
       this.harvestAndRollStore = new HarvestAndRollStore(this);

@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -17,16 +18,17 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
+export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }) => {
   const {
     claimablePendingRewards,
     claimablePendingRewardsInUsd,
     isLoading,
+    isLoadingHarvest,
     coinSide,
     coinSideError,
     onCoinSideSelect,
     onClose,
-    onFlipClick,
+    onHarvestAndRollClick,
     onHarvestAllClick,
     texts
   } = useHarvestAndRollModalViewModel();
@@ -60,23 +62,24 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = ({ opened }) => {
         error={coinSideError}
       />
 
-      <div>
+      <div className={styles.betSize}>
         <StateCurrencyAmount
           className={styles.amount}
           amount={claimablePendingRewards}
           currency={QUIPU_TOKEN.metadata.symbol}
           dollarEquivalent={claimablePendingRewardsInUsd}
-          isLeftCurrency
           data-test-id="yourClaimableReward"
         />
       </div>
 
       <div className={styles.buttons}>
-        <Button theme="secondary" onClick={onHarvestAllClick}>
-          Harvest all
+        <Button theme="secondary" onClick={onHarvestAllClick} disabled={isLoading} loading={isLoadingHarvest}>
+          Just Harvest
         </Button>
-        <Button onClick={onFlipClick}>Flip</Button>
+        <Button onClick={onHarvestAndRollClick} disabled={isLoadingHarvest} loading={isLoading}>
+          Harvest and Roll
+        </Button>
       </div>
     </Modal>
   );
-};
+});
