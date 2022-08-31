@@ -1,12 +1,12 @@
-import { toReal, multipliedIfPossible } from '@shared/helpers';
+import { multipliedIfPossible } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { FarmingItemModel } from '../models';
-import { UsersInfoValueWithId, getUserPendingReward } from './helpers';
+import { getRewards } from './get-rewards';
+import { UsersInfoValueWithId } from './helpers';
 
 export const getRewardsInUsd = (farmingItem: FarmingItemModel, userInfo: Nullable<UsersInfoValueWithId>) => {
-  const rewards = userInfo && getUserPendingReward(userInfo, farmingItem);
-  const realEarnBalance = rewards && toReal(rewards, farmingItem.rewardToken);
+  const realEarnBalance = getRewards(farmingItem, userInfo);
 
   return multipliedIfPossible(realEarnBalance, farmingItem.earnExchangeRate);
 };

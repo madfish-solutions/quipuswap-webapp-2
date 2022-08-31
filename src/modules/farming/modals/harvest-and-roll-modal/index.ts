@@ -1,1 +1,1 @@
-export * from './use-harvest-and-roll-modal';
+export * from './use-harvest-and-roll-modal.vm';
