@@ -1,27 +1,28 @@
-import { useState } from 'react';
-
-import { Nullable } from '@shared/types';
+import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { CoinSide } from '../../../coinflip';
+import { useCoinFlip } from '../../../coinflip/hooks';
 import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
 export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
 
+  const { handleCoinFlip } = useCoinFlip();
+
   const farmingListStore = useFarmingListStore();
   const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
 
   const harvestAndRollStore = useHarvestAndRollStore();
+  const { coinSide, coinSideError, isLoading, isLoadingHarvest } = harvestAndRollStore;
+
   const { doHarvestAll } = useDoHarvestAll();
 
-  const isLoading = false;
+  const { log } = useAmplitudeService();
 
-  const [coinSide, setCoinSide] = useState<Nullable<CoinSide>>(null);
-  const [coinSideError, setCoinSideError] = useState<Nullable<string>>(null);
   const onCoinSideSelect = (_coinSide: CoinSide) => {
-    setCoinSide(coinSide === _coinSide ? null : _coinSide);
-    setCoinSideError(null);
+    harvestAndRollStore.setCoinSide(coinSide === _coinSide ? null : _coinSide);
+    harvestAndRollStore.setCoinSideError(null);
   };
 
   const onClose = () => {
@@ -29,19 +30,51 @@ export const useHarvestAndRollModalViewModel = () => {
   };
 
   const onHarvestAllClick = async () => {
+    harvestAndRollStore.startHarvestLoading();
+    log('HARVEST_AND_ROLL_HARVEST_ALL_CLICK');
+
     await doHarvestAll();
+    log('HARVEST_AND_ROLL_HARVEST_ALL_SUCCESS');
+    harvestAndRollStore.finishHarvestLoading();
     onClose();
   };
 
-  const onFlipClick = async () => {
-    setCoinSideError('Coin Side is required');
-    // onClose();
+  const onHarvestAndRollClick = async () => {
+    const logData = {
+      coinSide,
+      claimablePendingRewards: claimablePendingRewards.toFixed(),
+      claimablePendingRewardsInUsd: claimablePendingRewardsInUsd?.toFixed()
+    };
+
+    log('HARVEST_AND_ROLL_FLIP_CLICK', logData);
+
+    if (!coinSide) {
+      harvestAndRollStore.setCoinSideError('Coin Side is required');
+
+      return;
+    }
+
+    harvestAndRollStore.setCoinSideError(null);
+
+    try {
+      harvestAndRollStore.startLoading();
+      // TODO: Optimize it
+      await doHarvestAll();
+      await handleCoinFlip(claimablePendingRewards, coinSide);
+      log('HARVEST_AND_ROLL_FLIP_SUCCESS', logData);
+    } catch (error) {
+      log('HARVEST_AND_ROLL_FLIP_FAILED', logData);
+    }
+
+    harvestAndRollStore.finishLoading();
+    onClose();
   };
 
   return {
     claimablePendingRewards,
     claimablePendingRewardsInUsd,
 
+    isLoadingHarvest,
     isLoading,
     coinSide,
     coinSideError,
@@ -49,7 +82,7 @@ export const useHarvestAndRollModalViewModel = () => {
 
     onClose,
     onHarvestAllClick,
-    onFlipClick,
+    onHarvestAndRollClick,
 
     texts: {
       harvestOrRoll: t('farm|harvestOrRoll')
