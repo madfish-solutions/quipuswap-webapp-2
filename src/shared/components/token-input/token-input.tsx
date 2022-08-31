@@ -76,7 +76,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
       className
     );
 
-    const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: Boolean(onSelectorClick) });
+    const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: !Boolean(onSelectorClick) });
 
     return (
       <div
