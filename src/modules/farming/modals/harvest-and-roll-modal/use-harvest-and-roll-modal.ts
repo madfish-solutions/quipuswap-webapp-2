@@ -1,5 +1,9 @@
+import { useState } from 'react';
+
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { CoinSide } from '../../../coinflip';
 import { useDoHarvestAll, useHarvestAndRollStore } from '../../hooks';
 
 export const useHarvestAndRollModal = () => {
@@ -7,6 +11,15 @@ export const useHarvestAndRollModal = () => {
 
   const harvestAndRollStore = useHarvestAndRollStore();
   const { doHarvestAll } = useDoHarvestAll();
+
+  const isLoading = false;
+
+  const [coinSide, setCoinSide] = useState<Nullable<CoinSide>>(null);
+  const [coinSideError, setCoinSideError] = useState<Nullable<string>>(null);
+  const onCoinSideSelect = (_coinSide: CoinSide) => {
+    setCoinSide(coinSide === _coinSide ? null : _coinSide);
+    setCoinSideError(null);
+  };
 
   const onClose = () => {
     harvestAndRollStore.close();
@@ -18,13 +31,20 @@ export const useHarvestAndRollModal = () => {
   };
 
   const onFlipClick = async () => {
-    onClose();
+    setCoinSideError('Coin Side is required');
+    // onClose();
   };
 
   return {
+    isLoading,
+    coinSide,
+    coinSideError,
+    onCoinSideSelect,
+
     onClose,
     onHarvestAllClick,
     onFlipClick,
+
     texts: {
       harvestOrRoll: t('farm|harvestOrRoll')
     }
