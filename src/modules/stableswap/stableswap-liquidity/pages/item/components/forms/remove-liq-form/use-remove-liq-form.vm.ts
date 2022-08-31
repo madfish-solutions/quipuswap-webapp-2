@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
-import { getNotNullFixedValue } from '@modules/stableswap/helpers/get-not-null-fixed-value';
 import { StableswapItemModel } from '@modules/stableswap/models';
 import {
   findBalanceToken,
@@ -169,10 +168,9 @@ export const useRemoveLiqFormViewModel = () => {
     const localTokenDecimals = localToken.metadata.decimals;
 
     return async (inputAmount: string) => {
-      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const notNullFixedValue = getNotNullFixedValue(fixedValue);
+      const { realValue } = numberAsString(inputAmount, localTokenDecimals);
 
-      formik.setFieldValue(getInputSlugByIndex(index), notNullFixedValue);
+      formik.setFieldValue(getInputSlugByIndex(index), realValue);
 
       const shares = await calculateShares(index, realValue);
       formik.setFieldValue(LP_INPUT_KEY, shares);
