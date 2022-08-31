@@ -7,7 +7,7 @@ import { ManagedToken, Optional, Token } from '@shared/types';
 import { ExtendTokensModalCellProps } from './components';
 import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
 
-const MAX_INPUT_COUNT = 4;
+const MAX_INPUT_COUNT = 2;
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
 
@@ -20,9 +20,8 @@ export class TokensModalStore {
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
 
-  lastChoosenToken: Nullable<Token> = null;
-  inputNumber: Nullable<number> = null;
-  singleChoosenTokens: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
+  inputIndex: Nullable<number> = null;
+  choosenTokensSingleModal: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
@@ -66,9 +65,8 @@ export class TokensModalStore {
       maxQuantity: observable,
       minQuantity: observable,
 
-      lastChoosenToken: observable,
-      inputNumber: observable,
-      singleChoosenTokens: observable,
+      inputIndex: observable,
+      choosenTokensSingleModal: observable,
 
       setOpenState: action,
       toggleChosenToken: action,
@@ -77,7 +75,6 @@ export class TokensModalStore {
 
       setInputIndex: action,
       setChooseToken: action,
-      setLastChoosenToken: action,
       clearChooseToken: action,
 
       extendTokens: computed,
@@ -91,28 +88,20 @@ export class TokensModalStore {
   }
 
   setInputIndex(index: number) {
-    this.inputNumber = index;
+    this.inputIndex = index;
   }
 
-  setLastChoosenToken = (token: Optional<Token>) => {
-    if (!isExist(token)) {
-      return;
-    }
-
-    this.lastChoosenToken = token;
-  };
-
   setChooseToken(token: Optional<Token>) {
-    if (!isExist(this.inputNumber) || !isExist(token)) {
+    if (!isExist(this.inputIndex) || !isExist(token)) {
       return;
     }
 
-    this.singleChoosenTokens[this.inputNumber] = token;
+    this.choosenTokensSingleModal[this.inputIndex] = token;
     this.close();
   }
 
   clearChooseToken() {
-    this.singleChoosenTokens = new Array(MAX_INPUT_COUNT).fill(null);
+    this.choosenTokensSingleModal = new Array(MAX_INPUT_COUNT).fill(null);
   }
 
   setChosenTokens(tokens: Nullable<Array<Token>>) {
