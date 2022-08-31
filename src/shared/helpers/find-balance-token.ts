@@ -1,4 +1,5 @@
-import { BalanceToken, Token } from '@shared/types';
+import { BalanceToken } from '@shared/hooks';
+import { Token } from '@shared/types';
 
 import { isTokenEqual } from './tokens';
 

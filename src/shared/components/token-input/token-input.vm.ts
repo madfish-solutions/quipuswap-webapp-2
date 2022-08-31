@@ -2,10 +2,8 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap, isExist } from '@shared/helpers';
+import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
-import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-modal-store';
-import { Optional } from '@shared/types';
 
 import { TokenInputViewModelProps } from './types';
 
@@ -14,10 +12,8 @@ export const useTokenInputViewModel = ({
   hiddenBalance,
   readOnly,
   hiddenPercentSelector,
-  onInputChange,
-  onSelectorClick
+  onInputChange
 }: TokenInputViewModelProps) => {
-  const tokensModalStore = useTokensModalStore();
   const { accountPkh } = useAuthStore();
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -49,15 +45,6 @@ export const useTokenInputViewModel = ({
   const shownPercentSelector = !hiddenPercentSelector && isFormReady;
   const shownBalance = Boolean(accountPkh) && !hiddenBalance;
 
-  const handleSelectClick = (index: Optional<number>) => {
-    if (!isExist(index) || !isExist(onSelectorClick)) {
-      return;
-    }
-
-    tokensModalStore.setInputIndex(index);
-    onSelectorClick();
-  };
-
   return {
     isFocused,
     inputRef,
@@ -68,8 +55,6 @@ export const useTokenInputViewModel = ({
     shownBalance,
 
     amountCap,
-
-    handleSelectClick,
 
     focusInput,
     handleInputFocus,

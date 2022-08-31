@@ -19,7 +19,6 @@ export interface TokenInputProps extends TokenInputViewModelProps {
   balance?: Optional<BigNumber.Value>;
   balanceText?: string;
   id?: string;
-  index?: number;
   className?: string;
   label: string;
   error?: string;
