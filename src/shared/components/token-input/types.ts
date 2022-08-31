@@ -11,7 +11,7 @@ export interface TokenInputViewModelProps {
   hiddenPercentSelector?: boolean;
   hiddenBalance?: boolean;
   onInputChange: (value: string) => void;
-  onSelectorClick?: () => void | Promise<void>;
+  onSelectorClick?: () => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {

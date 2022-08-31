@@ -1,7 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Token } from '@shared/types';
-
 import { StableswapItemDto } from '../dto';
 
 export class StableswapItemModel extends StableswapItemDto {
@@ -12,10 +10,6 @@ export class StableswapItemModel extends StableswapItemDto {
       //@ts-ignore
       this[key] = dto[key as keyof StableswapItemDto];
     }
-  }
-
-  get tokens(): Array<Token> {
-    return this.tokensInfo.map(({ token }) => token);
   }
 
   get providersFee(): BigNumber {

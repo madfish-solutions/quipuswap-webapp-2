@@ -23,7 +23,7 @@ export interface TokensModalViewProps {
 }
 
 interface TokensModalInitialParamsAbstraction {
-  tokens?: Nullable<Array<Token>>; //
+  tokens?: Nullable<Array<Token>>;
   disabledTokens?: Nullable<Array<Token>>;
 }
 interface TokensQuantityValidation extends TokensModalInitialParamsAbstraction {

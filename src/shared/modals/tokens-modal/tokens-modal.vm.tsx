@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { Button } from '@shared/components';
@@ -20,15 +20,8 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const {
-    minQuantity,
-    maxQuantity,
-    tokensQuantityStatus,
-    isTokensQuantityOk,
-    chosenTokens,
-    extendTokens,
-    isMultipleTokenChoose
-  } = tokensModalStore;
+  const { minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk, chosenTokens, extendTokens } =
+    tokensModalStore;
 
   const tokensQuantityInfoParams = {
     minQuantity,
@@ -40,13 +33,13 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const handleTokenClick = useCallback(
     (token: Token) => {
-      if (isMultipleTokenChoose) {
-        tokensModalStore.toggleChosenToken(token);
-      } else {
+      if (isEqual(maxQuantity, SINGLE_TOKEN_VALUE)) {
         tokensModalStore.setChooseToken(token);
+      } else {
+        tokensModalStore.toggleChosenToken(token);
       }
     },
-    [isMultipleTokenChoose, tokensModalStore]
+    [maxQuantity, tokensModalStore]
   );
 
   const {
