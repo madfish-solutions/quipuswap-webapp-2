@@ -1,12 +1,14 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { DexTwoCreateForm, NewLiquidityCard } from './components';
 import { useNewLiquidityCreatePageViewModel } from './new-liquidity-create-page.vm';
 
-export const NewLiquidityCreatePage: FC = () => {
+export const NewLiquidityCreatePage: FC = observer(() => {
   const { t } = useTranslation();
   const { data, bakerData, handleSubmit } = useNewLiquidityCreatePageViewModel();
 
@@ -20,4 +22,4 @@ export const NewLiquidityCreatePage: FC = () => {
       </StickyBlock>
     </>
   );
-};
+});
