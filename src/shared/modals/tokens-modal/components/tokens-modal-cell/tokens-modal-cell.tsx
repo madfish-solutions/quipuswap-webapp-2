@@ -3,10 +3,11 @@ import { FC, useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount, TokensLogos } from '@shared/components';
 import { Checkbox } from '@shared/elements';
-import { getTokenName, getTokenSymbol } from '@shared/helpers';
+import { getTokenName, getTokenSymbol, isEqual } from '@shared/helpers';
 import { ManagedToken } from '@shared/types';
 
 import { useTokensModalStore } from '../../use-tokens-modal-store';
@@ -30,7 +31,7 @@ export interface TokensModalCellProps {
 const BIG_SLICE_AMOUNT = 50;
 
 export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick, balance }) => {
-  const { isMultipleTokenChoose } = useTokensModalStore();
+  const { maxQuantity } = useTokensModalStore();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -50,7 +51,7 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
 
       <div className={styles.checkboxContainer}>
         {balance && <StateCurrencyAmount amount={balance} />}
-        {isMultipleTokenChoose && (
+        {!isEqual(maxQuantity, SINGLE_TOKEN_VALUE) && (
           <Checkbox className={styles.checkbox} checked={token.isChosen} disabled={token.disabled} />
         )}
       </div>

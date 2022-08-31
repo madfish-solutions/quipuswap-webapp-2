@@ -72,9 +72,7 @@ export const useAddLiqFormViewModel = () => {
   const { label, tooltip, disabled, isSubmitting, shouldShowZeroInputsAlert } = useAddLiqFormHelper(formik);
 
   useEffect(() => {
-    return () => {
-      formStore.clearStore();
-    };
+    return () => formStore.clearStore();
   }, [formStore]);
 
   if (isNull(item)) {

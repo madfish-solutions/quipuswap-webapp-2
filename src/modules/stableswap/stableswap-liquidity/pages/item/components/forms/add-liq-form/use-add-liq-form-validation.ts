@@ -5,7 +5,6 @@ import * as yup from 'yup';
 
 import { StableswapItemModel } from '@modules/stableswap/models';
 import { operationAmountSchema } from '@shared/helpers';
-import { Nullable } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 

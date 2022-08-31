@@ -12,7 +12,6 @@ export const useStableTokenInputViewModel = (
   isRemove: Undefined<boolean>
 ) => {
   const accountPkh = useAccountPkh();
-
   const stableswapItemStore = useStableswapItemStore();
   const item = stableswapItemStore.item;
 

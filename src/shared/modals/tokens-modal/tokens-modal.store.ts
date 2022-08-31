@@ -1,6 +1,5 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
 import { ManagedToken, Optional, Token } from '@shared/types';
@@ -46,10 +45,6 @@ export class TokensModalStore {
     return TokensQuantityStatus.OK;
   }
 
-  get isMultipleTokenChoose() {
-    return !(this.maxQuantity === SINGLE_TOKEN_VALUE && this.minQuantity === SINGLE_TOKEN_VALUE);
-  }
-
   get isTokensQuantityOk() {
     return this.tokensQuantityStatus === TokensQuantityStatus.OK;
   }
@@ -87,9 +82,7 @@ export class TokensModalStore {
 
       extendTokens: computed,
       tokensQuantityStatus: computed,
-      isTokensQuantityOk: computed,
-
-      isMultipleTokenChoose: computed
+      isTokensQuantityOk: computed
     });
   }
 
