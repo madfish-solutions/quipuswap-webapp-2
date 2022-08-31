@@ -18,11 +18,10 @@ interface Props {
   balance?: Optional<BigNumber.Value>;
   isRemove?: boolean;
   onInputChange: (value: string) => void;
-  onSelectorClick?: () => void | Promise<void>;
 }
 
 export const StableTokenInput: FC<Props> = observer(
-  ({ formik, index, label, balance, className, isRemove, onInputChange, onSelectorClick }) => {
+  ({ formik, index, label, balance, className, isRemove, onInputChange }) => {
     const outputComponentViewModel = useStableTokenInputViewModel(formik, index, isRemove);
 
     if (isNull(outputComponentViewModel)) {
@@ -34,7 +33,6 @@ export const StableTokenInput: FC<Props> = observer(
 
     return (
       <TokenInput
-        index={index}
         className={className}
         tokens={token}
         decimals={token.metadata.decimals}
@@ -47,7 +45,6 @@ export const StableTokenInput: FC<Props> = observer(
         error={error}
         tokenInputDTI={tokenInputDTI}
         hiddenPercentSelector={hiddenPercentSelector}
-        onSelectorClick={onSelectorClick}
       />
     );
   }

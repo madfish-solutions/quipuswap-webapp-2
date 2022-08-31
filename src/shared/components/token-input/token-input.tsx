@@ -29,7 +29,6 @@ const themeClass = {
 export const TokenInput: FC<TokenInputProps> = observer(
   ({
     id,
-    index,
     className,
     label,
     dollarEquivalent,
@@ -58,8 +57,6 @@ export const TokenInput: FC<TokenInputProps> = observer(
       shownBalance,
       amountCap,
 
-      handleSelectClick,
-
       focusInput,
       handleInputFocus,
       handleInputBlur,
@@ -71,8 +68,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
       readOnly,
       hiddenPercentSelector,
       hiddenBalance,
-      onInputChange,
-      onSelectorClick
+      onInputChange
     });
     const compoundClassName = cx(
       { [styles.focused]: isFocused, [styles.error]: !!error, [styles.readOnly]: !isFormReady },
@@ -80,7 +76,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
       className
     );
 
-    const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: !Boolean(onSelectorClick) });
+    const compoundSelectorClassName = cx(styles.selector, { [styles.frozen]: Boolean(onSelectorClick) });
 
     return (
       <div
@@ -122,7 +118,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
                 className={compoundSelectorClassName}
                 textClassName={styles.selectorInner}
                 data-test-id="tokenInputSelectButton"
-                onClick={() => handleSelectClick(index)}
+                onClick={onSelectorClick}
               >
                 <TokensLogos tokens={tokens} />
                 <TokensSymbols tokens={tokens} />

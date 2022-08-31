@@ -1,24 +1,30 @@
 import { useMemo } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import * as yup from 'yup';
 
+import { StableswapItemModel } from '@modules/stableswap/models';
 import { operationAmountSchema } from '@shared/helpers';
-import { BalanceToken } from '@shared/types';
+import { Nullable } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from '../../../../../../helpers';
 
-export const useAddLiqFormValidation = (userBalance: Array<BalanceToken>, isBalancedProportion: boolean) => {
+export const useAddLiqFormValidation = (
+  userBalance: Array<Nullable<BigNumber>>,
+  stableswapItem: Nullable<StableswapItemModel>,
+  isBalancedProportion: boolean
+) => {
   const { t } = useTranslation();
 
   return useMemo(() => {
     const isZeroInclusive = !isBalancedProportion;
-    const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map(({ token, balance }) => {
-      const tokenMetadata = token.metadata;
+    const inputAmountSchemas: Array<NumberAsStringSchema> = userBalance.map((balance, index) => {
+      const tokenMetadata = stableswapItem?.tokensInfo[index]?.token.metadata;
 
       return operationAmountSchema(
-        balance ?? null,
+        balance,
         isZeroInclusive,
         tokenMetadata?.decimals,
         tokenMetadata &&
@@ -38,5 +44,5 @@ export const useAddLiqFormValidation = (userBalance: Array<BalanceToken>, isBala
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape(shape);
-  }, [isBalancedProportion, userBalance, t]);
+  }, [isBalancedProportion, userBalance, stableswapItem, t]);
 };

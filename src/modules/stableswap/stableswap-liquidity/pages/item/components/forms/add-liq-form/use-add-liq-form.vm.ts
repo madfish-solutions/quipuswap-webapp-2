@@ -3,20 +3,15 @@ import { useCallback, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import {
   extractTokens,
   getInputsAmountFormFormikValues,
-  isExist,
   isNull,
   numberAsString,
   placeDecimals,
   saveBigNumber,
   toFixed
 } from '@shared/helpers';
-import { useTokensWithBalances } from '@shared/hooks';
-import { useChooseTokens } from '@shared/modals/tokens-modal';
-import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-modal-store';
 
 import {
   calculateOutputWithToken,
@@ -24,8 +19,12 @@ import {
   getFormikInitialValues,
   getInputSlugByIndex
 } from '../../../../../../helpers';
-import { useAddStableswapLiquidity, useStableswapItemFormStore, useStableswapItemStore } from '../../../../../../hooks';
-import { getCurrentTokensAndBalances } from '../helpers';
+import {
+  useAddStableswapLiquidity,
+  useStableswapItemFormStore,
+  useStableswapItemStore,
+  useStableswapTokensBalances
+} from '../../../../../../hooks';
 import { useAddLiqFormValidation } from './use-add-liq-form-validation';
 import { useAddLiqFormHelper } from './use-add-liq-form.helper';
 import { useZeroInputsError } from './use-zero-inputs-error';
@@ -36,21 +35,14 @@ export interface AddLiqFormValues {
   [key: string]: string;
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useAddLiqFormViewModel = () => {
-  const tokensModalStore = useTokensModalStore();
-  const { chooseTokens } = useChooseTokens();
   const { addStableswapLiquidity } = useAddStableswapLiquidity();
 
   const { item } = useStableswapItemStore();
   const formStore = useStableswapItemFormStore();
+  const userBalances = useStableswapTokensBalances(item);
 
-  const itemTokensAndBalances = useTokensWithBalances(item?.tokens ?? []);
-  const choosedTokensAndBalances = useTokensWithBalances(tokensModalStore.singleChoosenTokens.filter(isExist));
-
-  const userCurrentTokensAndBalances = getCurrentTokensAndBalances(itemTokensAndBalances, choosedTokensAndBalances);
-
-  const validationSchema = useAddLiqFormValidation(userCurrentTokensAndBalances, formStore.isBalancedProportion);
+  const validationSchema = useAddLiqFormValidation(userBalances, item, formStore.isBalancedProportion);
 
   const { isZeroInputsError } = useZeroInputsError();
   const handleSubmit = useCallback(
@@ -81,10 +73,9 @@ export const useAddLiqFormViewModel = () => {
 
   useEffect(() => {
     return () => {
-      tokensModalStore.clearChooseToken();
       formStore.clearStore();
     };
-  }, [formStore, tokensModalStore]);
+  }, [formStore]);
 
   if (isNull(item)) {
     return null;
@@ -138,27 +129,12 @@ export const useAddLiqFormViewModel = () => {
   const handleInputChange = (reserves: BigNumber, index: number) =>
     formStore.isBalancedProportion ? handleBalancedInputChange(reserves, index) : handleImbalancedInputChange(index);
 
-  const handleSelectTokensClick = async () => {
-    const preparedToken = tokensModalStore.lastChoosenToken ? [tokensModalStore.lastChoosenToken] : null;
-
-    const chosenTokens = await chooseTokens({
-      tokens: preparedToken,
-      disabledTokens: tokensModalStore.singleChoosenTokens.filter(isExist),
-      min: SINGLE_TOKEN_VALUE,
-      max: SINGLE_TOKEN_VALUE
-    });
-
-    tokensModalStore.setLastChoosenToken(chosenTokens?.[0]);
-    tokensModalStore.setChooseToken(tokensModalStore.lastChoosenToken);
-  };
-
   const data = tokensInfo.map(({ reserves }, index) => ({
     index,
     label,
     formik,
-    balance: userCurrentTokensAndBalances[index]?.balance,
-    onInputChange: handleInputChange(reserves, index),
-    onSelectorClick: handleSelectTokensClick
+    balance: userBalances[index],
+    onInputChange: handleInputChange(reserves, index)
   }));
 
   const handleSwitcherClick = (state: boolean) => formStore.setIsBalancedProportion(state);
@@ -169,7 +145,6 @@ export const useAddLiqFormViewModel = () => {
     disabled,
     isSubmitting,
     isZeroInputsError,
-    handleSelectTokensClick,
     shouldShowZeroInputsAlert,
     switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
