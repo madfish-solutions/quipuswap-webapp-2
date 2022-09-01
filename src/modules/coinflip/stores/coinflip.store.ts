@@ -201,6 +201,7 @@ export class CoinflipStore {
       isUserLastGameLoading: computed,
       pendingGame: computed,
       pendingGameToken: computed,
+      maxBetSize: computed,
 
       setToken: action,
       setInput: action,
@@ -210,6 +211,10 @@ export class CoinflipStore {
 
   get token(): Token {
     return this.tokenToPlay === TokenToPlay.Tezos ? TEZOS_TOKEN : QUIPU_TOKEN;
+  }
+
+  get maxBetSize() {
+    return getBidSize(this.generalStats.bank, this.generalStats.maxBetPercent);
   }
 
   get pendingGameToken() {
