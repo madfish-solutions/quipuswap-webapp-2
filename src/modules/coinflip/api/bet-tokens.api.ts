@@ -17,7 +17,7 @@ export const getBetTokensParams = async (
   const contract = await tezos.contract.at(COINFLIP_CONTRACT_ADDRESS);
 
   return contract.methods
-    .bet(tokenAsset, formattedAmount, coinSide)
+    .bet(tokenAsset, formattedAmount.integerValue(BigNumber.ROUND_DOWN), coinSide)
     .toTransferParams({ amount: Number(fee), mutez: true });
 };
 
