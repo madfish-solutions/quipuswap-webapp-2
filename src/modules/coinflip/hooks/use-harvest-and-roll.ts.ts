@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { sendBatch } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
@@ -8,21 +9,25 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getContract } from '@shared/dapp';
 import { isNull, isTezosToken, toAtomic } from '@shared/helpers';
-import { useConfirmOperation, useToasts } from '@shared/utils';
+import { useToasts } from '@shared/utils';
 
-import { betTokens } from '../api';
+import { getHarvestAllParams } from '../../farming/api';
+import { useStakedOnlyFarmIds } from '../../farming/hooks/use-staked-only-farm-ids';
+import { getBetTokensParams } from '../api';
 
-export const useCoinFlip = () => {
+export const useHarvestAndRoll = () => {
   const { tezos } = useRootStore();
   const { token } = useCoinflipStore();
   const accountPkh = useAccountPkh();
-  const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
+  const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
 
-  const handleCoinFlip = async (inputAmount: BigNumber, coinSide: string) => {
+  const doHarvestAndRoll = async (inputAmount: BigNumber, coinSide: string) => {
     if (isNull(inputAmount) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
       return null;
     }
+
+    const stakedOnlyFarmIds = getStakedOnlyFarmIds();
 
     try {
       const tokenAsset = isTezosToken(token) ? TOKEN_ASSETS.TEZOS : TOKEN_ASSETS.QUIPU;
@@ -33,13 +38,23 @@ export const useCoinFlip = () => {
 
       const fee = isTezosToken(token) ? network_fee.plus(atomicInputAmount) : network_fee;
 
-      const operation = await betTokens(tezos, token, accountPkh, tokenAsset, atomicInputAmount, coinSide, fee);
+      const operation1 = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
 
-      await confirmOperation(operation.opHash, { message: 'Bet successful!' });
+      const operation2 = await getBetTokensParams(
+        tezos,
+        token,
+        accountPkh,
+        tokenAsset,
+        atomicInputAmount,
+        coinSide,
+        fee
+      );
+
+      await sendBatch(tezos, [...operation1, operation2]);
     } catch (error) {
       showErrorToast(error as Error);
     }
   };
 
-  return { handleCoinFlip };
+  return { doHarvestAndRoll };
 };

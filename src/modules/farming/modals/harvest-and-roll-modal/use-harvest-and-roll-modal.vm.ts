@@ -2,13 +2,13 @@ import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { CoinSide } from '../../../coinflip';
-import { useCoinFlip } from '../../../coinflip/hooks';
+import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll.ts';
 import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
 export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
 
-  const { handleCoinFlip } = useCoinFlip();
+  const { doHarvestAndRoll } = useHarvestAndRoll();
 
   const farmingListStore = useFarmingListStore();
   const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
@@ -58,9 +58,9 @@ export const useHarvestAndRollModalViewModel = () => {
 
     try {
       harvestAndRollStore.startLoading();
-      // TODO: Optimize it
-      await doHarvestAll();
-      await handleCoinFlip(claimablePendingRewards, coinSide);
+
+      await doHarvestAndRoll(claimablePendingRewards, coinSide);
+
       log('HARVEST_AND_ROLL_FLIP_SUCCESS', logData);
     } catch (error) {
       log('HARVEST_AND_ROLL_FLIP_FAILED', logData);
