@@ -5,11 +5,13 @@ import { withApproveApi } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { Token } from '@shared/types';
 
+import { TOKEN_ASSETS } from './types';
+
 export const getBetTokensParams = async (
   tezos: TezosToolkit,
   token: Token,
   accountPkh: string,
-  tokenAsset: number,
+  tokenAsset: TOKEN_ASSETS,
   formattedAmount: BigNumber,
   coinSide: string,
   fee: BigNumber
@@ -25,7 +27,7 @@ export const betTokens = async (
   tezos: TezosToolkit,
   token: Token,
   accountPkh: string,
-  tokenAsset: number,
+  tokenAsset: TOKEN_ASSETS,
   formattedAmount: BigNumber,
   coinSide: string,
   fee: BigNumber

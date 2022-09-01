@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
+import { useNavigate } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
 import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -22,6 +24,8 @@ export const useHarvestAndRollModalViewModel = () => {
   }, [getCoinflipGeneralStats]);
 
   const { doHarvestAndRoll } = useHarvestAndRoll();
+
+  const navigate = useNavigate();
 
   const { maxBetSize } = useCoinflipStore();
 
@@ -83,6 +87,8 @@ export const useHarvestAndRollModalViewModel = () => {
       await doHarvestAndRoll(betSize, coinSide);
 
       log('HARVEST_AND_ROLL_FLIP_SUCCESS', logData);
+
+      navigate(AppRootRoutes.Coinflip);
     } catch (error) {
       log('HARVEST_AND_ROLL_FLIP_FAILED', logData);
     }

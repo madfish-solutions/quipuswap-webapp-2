@@ -2,25 +2,31 @@ import { BigNumber } from 'bignumber.js';
 
 import { getFA2ApproveParams, sendBatch } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
-import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
+import { QUIPU_TOKEN, TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
-import { useCoinflipStore } from '@modules/coinflip/hooks';
+import { useCoinflipStore, useGamersStats, useUserLastGame, useUserPendingGame } from '@modules/coinflip/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getContract } from '@shared/dapp';
-import { isNull, isTezosToken, toAtomic } from '@shared/helpers';
+import { isNull, toAtomic } from '@shared/helpers';
 import { useToasts } from '@shared/utils';
 
 import { getHarvestAllParams } from '../../farming/api';
 import { useStakedOnlyFarmIds } from '../../farming/hooks/use-staked-only-farm-ids';
 import { getBetTokensParams } from '../api';
+import { TokenToPlay } from '../stores';
 
 export const useHarvestAndRoll = () => {
   const { tezos } = useRootStore();
-  const { token } = useCoinflipStore();
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
   const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
+  const coinflipStore = useCoinflipStore();
+  const { getGamersStats } = useGamersStats();
+  const { getUserLastGame } = useUserLastGame();
+  const { getUserPendingGame } = useUserPendingGame();
+
+  const token = QUIPU_TOKEN;
 
   const doHarvestAndRoll = async (inputAmount: BigNumber, coinSide: string) => {
     if (isNull(inputAmount) || isNull(tezos) || isNull(accountPkh) || isNull(coinSide)) {
@@ -30,31 +36,35 @@ export const useHarvestAndRoll = () => {
     const stakedOnlyFarmIds = getStakedOnlyFarmIds();
 
     try {
-      const tokenAsset = isTezosToken(token) ? TOKEN_ASSETS.TEZOS : TOKEN_ASSETS.QUIPU;
       const atomicInputAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);
 
       const contract = await getContract(tezos, COINFLIP_CONTRACT_ADDRESS);
       const { network_fee } = await contract.storage<CoinflipStorage>();
 
-      const fee = isTezosToken(token) ? network_fee.plus(atomicInputAmount) : network_fee;
+      const fee = network_fee;
 
-      const harvestOperations = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
+      const harvestOperationsParams = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
 
-      const betOperation = await getBetTokensParams(
+      const betOperationParams = await getBetTokensParams(
         tezos,
         token,
         accountPkh,
-        tokenAsset,
+        TOKEN_ASSETS.QUIPU,
         atomicInputAmount,
         coinSide,
         fee
       );
 
       await sendBatch(tezos, [
-        ...harvestOperations,
-        ...(await getFA2ApproveParams(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, [betOperation])),
-        betOperation
+        ...harvestOperationsParams,
+        ...(await getFA2ApproveParams(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, [betOperationParams]))
       ]);
+
+      coinflipStore.setPendingGameTokenToPlay(TokenToPlay.Quipu);
+
+      await getGamersStats();
+      await getUserLastGame();
+      await getUserPendingGame();
     } catch (error) {
       showErrorToast(error as Error);
     }
