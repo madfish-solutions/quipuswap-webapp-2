@@ -12,5 +12,9 @@ export const newLiquidity = {
   maxApr: 'Max APR',
   maxAprTooltip: 'max apr tooltip',
   pools: 'Pools',
-  poolsTooltip: 'pools tooltip'
+  poolsTooltip: 'pools tooltip',
+  createPool: 'Create Pool',
+  regularPool: '2 assets with the volatile exchange rates',
+  stablePool: 'From 2 to 4 tokens with the equal value',
+  back: 'Back'
 } as const;
