@@ -38,9 +38,9 @@ export const useHarvestAndRoll = () => {
 
       const fee = isTezosToken(token) ? network_fee.plus(atomicInputAmount) : network_fee;
 
-      const operation1 = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
+      const harvestOperations = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
 
-      const operation2 = await getBetTokensParams(
+      const betOperation = await getBetTokensParams(
         tezos,
         token,
         accountPkh,
@@ -50,7 +50,7 @@ export const useHarvestAndRoll = () => {
         fee
       );
 
-      await sendBatch(tezos, [...operation1, operation2]);
+      await sendBatch(tezos, [...harvestOperations, betOperation]);
     } catch (error) {
       showErrorToast(error as Error);
     }
