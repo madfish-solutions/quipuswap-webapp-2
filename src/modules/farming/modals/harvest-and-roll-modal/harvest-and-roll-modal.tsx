@@ -20,8 +20,9 @@ const modeClass = {
 
 export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }) => {
   const {
-    claimablePendingRewards,
-    claimablePendingRewardsInUsd,
+    betSize,
+    betSizeUsd,
+    message,
     isLoading,
     isLoadingHarvest,
     coinSide,
@@ -36,7 +37,7 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(styles.modal, modeClass[colorThemeMode]);
 
-  if (!opened || !claimablePendingRewardsInUsd) {
+  if (!opened || !betSize) {
     return null;
   }
 
@@ -65,12 +66,13 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }
       <div className={styles.betSize}>
         <StateCurrencyAmount
           className={styles.amount}
-          amount={claimablePendingRewards}
+          amount={betSize}
           currency={QUIPU_TOKEN.metadata.symbol}
-          dollarEquivalent={claimablePendingRewardsInUsd}
+          dollarEquivalent={betSizeUsd}
           data-test-id="yourClaimableReward"
         />
       </div>
+      <p className={styles.message}>{message}</p>
 
       <div className={styles.buttons}>
         <Button theme="secondary" onClick={onHarvestAllClick} disabled={isLoading} loading={isLoadingHarvest}>

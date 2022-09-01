@@ -1,14 +1,29 @@
+import { useEffect } from 'react';
+
+import { BigNumber } from 'bignumber.js';
+
 import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { CoinSide } from '../../../coinflip';
+import { useCoinflipGeneralStats, useCoinflipStore } from '../../../coinflip/hooks';
 import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll.ts';
 import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
 export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
 
+  const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+
+  useEffect(() => {
+    (async () => {
+      await getCoinflipGeneralStats();
+    })();
+  }, [getCoinflipGeneralStats]);
+
   const { doHarvestAndRoll } = useHarvestAndRoll();
+
+  const { maxBetSize } = useCoinflipStore();
 
   const farmingListStore = useFarmingListStore();
   const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
@@ -19,6 +34,11 @@ export const useHarvestAndRollModalViewModel = () => {
   const { doHarvestAll } = useDoHarvestAll();
 
   const { log } = useAmplitudeService();
+
+  const betSize = maxBetSize ? BigNumber.min(maxBetSize, claimablePendingRewards) : claimablePendingRewards;
+  const isMaxBetSize = maxBetSize && betSize.isEqualTo(maxBetSize);
+  const betSizeUsd = isMaxBetSize ? null : claimablePendingRewardsInUsd;
+  const message = isMaxBetSize ? 'Maximum allowable bid' : null;
 
   const onCoinSideSelect = (_coinSide: CoinSide) => {
     harvestAndRollStore.setCoinSide(coinSide === _coinSide ? null : _coinSide);
@@ -43,7 +63,8 @@ export const useHarvestAndRollModalViewModel = () => {
     const logData = {
       coinSide,
       claimablePendingRewards: claimablePendingRewards.toFixed(),
-      claimablePendingRewardsInUsd: claimablePendingRewardsInUsd?.toFixed()
+      claimablePendingRewardsInUsd: claimablePendingRewardsInUsd?.toFixed(),
+      betSize: betSize.toFixed()
     };
 
     log('HARVEST_AND_ROLL_FLIP_CLICK', logData);
@@ -59,7 +80,7 @@ export const useHarvestAndRollModalViewModel = () => {
     try {
       harvestAndRollStore.startLoading();
 
-      await doHarvestAndRoll(claimablePendingRewards, coinSide);
+      await doHarvestAndRoll(betSize, coinSide);
 
       log('HARVEST_AND_ROLL_FLIP_SUCCESS', logData);
     } catch (error) {
@@ -71,8 +92,9 @@ export const useHarvestAndRollModalViewModel = () => {
   };
 
   return {
-    claimablePendingRewards,
-    claimablePendingRewardsInUsd,
+    betSize,
+    betSizeUsd,
+    message,
 
     isLoadingHarvest,
     isLoading,

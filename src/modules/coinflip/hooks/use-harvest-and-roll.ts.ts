@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { sendBatch } from '@blockchain';
+import { getFA2ApproveParams, sendBatch } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
@@ -50,7 +50,11 @@ export const useHarvestAndRoll = () => {
         fee
       );
 
-      await sendBatch(tezos, [...harvestOperations, betOperation]);
+      await sendBatch(tezos, [
+        ...harvestOperations,
+        ...(await getFA2ApproveParams(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, [betOperation])),
+        betOperation
+      ]);
     } catch (error) {
       showErrorToast(error as Error);
     }
