@@ -23,7 +23,7 @@ export const CoinflipPage: FC = observer(() => {
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <TestnetAlert />
 
-      <PageTitle>{t('coinflip|Game')}</PageTitle>
+      <PageTitle data-test-id="coinflipPageTitle">{t('coinflip|Game')}</PageTitle>
 
       <CoinflipResultModal result={result} wonAmount={wonAmount} currency={currency} />
 
