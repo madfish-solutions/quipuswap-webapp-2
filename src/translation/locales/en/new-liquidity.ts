@@ -16,5 +16,6 @@ export const newLiquidity = {
   createPool: 'Create Pool',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
-  back: 'Back'
+  back: 'Back',
+  noPool: 'Can’t find appropriate pool? Create own!'
 } as const;
