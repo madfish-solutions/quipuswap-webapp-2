@@ -10,6 +10,7 @@ import { ArrowDown } from '@shared/svg';
 import { NewLiquidityRoutes } from '../../new-liquidity-routes.enum';
 import styles from './create-pool.module.scss';
 import { useCreatePoolViewModel } from './create-pool.vm';
+import { StableswapRoutes } from '@modules/stableswap';
 
 export const CreatePoolPage: FC = observer(() => {
   const { translations, createRegularPoolIcon, createStablePoolIcon } = useCreatePoolViewModel();
@@ -52,7 +53,10 @@ export const CreatePoolPage: FC = observer(() => {
         <div className={styles.poolWrapper}>
           <img className={styles.img} src={createStablePoolIcon} alt="Create stable pool icon" />
           <h2 className={styles.subtitle}>{stablePool}</h2>
-          <Button className={styles.button} href={`${AppRootRoutes.Stableswap}/${StableswapLiquidityFormTabs.create}`}>
+          <Button
+            className={styles.button}
+            href={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.create}`}
+          >
             {createPool}
           </Button>
         </div>
