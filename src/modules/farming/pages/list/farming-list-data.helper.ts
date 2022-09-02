@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
 import { getFarmingLabel } from '@modules/farming/helpers';
-import { getTokenSymbol, isNull } from '@shared/helpers';
+import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -89,7 +89,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     labels,
     itemStats,
     userStats,
-    href: item.old ? `v1/${item.id}` : `${item.id}`,
+    href: item.old || isUndefined(item.old) ? `v1/${item.id}` : `${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),
