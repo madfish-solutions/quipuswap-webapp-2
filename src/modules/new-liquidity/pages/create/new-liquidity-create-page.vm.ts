@@ -1,6 +1,18 @@
-import { FormikErrors, FormikValues, useFormik } from 'formik';
+import { useCallback } from 'react';
 
-import { canDelegate, numberAsString } from '@shared/helpers';
+import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
+
+import { ZERO_BAKER_ADDRESS } from '@config/constants';
+import { useCreateNewLiquidityPool } from '@modules/new-liquidity/hooks/blockchain/use-new-liquidity-create-pool';
+import {
+  canDelegate,
+  getInputsAmountFormFormikValues,
+  isEmptyArray,
+  isExist,
+  numberAsString,
+  sortTokens,
+  toAtomic
+} from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -12,17 +24,38 @@ import { useNewLiqudityCreateValidation } from './use-new-liquidity-create-valid
 
 export const useNewLiquidityCreatePageViewModel = () => {
   const { t } = useTranslation();
+  const { createNewLiquidityPool } = useCreateNewLiquidityPool();
 
   const userTokensAndBalances = useTokensWithBalances(MOCK_CHOOSED_TOKENS);
-
   const shouldShowBakerInput = canDelegate(MOCK_CHOOSED_TOKENS);
 
   const validationSchema = useNewLiqudityCreateValidation(userTokensAndBalances, shouldShowBakerInput);
 
-  function handleSubmit() {
-    // eslint-disable-next-line no-console
-    console.log('submit');
-  }
+  const handleSubmit = useCallback(
+    async <T extends Record<string, string>>(values: T, actions: FormikHelpers<T>) => {
+      if (isEmptyArray(MOCK_CHOOSED_TOKENS.filter(isExist))) {
+        return;
+      }
+
+      actions.setSubmitting(true);
+
+      const valuesBN = getInputsAmountFormFormikValues(values);
+
+      const candidate = shouldShowBakerInput ? values[NewLiqCreateInput.BAKER_INPUT] : ZERO_BAKER_ADDRESS;
+      const tokensAndAmount = Object.values(valuesBN)
+        .filter(Number)
+        .map((amount, index) => ({
+          token: MOCK_CHOOSED_TOKENS[index],
+          amount: toAtomic(amount, MOCK_CHOOSED_TOKENS[index].metadata.decimals)
+        }))
+        .sort((a, b) => sortTokens(a.token, b.token));
+
+      await createNewLiquidityPool(tokensAndAmount, candidate);
+
+      actions.setSubmitting(false);
+    },
+    [createNewLiquidityPool, shouldShowBakerInput]
+  );
 
   const formik = useFormik({
     validationSchema,

@@ -178,3 +178,6 @@ export const TESTNET_EXCHANGE_RATE = 1.5;
 
 //Charts
 export const COLORS = ['#1373E4', '#2ED33E', '#F9A605', '#FF8042'];
+
+// Baker
+export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
