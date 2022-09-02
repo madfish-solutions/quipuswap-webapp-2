@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { AppRootRoutes } from '@app.router';
+import { StableswapRoutes } from '@modules/stableswap';
 import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { Button, Card, PageTitle, TestnetAlert } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
@@ -10,7 +11,6 @@ import { ArrowDown } from '@shared/svg';
 import { NewLiquidityRoutes } from '../../new-liquidity-routes.enum';
 import styles from './create-pool.module.scss';
 import { useCreatePoolViewModel } from './create-pool.vm';
-import { StableswapRoutes } from '@modules/stableswap';
 
 export const CreatePoolPage: FC = observer(() => {
   const { translations, createRegularPoolIcon, createStablePoolIcon } = useCreatePoolViewModel();
