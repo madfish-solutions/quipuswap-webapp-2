@@ -13,6 +13,7 @@ import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './farming-item.page.module.scss';
+import { getFarmingIdAndType } from './helpers';
 
 export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
@@ -23,7 +24,7 @@ export const useFarmingItemPageViewModel = () => {
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const params = useParams();
 
-  const rawStakeId = params.farmId;
+  const { old, rawStakeId } = getFarmingIdAndType(params);
   /*
     Load data
   */
@@ -31,9 +32,9 @@ export const useFarmingItemPageViewModel = () => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getFarmingItem(new BigNumber(`${rawStakeId}`));
+    void getFarmingItem(new BigNumber(`${rawStakeId}`), old);
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
+  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh, old]);
 
   useEffect(() => {
     if (isNull(farmingItemStore)) {

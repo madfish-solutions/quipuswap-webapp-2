@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
-import { isEmptyArray } from '@shared/helpers';
+import { SINGLE_TOKEN_VALUE } from '@config/constants';
+import { Button } from '@shared/components';
+import { isEmptyArray, isEqual } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 import { noopMap } from '@shared/mapping';
+import { Token } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
+import { i18n } from '@translation';
 
-import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
+import { ManagedTokensModalCellProps, TokensModalCellProps, TokensQuantityInfo } from './components';
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
+import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
 import { useTokensModalStore } from './use-tokens-modal-store';
 
@@ -15,10 +20,27 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { chosenTokens, extendTokens, minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk } =
+  const { minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk, chosenTokens, extendTokens } =
     tokensModalStore;
 
+  const tokensQuantityInfoParams = {
+    minQuantity,
+    maxQuantity,
+    tokensQuantityStatus
+  };
+
   const tokensManagerStore = useTokensManagerStore();
+
+  const handleTokenClick = useCallback(
+    (token: Token) => {
+      if (isEqual(maxQuantity, SINGLE_TOKEN_VALUE)) {
+        tokensModalStore.setChooseToken(token);
+      } else {
+        tokensModalStore.toggleChosenToken(token);
+      }
+    },
+    [maxQuantity, tokensModalStore]
+  );
 
   const {
     search,
@@ -47,9 +69,9 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     return extendTokens.map(token => ({
       token,
       balance: null,
-      onTokenClick: () => tokensModalStore.toggleChosenToken(token)
+      onTokenClick: () => handleTokenClick(token)
     }));
-  }, [chosenTokens, extendTokens, tokensModalStore]);
+  }, [chosenTokens, extendTokens, handleTokenClick]);
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
@@ -85,13 +107,15 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     tokensModalCellParams,
     managedTokensModalCellParams,
     isModalOpen: tokensModalStore.isOpen,
-    isTokensQuantityOk,
     closeTokensModal,
-    tokensQuantityInfoParams: {
-      tokensQuantityStatus,
-      minQuantity,
-      maxQuantity
-    },
+    tokensModalFooter: !isEqual(maxQuantity, SINGLE_TOKEN_VALUE) && (
+      <div className={styles.footerContent}>
+        <TokensQuantityInfo {...tokensQuantityInfoParams} />
+        <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
+          {i18n.t('common|select')}
+        </Button>
+      </div>
+    ),
     headerProps: {
       tabsProps,
 

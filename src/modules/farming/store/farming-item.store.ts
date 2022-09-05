@@ -29,11 +29,12 @@ const defaultAvailableBalance = {
 @ModelBuilder()
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;
+  old = true;
 
   //#region item store region
   @Led({
     default: defaultItem,
-    loader: async self => await getFarmingItemApi(self.farmingId),
+    loader: async self => await getFarmingItemApi(self.farmingId, self.old),
     model: FarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<FarmingItemResponseModel, typeof defaultItem>;
@@ -119,6 +120,7 @@ export class FarmingItemStore {
       setInputAmount: action,
       setSelectedBaker: action,
       updatePendingRewards: action,
+      setOld: action,
 
       availableBalance: computed,
       item: computed,
@@ -176,6 +178,10 @@ export class FarmingItemStore {
 
   setFarmingId(farmingId: Nullable<BigNumber>) {
     this.farmingId = farmingId;
+  }
+
+  setOld(old: boolean) {
+    this.old = old;
   }
 
   async getUserInfo() {
