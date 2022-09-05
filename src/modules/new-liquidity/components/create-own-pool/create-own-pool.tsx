@@ -7,6 +7,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
+import { NewLiquidityRoutes } from '../../new-liquidity-routes.enum';
 import styles from './create-own-pool.module.scss';
 
 const modeClass = {
@@ -21,8 +22,12 @@ export const CreateOwnPool: FC = () => {
   return (
     <Card contentClassName={styles.content} className={cx(modeClass[colorThemeMode], styles.root)}>
       <p className={styles.text}>{t('newLiquidity|noPool')}</p>
-      {/* TODO: change '/create' to enum value */}
-      <Button className={styles.button} external href={`${AppRootRoutes.NewLiquidity}/create`} theme="secondary">
+      <Button
+        className={styles.button}
+        external
+        href={`${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.create}`}
+        theme="secondary"
+      >
         {t('newLiquidity|createPool')}
       </Button>
     </Card>
