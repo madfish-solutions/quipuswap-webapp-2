@@ -9,10 +9,8 @@ import { SentryRoutes } from '@shared/services';
 import { PageNotFoundPage } from '../errors';
 import { NewLiquidityRoutes } from './new-liquidity-routes.enum';
 import { useNewLiquidityViewModel } from './new-liquidity.routing.vm';
-import { NewLiquidityCreatePage } from './pages/create';
-import { DexTwoAddLiq, DexTwoRemoveLiq } from './pages/item';
-import { NewLiquidityListPage } from './pages/list';
 import { CreatePoolPage, DexTwoAddLiq, DexTwoRemoveLiq, NewLiquidityListPage } from './pages';
+import { NewLiquidityCreatePage } from './pages/create';
 import { NewLiquidityFormTabs } from './types';
 
 export const NewLiquidityPageRouter: FC = () => {

@@ -185,4 +185,3 @@ export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;
-
