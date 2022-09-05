@@ -66,8 +66,8 @@ export class LoadingErrorData<ModelType extends object, Default = any, RawData =
   async load() {
     try {
       this.startLoading();
-
-      this.setRawData(await this.getDate());
+      const rawData = await this.getDate();
+      this.setRawData(rawData);
     } catch (error) {
       this.setError(error as Error);
 
