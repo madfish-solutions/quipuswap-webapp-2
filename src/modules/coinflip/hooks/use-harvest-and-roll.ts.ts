@@ -4,27 +4,26 @@ import { getFA2ApproveParams, sendBatch } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { QUIPU_TOKEN, TEZOS_TOKEN_DECIMALS } from '@config/tokens';
 import { CoinflipStorage, TOKEN_ASSETS } from '@modules/coinflip/api/types';
-import { useCoinflipStore, useGamersStats, useUserLastGame, useUserPendingGame } from '@modules/coinflip/hooks';
+import { useGamersStats, useUserLastGame, useUserPendingGame } from '@modules/coinflip/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getContract } from '@shared/dapp';
 import { isNull, toAtomic } from '@shared/helpers';
-import { useToasts } from '@shared/utils';
+import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { getHarvestAllParams } from '../../farming/api';
 import { useStakedOnlyFarmIds } from '../../farming/hooks/use-staked-only-farm-ids';
 import { getBetTokensParams } from '../api';
-import { TokenToPlay } from '../stores';
 
 export const useHarvestAndRoll = () => {
   const { tezos } = useRootStore();
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
   const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
-  const coinflipStore = useCoinflipStore();
   const { getGamersStats } = useGamersStats();
   const { loadUserLastGame } = useUserLastGame();
   const { getUserPendingGame } = useUserPendingGame();
+  const confirmOperation = useConfirmOperation();
 
   const token = QUIPU_TOKEN;
 
@@ -55,12 +54,12 @@ export const useHarvestAndRoll = () => {
         fee
       );
 
-      await sendBatch(tezos, [
+      const oparation = await sendBatch(tezos, [
         ...harvestOperationsParams,
         ...(await getFA2ApproveParams(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, [betOperationParams]))
       ]);
 
-      coinflipStore.setPendingGameTokenToPlay(TokenToPlay.Quipu);
+      await confirmOperation(oparation.opHash);
 
       await getGamersStats();
       await loadUserLastGame();
