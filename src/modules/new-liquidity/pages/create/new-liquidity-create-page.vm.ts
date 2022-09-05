@@ -9,15 +9,16 @@ import {
   getInputsAmountFormFormikValues,
   isEmptyArray,
   isExist,
+  isTezosToken,
   numberAsString,
-  sortTokens,
-  toAtomic
+  sortTokens
 } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from './components/helpers';
+import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
 import { MOCK_CHOOSED_TOKENS } from './mock-data';
 import { NewLiqCreateInput } from './new-liquidity-create.interface';
 import { useNewLiqudityCreateValidation } from './use-new-liquidity-create-validation';
@@ -42,16 +43,17 @@ export const useNewLiquidityCreatePageViewModel = () => {
       const valuesBN = getInputsAmountFormFormikValues(values);
 
       const candidate = shouldShowBakerInput ? values[NewLiqCreateInput.BAKER_INPUT] : ZERO_BAKER_ADDRESS;
-      const tokensAndAmount = Object.values(valuesBN)
-        .filter(Number)
-        .map((amount, index) => ({
-          token: MOCK_CHOOSED_TOKENS[index],
-          amount: toAtomic(amount, MOCK_CHOOSED_TOKENS[index].metadata.decimals)
-        }))
-        .sort((a, b) => sortTokens(a.token, b.token));
+      const tokensAndAmount = getTokensAndAmounts(valuesBN, MOCK_CHOOSED_TOKENS).sort((a, b) =>
+        sortTokens(a.token, b.token)
+      );
+
+      if (isTezosToken(tokensAndAmount[0].token)) {
+        tokensAndAmount.reverse();
+      }
 
       await createNewLiquidityPool(tokensAndAmount, candidate);
 
+      actions.resetForm();
       actions.setSubmitting(false);
     },
     [createNewLiquidityPool, shouldShowBakerInput]
