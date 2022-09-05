@@ -182,6 +182,25 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell
           className={styles.cardCell}
+          cellName={t('coinflip|yourSideIs')}
+          data-test-id="coinflipYourSideIs"
+        >
+          <StateWrapper
+            isError={shouldHideData || !isExist(betCoinSide) || !isExist(gameResult)}
+            errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
+            loaderFallback={<DashPlug />}
+          >
+            <div className={styles.resultContainer}>
+              <span className={styles.betCoinSide} data-test-id="coinflipBetCoinSide">
+                {betCoinSide && t(`coinflip|${betCoinSide}`)}
+              </span>
+            </div>
+          </StateWrapper>
+        </DetailsCardCell>
+
+        <DetailsCardCell
+          className={styles.cardCell}
           cellName={t('coinflip|result')}
           tooltipContent={t('coinflip|resultTooltip')}
           data-test-id="coinflipGameResult"
@@ -193,11 +212,6 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
-              {betCoinSide && (
-                <span className={styles.yourSide} data-test-id="coinflipGameSide">
-                  (Your side is: {t(`coinflip|${betCoinSide}`)})
-                </span>
-              )}
               <span className={styles.result} data-test-id="coinflipGameResult">
                 {gameResult}
               </span>

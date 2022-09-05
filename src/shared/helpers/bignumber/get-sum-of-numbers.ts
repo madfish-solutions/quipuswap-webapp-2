@@ -5,13 +5,5 @@ import { isExist } from '../index';
 
 const ZERO_AMOUNT = 0;
 
-export const getSumOfNumbers = (numbersList: Nullable<BigNumber>[]) => {
-  if (numbersList.some(isExist)) {
-    return numbersList.reduce<BigNumber>(
-      (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
-      new BigNumber(ZERO_AMOUNT)
-    );
-  }
-
-  return new BigNumber(ZERO_AMOUNT);
-};
+export const getSumOfNumbers = (numbersList: Nullable<BigNumber>[]) =>
+  numbersList.some(isExist) ? BigNumber.sum(...numbersList.filter(isExist)) : new BigNumber(ZERO_AMOUNT);
