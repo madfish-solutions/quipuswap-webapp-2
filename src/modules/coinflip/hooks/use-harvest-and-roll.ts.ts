@@ -23,7 +23,7 @@ export const useHarvestAndRoll = () => {
   const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
   const coinflipStore = useCoinflipStore();
   const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
   const { getUserPendingGame } = useUserPendingGame();
 
   const token = QUIPU_TOKEN;
@@ -63,7 +63,7 @@ export const useHarvestAndRoll = () => {
       coinflipStore.setPendingGameTokenToPlay(TokenToPlay.Quipu);
 
       await getGamersStats();
-      await getUserLastGame();
+      await loadUserLastGame();
       await getUserPendingGame();
     } catch (error) {
       showErrorToast(error as Error);

@@ -14,7 +14,7 @@ export const useCoinflipGameViewModel = () => {
   const tokenBalance = useTokenBalance(token) ?? null;
 
   const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
   const { getUserPendingGame } = useUserPendingGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
 
@@ -41,7 +41,7 @@ export const useCoinflipGameViewModel = () => {
       coinflipStore.setPendingGameTokenToPlay(tokenToPlay);
 
       await getGamersStats();
-      await getUserLastGame();
+      await loadUserLastGame();
       await getUserPendingGame();
 
       log('CLICK_FLIP_OPERATION_SUCCESS', logData);
