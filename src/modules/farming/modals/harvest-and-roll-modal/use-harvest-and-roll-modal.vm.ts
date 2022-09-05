@@ -43,7 +43,7 @@ export const useHarvestAndRollModalViewModel = () => {
   const betSize = maxBetSize ? BigNumber.min(maxBetSize, claimablePendingRewards) : claimablePendingRewards;
   const isMaxBetSize = maxBetSize && betSize.isEqualTo(maxBetSize);
   const betSizeUsd = isMaxBetSize ? null : claimablePendingRewardsInUsd;
-  const message = isMaxBetSize ? 'Maximum allowable bid' : null;
+  const message = isMaxBetSize ? t('farm|maximumAllowableBid') : null;
 
   const onCoinSideSelect = (_coinSide: Nullable<CoinSide>) => {
     harvestAndRollStore.setCoinSide(coinSide === _coinSide ? null : _coinSide);
@@ -116,7 +116,10 @@ export const useHarvestAndRollModalViewModel = () => {
     onHarvestAndRollClick,
 
     texts: {
-      harvestOrRoll: t('farm|harvestOrRoll')
+      harvestOrRoll: t('farm|harvestOrRoll'),
+      harvestAndRoll: t('farm|harvestAndRoll'),
+      harvestOrRollDescription: t('farm|harvestOrRollDescription'),
+      justHarvest: t('farm|JustHarvest')
     }
   };
 };

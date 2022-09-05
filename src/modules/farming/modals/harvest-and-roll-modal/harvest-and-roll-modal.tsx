@@ -50,10 +50,7 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }
       isOpen={opened}
       onRequestClose={onClose}
     >
-      <div className={styles.description}>
-        Collect rewards or take a chance and double them? Click the flip button to use Coinflip and try to almost double
-        your rewards instead of the usual harvesting. Pay attention: losing bets will be lost. Fortune favors the brave!
-      </div>
+      <div className={styles.description}>{texts.harvestOrRollDescription}</div>
 
       <CoinflipGameSelect
         isLoading={isLoading}
@@ -76,10 +73,10 @@ export const HarvestAndRollModal: FC<{ opened: boolean }> = observer(({ opened }
 
       <div className={styles.buttons}>
         <Button theme="secondary" onClick={onHarvestAllClick} disabled={isLoading} loading={isLoadingHarvest}>
-          Just Harvest
+          {texts.justHarvest}
         </Button>
         <Button onClick={onHarvestAndRollClick} disabled={isLoadingHarvest} loading={isLoading}>
-          Harvest and Roll
+          {texts.harvestAndRoll}
         </Button>
       </div>
     </Modal>
