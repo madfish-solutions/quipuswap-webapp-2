@@ -8,7 +8,7 @@ import { Optional, WhitelistedBaker } from '@shared/types';
 const SEPARATOR = '/';
 const ID_INDEX_V1 = 1;
 const ID_INDEX_V2 = 0;
-const V2_ROUTER_LENGTH = 1;
+const V1_FARMS = 'v1';
 
 export const makeBaker = (delegateAddress: Optional<string>, knownBakers: WhitelistedBaker[]) => {
   if (typeof delegateAddress === 'string' && delegateAddress !== ZERO_ADDRESS) {
@@ -23,7 +23,7 @@ export const canDelegate = (farmingItem: FarmingItemModel) => farmingItem.tokens
 export const getFarmingIdAndType = (params: Readonly<Params<string>>) => {
   const routerParts = params['*']?.split(SEPARATOR) ?? [];
 
-  const old = routerParts.length > V2_ROUTER_LENGTH;
+  const old = routerParts.includes(V1_FARMS);
   const rawStakeId = old ? routerParts[ID_INDEX_V1] : routerParts[ID_INDEX_V2];
 
   return { rawStakeId, old };
