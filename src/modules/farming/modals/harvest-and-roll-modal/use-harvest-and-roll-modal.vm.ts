@@ -4,11 +4,13 @@ import { BigNumber } from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { sleep } from '@shared/helpers';
 import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { CoinSide } from '../../../coinflip';
-import { useCoinflipGeneralStats, useCoinflipStore } from '../../../coinflip/hooks';
+import { Statuses } from '../../../coinflip/helpers';
+import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../../../coinflip/hooks';
 import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll.ts';
 import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
@@ -27,7 +29,8 @@ export const useHarvestAndRollModalViewModel = () => {
 
   const navigate = useNavigate();
 
-  const { maxBetSize } = useCoinflipStore();
+  const { maxBetSize, lastGameResult } = useCoinflipStore();
+  const { loadUserLastGame } = useUserLastGame();
 
   const farmingListStore = useFarmingListStore();
   const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
@@ -44,12 +47,13 @@ export const useHarvestAndRollModalViewModel = () => {
   const betSizeUsd = isMaxBetSize ? null : claimablePendingRewardsInUsd;
   const message = isMaxBetSize ? 'Maximum allowable bid' : null;
 
-  const onCoinSideSelect = (_coinSide: CoinSide) => {
+  const onCoinSideSelect = (_coinSide: Nullable<CoinSide>) => {
     harvestAndRollStore.setCoinSide(coinSide === _coinSide ? null : _coinSide);
     harvestAndRollStore.setCoinSideError(null);
   };
 
   const onClose = () => {
+    onCoinSideSelect(null);
     harvestAndRollStore.close();
   };
 
@@ -61,6 +65,15 @@ export const useHarvestAndRollModalViewModel = () => {
     log('HARVEST_AND_ROLL_HARVEST_ALL_SUCCESS');
     harvestAndRollStore.finishHarvestLoading();
     onClose();
+  };
+
+  const waitStartedStatus = async () => {
+    await loadUserLastGame();
+    if (lastGameResult !== Statuses.started) {
+      // TODO
+      await sleep(1000);
+      await waitStartedStatus();
+    }
   };
 
   const onHarvestAndRollClick = async () => {
@@ -85,6 +98,7 @@ export const useHarvestAndRollModalViewModel = () => {
       harvestAndRollStore.startLoading();
 
       await doHarvestAndRoll(betSize, coinSide);
+      await waitStartedStatus();
 
       log('HARVEST_AND_ROLL_FLIP_SUCCESS', logData);
 

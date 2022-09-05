@@ -5,20 +5,20 @@ import { COINFLIP_CONTRACT_DECIMALS } from '@config/config';
 import { ZERO_AMOUNT } from '@config/constants';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { COINFLIP_TOKENS_TO_PLAY, QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { toReal, defined, placeDecimals } from '@shared/helpers';
+import { defined, placeDecimals, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableBigNumberWrapperModel } from '@shared/models/nullable-bignumber-wrapper.model';
-import { RootStore, LoadingErrorData } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
 import {
   getCoinflipGeneralStatsApi,
+  getGamersStatsApi,
   getGamesCountByTokenApi,
   getTokenWonByTokenApi,
-  getGamersStatsApi,
   getUserLastGameInfo
 } from '../api';
-import { getBidSize } from '../helpers';
+import { getBidSize, getGameResult } from '../helpers';
 import { DashboardGeneralStats, GamersStats, UserLastGame } from '../interfaces';
 import { GamersStatsModel, GeneralStatsModel, LastGameModel, TokensWonListResponseModel } from '../models';
 import { TokenWon } from '../types';
@@ -163,6 +163,10 @@ export class CoinflipStore {
     return this.userLastGameInfo.model;
   }
 
+  get lastGameResult() {
+    return getGameResult(this.userLastGame.status);
+  }
+
   get isUserLastGameLoading() {
     return this.userLastGameInfo.isLoading;
   }
@@ -270,6 +274,7 @@ export class CoinflipStore {
     };
   }
 
+  // Using
   async getCoinflipGeneralStats() {
     return (
       (await getCoinflipGeneralStatsApi(this.rootStore.tezos, COINFLIP_CONTRACT_ADDRESS, this.token)) ??
@@ -277,6 +282,7 @@ export class CoinflipStore {
     );
   }
 
+  // Using
   async getGamersStats() {
     return (
       (await getGamersStatsApi(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.token)) ??
