@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import * as yup from 'yup';
 
 import { StableswapItemModel } from '@modules/stableswap/models';
