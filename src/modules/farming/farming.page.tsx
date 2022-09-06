@@ -16,8 +16,7 @@ export const FarmingPage: FC = () => {
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
-        <Route path="/:farmId/" element={<FarmingItemPage />} />
-        <Route path="/:farmId/:tab" element={<FarmingItemPage />} />
+        <Route path="/*" element={<FarmingItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
