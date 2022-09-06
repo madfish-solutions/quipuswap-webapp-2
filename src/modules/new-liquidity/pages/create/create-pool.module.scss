@@ -1,0 +1,86 @@
+@import "@styles/_breakpoints.scss";
+@import "@styles/_variables.scss";
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+}
+
+.backArrow {
+  display: flex;
+  align-items: center;
+  transform: rotate(90deg);
+  margin-right: 0;
+}
+
+.cardContent {
+  position: relative;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.poolWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 50%;
+}
+
+.img {
+  display: block;
+  margin-bottom: 8px;
+  height: auto;
+  width: 100%;
+}
+
+.subtitle {
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.142rem;
+  line-height: 1.5;
+}
+
+.button {
+  max-width: 280px;
+}
+
+@include media('<tablet') {
+  .cardContent::before {
+    content: "";
+    position: absolute;
+    display: block;
+    height: 1px;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    background-color: $text-01;
+    transform: translateY(-8px);
+  }
+
+  .poolWrapper:first-child {
+    margin-bottom: 64px;
+  }
+}
+
+@include media('>=tablet') {
+  .cardContent {
+    flex-direction: row;
+    column-gap: 40px;
+    justify-content: space-between;
+  }
+}
+
+@include media('>=Ltablet') {
+  .subtitle,
+  .img {
+    margin-bottom: 32px;
+  }
+
+  .subtitle {
+    font-size: 1.714rem;
+    line-height: 1.333;
+  }
+}
