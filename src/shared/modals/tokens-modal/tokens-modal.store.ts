@@ -75,7 +75,6 @@ export class TokensModalStore {
 
       setInputIndex: action,
       setChooseToken: action,
-      clearChooseToken: action,
 
       extendTokens: computed,
       tokensQuantityStatus: computed,
@@ -98,10 +97,6 @@ export class TokensModalStore {
 
     this.choosenTokensSingleModal[this.inputIndex] = token;
     this.close();
-  }
-
-  clearChooseToken() {
-    this.choosenTokensSingleModal = new Array(MAX_INPUT_COUNT).fill(null);
   }
 
   setChosenTokens(tokens: Nullable<Array<Token>>) {

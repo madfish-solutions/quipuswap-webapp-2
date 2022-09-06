@@ -1,24 +1,29 @@
 import { useMemo } from 'react';
 
+import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
 import { operationAmountSchema } from '@shared/helpers';
-import { BalanceToken } from '@shared/hooks';
+import { Optional, Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from './components/helpers';
 import { NewLiqCreateInput } from './new-liquidity-create.interface';
 
-export const useNewLiqudityCreateValidation = (userTokensAndBalances: Array<BalanceToken>, canDelegate: boolean) => {
+export const useNewLiqudityCreateValidation = (
+  tokens: Array<Optional<Token>>,
+  userBalances: Array<Nullable<BigNumber>>,
+  canDelegate: boolean
+) => {
   const { t } = useTranslation();
 
   return useMemo(() => {
-    const inputAmountSchemas = userTokensAndBalances.map(({ token, balance }) => {
-      const tokenMetadata = token.metadata;
+    const inputAmountSchemas = tokens.map((token, index) => {
+      const tokenMetadata = token?.metadata;
 
       return operationAmountSchema(
-        balance ?? null,
+        userBalances[index] ?? null,
         false,
         tokenMetadata?.decimals,
         tokenMetadata &&
@@ -41,5 +46,5 @@ export const useNewLiqudityCreateValidation = (userTokensAndBalances: Array<Bala
       ...shape,
       [NewLiqCreateInput.BAKER_INPUT]: bakerSchema
     });
-  }, [t, canDelegate, userTokensAndBalances]);
+  }, [tokens, canDelegate, userBalances, t]);
 };

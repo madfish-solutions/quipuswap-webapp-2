@@ -32,7 +32,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
     className,
     label,
     dollarEquivalent,
-    tokens = [],
+    tokens,
     value,
     balance,
     error,
@@ -120,8 +120,14 @@ export const TokenInput: FC<TokenInputProps> = observer(
                 data-test-id="tokenInputSelectButton"
                 onClick={onSelectorClick}
               >
-                <TokensLogos tokens={tokens} />
-                <TokensSymbols tokens={tokens} />
+                {tokens ? (
+                  <>
+                    <TokensSymbols tokens={tokens} />
+                    <TokensLogos tokens={tokens} />
+                  </>
+                ) : (
+                  'SELECT'
+                )}
                 {Boolean(onSelectorClick) && <Shevron />}
               </Button>
             </div>
