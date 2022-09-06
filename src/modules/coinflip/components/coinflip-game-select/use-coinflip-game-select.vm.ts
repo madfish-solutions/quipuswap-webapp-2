@@ -35,8 +35,8 @@ export const useCoinflipGameSelectViewModel = ({
   const getFaceIcon = () => (isTez ? getTezosFaceIcon() : getQuipuSwapFaceIcon());
   const getBackIcon = () => (isTez ? getTezosBackIcon() : getQuipuSwapBackIcon());
 
-  const handleSelectSideA = () => handleSelectCoinSide(CoinSide.Head);
-  const handleSelectSideB = () => handleSelectCoinSide(CoinSide.Tail);
+  const handleSelectHead = () => handleSelectCoinSide(CoinSide.Head);
+  const handleSelectTail = () => handleSelectCoinSide(CoinSide.Tail);
 
   const animationData = isTez ? animationTezosData : animationQuipuData;
 
@@ -44,9 +44,11 @@ export const useCoinflipGameSelectViewModel = ({
     isLoading,
     error,
     animationData,
-    handleSelectSideA,
-    handleSelectSideB,
+    handleSelectHead,
+    handleSelectTail,
     FaceIcon: getFaceIcon(),
-    BackIcon: getBackIcon()
+    BackIcon: getBackIcon(),
+    isHeadSelected,
+    isTailSelected
   };
 };

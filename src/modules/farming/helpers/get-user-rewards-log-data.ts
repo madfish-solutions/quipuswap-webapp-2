@@ -1,9 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
-import { defined } from '@shared/helpers';
+import { defined, getSumOfNumbers } from '@shared/helpers';
 
 import { FarmingListStore } from '../store';
-import { getPendingRewards } from './get-pending-rewards';
 
 const ZERO_AMOUNT = 0;
 
@@ -21,5 +20,5 @@ export const getUserRewardsLogData = (farmingListStore: FarmingListStore, ids: A
     return (earnBalance && earnBalance.multipliedBy(earnExchangeRate ?? ZERO_AMOUNT)) ?? null;
   });
 
-  return getPendingRewards(userEarnBalancesInUsd);
+  return getSumOfNumbers(userEarnBalancesInUsd);
 };

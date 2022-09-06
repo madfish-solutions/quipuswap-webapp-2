@@ -27,7 +27,7 @@ const getFA12ApproveParams = async (
     : [setAllowanceParams, ...operationParams];
 };
 
-const getFA2ApproveParams = async (
+export const getFA2ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token | TokenAddress,

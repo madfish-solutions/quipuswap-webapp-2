@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useFarmingListStore } from '@modules/farming/hooks';
+import { useFarmingListStore, useHarvestAndRollStore } from '@modules/farming/hooks';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
 import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
 import { useReady } from '@providers/use-dapp';
@@ -9,12 +9,13 @@ import { useTranslation } from '@translation';
 
 import { farmingListDataHelper } from './farming-list-data.helper';
 
-export const useFarmingListViewModel = () => {
+export const useFarmingListPageViewModel = () => {
+  const isReady = useReady();
   const { accountPkh } = useAuthStore();
   const farmingListStore = useFarmingListStore();
-  const isReady = useReady();
   const { getFarmingList } = useGetFarmingList();
   const { getFarmingStats } = useGetFarmingStats();
+  const { opened } = useHarvestAndRollStore();
 
   const { t } = useTranslation();
   const title = t('common|Farming');
@@ -37,6 +38,7 @@ export const useFarmingListViewModel = () => {
   return {
     isLoading,
     list: data ?? [],
-    title
+    title,
+    opened
   };
 };
