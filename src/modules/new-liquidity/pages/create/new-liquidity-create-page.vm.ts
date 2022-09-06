@@ -23,6 +23,8 @@ import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
 import { NewLiqCreateInput } from './new-liquidity-create.interface';
 import { useNewLiqudityCreateValidation } from './use-new-liquidity-create-validation';
 
+const ZERO_DECIMALS = 0;
+
 export const useNewLiquidityCreatePageViewModel = () => {
   const { chooseTokens } = useChooseTokens();
   const { t } = useTranslation();
@@ -72,7 +74,7 @@ export const useNewLiquidityCreatePageViewModel = () => {
 
   const handleInputChange = (index: number) => {
     const localToken = choosedTokens[index];
-    const localTokenDecimals = localToken ? localToken.metadata.decimals : 0;
+    const localTokenDecimals = localToken ? localToken.metadata.decimals : ZERO_DECIMALS;
 
     return async (inputAmount: string) => {
       const { realValue } = numberAsString(inputAmount, localTokenDecimals);
@@ -88,12 +90,13 @@ export const useNewLiquidityCreatePageViewModel = () => {
   const handleSelectTokensClick = useCallback(
     async (index: number) => {
       tokensModalStore.setInputIndex(index);
-      const chosenTokens = await chooseTokens({
-        min: SINGLE_TOKEN_VALUE,
-        max: SINGLE_TOKEN_VALUE
-      });
+      const [token] =
+        (await chooseTokens({
+          min: SINGLE_TOKEN_VALUE,
+          max: SINGLE_TOKEN_VALUE
+        })) ?? [];
 
-      tokensModalStore.setChooseToken(chosenTokens?.[0]);
+      tokensModalStore.setChooseToken(token);
     },
     [tokensModalStore, chooseTokens]
   );
