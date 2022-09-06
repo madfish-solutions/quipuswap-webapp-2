@@ -14,7 +14,8 @@ import {
   toReal,
   defined,
   isEmptyArray,
-  saveBigNumber
+  saveBigNumber,
+  getSumOfNumbers
 } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -24,7 +25,6 @@ import { getFarmingListApi, getAllFarmsUserInfoApi, getFarmingListUserBalances, 
 import {
   getRewardsInUsd,
   getEndTimestamp,
-  getPendingRewards,
   getIsHarvestAvailable,
   getUserInfoLastStakedTime,
   getUserPendingRewardWithFee
@@ -194,20 +194,25 @@ export class FarmingListStore {
     return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
   }
 
-  claimablePendingRewards: Nullable<BigNumber> = null;
-  totalPendingRewards: Nullable<BigNumber> = null;
+  claimablePendingRewardsInUsd: Nullable<BigNumber> = null;
+  totalPendingRewardsInUsd: Nullable<BigNumber> = null;
   tokensRewardList: Array<TokensReward> = [];
+
+  get claimablePendingRewards() {
+    return getSumOfNumbers(this.tokensRewardList.map(({ claimable }) => claimable.amount));
+  }
 
   readonly updateUserInfoInterval = new MakeInterval(
     async () => await this._userInfo.load(),
     FARM_REWARD_UPDATE_INTERVAL
   );
+
   readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      claimablePendingRewards: observable,
-      totalPendingRewards: observable,
+      claimablePendingRewardsInUsd: observable,
+      totalPendingRewardsInUsd: observable,
       tokensRewardList: observable,
 
       updatePendingRewards: action,
@@ -217,6 +222,7 @@ export class FarmingListStore {
       listList: computed,
       listBalances: computed,
       farmingItemsWithBalances: computed,
+      claimablePendingRewards: computed,
 
       accountPkh: computed,
       tezos: computed
@@ -262,8 +268,8 @@ export class FarmingListStore {
     const isBalanceLoaded = this.listBalances.some(({ earnBalance }) => isExist(earnBalance));
 
     if (!isBalanceLoaded || isEmptyArray(this.userInfo)) {
-      this.totalPendingRewards = null;
-      this.claimablePendingRewards = null;
+      this.totalPendingRewardsInUsd = null;
+      this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
       const stakedFarmingsIds = this.listBalances
@@ -271,13 +277,12 @@ export class FarmingListStore {
         .map(({ id }) => id);
 
       const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
-
       const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
-
       const claimableRewardsInUsd = claimableFarmingsIds.map(id => this.prepareRewards(id));
 
-      this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
-      this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
+      this.totalPendingRewardsInUsd = getSumOfNumbers(totalRewardsInUsd);
+      this.claimablePendingRewardsInUsd = getSumOfNumbers(claimableRewardsInUsd);
+
       this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
     }
   }

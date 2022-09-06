@@ -5,7 +5,8 @@ import { CoinflipStore as ICoinflipStore } from '@modules/coinflip';
 import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
-  FarmingListStore as IFarmingListStore
+  FarmingListStore as IFarmingListStore,
+  HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
 import {
   NewLiquidityListStore as INewLiquidityListStore,
@@ -43,6 +44,7 @@ export class RootStore {
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
+  harvestAndRollStore: Nullable<IHarvestAndRollStore> = null;
 
   stableswapListStore: Nullable<IStableswapListStore> = null;
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
@@ -188,6 +190,13 @@ export class RootStore {
     if (isNull(this.farmingListStore)) {
       const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
+    }
+  }
+
+  async createHarvestAndRollStore() {
+    if (isNull(this.harvestAndRollStore)) {
+      const { HarvestAndRollStore } = await import('@modules/farming/store/harvest-and-roll.store');
+      this.harvestAndRollStore = new HarvestAndRollStore(this);
     }
   }
 

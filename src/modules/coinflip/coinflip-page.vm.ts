@@ -25,7 +25,7 @@ export const useCoinflipPageViewModel = () => {
   const { getGamesUserInfo } = useGamesUserInfo();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
   const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
 
   useEffect(() => {
     (async () => {
@@ -35,7 +35,7 @@ export const useCoinflipPageViewModel = () => {
       await getGamesUserInfo(accountPkh);
       await getCoinflipGeneralStats();
       await getGamersStats();
-      await getUserLastGame();
+      await loadUserLastGame();
       prevAccountPkhRef.current = accountPkh;
       prevSelectedTokenRef.current = selectedToken;
     })();
@@ -43,7 +43,7 @@ export const useCoinflipPageViewModel = () => {
     getGamesUserInfo,
     getCoinflipGeneralStats,
     getGamersStats,
-    getUserLastGame,
+    loadUserLastGame,
     dAppReady,
     accountPkh,
     selectedToken
