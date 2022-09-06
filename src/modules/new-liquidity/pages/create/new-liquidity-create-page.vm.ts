@@ -92,13 +92,14 @@ export const useNewLiquidityCreatePageViewModel = () => {
       tokensModalStore.setInputIndex(index);
       const [token] =
         (await chooseTokens({
+          disabledTokens: choosedTokens.filter(isExist),
           min: SINGLE_TOKEN_VALUE,
           max: SINGLE_TOKEN_VALUE
         })) ?? [];
 
       tokensModalStore.setChooseToken(token);
     },
-    [tokensModalStore, chooseTokens]
+    [tokensModalStore, chooseTokens, choosedTokens]
   );
 
   const data = choosedTokens.map((token, index) => ({
