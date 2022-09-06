@@ -234,7 +234,7 @@ export class FarmingListStore {
     const list = this.listList;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(list)) {
-      return null;
+      return defaultUserInfo;
     }
 
     const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh, this.farmsWithBalancesIsd);

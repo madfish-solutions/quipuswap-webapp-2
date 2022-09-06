@@ -1,5 +1,5 @@
-@import "@styles/_variables";
-@import "@styles/_breakpoints";
+@import '@styles/_variables';
+@import '@styles/_breakpoints';
 
 .root {
   display: flex;
@@ -23,7 +23,6 @@
   border-radius: 8px;
   transition: background-color $animationTime, color $animationTime;
   flex-grow: 1;
-  font-family: $font;
   box-sizing: border-box;
   line-height: 1.72;
   outline: none;
@@ -84,7 +83,6 @@
 // Sizes
 .medium {
   .input {
-    font-family: $font;
     font-size: 1rem;
   }
 }
@@ -97,7 +95,7 @@
     text-align: center;
     padding: 5px 0;
   }
-// Colors
+  // Colors
 }
 .light {
   .background {
