@@ -15,10 +15,11 @@ export const useGetFarmingItem = () => {
   const isReady = useReady();
 
   const getFarmingItem = useCallback(
-    async (farmingId: BigNumber) => {
+    async (farmingId: BigNumber, old = true) => {
       if (isReady) {
         try {
           farmingItemStore.setFarmingId(farmingId);
+          farmingItemStore.setOld(old);
           await farmingItemStore.itemStore.load();
           await Promise.all([
             farmingItemStore.availableBalanceStore.load(),

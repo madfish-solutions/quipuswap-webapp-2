@@ -24,7 +24,7 @@ export const FarmsListPage = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
         <FarmingListFilter />
         <Iterator
-          data={list ?? []}
+          data={list}
           render={ListItemCard}
           fallback={<EmptyFarmingList />}
           isGrouped
