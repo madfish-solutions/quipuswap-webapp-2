@@ -27,9 +27,9 @@ export const useFarmingRewardsListViewModel = () => {
     if (isProd()) {
       await doHarvestAll();
       await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
+    } else {
+      await harvestAndRollStore.open();
     }
-
-    await harvestAndRollStore.open();
   };
 
   useEffect(() => {
