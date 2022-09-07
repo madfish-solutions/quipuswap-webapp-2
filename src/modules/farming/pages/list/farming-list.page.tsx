@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert, ListStats } from '@shared/components';
-import { isDev } from '@shared/helpers';
 
 import { HarvestAndRollModal } from '../../modals/harvest-and-roll-modal/harvest-and-roll-modal';
 import { EmptyFarmingList, FarmingListSkeleton, FarmingRewardsList } from './components';
@@ -33,7 +32,7 @@ export const FarmsListPage = observer(() => {
           DTI="farmingList"
         />
       </StateWrapper>
-      {isDev() && <HarvestAndRollModal opened={opened} />}
+      <HarvestAndRollModal opened={opened} />
     </>
   );
 });
