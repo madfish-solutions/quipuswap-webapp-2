@@ -1,12 +1,22 @@
 import { useEffect } from 'react';
 
+import { isProd } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { useFarmingListStore, useHarvestAndRollStore } from '../../../../hooks';
+import {
+  useDoHarvestAll,
+  useFarmingListStore,
+  useGetFarmingList,
+  useGetFarmingStats,
+  useHarvestAndRollStore
+} from '../../../../hooks';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation();
+  const { delayedGetFarmingList } = useGetFarmingList();
+  const { delayedGetFarmingStats } = useGetFarmingStats();
+  const { doHarvestAll } = useDoHarvestAll();
 
   const farmingListStore = useFarmingListStore();
   const harvestAndRollStore = useHarvestAndRollStore();
@@ -14,7 +24,12 @@ export const useFarmingRewardsListViewModel = () => {
   const handleHarvestAll = async () => {
     amplitudeService.logEvent('HARVEST_ALL_CLICK');
 
-    await harvestAndRollStore.open();
+    if (isProd()) {
+      await doHarvestAll();
+      await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
+    } else {
+      await harvestAndRollStore.open();
+    }
   };
 
   useEffect(() => {
