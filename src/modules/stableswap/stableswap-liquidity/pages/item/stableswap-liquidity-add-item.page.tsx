@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { PageTitle, StickyBlock, TestnetAlert, Opportunity, Iterator } from '@shared/components';
+import { isEmptyArray } from '@shared/helpers';
 
 import { StableswapFormTabsCard } from '../../../components';
 import { StableswapRoutes } from '../../../stableswap-routes.enum';
@@ -24,12 +25,15 @@ export const StableswapLiquidityAddItemPage: FC = observer(() => {
           <AddLiqForm />
         </StableswapFormTabsCard>
         <div>
-          <Iterator
-            render={Opportunity}
-            data={opportunities}
-            wrapperClassName={styles.opportunitiesWrapper}
-            isGrouped
-          />
+          {!isEmptyArray(opportunities) && (
+            <Iterator
+              render={Opportunity}
+              data={opportunities}
+              wrapperClassName={styles.opportunitiesWrapper}
+              isGrouped
+            />
+          )}
+
           <Details />
         </div>
       </StickyBlock>
