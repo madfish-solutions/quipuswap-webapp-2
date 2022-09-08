@@ -4,6 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { QUIPU_TOKEN } from '@config/tokens';
+import { toReal } from '@shared/helpers';
 import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -12,16 +14,11 @@ import { useCoinflipGeneralStats, useCoinflipStore } from '../../../coinflip/hoo
 import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll.ts';
 import { useDoHarvestAll, useFarmingListStore, useHarvestAndRollStore } from '../../hooks';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
 
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
-
-  useEffect(() => {
-    (async () => {
-      await getCoinflipGeneralStats();
-    })();
-  }, [getCoinflipGeneralStats]);
 
   const { doHarvestAndRoll } = useHarvestAndRoll();
 
@@ -30,19 +27,33 @@ export const useHarvestAndRollModalViewModel = () => {
   const { maxBetSize } = useCoinflipStore();
 
   const farmingListStore = useFarmingListStore();
-  const { claimablePendingQuipuRewards, claimablePendingQuipuRewardsInUsd } = farmingListStore;
 
   const harvestAndRollStore = useHarvestAndRollStore();
-  const { coinSide, coinSideError, isLoading, isLoadingHarvest } = harvestAndRollStore;
+  const { opened, coinSide, coinSideError, isLoading, isLoadingHarvest, rewardsInQuipu, rewardsQuipuInUsd } =
+    harvestAndRollStore;
+
+  useEffect(() => {
+    (async () => {
+      if (!opened) {
+        return;
+      }
+      await getCoinflipGeneralStats();
+
+      const _rewardsInQuipu = await farmingListStore.getQuipuPendingRewards();
+      harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
+      const _rewardsQuipuInUsd = toReal(_rewardsInQuipu, QUIPU_TOKEN);
+      harvestAndRollStore.setRewardsQuipuInUsd(_rewardsQuipuInUsd);
+    })();
+  }, [opened, farmingListStore, getCoinflipGeneralStats, harvestAndRollStore]);
 
   const { doHarvestAll } = useDoHarvestAll();
   const coinflipStore = useCoinflipStore();
 
   const { log } = useAmplitudeService();
 
-  const betSize = maxBetSize ? BigNumber.min(maxBetSize, claimablePendingQuipuRewards) : claimablePendingQuipuRewards;
-  const isMaxBetSize = maxBetSize && betSize.isEqualTo(maxBetSize);
-  const betSizeUsd = isMaxBetSize ? null : claimablePendingQuipuRewardsInUsd;
+  const betSize = maxBetSize && rewardsInQuipu ? BigNumber.min(maxBetSize, rewardsInQuipu) : rewardsInQuipu;
+  const isMaxBetSize = maxBetSize && betSize?.isEqualTo(maxBetSize);
+  const betSizeUsd = isMaxBetSize ? null : rewardsQuipuInUsd;
   const message = isMaxBetSize ? t('farm|maximumAllowableBid') : null;
 
   const onCoinSideSelect = (_coinSide: Nullable<CoinSide>) => {
@@ -69,12 +80,16 @@ export const useHarvestAndRollModalViewModel = () => {
   const onHarvestAndRollClick = async () => {
     const logData = {
       coinSide,
-      claimablePendingRewards: claimablePendingQuipuRewards.toFixed(),
-      claimablePendingRewardsInUsd: claimablePendingQuipuRewardsInUsd?.toFixed(),
-      betSize: betSize.toFixed()
+      claimablePendingRewards: rewardsInQuipu?.toFixed(),
+      claimablePendingRewardsInUsd: rewardsQuipuInUsd?.toFixed(),
+      betSize: betSize?.toFixed()
     };
 
     log('HARVEST_AND_ROLL_FLIP_CLICK', logData);
+
+    if (!betSize || !rewardsInQuipu || !rewardsQuipuInUsd) {
+      throw new Error('BeiSize, Quipu and QuipuUSD rewards are not defined');
+    }
 
     if (!coinSide) {
       harvestAndRollStore.setCoinSideError('Coin Side is required');

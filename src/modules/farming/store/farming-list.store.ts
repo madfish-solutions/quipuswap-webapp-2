@@ -11,7 +11,6 @@ import {
   isEmptyArray,
   isExist,
   isNull,
-  isQuipuToken,
   isTokenEqual,
   MakeInterval,
   multipliedIfPossible,
@@ -108,10 +107,6 @@ export class FarmingListStore {
   getFarmingItemModelById(id: string): Undefined<FarmingItemModel> {
     return (this.listStore.model as FarmingListResponseModel).getFarmingItemModelById?.(id);
   }
-
-  isQuipuFarmingItemModelById(id: string): boolean {
-    return !!(this.listStore.model as FarmingListResponseModel).isQuipuFarmingById?.(id);
-  }
   //#endregion farming list store
 
   //#region farming list balances store
@@ -207,25 +202,6 @@ export class FarmingListStore {
     return getSumOfNumbers(this.tokensRewardList.map(({ claimable }) => claimable.amount));
   }
 
-  get claimablePendingQuipuRewards() {
-    return getSumOfNumbers(
-      this.tokensRewardList.filter(({ token }) => isQuipuToken(token)).map(({ claimable }) => claimable.amount)
-    );
-  }
-
-  get claimablePendingQuipuRewardsInUsd() {
-    const stakedFarmingsIds = this.listBalances
-      .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
-      .map(({ id }) => id);
-
-    const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
-    const claimableRewardsInUsd = claimableFarmingsIds
-      .filter(id => this.isQuipuFarmingItemModelById(id))
-      .map(id => this.prepareRewards(id));
-
-    return getSumOfNumbers(claimableRewardsInUsd);
-  }
-
   readonly updateUserInfoInterval = new MakeInterval(
     async () => await this._userInfo.load(),
     FARM_REWARD_UPDATE_INTERVAL
@@ -247,8 +223,6 @@ export class FarmingListStore {
       listBalances: computed,
       farmingItemsWithBalances: computed,
       claimablePendingRewards: computed,
-      claimablePendingQuipuRewards: computed,
-      claimablePendingQuipuRewardsInUsd: computed,
 
       accountPkh: computed,
       tezos: computed

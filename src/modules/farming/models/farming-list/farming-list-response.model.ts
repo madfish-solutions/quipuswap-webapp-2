@@ -1,5 +1,3 @@
-import { isQuipuToken } from '@shared/helpers';
-
 import { FarmingListResponseDto } from '../../dto';
 import { FarmingItemModel, FarmingItemResponseModel } from '../farming-item';
 
@@ -16,9 +14,5 @@ export class FarmingListResponseModel extends FarmingListResponseDto {
 
   getFarmingItemModelById(id: string) {
     return this.indexedList[id];
-  }
-
-  isQuipuFarmingById(id: string) {
-    return isQuipuToken(this.indexedList[id].rewardToken);
   }
 }
