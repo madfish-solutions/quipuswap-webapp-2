@@ -42,6 +42,7 @@ export const common = {
   'e.g. Kscwf2r3...': 'e.g. Kscwf2r3...',
   Add: 'Add',
   Remove: 'Remove',
+  Create: 'Create',
   Unstake: 'Unstake',
   'Sell Price': 'Sell Price',
   'The amount of token B you receive for 1 token A, according to the current exchange rate.':

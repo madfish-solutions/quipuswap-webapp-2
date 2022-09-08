@@ -1,6 +1,6 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
-@import "@styles/text";
+@import '@styles/variables';
+@import '@styles/breakpoints';
+@import '@styles/text';
 
 @mixin theme($focused, $background, $shape, $price, $hover-fallback) {
   &:not(.readOnly) {
@@ -109,7 +109,6 @@
   background: transparent;
   outline: none;
   border: none;
-  font-family: $font;
   font-style: normal;
   font-weight: 600;
   font-size: 1.714rem;
@@ -145,7 +144,7 @@
   height: 28px;
 }
 
-@include media(">tablet") {
+@include media('>tablet') {
   .shape {
     justify-content: space-between;
   }

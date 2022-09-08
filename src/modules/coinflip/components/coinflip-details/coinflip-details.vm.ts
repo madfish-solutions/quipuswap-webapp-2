@@ -37,7 +37,7 @@ export const useCoinflipDetailsViewModel = () => {
     bidSize: contractBidSize
   } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
   const { getUserPendingGame } = useUserPendingGame();
 
@@ -54,8 +54,8 @@ export const useCoinflipDetailsViewModel = () => {
       return;
     }
 
-    await getUserLastGame();
-  }, [accountPkh, tezos, getUserLastGame]);
+    await loadUserLastGame();
+  }, [accountPkh, tezos, loadUserLastGame]);
 
   const updateUserPendingGame = useCallback(async () => {
     if (isNull(tezos) || isNull(accountPkh)) {
@@ -66,9 +66,9 @@ export const useCoinflipDetailsViewModel = () => {
   }, [accountPkh, tezos, getUserPendingGame]);
 
   useEffect(() => {
-    updateUserLastGame();
-    updateUserPendingGame();
-    updateGeneralStats();
+    void updateUserLastGame();
+    void updateUserPendingGame();
+    void updateGeneralStats();
   }, [updateUserLastGame, updateGeneralStats, updateUserPendingGame]);
 
   useOnBlock(updateUserLastGame);

@@ -100,5 +100,10 @@ export const farm = {
   Claimable: 'Claimable',
   YouvesCheckout: 'Check out alternative farming on Youves',
   lock: '{{timelock}} LOCK',
-  unlockFee: '{{unlockFee}}% UNLOCK FEE'
+  unlockFee: '{{unlockFee}}% UNLOCK FEE',
+  harvestOrRoll: 'Harvest or Roll',
+  harvestAndRoll: 'Harvest and Roll',
+  harvestOrRollDescription:
+    'Collect rewards or take a chance and double them? Click the flip button to use Coinflip and try to almost double your rewards instead of the usual harvesting. Pay attention: losing bets will be lost. Fortune favors the brave!',
+  maximumAllowableBid: 'Maximum allowable bid'
 } as const;

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Iterator, ListItemCard, PageTitle, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { HotPools, NewLiquidityStats } from '../../components';
+import { CreateOwnPool, HotPools, NewLiquidityStats } from '../../components';
 import styles from './new-liquidity-list-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
 
@@ -22,6 +22,8 @@ export const NewLiquidityListPage: FC = observer(() => {
       <NewLiquidityStats />
 
       <HotPools pools={hotPools} />
+
+      <CreateOwnPool />
 
       <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
     </>
