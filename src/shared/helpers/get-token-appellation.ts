@@ -1,10 +1,11 @@
 import { EMPTY_STRING, FISRT_INDEX, SLASH } from '@config/constants';
-import { TEZOS_TOKEN } from '@config/tokens';
-import { Nullable, Optional, RawToken, Token, TokenMetadata } from '@shared/types';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { Nullable, Optional, RawToken, Token, TokenAddress, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
 
 import { isEmptyArray, isLastElementIndex, isSingleElement, toArray } from './arrays';
 import { shortize } from './shortize';
+import { getTokenSlug } from './tokens';
 import { isExist } from './type-checks';
 
 type isAddress = boolean;
@@ -53,8 +54,10 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: { contractAddress: string }) =>
-  token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
+export const isTezosToken = (token: TokenAddress) =>
+  getTokenSlug(token).toLocaleLowerCase() === getTokenSlug(TEZOS_TOKEN).toLocaleLowerCase();
+
+export const isQuipuToken = (token: TokenAddress) => getTokenSlug(token) === getTokenSlug(QUIPU_TOKEN);
 
 const TOKEN_LENGTH = 10;
 

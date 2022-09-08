@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 import { noop } from 'rxjs';
 
@@ -15,6 +16,9 @@ export class HarvestAndRollStore extends BaseFilterStore {
   isLoading = false;
   isLoadingHarvest = false;
 
+  rewardsInQuipu: Nullable<BigNumber> = null;
+  rewardsQuipuInUsd: Nullable<BigNumber> = null;
+
   constructor(private rootStore: RootStore) {
     super();
 
@@ -24,6 +28,8 @@ export class HarvestAndRollStore extends BaseFilterStore {
       coinSideError: observable,
       isLoading: observable,
       isLoadingHarvest: observable,
+      rewardsInQuipu: observable,
+      rewardsQuipuInUsd: observable,
 
       open: action,
       close: action,
@@ -32,7 +38,9 @@ export class HarvestAndRollStore extends BaseFilterStore {
       startLoading: action,
       finishLoading: action,
       startHarvestLoading: action,
-      finishHarvestLoading: action
+      finishHarvestLoading: action,
+      setRewardsInQuipu: action,
+      setRewardsQuipuInUsd: action
     });
   }
 
@@ -71,5 +79,13 @@ export class HarvestAndRollStore extends BaseFilterStore {
 
   finishHarvestLoading() {
     this.isLoadingHarvest = false;
+  }
+
+  setRewardsInQuipu(rewardsInQuipu: Nullable<BigNumber>) {
+    this.rewardsInQuipu = rewardsInQuipu;
+  }
+
+  setRewardsQuipuInUsd(rewardsQuipuInUsd: Nullable<BigNumber>) {
+    this.rewardsQuipuInUsd = rewardsQuipuInUsd;
   }
 }
