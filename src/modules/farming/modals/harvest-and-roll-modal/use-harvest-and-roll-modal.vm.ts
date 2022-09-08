@@ -30,7 +30,7 @@ export const useHarvestAndRollModalViewModel = () => {
   const { maxBetSize } = useCoinflipStore();
 
   const farmingListStore = useFarmingListStore();
-  const { claimablePendingRewards, claimablePendingRewardsInUsd } = farmingListStore;
+  const { claimablePendingQuipuRewards, claimablePendingQuipuRewardsInUsd } = farmingListStore;
 
   const harvestAndRollStore = useHarvestAndRollStore();
   const { coinSide, coinSideError, isLoading, isLoadingHarvest } = harvestAndRollStore;
@@ -40,9 +40,9 @@ export const useHarvestAndRollModalViewModel = () => {
 
   const { log } = useAmplitudeService();
 
-  const betSize = maxBetSize ? BigNumber.min(maxBetSize, claimablePendingRewards) : claimablePendingRewards;
+  const betSize = maxBetSize ? BigNumber.min(maxBetSize, claimablePendingQuipuRewards) : claimablePendingQuipuRewards;
   const isMaxBetSize = maxBetSize && betSize.isEqualTo(maxBetSize);
-  const betSizeUsd = isMaxBetSize ? null : claimablePendingRewardsInUsd;
+  const betSizeUsd = isMaxBetSize ? null : claimablePendingQuipuRewardsInUsd;
   const message = isMaxBetSize ? t('farm|maximumAllowableBid') : null;
 
   const onCoinSideSelect = (_coinSide: Nullable<CoinSide>) => {
@@ -69,8 +69,8 @@ export const useHarvestAndRollModalViewModel = () => {
   const onHarvestAndRollClick = async () => {
     const logData = {
       coinSide,
-      claimablePendingRewards: claimablePendingRewards.toFixed(),
-      claimablePendingRewardsInUsd: claimablePendingRewardsInUsd?.toFixed(),
+      claimablePendingRewards: claimablePendingQuipuRewards.toFixed(),
+      claimablePendingRewardsInUsd: claimablePendingQuipuRewardsInUsd?.toFixed(),
       betSize: betSize.toFixed()
     };
 
