@@ -90,7 +90,10 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     labels,
     itemStats,
     userStats,
-    href: item.old || isUndefined(item.old) ? `${AppRootRoutes.VersionOne}/${item.id}` : `${item.id}`,
+    href:
+      item.old || isUndefined(item.old)
+        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${item.id}`
+        : `${AppRootRoutes.Farming}/${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),
