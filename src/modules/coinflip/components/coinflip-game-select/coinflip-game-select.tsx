@@ -9,8 +9,17 @@ import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import { useCoinflipGameSelectViewModel } from './use-coinflip-game-select.vm';
 
 export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
-  const { error, isLoading, handleSelectSideA, handleSelectSideB, FaceIcon, BackIcon, animationData } =
-    useCoinflipGameSelectViewModel(props);
+  const {
+    error,
+    isLoading,
+    handleSelectHead,
+    handleSelectTail,
+    FaceIcon,
+    BackIcon,
+    animationData,
+    isHeadSelected,
+    isTailSelected
+  } = useCoinflipGameSelectViewModel(props);
 
   return (
     <div className={styles.root}>
@@ -32,20 +41,22 @@ export const CoinflipGameSelect: FC<CoinflipGameSelectProps> = props => {
           <>
             <Button
               data-test-id="coinflipHeadButton"
-              onClick={handleSelectSideA}
+              onClick={handleSelectHead}
               theme="clean"
               className={styles.button}
             >
               <FaceIcon />
+              <div className={styles.buttonLabel}>{isHeadSelected ? 'Head' : <br />}</div>
             </Button>
 
             <Button
               data-test-id="coinflipTailButton"
-              onClick={handleSelectSideB}
+              onClick={handleSelectTail}
               theme="clean"
               className={styles.button}
             >
               <BackIcon />
+              <div className={styles.buttonLabel}>{isTailSelected ? 'Tail' : <br />}</div>
             </Button>
           </>
         )}

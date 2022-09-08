@@ -1,0 +1,44 @@
+@import "@styles/_variables";
+
+.modal {
+  padding: 24px;
+  z-index: 99;
+}
+
+.modalPortal {
+  overflow: hidden;
+}
+
+.description {
+  text-align: left;
+}
+
+.betSize {
+  display: flex;
+  justify-content: center;
+}
+
+.message {
+  text-align: center;
+}
+
+.light {
+  .title,
+  .description {
+    color: $text-01;
+  }
+}
+
+.dark {
+  .description {
+    color: $text-inverse;
+  }
+}
+
+
+.buttons {
+  margin-top: 40px;
+
+  display: flex;
+  column-gap: 16px;
+}

@@ -11,17 +11,18 @@ export const useUserLastGame = () => {
   const coinflipStore = useCoinflipStore();
   const isReady = useReady();
 
-  const getUserLastGame = useCallback(async () => {
-    if (isReady && !isNull(coinflipStore)) {
-      try {
-        await coinflipStore.userLastGameInfo.load();
-      } catch (error) {
-        showErrorToast(error as Error);
-      }
+  const loadUserLastGame = useCallback(async () => {
+    if (!isReady || isNull(coinflipStore)) {
+      return;
+    }
+    try {
+      await coinflipStore.userLastGameInfo.load();
+    } catch (error) {
+      showErrorToast(error as Error);
     }
   }, [isReady, showErrorToast, coinflipStore]);
 
   return {
-    getUserLastGame
+    loadUserLastGame
   };
 };

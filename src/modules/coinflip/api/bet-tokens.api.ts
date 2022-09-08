@@ -5,20 +5,34 @@ import { withApproveApi } from '@blockchain';
 import { COINFLIP_CONTRACT_ADDRESS } from '@config/environment';
 import { Token } from '@shared/types';
 
-export const betTokens = async (
+import { TOKEN_ASSETS } from './types';
+
+export const getBetTokensParams = async (
   tezos: TezosToolkit,
   token: Token,
   accountPkh: string,
-  tokenAsset: number,
+  tokenAsset: TOKEN_ASSETS,
   formattedAmount: BigNumber,
   coinSide: string,
   fee: BigNumber
 ) => {
   const contract = await tezos.contract.at(COINFLIP_CONTRACT_ADDRESS);
 
-  const userBet = contract.methods
-    .bet(tokenAsset, formattedAmount, coinSide)
+  return contract.methods
+    .bet(tokenAsset, formattedAmount.integerValue(BigNumber.ROUND_DOWN), coinSide)
     .toTransferParams({ amount: Number(fee), mutez: true });
+};
 
-  return await withApproveApi(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, formattedAmount, [userBet]);
+export const betTokens = async (
+  tezos: TezosToolkit,
+  token: Token,
+  accountPkh: string,
+  tokenAsset: TOKEN_ASSETS,
+  formattedAmount: BigNumber,
+  coinSide: string,
+  fee: BigNumber
+) => {
+  const userBetParams = await getBetTokensParams(tezos, token, accountPkh, tokenAsset, formattedAmount, coinSide, fee);
+
+  return await withApproveApi(tezos, COINFLIP_CONTRACT_ADDRESS, token, accountPkh, formattedAmount, [userBetParams]);
 };
