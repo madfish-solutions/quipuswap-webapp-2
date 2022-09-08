@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { toReal } from '@shared/helpers';
-import { useAmplitudeService } from '@shared/hooks';
+import { useAmplitudeService, useTokenAmountInUsd } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { CoinSide, TokenToPlay } from '../../../coinflip';
@@ -32,6 +32,8 @@ export const useHarvestAndRollModalViewModel = () => {
   const { opened, coinSide, coinSideError, isLoading, isLoadingHarvest, rewardsInQuipu, rewardsQuipuInUsd } =
     harvestAndRollStore;
 
+  const { getUsd } = useTokenAmountInUsd(QUIPU_TOKEN);
+
   useEffect(() => {
     (async () => {
       if (!opened) {
@@ -39,12 +41,13 @@ export const useHarvestAndRollModalViewModel = () => {
       }
       await getCoinflipGeneralStats();
 
-      const _rewardsInQuipu = await farmingListStore.getQuipuPendingRewards();
+      const _rewardsInQuipu = toReal(await farmingListStore.getQuipuPendingRewards(), QUIPU_TOKEN);
       harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
-      const _rewardsQuipuInUsd = toReal(_rewardsInQuipu, QUIPU_TOKEN);
+
+      const _rewardsQuipuInUsd = getUsd(_rewardsInQuipu);
       harvestAndRollStore.setRewardsQuipuInUsd(_rewardsQuipuInUsd);
     })();
-  }, [opened, farmingListStore, getCoinflipGeneralStats, harvestAndRollStore]);
+  }, [opened, farmingListStore, getCoinflipGeneralStats, harvestAndRollStore, getUsd]);
 
   const { doHarvestAll } = useDoHarvestAll();
   const coinflipStore = useCoinflipStore();
@@ -87,8 +90,8 @@ export const useHarvestAndRollModalViewModel = () => {
 
     log('HARVEST_AND_ROLL_FLIP_CLICK', logData);
 
-    if (!betSize || !rewardsInQuipu || !rewardsQuipuInUsd) {
-      throw new Error('BeiSize, Quipu and QuipuUSD rewards are not defined');
+    if (!betSize) {
+      throw new Error('BeiSize of Quipu rewards are not defined');
     }
 
     if (!coinSide) {
