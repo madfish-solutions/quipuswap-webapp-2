@@ -26,9 +26,7 @@ export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
           ...restProps,
           tokenAddress: tokenAddress ?? 'tez'
         }))
-      )
-      // eslint-disable-next-line no-console
-      .catch(console.error);
+      );
 
   const { data: exchangeRates } = useUpdateOnBlockSWR(tezos, ['exchange-rates'], getExchangeRates, {
     refreshInterval: 30000

@@ -5,6 +5,5 @@ export * from './calculate-output-with-lp';
 export * from './create-amount-michelson-map';
 export * from './formik';
 export * from './get-input-slug-by-index';
-export * from './get-not-null-fixed-value';
 export * from './get-stableswap-title';
 export * from './apply-stableswap-fee';

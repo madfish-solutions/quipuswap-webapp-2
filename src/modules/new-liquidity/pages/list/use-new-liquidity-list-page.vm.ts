@@ -4,8 +4,7 @@ import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
 import { isHotPool } from '../../helpers';
-import { useGetNewLiquidityList, useNewLiquidityListStore } from '../../hooks';
-import { useGetNewLiquidityStats } from '../../hooks/loaders/use-get-new-liquidity-stats.loader';
+import { useGetNewLiquidityList, useNewLiquidityListStore, useGetNewLiquidityStats } from '../../hooks';
 import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 
 export const useNewLiquidityPageViewModel = () => {

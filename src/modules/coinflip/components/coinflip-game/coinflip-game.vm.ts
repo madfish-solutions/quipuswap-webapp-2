@@ -4,7 +4,7 @@ import { useAmountInUsd, useAmplitudeService, useTokenBalance } from '@shared/ho
 import { useToasts } from '@shared/utils';
 
 import { getGameResult, Statuses } from '../../helpers';
-import { useCoinFlip, useCoinflipStore, useGamersStats, useUserLastGame } from '../../hooks';
+import { useCoinFlip, useCoinflipStore, useGamersStats, useUserLastGame, useUserPendingGame } from '../../hooks';
 import { CoinSide } from '../../stores';
 
 export const useCoinflipGameViewModel = () => {
@@ -14,7 +14,8 @@ export const useCoinflipGameViewModel = () => {
   const tokenBalance = useTokenBalance(token) ?? null;
 
   const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
+  const { getUserPendingGame } = useUserPendingGame();
   const { handleCoinFlip: handleCoinFlipPure } = useCoinFlip();
 
   const { showErrorToast } = useToasts();
@@ -37,9 +38,11 @@ export const useCoinflipGameViewModel = () => {
       log('CLICK_FLIP_BUTTON_CLICK', logData);
 
       await handleCoinFlipPure(input, coinSide);
+      coinflipStore.setPendingGameTokenToPlay(tokenToPlay);
 
       await getGamersStats();
-      await getUserLastGame();
+      await loadUserLastGame();
+      await getUserPendingGame();
 
       log('CLICK_FLIP_OPERATION_SUCCESS', logData);
     } catch (error) {
@@ -63,7 +66,7 @@ export const useCoinflipGameViewModel = () => {
     coinflipStore.setInput(!input.isNaN() ? input : null);
   };
 
-  const gameResult = getGameResult(userLastGame?.status);
+  const gameResult = getGameResult(userLastGame.status);
 
   return {
     isLoading: isLoading || isUserLastGameLoading || gameResult === Statuses.started,

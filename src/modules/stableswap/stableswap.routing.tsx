@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../errors';
 import { StableDividendsRouter } from './stabledividends';
@@ -11,7 +12,7 @@ import { StableswapRoutes } from './stableswap-routes.enum';
 
 export const StableswapRouter: FC = () => {
   return (
-    <Routes>
+    <SentryRoutes>
       <Route path={`${StableswapRoutes.liquidity}/*`} element={<StableswapLiquidityRouter />} />
       <Route path={`${StableswapRoutes.dividends}/*`} element={<StableDividendsRouter />} />
 
@@ -21,6 +22,6 @@ export const StableswapRouter: FC = () => {
       />
 
       <Route path="*" element={<PageNotFoundPage />} />
-    </Routes>
+    </SentryRoutes>
   );
 };

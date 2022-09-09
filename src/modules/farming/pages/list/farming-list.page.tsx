@@ -2,14 +2,15 @@ import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert, ListStats } from '@shared/components';
 
+import { HarvestAndRollModal } from '../../modals/harvest-and-roll-modal/harvest-and-roll-modal';
 import { EmptyFarmingList, FarmingListSkeleton, FarmingRewardsList } from './components';
 import styles from './farming-list.page.module.scss';
 import { FarmingListFilter } from './structures';
-import { useFarmingListViewModel } from './use-farming-list.vm';
+import { useFarmingListPageViewModel } from './use-farming-list-page.vm';
 import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const FarmsListPage = observer(() => {
-  const { isLoading, list, title } = useFarmingListViewModel();
+  const { isLoading, list, title, opened } = useFarmingListPageViewModel();
   const { stats } = useListStatsViewModel();
 
   return (
@@ -23,7 +24,7 @@ export const FarmsListPage = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
         <FarmingListFilter />
         <Iterator
-          data={list ?? []}
+          data={list}
           render={ListItemCard}
           fallback={<EmptyFarmingList />}
           isGrouped
@@ -31,6 +32,7 @@ export const FarmsListPage = observer(() => {
           DTI="farmingList"
         />
       </StateWrapper>
+      <HarvestAndRollModal opened={opened} />
     </>
   );
 });

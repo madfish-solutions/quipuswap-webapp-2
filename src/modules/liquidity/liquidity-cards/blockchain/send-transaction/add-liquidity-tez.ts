@@ -1,14 +1,22 @@
-import { batchify, FoundDex, addLiquidity as getAddLiquidityParams } from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
+
+import { withApproveApiForManyTokens } from '@blockchain';
+import { Token } from '@shared/types';
 
 export const addLiquidityTez = async (
   tezos: TezosToolkit,
   dex: FoundDex,
+  token: Token,
   tezValue: BigNumber,
-  estimateTezosToolkit: TezosToolkit
+  tokenValue: BigNumber
 ) => {
-  const addLiquidityParams = await getAddLiquidityParams(estimateTezosToolkit, dex, { tezValue });
-
-  return await batchify(tezos.wallet.batch([]), addLiquidityParams).send();
+  return await withApproveApiForManyTokens(
+    tezos,
+    dex.contract.address,
+    [{ token, amount: tokenValue }],
+    await tezos.wallet.pkh(),
+    [dex.contract.methods.investLiquidity(tokenValue).toTransferParams({ mutez: true, amount: tezValue.toNumber() })]
+  );
 };
