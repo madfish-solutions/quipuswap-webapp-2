@@ -23,5 +23,23 @@ export const getGamersStatsApi = async (tezos: Nullable<TezosToolkit>, accountPk
 
   const gamerStats = await coinFlipStorage.gamers_stats.get<GamersStatsRaw>([accountPkh, new BigNumber(tokenAsset)]);
 
-  return gamerStats ?? null;
+  if (!gamerStats) {
+    return null;
+  }
+
+  const {
+    last_game_id: lastGameId,
+    games_count: gamesCount,
+    total_won_amt: totalWonAmount,
+    total_lost_amt: totalLostAmount,
+    total_bets_amt: totalBetsAmount
+  } = gamerStats;
+
+  return {
+    lastGameId,
+    gamesCount,
+    totalWonAmount,
+    totalLostAmount,
+    totalBetsAmount
+  };
 };

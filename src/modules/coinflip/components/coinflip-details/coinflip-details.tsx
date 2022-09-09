@@ -50,14 +50,16 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
       header={{ content: <>Details</> }}
       contentClassName={styles.content}
     >
-      <div className={styles.gameInfo}>
-        <h3 className={styles.h3}>Game Info</h3>
+      <div className={styles.gameInfo} data-test-id="coinflipGameInfo">
+        <h3 className={styles.h3} data-test-id="coinflipGameInfoTitle">
+          Game Info
+        </h3>
 
         <DetailsCardCell
           className={styles.cardCell}
           cellName={t('coinflip|payoutCoefficient')}
           tooltipContent={t('coinflip|payoutCoefficientTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipPayoutCoefficient"
         >
           <StateCurrencyAmount
             className={styles.payoutCoefficient}
@@ -72,7 +74,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           className={styles.cardCell}
           cellName={t('coinflip|bank')}
           tooltipContent={t('coinflip|bankTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipBank"
         >
           <StateCurrencyAmount
             className={cx(styles.amount)}
@@ -88,7 +90,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           className={styles.cardCell}
           cellName={t('coinflip|totalWins')}
           tooltipContent={t('coinflip|totalWinsTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipTotalWins"
         >
           <StateCurrencyAmount
             className={cx(styles.amount)}
@@ -104,7 +106,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           className={styles.cardCell}
           cellName={t('coinflip|gamesCount')}
           tooltipContent={t('coinflip|gamesCountTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipGamesCount"
         >
           <StateCurrencyAmount isLoading={isGamersStatsLoading} loaderFallback={<DashPlug />} amount={gamesCount} />
         </DetailsCardCell>
@@ -112,7 +114,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
         <DetailsCardCell
           className={styles.cardCell}
           cellName={t('coinflip|maxAllowableBid')}
-          data-test-id="maxAllowableBid"
+          data-test-id="coinflipMaxAllowableBid"
         >
           <StateCurrencyAmount
             className={cx(styles.amount)}
@@ -123,14 +125,16 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           />
         </DetailsCardCell>
       </div>
-      <div className={styles.lastGameResult}>
-        <h3 className={styles.h3}>Your last game result</h3>
+      <div className={styles.lastGameResult} data-test-id="coinflipLastGameResultSection">
+        <h3 className={styles.h3} data-test-id="coinflipLastGameResultTitle">
+          Your last game result
+        </h3>
 
         <DetailsCardCell
           className={styles.cardCell}
           cellName={t('coinflip|gameId')}
           tooltipContent={t('coinflip|gameIdTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipGameId"
         >
           <StateCurrencyAmount
             isError={shouldHideData || !isExist(lastGameId)}
@@ -145,7 +149,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           className={styles.cardCell}
           cellName={t('coinflip|betSize')}
           tooltipContent={t('coinflip|betSizeTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipBetSize"
         >
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(bidSizeInUsd) })}
@@ -163,7 +167,7 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
           className={styles.cardCell}
           cellName={t('coinflip|rewardSize')}
           tooltipContent={t('coinflip|rewardSizeTooltip')}
-          data-test-id="valueLocked"
+          data-test-id="coinflipRewardSize"
         >
           <StateCurrencyAmount
             className={cx({ [styles.amount]: isExist(rewardSizeInUsd) })}
@@ -178,9 +182,8 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
 
         <DetailsCardCell
           className={styles.cardCell}
-          cellName={t('coinflip|result')}
-          tooltipContent={t('coinflip|resultTooltip')}
-          data-test-id="valueLocked"
+          cellName={t('coinflip|yourSideIs')}
+          data-test-id="coinflipYourSideIs"
         >
           <StateWrapper
             isError={shouldHideData || !isExist(betCoinSide) || !isExist(gameResult)}
@@ -189,8 +192,29 @@ export const CoinflipDetails: FC<Props> = observer(({ className }) => {
             loaderFallback={<DashPlug />}
           >
             <div className={styles.resultContainer}>
-              {betCoinSide && <span className={styles.yourSide}>(Your side is: {t(`coinflip|${betCoinSide}`)})</span>}
-              <span className={styles.result}>{gameResult}</span>
+              <span className={styles.betCoinSide} data-test-id="coinflipBetCoinSide">
+                {betCoinSide && t(`coinflip|${betCoinSide}`)}
+              </span>
+            </div>
+          </StateWrapper>
+        </DetailsCardCell>
+
+        <DetailsCardCell
+          className={styles.cardCell}
+          cellName={t('coinflip|result')}
+          tooltipContent={t('coinflip|resultTooltip')}
+          data-test-id="coinflipGameResult"
+        >
+          <StateWrapper
+            isError={shouldHideData || !isExist(betCoinSide) || !isExist(gameResult)}
+            errorFallback={<DashPlug animation={false} />}
+            isLoading={isUserLastGameLoading}
+            loaderFallback={<DashPlug />}
+          >
+            <div className={styles.resultContainer}>
+              <span className={styles.result} data-test-id="coinflipGameResult">
+                {gameResult}
+              </span>
             </div>
           </StateWrapper>
         </DetailsCardCell>

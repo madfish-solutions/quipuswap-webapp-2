@@ -13,7 +13,8 @@ export const useDetailsVievModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
   const { itemStore } = useStableDividendsItemStore();
-  const { data: item, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
+  const { model, isLoading: isDataLoading, isInitialized: isDataInitialized } = itemStore;
+  const item = model.item;
 
   const isLoading = isDataLoading || !isDataInitialized || !dAppReady;
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);

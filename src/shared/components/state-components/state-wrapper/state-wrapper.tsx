@@ -2,7 +2,7 @@ import { ReactElement, Suspense } from 'react';
 
 import { CFC } from '@shared/types';
 
-import { ErrorBoundary } from './error-boundary/error-boundary';
+import { ErrorBoundary } from './error-boundary';
 
 export interface StateWrapperProps {
   isLoading?: boolean;
@@ -27,7 +27,7 @@ export const StateWrapper: CFC<StateWrapperProps> = ({
   }
 
   return (
-    <ErrorBoundary isError={isError} fallback={errorFallback ?? <></>}>
+    <ErrorBoundary fallback={errorFallback ?? <></>}>
       <Suspense fallback={loaderFallback}>{children}</Suspense>
     </ErrorBoundary>
   );

@@ -6,24 +6,19 @@ import { isNull } from '@shared/helpers';
 export const useNewLiquidityViewModel = () => {
   const rootStore = useRootStore();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
-  const [error, setError] = useState<Nullable<Error>>(null);
 
   useEffect(() => {
     (async () => {
-      try {
-        if (isNull(rootStore.newLiquidityListStore)) {
-          await rootStore.createNewLiquidityListStore();
-        }
-
-        if (isNull(rootStore.newLiquidityItemStore)) {
-          await rootStore.createNewLiquidityItemStore();
-        }
-        setIsInitialized(true);
-      } catch (_error) {
-        setError(_error as Error);
+      if (isNull(rootStore.newLiquidityListStore)) {
+        await rootStore.createNewLiquidityListStore();
       }
+
+      if (isNull(rootStore.newLiquidityItemStore)) {
+        await rootStore.createNewLiquidityItemStore();
+      }
+      setIsInitialized(true);
     })();
   }, [rootStore]);
 
-  return { isInitialized, error };
+  return { isInitialized };
 };

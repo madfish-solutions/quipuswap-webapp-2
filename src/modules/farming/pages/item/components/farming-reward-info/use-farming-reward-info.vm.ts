@@ -20,8 +20,7 @@ export const useFarmingRewardInfoViewModel = () => {
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
-  const { data: userInfo } = userInfoStore;
-  const { data: delegateAddress } = userFarmingDelegateStore;
+  const userInfo = farmingItemStore.userInfo;
 
   const walletIsConnected = isExist(accountPkh);
   const userInfoStoreReady = userInfoStore.isReady || !walletIsConnected;
@@ -30,6 +29,7 @@ export const useFarmingRewardInfoViewModel = () => {
   const pendingRewardsReady = isExist(farmingItem?.earnBalance) || !walletIsConnected;
   const farmingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
+  const delegateAddress = farmingItemStore.userFarmingDelegateAddress;
 
   const handleHarvest = async () => {
     amplitudeService.logEvent('HARVEST_CLICK');

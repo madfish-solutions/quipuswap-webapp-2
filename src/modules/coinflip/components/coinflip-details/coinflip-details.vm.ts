@@ -11,7 +11,7 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 
 import { getBetCoinSide, getGameResult, getTokenInstanceFromSymbol } from '../../helpers';
-import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame } from '../../hooks';
+import { useCoinflipGeneralStats, useCoinflipStore, useUserLastGame, useUserPendingGame } from '../../hooks';
 import { DashboardGeneralStats } from '../../interfaces';
 
 const mapping = ({ bank, gamesCount, payoutCoefficient, totalWins }: DashboardGeneralStats, token: Token) => ({
@@ -37,8 +37,9 @@ export const useCoinflipDetailsViewModel = () => {
     bidSize: contractBidSize
   } = useCoinflipStore();
   const { accountPkh } = useAuthStore();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
+  const { getUserPendingGame } = useUserPendingGame();
 
   const updateGeneralStats = useCallback(async () => {
     if (isNull(tezos)) {
@@ -53,33 +54,43 @@ export const useCoinflipDetailsViewModel = () => {
       return;
     }
 
-    await getUserLastGame();
-  }, [accountPkh, tezos, getUserLastGame]);
+    await loadUserLastGame();
+  }, [accountPkh, tezos, loadUserLastGame]);
+
+  const updateUserPendingGame = useCallback(async () => {
+    if (isNull(tezos) || isNull(accountPkh)) {
+      return;
+    }
+
+    await getUserPendingGame();
+  }, [accountPkh, tezos, getUserPendingGame]);
 
   useEffect(() => {
-    updateUserLastGame();
-    updateGeneralStats();
-  }, [updateUserLastGame, updateGeneralStats]);
+    void updateUserLastGame();
+    void updateUserPendingGame();
+    void updateGeneralStats();
+  }, [updateUserLastGame, updateGeneralStats, updateUserPendingGame]);
 
   useOnBlock(updateUserLastGame);
   useOnBlock(updateGeneralStats);
+  useOnBlock(updateUserPendingGame);
 
   const tokenInstance = getTokenInstanceFromSymbol(tokenToPlay);
 
-  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.data, tokenInstance);
+  const { bank, gamesCount, payoutCoefficient, totalWins } = mapping(generalStatsStore.model, tokenInstance);
 
   const tokenExchangeRate = exchangeRates?.find(
     rate => rate.tokenId === tokenInstance.fa2TokenId && tokenInstance.contractAddress === rate.tokenAddress
   );
   const bankBN = new BigNumber(bank ?? '0');
   const bankInUsd = bankBN.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const realBidSize = userLastGame?.bidSize && toReal(userLastGame.bidSize, tokenInstance);
+  const realBidSize = userLastGame.bidSize && toReal(userLastGame.bidSize, tokenInstance);
   const bidSizeInUsd = accountPkh && realBidSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const totalWinsInUsd = totalWins?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
   const rewardSize = realBidSize?.multipliedBy(payoutCoefficient ?? '0');
   const rewardSizeInUsd = accountPkh && rewardSize?.multipliedBy(tokenExchangeRate?.exchangeRate ?? '0');
-  const gameResult = getGameResult(userLastGame?.status);
-  const betCoinSide = getBetCoinSide(userLastGame?.betCoinSide);
+  const gameResult = getGameResult(userLastGame.status);
+  const betCoinSide = getBetCoinSide(userLastGame.betCoinSide);
   const shouldHideData = isNull(accountPkh);
   const preparedBidSize =
     Math.floor(Number(contractBidSize) * QUIPU_TOKEN_DECIMALS_PRECISION) / QUIPU_TOKEN_DECIMALS_PRECISION;
@@ -102,7 +113,7 @@ export const useCoinflipDetailsViewModel = () => {
     payoutCoefficient,
     isGamersStatsLoading: isNull(generalStatsStore) || isGeneralStatsLoading,
     isUserLastGameLoading: isNull(userLastGame) || isUserLastGameLoading || isGamersStatsLoading,
-    status: userLastGame?.status,
+    status: userLastGame.status,
     lastGameId: gamersStats?.lastGameId
   };
 };

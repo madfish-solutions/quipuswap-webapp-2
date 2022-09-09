@@ -43,7 +43,7 @@ export const useTokenInputViewModel = ({
   const amountCap = !Array.isArray(tokens) ? getTokenInputAmountCap(tokens) : undefined;
   const isFormReady = !readOnly;
   const shownPercentSelector = !hiddenPercentSelector && isFormReady;
-  const shownBalance = Boolean(accountPkh) && !hiddenBalance;
+  const shownBalance = Boolean(accountPkh) && !hiddenBalance && Boolean(tokens);
 
   return {
     isFocused,

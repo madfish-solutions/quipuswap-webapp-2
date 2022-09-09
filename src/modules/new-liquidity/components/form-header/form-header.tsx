@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import cx from 'classnames';
+
 import { AppRootRoutes } from '@app.router';
 import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
@@ -7,11 +9,15 @@ import { useTranslation } from '@translation';
 
 import styles from './form-header.module.scss';
 
-export const FormHeader: FC = () => {
+interface Props {
+  className?: string;
+}
+
+export const FormHeader: FC<Props> = ({ className }) => {
   const { t } = useTranslation();
 
   return (
-    <div className={styles.root}>
+    <div className={cx(styles.root, className)}>
       <Button
         href={AppRootRoutes.NewLiquidity}
         theme="quaternary"

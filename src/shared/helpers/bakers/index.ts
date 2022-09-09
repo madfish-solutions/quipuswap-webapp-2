@@ -4,3 +4,4 @@ export * from './bakers-metadata';
 export * from './get-bakers';
 export * from './local-search-baker';
 export * from './get-baker-name';
+export * from './can-delegate';
