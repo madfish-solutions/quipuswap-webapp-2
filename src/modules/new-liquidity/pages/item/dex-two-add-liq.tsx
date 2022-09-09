@@ -7,7 +7,7 @@ import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { DexTwoAddLiqForm } from './components';
+import { DexTwoAddLiqForm, DexTwoDetails } from './components';
 
 export const DexTwoAddLiq: FC = () => {
   const { t } = useTranslation();
@@ -22,6 +22,7 @@ export const DexTwoAddLiq: FC = () => {
         <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
           <DexTwoAddLiqForm />
         </NewLiquidityFormTabsCard>
+        <DexTwoDetails />
       </StickyBlock>
     </>
   );

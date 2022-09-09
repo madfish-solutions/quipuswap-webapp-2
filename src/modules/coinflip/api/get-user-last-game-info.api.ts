@@ -20,5 +20,15 @@ export const getUserLastGameInfo = async (tezos: Nullable<TezosToolkit>, gameId:
 
   const userLastGameInfo = await coinflipStorage.games.get<UserLastGameRaw>(gameId);
 
-  return userLastGameInfo ?? null;
+  if (!userLastGameInfo) {
+    return null;
+  }
+
+  const { bid_size: bidSize, bet_coin_side: betCoinSide, status } = userLastGameInfo;
+
+  return {
+    bidSize,
+    betCoinSide,
+    status
+  };
 };

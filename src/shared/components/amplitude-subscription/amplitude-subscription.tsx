@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useAccountPkh } from '@providers/use-dapp';
 
 import { hash } from '../../helpers';
-import { amplitudeService } from '../../services';
+import { amplitudeService, sentryService } from '../../services';
 
 export const AmplitudeSubscription: FC = () => {
   const location = useLocation();
@@ -25,6 +25,7 @@ export const AmplitudeSubscription: FC = () => {
 
   useEffect(() => {
     amplitudeService.setUserId(accountPkh ? hash(accountPkh) : null);
+    sentryService.setUser(accountPkh ? { id: hash(accountPkh) } : null);
   }, [accountPkh]);
 
   return null;

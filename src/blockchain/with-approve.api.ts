@@ -27,7 +27,7 @@ const getFA12ApproveParams = async (
     : [setAllowanceParams, ...operationParams];
 };
 
-const getFA2ApproveParams = async (
+export const getFA2ApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token | TokenAddress,
@@ -152,6 +152,10 @@ export const withApproveApiForManyTokens = async (
 
   let accumParams: TransferParams[] = operationParams;
   for (const { token, amount } of tokensAndAmountsArray) {
+    if (isTezosToken(token)) {
+      continue;
+    }
+
     accumParams = await getApproveParams(tezos, contractAddress, token, accountPkh, amount, accumParams);
   }
 

@@ -56,6 +56,7 @@ export const stableswap = {
   tokenAmountLocked: 'The amount of {{tokenName}} locked within this pool by liquidity providers.',
   selectTokens: 'Select 2–4 Tokens',
   fees: 'Fees',
+  feesRate: 'Fees rate',
   amplificationParameters: 'A (amplification parameters)',
   amplification10: '10 (uncollateralized algoritmic stablecoins)',
   amplification100: '100 (non-redeemable, collateralized assets)',
@@ -92,6 +93,7 @@ export const stableswap = {
   stakersFeeDecriptions: 'QUIPU Stakers Fee:',
   devFeeDecriptions: 'Dev Fee:',
   clickThe: 'Click the',
-  button: 'button!'
+  button: 'button!',
+  weeklyVolume: 'Volume(7d)'
   //#endregion creation rules
 } as const;

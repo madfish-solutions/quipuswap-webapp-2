@@ -18,6 +18,8 @@ export const useFarmingPageViewModel = () => {
           await rootStore.createFarmingFilterStore();
           await rootStore.createFarmingListStore();
           await rootStore.createFarmingItemStore();
+          await rootStore.createCoinflipStore();
+          await rootStore.createHarvestAndRollStore();
         }
       } finally {
         setIsInitialazied(true);

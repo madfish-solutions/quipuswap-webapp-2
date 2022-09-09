@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoadingErrorDataNew } from '../store';
+import { LoadingErrorData } from '../store';
 import { Constructable } from '../types';
 import { LED_METADATA_KEY } from './led-metadata-key';
 import { createConfigMap, MapperConfig } from './mapper';
@@ -8,7 +8,7 @@ import { LedMetadataValue } from './types';
 export const ModelBuilder = () => {
   return function <T extends Constructable>(Constructor: T) {
     return class extends Constructor {
-      [key: LedMetadataValue['propertyKey']]: LoadingErrorDataNew<object, any, any>;
+      [key: LedMetadataValue['propertyKey']]: LoadingErrorData<object, any, any>;
       constructor(...args: any[]) {
         super(...args);
 
@@ -17,7 +17,7 @@ export const ModelBuilder = () => {
         ledFields.forEach(({ propertyKey, default: defaultData, loader, model }) => {
           const mapperConfig: MapperConfig = createConfigMap(model.prototype)!;
 
-          this[propertyKey] = new LoadingErrorDataNew(defaultData, async () => loader(this), mapperConfig, model);
+          this[propertyKey] = new LoadingErrorData(defaultData, async () => loader(this), mapperConfig, model);
         });
       }
     };

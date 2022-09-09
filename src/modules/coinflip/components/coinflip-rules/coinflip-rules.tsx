@@ -23,9 +23,12 @@ export const CoinflipRules: FC = observer(() => {
       header={{ content: <>Play Coinflip - get a chance to double your bid!</> }}
       contentClassName={styles.content}
       className={cx(styles.root, modeClass[colorThemeMode])}
+      data-test-id="coinflipRules"
     >
-      <div>
-        <h3 className={styles.h3}>How to play?</h3>
+      <div data-test-id="howToPlaySection">
+        <h3 className={styles.h3} data-test-id="howToPlayTitle">
+          How to play?
+        </h3>
         <ol className={cx(styles.list, styles.ol)}>
           <li className={styles.li}>Pick a token (Tez or QUIPU for now).</li>
           <li className={styles.li}>Submit your bet.</li>
@@ -39,8 +42,10 @@ export const CoinflipRules: FC = observer(() => {
           <li className={styles.li}>If you lose - your bid is gone and your tokens move to the Rewards pool.</li>
         </ol>
       </div>
-      <div>
-        <h3 className={styles.h3}>Rules of the Game</h3>
+      <div data-test-id="rulesOfTheGameSection">
+        <h3 className={styles.h3} data-test-id="rulesOfTheGameTitle">
+          Rules of the Game
+        </h3>
         <ul className={cx(styles.list, styles.ul)}>
           <li className={styles.li}>
             {`All rewards are paid from the Rewards pool. All lost bets of users and tokens that are added by the project

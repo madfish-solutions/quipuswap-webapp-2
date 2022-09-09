@@ -1,12 +1,13 @@
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useLocation, Navigate, Routes, Route } from 'react-router-dom';
+import { useLocation, Navigate, Route } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { PageNotFoundPage } from '@modules/errors';
 import { StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
+import { SentryRoutes } from '@shared/services';
 
 import { StableswapRoutes } from '../stableswap-routes.enum';
 import { StableDividendsFormTabs } from '../types';
@@ -37,14 +38,14 @@ export const StableDividendsRouter: FC = observer(() => {
 
   return (
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
-      <Routes>
+      <SentryRoutes>
         <Route index element={<StableDividendsListPage />} />
 
         <Route path={`/${StableDividendsFormTabs.stake}/:poolId`} element={<StableDividendsStakeItemPage />} />
         <Route path={`/${StableDividendsFormTabs.unstake}/:poolId`} element={<StableDividendsUnstakeItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
-      </Routes>
+      </SentryRoutes>
     </StateWrapper>
   );
 });

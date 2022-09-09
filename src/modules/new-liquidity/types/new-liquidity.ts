@@ -1,4 +1,5 @@
 export enum NewLiquidityFormTabs {
   add = 'add',
-  remove = 'remove'
+  remove = 'remove',
+  create = 'create'
 }
