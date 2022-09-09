@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { CoinflipPage } from '@modules/coinflip';
@@ -14,9 +14,10 @@ import { StableswapRouter } from '@modules/stableswap/stableswap.routing';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
 import { TermsOfServicePage } from '@modules/terms-of-service';
 import { VotingPage } from '@modules/voting';
+import { SentryRoutes } from '@shared/services';
 
 export const AppRouter: FC = () => (
-  <Routes>
+  <SentryRoutes>
     <Route path={AppRootRoutes.Root} element={<HomePage />} />
 
     <Route path={`${AppRootRoutes.Swap}/*`} element={<SwapPage />} />
@@ -35,5 +36,5 @@ export const AppRouter: FC = () => (
     <Route path={AppRootRoutes.TermsOfService} element={<TermsOfServicePage />} />
 
     <Route path="*" element={<PageNotFoundPage />} />
-  </Routes>
+  </SentryRoutes>
 );

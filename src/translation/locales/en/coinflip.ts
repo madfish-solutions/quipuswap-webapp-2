@@ -34,5 +34,6 @@ export const coinflip = {
   rewardTooltip: 'Your all-time Coinflip winnings.',
   yourGamesTooltip: 'The number of coins flipped by you.',
   head: 'Head',
-  tail: 'Tail'
+  tail: 'Tail',
+  yourSideIs: 'Your side is'
 } as const;

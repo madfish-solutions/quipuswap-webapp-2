@@ -15,15 +15,17 @@ const ZERO_BN = new BigNumber('0');
 export const useCoinflipPageViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const coinflipStore = useCoinflipStore();
-  const token = coinflipStore?.token;
+  const token = coinflipStore?.pendingGameToken;
+  const selectedToken = coinflipStore?.token;
   const rootStore = useRootStore();
   const dAppReady = useReady();
   const { accountPkh } = useAuthStore();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const prevSelectedTokenRef = useRef(token);
   const { getGamesUserInfo } = useGamesUserInfo();
   const { getCoinflipGeneralStats } = useCoinflipGeneralStats();
   const { getGamersStats } = useGamersStats();
-  const { getUserLastGame } = useUserLastGame();
+  const { loadUserLastGame } = useUserLastGame();
 
   useEffect(() => {
     (async () => {
@@ -33,10 +35,19 @@ export const useCoinflipPageViewModel = () => {
       await getGamesUserInfo(accountPkh);
       await getCoinflipGeneralStats();
       await getGamersStats();
-      await getUserLastGame();
+      await loadUserLastGame();
       prevAccountPkhRef.current = accountPkh;
+      prevSelectedTokenRef.current = selectedToken;
     })();
-  }, [getGamesUserInfo, getCoinflipGeneralStats, getGamersStats, getUserLastGame, dAppReady, accountPkh, token]);
+  }, [
+    getGamesUserInfo,
+    getCoinflipGeneralStats,
+    getGamersStats,
+    loadUserLastGame,
+    dAppReady,
+    accountPkh,
+    selectedToken
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -50,18 +61,18 @@ export const useCoinflipPageViewModel = () => {
 
   const wonAmount = useMemo(() => {
     const realPayoutCoefficient = toReal(
-      coinflipStore?.generalStatsStore.data?.payoutCoefficient ?? ZERO_BN,
+      coinflipStore?.generalStatsStore.model.payoutCoefficient ?? ZERO_BN,
       COINFLIP_CONTRACT_DECIMALS
     );
-    const realBidSize = toReal(coinflipStore?.userLastGameInfo.data?.bidSize ?? ZERO_BN, token);
+    const realBidSize = toReal(coinflipStore?.pendingGameStore.model.bidSize ?? ZERO_BN, token);
 
     return realPayoutCoefficient.multipliedBy(realBidSize);
-  }, [coinflipStore?.generalStatsStore.data?.payoutCoefficient, coinflipStore?.userLastGameInfo.data?.bidSize, token]);
+  }, [coinflipStore?.generalStatsStore.model.payoutCoefficient, coinflipStore?.pendingGameStore.model.bidSize, token]);
 
   return {
     isInitialized,
     wonAmount,
-    result: coinflipStore?.userLastGameInfo.data?.status ?? null,
+    result: coinflipStore?.pendingGameStore.model.status,
     currency: token?.metadata.symbol
   };
 };

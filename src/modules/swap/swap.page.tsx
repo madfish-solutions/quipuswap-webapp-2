@@ -1,25 +1,26 @@
 import { FC } from 'react';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
+import { SentryRoutes } from '@shared/services';
 import { SwapTabAction } from '@shared/types';
 
 import { SwapSend } from './swap-send';
 
 export const SwapPage: FC = () => {
   return (
-    <Routes>
+    <SentryRoutes>
       <Route path="/" element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
       <Route path=":fromTo" element={<SwapSend initialAction={'swap' as SwapTabAction} />} />
-    </Routes>
+    </SentryRoutes>
   );
 };
 
 export const SendPage: FC = () => {
   return (
-    <Routes>
+    <SentryRoutes>
       <Route path="/" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
       <Route path=":fromTo" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
-    </Routes>
+    </SentryRoutes>
   );
 };

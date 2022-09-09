@@ -4,28 +4,28 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import {
+  defined,
+  getSumOfNumbers,
+  getTokenSlug,
+  getUniqArray,
+  isEmptyArray,
   isExist,
   isNull,
-  MakeInterval,
   isTokenEqual,
-  getUniqArray,
-  getTokenSlug,
+  MakeInterval,
   multipliedIfPossible,
-  toReal,
-  defined,
-  isEmptyArray,
-  saveBigNumber
+  saveBigNumber,
+  toReal
 } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorDataNew, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import { getFarmingListApi, getAllFarmsUserInfoApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
+import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
 import {
-  getRewardsInUsd,
   getEndTimestamp,
-  getPendingRewards,
   getIsHarvestAvailable,
+  getRewardsInUsd,
   getUserInfoLastStakedTime,
   getUserPendingRewardWithFee
 } from '../helpers';
@@ -84,7 +84,7 @@ export class FarmingListStore {
     loader: getFarmingStatsApi,
     model: FarmingStatsResponseModel
   })
-  readonly statsStore: LoadingErrorDataNew<FarmingStatsResponseModel, typeof defaultStats>;
+  readonly statsStore: LoadingErrorData<FarmingStatsResponseModel, typeof defaultStats>;
 
   get stats() {
     return this.statsStore.model.stats;
@@ -97,7 +97,7 @@ export class FarmingListStore {
     loader: getFarmingListApi,
     model: FarmingListResponseModel
   })
-  readonly listStore: LoadingErrorDataNew<FarmingListResponseModel, typeof defaultList>;
+  readonly listStore: LoadingErrorData<FarmingListResponseModel, typeof defaultList>;
 
   //TODO: change name
   get listList() {
@@ -115,7 +115,7 @@ export class FarmingListStore {
     loader: async (self: FarmingListStore) => getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
     model: FarmingListBalancesModel
   })
-  readonly listBalancesStore: LoadingErrorDataNew<FarmingListBalancesModel, typeof defaultListBalances>;
+  readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
 
   get listBalances() {
     const balances = this.listBalancesStore.model.balances;
@@ -165,7 +165,7 @@ export class FarmingListStore {
     loader: async (self: FarmingListStore) => await self.getUserInfo(),
     model: UserInfoResponseModel
   })
-  readonly _userInfo: LoadingErrorDataNew<UserInfoResponseModel, typeof defaultUserInfo>;
+  readonly _userInfo: LoadingErrorData<UserInfoResponseModel, typeof defaultUserInfo>;
   private farmsWithBalancesIsd: Nullable<Array<BigNumber>> = null;
 
   get userInfo(): Array<UserInfoModel> {
@@ -194,20 +194,25 @@ export class FarmingListStore {
     return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
   }
 
-  claimablePendingRewards: Nullable<BigNumber> = null;
-  totalPendingRewards: Nullable<BigNumber> = null;
+  claimablePendingRewardsInUsd: Nullable<BigNumber> = null;
+  totalPendingRewardsInUsd: Nullable<BigNumber> = null;
   tokensRewardList: Array<TokensReward> = [];
+
+  get claimablePendingRewards() {
+    return getSumOfNumbers(this.tokensRewardList.map(({ claimable }) => claimable.amount));
+  }
 
   readonly updateUserInfoInterval = new MakeInterval(
     async () => await this._userInfo.load(),
     FARM_REWARD_UPDATE_INTERVAL
   );
+
   readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      claimablePendingRewards: observable,
-      totalPendingRewards: observable,
+      claimablePendingRewardsInUsd: observable,
+      totalPendingRewardsInUsd: observable,
       tokensRewardList: observable,
 
       updatePendingRewards: action,
@@ -217,6 +222,7 @@ export class FarmingListStore {
       listList: computed,
       listBalances: computed,
       farmingItemsWithBalances: computed,
+      claimablePendingRewards: computed,
 
       accountPkh: computed,
       tezos: computed
@@ -228,7 +234,7 @@ export class FarmingListStore {
     const list = this.listList;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(list)) {
-      return null;
+      return defaultUserInfo;
     }
 
     const userInfo = await getAllFarmsUserInfoApi(tezos, authStore.accountPkh, this.farmsWithBalancesIsd);
@@ -262,8 +268,8 @@ export class FarmingListStore {
     const isBalanceLoaded = this.listBalances.some(({ earnBalance }) => isExist(earnBalance));
 
     if (!isBalanceLoaded || isEmptyArray(this.userInfo)) {
-      this.totalPendingRewards = null;
-      this.claimablePendingRewards = null;
+      this.totalPendingRewardsInUsd = null;
+      this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
       const stakedFarmingsIds = this.listBalances
@@ -271,13 +277,12 @@ export class FarmingListStore {
         .map(({ id }) => id);
 
       const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
-
       const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
-
       const claimableRewardsInUsd = claimableFarmingsIds.map(id => this.prepareRewards(id));
 
-      this.totalPendingRewards = getPendingRewards(totalRewardsInUsd);
-      this.claimablePendingRewards = getPendingRewards(claimableRewardsInUsd);
+      this.totalPendingRewardsInUsd = getSumOfNumbers(totalRewardsInUsd);
+      this.claimablePendingRewardsInUsd = getSumOfNumbers(claimableRewardsInUsd);
+
       this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
     }
   }

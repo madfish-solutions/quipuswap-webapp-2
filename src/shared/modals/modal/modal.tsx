@@ -8,6 +8,7 @@ import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
 import { PopupClose } from '@shared/svg';
 
+import { Optional } from '../../types';
 import styles from './modal.module.scss';
 
 export type ModalProps = {
@@ -19,7 +20,7 @@ export type ModalProps = {
   cardClassName?: string;
   header?: ReactNode;
   footer?: ReactNode;
-  title?: string;
+  title?: Optional<string>;
 } & ReactModal.Props;
 
 const modeClass = {

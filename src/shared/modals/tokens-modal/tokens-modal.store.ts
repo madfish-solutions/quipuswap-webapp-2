@@ -2,10 +2,12 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
-import { ManagedToken, Token } from '@shared/types';
+import { ManagedToken, Optional, Token } from '@shared/types';
 
 import { ExtendTokensModalCellProps } from './components';
 import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';
+
+const MAX_INPUT_COUNT = 2;
 
 type TokensResolver = (value: Nullable<Array<Token>> | PromiseLike<Nullable<Array<Token>>>) => void;
 
@@ -17,6 +19,9 @@ export class TokensModalStore {
   isSingle: Nullable<boolean> = null;
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
+
+  inputIndex: Nullable<number> = null;
+  choosenTokensSingleModal: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
@@ -60,10 +65,16 @@ export class TokensModalStore {
       maxQuantity: observable,
       minQuantity: observable,
 
+      inputIndex: observable,
+      choosenTokensSingleModal: observable,
+
       setOpenState: action,
       toggleChosenToken: action,
       setChosenTokens: action,
       setInitialTokens: action,
+
+      setInputIndex: action,
+      setChooseToken: action,
 
       extendTokens: computed,
       tokensQuantityStatus: computed,
@@ -73,6 +84,19 @@ export class TokensModalStore {
 
   setOpenState(isOpen: boolean) {
     this.isOpen = isOpen;
+  }
+
+  setInputIndex(index: number) {
+    this.inputIndex = index;
+  }
+
+  setChooseToken(token: Optional<Token>) {
+    if (!isExist(this.inputIndex) || !isExist(token)) {
+      return;
+    }
+
+    this.choosenTokensSingleModal[this.inputIndex] = token;
+    this.close();
   }
 
   setChosenTokens(tokens: Nullable<Array<Token>>) {

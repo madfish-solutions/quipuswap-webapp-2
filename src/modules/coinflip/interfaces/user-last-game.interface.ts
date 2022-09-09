@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
 
 export interface BetCoinSide {
-  head: symbol;
-  tail: symbol;
+  head?: symbol;
+  tail?: symbol;
 }
 
 export interface Status {
-  lost: symbol;
-  started: symbol;
-  won: symbol;
+  lost?: symbol;
+  started?: symbol;
+  won?: symbol;
 }
 
 export interface UserLastGameRaw {
