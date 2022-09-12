@@ -13,4 +13,7 @@ export class OpportunityDto implements Opportunity {
 
   @Typed()
   apy: BigNumber;
+
+  @Typed({ optional: true })
+  old: boolean;
 }

@@ -4,28 +4,28 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import {
+  defined,
+  getSumOfNumbers,
+  getTokenSlug,
+  getUniqArray,
+  isEmptyArray,
   isExist,
   isNull,
-  MakeInterval,
   isTokenEqual,
-  getUniqArray,
-  getTokenSlug,
+  MakeInterval,
   multipliedIfPossible,
-  toReal,
-  defined,
-  isEmptyArray,
   saveBigNumber,
-  getSumOfNumbers
+  toReal
 } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import { getFarmingListApi, getAllFarmsUserInfoApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
+import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
 import {
-  getRewardsInUsd,
   getEndTimestamp,
   getIsHarvestAvailable,
+  getRewardsInUsd,
   getUserInfoLastStakedTime,
   getUserPendingRewardWithFee
 } from '../helpers';
