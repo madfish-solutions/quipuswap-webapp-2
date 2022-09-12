@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { AppRootRoutes } from '@app.router';
 import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
 import { getFarmingLabel } from '@modules/farming/helpers';
@@ -89,7 +90,10 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     labels,
     itemStats,
     userStats,
-    href: item.old || isUndefined(item.old) ? `v1/${item.id}` : `${item.id}`,
+    href:
+      item.old || isUndefined(item.old)
+        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${item.id}`
+        : `${AppRootRoutes.Farming}/${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),

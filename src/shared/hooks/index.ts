@@ -20,4 +20,5 @@ export * from './use-base-filter-store-converter';
 export * from './use-amount-in-usd';
 export * from './use-amplitude-service';
 export * from './use-mobile-detect';
+export * from './use-token-amount-in-usd';
 export * from './youtube';
