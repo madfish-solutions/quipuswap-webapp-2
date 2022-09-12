@@ -1,11 +1,21 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
+import { FISRT_INDEX, PERCENTAGE_100 } from '@config/constants';
 import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, extractTokens, getTransactionDeadline, isExist, isNull, toAtomic } from '@shared/helpers';
+import {
+  decreaseBySlippage,
+  extractTokens,
+  getTransactionDeadline,
+  isExist,
+  isNull,
+  isTezosToken,
+  sortTokens,
+  toAtomic
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -35,15 +45,24 @@ export const useAddLiquidity = () => {
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
     );
 
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
-    const shares = atomicInputAmounts[0]
-      .multipliedBy(item.totalSupply)
-      .idiv(item.tokensInfo[0].atomicTokenTvl)
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts).sort((a, b) =>
+      sortTokens(a.token, b.token)
+    );
+
+    if (isTezosToken(tokensAndAmounts[FISRT_INDEX].token)) {
+      tokensAndAmounts.reverse();
+    }
+
+    const shares = atomicInputAmounts[FISRT_INDEX].multipliedBy(item.totalSupply)
+      .dividedBy(item.tokensInfo[FISRT_INDEX].atomicTokenTvl)
       .decimalPlaces(LP_TOKEN.metadata.decimals);
 
-    // TODO: Fees for shares
+    const sharesWithFee = shares
+      .multipliedBy(PERCENTAGE_100.minus(item.feesRate))
+      .dividedBy(PERCENTAGE_100)
+      .integerValue(BigNumber.ROUND_DOWN);
 
-    const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN); // should be shares with fee
+    const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 

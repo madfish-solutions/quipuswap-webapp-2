@@ -2,11 +2,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
+import { EMPTY_STRING, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { isGreaterThanZero, sortTokensAmounts } from '@shared/helpers';
+import { isEqual, isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
-
-const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
 export const addDexTwoLiquidityApi = async (
   tezos: TezosToolkit,
@@ -17,15 +16,19 @@ export const addDexTwoLiquidityApi = async (
   candidate: string,
   itemId: BigNumber
 ) => {
-  if (!candidate) {
+  if (isEqual(candidate, EMPTY_STRING)) {
     candidate = ZERO_BAKER_ADDRESS;
   }
+
   const dexTwoContract = await tezos.wallet.at(DEX_TWO_CONTRACT_ADDRESS);
-  const sortedTokes = sortTokensAmounts(tokensAndAmounts);
+
+  const tezValue = tokensAndAmounts.find(item => isTezosToken(item.token))?.amount ?? new BigNumber(0);
+
+  const [tokenA, tokenB] = tokensAndAmounts;
 
   const dexTwoLiquidityParams = dexTwoContract.methods
-    .invest_liquidity(itemId, sortedTokes.amountA, sortedTokes.amountB, shares, accountPkh, candidate, deadline)
-    .toTransferParams();
+    .invest_liquidity(itemId, tokenA.amount, tokenB.amount, shares, accountPkh, candidate, deadline)
+    .toTransferParams({ mutez: true, amount: tezValue.toNumber() });
 
   const cleanedTokensAmount = tokensAndAmounts.filter(({ amount }) => isGreaterThanZero(amount));
 

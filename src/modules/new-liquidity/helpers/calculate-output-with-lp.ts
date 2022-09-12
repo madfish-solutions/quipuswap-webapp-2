@@ -10,18 +10,18 @@ interface TokenOutputWithDecimals {
 }
 
 export const calculateOutputWithLp = (
-  shares: BigNumber,
-  totalSupply: Nullable<BigNumber>,
+  shares: Nullable<BigNumber>,
+  totalSupply: BigNumber,
   tokensInfo: Array<LiquidityTokenInfo>
 ): Array<Nullable<TokenOutputWithDecimals>> => {
-  if (isNull(shares) || isNull(totalSupply)) {
+  if (isNull(shares)) {
     return tokensInfo.map(() => null);
   }
 
   const tokenOutputs: Array<TokenOutputWithDecimals> = tokensInfo.map(({ token, atomicTokenTvl }) => ({
     output: shares
       .multipliedBy(atomicTokenTvl)
-      .idiv(totalSupply)
+      .dividedBy(totalSupply)
       .decimalPlaces(token.metadata.decimals, BigNumber.ROUND_DOWN),
     decimals: token.metadata.decimals
   }));
