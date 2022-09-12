@@ -1,36 +1,26 @@
-/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
-// import { LP_TOKEN_DECIMALS } from '@config/constants';
-import { LP_TOKEN_DECIMALS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useAddLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
-  // calculateShares,
   extractTokens,
   getInputsAmountFormFormikValues,
-  // isExist,
   isNull,
   isTezosToken,
   numberAsString,
   saveBigNumber,
   toAtomic,
-  // toAtomic,
-  // toAtomic,
-  // toReal,
-  toFixed
-  // toReal
+  toFixed,
+  toReal
 } from '@shared/helpers';
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndexAdd, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
-// import { LP_TOKEN } from '../helpers/mock-lp-token';
-// import { LP_TOKEN } from '../helpers/mock-lp-token';
 import { Input, NewLiquidityAddFormValues } from './dex-two-add-liq-form.interface';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
@@ -72,7 +62,6 @@ export const useDexTwoAddLiqFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  //
   const calculateShares = (
     inputAmount: Nullable<BigNumber>,
     reserve: BigNumber,
@@ -83,36 +72,17 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
   const formikValues = formik.values;
 
-  const handleInputChange = (reserves: BigNumber, tokenDecimals: number, index: number) => {
+  const handleInputChange = (reserves: BigNumber, index: number) => {
     const localToken = extractTokens(tokensInfo)[index];
     const localTokenDecimals = localToken.metadata.decimals;
-
-    const decimalDifference =
-      Math.abs(tokenDecimals - LP_TOKEN_DECIMALS) === 0 ? tokenDecimals : Math.abs(tokenDecimals - LP_TOKEN_DECIMALS);
-
-    console.log(decimalDifference);
-    console.log('tokenDecimals', tokenDecimals);
-
-    // const share = calculateShares(new BigNumber(1), new BigNumber(2000000), new BigNumber(4000000), 6);
-
-    // const tokenADec = tokensInfo[index].token.metadata.decimals;
-    // const tokenBDec = tokensInfo[Math.abs(index - 1)].token.metadata.decimals;
-
-    // const notLocalTokenDecimals = extractTokens(tokensInfo)[Math.abs(index - 1)].metadata.decimals;
-
-    // return async (inputAmount: string) => {
-    //   const { realValue } = numberAsString(inputAmount, localTokenDecimals);
-    //   const formikKey = getInputSlugByIndexAdd(index);
-
-    //   formik.setFieldValue(formikKey, realValue);
-    // };
+    const notLocalTokenDecimals = extractTokens(tokensInfo)[Math.abs(index - 1)].metadata.decimals;
 
     return (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
       const inputAmountBN = saveBigNumber(fixedValue, null);
 
       (formikValues as FormikValues)[getInputSlugByIndexAdd(index)] = realValue;
-      const shares = calculateShares(inputAmountBN, reserves, item.totalSupply, tokenDecimals);
+      const shares = calculateShares(inputAmountBN, reserves, item.totalSupply, localTokenDecimals);
 
       const calculatedValues = item.tokensInfo.map(({ atomicTokenTvl, token }, indexOfCalculatedInput) => {
         if (index === indexOfCalculatedInput) {
@@ -122,28 +92,10 @@ export const useDexTwoAddLiqFormViewModel = () => {
         return calculateOutputWithToken(shares, item.totalSupply, atomicTokenTvl, token);
       });
 
-      // console.log(calculatedValues.map(item1 => item1!.toFixed()));
-
-      console.log(tokensInfo.map(item1 => item1.token));
-
       calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-        // let toRealVal;
-
-        // if (tokenADec > tokenBDec) {
-        //   toRealVal = calculatedValue?.div(Math.abs(tokenADec - tokenBDec));
-        // } else if (tokenADec < tokenBDec) {
-        //   toRealVal = calculatedValue?.multipliedBy(Math.abs(tokenADec - tokenBDec));
-        // } else {
-        //   toRealVal = calculatedValue;
-        // }
-        console.log(calculatedValues.map(item1 => item1!.toFixed()));
-        console.log(calculatedValue?.toNumber());
-
         if (indexOfCalculatedInput !== index && calculatedValue) {
           (formikValues as FormikValues)[getInputSlugByIndexAdd(indexOfCalculatedInput)] = toFixed(
-            calculatedValue
-              .div(10 ** tokensInfo[Math.abs(indexOfCalculatedInput - 1)].token.metadata.decimals)
-              .decimalPlaces(tokensInfo[indexOfCalculatedInput].token.metadata.decimals)
+            toReal(calculatedValue, notLocalTokenDecimals).decimalPlaces(notLocalTokenDecimals)
           );
         }
       });
@@ -171,7 +123,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
       tokens: token,
       label: t('common|Input'),
       balance: userBalances[index],
-      onInputChange: handleInputChange(atomicTokenTvl, decimals, index)
+      onInputChange: handleInputChange(atomicTokenTvl, index)
     };
   });
 
