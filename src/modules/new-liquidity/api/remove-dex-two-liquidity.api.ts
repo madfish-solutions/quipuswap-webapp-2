@@ -2,12 +2,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
+import { EMPTY_STRING, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { sortTokensAmounts } from '@shared/helpers';
+import { isEqual } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
-
-// TODO: temporary/ until the field appears on the backend
-const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
 export const removeDexTwoLiquidityApi = async (
   tezos: TezosToolkit,
@@ -15,21 +13,19 @@ export const removeDexTwoLiquidityApi = async (
   tokensAndAmounts: Array<AmountToken>,
   deadline: string,
   accountPkh: string,
+  candidate: string,
   itemId: BigNumber
 ) => {
+  if (isEqual(candidate, EMPTY_STRING)) {
+    candidate = ZERO_BAKER_ADDRESS;
+  }
+
   const dexTwoContract = await tezos.wallet.at(DEX_TWO_CONTRACT_ADDRESS);
-  const sortedTokes = sortTokensAmounts(tokensAndAmounts);
+
+  const [tokenA, tokenB] = tokensAndAmounts;
 
   const dexTwoLiquidityParams = dexTwoContract.methods
-    .divest_liquidity(
-      itemId,
-      sortedTokes.amountA,
-      sortedTokes.amountB,
-      shares,
-      accountPkh,
-      ZERO_BAKER_ADDRESS,
-      deadline
-    )
+    .divest_liquidity(itemId, tokenA.amount, tokenB.amount, shares, accountPkh, candidate, deadline)
     .toTransferParams();
 
   return await sendBatch(tezos, [dexTwoLiquidityParams]);
