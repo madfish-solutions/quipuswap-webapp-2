@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
 import { FISRT_INDEX } from '@config/constants';
-import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -14,14 +13,15 @@ import {
   isNull,
   isTezosToken,
   sortTokens,
-  toAtomic,
-  getValueWithFee
+  toAtomic
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { addDexTwoLiquidityApi } from '../../api';
+import { getValueWithFee } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useAddLiquidity = () => {

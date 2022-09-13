@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
+import { OPPOSITE_INDEX } from '@config/constants';
 import { calculateOutputWithLp } from '@modules/new-liquidity/helpers/calculate-output-with-lp';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
   calculateShares,
-  extractTokens,
   getInputsAmountFormFormikValues,
   numberAsString,
   saveBigNumber,
@@ -18,6 +18,7 @@ import {
 import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
+import { getTokenData } from '../helpers';
 import { getInputSlugByIndexRemove, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { LP_TOKEN } from '../helpers/mock-lp-token';
@@ -81,41 +82,33 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     };
   };
 
-  const handleInputChange = (reserves: BigNumber, index: number) => {
-    const localTokenDecimals = extractTokens(item.tokensInfo)[index].metadata.decimals;
-    const notLocalTokenDecimals = extractTokens(item.tokensInfo)[Math.abs(index - 1)].metadata.decimals;
+  const handleInputChange = (index: number) => {
+    const notLocalTokenIndex = Math.abs(index - OPPOSITE_INDEX);
+
+    const { decimals: locDecimals, atomicTokenTvl: locAtomicTokenTvl } = getTokenData(item.tokensInfo, index);
+    const {
+      token: notLocToken,
+      decimals: notLocDecimals,
+      atomicTokenTvl: notLocAtomicTokenTvl
+    } = getTokenData(item.tokensInfo, notLocalTokenIndex);
 
     return (inputAmount: string) => {
-      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = saveBigNumber(fixedValue, null);
-      const atomicinputAmountBN = toAtomicIfPossible(inputAmountBN, localTokenDecimals);
+      const { realValue, fixedValue } = numberAsString(inputAmount, locDecimals);
+      const atomicInputAmountBN = toAtomicIfPossible(saveBigNumber(fixedValue, null), locDecimals);
+
+      const lpValue = calculateShares(atomicInputAmountBN, locAtomicTokenTvl, item.totalSupply);
+      const realLpValue = toRealIfPossible(lpValue, LP_TOKEN.metadata.decimals);
+
+      const notLocalInputValue = calculateOutputWithToken(lpValue, item.totalSupply, notLocAtomicTokenTvl, notLocToken);
+      const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
 
       (formikValues as FormikValues)[getInputSlugByIndexRemove(index)] = realValue;
 
-      const lpValue = calculateShares(atomicinputAmountBN, reserves, item.totalSupply);
+      formikValues[Input.LP_INPUT] = toFixed(realLpValue?.decimalPlaces(LP_TOKEN.metadata.decimals));
 
-      formikValues[Input.LP_INPUT] = toFixed(
-        toRealIfPossible(lpValue, LP_TOKEN.metadata.decimals)?.decimalPlaces(LP_TOKEN.metadata.decimals)
+      (formikValues as FormikValues)[getInputSlugByIndexRemove(notLocalTokenIndex)] = toFixed(
+        realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN)
       );
-
-      const calculatedValues = item.tokensInfo.map(({ atomicTokenTvl, token }, indexOfCalculatedInput) => {
-        if (index === indexOfCalculatedInput) {
-          return inputAmountBN;
-        }
-
-        return calculateOutputWithToken(lpValue, item.totalSupply, atomicTokenTvl, token);
-      });
-
-      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-        if (indexOfCalculatedInput !== index) {
-          (formikValues as FormikValues)[getInputSlugByIndexRemove(indexOfCalculatedInput)] = toFixed(
-            toRealIfPossible(calculatedValue, notLocalTokenDecimals)?.decimalPlaces(
-              notLocalTokenDecimals,
-              BigNumber.ROUND_DOWN
-            )
-          );
-        }
-      });
 
       formik.setValues(formikValues);
     };
@@ -136,16 +129,17 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     const value = (formik.values as FormikValues)[inputSlug];
     const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
     const token = item.tokensInfo[index].token;
+    const decimals = token.metadata.decimals;
 
     return {
       value,
       error,
       index,
-      decimals: token.metadata.decimals,
+      decimals,
       tokens: token,
       label: t('common|Input'),
       balance: userBalances[index],
-      onInputChange: handleInputChange(item.tokensInfo[index].atomicTokenTvl, index)
+      onInputChange: handleInputChange(index)
     };
   });
 

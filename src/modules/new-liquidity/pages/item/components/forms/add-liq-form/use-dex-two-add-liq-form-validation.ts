@@ -40,10 +40,11 @@ export const useDexTwoAddLiqValidation = (
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
-    if (shouldShowBakerInput) {
-      shape[Input.BAKER_INPUT] = yup.string().required('Amount is required');
-    }
+    const bakerSchema = shouldShowBakerInput ? yup.string().required('Baker is required') : yup.string();
 
-    return yup.object().shape(shape);
+    return yup.object().shape({
+      ...shape,
+      [Input.BAKER_INPUT]: bakerSchema
+    });
   }, [dexTwoItem.tokensInfo, shouldShowBakerInput, t, userBalances]);
 };

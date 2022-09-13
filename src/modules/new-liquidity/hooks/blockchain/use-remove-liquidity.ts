@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { removeDexTwoLiquidityApi } from '@modules/new-liquidity/api';
+import { FISRT_INDEX } from '@config/constants';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -9,7 +9,6 @@ import {
   decreaseBySlippage,
   extractTokens,
   getTransactionDeadline,
-  getValueWithFee,
   isExist,
   isNull,
   isTezosToken,
@@ -22,6 +21,8 @@ import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { removeDexTwoLiquidityApi } from '../../api';
+import { getValueWithFee } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
@@ -57,7 +58,7 @@ export const useRemoveLiquidity = () => {
       sortTokens(a.token, b.token)
     );
 
-    if (isTezosToken(tokensAndAmounts[0].token)) {
+    if (isTezosToken(tokensAndAmounts[FISRT_INDEX].token)) {
       tokensAndAmounts.reverse();
     }
 
