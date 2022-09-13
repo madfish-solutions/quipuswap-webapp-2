@@ -9,12 +9,11 @@ interface DexTwoLiqTokensInfo {
 }
 
 export const getTokenData = (tokensInfo: Array<DexTwoLiqTokensInfo>, index: number) => {
-  const _index = Math.abs(index);
   const extractedTokens = extractTokens(tokensInfo);
 
-  const token = extractedTokens[_index];
+  const token = extractedTokens[index];
   const decimals = token.metadata.decimals;
-  const atomicTokenTvl = tokensInfo[_index].atomicTokenTvl;
+  const atomicTokenTvl = tokensInfo[index].atomicTokenTvl;
 
   return { token, decimals, atomicTokenTvl };
 };
