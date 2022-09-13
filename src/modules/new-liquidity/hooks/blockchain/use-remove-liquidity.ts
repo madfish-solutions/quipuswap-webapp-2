@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { PERCENTAGE_100 } from '@config/constants';
 import { removeDexTwoLiquidityApi } from '@modules/new-liquidity/api';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
@@ -10,6 +9,7 @@ import {
   decreaseBySlippage,
   extractTokens,
   getTransactionDeadline,
+  getValueWithFee,
   isExist,
   isNull,
   isTezosToken,
@@ -34,7 +34,7 @@ export const useRemoveLiquidity = () => {
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const { item } = useNewLiquidityItemStore();
-  const lpTokenBalance = useTokenBalance(LP_TOKEN) ?? null;
+  const lpTokenBalance = useTokenBalance(LP_TOKEN) ?? null; // TODO: remove MOCK LP when store will be ready
 
   const removeLiquidity = async (inputAmounts: FormikValues) => {
     if (
@@ -63,10 +63,9 @@ export const useRemoveLiquidity = () => {
 
     const atomicLpTokenBalance = toAtomic(lpTokenBalance, LP_TOKEN);
 
-    const atomicLpTokenBalanceWithFee = atomicLpTokenBalance
-      .multipliedBy(PERCENTAGE_100.minus(item.feesRate))
-      .dividedBy(PERCENTAGE_100)
-      .integerValue(BigNumber.ROUND_DOWN);
+    const atomicLpTokenBalanceWithFee = getValueWithFee(atomicLpTokenBalance, item.feesRate).integerValue(
+      BigNumber.ROUND_DOWN
+    );
 
     const sharesWithSlippage = decreaseBySlippage(atomicLpTokenBalanceWithFee, liquiditySlippage).integerValue(
       BigNumber.ROUND_DOWN
@@ -84,7 +83,7 @@ export const useRemoveLiquidity = () => {
         item.currentDelegate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyRemoved') });
+      await confirmOperation(operation.opHash, { message: t('newLiquidity|successfullyRemoved') });
     } catch (error) {
       showErrorToast(error as Error);
     }
