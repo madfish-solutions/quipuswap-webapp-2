@@ -4,8 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens } from '@blockchain';
 import { EMPTY_STRING, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { isEqual, isGreaterThanZero, isTezosToken } from '@shared/helpers';
+import { isEqual, isGreaterThanZero } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
+
+import { getTezValue } from '../helpers/get-tez-value';
 
 export const addDexTwoLiquidityApi = async (
   tezos: TezosToolkit,
@@ -22,7 +24,10 @@ export const addDexTwoLiquidityApi = async (
 
   const dexTwoContract = await tezos.wallet.at(DEX_TWO_CONTRACT_ADDRESS);
 
-  const tezValue = tokensAndAmounts.find(item => isTezosToken(item.token))?.amount ?? new BigNumber(0);
+  const tezValue = getTezValue(tokensAndAmounts);
+
+  // eslint-disable-next-line no-console
+  console.log(tezValue);
 
   const [tokenA, tokenB] = tokensAndAmounts;
 

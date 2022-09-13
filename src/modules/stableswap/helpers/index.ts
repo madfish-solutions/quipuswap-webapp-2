@@ -1,6 +1,4 @@
-export * from './calculate-lp-value';
 export * from './calculate-tokens-input';
-export * from './calculate-output-with-token';
 export * from './calculate-output-with-lp';
 export * from './create-amount-michelson-map';
 export * from './formik';

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { FISRT_INDEX, PERCENTAGE_100 } from '@config/constants';
+import { FISRT_INDEX } from '@config/constants';
 import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
 import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
@@ -14,7 +14,8 @@ import {
   isNull,
   isTezosToken,
   sortTokens,
-  toAtomic
+  toAtomic,
+  getValueWithFee
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
@@ -57,10 +58,7 @@ export const useAddLiquidity = () => {
       .dividedBy(item.tokensInfo[FISRT_INDEX].atomicTokenTvl)
       .decimalPlaces(LP_TOKEN.metadata.decimals);
 
-    const sharesWithFee = shares
-      .multipliedBy(PERCENTAGE_100.minus(item.feesRate))
-      .dividedBy(PERCENTAGE_100)
-      .integerValue(BigNumber.ROUND_DOWN);
+    const sharesWithFee = getValueWithFee(shares, item.feesRate).integerValue(BigNumber.ROUND_DOWN);
 
     const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
@@ -76,7 +74,7 @@ export const useAddLiquidity = () => {
         candidate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });
+      await confirmOperation(operation.opHash, { message: t('newLiquidity|successfullyAdded') });
     } catch (error) {
       showErrorToast(error as Error);
     }

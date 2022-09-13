@@ -14,15 +14,15 @@ import {
   saveBigNumber,
   toFixed,
   extractTokens,
-  getInputsAmountFormFormikValues
+  getInputsAmountFormFormikValues,
+  calculateOutputWithToken,
+  calculateShares as calculateLpValue
 } from '@shared/helpers';
 import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
-  calculateShares as calculateLpValue,
   calculateOutputWithLp,
-  calculateOutputWithToken,
   getFormikInitialValues,
   getFormikInitialValuesRemoveForm,
   getInputSlugByIndex,

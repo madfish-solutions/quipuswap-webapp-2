@@ -2,9 +2,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
-import { EMPTY_STRING, ZERO_BAKER_ADDRESS } from '@config/constants';
+import { ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { isEqual } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
 
 export const removeDexTwoLiquidityApi = async (
@@ -16,7 +16,7 @@ export const removeDexTwoLiquidityApi = async (
   candidate: string,
   itemId: BigNumber
 ) => {
-  if (isEqual(candidate, EMPTY_STRING)) {
+  if (!isExist(candidate)) {
     candidate = ZERO_BAKER_ADDRESS;
   }
 
