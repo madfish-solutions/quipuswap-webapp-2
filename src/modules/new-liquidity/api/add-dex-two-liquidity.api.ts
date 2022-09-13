@@ -26,9 +26,6 @@ export const addDexTwoLiquidityApi = async (
 
   const tezValue = getTezValue(tokensAndAmounts);
 
-  // eslint-disable-next-line no-console
-  console.log(tezValue);
-
   const [tokenA, tokenB] = tokensAndAmounts;
 
   const dexTwoLiquidityParams = dexTwoContract.methods
