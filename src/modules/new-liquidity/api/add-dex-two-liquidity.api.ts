@@ -2,9 +2,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
-import { EMPTY_STRING, ZERO_BAKER_ADDRESS } from '@config/constants';
+import { ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { isEqual, isGreaterThanZero } from '@shared/helpers';
+import { isGreaterThanZero } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
 
 import { getTezValue } from '../helpers/get-tez-value';
@@ -18,7 +18,7 @@ export const addDexTwoLiquidityApi = async (
   candidate: string,
   itemId: BigNumber
 ) => {
-  if (isEqual(candidate, EMPTY_STRING)) {
+  if (!candidate) {
     candidate = ZERO_BAKER_ADDRESS;
   }
 

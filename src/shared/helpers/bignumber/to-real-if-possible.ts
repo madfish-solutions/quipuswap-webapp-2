@@ -1,11 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 
+import { DECIMALS_BASE, FALLBACK_DECIMALS } from '@config/constants';
 import { Optional, Token } from '@shared/types';
 
 import { isExist } from '../type-checks';
-
-const BASE = 10;
-const FALLBACK_DECIMALS = 0;
 
 export const toRealIfPossible = (
   atomic: Optional<BigNumber>,
@@ -15,8 +13,8 @@ export const toRealIfPossible = (
     return null;
   }
 
-  return atomic.div(
-    new BigNumber(BASE).pow(
+  return atomic.dividedBy(
+    new BigNumber(DECIMALS_BASE).pow(
       typeof decimalsOrToken === 'number' ? decimalsOrToken : decimalsOrToken?.metadata.decimals ?? FALLBACK_DECIMALS
     )
   );

@@ -16,7 +16,7 @@ export class LiquidityItemDto implements LiquidityItem {
   @Typed()
   feesRate: string;
 
-  @Typed()
+  @Typed({ optional: true })
   currentDelegate: string;
 
   @Typed()

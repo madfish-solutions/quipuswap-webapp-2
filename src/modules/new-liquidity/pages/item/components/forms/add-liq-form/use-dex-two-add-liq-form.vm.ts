@@ -1,13 +1,13 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
+import { OPPOSITE_INDEX } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useAddLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
   calculateShares,
-  extractTokens,
   getInputsAmountFormFormikValues,
   isTezosToken,
   numberAsString,
@@ -19,6 +19,7 @@ import {
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { getTokenData } from '../helpers';
 import { getInputSlugByIndexAdd, getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { Input, NewLiquidityAddFormValues } from './dex-two-add-liq-form.interface';
@@ -64,36 +65,30 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
   const formikValues = formik.values;
 
-  const handleInputChange = (reserves: BigNumber, index: number) => {
-    const localTokenDecimals = extractTokens(tokensInfo)[index].metadata.decimals;
-    const notLocalTokenDecimals = extractTokens(tokensInfo)[Math.abs(index - 1)].metadata.decimals;
+  const handleInputChange = (index: number) => {
+    const notLocalTokenIndex = Math.abs(index - OPPOSITE_INDEX);
+
+    const { decimals: locDecimals, atomicTokenTvl: locAtomicTokenTvl } = getTokenData(item.tokensInfo, index);
+    const {
+      token: notLocToken,
+      decimals: notLocDecimals,
+      atomicTokenTvl: notLocAtomicTokenTvl
+    } = getTokenData(item.tokensInfo, notLocalTokenIndex);
 
     return (inputAmount: string) => {
-      const { realValue, fixedValue } = numberAsString(inputAmount, localTokenDecimals);
-      const inputAmountBN = saveBigNumber(fixedValue, null);
-      const atomicInputAmount = toAtomicIfPossible(inputAmountBN, localTokenDecimals);
+      const { realValue, fixedValue } = numberAsString(inputAmount, locDecimals);
+      const atomicInputAmountBN = toAtomicIfPossible(saveBigNumber(fixedValue, null), locDecimals);
+
+      const shares = calculateShares(atomicInputAmountBN, locAtomicTokenTvl, item.totalSupply);
+
+      const notLocalInputValue = calculateOutputWithToken(shares, item.totalSupply, notLocAtomicTokenTvl, notLocToken);
+      const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
 
       (formikValues as FormikValues)[getInputSlugByIndexAdd(index)] = realValue;
-      const shares = calculateShares(atomicInputAmount, reserves, item.totalSupply);
 
-      const calculatedValues = item.tokensInfo.map(({ atomicTokenTvl, token }, indexOfCalculatedInput) => {
-        if (index === indexOfCalculatedInput) {
-          return inputAmountBN;
-        }
-
-        return calculateOutputWithToken(shares, item.totalSupply, atomicTokenTvl, token);
-      });
-
-      calculatedValues.forEach((calculatedValue, indexOfCalculatedInput) => {
-        if (indexOfCalculatedInput !== index) {
-          (formikValues as FormikValues)[getInputSlugByIndexAdd(indexOfCalculatedInput)] = toFixed(
-            toRealIfPossible(calculatedValue, notLocalTokenDecimals)?.decimalPlaces(
-              notLocalTokenDecimals,
-              BigNumber.ROUND_DOWN
-            )
-          );
-        }
-      });
+      (formikValues as FormikValues)[getInputSlugByIndexAdd(notLocalTokenIndex)] = toFixed(
+        realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN)
+      );
 
       formik.setValues(formikValues);
     };
@@ -103,7 +98,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
     formik.setFieldValue(Input.BAKER_INPUT, baker.address);
   };
 
-  const data = tokensInfo.map(({ atomicTokenTvl }, index) => {
+  const data = tokensInfo.map((_, index) => {
     const inputSlug = getInputSlugByIndexAdd(index);
     const value = (formik.values as FormikValues)[inputSlug];
     const error = (formik.errors as FormikErrors<FormikValues>)[inputSlug] as string;
@@ -114,11 +109,11 @@ export const useDexTwoAddLiqFormViewModel = () => {
       value,
       error,
       index,
-      decimals: decimals,
+      decimals,
       tokens: token,
       label: t('common|Input'),
       balance: userBalances[index],
-      onInputChange: handleInputChange(atomicTokenTvl, index)
+      onInputChange: handleInputChange(index)
     };
   });
 
