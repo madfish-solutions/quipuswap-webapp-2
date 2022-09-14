@@ -53,7 +53,7 @@ export const useStakeFormViewModel = () => {
     confirmationPopup(async () => {
       await handleStakeSubmit(values, actions);
 
-      await delayedGetFarmingItem(defined(farmingItem).id);
+      await delayedGetFarmingItem(defined(farmingItem).id, defined(farmingItem).old);
     });
   };
 
