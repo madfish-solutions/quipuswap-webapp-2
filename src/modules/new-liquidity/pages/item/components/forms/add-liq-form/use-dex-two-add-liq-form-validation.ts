@@ -8,8 +8,8 @@ import { operationAmountSchema } from '@shared/helpers';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndexAdd } from '../helpers/forms.helpers';
-import { Input } from './dex-two-add-liq-form.interface';
+import { getInputSlugByIndex } from '../helpers/forms.helpers';
+import { Input } from '../interface';
 
 export const useDexTwoAddLiqValidation = (
   userBalances: Nullable<BigNumber>[],
@@ -35,7 +35,7 @@ export const useDexTwoAddLiqValidation = (
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndexAdd(index), item.required('Amount is required!')];
+      return [getInputSlugByIndex(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
@@ -44,7 +44,7 @@ export const useDexTwoAddLiqValidation = (
 
     return yup.object().shape({
       ...shape,
-      [Input.BAKER_INPUT]: bakerSchema
+      [Input.THIRD_INPUT]: bakerSchema
     });
   }, [dexTwoItem.tokensInfo, shouldShowBakerInput, t, userBalances]);
 };
