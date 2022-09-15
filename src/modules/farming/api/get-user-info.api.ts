@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS_OLD } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 
 import { DEFAULT_RAW_USER_INFO, getAllFarmUserInfo } from '../helpers';
@@ -13,7 +13,7 @@ export const getUserInfoApi = async (
   accountPkh: string,
   tezos: TezosToolkit
 ): Promise<RawUsersInfoValue> => {
-  const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS);
+  const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS_OLD);
   const storage = wrapStorage.storage;
   const value = await storage.users_info.get([item.id, accountPkh]);
 
@@ -25,7 +25,7 @@ export const getAllFarmsUserInfoApi = async (
   accountPkh: string,
   farmsWithBalancesIds: Nullable<Array<BigNumber>> = null
 ) => {
-  const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS);
+  const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS_OLD);
   const storage = wrapStorage.storage;
 
   return await getAllFarmUserInfo(storage, accountPkh, farmsWithBalancesIds);

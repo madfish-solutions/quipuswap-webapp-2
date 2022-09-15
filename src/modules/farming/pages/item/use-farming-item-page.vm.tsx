@@ -32,9 +32,12 @@ export const useFarmingItemPageViewModel = () => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
+
+    // eslint-disable-next-line no-console
+    console.log(farmingItemStore);
     void getFarmingItem(new BigNumber(`${rawStakeId}`), old);
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh, old]);
+  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh, old, farmingItemStore]);
 
   useEffect(() => {
     if (isNull(farmingItemStore)) {

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { FARMING_CONTRACT_ADDRESS_OLD, FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { stakeTokenApi } from '@modules/farming/api/stake-token.api';
 import { FarmingItemWithBalances } from '@modules/farming/pages/list/types';
 import { useRootStore } from '@providers/root-store-provider';
@@ -27,6 +28,7 @@ export const useDoStake = () => {
       selectedBaker: WhitelistedBaker
     ) => {
       const logData = getStakeUnstakeLogData(farmingItem, balance, timeout, isUnlocked);
+      const contractAddress = farmingItem.old ? FARMING_CONTRACT_ADDRESS_OLD : FARMING_CONTRACT_ADDRESS;
       try {
         amplitudeService.logEvent('STAKE', logData);
         const operation = await stakeTokenApi(
@@ -35,7 +37,8 @@ export const useDoStake = () => {
           defined(rootStore.authStore.accountPkh),
           defined(farmingItem).id,
           balance,
-          defined(selectedBaker).address
+          defined(selectedBaker).address,
+          contractAddress
         );
 
         await confirmOperation(operation.opHash, { message: 'Stake successful' });
