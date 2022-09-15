@@ -22,51 +22,55 @@ export const TempleIconDark: FC<IconProps> = ({ className, ...props }) => {
       />
       <path d="M12.923 3.692H4.616l-.231-.923h9.231l-.693.923Z" fill={getUrl('j')} />
       <path d="M14.77 22.154 10.616 5.538l-.74.738 3.971 15.878-.74.738h.924l.739-.738Z" fill={getUrl('k')} />
-      <path d="M14.308 5.538h-.924l-.461-1.846.693-.923.692 2.769Z" fill="#4643FA" />
+      <path d="M14.308 5.538h-.924l-.461-1.846.693-.923.692 2.769Z" fill={getUrl('l')} />
       <defs>
-        <linearGradient id={getId('a')} x1={5.5} y1={0} x2={8.5} y2={21.5} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('a')} x1={3.434} y1={0.702} x2={6.822} y2={24.215} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F96C13" />
+          <stop offset={1} stopColor="#FB9828" />
         </linearGradient>
-        <linearGradient id={getId('b')} x1={7.5} y1={18} x2={8} y2={22.5} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('b')} x1={0.001} y1={11.998} x2={16.617} y2={11.998} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F84200" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('c')} x1={8} y1={16.5} x2={12} y2={24.5} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('c')} x1={12.045} y1={22.827} x2={8.033} y2={0.548} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F96C13" />
+          <stop offset={1} stopColor="#FB9828" />
         </linearGradient>
-        <linearGradient id={getId('d')} x1={5.5} y1={20.5} x2={13.357} y2={15.721} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('d')} x1={1.743} y1={11.999} x2={14.154} y2={11.999} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F84200" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('e')} x1={0} y1={0} x2={18.774} y2={1.828} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('e')} x1={16.617} y1={12.001} x2={0.001} y2={12.001} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FB9828" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('f')} x1={3} y1={7.5} x2={17.5} y2={14} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('f')} x1={0} y1={12.001} x2={16.615} y2={12.001} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F84200" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('g')} x1={6.5} y1={1.5} x2={15} y2={23} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('g')} x1={11.72} y1={24.882} x2={7.273} y2={0.186} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F96C13" />
+          <stop offset={1} stopColor="#FB9828" />
         </linearGradient>
-        <linearGradient id={getId('h')} x1={5.5} y1={1} x2={18.608} y2={7.019} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('h')} x1={12.045} y1={22.827} x2={8.033} y2={0.548} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FB9828" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('i')} x1={0} y1={0} x2={18.774} y2={1.828} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FF6B00" />
-          <stop offset={1} stopColor="#F9A605" />
+        <linearGradient id={getId('i')} x1={0} y1={12} x2={16.616} y2={12} gradientUnits="userSpaceOnUse">
+          <stop offset={0.002} stopColor="#FCC33C" />
+          <stop offset={1} stopColor="#FFEE50" />
         </linearGradient>
-        <linearGradient id={getId('j')} x1={14.5} y1={0} x2={-2} y2={0.5} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('j')} x1={16.616} y1={12.001} x2={0} y2={12.001} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F84200" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
-        <linearGradient id={getId('k')} x1={11} y1={4} x2={14} y2={23} gradientUnits="userSpaceOnUse">
-          <stop stopColor="#5C1EE0" />
-          <stop offset={1} stopColor="#1373E4" />
+        <linearGradient id={getId('k')} x1={14.106} y1={24} x2={11.576} y2={-0.92} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F96C13" />
+          <stop offset={1} stopColor="#F84200" />
+        </linearGradient>
+        <linearGradient id={getId('l')} x1={13.943} y1={5.928} x2={13.252} y2={3.159} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F84200" />
+          <stop offset={1} stopColor="#F96C13" />
         </linearGradient>
       </defs>
     </svg>
