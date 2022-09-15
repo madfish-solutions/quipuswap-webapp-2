@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { getUserBalance } from '@blockchain';
 import { FARMING_NEW_LIST_API_URL } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS_OLD } from '@config/environment';
 import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
@@ -27,7 +27,7 @@ interface UserBalances {
 const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
-    await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
+    await tezos.contract.at(FARMING_CONTRACT_ADDRESS_OLD)
   ).storage<FarmingContractStorageWrapper>();
 
   const storage = wrapStorage.storage;

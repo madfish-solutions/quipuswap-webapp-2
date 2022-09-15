@@ -2,7 +2,7 @@ import cx from 'classnames';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { DAYS_IN_YEAR, MS_IN_SECOND, NO_TIMELOCK_VALUE, NO_WITHDRAWAL_FEE_VALUE } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS_OLD, TZKT_EXPLORER_URL } from '@config/environment';
 import { getFarmingLabel, getRealDailyDistribution } from '@modules/farming/helpers';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
@@ -43,7 +43,7 @@ export const useFarmingDetailsViewModel = () => {
       shouldShowTags: false,
       CardCellClassName,
       depositTokenDecimals: 0,
-      stakeUrl: `${TZKT_EXPLORER_URL}/${FARMING_CONTRACT_ADDRESS}`,
+      stakeUrl: `${TZKT_EXPLORER_URL}/${FARMING_CONTRACT_ADDRESS_OLD}`,
       stakedTokenSymbol: null,
       rewardTokenSymbol: null,
       rewardTokenDecimals: 0,

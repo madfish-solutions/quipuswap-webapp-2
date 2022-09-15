@@ -26,6 +26,7 @@ export const RPC_URLS = process.env.REACT_APP_RPC_URLS?.split(',') ?? [process.e
 export const TZKT_EXPLORER_URL = process.env.REACT_APP_TZKT_EXPLORER_URL!;
 
 export const TOKEN_TO_TOKEN_DEX = process.env.REACT_APP_TTDEX_CONTRACT!;
+export const FARMING_CONTRACT_ADDRESS_OLD = process.env.REACT_APP_FARMING_CONTRACT_OLD!;
 export const FARMING_CONTRACT_ADDRESS = process.env.REACT_APP_FARMING_CONTRACT!;
 export const COINFLIP_CONTRACT_ADDRESS = process.env.REACT_APP_COINFLIP_CONTRACT!;
 export const DEX_TWO_CONTRACT_ADDRESS = process.env.REACT_APP_DEX_TWO_CONTRACT_ADDRESS!;
