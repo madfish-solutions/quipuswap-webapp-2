@@ -1,2 +1,2 @@
 export * from './forms.helpers';
-export * from './get-token-data';
+export * from './get-token-and-field-data';

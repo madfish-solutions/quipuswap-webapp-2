@@ -10,8 +10,8 @@ import { Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndexRemove } from '../helpers';
-import { Input } from './dex-two-remove-liq-form.interface';
+import { getInputSlugByIndex } from '../helpers';
+import { Input } from '../interface';
 
 export const useDexTwoRemoveLiqValidation = (
   userBalances: Nullable<BigNumber>[],
@@ -39,14 +39,14 @@ export const useDexTwoRemoveLiqValidation = (
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndexRemove(index), item.required('Amount is required!')];
+      return [getInputSlugByIndex(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape({
       ...shape,
-      [Input.LP_INPUT]: operationAmountSchema(
+      [Input.THIRD_INPUT]: operationAmountSchema(
         lpTokenBalance,
         false,
         decimals,
