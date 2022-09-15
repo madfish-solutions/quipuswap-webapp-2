@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { useLocation } from 'react-router-dom';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+import { TempleIcon } from '@shared/svg/temple-icon';
 
 import { MenuClosed, MenuOpened } from '../../svg';
 import { Button } from '../button';
@@ -14,6 +15,8 @@ import { SettingsButton } from '../settings-button';
 import styles from './header.module.scss';
 import { Menu } from './menu';
 import { QPToken } from './qp-token';
+
+const TEMPLE_LINK = 'https://templewallet.com/mobile';
 
 interface HeaderProps {
   className?: string;
@@ -53,6 +56,15 @@ export const Header: FC<HeaderProps> = ({ className }) => {
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
 
+        <Button
+          theme="quaternary"
+          href={TEMPLE_LINK}
+          external
+          textClassName={styles.textClassName}
+          className={styles.templeIcon}
+        >
+          <TempleIcon />
+        </Button>
         <QPToken className={styles.qpToken} id="desktop" />
         <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />
