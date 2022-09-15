@@ -56,13 +56,7 @@ export const Header: FC<HeaderProps> = ({ className }) => {
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
 
-        <Button
-          theme="quaternary"
-          href={TEMPLE_LINK}
-          external
-          textClassName={styles.textClassName}
-          className={styles.templeIcon}
-        >
+        <Button theme="quaternary" href={TEMPLE_LINK} external className={styles.templeIcon}>
           <TempleIcon />
         </Button>
         <QPToken className={styles.qpToken} id="desktop" />
