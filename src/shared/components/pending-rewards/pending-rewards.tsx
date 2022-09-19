@@ -84,7 +84,9 @@ export const PendingRewards: FC<Props> = ({
             </div>
           </>
         ) : (
-          <span className={styles.amount}>{t('farm|Earn extra income with QuipuSwap')}</span>
+          <span className={styles.amount} data-test-id="earnExtraIncome">
+            {t('farm|Earn extra income with QuipuSwap')}
+          </span>
         )}
       </div>
       <GobletIcon />
