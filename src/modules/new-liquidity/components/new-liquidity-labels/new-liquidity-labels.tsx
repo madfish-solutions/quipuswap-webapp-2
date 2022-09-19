@@ -1,28 +1,29 @@
 import { FC } from 'react';
 
-import { isNull } from '@shared/helpers';
+import { isEmptyArray, isNull } from '@shared/helpers';
 import { CaseIcon, DollarIcon, MedalIcon } from '@shared/svg';
-import { Undefined } from '@shared/types';
 
-import { Icon, NewLiquidityLabelsInterface } from '../../interfaces';
+import { Categories } from '../../interfaces';
 import styles from './new-liquidity-labels.module.scss';
 
-const Component: Record<Icon, FC> = {
-  [Icon.MEDAL]: MedalIcon,
-  [Icon.CASE]: CaseIcon,
-  [Icon.DOLLAR]: DollarIcon
+const Component: Record<Categories, FC> = {
+  [Categories.Stable]: MedalIcon,
+  [Categories.BTC]: CaseIcon,
+  [Categories.QuipuSwap]: DollarIcon,
+  [Categories.Bridge]: DollarIcon,
+  [Categories.Tezotopia]: DollarIcon
 };
 
 interface Props {
-  newLiquidityLabelsData?: NewLiquidityLabelsInterface;
+  categories: Array<Categories>;
 }
 
-export const NewLiquidityLabels: FC<Props> = ({ newLiquidityLabelsData }) => {
-  const entries = Object.entries<Undefined<boolean>, Icon>(newLiquidityLabelsData ?? {});
-
-  const icons: Array<Nullable<FC>> = entries.map(([key, value]) => {
-    return (value && Component[key]) || null;
-  });
+export const NewLiquidityLabels: FC<Props> = ({ categories }) => {
+  if (!isEmptyArray(categories)) {
+    // eslint-disable-next-line no-console
+    console.log('NewLiquidityLabels', categories);
+  }
+  const icons = categories.map(category => Component[category]);
 
   return (
     <div className={styles.root}>
