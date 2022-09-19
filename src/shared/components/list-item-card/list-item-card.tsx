@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
 import { NewLiquidityLabels } from '@modules/new-liquidity/components';
-import { NewLiquidityLabelsInterface } from '@modules/new-liquidity/interfaces';
+import { Categories } from '@modules/new-liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { isEmptyArray, isUndefined } from '@shared/helpers';
+import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
 import { ArrowDown, VisibleIcon } from '@shared/svg';
 import { Token } from '@shared/types';
 
@@ -28,7 +28,7 @@ export interface Props {
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
   visibleIcon?: boolean;
-  newLiquidityLabelsData?: NewLiquidityLabelsInterface;
+  categories?: Array<Categories>;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
   farmingItemDTI?: string;
@@ -46,7 +46,7 @@ export const ListItemCard: FC<Props> = ({
   labels,
   isNewLiquidity,
   visibleIcon,
-  newLiquidityLabelsData,
+  categories,
   status,
   isNew,
   itemStats,
@@ -71,6 +71,7 @@ export const ListItemCard: FC<Props> = ({
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
+                  {/* TODO: LOCAL */}
                   <span className={styles.earn}>Earn</span>
                   <TokensLogos tokens={outputToken} width={24} />
                 </div>
@@ -82,6 +83,7 @@ export const ListItemCard: FC<Props> = ({
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
+                  {/* TODO: LOCAL */}
                   <span className={styles.earn}>Earn</span>
                   <TokensSymbols className={styles.tokensSymbols} tokens={outputToken} />
                 </div>
@@ -91,7 +93,7 @@ export const ListItemCard: FC<Props> = ({
 
           <div className={styles.statusAndlabelsContainer}>
             {!isNewLiquidity && <LabelComponent {...status} />}
-            {newLiquidityLabelsData && <NewLiquidityLabels newLiquidityLabelsData={newLiquidityLabelsData} />}
+            {isExist(categories) && !isEmptyArray(categories) && <NewLiquidityLabels categories={categories} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={LabelComponent} data={labels} />
