@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
-import { calculateOutputWithLp } from '@modules/new-liquidity/helpers/calculate-output-with-lp';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import {
@@ -20,7 +19,7 @@ import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { getTokenAndFieldData } from '../helpers';
-import { getInputSlugByIndex, getUserBalances } from '../helpers/forms.helpers';
+import { getUserBalances } from '../helpers/forms.helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { LP_TOKEN } from '../helpers/mock-lp-token';
 import { Input, NewLiquidityFormValues } from '../interface';
@@ -62,6 +61,20 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
   const formikValues = formik.values;
 
   const handleLpInputChange = () => {
+    const {
+      token: firstToken,
+      decimals: firstTokenDecimals,
+      atomicTokenTvl: firstTokenAtomicTokenTvl,
+      inputField: firstTokenInputField
+    } = getTokenAndFieldData(item.tokensInfo, FISRT_INDEX);
+
+    const {
+      token: secondToken,
+      decimals: secondTokenDecimals,
+      atomicTokenTvl: secondTokenAtomicTokenTvl,
+      inputField: secondTokenInputField
+    } = getTokenAndFieldData(item.tokensInfo, OPPOSITE_INDEX);
+
     return (inputAmount: string) => {
       const { realValue, fixedValue } = numberAsString(inputAmount, LP_TOKEN.metadata.decimals);
 
@@ -69,15 +82,29 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
 
       const inputAmountBN = saveBigNumber(fixedValue, null);
       const atomicInputAmout = toAtomicIfPossible(inputAmountBN, LP_TOKEN);
-      const tokenOutputs = calculateOutputWithLp(atomicInputAmout, item.totalSupply, item.tokensInfo);
 
-      tokenOutputs.forEach((tokenOutput, indexOfTokenInput) => {
-        (formikValues as FormikValues)[getInputSlugByIndex(indexOfTokenInput)] = toFixed(
-          toRealIfPossible(tokenOutput?.output, tokenOutput?.decimals)?.decimalPlaces(
-            tokenOutput?.decimals ?? BigNumber.ROUND_DOWN
-          )
-        );
-      });
+      const firstInputValue = calculateOutputWithToken(
+        atomicInputAmout,
+        item.totalSupply,
+        firstTokenAtomicTokenTvl,
+        firstToken
+      );
+      const realFirstInputValue = toRealIfPossible(firstInputValue, firstTokenDecimals)?.decimalPlaces(
+        firstTokenDecimals
+      );
+
+      const secondInputValue = calculateOutputWithToken(
+        atomicInputAmout,
+        item.totalSupply,
+        secondTokenAtomicTokenTvl,
+        secondToken
+      );
+      const realSecondInputValue = toRealIfPossible(secondInputValue, secondTokenDecimals)?.decimalPlaces(
+        secondTokenDecimals
+      );
+
+      formikValues[firstTokenInputField] = toFixed(realFirstInputValue);
+      formikValues[secondTokenInputField] = toFixed(realSecondInputValue);
 
       formik.setValues(formikValues);
     };
