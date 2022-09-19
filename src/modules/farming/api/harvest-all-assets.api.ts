@@ -1,11 +1,11 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FARMING_CONTRACT_ADDRESS_OLD } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { batchOperations } from '@shared/helpers';
 
 export const harvestFarmingIds = async (tezos: TezosToolkit, farmingIds: BigNumber[], rewardsReceiver: string) => {
-  const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS_OLD);
+  const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
 
   return farmingIds.map(farmingId => farmingContract.methods.harvest(farmingId, rewardsReceiver));
 };

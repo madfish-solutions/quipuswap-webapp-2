@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FARMING_CONTRACT_ADDRESS_OLD } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 
 import { FarmingStorage } from '../interfaces';
@@ -9,7 +9,7 @@ import { FarmingStorage } from '../interfaces';
 export const getUserFarmingDelegate = async (tezos: TezosToolkit, accountPkh: string, id: BigNumber) => {
   const {
     storage: { candidates }
-  } = await getStorageInfo<FarmingStorage>(tezos, FARMING_CONTRACT_ADDRESS_OLD);
+  } = await getStorageInfo<FarmingStorage>(tezos, FARMING_CONTRACT_ADDRESS);
 
   return (await candidates.get<string>([id, accountPkh])) ?? null;
 };

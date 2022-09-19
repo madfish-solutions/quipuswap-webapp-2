@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { withApproveApi } from '@blockchain';
 import { FARMING_REFERRER_CONTRACT } from '@config/config';
 import { DEFAULT_BAKER_FOR_NON_TEZ_LP, FARM_ID_FOR_RESTAKE } from '@config/constants';
-import { FARMING_CONTRACT_ADDRESS_OLD } from '@config/environment';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { Token } from '@shared/types';
 
 export const harvestAndRestake = async (
@@ -14,7 +14,7 @@ export const harvestAndRestake = async (
   rewardsInToken: BigNumber,
   token: Token
 ) => {
-  const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS_OLD);
+  const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
 
   const harvestParams = farmingContract.methods.harvest(farmingId, accountPkh).toTransferParams();
   const farmingParams = farmingContract.methods
@@ -23,5 +23,5 @@ export const harvestAndRestake = async (
 
   const operationParams = [harvestParams, farmingParams];
 
-  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS_OLD, token, accountPkh, rewardsInToken, operationParams);
+  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, rewardsInToken, operationParams);
 };
