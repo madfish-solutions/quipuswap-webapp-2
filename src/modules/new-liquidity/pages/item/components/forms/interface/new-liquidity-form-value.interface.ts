@@ -5,7 +5,5 @@ export enum Input {
 }
 
 export interface NewLiquidityFormValues {
-  [Input.FIRST_LIQ_INPUT]: string;
-  [Input.SECOND_LIQ_INPUT]: string;
-  [Input.THIRD_INPUT]: string;
+  [x: string]: string;
 }
