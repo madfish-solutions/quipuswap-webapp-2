@@ -20,8 +20,7 @@ import {
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { getTokenAndFieldData } from '../helpers';
-import { getUserBalances } from '../helpers/forms.helpers';
+import { getTokenAndFieldData, getFormikInitialValues, getUserBalances } from '../helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { Input, NewLiquidityFormValues } from '../interface';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
@@ -56,11 +55,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
   const formik = useFormik({
     validationSchema,
-    initialValues: {
-      [Input.FIRST_LIQ_INPUT]: '',
-      [Input.SECOND_LIQ_INPUT]: '',
-      [Input.THIRD_INPUT]: ''
-    },
+    initialValues: getFormikInitialValues(),
     onSubmit: handleSubmit
   });
 
