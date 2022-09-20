@@ -1,27 +1,16 @@
-import BigNumber from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
-import { calculateOutputWithLp } from '@modules/new-liquidity/helpers';
+import { FISRT_INDEX } from '@config/constants';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/new-liquidity/hooks/blockchain';
-import {
-  calculateOutputWithToken,
-  calculateShares,
-  getInputsAmountFormFormikValues,
-  isEqual,
-  numberAsString,
-  saveBigNumber,
-  toAtomicIfPossible,
-  toFixed,
-  toRealIfPossible
-} from '@shared/helpers';
+import { getInputsAmountFormFormikValues, isEqual } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { getTokenAndFieldData, getInputSlugByIndex, getUserBalances, getFormikInitialValues } from '../helpers';
+import { getUserBalances, getFormikInitialValues } from '../helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { LP_TOKEN } from '../helpers/mock-lp-token';
+import { useCalculateValues } from '../hooks';
 import { Input, NewLiquidityFormValues } from '../interface';
 import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
 
@@ -30,6 +19,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
   const { removeLiquidity } = useRemoveLiquidity();
   const newLiquidityItemStore = useNewLiquidityItemStore();
   const item = newLiquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
+  const { handleInputChange, handleLpInputChange } = useCalculateValues();
 
   const userBalances = getUserBalances(item.tokensInfo);
 
@@ -54,69 +44,6 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  const formikValues = formik.values;
-
-  const handleLpInputChange = () => {
-    return (inputAmount: string) => {
-      const { realValue, fixedValue } = numberAsString(inputAmount, LP_TOKEN.metadata.decimals);
-
-      formikValues[Input.THIRD_INPUT] = realValue;
-
-      const inputAmountBN = saveBigNumber(fixedValue, null);
-      const atomicInputAmout = toAtomicIfPossible(inputAmountBN, LP_TOKEN);
-
-      const tokenOutputs = calculateOutputWithLp(atomicInputAmout, item.totalSupply, item.tokensInfo);
-
-      tokenOutputs.forEach((tokenOutput, indexOfTokenInput) => {
-        formikValues[getInputSlugByIndex(indexOfTokenInput)] = toFixed(
-          toRealIfPossible(tokenOutput?.output, tokenOutput?.decimals)?.decimalPlaces(
-            tokenOutput?.decimals ?? BigNumber.ROUND_DOWN
-          )
-        );
-      });
-
-      formik.setValues(formikValues);
-    };
-  };
-
-  const handleInputChange = (index: number) => {
-    const notLocalTokenIndex = Math.abs(index - OPPOSITE_INDEX);
-
-    const {
-      decimals: locDecimals,
-      atomicTokenTvl: locAtomicTokenTvl,
-      inputField: locInputField
-    } = getTokenAndFieldData(item.tokensInfo, index);
-
-    const {
-      token: notLocToken,
-      decimals: notLocDecimals,
-      atomicTokenTvl: notLocAtomicTokenTvl,
-      inputField: notLocInputField
-    } = getTokenAndFieldData(item.tokensInfo, notLocalTokenIndex);
-
-    return (inputAmount: string) => {
-      const { realValue, fixedValue } = numberAsString(inputAmount, locDecimals);
-      const atomicInputAmountBN = toAtomicIfPossible(saveBigNumber(fixedValue, null), locDecimals);
-
-      const lpValue = calculateShares(atomicInputAmountBN, locAtomicTokenTvl, item.totalSupply);
-      const realLpValue = toRealIfPossible(lpValue, LP_TOKEN.metadata.decimals);
-
-      const notLocalInputValue = calculateOutputWithToken(lpValue, item.totalSupply, notLocAtomicTokenTvl, notLocToken);
-      const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
-
-      formikValues[locInputField] = realValue;
-
-      formikValues[Input.THIRD_INPUT] = toFixed(realLpValue?.decimalPlaces(LP_TOKEN.metadata.decimals));
-
-      formikValues[notLocInputField] = toFixed(
-        realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN)
-      );
-
-      formik.setValues(formikValues);
-    };
-  };
-
   const lpData = {
     disabled: false,
     value: formik.values[Input.THIRD_INPUT],
@@ -124,7 +51,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     label: t('common|Input'),
     tokens: LP_TOKEN,
     balance: lpTokenBalance,
-    onInputChange: handleLpInputChange()
+    onInputChange: handleLpInputChange(item, formik)
   };
 
   const data = item.tokensInfo.map((_, index) => {
@@ -142,7 +69,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
       tokens: token,
       label: t('common|Input'),
       balance: userBalances[index],
-      onInputChange: handleInputChange(index)
+      onInputChange: handleInputChange(index, item, formik)
     };
   });
 
