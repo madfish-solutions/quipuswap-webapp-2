@@ -19,9 +19,17 @@ interface Props {
   data: TokenInputProps[];
   bakerData: BakerProps;
   onSubmit: () => void;
+  canMigrateLiquidity?: boolean;
+  onMigrateLiquidity?: () => void;
 }
 
-export const DexTwoAddLiqFormView: FC<Props> = ({ data, onSubmit, bakerData }) => {
+export const DexTwoAddLiqFormView: FC<Props> = ({
+  data,
+  onSubmit,
+  bakerData,
+  canMigrateLiquidity,
+  onMigrateLiquidity
+}) => {
   const { t } = useTranslation();
 
   const { value, error, handleChange, shouldShowBakerInput } = bakerData;
@@ -39,17 +47,35 @@ export const DexTwoAddLiqFormView: FC<Props> = ({ data, onSubmit, bakerData }) =
         />
       )}
       <div className={stylesCommonContainer.buttons}>
-        <ConnectWalletOrDoSomething>
-          <Button
-            type="submit"
-            className={stylesCommonContainer.button}
-            disabled={false}
-            loading={false}
-            data-test-id="dexTwoAddLiqButton"
-          >
-            {t('common|Add')}
-          </Button>
-        </ConnectWalletOrDoSomething>
+        {canMigrateLiquidity ? (
+          <>
+            <Button
+              theme="secondary"
+              type="submit"
+              className={stylesCommonContainer.button}
+              disabled={false}
+              loading={false}
+              data-test-id="dexTwoAddLiqButton"
+            >
+              {t('common|Add')}
+            </Button>
+            <Button theme="primary" type="button" onClick={onMigrateLiquidity}>
+              {t('newLiquidity|migrate')}
+            </Button>
+          </>
+        ) : (
+          <ConnectWalletOrDoSomething>
+            <Button
+              type="submit"
+              className={stylesCommonContainer.button}
+              disabled={false}
+              loading={false}
+              data-test-id="dexTwoAddLiqButton"
+            >
+              {t('common|Add')}
+            </Button>
+          </ConnectWalletOrDoSomething>
+        )}
       </div>
     </form>
   );

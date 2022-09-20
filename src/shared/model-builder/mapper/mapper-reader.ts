@@ -24,6 +24,10 @@ export const mapperReader = (
   const initialObjetEntries = Object.entries(initialObject);
   const mappedEntries: Array<[string, any]> = initialObjetEntries.map(([key, value]) => {
     try {
+      if (isUndefined(mapperConfig)) {
+        return ['', ''];
+      }
+
       if (isUndefined(mapperConfig[key])) {
         return ['', ''];
       }

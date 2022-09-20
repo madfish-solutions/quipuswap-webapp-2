@@ -64,6 +64,7 @@ export const FISRT_INDEX = 0;
 
 //#region default value for token search
 export const DEFAULT_TOKEN_ID = 0;
+export const DEFAULT_TOKEN_ID_BN = new BigNumber(DEFAULT_TOKEN_ID);
 export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
