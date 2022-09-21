@@ -36,10 +36,10 @@ export const useGetFarmingItem = () => {
   );
 
   const delayedGetFarmingItem = useCallback(
-    async (farmingId: BigNumber) => {
+    async (farmingId: BigNumber, old = true) => {
       await sleep(DELAY_BEFORE_DATA_UPDATE);
 
-      await getFarmingItem(farmingId);
+      await getFarmingItem(farmingId, old);
     },
     [getFarmingItem]
   );
