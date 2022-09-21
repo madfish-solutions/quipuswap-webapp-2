@@ -35,4 +35,12 @@ export class LiquidityItemModel extends LiquidityItemResponseDto {
   get type() {
     return this.item.type;
   }
+
+  get aToken() {
+    return this.item.tokensInfo[FIRST_TUPLE_INDEX].token;
+  }
+
+  get bToken() {
+    return this.item.tokensInfo[SECOND_TUPLE_INDEX].token;
+  }
 }

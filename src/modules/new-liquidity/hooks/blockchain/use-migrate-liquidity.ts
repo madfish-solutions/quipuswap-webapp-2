@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 
 import { batchify } from '@quipuswap/sdk';
-import { ContractMethod, TransferParams, Wallet } from '@taquito/taquito';
+import { ContractAbstraction, ContractMethod, TransferParams, Wallet } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { ZERO_AMOUNT } from '@config/constants';
+import { getApproveParams } from '@blockchain';
+import { DUMMY_BAKER } from '@config/bakers';
+import { SECONDS_IN_MINUTE, ZERO_AMOUNT } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
 import { getBlockchainTimestamp, isExist, isNull, isTezosToken, isUndefined } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -22,6 +25,9 @@ export const useMigrateLiquidity = () => {
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
   const { t } = useTranslation();
+  const {
+    settings: { transactionDeadline }
+  } = useSettingsStore();
   const [canMigrateLiquidity, setCanMigrateLiquidity] = useState(false);
   const [dexOneBalanceLP, setDexOneBalanceLP] = useState<BigNumber>(new BigNumber(ZERO_AMOUNT));
 
@@ -68,20 +74,20 @@ export const useMigrateLiquidity = () => {
   };
 
   const getAddLiqParams = async (
+    dexTwoContract: ContractAbstraction<Wallet>,
     amountA: BigNumber,
     amountB: BigNumber,
     shares: BigNumber,
-    transactionDeadline: string
+    deadline: string
   ) => {
-    const dexTwoContract = await tezos!.wallet.at(itemStore.contractAddress);
     let addLiqParams: ContractMethod<Wallet> | TransferParams = dexTwoContract.methods.invest_liquidity(
       itemStore.id,
       amountA,
       amountB,
       shares,
       accountPkh,
-      'tz1burnburnburnburnburnburnburjAYjjX',
-      transactionDeadline
+      DUMMY_BAKER,
+      deadline
     );
 
     if (itemStore.item.tokensInfo.some(({ token }) => isTezosToken(token))) {
@@ -107,23 +113,49 @@ export const useMigrateLiquidity = () => {
     }
 
     const { amountA, amountB, dexTwoShares } = calculateTokensAmounts();
+    const deadlineInSeconds = transactionDeadline.multipliedBy(SECONDS_IN_MINUTE).toNumber();
 
-    const transactionDeadline = (await getBlockchainTimestamp(tezos, 36000)).toString();
+    const [dexOneContract, dexTwoContract, deadline] = await Promise.all([
+      tezos.wallet.at(accordanceItem.contractAddress),
+      tezos.wallet.at(itemStore.contractAddress),
+      getBlockchainTimestamp(tezos, deadlineInSeconds).then(result => result.toString())
+    ]);
+
     const removeLiqParams = await getDexOneRemoveLiquidityParams(
-      tezos,
-      accordanceItem.contractAddress,
+      dexOneContract,
       accordanceItem.type,
       amountA,
       amountB,
       dexOneBalanceLP,
-      transactionDeadline,
+      deadline,
       accordanceItem.id
     );
 
-    const addLiqParams = await getAddLiqParams(amountA, amountB, dexTwoShares, transactionDeadline);
+    const addLiqParams = await getAddLiqParams(dexTwoContract, amountA, amountB, dexTwoShares, deadline);
+
+    const addLiqParamsWithAllowanceA = await getApproveParams(
+      tezos,
+      itemStore.contractAddress,
+      accordanceItem.aToken,
+      accountPkh,
+      amountA,
+      [addLiqParams]
+    );
+
+    const addLiqParamsWithBothAllowances = await getApproveParams(
+      tezos,
+      itemStore.contractAddress,
+      accordanceItem.bToken,
+      accountPkh,
+      amountB,
+      addLiqParamsWithAllowanceA
+    );
 
     try {
-      const operation = await batchify(tezos.wallet.batch([]), [removeLiqParams, addLiqParams]).send();
+      const operation = await batchify(tezos.wallet.batch([]), [
+        removeLiqParams,
+        ...addLiqParamsWithBothAllowances
+      ]).send();
       await confirmOperation(operation.opHash, { message: t('newLiquidity|assetsMigrated') });
     } catch (error) {
       // eslint-disable-next-line no-console

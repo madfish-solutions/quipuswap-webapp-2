@@ -6,7 +6,7 @@ import { RootStore } from '@shared/store';
 import { PoolType } from '../interfaces';
 
 export class NewLiquidityItemStore {
-  private readonly _id: BigNumber = new BigNumber(3);
+  private readonly _id: BigNumber = new BigNumber(33);
   private readonly _type: string = PoolType.DEX_TWO;
 
   constructor(private rootStore: RootStore) {
