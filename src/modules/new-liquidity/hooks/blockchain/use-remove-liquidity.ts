@@ -42,7 +42,7 @@ export const useRemoveLiquidity = () => {
     const tokens = extractTokens(item.tokensInfo);
 
     const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
-      decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).integerValue(BigNumber.ROUND_DOWN)
+      decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).minus(1).integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicAndDecresedInputAmounts).sort((a, b) =>
