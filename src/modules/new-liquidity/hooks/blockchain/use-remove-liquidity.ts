@@ -21,7 +21,6 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeDexTwoLiquidityApi } from '../../api';
-import { getValueWithFee } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
@@ -43,10 +42,7 @@ export const useRemoveLiquidity = () => {
     const tokens = extractTokens(item.tokensInfo);
 
     const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
-      decreaseBySlippage(
-        getValueWithFee(toAtomic(amount, tokens[index]), item.feesRate),
-        liquiditySlippage
-      ).integerValue(BigNumber.ROUND_DOWN)
+      decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicAndDecresedInputAmounts).sort((a, b) =>
