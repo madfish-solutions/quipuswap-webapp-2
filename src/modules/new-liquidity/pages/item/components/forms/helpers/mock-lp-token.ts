@@ -3,7 +3,7 @@ import { Standard } from '@shared/types';
 export const LP_TOKEN = {
   type: 'FA2' as Standard,
   contractAddress: 'KT1A4tdqDYbh6S4ugegh5WYPJmYzxWXAtFco',
-  fa2TokenId: 3,
+  fa2TokenId: 1,
   isWhitelisted: true,
   metadata: {
     name: 'Quipuswap LP Token',

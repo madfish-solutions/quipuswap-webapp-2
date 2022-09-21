@@ -21,14 +21,13 @@ import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getTokenAndFieldData, getFormikInitialValues, getUserBalances } from '../helpers';
-import { MOCK_ITEM } from '../helpers/mock-item';
 import { Input, NewLiquidityFormValues } from '../interface';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const newLiquidityItemStore = useNewLiquidityItemStore();
-  const item = newLiquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
+  const item = newLiquidityItemStore.item!; // TODO: fix MOCK, when store will be ready
   const { addLiquidity } = useAddLiquidity();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
@@ -59,8 +58,6 @@ export const useDexTwoAddLiqFormViewModel = () => {
     onSubmit: handleSubmit
   });
 
-  const formikValues = formik.values;
-
   const handleInputChange = (index: number) => {
     const notLocalTokenIndex = Math.abs(index - OPPOSITE_INDEX);
 
@@ -86,13 +83,10 @@ export const useDexTwoAddLiqFormViewModel = () => {
       const notLocalInputValue = calculateOutputWithToken(shares, item.totalSupply, notLocAtomicTokenTvl, notLocToken);
       const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
 
-      formikValues[locInputField] = realValue;
-
-      formikValues[notLocInputField] = toFixed(
-        realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN)
-      );
-
-      formik.setValues(formikValues);
+      formik.setValues({
+        [locInputField]: realValue,
+        [notLocInputField]: toFixed(realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN))
+      });
     };
   };
 
@@ -115,6 +109,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
       tokens: token,
       label: t('common|Input'),
       balance: userBalances[index],
+      hiddenPercentage: true,
       onInputChange: handleInputChange(index)
     };
   });

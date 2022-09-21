@@ -15,7 +15,6 @@ import {
   sortTokens,
   toAtomic
 } from '@shared/helpers';
-import { useTokenBalance } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -35,26 +34,22 @@ export const useRemoveLiquidity = () => {
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const { item } = useNewLiquidityItemStore();
-  const lpTokenBalance = useTokenBalance(LP_TOKEN) ?? null; // TODO: remove MOCK LP when store will be ready
 
-  const removeLiquidity = async (inputAmounts: FormikValues) => {
-    if (
-      isNull(tezos) ||
-      !isExist(item) ||
-      isNull(lpTokenBalance) ||
-      isNull(accountPkh) ||
-      !inputAmounts.every(isExist)
-    ) {
+  const removeLiquidity = async (inputAmounts: FormikValues, shares: BigNumber) => {
+    if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
       return;
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
 
-    const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
-      toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
+    const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
+      decreaseBySlippage(
+        getValueWithFee(toAtomic(amount, tokens[index]), item.feesRate),
+        liquiditySlippage
+      ).integerValue(BigNumber.ROUND_DOWN)
     );
 
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts).sort((a, b) =>
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicAndDecresedInputAmounts).sort((a, b) =>
       sortTokens(a.token, b.token)
     );
 
@@ -62,22 +57,14 @@ export const useRemoveLiquidity = () => {
       tokensAndAmounts.reverse();
     }
 
-    const atomicLpTokenBalance = toAtomic(lpTokenBalance, LP_TOKEN);
-
-    const atomicLpTokenBalanceWithFee = getValueWithFee(atomicLpTokenBalance, item.feesRate).integerValue(
-      BigNumber.ROUND_DOWN
-    );
-
-    const sharesWithSlippage = decreaseBySlippage(atomicLpTokenBalanceWithFee, liquiditySlippage).integerValue(
-      BigNumber.ROUND_DOWN
-    );
+    const atomicLpTokenBalance = toAtomic(shares, LP_TOKEN).integerValue(BigNumber.ROUND_DOWN);
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
     try {
       const operation = await removeDexTwoLiquidityApi(
         tezos,
-        sharesWithSlippage,
+        atomicLpTokenBalance,
         tokensAndAmounts,
         deadline,
         accountPkh,
