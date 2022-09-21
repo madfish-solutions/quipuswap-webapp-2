@@ -78,7 +78,7 @@ export const useCalculateValues = () => {
         item.totalSupply,
         firstTokenAtomicTokenTvl,
         firstToken
-      );
+      )?.integerValue(BigNumber.ROUND_DOWN);
       const realFirstInputValue = toRealIfPossible(firstInputValue, firstTokenDecimals)?.decimalPlaces(
         firstTokenDecimals
       );
@@ -88,7 +88,7 @@ export const useCalculateValues = () => {
         item.totalSupply,
         secondTokenAtomicTokenTvl,
         secondToken
-      );
+      )?.integerValue(BigNumber.ROUND_DOWN);
       const realSecondInputValue = toRealIfPossible(secondInputValue, secondTokenDecimals)?.decimalPlaces(
         secondTokenDecimals
       );

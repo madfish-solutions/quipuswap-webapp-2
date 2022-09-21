@@ -5,7 +5,6 @@ import * as yup from 'yup';
 
 import { LiquidityItem } from '@modules/new-liquidity/interfaces';
 import { operationAmountSchema } from '@shared/helpers';
-import { useTokenBalance } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
@@ -16,10 +15,10 @@ import { Input } from '../interface';
 export const useDexTwoRemoveLiqValidation = (
   userBalances: Nullable<BigNumber>[],
   dexTwoItem: LiquidityItem,
-  lpToken: Token
+  lpToken: Token,
+  lpTokenBalance: Nullable<BigNumber>
 ) => {
   const { t } = useTranslation();
-  const lpTokenBalance = useTokenBalance(lpToken) ?? null;
   const { symbol, decimals } = lpToken.metadata;
 
   return useMemo(() => {
