@@ -15,10 +15,10 @@ export const stableDividendsListDataHelper = (item: StableDividendsItem & Staker
     !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarnedInUsd?.gt(DEFAULT_VALUE));
 
   const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${item.stableDividendsItemUrl}`;
-  const status = { status: ActiveStatus.ACTIVE, label: i18n.t('common|whiteListed'), filled: true };
+  const status = { status: ActiveStatus.ACTIVE, label: i18n.t('common|whiteListed'), filled: true, DTI: 'whitelisted' };
   const extractedTokens = extractTokens(item.tokensInfo);
 
-  const stableDividendsItemDTI = `stable-dividends-item-${item.id}`;
+  const itemDTI = `stable-dividends-item-${item.id}`;
 
   const itemStats = [
     {
@@ -71,11 +71,11 @@ export const stableDividendsListDataHelper = (item: StableDividendsItem & Staker
 
   return {
     href: link,
-    status: status,
+    status,
     inputToken: item.stakedToken,
     outputToken: extractedTokens,
     itemStats,
     userStats,
-    stableDividendsItemDTI
+    itemDTI
   };
 };

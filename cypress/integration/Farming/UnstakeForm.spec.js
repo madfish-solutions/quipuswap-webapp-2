@@ -2,7 +2,7 @@
 
 describe('Unstake form exists', () => {
   beforeEach(() => {
-    cy.visit('/farming/5');
+    cy.visit('/farming/v1/5');
     cy.get('[data-test-id="acceptCookieButton"]').click();
   });
   it('Should_HiglightUnstakeForm_When_ClickOnUnstakeTab', () => {

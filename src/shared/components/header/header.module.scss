@@ -21,14 +21,16 @@
 
 .coloModeSwitcher,
 .languageSwitcher,
-.settings {
+.settings,
+.qpToken {
   display: none;
 }
 
-.qpToken {
-  margin-left: 8px;
-  margin-right: 8px;
-  white-space: nowrap;
+.templeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 8px;
 }
 
 .connect {
@@ -62,6 +64,15 @@
 
 .coloModeSwitcher {
   margin-right: 8px;
+}
+
+@include media(">Lphone") {
+  .qpToken {
+    display: flex;
+    align-items: center;
+    margin: 0 8px;
+    white-space: nowrap;
+  }
 }
 
 @include media(">SDesktop") {

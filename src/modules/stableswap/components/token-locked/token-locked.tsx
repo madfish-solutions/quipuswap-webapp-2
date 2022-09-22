@@ -26,7 +26,12 @@ export const TokenLocked: FC<Props> = ({
   const cellName = useTokenLockedViewModel(tokenSymbol);
 
   return (
-    <DetailsCardCell cellName={cellName} tooltipContent={tooltipContent} className={className}>
+    <DetailsCardCell
+      cellName={cellName}
+      tooltipContent={tooltipContent}
+      className={className}
+      data-test-id="tokenLocked"
+    >
       <StateCurrencyAmount
         isLoading={isLoading}
         currency={tokenSymbol}
