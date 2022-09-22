@@ -30,7 +30,20 @@ export const mapperReader = (
       const { optional, nullable, isArray, mapper: configMapper, shape } = mapperConfig[key];
 
       if (isArray) {
-        return [key, value.map((value2: any) => mapperReader(value2, shape))];
+        return [
+          key,
+          value.map((value2: any) => {
+            if (isObject(value2)) {
+              return mapperReader(value2, shape);
+            }
+
+            const mapper = mapperFactory[configMapper];
+
+            if (mapper) {
+              return [key, mapper(value, optional, nullable)];
+            }
+          })
+        ];
       }
 
       if (isObject(value)) {

@@ -60,6 +60,7 @@ export const LP_INPUT_KEY = 'lp-input';
 
 //#region arrays
 export const FISRT_INDEX = 0;
+export const OPPOSITE_INDEX = 1;
 //#endregion
 
 //#region default value for token search
@@ -185,3 +186,7 @@ export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;
+
+// toRealIfPossible / toAtomicIfPossible
+export const DECIMALS_BASE = 10;
+export const FALLBACK_DECIMALS = 0;
