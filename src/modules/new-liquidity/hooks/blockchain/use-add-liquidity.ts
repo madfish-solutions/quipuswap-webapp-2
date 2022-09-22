@@ -1,15 +1,27 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { addDexTwoLiquidityApi } from '@modules/new-liquidity/api/add-dex-two-liquidity.api';
+import { FISRT_INDEX } from '@config/constants';
+import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { decreaseBySlippage, extractTokens, getTransactionDeadline, isExist, isNull, toAtomic } from '@shared/helpers';
+import {
+  decreaseBySlippage,
+  extractTokens,
+  getTransactionDeadline,
+  isExist,
+  isNull,
+  isTezosToken,
+  sortTokens,
+  toAtomic
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { addDexTwoLiquidityApi } from '../../api';
+import { getValueWithFee } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useAddLiquidity = () => {
@@ -34,14 +46,21 @@ export const useAddLiquidity = () => {
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
     );
 
-    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts);
-    const shares = atomicInputAmounts[0]
-      .multipliedBy(item.totalSupply)
-      .dividedToIntegerBy(item?.tokensInfo[0].atomicTokenTvl);
+    const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicInputAmounts).sort((a, b) =>
+      sortTokens(a.token, b.token)
+    );
 
-    // TODO: Fees for shares
+    if (isTezosToken(tokensAndAmounts[FISRT_INDEX].token)) {
+      tokensAndAmounts.reverse();
+    }
 
-    const sharesWithSlippage = decreaseBySlippage(shares, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN); // should be shares with fee
+    const shares = atomicInputAmounts[FISRT_INDEX].multipliedBy(item.totalSupply)
+      .dividedBy(item.tokensInfo[FISRT_INDEX].atomicTokenTvl)
+      .decimalPlaces(LP_TOKEN.metadata.decimals);
+
+    const sharesWithFee = getValueWithFee(shares, item.feesRate).integerValue(BigNumber.ROUND_DOWN);
+
+    const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
@@ -55,7 +74,7 @@ export const useAddLiquidity = () => {
         candidate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });
+      await confirmOperation(operation.opHash, { message: t('newLiquidity|successfullyAdded') });
     } catch (error) {
       showErrorToast(error as Error);
     }

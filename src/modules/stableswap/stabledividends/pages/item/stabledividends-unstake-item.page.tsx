@@ -16,7 +16,7 @@ export const StableDividendsUnstakeItemPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="stableDividendsUnstakePageTitle">{title}</PageTitle>
       <StableDividendsRewardInfo />
       <StickyBlock>
         <StableswapFormTabsCard subpath={StableswapRoutes.dividends} tabActiveId={StableDividendsFormTabs.unstake}>

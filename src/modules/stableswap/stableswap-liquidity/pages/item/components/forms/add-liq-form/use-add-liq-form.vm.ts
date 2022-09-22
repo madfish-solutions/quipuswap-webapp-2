@@ -4,21 +4,18 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
 import {
+  calculateOutputWithToken,
   extractTokens,
   getInputsAmountFormFormikValues,
   isNull,
   numberAsString,
   placeDecimals,
   saveBigNumber,
-  toFixed
+  toFixed,
+  calculateShares
 } from '@shared/helpers';
 
-import {
-  calculateOutputWithToken,
-  calculateShares,
-  getFormikInitialValues,
-  getInputSlugByIndex
-} from '../../../../../../helpers';
+import { getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
 import {
   useAddStableswapLiquidity,
   useStableswapItemFormStore,
