@@ -1,28 +1,27 @@
 import { FC } from 'react';
 
-import { useParams } from 'react-router-dom';
-
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
 
 import { DexTwoRemoveLiqForm } from './components';
+import { useDexTwoItemPageViewModel } from './use-dex-two-item-page.vm';
 
 export const DexTwoRemoveLiq: FC = () => {
-  const { t } = useTranslation();
-  const { pairSlug } = useParams();
+  const { t, title, isInitialize } = useDexTwoItemPageViewModel();
 
   return (
     <>
       <PageTitle data-test-id="dexTwoRemoveLiqTitle">
-        {t('common|Remove')} {pairSlug}
+        {t('common|Remove')} {title}
       </PageTitle>
-      <StickyBlock>
-        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.remove}>
-          <DexTwoRemoveLiqForm />
-        </NewLiquidityFormTabsCard>
-      </StickyBlock>
+      {isInitialize && (
+        <StickyBlock>
+          <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.remove}>
+            <DexTwoRemoveLiqForm />
+          </NewLiquidityFormTabsCard>
+        </StickyBlock>
+      )}
     </>
   );
 };
