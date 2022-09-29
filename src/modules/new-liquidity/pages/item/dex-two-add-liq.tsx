@@ -1,31 +1,23 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'react-router-dom';
 
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
-import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
 
 import { DexTwoAddLiqForm, DexTwoDetails } from './components';
+import { useDexTwoItemPageViewModel } from './use-dex-two-item-page.vm';
 
 export const DexTwoAddLiq: FC = observer(() => {
-  const { t } = useTranslation();
-  const { pairSlug } = useParams();
-  const newLiquidityItemStore = useNewLiquidityItemStore();
-  useEffect(() => {
-    newLiquidityItemStore.setTokenPairSlug(pairSlug!);
-    newLiquidityItemStore.itemSore.load();
-  }, [newLiquidityItemStore, pairSlug]);
+  const { t, title, isInitialize } = useDexTwoItemPageViewModel();
 
   return (
     <>
       <PageTitle data-test-id="dexTwoAddLiqTitle">
-        {t('common|Add')} {pairSlug}
+        {t('common|Add')} {title}
       </PageTitle>
-      {newLiquidityItemStore.item && (
+      {isInitialize && (
         <StickyBlock>
           <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
             <DexTwoAddLiqForm />
