@@ -1,9 +1,11 @@
-import { LIQUIDITY_API_URL } from '@config/environment';
+import { LIQUIDITY_DEX_TWO_ITEM_API_URL } from '@config/constants';
 
 export const getDexTwoLiquidityItemApi = async (tokenPairSlug: string) => {
   if (!tokenPairSlug) {
     throw Error('tokenPairSlug is required');
   }
 
-  return await fetch(`${LIQUIDITY_API_URL}/dex-two-item/${tokenPairSlug}`).then(async res => res.json());
+  const response = await fetch(`${LIQUIDITY_DEX_TWO_ITEM_API_URL}/${tokenPairSlug}`);
+
+  return await response.json();
 };

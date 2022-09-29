@@ -1,5 +1,7 @@
 import { computed, makeObservable } from 'mobx';
 
+import { EMPTY_STRING } from '@config/constants';
+import { getSymbolsString } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
@@ -22,6 +24,12 @@ export class NewLiquidityItemStore {
     return this.itemSore?.model.item;
   }
   //#endregion dex two liquidity item store
+
+  get pageTitle() {
+    const tokens = this.item?.tokensInfo.map(({ token }) => token);
+
+    return tokens ? getSymbolsString(tokens) : EMPTY_STRING;
+  }
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
