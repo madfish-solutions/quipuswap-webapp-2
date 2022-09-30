@@ -3,7 +3,7 @@
 describe('Tooltips in the card', () => {
   it('Should_DisplayTooltips_When_HoweringMouseOverInTheCard', () => {
     // Go to the Farming number 5
-    cy.visit('/farming/5');
+    cy.visit('/farming/v1/5');
     // check all tooltips
     cy.get('[data-test-id="farmingListPendingRewards"] [data-test-id="yourShare"] [data-test-id="tooltip"]').trigger(
       'focus'

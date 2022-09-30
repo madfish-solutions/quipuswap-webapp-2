@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { DexTwoRemoveLiqFormView } from '@shared/components';
 
-import { useDexTwoRemoveLiqFormViewModel } from './use-dex-two-remove-liq-form-view-model';
+import { useDexTwoRemoveLiqFormViewModel } from './use-dex-two-remove-liq-form.vm';
 
 export const DexTwoRemoveLiqForm: FC = observer(() => {
   const params = useDexTwoRemoveLiqFormViewModel();

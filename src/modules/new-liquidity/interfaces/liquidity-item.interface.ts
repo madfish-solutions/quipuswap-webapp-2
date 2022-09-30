@@ -15,6 +15,7 @@ export interface LiquidityItem {
   volumeForWeek: Nullable<BigNumber>;
   poolLabels: Array<Categories>;
   tokensInfo: Array<LiquidityTokenInfo>;
+  feesRate: string;
 }
 
 export interface LiquidityItemResponse {
