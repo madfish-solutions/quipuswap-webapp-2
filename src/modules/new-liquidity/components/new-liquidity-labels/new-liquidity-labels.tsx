@@ -1,17 +1,17 @@
 import { FC } from 'react';
 
-import { isEmptyArray, isNull } from '@shared/helpers';
-import { CaseIcon, DollarIcon, MedalIcon } from '@shared/svg';
+import { isNull } from '@shared/helpers';
+import { StableCategory, BtcCategory, QuipuCategory, BridgeCategory, TezotopiaCategory } from '@shared/svg/categories';
 
 import { Categories } from '../../interfaces';
 import styles from './new-liquidity-labels.module.scss';
 
 const Component: Record<Categories, FC> = {
-  [Categories.Stable]: MedalIcon,
-  [Categories.BTC]: CaseIcon,
-  [Categories.QuipuSwap]: DollarIcon,
-  [Categories.Bridge]: DollarIcon,
-  [Categories.Tezotopia]: DollarIcon
+  [Categories.Stable]: StableCategory,
+  [Categories.BTC]: BtcCategory,
+  [Categories.QuipuSwap]: QuipuCategory,
+  [Categories.Bridge]: BridgeCategory,
+  [Categories.Tezotopia]: TezotopiaCategory
 };
 
 interface Props {
@@ -19,10 +19,6 @@ interface Props {
 }
 
 export const NewLiquidityLabels: FC<Props> = ({ categories }) => {
-  if (!isEmptyArray(categories)) {
-    // eslint-disable-next-line no-console
-    console.log('NewLiquidityLabels', categories);
-  }
   const icons = categories.map(category => Component[category]);
 
   return (
