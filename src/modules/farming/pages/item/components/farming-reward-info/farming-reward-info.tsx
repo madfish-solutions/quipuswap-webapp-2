@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
-import { getBakerName, getTokenSymbol } from '@shared/helpers';
+import { getBakerName, getSymbolsString } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
 import { useTranslation } from '@translation';
 
@@ -43,6 +43,7 @@ export const FarmingRewardInfo: FC = observer(() => {
     isHarvestAvailable,
     handleHarvest
   } = useFarmingRewardInfoViewModel();
+  const symbolsString = getSymbolsString(farmingItem?.tokens ?? []);
 
   return (
     <RewardInfo
@@ -67,11 +68,11 @@ export const FarmingRewardInfo: FC = observer(() => {
         data-test-id="yourShare"
       >
         <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
-          {({ depositBalance, stakedToken }) => (
+          {({ depositBalance }) => (
             <StateCurrencyAmount
               amount={depositBalance}
               className={styles.statsValueText}
-              currency={getTokenSymbol(stakedToken)}
+              currency={symbolsString}
               dollarEquivalent={myDepositDollarEquivalent}
               labelSize="large"
             />
