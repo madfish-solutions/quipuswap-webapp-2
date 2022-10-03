@@ -2,16 +2,15 @@ import { Standard } from '@shared/types';
 
 export const LP_TOKEN = {
   type: 'FA2' as Standard,
-  contractAddress: 'KT1HDPGgeADpRam6RqYyf1mNZ1mqSuiY8qRS',
-  fa2TokenId: 0,
+  contractAddress: 'KT1A4tdqDYbh6S4ugegh5WYPJmYzxWXAtFco',
+  fa2TokenId: 1,
   isWhitelisted: true,
   metadata: {
-    token_id: '0',
-    decimals: 18,
-    description: 'Liquidity Pool token of QuipuSwap Stable DEX',
-    name: 'Stable DEX QuipuSwap LP token',
-    shouldPreferSymbol: true,
-    symbol: 'sdQPLP',
-    thumbnailUri: 'ipfs://QmUXFJxwGEjknP5DKNwMwsWXvrY8G2jUMbxjdBE3ekP8DP'
+    name: 'Quipuswap LP Token',
+    symbol: 'QPT',
+    decimals: 6,
+    description: 'Quipuswap LP token represents user share in the liquidity pool',
+    thumbnailUri: 'https://quipuswap.com/QPLP.png',
+    shouldPreferSymbol: 'true'
   }
 };

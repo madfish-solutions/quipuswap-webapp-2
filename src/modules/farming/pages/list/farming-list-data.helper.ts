@@ -17,7 +17,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
 
   const shouldShowUserStats = !isNull(accountPkh) && (item.depositBalance?.gt(ZERO) || item.earnBalance?.gt(ZERO));
 
-  const farmingItemDTI = item.old ? `farming-item-v1-${item.id}` : `farming-item-${item.id}`;
+  const itemDTI = item.old ? `farming-item-v1-${item.id}` : `farming-item-${item.id}`;
 
   const labels = getFarmingLabel(item);
 
@@ -98,6 +98,6 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     outputToken: item.rewardToken,
     isNew: NEW_FARMINGS.includes(item.id.toFixed()),
     status: { status: item.stakeStatus, filled: true },
-    farmingItemDTI
+    itemDTI
   };
 };

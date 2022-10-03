@@ -5,22 +5,21 @@ import * as yup from 'yup';
 
 import { LiquidityItem } from '@modules/new-liquidity/interfaces';
 import { operationAmountSchema } from '@shared/helpers';
+import { Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { getInputSlugByIndexRemove } from '../helpers/forms.helpers';
-import { Input } from './use-dex-two-remove-liq-form-view-model';
+import { getInputSlugByIndex } from '../helpers';
+import { Input } from '../interface';
 
 export const useDexTwoRemoveLiqValidation = (
   userBalances: Nullable<BigNumber>[],
   dexTwoItem: LiquidityItem,
-  lpTokenBalance: BigNumber,
-  lpTokenMetadata: {
-    symbol: string;
-    decimals: number;
-  }
+  lpToken: Token,
+  lpTokenBalance: Nullable<BigNumber>
 ) => {
   const { t } = useTranslation();
+  const { symbol, decimals } = lpToken.metadata;
 
   return useMemo(() => {
     const inputAmountSchemas = userBalances.map((balance, index) => {
@@ -39,22 +38,22 @@ export const useDexTwoRemoveLiqValidation = (
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [getInputSlugByIndexRemove(index), item.required('Amount is required!')];
+      return [getInputSlugByIndex(index), item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
     return yup.object().shape({
       ...shape,
-      [Input.LP_INPUT]: operationAmountSchema(
+      [Input.THIRD_INPUT]: operationAmountSchema(
         lpTokenBalance,
         false,
-        lpTokenMetadata.decimals,
+        decimals,
         t('common|tokenDecimalsOverflowError', {
-          tokenSymbol: lpTokenMetadata.symbol,
-          decimalPlaces: lpTokenMetadata.decimals
+          tokenSymbol: symbol,
+          decimalPlaces: decimals
         })
       ).required('Amount is required')
     });
-  }, [dexTwoItem.tokensInfo, lpTokenBalance, lpTokenMetadata.decimals, lpTokenMetadata.symbol, t, userBalances]);
+  }, [decimals, dexTwoItem.tokensInfo, lpTokenBalance, symbol, t, userBalances]);
 };

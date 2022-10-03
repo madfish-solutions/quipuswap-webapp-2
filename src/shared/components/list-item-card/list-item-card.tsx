@@ -31,7 +31,7 @@ export interface Props {
   categories?: Array<Categories>;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
-  farmingItemDTI?: string;
+  itemDTI?: string;
 }
 
 const modeClass = {
@@ -51,7 +51,7 @@ export const ListItemCard: FC<Props> = ({
   isNew,
   itemStats,
   userStats,
-  farmingItemDTI
+  itemDTI
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -59,10 +59,9 @@ export const ListItemCard: FC<Props> = ({
     (Array.isArray(outputToken) && !isEmptyArray(outputToken)) || !isUndefined(outputToken);
 
   return (
-    <Link to={href} data-test-id={farmingItemDTI}>
+    <Link to={href} data-test-id={itemDTI}>
       <Card className={cx(styles.root, modeClass[colorThemeMode])} isV2>
         {isNew && <NewLabel />}
-
         <div className={styles.topContainer}>
           <div className={styles.logosAndSymbols}>
             <div className={cx(styles.logosContainer, { [styles.inlineIcons]: isNewLiquidity })}>
