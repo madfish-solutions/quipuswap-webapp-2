@@ -1,5 +1,4 @@
 import { FC, useContext } from 'react';
-import * as React from 'react';
 
 import { ColorThemeContext } from '@providers/color-theme-context';
 import { useSvgHelper } from '@shared/hooks';
