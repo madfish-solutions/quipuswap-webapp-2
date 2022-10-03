@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { migrateLiquidity } from '@blockchain';
-import { ZERO_AMOUNT } from '@config/constants';
+import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
-import { isExist, isNull, isUndefined } from '@shared/helpers';
+import { isExist, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -39,7 +39,14 @@ export const useMigrateLiquidity = () => {
   }, [canMigrateLiquidity, itemStore, accountPkh, tezos]);
 
   const calculateTokensAmounts = () => {
-    const accordanceItem = itemStore.accordanceItem!;
+    const accordanceItem = itemStore.accordanceItem;
+    if (!accordanceItem) {
+      return {
+        amountA: ZERO_AMOUNT_BN,
+        amountB: ZERO_AMOUNT_BN,
+        shares: ZERO_AMOUNT_BN
+      };
+    }
     const amountA = getUserTokensAmountByShares(
       accordanceItem.aTokenAtomicTvl,
       dexOneBalanceLP,
@@ -75,7 +82,7 @@ export const useMigrateLiquidity = () => {
     }
     const accordanceItem = itemStore.accordanceItem;
 
-    if (isNull(accordanceItem) || isNull(tezos) || isNull(accountPkh) || isUndefined(accordanceItem)) {
+    if (!isExist(accordanceItem) || isNull(tezos) || isNull(accountPkh) || !isExist(itemStore.item)) {
       return;
     }
 
