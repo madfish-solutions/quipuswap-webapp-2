@@ -8,7 +8,7 @@ describe('Visual testing of the Farming page', () => {
     cy.get('[data-test-id="acceptCookieButton"]').click();
     cy.wait(DEFAULT_WAIT_TIMEOUT);
   });
-  it.skip('Should_DisplayCorrectlyFarmingPage_When_OpenedFarmingPage', () => {
+  it('Should_DisplayCorrectlyFarmingPage_When_OpenedFarmingPage', () => {
     cy.percySnapshot('FarmingPagelayout', {
       percyCSS: `
        [data-test-id='farmingListStats'],
