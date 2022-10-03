@@ -47,35 +47,23 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
         />
       )}
       <div className={stylesCommonContainer.buttons}>
-        {canMigrateLiquidity ? (
-          <>
-            <Button
-              theme="secondary"
-              type="submit"
-              className={stylesCommonContainer.button}
-              disabled={false}
-              loading={false}
-              data-test-id="dexTwoAddLiqButton"
-            >
-              {t('common|Add')}
-            </Button>
+        <ConnectWalletOrDoSomething>
+          <Button
+            type="submit"
+            theme={canMigrateLiquidity ? 'secondary' : 'primary'}
+            className={stylesCommonContainer.button}
+            disabled={false}
+            loading={false}
+            data-test-id="dexTwoAddLiqButton"
+          >
+            {t('common|Add')}
+          </Button>
+          {canMigrateLiquidity && (
             <Button theme="primary" type="button" onClick={onMigrateLiquidity}>
               {t('newLiquidity|migrate')}
             </Button>
-          </>
-        ) : (
-          <ConnectWalletOrDoSomething>
-            <Button
-              type="submit"
-              className={stylesCommonContainer.button}
-              disabled={false}
-              loading={false}
-              data-test-id="dexTwoAddLiqButton"
-            >
-              {t('common|Add')}
-            </Button>
-          </ConnectWalletOrDoSomething>
-        )}
+          )}
+        </ConnectWalletOrDoSomething>
       </div>
     </form>
   );

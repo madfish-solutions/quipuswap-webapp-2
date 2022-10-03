@@ -1,6 +1,9 @@
 import { ContractAbstraction, Wallet } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { getRemoveLiquidityParamsTezToken, getRemoveLiquidityParamsTokenToken } from '@blockchain';
+import { DEFAULT_TOKEN_ID_BN } from '@config/constants';
+
 import { PoolType } from '../interfaces';
 
 export const getDexOneRemoveLiquidityParams = async (
@@ -10,13 +13,13 @@ export const getDexOneRemoveLiquidityParams = async (
   amountB: BigNumber,
   shares: BigNumber,
   transactionDeadline: string,
-  id?: BigNumber
+  id: BigNumber = DEFAULT_TOKEN_ID_BN
 ) => {
   switch (poolType) {
     case PoolType.TEZ_TOKEN:
-      return contract.methods.divestLiquidity(amountB, amountA, shares).toTransferParams();
+      return getRemoveLiquidityParamsTezToken(contract, amountA, amountB, shares);
     case PoolType.TOKEN_TOKEN:
-      return contract.methods.divest(id, amountA, amountB, shares, transactionDeadline).toTransferParams();
+      return getRemoveLiquidityParamsTokenToken(contract, amountA, amountB, shares, transactionDeadline, id);
     default:
       throw Error('Invalid pool type');
   }

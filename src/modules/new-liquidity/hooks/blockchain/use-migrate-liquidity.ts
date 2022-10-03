@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 
-import { batchify } from '@quipuswap/sdk';
-import { ContractAbstraction, ContractMethod, TransferParams, Wallet } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { getApproveParams } from '@blockchain';
-import { DUMMY_BAKER } from '@config/bakers';
-import { SECONDS_IN_MINUTE, ZERO_AMOUNT } from '@config/constants';
+import { migrateLiquidity } from '@blockchain';
+import { ZERO_AMOUNT } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
-import { getBlockchainTimestamp, isExist, isNull, isTezosToken, isUndefined } from '@shared/helpers';
+import { isExist, isNull, isUndefined } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getDexOneRemoveLiquidityParams } from '../../api';
-import { calculateAmountReceived, checkMigrationParams } from '../../helpers';
+import { getUserTokensAmountByShares, checkMigrationParams } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useMigrateLiquidity = () => {
@@ -44,12 +40,12 @@ export const useMigrateLiquidity = () => {
 
   const calculateTokensAmounts = () => {
     const accordanceItem = itemStore.accordanceItem!;
-    const amountA = calculateAmountReceived(
+    const amountA = getUserTokensAmountByShares(
       accordanceItem.aTokenAtomicTvl,
       dexOneBalanceLP,
       accordanceItem.totalLpSupply
     );
-    const amountB = calculateAmountReceived(
+    const amountB = getUserTokensAmountByShares(
       accordanceItem.bTokenAtomicTvl,
       dexOneBalanceLP,
       accordanceItem.totalLpSupply
@@ -64,42 +60,13 @@ export const useMigrateLiquidity = () => {
       .dividedBy(itemStore.bTokenAtomicTvl)
       .integerValue(BigNumber.ROUND_DOWN);
 
-    const dexTwoShares = lpBasedOnTokenA.isLessThan(lpBasedOnTokenB) ? lpBasedOnTokenA : lpBasedOnTokenB;
+    const shares = lpBasedOnTokenA.isLessThan(lpBasedOnTokenB) ? lpBasedOnTokenA : lpBasedOnTokenB;
 
     return {
       amountA,
       amountB,
-      dexTwoShares
+      shares
     };
-  };
-
-  const getAddLiqParams = async (
-    dexTwoContract: ContractAbstraction<Wallet>,
-    amountA: BigNumber,
-    amountB: BigNumber,
-    shares: BigNumber,
-    deadline: string
-  ) => {
-    let addLiqParams: ContractMethod<Wallet> | TransferParams = dexTwoContract.methods.invest_liquidity(
-      itemStore.id,
-      amountA,
-      amountB,
-      shares,
-      accountPkh,
-      DUMMY_BAKER,
-      deadline
-    );
-
-    if (itemStore.item.tokensInfo.some(({ token }) => isTezosToken(token))) {
-      addLiqParams = addLiqParams.toTransferParams({
-        mutez: true,
-        amount: amountB.toNumber()
-      });
-    } else {
-      addLiqParams = addLiqParams.toTransferParams();
-    }
-
-    return addLiqParams;
   };
 
   const onMigrateLiquidity = async () => {
@@ -112,54 +79,26 @@ export const useMigrateLiquidity = () => {
       return;
     }
 
-    const { amountA, amountB, dexTwoShares } = calculateTokensAmounts();
-    const deadlineInSeconds = transactionDeadline.multipliedBy(SECONDS_IN_MINUTE).toNumber();
-
-    const [dexOneContract, dexTwoContract, deadline] = await Promise.all([
-      tezos.wallet.at(accordanceItem.contractAddress),
-      tezos.wallet.at(itemStore.contractAddress),
-      getBlockchainTimestamp(tezos, deadlineInSeconds).then(result => result.toString())
-    ]);
-
-    const removeLiqParams = await getDexOneRemoveLiquidityParams(
-      dexOneContract,
-      accordanceItem.type,
-      amountA,
-      amountB,
-      dexOneBalanceLP,
-      deadline,
-      accordanceItem.id
-    );
-
-    const addLiqParams = await getAddLiqParams(dexTwoContract, amountA, amountB, dexTwoShares, deadline);
-
-    const addLiqParamsWithAllowanceA = await getApproveParams(
-      tezos,
-      itemStore.contractAddress,
-      accordanceItem.aToken,
-      accountPkh,
-      amountA,
-      [addLiqParams]
-    );
-
-    const addLiqParamsWithBothAllowances = await getApproveParams(
-      tezos,
-      itemStore.contractAddress,
-      accordanceItem.bToken,
-      accountPkh,
-      amountB,
-      addLiqParamsWithAllowanceA
-    );
+    const amounts = calculateTokensAmounts();
 
     try {
-      const operation = await batchify(tezos.wallet.batch([]), [
-        removeLiqParams,
-        ...addLiqParamsWithBothAllowances
-      ]).send();
+      const operation = await migrateLiquidity(
+        tezos,
+        accountPkh,
+        { contractAddress: itemStore.contractAddress, id: itemStore.item.id, tokensInfo: itemStore.item.tokensInfo },
+        {
+          contractAddress: accordanceItem.contractAddress,
+          type: accordanceItem.type,
+          id: accordanceItem.id,
+          aToken: accordanceItem.aToken,
+          bToken: accordanceItem.bToken
+        },
+        amounts,
+        dexOneBalanceLP,
+        transactionDeadline
+      );
       await confirmOperation(operation.opHash, { message: t('newLiquidity|assetsMigrated') });
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('error', error);
       showErrorToast(error as Error);
     }
   };
