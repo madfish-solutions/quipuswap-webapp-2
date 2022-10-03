@@ -7,7 +7,7 @@ import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { DexTwoDetails } from './components';
+import { DexTwoClaimRewardsFrom, DexTwoDetails } from './components';
 
 export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) => {
   const { t } = useTranslation();
@@ -19,7 +19,9 @@ export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) =>
       </PageTitle>
 
       <StickyBlock>
-        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.claim}>lol</NewLiquidityFormTabsCard>
+        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.claim}>
+          <DexTwoClaimRewardsFrom />
+        </NewLiquidityFormTabsCard>
         <DexTwoDetails />
       </StickyBlock>
     </>

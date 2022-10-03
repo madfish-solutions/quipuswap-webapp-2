@@ -1,6 +1,6 @@
-@import '@styles/variables';
-@import '@styles/breakpoints';
-@import '@styles/text';
+@import "@styles/variables";
+@import "@styles/breakpoints";
+@import "@styles/text";
 
 @mixin theme($focused, $background, $shape, $price, $hover-fallback) {
   &:not(.readOnly) {
@@ -135,8 +135,39 @@
 }
 
 .readOnly {
-  .input {
-    color: $text-03;
+  position: relative;
+
+  .readOnlyValue {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+
+    color: $ui-01;
+  }
+
+  .shape {
+    background: none;
+    padding-bottom: 36px;
+    row-gap: 16px;
+  }
+  .background {
+    background: none;
+  }
+
+  .scaffoldingPercentSelector {
+    height: 0;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+
+    left: -100vw;
+    right: 100vw;
+    bottom: 0;
+    height: 1px;
+    width: calc(100vw + 100vw + 100%);
+    background: $text-01;
   }
 }
 
@@ -144,7 +175,7 @@
   height: 28px;
 }
 
-@include media('>tablet') {
+@include media(">tablet") {
   .shape {
     justify-content: space-between;
   }
