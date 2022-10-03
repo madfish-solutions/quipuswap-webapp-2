@@ -1,13 +1,35 @@
-import { BigNumber } from 'bignumber.js';
 import { computed, makeObservable } from 'mobx';
 
-import { RootStore } from '@shared/store';
+import { EMPTY_STRING } from '@config/constants';
+import { getSymbolsString } from '@shared/helpers';
+import { Led, ModelBuilder } from '@shared/model-builder';
+import { LoadingErrorData, RootStore } from '@shared/store';
 
-import { PoolType } from '../interfaces';
+import { getDexTwoLiquidityItemApi } from '../api/get-dex-two-liquidity-item.api';
+import { LiquidityItemModel } from '../models';
 
+@ModelBuilder()
 export class NewLiquidityItemStore {
-  private readonly _id: BigNumber = new BigNumber(33);
-  private readonly _type: string = PoolType.DEX_TWO;
+  tokenPairSlug: string;
+
+  //#region dex two liquidity item store
+  @Led({
+    default: { item: null },
+    loader: async self => await getDexTwoLiquidityItemApi(self.tokenPairSlug),
+    model: LiquidityItemModel
+  })
+  readonly itemSore: LoadingErrorData<LiquidityItemModel, { item: null }>;
+
+  get item() {
+    return this.itemSore?.model.item;
+  }
+  //#endregion dex two liquidity item store
+
+  get pageTitle() {
+    const tokens = this.item?.tokensInfo.map(({ token }) => token);
+
+    return tokens ? getSymbolsString(tokens) : EMPTY_STRING;
+  }
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -22,10 +44,8 @@ export class NewLiquidityItemStore {
     });
   }
 
-  get item() {
-    return this.rootStore.newLiquidityListStore!.list.find(
-      ({ item: { id, type } }) => Number(id) === Number(this._id) && type === this._type
-    )!.item;
+  setTokenPairSlug(tokenPairSlug: string) {
+    this.tokenPairSlug = tokenPairSlug;
   }
 
   get itemModel() {
@@ -59,7 +79,7 @@ export class NewLiquidityItemStore {
   }
 
   get accordanceSlug() {
-    return `${this.contractAddress}_${this.item.id}`;
+    return `${this.contractAddress}_${this.item?.id}`;
   }
 
   get accordanceItem() {

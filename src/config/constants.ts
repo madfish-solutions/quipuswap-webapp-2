@@ -60,6 +60,7 @@ export const LP_INPUT_KEY = 'lp-input';
 
 //#region arrays
 export const FISRT_INDEX = 0;
+export const OPPOSITE_INDEX = 1;
 //#endregion
 
 //#region default value for token search
@@ -85,6 +86,7 @@ export const SKIP = -1;
 export const LIST = 'list';
 export const NEW_LIST = 'new-list';
 export const STATS = 'stats';
+export const DEX_TWO_ITEM = 'dex-two-item';
 // TODO: change api address => change farm => dividends (if needed)
 export const DIVIDENDS = 'farm';
 
@@ -100,6 +102,7 @@ export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}
 
 export const LIQUIDITY_LIST_API_URL = `${LIQUIDITY_API_URL}/${LIST}`;
 export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
+export const LIQUIDITY_DEX_TWO_ITEM_API_URL = `${LIQUIDITY_API_URL}/${DEX_TWO_ITEM}`;
 //#endregion
 
 //TODO: assort mix
@@ -186,3 +189,7 @@ export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;
+
+// toRealIfPossible / toAtomicIfPossible
+export const DECIMALS_BASE = 10;
+export const FALLBACK_DECIMALS = 0;

@@ -16,6 +16,7 @@ export interface LiquidityItem {
   poolLabels: Array<string>;
   tokensInfo: Array<LiquidityTokenInfo>;
   accordanceSlug?: string;
+  feesRate: string;
 }
 
 export interface LiquidityItemResponse {

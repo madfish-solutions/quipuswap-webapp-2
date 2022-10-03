@@ -14,7 +14,7 @@ export const StableDividendsListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-test-id="stableDividendsPageTitle">{title}</PageTitle>
       <StableDividendsStats />
       <StableDividendsRewardInfo />
       <StableDividendsListFilter />

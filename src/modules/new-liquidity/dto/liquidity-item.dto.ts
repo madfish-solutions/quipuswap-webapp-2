@@ -17,6 +17,12 @@ export class LiquidityItemDto implements LiquidityItem {
   contractAddress: string;
 
   @Typed()
+  feesRate: string;
+
+  @Typed({ optional: true })
+  currentDelegate: string;
+
+  @Typed()
   tvlInUsd: BigNumber;
 
   @Typed()
