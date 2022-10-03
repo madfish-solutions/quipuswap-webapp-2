@@ -1,6 +1,6 @@
-import { computed, makeObservable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 
-import { EMPTY_STRING } from '@config/constants';
+import { EMPTY_STRING, FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
 import { getSymbolsString } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -21,7 +21,7 @@ export class NewLiquidityItemStore {
   readonly itemSore: LoadingErrorData<LiquidityItemModel, { item: null }>;
 
   get item() {
-    return this.itemSore?.model.item;
+    return this.itemSore.model.item;
   }
   //#endregion dex two liquidity item store
 
@@ -33,6 +33,7 @@ export class NewLiquidityItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
+      itemSore: observable,
       item: computed,
       contractAddress: computed,
       id: computed,
@@ -40,7 +41,8 @@ export class NewLiquidityItemStore {
       bTokenAtomicTvl: computed,
       totalLpSupply: computed,
       type: computed,
-      accordanceItem: computed
+      accordanceItem: computed,
+      itemModel: computed
     });
   }
 
@@ -49,33 +51,31 @@ export class NewLiquidityItemStore {
   }
 
   get itemModel() {
-    return this.rootStore.newLiquidityListStore!.list.find(
-      ({ item: { id, type } }) => Number(id) === Number(this._id) && type === this._type
-    )!;
+    return this.itemSore.model;
   }
 
   get contractAddress() {
-    return this.itemModel.contractAddress;
+    return this.item?.contractAddress || EMPTY_STRING;
   }
 
   get id() {
-    return this.itemModel.id;
+    return this.item?.id || ZERO_AMOUNT_BN;
   }
 
   get aTokenAtomicTvl() {
-    return this.itemModel.aTokenAtomicTvl;
+    return this.item?.tokensInfo[FIRST_TUPLE_INDEX].atomicTokenTvl || ZERO_AMOUNT_BN;
   }
 
   get bTokenAtomicTvl() {
-    return this.itemModel.bTokenAtomicTvl;
+    return this.item?.tokensInfo[SECOND_TUPLE_INDEX].atomicTokenTvl || ZERO_AMOUNT_BN;
   }
 
   get totalLpSupply() {
-    return this.itemModel.totalLpSupply;
+    return this.item?.totalSupply || ZERO_AMOUNT_BN;
   }
 
   get type() {
-    return this.itemModel.type;
+    return this.item?.type || EMPTY_STRING;
   }
 
   get accordanceSlug() {
@@ -83,7 +83,7 @@ export class NewLiquidityItemStore {
   }
 
   get accordanceItem() {
-    return this.rootStore.newLiquidityListStore!.list.find(itemModel => {
+    return this.rootStore.newLiquidityListStore?.list.find(itemModel => {
       return itemModel.item.accordanceSlug === this.accordanceSlug;
     });
   }

@@ -115,6 +115,7 @@ export const TAB_INDEX = 0;
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
 export const ZERO_AMOUNT = 0;
+export const ZERO_AMOUNT_BN = new BigNumber(ZERO_AMOUNT);
 
 export const USD_DECIMALS = 2;
 
