@@ -1,29 +1,29 @@
 import { FC } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
-import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
+import { PageTitle, StateWrapper, StickyBlock } from '@shared/components';
 
 import { DexTwoAddLiqForm, DexTwoDetails } from './components';
+import { useDexTwoItemPageViewModel } from './use-dex-two-item-page.vm';
 
-export const DexTwoAddLiq: FC = () => {
-  const { t } = useTranslation();
-  const { pairSlug } = useParams();
+export const DexTwoAddLiq: FC = observer(() => {
+  const { t, title, isInitialized } = useDexTwoItemPageViewModel();
 
   return (
-    <>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <PageTitle data-test-id="dexTwoAddLiqTitle">
-        {t('common|Add')} {pairSlug}
+        {t('common|Add')} {title}
       </PageTitle>
+
       <StickyBlock>
         <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
           <DexTwoAddLiqForm />
         </NewLiquidityFormTabsCard>
         <DexTwoDetails />
       </StickyBlock>
-    </>
+    </StateWrapper>
   );
-};
+});
