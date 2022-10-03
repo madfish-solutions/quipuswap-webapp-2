@@ -58,9 +58,13 @@ export class NewLiquidityItemStore {
     return this.itemModel.type;
   }
 
+  get accordanceSlug() {
+    return `${this.contractAddress}_${this.item.id}`;
+  }
+
   get accordanceItem() {
     return this.rootStore.newLiquidityListStore!.list.find(itemModel => {
-      return itemModel.item.accordanceSlug === `${this.contractAddress}_${this.item.id}`;
+      return itemModel.item.accordanceSlug === this.accordanceSlug;
     });
   }
 }

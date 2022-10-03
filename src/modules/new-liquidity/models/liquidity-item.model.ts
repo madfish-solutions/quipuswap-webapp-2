@@ -43,4 +43,8 @@ export class LiquidityItemModel extends LiquidityItemResponseDto {
   get bToken() {
     return this.item.tokensInfo[SECOND_TUPLE_INDEX].token;
   }
+
+  get tokensInfo() {
+    return this.item.tokensInfo;
+  }
 }

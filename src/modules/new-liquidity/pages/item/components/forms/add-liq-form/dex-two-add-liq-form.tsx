@@ -14,7 +14,7 @@ interface Props {
 export const DexTwoAddLiqForm: FC<Props> = observer(props => {
   const params = useDexTwoAddLiqFormViewModel();
 
-  const comonParams = { ...params, ...props };
+  const commonParams = { ...params, ...props };
 
-  return <DexTwoAddLiqFormView {...comonParams} />;
+  return <DexTwoAddLiqFormView {...commonParams} />;
 });
