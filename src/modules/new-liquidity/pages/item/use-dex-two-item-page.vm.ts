@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
@@ -5,17 +6,22 @@ import { useParams } from 'react-router-dom';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useTranslation } from '@translation';
 
-export const useDexTwoItemPageViewModel = () => {
+export const useCpmmViewModel = () => {
   const { t } = useTranslation();
-  const { pairSlug } = useParams();
+  const params = useParams();
+  const pairSlug = params['*']!.split('/')[1];
   const newLiquidityItemStore = useNewLiquidityItemStore();
 
   useEffect(() => {
-    newLiquidityItemStore.setTokenPairSlug(pairSlug!);
-    void newLiquidityItemStore.itemSore.load();
+    newLiquidityItemStore.setTokenPairSlug(pairSlug);
+
+    console.log('loading', params);
+    void newLiquidityItemStore.itemSore.load().then(() => {
+      console.log('loaded');
+    });
 
     return () => newLiquidityItemStore.itemSore.resetData();
-  }, [newLiquidityItemStore, pairSlug]);
+  }, [newLiquidityItemStore, pairSlug, params]);
 
   return {
     t,

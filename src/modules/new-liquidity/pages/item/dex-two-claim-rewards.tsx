@@ -7,21 +7,19 @@ import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { DexTwoDetails, DexTwoRemoveLiqForm } from './components';
+import { DexTwoDetails } from './components';
 
-export const DexTwoRemoveLiq: FC<{ title: string }> = observer(({ title }) => {
+export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) => {
   const { t } = useTranslation();
 
   return (
     <>
-      <PageTitle data-test-id="dexTwoRemoveLiqTitle">
-        {t('common|Remove')} {title}
+      <PageTitle data-test-id="dexTwoClaimRewardsTitle">
+        {t('common|Add')} {title}
       </PageTitle>
 
       <StickyBlock>
-        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.remove}>
-          <DexTwoRemoveLiqForm />
-        </NewLiquidityFormTabsCard>
+        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.claim}>lol</NewLiquidityFormTabsCard>
         <DexTwoDetails />
       </StickyBlock>
     </>
