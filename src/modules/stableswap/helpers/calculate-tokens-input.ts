@@ -1,8 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { multipliedIfPossible, isNull } from '@shared/helpers';
-
-import { calculateShares } from './calculate-lp-value';
+import { multipliedIfPossible, isNull, calculateShares } from '@shared/helpers';
 
 export const calculateTokensInputs = (
   inputAmount: Nullable<BigNumber>,

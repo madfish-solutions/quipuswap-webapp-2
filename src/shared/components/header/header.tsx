@@ -4,6 +4,8 @@ import cx from 'classnames';
 import { useLocation } from 'react-router-dom';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+import { useAmplitudeService } from '@shared/hooks';
+import { TempleIcon } from '@shared/svg/temple-icon';
 
 import { MenuClosed, MenuOpened } from '../../svg';
 import { Button } from '../button';
@@ -14,6 +16,9 @@ import { SettingsButton } from '../settings-button';
 import styles from './header.module.scss';
 import { Menu } from './menu';
 import { QPToken } from './qp-token';
+
+const TEMPLE_LINK = 'https://templewallet.com/mobile';
+const TEMPLE_BANNER_CLICK = 'TEMPLE_BANNER_CLICK';
 
 interface HeaderProps {
   className?: string;
@@ -26,6 +31,7 @@ const modeClass = {
 
 export const Header: FC<HeaderProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { log } = useAmplitudeService();
 
   const location = useLocation();
   const locationRef = useRef(location.pathname);
@@ -47,12 +53,25 @@ export const Header: FC<HeaderProps> = ({ className }) => {
     }
   }, [location.pathname]);
 
+  const handleTempleBannerClick = () => {
+    log(TEMPLE_BANNER_CLICK);
+  };
+
   return (
     <div className={styles.wrapper}>
       <header className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="header">
         <LogoButton href="/" />
         <ConnectWalletButton className={styles.connect} />
 
+        <Button
+          theme="quaternary"
+          href={TEMPLE_LINK}
+          external
+          onClick={handleTempleBannerClick}
+          className={styles.templeIcon}
+        >
+          <TempleIcon />
+        </Button>
         <QPToken className={styles.qpToken} id="desktop" />
         <SettingsButton className={styles.settings} />
         <ColorModeSwitcher className={styles.coloModeSwitcher} />

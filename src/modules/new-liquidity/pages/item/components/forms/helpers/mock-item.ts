@@ -16,6 +16,7 @@ export const MOCK_ITEM = {
   tvlInUsd: new BigNumber(1),
   type: 'DEX_TWO',
   volumeForWeek: null,
+  feesRate: '0.033',
   opportunities: [
     {
       id: '1',

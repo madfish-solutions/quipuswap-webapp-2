@@ -20,5 +20,7 @@ export const newLiquidity = {
   back: 'Back',
   noPool: 'Can’t find appropriate pool? Create own!',
   migrate: 'Migrate',
-  assetsMigrated: 'Assets successfully migrated'
+  assetsMigrated: 'Assets successfully migrated',
+  successfullyAdded: 'Liquidity has been successfully added',
+  successfullyRemoved: 'Liquidity has been successfully removed'
 } as const;

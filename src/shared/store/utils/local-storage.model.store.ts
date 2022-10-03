@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-export const localStorageExstractor = <RawData, Model>(
+const localStorageExtractor = <RawData, Model>(
   key: string,
   mapper: (raw: RawData) => Model,
   defaultValue: RawData
@@ -30,7 +30,7 @@ export class LocalStorageModel<RawData, Model> {
   }
 
   getModel() {
-    const [model, isNew] = localStorageExstractor(this.key, this.mapping, this.defaultValue);
+    const [model, isNew] = localStorageExtractor(this.key, this.mapping, this.defaultValue);
     if (isNew) {
       this.update(this.defaultValue);
     }
