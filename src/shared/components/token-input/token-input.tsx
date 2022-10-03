@@ -99,17 +99,21 @@ export const TokenInput: FC<TokenInputProps> = observer(
             <div className={styles.balance}>
               {shownBalance && <Balance text={balanceText} balance={balance} colorMode={colorThemeMode} />}
             </div>
-            <input
-              id={id}
-              className={cx(styles.item, styles.input)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              ref={inputRef}
-              value={value}
-              autoComplete="off"
-              disabled={!isFormReady || disabled}
-              onChange={handleInputChange}
-            />
+            {readOnly ? (
+              <div className={cx(styles.item, styles.readOnlyValue)}>{value}</div>
+            ) : (
+              <input
+                id={id}
+                className={cx(styles.item, styles.input)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                ref={inputRef}
+                value={value}
+                autoComplete="off"
+                disabled={!isFormReady || disabled}
+                onChange={handleInputChange}
+              />
+            )}
             <div className={styles.dangerContainer}>
               {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
               <Button
