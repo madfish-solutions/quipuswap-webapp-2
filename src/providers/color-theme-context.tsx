@@ -19,6 +19,7 @@ interface ThemeColorsPros {
   background1: string;
   background2: string;
   fillLogo: string;
+  fillIconCategories: string;
 }
 
 const themeColorsObj = {
@@ -30,7 +31,8 @@ const themeColorsObj = {
     stroke: '#FFFFFF',
     background1: '#F0F1F3',
     background2: '#FAFAFC',
-    fillLogo: '#232735'
+    fillLogo: '#232735',
+    fillIconCategories: '#070C12'
   },
   dark: {
     fill1: '#FF6B00',
@@ -40,7 +42,8 @@ const themeColorsObj = {
     stroke: '#14171E',
     background1: '#070C12',
     background2: '#14171E',
-    fillLogo: '#FFFFFF'
+    fillLogo: '#FFFFFF',
+    fillIconCategories: '#FFFFFF'
   }
 };
 

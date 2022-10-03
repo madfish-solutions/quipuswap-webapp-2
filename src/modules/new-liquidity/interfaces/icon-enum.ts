@@ -1,5 +1,7 @@
-export enum Icon {
-  CASE = 'CASE',
-  MEDAL = 'MEDAL',
-  DOLLAR = 'DOLLAR'
+export enum Categories {
+  Stable = 'Stable',
+  BTC = 'BTC-based',
+  QuipuSwap = 'QuipuSwap',
+  Bridge = 'Bridge',
+  Tezotopia = 'Tezotopia'
 }

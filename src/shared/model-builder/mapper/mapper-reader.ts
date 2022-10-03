@@ -40,8 +40,10 @@ export const mapperReader = (
             const mapper = mapperFactory[configMapper];
 
             if (mapper) {
-              return [key, mapper(value, optional, nullable)];
+              return mapper(value2, optional, nullable);
             }
+
+            throw new Error(`Mapper ${configMapper} not found`);
           })
         ];
       }
