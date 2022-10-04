@@ -9,8 +9,6 @@
   display: flex;
   align-items: center;
   column-gap: 8px;
-
-  border-bottom: 1px solid $text-01;
 }
 
 .tokenSymbol {
@@ -44,4 +42,12 @@
   .tokenName {
     max-width: 240px;
   }
+}
+
+.light {
+  border-bottom: 1px solid $ui-03;
+}
+
+.dark {
+  border-bottom: 1px solid $text-01;
 }
