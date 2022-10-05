@@ -22,5 +22,8 @@ export const newLiquidity = {
   migrate: 'Migrate',
   assetsMigrated: 'Assets successfully migrated',
   successfullyAdded: 'Liquidity has been successfully added',
-  successfullyRemoved: 'Liquidity has been successfully removed'
+  successfullyRemoved: 'Liquidity has been successfully removed',
+  heyBro: 'Hey, bro!',
+  migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
+  why: 'Why?'
 } as const;

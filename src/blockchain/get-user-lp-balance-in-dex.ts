@@ -8,7 +8,7 @@ import { getUserLpBalanceDexTwo } from './get-user-lp-balance-dex-two';
 import { getUserLpBalanceTezToken } from './get-user-lp-balance-tez-token';
 import { getUserLpBalanceTokenToken } from './get-user-lp-balance-token-token';
 
-export const getUserLpBalance = async (
+export const getUserLpBalanceInDex = async (
   tezos: TezosToolkit,
   accountPkh: string,
   contractAddress: string,

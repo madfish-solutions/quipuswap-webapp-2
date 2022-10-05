@@ -5,10 +5,12 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, Tooltip } from '@shared/components';
 import { MigrateLiquidityIcon } from '@shared/svg';
+import { useTranslation } from '@translation';
 
 import styles from './migrate-liquidity-card.module.scss';
 
 export const MigrateLiquidityCard = () => {
+  const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -21,11 +23,11 @@ export const MigrateLiquidityCard = () => {
     >
       <span>
         <div className={styles.heyBro}>
-          Hey, bro!
+          {t('newLiquidity|heyBro')}
           <Tooltip content={<div>Tooltip!</div>} />
         </div>
-        <span className={styles.migrateDescription}>Please, migrate your assets to the new ecxiting AMM version.</span>
-        <span className={styles.why}>Why?</span>
+        <span className={styles.migrateDescription}>{t('newLiquidity|migrateAssets')}</span>
+        <span className={styles.why}>{t('newLiquidity|why')}</span>
       </span>
       <MigrateLiquidityIcon />
     </Card>

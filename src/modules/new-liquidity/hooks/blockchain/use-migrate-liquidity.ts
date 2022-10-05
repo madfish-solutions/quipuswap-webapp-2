@@ -11,7 +11,7 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getUserTokensAmountByShares, checkMigrationParams } from '../../helpers';
+import { getUserTokensAmountByShares, getUserLpBalanceToMigrate, getLpBasedOnToken } from '../../helpers';
 import { useNewLiquidityItemStore } from '../store';
 
 export const useMigrateLiquidity = () => {
@@ -29,10 +29,10 @@ export const useMigrateLiquidity = () => {
 
   useEffect(() => {
     (async () => {
-      const migrationParams = await checkMigrationParams(tezos, accountPkh, itemStore);
+      const migrationParams = await getUserLpBalanceToMigrate(tezos, accountPkh, itemStore);
 
       if (isExist(migrationParams)) {
-        setCanMigrateLiquidity(migrationParams.canMigrateLiquidity);
+        setCanMigrateLiquidity(true);
         setDexOneBalanceLP(migrationParams.userLpBalance);
       }
     })();
@@ -58,14 +58,8 @@ export const useMigrateLiquidity = () => {
       accordanceItem.totalLpSupply
     );
 
-    const lpBasedOnTokenA = amountA
-      .multipliedBy(itemStore.totalLpSupply)
-      .dividedBy(itemStore.aTokenAtomicTvl)
-      .integerValue(BigNumber.ROUND_DOWN);
-    const lpBasedOnTokenB = amountB
-      .multipliedBy(itemStore.totalLpSupply)
-      .dividedBy(itemStore.bTokenAtomicTvl)
-      .integerValue(BigNumber.ROUND_DOWN);
+    const lpBasedOnTokenA = getLpBasedOnToken(amountA, itemStore.totalLpSupply, itemStore.aTokenAtomicTvl);
+    const lpBasedOnTokenB = getLpBasedOnToken(amountB, itemStore.totalLpSupply, itemStore.bTokenAtomicTvl);
 
     const shares = lpBasedOnTokenA.isLessThan(lpBasedOnTokenB) ? lpBasedOnTokenA : lpBasedOnTokenB;
 
