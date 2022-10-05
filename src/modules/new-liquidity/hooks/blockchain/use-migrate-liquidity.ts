@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -27,16 +27,20 @@ export const useMigrateLiquidity = () => {
   const [canMigrateLiquidity, setCanMigrateLiquidity] = useState(false);
   const [dexOneBalanceLP, setDexOneBalanceLP] = useState<BigNumber>(new BigNumber(ZERO_AMOUNT));
 
-  useEffect(() => {
-    (async () => {
-      const userLpBalanceToMigrate = await getUserLpBalanceToMigrate(tezos, accountPkh, itemStore);
+  const getMigrationParams = useCallback(async () => {
+    const userLpBalanceToMigrate = await getUserLpBalanceToMigrate(tezos, accountPkh, itemStore);
 
-      if (isExist(userLpBalanceToMigrate)) {
-        setCanMigrateLiquidity(true);
-        setDexOneBalanceLP(userLpBalanceToMigrate);
-      }
-    })();
-  }, [canMigrateLiquidity, itemStore, accountPkh, tezos]);
+    if (userLpBalanceToMigrate?.isGreaterThan(ZERO_AMOUNT)) {
+      setCanMigrateLiquidity(true);
+      setDexOneBalanceLP(userLpBalanceToMigrate);
+    } else {
+      setCanMigrateLiquidity(false);
+    }
+  }, [accountPkh, itemStore, tezos]);
+
+  useEffect(() => {
+    (async () => await getMigrationParams())();
+  }, [getMigrationParams, itemStore, accountPkh, tezos]);
 
   const calculateTokensAmounts = () => {
     const accordanceItem = itemStore.accordanceItem;
@@ -99,6 +103,7 @@ export const useMigrateLiquidity = () => {
         transactionDeadline
       );
       await confirmOperation(operation.opHash, { message: t('newLiquidity|assetsMigrated') });
+      await getMigrationParams();
     } catch (error) {
       showErrorToast(error as Error);
     }

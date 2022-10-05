@@ -21,10 +21,11 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
         aToken,
         bToken
       )}`;
+    case 'TEZ_TOKEN':
     case 'TOKEN_TOKEN':
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
     case 'STABLESWAP':
-      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${id.toFixed()}`;
+      return `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${id.toFixed()}`;
     default:
       return `${AppRootRoutes.Liquidity}`;
   }
