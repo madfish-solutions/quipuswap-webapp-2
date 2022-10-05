@@ -15,7 +15,6 @@
 .tabs {
   margin: -16px -24px 0 -16px;
   padding: 0 16px;
-  border-bottom: 1px solid $text-01;
 }
 
 .inputs {
@@ -45,4 +44,12 @@
   .button {
     max-width: 200px;
   }
+}
+
+.light {
+  border-bottom: 1px solid $ui-03;
+}
+
+.dark {
+  border-bottom: 1px solid $text-01;
 }

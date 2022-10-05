@@ -194,3 +194,6 @@ export const SINGLE_TOKEN_VALUE = 1;
 // toRealIfPossible / toAtomicIfPossible
 export const DECIMALS_BASE = 10;
 export const FALLBACK_DECIMALS = 0;
+
+// Referal code
+export const QUIPUSWAP_REFERRAL_CODE = new BigNumber(1);
