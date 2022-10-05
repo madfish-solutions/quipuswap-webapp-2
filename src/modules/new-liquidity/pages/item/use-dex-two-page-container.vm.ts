@@ -3,10 +3,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
-import { useTranslation } from '@translation';
 
-export const useDexTwoItemPageViewModel = () => {
-  const { t } = useTranslation();
+export const useDexTwoPageContainerViewModel = () => {
   const { pairSlug } = useParams();
   const newLiquidityItemStore = useNewLiquidityItemStore();
 
@@ -18,8 +16,6 @@ export const useDexTwoItemPageViewModel = () => {
   }, [newLiquidityItemStore, pairSlug]);
 
   return {
-    t,
-    title: newLiquidityItemStore.pageTitle,
     isInitialized: Boolean(newLiquidityItemStore.item)
   };
 };
