@@ -9,7 +9,7 @@ import { SentryRoutes } from '@shared/services';
 import { PageNotFoundPage } from '../errors';
 import { NewLiquidityRoutes } from './new-liquidity-routes.enum';
 import { useNewLiquidityViewModel } from './new-liquidity.routing.vm';
-import { CreatePoolPage, PageContainerAdd, PageContainerRemove, NewLiquidityListPage } from './pages';
+import { CreatePoolPage, DexTwoAddLiq, DexTwoRemoveLiq, NewLiquidityListPage } from './pages';
 import { NewLiquidityCreatePage } from './pages/create';
 import { NewLiquidityFormTabs } from './types';
 
@@ -27,13 +27,10 @@ export const NewLiquidityPageRouter: FC = () => {
           element={<DexOneRemoveLiq />}
         />
 
-        <Route
-          path={`${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/:pairSlug`}
-          element={<PageContainerAdd />}
-        />
+        <Route path={`${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
         <Route
           path={`${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.remove}/:pairSlug`}
-          element={<PageContainerRemove />}
+          element={<DexTwoRemoveLiq />}
         />
         <Route path={NewLiquidityRoutes.create} element={<CreatePoolPage />} />
 

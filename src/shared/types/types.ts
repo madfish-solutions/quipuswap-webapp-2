@@ -106,7 +106,6 @@ export interface TokenMetadata {
   symbol: string;
   name: string;
   thumbnailUri: string;
-  categories?: Array<string>;
 }
 
 export enum DexPairType {
