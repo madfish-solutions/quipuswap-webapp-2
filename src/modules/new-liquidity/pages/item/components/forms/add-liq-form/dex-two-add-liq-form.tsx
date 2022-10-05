@@ -6,15 +6,8 @@ import { DexTwoAddLiqFormView } from '@shared/components';
 
 import { useDexTwoAddLiqFormViewModel } from './use-dex-two-add-liq-form.vm';
 
-interface Props {
-  canMigrateLiquidity?: boolean;
-  onMigrateLiquidity?: () => void;
-}
-
-export const DexTwoAddLiqForm: FC<Props> = observer(props => {
+export const DexTwoAddLiqForm: FC = observer(() => {
   const params = useDexTwoAddLiqFormViewModel();
 
-  const commonParams = { ...params, ...props };
-
-  return <DexTwoAddLiqFormView {...commonParams} />;
+  return <DexTwoAddLiqFormView {...params} />;
 });

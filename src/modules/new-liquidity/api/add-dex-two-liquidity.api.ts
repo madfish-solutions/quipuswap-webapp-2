@@ -7,7 +7,7 @@ import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { isGreaterThanZero } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
 
-import { getTezValue } from '../helpers/get-tez-value';
+import { getTezValue } from '../helpers';
 
 export const addDexTwoLiquidityApi = async (
   tezos: TezosToolkit,

@@ -72,7 +72,7 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
           className={s.shape}
           data-test-id="chooseBakerButton"
         >
-          <input {...props} ref={inputRef} value={value} hidden readOnly />
+          <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
             <BakerLogo
               bakerName={baker && isBackerNotEmpty(baker) ? baker.name : ''}
