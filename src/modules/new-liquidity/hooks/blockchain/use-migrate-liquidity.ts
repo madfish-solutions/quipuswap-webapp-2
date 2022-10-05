@@ -33,7 +33,7 @@ export const useMigrateLiquidity = () => {
 
       if (isExist(migrationParams)) {
         setCanMigrateLiquidity(true);
-        setDexOneBalanceLP(migrationParams.userLpBalance);
+        setDexOneBalanceLP(migrationParams);
       }
     })();
   }, [canMigrateLiquidity, itemStore, accountPkh, tezos]);
