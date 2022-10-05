@@ -29,11 +29,11 @@ export const useMigrateLiquidity = () => {
 
   useEffect(() => {
     (async () => {
-      const migrationParams = await getUserLpBalanceToMigrate(tezos, accountPkh, itemStore);
+      const userLpBalanceToMigrate = await getUserLpBalanceToMigrate(tezos, accountPkh, itemStore);
 
-      if (isExist(migrationParams)) {
+      if (isExist(userLpBalanceToMigrate)) {
         setCanMigrateLiquidity(true);
-        setDexOneBalanceLP(migrationParams);
+        setDexOneBalanceLP(userLpBalanceToMigrate);
       }
     })();
   }, [canMigrateLiquidity, itemStore, accountPkh, tezos]);
