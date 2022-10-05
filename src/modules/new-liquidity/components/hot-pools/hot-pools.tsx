@@ -20,7 +20,7 @@ interface Props {
 
 export const HotPools: FC<Props> = ({ pools }) => {
   return (
-    <HotPoolSlider>
+    <HotPoolSlider poolsCount={pools.length}>
       {pools.map(({ id, tvlInUsd, maxApr, inputToken, href }) => (
         <HotPoolCard key={id.toString()} tvl={tvlInUsd} apr={maxApr} tokens={inputToken} href={href} />
       ))}
