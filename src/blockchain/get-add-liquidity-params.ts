@@ -13,7 +13,7 @@ export const getAddLiquidityParams = async (
   deadline: string,
   tokensInfo: Array<LiquidityTokenInfo>
 ) => {
-  let addLiqParams: ContractMethod<Wallet> | TransferParams = dexTwoContract.methods.invest_liquidity(
+  const addLiqParams: ContractMethod<Wallet> | TransferParams = dexTwoContract.methods.invest_liquidity(
     dexTwoId,
     amounts.amountA,
     amounts.amountB,
@@ -23,14 +23,12 @@ export const getAddLiquidityParams = async (
     deadline
   );
 
-  if (tokensInfo.some(({ token }) => isTezosToken(token))) {
-    addLiqParams = addLiqParams.toTransferParams({
-      mutez: true,
-      amount: amounts.amountB.toNumber()
-    });
-  } else {
-    addLiqParams = addLiqParams.toTransferParams();
-  }
+  const params = tokensInfo.some(({ token }) => isTezosToken(token))
+    ? {
+        mutez: true,
+        amount: amounts.amountB.toNumber()
+      }
+    : undefined;
 
-  return addLiqParams;
+  return addLiqParams.toTransferParams(params);
 };

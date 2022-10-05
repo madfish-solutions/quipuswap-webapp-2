@@ -1,13 +1,13 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { getUserLpBalance } from '@blockchain';
+import { getUserLpBalanceInDex } from '@blockchain';
 import { ZERO_AMOUNT } from '@config/constants';
 import { PoolType } from '@modules/new-liquidity/interfaces';
 import { isExist, isNull, isUndefined } from '@shared/helpers';
 
 import { NewLiquidityItemStore } from '../store';
 
-export const checkMigrationParams = async (
+export const getUserLpBalanceToMigrate = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
   liquidityItem: NewLiquidityItemStore
@@ -20,7 +20,7 @@ export const checkMigrationParams = async (
     return null;
   }
 
-  const userLpBalance = await getUserLpBalance(
+  const userLpBalance = await getUserLpBalanceInDex(
     tezos,
     accountPkh,
     accordanceItem.contractAddress,

@@ -1,10 +1,11 @@
 import { ContractAbstraction, Wallet } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { getRemoveLiquidityParamsTezToken, getRemoveLiquidityParamsTokenToken } from '@blockchain';
 import { DEFAULT_TOKEN_ID_BN } from '@config/constants';
+import { PoolType } from '@modules/new-liquidity/interfaces';
 
-import { PoolType } from '../interfaces';
+import { getRemoveLiquidityParamsTezToken } from './get-remove-liquidity-params-tez-token';
+import { getRemoveLiquidityParamsTokenToken } from './get-remove-liquidity-params-token-token';
 
 export const getDexOneRemoveLiquidityParams = async (
   contract: ContractAbstraction<Wallet>,

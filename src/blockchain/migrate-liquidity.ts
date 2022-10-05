@@ -3,12 +3,12 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
-import { getDexOneRemoveLiquidityParams } from '@modules/new-liquidity/api';
 import { LiquidityTokenInfo, PoolType } from '@modules/new-liquidity/interfaces';
 import { getBlockchainTimestamp } from '@shared/helpers';
 import { Token, TokenAddress } from '@shared/types';
 
 import { getAddLiquidityParams } from './get-add-liquidity-params';
+import { getDexOneRemoveLiquidityParams } from './get-dex-one-remove-liquidity-params';
 import { getApproveParams } from './with-approve.api';
 
 interface IAccordance {
