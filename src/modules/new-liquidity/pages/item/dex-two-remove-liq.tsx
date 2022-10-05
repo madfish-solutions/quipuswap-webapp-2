@@ -4,16 +4,16 @@ import { observer } from 'mobx-react-lite';
 
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
-import { PageTitle, StickyBlock } from '@shared/components';
+import { PageTitle, StateWrapper, StickyBlock } from '@shared/components';
 
 import { DexTwoRemoveLiqForm } from './components';
-import { useDexTwoItemViewModel } from './dex-two-item.vm';
+import { useDexTwoItemPageViewModel } from './use-dex-two-item-page.vm';
 
 export const DexTwoRemoveLiq: FC = observer(() => {
-  const { t, title } = useDexTwoItemViewModel();
+  const { t, title, isInitialized } = useDexTwoItemPageViewModel();
 
   return (
-    <>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <PageTitle data-test-id="dexTwoRemoveLiqTitle">
         {t('common|Remove')} {title}
       </PageTitle>
@@ -23,6 +23,6 @@ export const DexTwoRemoveLiq: FC = observer(() => {
           <DexTwoRemoveLiqForm />
         </NewLiquidityFormTabsCard>
       </StickyBlock>
-    </>
+    </StateWrapper>
   );
 });

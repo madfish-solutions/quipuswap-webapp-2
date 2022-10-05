@@ -1,8 +1,8 @@
-import { LiquidityListDto } from '../dto';
+import { LiquidityItemResponseDto, LiquidityListDto } from '../dto';
 import { LiquidityItemModel } from './liquidity-item.model';
 
 export class LiquidityListModel extends LiquidityListDto {
-  list: Array<LiquidityItemModel>;
+  list: Array<LiquidityItemResponseDto>;
 
   constructor(dto: LiquidityListDto) {
     super();
