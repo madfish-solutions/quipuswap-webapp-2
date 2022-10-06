@@ -20,7 +20,7 @@
   white-space: nowrap;
 }
 .tokenBody {
-  max-width: calc(100% - 32px);
+  flex: 1
 }
 .listItem {
   position: relative;
@@ -32,6 +32,7 @@
 .splitRow {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 .joinRow {
   display: flex;

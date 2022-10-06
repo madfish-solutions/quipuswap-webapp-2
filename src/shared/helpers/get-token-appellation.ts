@@ -59,7 +59,7 @@ export const isTezosToken = (token: TokenAddress) =>
 
 export const isQuipuToken = (token: TokenAddress) => getTokenSlug(token) === getTokenSlug(QUIPU_TOKEN);
 
-const TOKEN_LENGTH = 10;
+const TOKEN_LENGTH = 100;
 
 export const getTokenSymbol = (token: RawOrMappedToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {

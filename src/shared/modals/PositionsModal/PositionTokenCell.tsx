@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { TokenCell } from '@shared/components';
 import { Checkbox } from '@shared/elements';
-import { getTokenName, getTokenSymbol, isTezosToken, prepareTokenLogo } from '@shared/helpers';
+import { getTokenSymbol } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 interface PositionTokenCellProps {
@@ -13,15 +13,7 @@ interface PositionTokenCellProps {
 
 export const PositionTokenCell: FC<PositionTokenCellProps> = ({ token, onClick, isChecked }) => (
   <div data-test-id={getTokenSymbol(token)}>
-    <TokenCell
-      tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-      tokenName={getTokenName(token)}
-      tokenSymbol={getTokenSymbol(token)}
-      tokenType={token.type}
-      isTezosToken={isTezosToken(token)}
-      tabIndex={0}
-      onClick={onClick}
-    >
+    <TokenCell token={token} tabIndex={0} onClick={onClick}>
       <Checkbox checked={isChecked} />
     </TokenCell>
   </div>
