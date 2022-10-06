@@ -3,13 +3,16 @@ import { useContext } from 'react';
 import cx from 'classnames';
 import ReactSlider from 'react-slick';
 
+import { FISRT_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { CFC } from '@shared/types';
 
 import styles from './hot-pool-slider.module.scss';
 
+const MAX_SLIDES_TO_SHOW = 4;
+
 const SliderSettings = {
-  slidesToShow: 4,
+  slidesToShow: MAX_SLIDES_TO_SHOW,
   slidesToScroll: 1,
   infinite: true,
   arrows: false,
@@ -18,7 +21,7 @@ const SliderSettings = {
     {
       breakpoint: 1600,
       settings: {
-        slidesToShow: 4,
+        slidesToShow: MAX_SLIDES_TO_SHOW,
         className: styles.margin4cards,
         slidesToScroll: 1,
         infinite: true
@@ -61,13 +64,19 @@ const modeClass = {
 };
 
 interface Props {
+  poolsCount: number;
   className?: string;
 }
 
-export const HotPoolSlider: CFC<Props> = ({ className, children }) => {
+export const HotPoolSlider: CFC<Props> = ({ poolsCount, className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
+
+  if (poolsCount < MAX_SLIDES_TO_SHOW) {
+    SliderSettings.slidesToShow = poolsCount;
+    SliderSettings.responsive[FISRT_INDEX].settings.slidesToShow = poolsCount;
+  }
 
   return (
     <div className={compoundClassnames}>

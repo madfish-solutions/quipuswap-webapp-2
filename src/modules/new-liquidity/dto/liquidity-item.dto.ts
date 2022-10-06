@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 
-import { LiquidityItem, LiquidityItemResponse } from '../interfaces';
+import { Categories, LiquidityItem, LiquidityItemResponse } from '../interfaces';
 import { LiquidityTokenInfoDto } from './liquidity-token-info.dto';
 
 export class LiquidityItemDto implements LiquidityItem {
@@ -32,7 +32,7 @@ export class LiquidityItemDto implements LiquidityItem {
   maxApr: Nullable<number>;
 
   @Typed({ type: String, isArray: true })
-  poolLabels: Array<string>;
+  poolLabels: Array<Categories>;
 
   @Typed({ type: BigNumber, nullable: true })
   volumeForWeek: Nullable<BigNumber>;

@@ -40,6 +40,10 @@ export class LoadingErrorData<ModelType extends object, Default = any, RawData =
     return !this.isLoading && this.isInitialized;
   }
 
+  resetData() {
+    this.model = this.defaultData;
+  }
+
   setRawData(rawData: RawData) {
     this.error = null;
     this.rawData = rawData;
