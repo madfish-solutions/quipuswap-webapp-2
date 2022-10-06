@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { BlockInfo } from '@shared/types';
 
+import { Categories } from './icon-enum';
 import { LiquidityTokenInfo } from './liquidity-token-info.interface';
 
 export interface LiquidityItem {
@@ -12,7 +13,7 @@ export interface LiquidityItem {
   totalSupply: BigNumber;
   maxApr: Nullable<number>;
   volumeForWeek: Nullable<BigNumber>;
-  poolLabels: Array<string>;
+  poolLabels: Array<Categories>;
   tokensInfo: Array<LiquidityTokenInfo>;
   feesRate: string;
 }

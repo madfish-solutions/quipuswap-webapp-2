@@ -10,13 +10,10 @@
   display: flex;
   align-items: center;
   column-gap: 8px;
-
-  border-bottom: 1px solid $text-01;
 }
 
 .tokenSymbol {
   @include ellipsis;
-  text-transform: uppercase;
 }
 
 /* TODO: create and change to body-3 element */
@@ -68,8 +65,10 @@
 
 .light {
   @include tokens-modal($hover-light-row);
+  border-bottom: 1px solid $ui-03;
 }
 
 .dark {
   @include tokens-modal($hover-dark-row);
+  border-bottom: 1px solid $text-01;
 }

@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
-import { ZERO_BAKER_ADDRESS } from '@config/constants';
+import { QUIPUSWAP_REFERRAL_CODE, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { AmountToken } from '@shared/types';
 
@@ -24,7 +24,16 @@ export const removeDexTwoLiquidityApi = async (
   const [tokenA, tokenB] = tokensAndAmounts;
 
   const dexTwoLiquidityParams = dexTwoContract.methods
-    .divest_liquidity(itemId, tokenA.amount, tokenB.amount, shares, accountPkh, candidate, deadline)
+    .divest_liquidity(
+      itemId,
+      tokenA.amount,
+      tokenB.amount,
+      shares,
+      accountPkh,
+      candidate,
+      deadline,
+      QUIPUSWAP_REFERRAL_CODE
+    )
     .toTransferParams();
 
   return await sendBatch(tezos, [dexTwoLiquidityParams]);

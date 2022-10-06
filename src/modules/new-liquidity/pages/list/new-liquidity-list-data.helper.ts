@@ -31,11 +31,10 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 };
 
 export const newLiquidityListDataHelper = ({
-  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type }
+  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
 }: LiquidityItemResponse) => {
   const tokens = tokensInfo.map(({ token }) => token);
   const itemStats = [];
-  const newLiquidityLabelsData = { MEDAL: true, CASE: true, DOLLAR: true };
 
   if (!isNull(tvlInUsd)) {
     itemStats.push({
@@ -91,7 +90,7 @@ export const newLiquidityListDataHelper = ({
     tvlInUsd,
     maxApr,
     itemStats,
-    newLiquidityLabelsData,
+    categories: poolLabels,
     visibleIcon: true,
     inputToken: tokens,
     href: getLiquidityHref(id, type, tokens),
