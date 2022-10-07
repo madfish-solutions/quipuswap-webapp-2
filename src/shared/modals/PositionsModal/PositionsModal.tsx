@@ -1,25 +1,20 @@
-import { useContext, FC } from 'react';
+import { FC } from 'react';
 
 import cx from 'classnames';
-import { FormApi } from 'final-form';
-import { Field, FormSpy, withTypes } from 'react-final-form';
-import { Props } from 'react-modal';
+import { Field, FormSpy } from 'react-final-form';
 
-import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '@config/constants';
-import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useAddCustomToken } from '@providers/dapp-tokens';
+import { DEBOUNCE_MS, MOCK_LOADING_ARRAY } from '@config/constants';
+import { ColorModes } from '@providers/color-theme-context';
 import { Button, LoadingTokenCell } from '@shared/components';
-import { getTokenSlug, isEmptyArray, isTokenEqual } from '@shared/helpers';
-import { useTokensSearchService } from '@shared/services';
+import { getTokenSlug, isTokenEqual } from '@shared/helpers';
 import { NotFound, Plus } from '@shared/svg';
-import { Token } from '@shared/types';
-import { useTranslation } from '@translation';
 
 import { Modal } from '../modal';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.scss';
-import { FormValues, IPositionsModalProps, PMFormField } from './PositionsModal.types';
+import { IPositionsModalProps, PMFormField } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
+import { usePositionsModalViewModel } from './use-positions-modal.vm';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -29,91 +24,27 @@ const themeClass = {
 // eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const PositionsModal: FC<IPositionsModalProps & Props> = ({
-  onChange,
-  onRequestClose,
-  notSelectable1 = undefined,
-  notSelectable2 = undefined,
-  blackListedTokens = [],
-  initialPair,
-  ...props
-}) => {
-  const addCustomToken = useAddCustomToken();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
-  const { Form } = withTypes<FormValues>();
-
-  const { handleInput, isSoleFa2Token, allTokens, searchTokens, isTokensNotFound, isTokensLoading, resetSearchValues } =
-    useTokensSearchService<FormValues>(blackListedTokens);
-
-  const handleTokenA = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
-    if (!notSelectable1) {
-      if (values[PMFormField.SECOND_TOKEN] && values[PMFormField.FIRST_TOKEN]) {
-        form.mutators.setValue(PMFormField.FIRST_TOKEN, values[PMFormField.SECOND_TOKEN]);
-        form.mutators.setValue(PMFormField.SECOND_TOKEN, undefined);
-      } else if (!values[PMFormField.FIRST_TOKEN]) {
-        form.mutators.setValue(PMFormField.FIRST_TOKEN, token);
-      } else {
-        form.mutators.setValue(PMFormField.FIRST_TOKEN, undefined);
-      }
-    }
-  };
-
-  const handleTokenB = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
-    if (!notSelectable2) {
-      if (!values[PMFormField.SECOND_TOKEN]) {
-        form.mutators.setValue(PMFormField.SECOND_TOKEN, token);
-      } else {
-        form.mutators.setValue(PMFormField.SECOND_TOKEN, undefined);
-      }
-    }
-  };
-
-  const handleTokenListItem = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
-    if (!isEmptyArray(searchTokens)) {
-      addCustomToken(token);
-    }
-    if (!values[PMFormField.FIRST_TOKEN]) {
-      form.mutators.setValue(PMFormField.FIRST_TOKEN, token);
-    } else if (!values[PMFormField.SECOND_TOKEN]) {
-      form.mutators.setValue(PMFormField.SECOND_TOKEN, token);
-    }
-    form.mutators.setValue(PMFormField.SEARCH, DEFAULT_SEARCH_VALUE);
-    form.mutators.setValue(PMFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
-    resetSearchValues();
-  };
-
-  const handleSelect = (values: FormValues) => {
-    onChange({
-      token1: values[PMFormField.FIRST_TOKEN],
-      token2: values[PMFormField.SECOND_TOKEN]
-    });
-  };
-
-  const checkFirstTokenSame = (values: FormValues) =>
-    initialPair?.token1 &&
-    values[PMFormField.FIRST_TOKEN] &&
-    isTokenEqual(values[PMFormField.FIRST_TOKEN], initialPair.token1);
-  const checkSecondTokenSame = (values: FormValues) =>
-    initialPair?.token2 &&
-    values[PMFormField.SECOND_TOKEN] &&
-    isTokenEqual(values[PMFormField.SECOND_TOKEN], initialPair.token2);
-
-  const isSelectDisabled = (values: FormValues) => {
-    const isFirstTokenSameOrDontChoosen = checkFirstTokenSame(values);
-    const isSecondTokenSameOrDontChoosen = checkSecondTokenSame(values);
-
-    return isFirstTokenSameOrDontChoosen && isSecondTokenSameOrDontChoosen;
-  };
-
-  const shouldSubmitOnRequest = (values: FormValues) => {
-    const isFirstTokenSame = checkFirstTokenSame(values);
-    const isSecondTokenSame = checkSecondTokenSame(values);
-
-    return (
-      values[PMFormField.FIRST_TOKEN] && values[PMFormField.SECOND_TOKEN] && (!isFirstTokenSame || !isSecondTokenSame)
-    );
-  };
+export const PositionsModal: FC<IPositionsModalProps> = props => {
+  const {
+    allTokens,
+    colorThemeMode,
+    handleInput,
+    handleSelect,
+    handleTokenA,
+    handleTokenB,
+    handleTokenListItem,
+    initialPair,
+    isSelectDisabled,
+    isSoleFa2Token,
+    isTokensLoading,
+    isTokensNotFound,
+    notSelectable1,
+    notSelectable2,
+    onRequestClose,
+    shouldSubmitOnRequest,
+    t,
+    Form
+  } = usePositionsModalViewModel(props);
 
   return (
     <Form

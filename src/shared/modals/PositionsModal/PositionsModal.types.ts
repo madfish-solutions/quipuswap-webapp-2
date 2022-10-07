@@ -1,6 +1,8 @@
+import { Props } from 'react-modal';
+
 import { Nullable, Token, TokenPair } from '@shared/types';
 
-export interface IPositionsModalProps {
+export interface IPositionsModalProps extends Props {
   onChange: (tokenPair: TokenPair) => void;
   initialPair: Nullable<TokenPair>;
   notSelectable1?: Token;
