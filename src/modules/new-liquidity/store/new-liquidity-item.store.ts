@@ -4,6 +4,7 @@ import { EMPTY_STRING, FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX, ZERO_AMOUNT_BN } f
 import { getSymbolsString } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
+import { Undefined } from '@shared/types';
 
 import { getDexTwoLiquidityItemApi } from '../api/get-dex-two-liquidity-item.api';
 import { LiquidityItemModel } from '../models';
@@ -82,7 +83,7 @@ export class NewLiquidityItemStore {
     return `${this.contractAddress}_${this.item?.id}`;
   }
 
-  get accordanceItem() {
+  get accordanceItem(): Undefined<LiquidityItemModel> {
     return this.rootStore.newLiquidityListStore?.list.find(itemModel => {
       return itemModel.item.accordanceSlug === this.accordanceSlug;
     });
