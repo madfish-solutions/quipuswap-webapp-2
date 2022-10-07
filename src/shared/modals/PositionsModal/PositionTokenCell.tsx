@@ -9,11 +9,12 @@ interface PositionTokenCellProps {
   token: Token;
   onClick: () => void;
   isChecked: boolean;
+  index?: number;
 }
 
-export const PositionTokenCell: FC<PositionTokenCellProps> = ({ token, onClick, isChecked }) => (
+export const PositionTokenCell: FC<PositionTokenCellProps> = ({ token, onClick, isChecked, index }) => (
   <div data-test-id={getTokenSymbol(token)}>
-    <TokenCell token={token} tabIndex={0} onClick={onClick}>
+    <TokenCell token={token} tabIndex={0} onClick={onClick} index={index}>
       <Checkbox checked={isChecked} />
     </TokenCell>
   </div>

@@ -5,14 +5,14 @@ import { Props } from 'react-modal';
 
 import { MOCK_LOADING_ARRAY } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { getTokenSlug } from '@shared/helpers';
 import { Modal } from '@shared/modals';
 import { NotFound } from '@shared/svg';
 import { Token } from '@shared/types';
 
 import { Iterator } from '../iterator';
-import { LoadingTokenCell, TokenCell } from '../modal-cell';
-import { Header } from './header';
+import { LoadingTokenCell } from '../modal-cell';
+import { AllTokensList } from './components/all-tokens-list';
+import { Header } from './components/header';
 import styles from './tokens-modal.module.scss';
 import { useTokensModalViewModel } from './tokens-modal.vm';
 
@@ -70,13 +70,8 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
         </div>
       )}
       {isTokensLoading && <Iterator data={MOCK_LOADING_ARRAY} render={LoadingTokenCell} />}
-      <Iterator
-        data={allTokens}
-        keyFn={getTokenSlug}
-        render={token => (
-          <TokenCell key={getTokenSlug(token)} token={token} tabIndex={0} onClick={() => handleTokenSelect(token)} />
-        )}
-      />
+
+      <AllTokensList tokens={allTokens} onTokenClick={token => handleTokenSelect(token)} />
     </Modal>
   );
 };

@@ -17,6 +17,7 @@ interface TokenCellProps {
   token: Token;
   tabIndex?: number;
   onClick?: () => void;
+  index?: number;
 }
 
 const modeClass = {
@@ -24,7 +25,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const TokenCell: CFC<TokenCellProps> = ({ token, onClick, tabIndex, children }) => {
+export const TokenCell: CFC<TokenCellProps> = ({ token, onClick, tabIndex, children, index }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -56,9 +57,7 @@ export const TokenCell: CFC<TokenCellProps> = ({ token, onClick, tabIndex, child
 
           <span className={cx(styles.caption)}>{tokenName}</span>
         </div>
-        <div>
-          <TokenBalance token={token} />
-        </div>
+        <div>{1 ? index : <TokenBalance token={token} />}</div>
       </div>
       {children}
     </div>
