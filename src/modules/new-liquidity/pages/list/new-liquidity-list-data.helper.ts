@@ -10,29 +10,7 @@ import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../../../liquidity';
 import { StableswapRoutes } from '../../../stableswap';
-import { Categories, LiquidityItemResponse } from '../../interfaces';
-
-export interface PreparedLiquidityItem {
-  id: BigNumber;
-  type: string;
-  tvlInUsd: BigNumber;
-  maxApr: Nullable<number>;
-  itemStats: Array<{
-    cellName: string;
-    tooltip: string;
-    amounts: {
-      amount: BigNumber | number;
-      currency: string;
-      dollarEquivalent?: BigNumber;
-      dollarEquivalentOnly?: boolean;
-    };
-  }>;
-  categories: Array<Categories>;
-  visibleIcon: boolean;
-  inputToken: Array<Token>;
-  href: string;
-  status: { status: ActiveStatus; filled: boolean };
-}
+import { LiquidityItemResponse, PreparedLiquidityItem } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;

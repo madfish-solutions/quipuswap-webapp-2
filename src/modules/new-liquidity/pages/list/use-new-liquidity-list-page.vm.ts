@@ -6,7 +6,8 @@ import { useTranslation } from '@translation';
 
 import { isHotPool } from '../../helpers';
 import { useGetNewLiquidityList, useNewLiquidityListStore, useGetNewLiquidityStats } from '../../hooks';
-import { newLiquidityListDataHelper, PreparedLiquidityItem } from './new-liquidity-list-data.helper';
+import { PreparedLiquidityItem } from '../../interfaces';
+import { newLiquidityListDataHelper } from './new-liquidity-list-data.helper';
 
 const STEP = 10;
 
