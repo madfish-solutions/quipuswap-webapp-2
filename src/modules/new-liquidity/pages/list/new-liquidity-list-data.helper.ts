@@ -4,6 +4,7 @@ import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { NewLiquidityRoutes } from '@modules/new-liquidity/new-liquidity-routes.enum';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
+import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getTokenPairSlug, isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
@@ -21,10 +22,13 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
         aToken,
         bToken
       )}`;
+    case 'TEZ_TOKEN':
     case 'TOKEN_TOKEN':
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
     case 'STABLESWAP':
-      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${id.toFixed()}`;
+      return `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${
+        StableswapLiquidityFormTabs.add
+      }/${id.toFixed()}`;
     default:
       return `${AppRootRoutes.Liquidity}`;
   }
