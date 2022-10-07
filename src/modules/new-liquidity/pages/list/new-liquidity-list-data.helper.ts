@@ -10,7 +10,29 @@ import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../../../liquidity';
 import { StableswapRoutes } from '../../../stableswap';
-import { LiquidityItemResponse } from '../../interfaces';
+import { Categories, LiquidityItemResponse } from '../../interfaces';
+
+export interface PreparedLiquidityItem {
+  id: BigNumber;
+  type: string;
+  tvlInUsd: BigNumber;
+  maxApr: Nullable<number>;
+  itemStats: Array<{
+    cellName: string;
+    tooltip: string;
+    amounts: {
+      amount: BigNumber | number;
+      currency: string;
+      dollarEquivalent?: BigNumber;
+      dollarEquivalentOnly?: boolean;
+    };
+  }>;
+  categories: Array<Categories>;
+  visibleIcon: boolean;
+  inputToken: Array<Token>;
+  href: string;
+  status: { status: ActiveStatus; filled: boolean };
+}
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;
@@ -32,7 +54,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 
 export const newLiquidityListDataHelper = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
-}: LiquidityItemResponse) => {
+}: LiquidityItemResponse): PreparedLiquidityItem => {
   const tokens = tokensInfo.map(({ token }) => token);
   const itemStats = [];
 
