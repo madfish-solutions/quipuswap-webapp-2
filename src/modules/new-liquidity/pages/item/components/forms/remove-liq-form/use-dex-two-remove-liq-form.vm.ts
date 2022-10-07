@@ -4,7 +4,7 @@ import { FISRT_INDEX } from '@config/constants';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import { isEqual, toReal } from '@shared/helpers';
-import { useTokenBalance } from '@shared/hooks';
+import { useTokenBalanceAutoLoading } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { getUserBalances, getFormikInitialValues, getInputsAmountFormFormikValues } from '../helpers';
@@ -25,7 +25,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
 
   const userBalances = getUserBalances(item.tokensInfo);
 
-  const lpTokenBalance = useTokenBalance(LP_TOKEN) ?? null;
+  const lpTokenBalance = useTokenBalanceAutoLoading(LP_TOKEN) ?? null;
 
   const lockeds = item.tokensInfo.map(tokenInfo => toReal(tokenInfo.atomicTokenTvl, tokenInfo.token));
 

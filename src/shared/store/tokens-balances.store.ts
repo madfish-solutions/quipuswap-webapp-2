@@ -63,11 +63,13 @@ export class TokensBalancesStore {
   }
 
   getBalance(token: Optional<Token>) {
-    if (isExist(token)) {
-      const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
-
-      return tokenBalance?.balance;
+    if (!isExist(token)) {
+      return null;
     }
+
+    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+
+    return tokenBalance?.balance ?? null;
   }
 
   clearBalances() {
@@ -76,11 +78,13 @@ export class TokensBalancesStore {
     });
   }
 
-  async loadTokenBalance(token: Token) {
-    if (this.rootStore.authStore.accountPkh && this.rootStore.tezos) {
-      const balance = await getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, token);
-      this.setRealBalance(token, saveBigNumber(balance, new BigNumber('0')));
+  async loadTokenBalance(token: Optional<Token>) {
+    if (!this.rootStore.authStore.accountPkh || !this.rootStore.tezos || !token) {
+      return null;
     }
+
+    const balance = await getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, token);
+    this.setRealBalance(token, saveBigNumber(balance, new BigNumber('0')));
   }
 
   async loadBalances() {

@@ -1,4 +1,4 @@
-import { FC, HTMLProps, ReactNode, useContext } from 'react';
+import { ComponentPropsWithRef, FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
@@ -13,7 +13,7 @@ import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
 import styles from './state-currency-amount.module.scss';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, ComponentPropsWithRef<'div'> {
   className?: string;
   amountClassName?: string;
   currencyClassName?: string;

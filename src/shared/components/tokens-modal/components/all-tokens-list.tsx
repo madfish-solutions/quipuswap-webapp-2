@@ -13,14 +13,8 @@ interface Props {
 export const AllTokensList: FC<Props> = ({ tokens, onTokenClick }) => {
   return (
     <div>
-      {tokens.map((token, index) => (
-        <TokenCell
-          key={getTokenSlug(token)}
-          token={token}
-          tabIndex={0}
-          onClick={() => onTokenClick(token)}
-          index={index}
-        />
+      {tokens.map(token => (
+        <TokenCell key={getTokenSlug(token)} token={token} tabIndex={0} onClick={() => onTokenClick(token)} />
       ))}
     </div>
   );

@@ -18,7 +18,7 @@ import {
   calculateOutputWithToken,
   calculateShares as calculateLpValue
 } from '@shared/helpers';
-import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/hooks';
+import { useAuthStore, useTokenBalanceAutoLoading, useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import {
@@ -44,7 +44,7 @@ export interface RemoveLiqFormValues {
 }
 
 const useRemoveLiqFormService = (item: Nullable<StableswapItemModel>, isBalancedProportion: boolean) => {
-  const lpBalance = useTokenBalance(item?.lpToken);
+  const lpBalance = useTokenBalanceAutoLoading(item?.lpToken);
   const fixedLpBalance = lpBalance ?? DEFAULT_LP_BALANCE;
 
   const tokens = item?.tokensInfo ? extractTokens(item.tokensInfo) : null;

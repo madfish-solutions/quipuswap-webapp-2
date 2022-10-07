@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { QUIPU_TOKEN } from '@config/tokens';
 import { numberAsString, getFormikError, isExist, toAtomic } from '@shared/helpers';
-import { useTokenBalance } from '@shared/hooks';
+import { useTokenBalanceAutoLoading } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useStableDividendsStake } from '../../../../hooks';
@@ -20,7 +20,7 @@ export const useStakeFormViewModel = (): StableDividendsFormViewProps => {
 
   const token = QUIPU_TOKEN;
 
-  const balance = useTokenBalance(token);
+  const balance = useTokenBalanceAutoLoading(token);
 
   const validationSchema = useFormValidation(balance ?? null);
 

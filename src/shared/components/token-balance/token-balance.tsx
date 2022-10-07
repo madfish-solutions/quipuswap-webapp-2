@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
-import { useTokenBalance } from '../../hooks';
+import { useOnScreen, useTokenBalance } from '../../hooks';
 import { Token } from '../../types';
 import { StateCurrencyAmount } from '../state-components';
 
@@ -10,7 +10,13 @@ interface Props {
 
 export const TokenBalance: FC<Props> = ({ token }) => {
   const tokenBalance = useTokenBalance(token);
-  const amount = Number(tokenBalance?.toFixed());
 
-  return <StateCurrencyAmount isLoading={false} loaderFallback={<></>} amount={amount || null} />;
+  const ref = useRef<HTMLDivElement>(null);
+  const isVisible = useOnScreen(ref);
+  if (isVisible) {
+    // eslint-disable-next-line no-console
+    console.log('visible', token);
+  }
+
+  return <StateCurrencyAmount isLoading={false} loaderFallback={<></>} amount={tokenBalance.amount} ref={ref} />;
 };

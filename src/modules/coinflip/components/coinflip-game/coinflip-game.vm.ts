@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { useAmountInUsd, useAmplitudeService, useTokenBalance } from '@shared/hooks';
+import { useAmountInUsd, useAmplitudeService, useTokenBalanceAutoLoading } from '@shared/hooks';
 import { useToasts } from '@shared/utils';
 
 import { getGameResult, Statuses } from '../../helpers';
@@ -11,7 +11,7 @@ export const useCoinflipGameViewModel = () => {
   const coinflipStore = useCoinflipStore();
   const { tokenToPlay, game, token, payout, isLoading, isUserLastGameLoading, userLastGame } = coinflipStore;
 
-  const tokenBalance = useTokenBalance(token) ?? null;
+  const tokenBalance = useTokenBalanceAutoLoading(token) ?? null;
 
   const { getGamersStats } = useGamersStats();
   const { loadUserLastGame } = useUserLastGame();
