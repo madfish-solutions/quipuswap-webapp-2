@@ -11,7 +11,7 @@ export const UserBalancesSubscription: FC = () => {
 
   useEffect(() => {
     if (accountPkh) {
-      tokensBalancesStore.loadBalances();
+      void tokensBalancesStore.loadBalances();
     } else {
       tokensBalancesStore.clearBalances();
     }

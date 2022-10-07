@@ -12,15 +12,16 @@ export const useTokenBalanceAutoLoading = (token: Optional<Token>): Optional<Big
   const { accountPkh } = useAuthStore();
 
   useEffect(() => {
-    if (token) {
-      const subscription = tokensBalancesStore.subscribe(token);
-
-      void tokensBalancesStore.loadTokenBalance(token);
-
-      return () => {
-        tokensBalancesStore.unsubscribe(token, subscription);
-      };
+    if (!token) {
+      return;
     }
+    const subscription = tokensBalancesStore.subscribe(token);
+
+    void tokensBalancesStore.loadTokenBalance(token);
+
+    return () => {
+      tokensBalancesStore.unsubscribe(token, subscription);
+    };
   }, [token, tokensBalancesStore, accountPkh]);
 
   return tokensBalancesStore.getBalance(token);

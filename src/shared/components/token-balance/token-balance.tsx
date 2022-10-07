@@ -1,7 +1,8 @@
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import { useOnScreen, useTokenBalance } from '../../hooks';
 import { Token } from '../../types';
+import { DashPlug } from '../dash-plug';
 import { StateCurrencyAmount } from '../state-components';
 
 interface Props {
@@ -9,14 +10,16 @@ interface Props {
 }
 
 export const TokenBalance: FC<Props> = ({ token }) => {
-  const tokenBalance = useTokenBalance(token);
+  const { load, isLoading, amount } = useTokenBalance(token);
 
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useOnScreen(ref);
-  if (isVisible) {
-    // eslint-disable-next-line no-console
-    console.log('visible', token);
-  }
 
-  return <StateCurrencyAmount isLoading={false} loaderFallback={<></>} amount={tokenBalance.amount} ref={ref} />;
+  useEffect(() => {
+    if (isVisible || !isLoading) {
+      void load();
+    }
+  }, [isVisible, load, isLoading]);
+
+  return <StateCurrencyAmount isLoading={isLoading} loaderFallback={<DashPlug />} amount={amount} ref={ref} />;
 };
