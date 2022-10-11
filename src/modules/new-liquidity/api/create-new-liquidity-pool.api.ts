@@ -2,6 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
+import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { isEqual, isTezosToken, isTokenFa12, isTokenFa2, saveBigNumber } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
 
@@ -82,7 +83,8 @@ export const createNewLiquidityPoolApi = async (
     token_b_in: token_b_in,
     shares_receiver: accountPkh,
     candidate: candidate,
-    deadline: timestamp
+    deadline: timestamp,
+    referral_code: QUIPUSWAP_REFERRAL_CODE
   };
 
   const addPoolTransferParams = newLiquidityPoolContract.methodsObject
