@@ -12,19 +12,15 @@ interface Props {
 }
 
 export const FarmingInfo: FC<Props> = ({ isYouves }) => {
-  return (
+  return isYouves ? (
+    <YouvesCard />
+  ) : (
     <>
-      {isYouves ? (
-        <YouvesCard />
-      ) : (
-        <>
-          <FarmingRewardInfo />
-          <StickyBlock>
-            <FarmingFormTabsCard />
-            <FarmingDetails />
-          </StickyBlock>
-        </>
-      )}
+      <FarmingRewardInfo />
+      <StickyBlock>
+        <FarmingFormTabsCard />
+        <FarmingDetails />
+      </StickyBlock>
     </>
   );
 };
