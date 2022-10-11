@@ -6,7 +6,6 @@ export enum AppRootRoutes {
   Swap = '/swap',
   Send = '/send',
   Farming = '/farming',
-  YouvesFarm = '/youves-farm',
   Voting = '/voting',
   Stableswap = '/stableswap',
   Coinflip = '/coinflip',
