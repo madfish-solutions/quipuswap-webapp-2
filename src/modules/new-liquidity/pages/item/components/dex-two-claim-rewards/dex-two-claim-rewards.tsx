@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 import { noop } from 'rxjs';
 
@@ -6,15 +5,19 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 
+import { useDexTwoClaimRewardsFromViewModel } from './use-dex-two-claim-rewards.vm';
+
 export const DexTwoClaimRewardsFrom = observer(() => {
+  const { rewardValue, rewardDollarEquivalent, balance, doClaim } = useDexTwoClaimRewardsFromViewModel();
+
   return (
     <div>
       <TokenInput
-        value={'500'}
+        value={rewardValue}
         label={'Baker reward'}
         readOnly
-        dollarEquivalent={new BigNumber(500)}
-        balance={new BigNumber(1000)}
+        dollarEquivalent={rewardDollarEquivalent}
+        balance={balance}
         onInputChange={noop}
         tokens={TEZOS_TOKEN}
       />
@@ -22,6 +25,7 @@ export const DexTwoClaimRewardsFrom = observer(() => {
         <ConnectWalletOrDoSomething>
           <Button
             type="submit"
+            onClick={doClaim}
             className={stylesCommonContainer.button}
             disabled={false}
             loading={false}
