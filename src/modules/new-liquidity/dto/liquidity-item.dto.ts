@@ -11,6 +11,9 @@ export class LiquidityItemDto implements LiquidityItem {
   id: BigNumber;
 
   @Typed()
+  contractAddress: string;
+
+  @Typed()
   type: string;
 
   @Typed()
