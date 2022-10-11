@@ -10,6 +10,7 @@ export const common = {
   Farming: 'Farming',
   Game: 'Game',
   Farm: 'Farm',
+  YouvesFarm: 'YouvesFarm',
   Portfolio: 'Portfolio',
   Governance: 'Governance',
   Stableswap: 'Stableswap',
