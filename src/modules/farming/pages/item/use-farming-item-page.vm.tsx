@@ -13,7 +13,6 @@ import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './farming-item.page.module.scss';
-// TODO: remove famingIdAndType id need
 
 export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
