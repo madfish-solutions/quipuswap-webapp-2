@@ -4,11 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { PageTitle, TestnetAlert } from '@shared/components';
 
-// import { YouvesCard } from '../list/components';
-// import { FarmingDetails } from './components/farming-details';
 import { FarmingInfo } from './components/farming-info';
-// import { FarmingRewardInfo } from './components/farming-reward-info';
-// import { FarmingFormTabsCard } from './components/farming-tabs/farming-from-tabs-card';
 import { useFarmingItemPageViewModel } from './use-farming-item-page.vm';
 
 export const FarmingItemPage: FC = observer(() => {
