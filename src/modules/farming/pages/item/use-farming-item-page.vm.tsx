@@ -13,7 +13,7 @@ import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './farming-item.page.module.scss';
-import { getFarmingIdAndType } from './helpers';
+// TODO: remove famingIdAndType id need
 
 export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
@@ -22,9 +22,8 @@ export const useFarmingItemPageViewModel = () => {
   const { getFarmingItem } = useGetFarmingItem();
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
-  const params = useParams();
+  const { id: rawStakeId } = useParams();
 
-  const { old, rawStakeId } = getFarmingIdAndType(params);
   /*
     Load data
   */
@@ -32,9 +31,9 @@ export const useFarmingItemPageViewModel = () => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getFarmingItem(new BigNumber(`${rawStakeId}`), old);
+    void getFarmingItem(new BigNumber(`${rawStakeId}`), true);
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh, old]);
+  }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 
   useEffect(() => {
     if (isNull(farmingItemStore)) {

@@ -2,9 +2,12 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, TestnetAlert } from '@shared/components';
+import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 
-import { FarmingInfo } from './components/farming-info';
+import { YouvesCard } from '../list/components';
+import { FarmingDetails } from './components/farming-details';
+import { FarmingRewardInfo } from './components/farming-reward-info';
+import { FarmingFormTabsCard } from './components/farming-tabs/farming-from-tabs-card';
 import { useFarmingItemPageViewModel } from './use-farming-item-page.vm';
 
 export const FarmingItemPage: FC = observer(() => {
@@ -14,7 +17,12 @@ export const FarmingItemPage: FC = observer(() => {
     <>
       <TestnetAlert />
       <PageTitle data-test-id="farmingItemPageTitle">{getTitle()}</PageTitle>
-      <FarmingInfo isYouves={isYouves} />
+      <FarmingRewardInfo />
+      {isYouves && <YouvesCard />}
+      <StickyBlock>
+        <FarmingFormTabsCard />
+        <FarmingDetails />
+      </StickyBlock>
     </>
   );
 });
