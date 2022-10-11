@@ -78,13 +78,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     Icon: FarmIcon
   },
   {
-    id: 'YouvesFarm',
-    to: AppRootRoutes.YouvesFarm,
-    label: i18n.t('common|YouvesFarm'),
-    Icon: FarmIcon,
-    hide: isProd()
-  },
-  {
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
     label: i18n.t('common|Game'),
