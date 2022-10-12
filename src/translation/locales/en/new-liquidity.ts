@@ -20,5 +20,6 @@ export const newLiquidity = {
   back: 'Back',
   noPool: 'Can’t find appropriate pool? Create own!',
   successfullyAdded: 'Liquidity has been successfully added',
-  successfullyRemoved: 'Liquidity has been successfully removed'
+  successfullyRemoved: 'Liquidity has been successfully removed',
+  backerReward: 'Backer Reward'
 } as const;

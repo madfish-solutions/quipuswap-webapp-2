@@ -4,17 +4,19 @@ import { noop } from 'rxjs';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
+import { useTranslation } from '@translation';
 
 import { useDexTwoClaimRewardsFromViewModel } from './use-dex-two-claim-rewards.vm';
 
 export const DexTwoClaimRewardsFrom = observer(() => {
+  const { t } = useTranslation();
   const { rewardValue, rewardDollarEquivalent, balance, doClaim } = useDexTwoClaimRewardsFromViewModel();
 
   return (
     <div>
       <TokenInput
         value={rewardValue}
-        label={'Baker reward'}
+        label={t('newLiquidity|backerReward')}
         readOnly
         dollarEquivalent={rewardDollarEquivalent}
         balance={balance}
@@ -31,7 +33,7 @@ export const DexTwoClaimRewardsFrom = observer(() => {
             loading={false}
             data-test-id="dexTwoClaimRewardsButton"
           >
-            Claim
+            {t('common|Claim')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
