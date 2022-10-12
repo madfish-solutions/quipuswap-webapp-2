@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { isValidFamingTab } from '@modules/farming/helpers/is-valid-farming-tab';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 
 import { FarmingFormTabs } from '../../types';
@@ -24,20 +25,12 @@ export const useFarmingFormTabsCardViewModel = () => {
   const { tab: farmingTab } = useParams();
 
   useEffect(() => {
-    if (Object.values(FarmingFormTabs).includes(farmingTab as FarmingFormTabs)) {
-      farmingItemStore.setTab(farmingTab as FarmingFormTabs);
-    } else {
-      farmingItemStore.setTab(FarmingFormTabs.stake);
-    }
+    const activeTab = isValidFamingTab(farmingTab) ? farmingTab : FarmingFormTabs.stake;
+
+    farmingItemStore.setTab(activeTab);
   }, [farmingItemStore, farmingTab]);
 
   const { item: farmingItem, currentTab } = farmingItemStore;
-
-  useEffect(() => {
-    return () => {
-      farmingItemStore.setTab(FarmingFormTabs.stake);
-    };
-  }, [farmingItemStore]);
 
   const isStakeForm = farmingItemStore.currentTab === FarmingFormTabs.stake;
 
