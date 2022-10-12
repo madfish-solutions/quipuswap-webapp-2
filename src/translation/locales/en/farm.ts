@@ -105,5 +105,6 @@ export const farm = {
   harvestAndRoll: 'Harvest and Roll',
   harvestOrRollDescription:
     'Collect rewards or take a chance and double them? Click the flip button to use Coinflip and try to almost double your rewards instead of the usual harvesting. Pay attention: losing bets will be lost. Fortune favors the brave!',
-  maximumAllowableBid: 'Maximum allowable bid'
+  maximumAllowableBid: 'Maximum allowable bid',
+  longTerm: 'Long Term Rewards'
 } as const;
