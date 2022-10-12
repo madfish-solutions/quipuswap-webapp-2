@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom'; //TODO
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useFarmingItemStore } from '@modules/farming/hooks';
 
