@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom'; //TODO
+import { useNavigate, useParams } from 'react-router-dom'; //TODO
 
 import { useFarmingItemStore } from '@modules/farming/hooks';
 
@@ -20,6 +20,16 @@ export const TabsContent = [
 export const useFarmingFormTabsCardViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const navigate = useNavigate();
+
+  const { tab: farmingTab } = useParams();
+
+  useEffect(() => {
+    if (Object.values(FarmingFormTabs).includes(farmingTab as FarmingFormTabs)) {
+      farmingItemStore.setTab(farmingTab as FarmingFormTabs);
+    } else {
+      farmingItemStore.setTab(FarmingFormTabs.stake);
+    }
+  }, [farmingItemStore, farmingTab]);
 
   const { item: farmingItem, currentTab } = farmingItemStore;
 
