@@ -22,6 +22,8 @@ export const useYouvesRewardInfoViewModel = () => {
     rewardTokenDecimals: 6,
     handleHarvest,
     isHarvestAvailable: true,
-    symbolsString
+    symbolsString,
+    shareAmount: new BigNumber(100),
+    shareAmountDollarEquivalent: new BigNumber(150)
   };
 };

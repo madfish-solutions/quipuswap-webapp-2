@@ -34,6 +34,8 @@ interface Props {
   handleHarvest: () => void;
   isHarvestAvailable: boolean;
   symbolsString: string;
+  shareAmount: BigNumber;
+  shareAmountDollarEquivalent: BigNumber;
 }
 
 export const YouvesRewardInfoView: FC<Props> = observer(
@@ -48,7 +50,9 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     rewardTokenDecimals,
     handleHarvest,
     isHarvestAvailable,
-    symbolsString
+    symbolsString,
+    shareAmount,
+    shareAmountDollarEquivalent
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const { t } = useTranslation();
@@ -77,17 +81,17 @@ export const YouvesRewardInfoView: FC<Props> = observer(
           data-test-id="yourShare"
         >
           <StateCurrencyAmount
-            amount={1000}
+            amount={shareAmount}
             className={styles.statsValueText}
             currency={symbolsString}
-            dollarEquivalent={100}
+            dollarEquivalent={shareAmountDollarEquivalent}
             labelSize="large"
           />
         </YouvesStatsItem>
 
         {shouldShowCountdown && (
           <YouvesStatsItem
-            itemName={t('farm|Lock period ends in')}
+            itemName={t('farm|Vesting period ends in')}
             loading={false}
             tooltipContent={t('farm|feeEndsInTooltip')}
             data-test-id="lockPeriodEndsIn"
