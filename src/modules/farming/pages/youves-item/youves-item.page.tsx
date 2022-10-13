@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
-import { PageTitle, TestnetAlert } from '@shared/components';
+import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 
 import { YouvesDetails } from './components/youves-details';
 import { YouvesRewardInfo } from './components/youves-reward-info/youves-reward-info';
+import { YouvesFormTabsCard } from './components/youves-tabs';
 import { useYouvesItemPageViewModel } from './use-youves-item-page.vm';
 
 export const YouvesItemPage: FC = () => {
@@ -12,9 +13,12 @@ export const YouvesItemPage: FC = () => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle data-test-id="farmingItemPageTitle">{getTitle()}</PageTitle>
+      <PageTitle data-test-id="youvesItemPageTitle">{getTitle()}</PageTitle>
       <YouvesRewardInfo />
-      <YouvesDetails />
+      <StickyBlock>
+        <YouvesFormTabsCard />
+        <YouvesDetails />
+      </StickyBlock>
     </>
   );
 };
