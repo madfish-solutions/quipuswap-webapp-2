@@ -77,6 +77,7 @@ export const farm = {
   'Your Share': 'Your Share',
   'Your delegate': 'Your delegate',
   'Lock period ends in': 'Lock period ends in',
+  'Vesting period ends in': 'Vesting period ends in',
   Stake: 'Stake',
   Unstake: 'Unstake',
   confirmationFirstStake:
