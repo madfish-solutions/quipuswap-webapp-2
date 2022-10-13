@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { getTimeLockDescription, getTokenSymbol } from '@shared/helpers';
+import { getTokenSymbol } from '@shared/helpers';
 import { useYoutubeTabs } from '@shared/hooks';
 import { ActiveStatus } from '@shared/types';
-import { i18n, useTranslation } from '@translation';
+import { useTranslation } from '@translation';
+
+import { getTimeLockDescription } from '../../helpers/parse-timelock';
 
 export const useYouvesDetailsViewModel = () => {
   const { t } = useTranslation();
@@ -17,7 +19,7 @@ export const useYouvesDetailsViewModel = () => {
     labels: [
       {
         status: ActiveStatus.ACTIVE,
-        label: i18n.t('farm|lock', { timelock: getTimeLockDescription(1000) }),
+        label: getTimeLockDescription(15581100),
         DTI: 'timeLockLabel'
       }
     ],
