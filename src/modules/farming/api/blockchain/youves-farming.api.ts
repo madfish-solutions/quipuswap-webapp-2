@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApi } from '@blockchain';
 import { YOUVES_BASED_CONTRACT } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
-import { TokenAddress } from '@shared/types';
+import { Standard, TokenIdFa2 } from '@shared/types';
 
 export namespace YouvesFarmingApi {
   export interface IFarmingStorage {
@@ -14,11 +14,12 @@ export namespace YouvesFarmingApi {
     };
   }
 
-  export const getToken = async (tezos: TezosToolkit): Promise<TokenAddress> => {
+  export const getToken = async (tezos: TezosToolkit): Promise<TokenIdFa2> => {
     const storage = await getStorageInfo<IFarmingStorage>(tezos, YOUVES_BASED_CONTRACT);
     const { id, address } = storage.deposit_token;
 
     return {
+      type: Standard.Fa2,
       fa2TokenId: id.toNumber(),
       contractAddress: address
     };
