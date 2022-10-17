@@ -65,6 +65,7 @@ export const OPPOSITE_INDEX = 1;
 
 //#region default value for token search
 export const DEFAULT_TOKEN_ID = 0;
+export const DEFAULT_TOKEN_ID_BN = new BigNumber(DEFAULT_TOKEN_ID);
 export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
@@ -114,6 +115,7 @@ export const TAB_INDEX = 0;
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
 export const ZERO_AMOUNT = 0;
+export const ZERO_AMOUNT_BN = new BigNumber(ZERO_AMOUNT);
 
 export const USD_DECIMALS = 2;
 
