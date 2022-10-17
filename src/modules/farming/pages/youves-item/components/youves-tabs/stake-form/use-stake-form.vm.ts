@@ -8,8 +8,8 @@ import * as yup from 'yup';
 import { LpTokensApi } from '@blockchain';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, getFormikError, isExist } from '@shared/helpers';
-import { useToken } from '@shared/hooks';
-import { TokenAddress } from '@shared/types';
+import { useToken, useTokenBalance } from '@shared/hooks';
+import { Optional, TokenAddress, TokenIdFa2 } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { YouvesFarmingApi } from '../../../../../api/blockchain/youves-farming.api';
@@ -23,7 +23,7 @@ interface FormValues {
   [FormFields.inputAmount]: string;
 }
 
-const getValidationSchema = (userBalance: Nullable<BigNumber>) =>
+const getValidationSchema = (userBalance: Optional<BigNumber>) =>
   yup.object().shape({
     [StakeFormFields.inputAmount]: balanceAmountSchema(userBalance).required('Value is required')
   });
@@ -38,11 +38,12 @@ export const useStakeFormViewModel = () => {
   const accountPkh = useAccountPkh();
 
   const [stakes, setStakes] = useState<BigNumber[]>([]);
+  const [lpToken, setLpToken] = useState<Nullable<TokenIdFa2>>(null);
   const [tokens, setTokens] = useState(DEFAULT_TOKENS);
   const tokenA = useToken(tokens.tokenA);
   const tokenB = useToken(tokens.tokenB);
-
-  const userTokenBalance = new BigNumber(100);
+  const loFullToken = useToken(lpToken);
+  const userLpTokenBalance = useTokenBalance(loFullToken);
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     // eslint-disable-next-line no-console
@@ -59,7 +60,7 @@ export const useStakeFormViewModel = () => {
   };
 
   const formik = useFormik({
-    validationSchema: getValidationSchema(userTokenBalance),
+    validationSchema: getValidationSchema(userLpTokenBalance),
     initialValues: {
       [FormFields.inputAmount]: ''
     },
@@ -78,6 +79,7 @@ export const useStakeFormViewModel = () => {
       setStakes(await YouvesFarmingApi.getStakes(tezos, accountPkh));
 
       const _lpToken = await YouvesFarmingApi.getToken(tezos);
+      setLpToken(_lpToken);
 
       const _tokens = tezos && _lpToken ? await LpTokensApi.getTokens(tezos, _lpToken) : DEFAULT_TOKENS;
       setTokens(_tokens);
@@ -90,7 +92,7 @@ export const useStakeFormViewModel = () => {
 
   return {
     stakes,
-    userTokenBalance,
+    userLpTokenBalance,
     tokens: [tokenA, tokenB],
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],
