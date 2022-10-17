@@ -11,22 +11,22 @@ import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../../../liquidity';
 import { StableswapRoutes } from '../../../stableswap';
-import { LiquidityItemResponse } from '../../interfaces';
+import { LiquidityItemResponse, PoolType } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;
 
   switch (type) {
-    case 'DEX_TWO':
+    case PoolType.DEX_TWO:
       return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${getTokenPairSlug(
         aToken,
         bToken
       )}`;
-    case 'TEZ_TOKEN':
-    case 'TOKEN_TOKEN':
+    case PoolType.TOKEN_TOKEN:
+    case PoolType.TEZ_TOKEN:
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
-    case 'STABLESWAP':
-      return `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${
+    case PoolType.STABLESWAP:
+      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${
         StableswapLiquidityFormTabs.add
       }/${id.toFixed()}`;
     default:
