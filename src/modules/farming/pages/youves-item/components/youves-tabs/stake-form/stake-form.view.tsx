@@ -15,6 +15,7 @@ interface Props {
   handleInputAmountChange: (value: string) => void;
   disabled: boolean;
   isSubmitting: boolean;
+  inputAmountError?: string;
 }
 
 export const StakeFormView: FC<Props> = ({
@@ -24,7 +25,8 @@ export const StakeFormView: FC<Props> = ({
   tokens,
   handleInputAmountChange,
   disabled,
-  isSubmitting
+  isSubmitting,
+  inputAmountError
 }) => {
   const { t } = useTranslation();
 
@@ -34,6 +36,7 @@ export const StakeFormView: FC<Props> = ({
         id="stake-form"
         label={t('common|Amount')}
         value={inputAmount}
+        error={inputAmountError}
         balance={userTokenBalance}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
