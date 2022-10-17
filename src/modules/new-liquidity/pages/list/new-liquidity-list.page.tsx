@@ -6,6 +6,7 @@ import { Iterator, ListItemCard, PageTitle, TestnetAlert } from '@shared/compone
 import { useTranslation } from '@translation';
 
 import { CreateOwnPool, HotPools, NewLiquidityStats } from '../../components';
+import { ListFilter } from './components';
 import styles from './new-liquidity-list-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
 
@@ -24,6 +25,8 @@ export const NewLiquidityListPage: FC = observer(() => {
       <HotPools pools={hotPools} />
 
       <CreateOwnPool />
+
+      <ListFilter />
 
       <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
       <div ref={lastElementRef} className={styles.lastElement} />
