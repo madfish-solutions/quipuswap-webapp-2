@@ -4,13 +4,14 @@ import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { NewLiquidityRoutes } from '@modules/new-liquidity/new-liquidity-routes.enum';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
+import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getTokenPairSlug, isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../../../liquidity';
 import { StableswapRoutes } from '../../../stableswap';
-import { LiquidityItemResponse, PoolType, PreparedLiquidityItem } from '../../interfaces';
+import { LiquidityItemResponse, PoolType } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;
@@ -25,7 +26,9 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
     case PoolType.TEZ_TOKEN:
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
     case PoolType.STABLESWAP:
-      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${id.toFixed()}`;
+      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${
+        StableswapLiquidityFormTabs.add
+      }/${id.toFixed()}`;
     default:
       return `${AppRootRoutes.Liquidity}`;
   }
@@ -33,7 +36,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 
 export const newLiquidityListDataHelper = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
-}: LiquidityItemResponse): PreparedLiquidityItem => {
+}: LiquidityItemResponse) => {
   const tokens = tokensInfo.map(({ token }) => token);
   const itemStats = [];
 

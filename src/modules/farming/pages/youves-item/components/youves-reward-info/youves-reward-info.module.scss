@@ -1,0 +1,52 @@
+@import "@styles/breakpoints";
+@import "@styles/variables";
+@import "@styles/text";
+
+@include media('>SDesktop') {
+  .titleLoader {
+    height: 4.573rem;
+  }
+  .rewardInfo {
+    margin-bottom: 32px;
+  }
+  .rewardHeader {
+    font-size: 1rem;
+  }
+}
+.backArrow {
+  transform: rotate(90deg);
+  margin-right: 0;
+}
+.rewardHeader {
+  font-size: 1rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+.arrowButton {
+  margin-right: 0;
+}
+.statsValueText {
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+.light {
+  .delegate {
+    @include background-text-color($brand-01);
+  }
+}
+.dark {
+  .delegate {
+    @include background-text-color($brand-02);
+  }
+}
+@include media('>Lphone') {
+  .statsValueText {
+    font-size: 1.429rem;
+  }
+}
+@include media('>desktop') {
+  .statsValueText {
+    font-size: 1.714rem;
+    line-height: 1.33;
+  }
+}
