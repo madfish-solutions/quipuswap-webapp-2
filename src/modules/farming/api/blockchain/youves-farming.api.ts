@@ -28,12 +28,7 @@ export namespace YouvesFarmingApi {
   export const getStakes = async (tezos: TezosToolkit, accountPkh: string) => {
     const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
 
-    const response = await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
-
-    // eslint-disable-next-line no-console
-    console.log('response', response);
-
-    return null;
+    return await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
   };
 
   export const deposit = async (

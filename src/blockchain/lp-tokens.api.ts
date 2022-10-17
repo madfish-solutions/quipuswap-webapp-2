@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { TokensValue } from '@modules/stableswap/types';
+import { mapTokensValueToTokenAddress, TokensValue } from '@modules/stableswap/types';
 import { getStorageInfo } from '@shared/dapp';
 import { isExist } from '@shared/helpers';
 import { BigMap, nat, TokenAddress } from '@shared/types';
@@ -14,7 +14,10 @@ export namespace LpTokensApi {
     storage: IStorage;
   }
 
-  export const getTokens = async (tezos: TezosToolkit, lpToken: TokenAddress) => {
+  export const getTokens = async (
+    tezos: TezosToolkit,
+    lpToken: TokenAddress
+  ): Promise<{ tokenA: TokenAddress; tokenB: TokenAddress }> => {
     if (!isExist(lpToken.fa2TokenId)) {
       throw new Error('Token is not FA2');
     }
@@ -26,6 +29,9 @@ export namespace LpTokensApi {
       throw new Error('Tokens not found');
     }
 
-    return { tokenA: map['token_a'], tokenB: map['token_b'] };
+    return {
+      tokenA: mapTokensValueToTokenAddress(map['token_a']),
+      tokenB: mapTokensValueToTokenAddress(map['token_b'])
+    };
   };
 }
