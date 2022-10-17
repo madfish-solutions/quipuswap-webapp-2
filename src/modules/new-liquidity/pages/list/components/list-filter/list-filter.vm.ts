@@ -10,7 +10,7 @@ import { LiquiditySortField, LiquiditySortFieldItem } from '../../types';
 
 export const useListFilterViewModel = () => {
   const { accountPkh } = useAuthStore();
-  const farmingFilterStore = useNewLiquidityListStore();
+  const newLiquidityListStore = useNewLiquidityListStore();
 
   const {
     search,
@@ -24,15 +24,15 @@ export const useListFilterViewModel = () => {
     handleDecrement,
 
     handleSortDirectionToggle
-  } = useBaseFilterStoreConverter(farmingFilterStore);
+  } = useBaseFilterStoreConverter(newLiquidityListStore);
 
-  const { showDust, investedOnly, sortField } = farmingFilterStore;
+  const { showDust, investedOnly, sortField } = newLiquidityListStore;
   const { t } = useTranslation();
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as LiquiditySortFieldItem;
 
-    return farmingFilterStore.onSortFieldChange(item.field);
+    return newLiquidityListStore.onSortFieldChange(item.field);
   };
 
   const sortingValues: LiquiditySortFieldItem[] = [
@@ -50,29 +50,11 @@ export const useListFilterViewModel = () => {
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const setShowDust = (state: boolean) => {
-    return farmingFilterStore.setShowDust(state);
+    return newLiquidityListStore.setShowDust(state);
   };
   const setInvestedOnly = (state: boolean) => {
-    return farmingFilterStore.setInvestedOnly(state);
+    return newLiquidityListStore.setInvestedOnly(state);
   };
-  // const setShowStable = (state: boolean) => {
-  //   return farmingFilterStore.setShowStable(state);
-  // };
-  // const setShowBridged = (state: boolean) => {
-  //   return farmingFilterStore.setShowBridged(state);
-  // };
-  // const setShowQuipu = (state: boolean) => {
-  //   return farmingFilterStore.setShowQuipu(state);
-  // };
-  // const setShowTezotopia = (state: boolean) => {
-  //   return farmingFilterStore.setShowTezotopia(state);
-  // };
-  // const setShowBTC = (state: boolean) => {
-  //   return farmingFilterStore.setShowBTC(state);
-  // };
-  // const setShowDexTwo = (state: boolean) => {
-  //   return farmingFilterStore.setShowDexTwo(state);
-  // };
 
   const switcherDataList = [
     {
