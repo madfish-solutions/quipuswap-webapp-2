@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { claimNewLiquidityBackerRewards } from '@modules/new-liquidity/api';
+import { claimNewLiquidityBakerRewards } from '@modules/new-liquidity/api';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
@@ -22,7 +22,7 @@ export const useClaimRewards = () => {
 
     try {
       log('CLAIM_NEW_LIQUIDITY_REWARDS', { contractAddress: item.contractAddress, farmingId: item.id });
-      const operation = await claimNewLiquidityBackerRewards(tezos, item.contractAddress, item.id, accountPkh);
+      const operation = await claimNewLiquidityBakerRewards(tezos, item.contractAddress, item.id, accountPkh);
 
       await confirmOperation(operation.opHash, { message: 'claimRewardsSuccess' });
       log('CLAIM_NEW_LIQUIDITY_REWARDS_SUCCESS', { contractAddress: item.contractAddress, farmingId: item.id });
