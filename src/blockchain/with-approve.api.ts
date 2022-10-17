@@ -1,7 +1,7 @@
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { isExist, isTezosToken, isTokenEqual, isTokenFa12, toArray } from '@shared/helpers';
+import { isExist, isTezosToken, isTokenAddressFa12, isTokenEqual, toArray } from '@shared/helpers';
 import { AmountToken, Token, TokenAddress } from '@shared/types';
 
 import { getAllowance } from './get-allowance';
@@ -84,7 +84,7 @@ export const getApproveParams = async (
 const withFA12ApproveApi = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: TokenAddress,
   accountPkh: string,
   amount: BigNumber.Value,
   operationParams: TransferParams[]
@@ -104,7 +104,7 @@ const withFA12ApproveApi = async (
 const withFA2ApproveApi = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: TokenAddress,
   accountPkh: string,
   operationParams: TransferParams[]
 ) => {
@@ -116,7 +116,7 @@ const withFA2ApproveApi = async (
 export const withApproveApi = async (
   tezos: TezosToolkit,
   contractAddress: string,
-  token: Token,
+  token: TokenAddress,
   accountPkh: string,
   amount: BigNumber.Value,
   operationParams: TransferParams[]
@@ -125,7 +125,7 @@ export const withApproveApi = async (
     return await sendBatch(tezos, operationParams);
   }
 
-  if (isTokenFa12(token)) {
+  if (isTokenAddressFa12(token)) {
     return await withFA12ApproveApi(tezos, contractAddress, token, accountPkh, amount, operationParams);
   }
 

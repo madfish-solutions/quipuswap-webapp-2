@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { observer } from 'mobx-react-lite';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { Token } from '@shared/types';
@@ -18,35 +17,41 @@ interface Props {
   isSubmitting: boolean;
 }
 
-export const StakeFormView: FC<Props> = observer(
-  ({ inputAmount, handleSubmit, userTokenBalance, tokens, handleInputAmountChange, disabled, isSubmitting }) => {
-    const { t } = useTranslation();
+export const StakeFormView: FC<Props> = ({
+  inputAmount,
+  handleSubmit,
+  userTokenBalance,
+  tokens,
+  handleInputAmountChange,
+  disabled,
+  isSubmitting
+}) => {
+  const { t } = useTranslation();
 
-    return (
-      <form onSubmit={handleSubmit}>
-        <TokenInput
-          id="stake-form"
-          label={t('common|Amount')}
-          value={inputAmount}
-          balance={userTokenBalance}
-          tokens={tokens}
-          onInputChange={handleInputAmountChange}
-        />
+  return (
+    <form onSubmit={handleSubmit}>
+      <TokenInput
+        id="stake-form"
+        label={t('common|Amount')}
+        value={inputAmount}
+        balance={userTokenBalance}
+        tokens={tokens}
+        onInputChange={handleInputAmountChange}
+      />
 
-        <div className={styles.buttons}>
-          <ConnectWalletOrDoSomething>
-            <Button
-              type="submit"
-              className={styles.button}
-              disabled={disabled}
-              loading={isSubmitting}
-              data-test-id="stakeButton"
-            >
-              {t('farm|Stake')}
-            </Button>
-          </ConnectWalletOrDoSomething>
-        </div>
-      </form>
-    );
-  }
-);
+      <div className={styles.buttons}>
+        <ConnectWalletOrDoSomething>
+          <Button
+            type="submit"
+            className={styles.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            data-test-id="stakeButton"
+          >
+            {t('farm|Stake')}
+          </Button>
+        </ConnectWalletOrDoSomething>
+      </div>
+    </form>
+  );
+};

@@ -1,4 +1,4 @@
-import { Standard, TokenId, TokenIdFa2 } from '@shared/types';
+import { Standard, TokenAddress, TokenId, TokenIdFa2 } from '@shared/types';
 
 import { isExist } from '../type-checks';
 
@@ -10,3 +10,6 @@ export const isTokenFa2 = (token: TokenId): token is TokenIdFa2 =>
   isTokenTypeFa2(token.type) || ('fa2TokenId' in token && isExist(token.fa2TokenId));
 
 export const isTokenFa12 = (token: TokenId) => isTokenTypeFa12(token.type);
+
+export const isTokenAddressFa2 = (token: TokenAddress) => isExist(token.fa2TokenId);
+export const isTokenAddressFa12 = (token: TokenAddress) => !isExist(token.fa2TokenId);
