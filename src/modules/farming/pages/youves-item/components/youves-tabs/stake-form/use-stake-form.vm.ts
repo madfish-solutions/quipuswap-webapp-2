@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { getFormikError, isExist } from '@shared/helpers';
+import { defined, getFormikError, isExist } from '@shared/helpers';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { YouvesFarmingApi } from '../../../../../api/blockchain/youves-farming.api';
@@ -28,14 +28,22 @@ const getValidationSchema = (userBalance: Nullable<BigNumber>) =>
 
 export const useStakeFormViewModel = () => {
   const tezos = useTezos();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const accountPkh = useAccountPkh();
 
   const userTokenBalance = new BigNumber(100);
 
-  const handleSubmit = (values: FormValues, actions: FormikHelpers<FormValues>) => {
+  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     // eslint-disable-next-line no-console
     console.log('submit', values);
+    actions.setSubmitting(true);
+    try {
+      await YouvesFarmingApi.deposit(defined(tezos), defined(accountPkh), 0, values.inputAmount);
+      actions.resetForm();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('error', error);
+    }
+    actions.setSubmitting(false);
   };
 
   const formik = useFormik({
@@ -50,13 +58,13 @@ export const useStakeFormViewModel = () => {
 
   useEffect(() => {
     (async () => {
-      if (!tezos) {
+      if (!tezos || !accountPkh) {
         return;
       }
       // eslint-disable-next-line no-console
-      console.log('load', await YouvesFarmingApi.getToken(tezos));
+      console.log('load', await YouvesFarmingApi.getStakes(tezos, accountPkh));
     })();
-  }, [tezos]);
+  }, [accountPkh, tezos]);
 
   const disabled = formik.isSubmitting || !isExist(tezos) || !isExist(accountPkh);
 
