@@ -10,20 +10,21 @@ import { i18n } from '@translation';
 
 import { LiquidityTabs } from '../../../liquidity';
 import { StableswapRoutes } from '../../../stableswap';
-import { LiquidityItemResponse, PreparedLiquidityItem } from '../../interfaces';
+import { LiquidityItemResponse, PoolType, PreparedLiquidityItem } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
   const [aToken, bToken] = tokens;
 
   switch (type) {
-    case 'DEX_TWO':
+    case PoolType.DEX_TWO:
       return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${getTokenPairSlug(
         aToken,
         bToken
       )}`;
-    case 'TOKEN_TOKEN':
+    case PoolType.TOKEN_TOKEN:
+    case PoolType.TEZ_TOKEN:
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
-    case 'STABLESWAP':
+    case PoolType.STABLESWAP:
       return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${id.toFixed()}`;
     default:
       return `${AppRootRoutes.Liquidity}`;
