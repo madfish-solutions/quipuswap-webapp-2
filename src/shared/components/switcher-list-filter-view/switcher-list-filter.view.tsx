@@ -8,7 +8,7 @@ export interface SwitcherLabelProps {
   disabled?: boolean;
   switcherDTI: string;
   switcherTranslationDTI: string;
-  translation: string;
+  translation?: string;
   translationClassName: string;
   className: string;
 }

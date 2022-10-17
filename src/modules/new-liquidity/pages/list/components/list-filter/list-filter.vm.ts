@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import { noop } from 'rxjs';
 
 import styles from '@modules/farming/pages/list/structures/farming-list-filter/farming-list-filter.module.scss';
 import { isDirrectOrder, isNull } from '@shared/helpers';
@@ -27,10 +26,8 @@ export const useListFilterViewModel = () => {
     handleSortDirectionToggle
   } = useBaseFilterStoreConverter(farmingFilterStore);
 
-  const { sortField } = farmingFilterStore;
-
-  const { showDust } = farmingFilterStore;
-  const { t } = useTranslation(['common', 'farm']);
+  const { showDust, investedOnly, sortField } = farmingFilterStore;
+  const { t } = useTranslation();
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as LiquiditySortFieldItem;
@@ -52,14 +49,49 @@ export const useListFilterViewModel = () => {
 
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
+  const setShowDust = (state: boolean) => {
+    return farmingFilterStore.setShowDust(state);
+  };
+  const setInvestedOnly = (state: boolean) => {
+    return farmingFilterStore.setInvestedOnly(state);
+  };
+  // const setShowStable = (state: boolean) => {
+  //   return farmingFilterStore.setShowStable(state);
+  // };
+  // const setShowBridged = (state: boolean) => {
+  //   return farmingFilterStore.setShowBridged(state);
+  // };
+  // const setShowQuipu = (state: boolean) => {
+  //   return farmingFilterStore.setShowQuipu(state);
+  // };
+  // const setShowTezotopia = (state: boolean) => {
+  //   return farmingFilterStore.setShowTezotopia(state);
+  // };
+  // const setShowBTC = (state: boolean) => {
+  //   return farmingFilterStore.setShowBTC(state);
+  // };
+  // const setShowDexTwo = (state: boolean) => {
+  //   return farmingFilterStore.setShowDexTwo(state);
+  // };
+
   const switcherDataList = [
     {
       value: showDust,
-      onClick: noop,
+      onClick: setShowDust,
       disabled: isNull(accountPkh),
       switcherDTI: 'stakedOnlySwitcher',
+      translation: 'ShowDust',
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
-      translation: t('farm|stakedOnly'),
+      translationClassName: styles.switcherTranslation,
+      className: cx(styles.switcherContainer, styles.switcherStakeOnly)
+    },
+    {
+      value: investedOnly,
+      onClick: setInvestedOnly,
+      disabled: isNull(accountPkh),
+      switcherDTI: 'stakedOnlySwitcher',
+      translation: 'InvestedOnly',
+      switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
     }
@@ -97,6 +129,7 @@ export const useListFilterViewModel = () => {
     translation,
     sorterProps,
     switcherDataList,
-    inputDTI
+    inputDTI,
+    shouldShowInputs: false
   };
 };
