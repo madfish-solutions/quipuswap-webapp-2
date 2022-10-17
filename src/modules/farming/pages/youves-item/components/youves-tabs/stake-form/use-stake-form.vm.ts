@@ -7,12 +7,13 @@ import * as yup from 'yup';
 
 import { LpTokensApi } from '@blockchain';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { defined, getFormikError, isExist } from '@shared/helpers';
+import { defined, getFormikError, isExist, toAtomic } from '@shared/helpers';
 import { useToken, useTokenBalance } from '@shared/hooks';
 import { Optional, TokenAddress, TokenIdFa2 } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { YouvesFarmingApi } from '../../../../../api/blockchain/youves-farming.api';
+import { useDoYouvesFarmingDeposit } from '../../../../../hooks';
 import { StakeFormFields } from '../../../../item/components/farming-tabs/stake-form/stake-form.interface';
 
 enum FormFields {
@@ -36,6 +37,7 @@ const DEFAULT_TOKENS: { tokenA: Nullable<TokenAddress>; tokenB: Nullable<TokenAd
 export const useStakeFormViewModel = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const { doDeposit } = useDoYouvesFarmingDeposit();
 
   const [stakes, setStakes] = useState<BigNumber[]>([]);
   const [lpToken, setLpToken] = useState<Nullable<TokenIdFa2>>(null);
@@ -46,16 +48,12 @@ export const useStakeFormViewModel = () => {
   const userLpTokenBalance = useTokenBalance(loFullToken);
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    // eslint-disable-next-line no-console
-    console.log('submit', values);
     actions.setSubmitting(true);
-    try {
-      await YouvesFarmingApi.deposit(defined(tezos), defined(accountPkh), 0, values.inputAmount);
-      actions.resetForm();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('error', error);
-    }
+    await doDeposit(
+      0,
+      toAtomic(new BigNumber(values.inputAmount), defined(loFullToken, 'LP Full Token').metadata.decimals)
+    );
+    actions.resetForm();
     actions.setSubmitting(false);
   };
 
@@ -76,15 +74,16 @@ export const useStakeFormViewModel = () => {
         return;
       }
 
-      setStakes(await YouvesFarmingApi.getStakes(tezos, accountPkh));
+      const _stakes = await YouvesFarmingApi.getStakes(tezos, accountPkh);
+      setStakes(_stakes);
+      // eslint-disable-next-line no-console
+      console.log('load._stakes', _stakes);
 
       const _lpToken = await YouvesFarmingApi.getToken(tezos);
       setLpToken(_lpToken);
 
       const _tokens = tezos && _lpToken ? await LpTokensApi.getTokens(tezos, _lpToken) : DEFAULT_TOKENS;
       setTokens(_tokens);
-      // eslint-disable-next-line no-console
-      console.log('load.tokens', _tokens);
     })();
   }, [accountPkh, tezos]);
 
