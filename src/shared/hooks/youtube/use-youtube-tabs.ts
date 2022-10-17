@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { amplitudeService } from '@shared/services';
 import { i18n } from '@translation';
 
-enum Tabs {
+export enum Tabs {
   details = 'details',
   guides = 'guides'
 }

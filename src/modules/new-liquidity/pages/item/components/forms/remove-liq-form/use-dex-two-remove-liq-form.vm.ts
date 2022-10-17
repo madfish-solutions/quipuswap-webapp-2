@@ -1,15 +1,18 @@
+import { useMemo } from 'react';
+
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { FISRT_INDEX } from '@config/constants';
+import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/new-liquidity/hooks/blockchain';
 import { isEqual, toReal } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
+import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getUserBalances, getFormikInitialValues, getInputsAmountFormFormikValues } from '../helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
-import { LP_TOKEN } from '../helpers/mock-lp-token';
 import { useCalculateValues } from '../hooks';
 import { Input, NewLiquidityFormValues } from '../interface';
 import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
@@ -23,9 +26,27 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
   const item = newLiquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
   const { handleInputChange, handleLpInputChange } = useCalculateValues();
 
+  const lpToken = useMemo(
+    () => ({
+      type: Standard.Fa2,
+      contractAddress: DEX_TWO_CONTRACT_ADDRESS,
+      fa2TokenId: item.id.toNumber(),
+      isWhitelisted: true,
+      metadata: {
+        name: 'Quipuswap LP Token',
+        symbol: 'QPT',
+        decimals: 6,
+        description: 'Quipuswap LP token represents user share in the liquidity pool',
+        thumbnailUri: 'https://quipuswap.com/QPLP.png',
+        shouldPreferSymbol: 'true'
+      }
+    }),
+    [item.id]
+  );
+
   const userBalances = getUserBalances(item.tokensInfo);
 
-  const lpTokenBalance = useTokenBalance(LP_TOKEN) ?? null;
+  const lpTokenBalance = useTokenBalance(lpToken) ?? null;
 
   const lockeds = item.tokensInfo.map(tokenInfo => toReal(tokenInfo.atomicTokenTvl, tokenInfo.token));
 
@@ -42,7 +63,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     actions.setSubmitting(false);
   };
 
-  const validationSchema = useDexTwoRemoveLiqValidation(lockeds, item, LP_TOKEN, lpTokenBalance);
+  const validationSchema = useDexTwoRemoveLiqValidation(lockeds, item, lpToken, lpTokenBalance);
 
   const formik = useFormik({
     validationSchema,
@@ -55,7 +76,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     value: formik.values[Input.THIRD_INPUT],
     error: formik.errors[Input.THIRD_INPUT],
     label: t('common|Input'),
-    tokens: LP_TOKEN,
+    tokens: lpToken,
     balance: lpTokenBalance,
     onInputChange: handleLpInputChange(item, formik)
   };

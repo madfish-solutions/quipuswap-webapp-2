@@ -1,0 +1,28 @@
+@import "@styles/variables";
+
+.root {
+  font-weight: 600;
+  display: flex;
+  column-gap: 4px;
+}
+
+.light {
+  &.root {
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.root {
+    color: $text-inverse;
+  }
+}
+
+.amountName {
+  display: flex;
+  align-items: center;
+}
+
+.periodName {
+  color: $text-03;
+}
