@@ -62,7 +62,7 @@ export const getFA2ApproveParams = async (
   return [addOperatorParams, ...operationParams, removeOperatorParams];
 };
 
-const getApproveParams = async (
+export const getApproveParams = async (
   tezos: TezosToolkit,
   contractAddress: string,
   token: Token | TokenAddress,
@@ -70,6 +70,10 @@ const getApproveParams = async (
   amount: BigNumber.Value,
   operationParams: TransferParams[]
 ) => {
+  if (isTezosToken(token)) {
+    return operationParams;
+  }
+
   if (isExist(token.fa2TokenId)) {
     return await getFA2ApproveParams(tezos, contractAddress, token, accountPkh, operationParams);
   }
