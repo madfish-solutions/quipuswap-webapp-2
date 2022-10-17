@@ -2,7 +2,7 @@
 @import "@styles/breakpoints";
 @import "@styles/text";
 
-@mixin theme($focused, $background, $shape, $price, $hover-fallback) {
+@mixin theme($focused, $background, $shape, $price, $hover-fallback, $input-underline) {
   &:not(.readOnly) {
     .input {
       caret-color: $hover-fallback;
@@ -10,6 +10,43 @@
 
     &.focused .background {
       background: $focused;
+    }
+  }
+
+  &.readOnly {
+    position: relative;
+
+    .readOnlyValue {
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+
+      color: $price;
+    }
+
+    .shape {
+      background: none;
+      padding-bottom: 36px;
+      row-gap: 16px;
+    }
+    .background {
+      background: none;
+    }
+
+    .scaffoldingPercentSelector {
+      height: 0;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+
+      left: -100vw;
+      right: 100vw;
+      bottom: 0;
+      height: 1px;
+      width: calc(100vw + 100vw + 100%);
+      background: $input-underline;
     }
   }
 
@@ -127,48 +164,11 @@
 }
 
 .light {
-  @include theme($brand-01, $ui-03, $ui-02, $text-01, $hover-primary-01-fallback);
+  @include theme($brand-01, $ui-03, $ui-02, $text-01, $hover-primary-01-fallback, $ui-03);
 }
 
 .dark {
-  @include theme($brand-02, $text-02, $ui-06, $text-inverse, $hover-primary-02-fallback);
-}
-
-.readOnly {
-  position: relative;
-
-  .readOnlyValue {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 32px;
-
-    color: $ui-01;
-  }
-
-  .shape {
-    background: none;
-    padding-bottom: 36px;
-    row-gap: 16px;
-  }
-  .background {
-    background: none;
-  }
-
-  .scaffoldingPercentSelector {
-    height: 0;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-
-    left: -100vw;
-    right: 100vw;
-    bottom: 0;
-    height: 1px;
-    width: calc(100vw + 100vw + 100%);
-    background: $text-01;
-  }
+  @include theme($brand-02, $text-02, $ui-06, $text-inverse, $hover-primary-02-fallback, $text-01);
 }
 
 .scaffoldingPercentSelector {
