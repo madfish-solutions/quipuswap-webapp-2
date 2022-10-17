@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
-
-import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
+import { useCpmmPairSlug, useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useTranslation } from '@translation';
 
-export const useDexTwoItemPageViewModel = () => {
+export const useCpmmViewModel = () => {
   const { t } = useTranslation();
-  const { pairSlug } = useParams();
+  const { pairSlug } = useCpmmPairSlug();
   const newLiquidityItemStore = useNewLiquidityItemStore();
 
   useEffect(() => {
