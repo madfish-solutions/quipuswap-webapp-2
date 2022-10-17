@@ -1,1 +1,1 @@
-export * from './youves-farming-item.page';
+export * from './youves-item.page';

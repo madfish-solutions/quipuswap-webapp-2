@@ -5,12 +5,12 @@ import { observer } from 'mobx-react-lite';
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
 
 import { DexTwoDetails, DexTwoRemoveLiqForm } from './components';
+import { useDexTwoItemViewModel } from './dex-two-item.vm';
 
-export const DexTwoRemoveLiq: FC<{ title: string }> = observer(({ title }) => {
-  const { t } = useTranslation();
+export const DexTwoRemoveLiq: FC = observer(() => {
+  const { t, title } = useDexTwoItemViewModel();
 
   return (
     <>

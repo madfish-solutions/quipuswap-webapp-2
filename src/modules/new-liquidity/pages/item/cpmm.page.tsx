@@ -18,8 +18,8 @@ export const CpmmPage: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <SentryRoutes>
-        <Route path={`${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq title={title} />} />
-        <Route path={`${NewLiquidityFormTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq title={title} />} />
+        <Route path={`${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
+        <Route path={`${NewLiquidityFormTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
         <Route path={`${NewLiquidityFormTabs.claim}/:pairSlug`} element={<DexTwoClaimRewards title={title} />} />
       </SentryRoutes>
     </StateWrapper>

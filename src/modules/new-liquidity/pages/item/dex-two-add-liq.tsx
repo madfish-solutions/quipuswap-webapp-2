@@ -5,12 +5,13 @@ import { observer } from 'mobx-react-lite';
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
 
-import { DexTwoAddLiqForm, DexTwoDetails } from './components';
+import { DexTwoAddLiqForm, DexTwoDetails, MigrateLiquidityCard } from './components';
+import styles from './dex-two-add-liq.module.scss';
+import { useDexTwoItemViewModel } from './dex-two-item.vm';
 
-export const DexTwoAddLiq: FC<{ title: string }> = observer(({ title }) => {
-  const { t } = useTranslation();
+export const DexTwoAddLiq: FC = observer(() => {
+  const { t, title, migrateLiquidity } = useDexTwoItemViewModel();
 
   return (
     <>
@@ -19,9 +20,12 @@ export const DexTwoAddLiq: FC<{ title: string }> = observer(({ title }) => {
       </PageTitle>
 
       <StickyBlock>
-        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
-          <DexTwoAddLiqForm />
-        </NewLiquidityFormTabsCard>
+        <div className={styles.formAndMigrationContainer}>
+          {migrateLiquidity.canMigrateLiquidity && <MigrateLiquidityCard />}
+          <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
+            <DexTwoAddLiqForm {...migrateLiquidity} />
+          </NewLiquidityFormTabsCard>
+        </div>
         <DexTwoDetails />
       </StickyBlock>
     </>
