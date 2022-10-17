@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 import * as yup from 'yup';
 
+import { LpTokensApi } from '@blockchain';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, getFormikError, isExist } from '@shared/helpers';
@@ -61,8 +62,16 @@ export const useStakeFormViewModel = () => {
       if (!tezos || !accountPkh) {
         return;
       }
+      const lpToken = await YouvesFarmingApi.getToken(tezos);
       // eslint-disable-next-line no-console
-      console.log('load', await YouvesFarmingApi.getStakes(tezos, accountPkh));
+      console.log('load.lpToken', lpToken);
+
+      const tokens = await LpTokensApi.getTokens(tezos, lpToken);
+      // eslint-disable-next-line no-console
+      console.log('load.tokens', tokens);
+
+      // eslint-disable-next-line no-console
+      console.log('load.stakes', await YouvesFarmingApi.getStakes(tezos, accountPkh));
     })();
   }, [accountPkh, tezos]);
 
