@@ -3,14 +3,14 @@ import { FC } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { Token } from '@shared/types';
+import { Optional, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 interface Props {
   inputAmount: string;
   handleSubmit: () => void;
-  userTokenBalance: BigNumber;
+  userLpTokenBalance: Optional<BigNumber>;
   tokens: Array<Nullable<Token>>;
   handleInputAmountChange: (value: string) => void;
   disabled: boolean;
@@ -21,7 +21,7 @@ interface Props {
 export const StakeFormView: FC<Props> = ({
   inputAmount,
   handleSubmit,
-  userTokenBalance,
+  userLpTokenBalance,
   tokens,
   handleInputAmountChange,
   disabled,
@@ -37,7 +37,7 @@ export const StakeFormView: FC<Props> = ({
         label={t('common|Amount')}
         value={inputAmount}
         error={inputAmountError}
-        balance={userTokenBalance}
+        balance={userLpTokenBalance}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
       />
