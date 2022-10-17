@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { getNewLiquidityBackerRewardsApi } from '@modules/new-liquidity/api';
+import { getNewLiquidityBakerRewardsApi } from '@modules/new-liquidity/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { TaquitoContract } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
@@ -10,11 +10,11 @@ import { useAuthStore, useOnBlock } from '@shared/hooks';
 
 import { useNewLiquidityItemStore } from '../store';
 
-interface UseLiquidityBackerRewardsParams {
+interface UseLiquidityBakerRewardsParams {
   bucketContract: Nullable<TaquitoContract>;
 }
 
-export const useLiquidityBackerRewards = ({ bucketContract }: UseLiquidityBackerRewardsParams) => {
+export const useLiquidityBakerRewards = ({ bucketContract }: UseLiquidityBakerRewardsParams) => {
   const { accountPkh } = useAuthStore();
   const { item } = useNewLiquidityItemStore();
   const { tezos } = useRootStore();
@@ -25,12 +25,12 @@ export const useLiquidityBackerRewards = ({ bucketContract }: UseLiquidityBacker
       return;
     }
 
-    const bigNumberRewards = await getNewLiquidityBackerRewardsApi(bucketContract, accountPkh);
+    const bigNumberRewards = await getNewLiquidityBakerRewardsApi(bucketContract, accountPkh);
 
     setRewards(bigNumberRewards);
   }, [accountPkh, bucketContract, item, tezos]);
 
   useOnBlock(getRewards);
 
-  return { backerRewards: rewards };
+  return { bakerRewards: rewards };
 };

@@ -16,7 +16,7 @@ export const DexTwoClaimRewardsFrom = observer(() => {
     <div>
       <TokenInput
         value={rewardValue}
-        label={t('newLiquidity|backerReward')}
+        label={t('newLiquidity|bakerReward')}
         readOnly
         dollarEquivalent={rewardDollarEquivalent}
         balance={balance}

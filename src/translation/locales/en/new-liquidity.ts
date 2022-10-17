@@ -23,7 +23,7 @@ export const newLiquidity = {
   assetsMigrated: 'Assets successfully migrated',
   successfullyAdded: 'Liquidity has been successfully added',
   successfullyRemoved: 'Liquidity has been successfully removed',
-  backerReward: 'Backer Reward',
+  bakerReward: 'Baker reward',
   heyBro: 'Hey, bro!',
   migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
   why: 'Why?'

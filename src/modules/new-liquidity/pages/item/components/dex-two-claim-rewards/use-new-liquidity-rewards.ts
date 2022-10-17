@@ -1,10 +1,10 @@
 import { useBucketContract } from '@modules/new-liquidity/hooks';
-import { useLiquidityBackerRewards } from '@modules/new-liquidity/hooks/helpers/use-liquidity-backer-rewards';
+import { useLiquidityBakerRewards } from '@modules/new-liquidity/hooks/helpers/use-liquidity-baker-rewards';
 
 export const useNewLiquidityRewards = () => {
   const { bucketContract } = useBucketContract();
 
-  const { backerRewards } = useLiquidityBackerRewards({ bucketContract });
+  const { bakerRewards } = useLiquidityBakerRewards({ bucketContract });
 
-  return { rewards: backerRewards };
+  return { rewards: bakerRewards };
 };

@@ -5,7 +5,7 @@ import { sendBatch } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { getContract } from '@shared/dapp';
 
-export const claimNewLiquidityBackerRewards = async (
+export const claimNewLiquidityBakerRewards = async (
   tezos: TezosToolkit,
   contractAddress: string,
   poolId: BigNumber,

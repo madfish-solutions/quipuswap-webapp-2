@@ -14,7 +14,7 @@ import {
   AddressTransformation,
   formatBalance,
   getBakerName,
-  isBackerNotEmpty,
+  isBakerNotEmpty,
   isEmptyArray,
   localSearchBaker
 } from '@shared/helpers';
@@ -137,10 +137,10 @@ export const BakersModal: FC<BakersModalProps> = ({ onChange, ...props }) => {
   // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
-  const getBakerFee = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? fixBakerFee(baker.fee) : '');
+  const getBakerFee = (baker: WhitelistedBaker) => (isBakerNotEmpty(baker) ? fixBakerFee(baker.fee) : '');
   const getBakerLogo = (baker: WhitelistedBaker) => ('logo' in baker ? baker.logo : '');
   const getBakerFreeSpace = (baker: WhitelistedBaker) => {
-    if (isBackerNotEmpty(baker)) {
+    if (isBakerNotEmpty(baker)) {
       const freeSpace = baker.freeSpace.toFixed(TEZOS_TOKEN.metadata.decimals);
 
       return formatBalance(freeSpace);
