@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
@@ -14,21 +16,26 @@ export const useDexTwoClaimRewardsFromViewModel = () => {
   const { claim } = useClaimRewards();
   const { rewards } = useNewLiquidityRewards();
 
+  const preParams = useMemo(
+    () => ({
+      rewardValue: '',
+      balance,
+      doClaim: claim,
+      rewardDollarEquivalent: null
+    }),
+    [balance, claim]
+  );
+
   if (isExist(item)) {
     const tokenSlug = getTokenSlug(TEZOS_TOKEN);
     const tokenExchangeRate = exchangeRate[tokenSlug];
 
     return {
-      balance,
+      ...preParams,
       rewardDollarEquivalent: multipliedIfPossible(tokenExchangeRate, rewards),
-      doClaim: claim,
       rewardValue: rewards?.toFixed() ?? null
     };
   }
 
-  return {
-    rewardValue: '',
-    balance,
-    doClaim: claim
-  };
+  return preParams;
 };
