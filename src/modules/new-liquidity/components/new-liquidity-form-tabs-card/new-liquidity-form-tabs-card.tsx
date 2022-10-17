@@ -6,14 +6,14 @@ import styles from '@styles/CommonContainer.module.scss';
 
 import { NewLiquidityFormTabs } from '../../types';
 import { FormHeader } from '../form-header';
-import { TabsContent, useNewLiquidityFormTabsCardViewModel } from './use-new-liquidity-form-tabs-card.vm';
+import { useNewLiquidityFormTabsCardViewModel } from './use-new-liquidity-form-tabs-card.vm';
 
 interface Props {
   tabActiveId: NewLiquidityFormTabs;
 }
 
 export const NewLiquidityFormTabsCard: CFC<Props> = observer(({ tabActiveId, children }) => {
-  const { isLoading, changeTabHandle } = useNewLiquidityFormTabsCardViewModel();
+  const { isLoading, changeTabHandle, TabsContent } = useNewLiquidityFormTabsCardViewModel();
 
   if (isLoading) {
     return <Skeleton className={styles.Skeleton} />;

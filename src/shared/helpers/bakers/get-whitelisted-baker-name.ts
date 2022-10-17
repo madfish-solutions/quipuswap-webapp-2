@@ -2,7 +2,7 @@ import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { shortize } from '../shortize';
 import { isExist } from '../type-checks';
-import { isBackerNotEmpty } from './is-backer-not-empty';
+import { isBakerNotEmpty } from './is-baker-not-empty';
 
 export function getWhitelistedBakerName(baker: WhitelistedBaker, sliceAmount?: number, charsLength?: number): string;
 export function getWhitelistedBakerName(
@@ -20,7 +20,7 @@ export function getWhitelistedBakerName(
     return null;
   }
 
-  if (isBackerNotEmpty(baker)) {
+  if (isBakerNotEmpty(baker)) {
     return baker.name.length > sliceAmount + 2 ? `${baker.name.slice(0, sliceAmount)}...` : baker.name;
   }
 
