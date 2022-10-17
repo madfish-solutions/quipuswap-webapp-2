@@ -24,14 +24,29 @@ export namespace YouvesFarmingApi {
     };
   };
 
-  export const deposit =
-    (tezos: TezosToolkit, accountPkh: string) => async (stakeId: BigNumber.Value, tokenAmount: BigNumber.Value) => {
-      const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
+  export const getStakes = async (tezos: TezosToolkit, accountPkh: string) => {
+    const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
 
-      const params = contract.methods.deposit(new BigNumber(stakeId), new BigNumber(tokenAmount)).toTransferParams();
+    const response = await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
 
-      const token = await getToken(tezos);
+    // eslint-disable-next-line no-console
+    console.log('response', response);
 
-      return await withApproveApi(tezos, YOUVES_BASED_CONTRACT, token, accountPkh, tokenAmount, [params]);
-    };
+    return null;
+  };
+
+  export const deposit = async (
+    tezos: TezosToolkit,
+    accountPkh: string,
+    stakeId: BigNumber.Value,
+    tokenAmount: BigNumber.Value
+  ) => {
+    const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
+
+    const params = contract.methods.deposit(new BigNumber(stakeId), new BigNumber(tokenAmount)).toTransferParams();
+
+    const token = await getToken(tezos);
+
+    return await withApproveApi(tezos, YOUVES_BASED_CONTRACT, token, accountPkh, tokenAmount, [params]);
+  };
 }
