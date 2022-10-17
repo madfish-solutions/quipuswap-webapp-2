@@ -11,7 +11,7 @@ interface Props {
   inputAmount: string;
   handleSubmit: () => void;
   userTokenBalance: BigNumber;
-  tokens: Array<Token>;
+  tokens: Array<Nullable<Token>>;
   handleInputAmountChange: (value: string) => void;
   disabled: boolean;
   isSubmitting: boolean;

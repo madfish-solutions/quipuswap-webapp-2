@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
@@ -6,9 +6,10 @@ import { FormikHelpers } from 'formik/dist/types';
 import * as yup from 'yup';
 
 import { LpTokensApi } from '@blockchain';
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, getFormikError, isExist } from '@shared/helpers';
+import { useToken } from '@shared/hooks';
+import { TokenAddress } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { YouvesFarmingApi } from '../../../../../api/blockchain/youves-farming.api';
@@ -27,9 +28,19 @@ const getValidationSchema = (userBalance: Nullable<BigNumber>) =>
     [StakeFormFields.inputAmount]: balanceAmountSchema(userBalance).required('Value is required')
   });
 
+const DEFAULT_TOKENS: { tokenA: Nullable<TokenAddress>; tokenB: Nullable<TokenAddress> } = {
+  tokenA: null,
+  tokenB: null
+};
+
 export const useStakeFormViewModel = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+
+  const [stakes, setStakes] = useState<BigNumber[]>([]);
+  const [tokens, setTokens] = useState(DEFAULT_TOKENS);
+  const tokenA = useToken(tokens.tokenA);
+  const tokenB = useToken(tokens.tokenB);
 
   const userTokenBalance = new BigNumber(100);
 
@@ -57,29 +68,30 @@ export const useStakeFormViewModel = () => {
 
   const inputAmountChange = async (value: string) => await formik.setFieldValue(FormFields.inputAmount, value);
 
+  // Load LP token & User stakes
   useEffect(() => {
     (async () => {
       if (!tezos || !accountPkh) {
         return;
       }
-      const lpToken = await YouvesFarmingApi.getToken(tezos);
-      // eslint-disable-next-line no-console
-      console.log('load.lpToken', lpToken);
 
-      const tokens = await LpTokensApi.getTokens(tezos, lpToken);
-      // eslint-disable-next-line no-console
-      console.log('load.tokens', tokens);
+      setStakes(await YouvesFarmingApi.getStakes(tezos, accountPkh));
 
+      const _lpToken = await YouvesFarmingApi.getToken(tezos);
+
+      const _tokens = tezos && _lpToken ? await LpTokensApi.getTokens(tezos, _lpToken) : DEFAULT_TOKENS;
+      setTokens(_tokens);
       // eslint-disable-next-line no-console
-      console.log('load.stakes', await YouvesFarmingApi.getStakes(tezos, accountPkh));
+      console.log('load.tokens', _tokens);
     })();
   }, [accountPkh, tezos]);
 
   const disabled = formik.isSubmitting || !isExist(tezos) || !isExist(accountPkh);
 
   return {
+    stakes,
     userTokenBalance,
-    tokens: [QUIPU_TOKEN, TEZOS_TOKEN],
+    tokens: [tokenA, tokenB],
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],
     inputAmountError: getFormikError(formik, FormFields.inputAmount),

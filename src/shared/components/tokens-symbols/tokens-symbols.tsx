@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { getSymbolsString } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-type Tokens = Token | Array<Token>;
+type Tokens = Nullable<Token> | Array<Nullable<Token>>;
 
 interface Props {
   tokens: Tokens;

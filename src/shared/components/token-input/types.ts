@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { Optional, Token } from '@shared/types';
 
-export type Tokens = Token | Array<Token>;
+export type Tokens = Nullable<Token> | Array<Nullable<Token>>;
 
 export interface TokenInputViewModelProps {
   tokens?: Tokens;
