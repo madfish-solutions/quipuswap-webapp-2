@@ -9,7 +9,7 @@ export const useCpmmViewModel = () => {
   const newLiquidityItemStore = useNewLiquidityItemStore();
 
   useEffect(() => {
-    newLiquidityItemStore.setTokenPairSlug(pairSlug);
+    newLiquidityItemStore.setTokenPairSlug(pairSlug!);
     void newLiquidityItemStore.itemSore.load();
 
     return () => newLiquidityItemStore.itemSore.resetData();
