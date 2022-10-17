@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import Select, { Props as SelectProps } from 'react-select';
 
 import { FarmingSortFieldItem } from '@modules/farming/pages/list/types';
+import { LiquiditySortFieldItem } from '@modules/new-liquidity/pages/list/types';
 import { StableDividendsSortFieldItem } from '@modules/stableswap/stabledividends/pages/list/types';
 import { StableswapSortFieldItem } from '@modules/stableswap/stableswap-liquidity/pages/list/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -15,9 +16,15 @@ import { Undefined } from '@shared/types';
 import styles from './sorter.module.scss';
 
 export interface SorterProps {
-  sortingValue: Undefined<FarmingSortFieldItem | StableswapSortFieldItem | StableDividendsSortFieldItem>;
+  sortingValue: Undefined<
+    FarmingSortFieldItem | StableswapSortFieldItem | StableDividendsSortFieldItem | LiquiditySortFieldItem
+  >;
   sortDirectionRotate: boolean;
-  sortingValues: FarmingSortFieldItem[] | StableswapSortFieldItem[] | StableDividendsSortFieldItem[];
+  sortingValues:
+    | FarmingSortFieldItem[]
+    | StableswapSortFieldItem[]
+    | StableDividendsSortFieldItem[]
+    | LiquiditySortFieldItem[];
   buttonDTI: string;
   sorterSelectDTI: string;
   handleSortFieldChange: (value: unknown) => void;
