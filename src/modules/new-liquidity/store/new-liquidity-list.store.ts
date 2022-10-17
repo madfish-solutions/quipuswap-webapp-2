@@ -28,6 +28,13 @@ const DEFAULT_RESPONSE_DATA = {
 @ModelBuilder()
 export class NewLiquidityListStore extends BaseFilterStore {
   showDust = false;
+  investedOnly = false;
+  showStable = true;
+  showBridged = false;
+  showQuipu = false;
+  showTezotopia = false;
+  showBTC = false;
+  showDexTwo = false;
   sortField: LiquiditySortField = LiquiditySortField.ID;
 
   //#region liquidity list store
@@ -60,17 +67,30 @@ export class NewLiquidityListStore extends BaseFilterStore {
     super();
 
     makeObservable(this, {
+      showDust: observable,
+      investedOnly: observable,
+      showStable: observable,
+      showBridged: observable,
+      showQuipu: observable,
+      showTezotopia: observable,
+      showBTC: observable,
+      showDexTwo: observable,
+      sortField: observable,
+
       list: computed,
       stats: computed,
 
-      activeOnly: observable,
-
       setShowDust: action,
+      setInvestedOnly: action,
+      setShowStable: action,
+      setShowBridged: action,
+      setShowQuipu: action,
+      setShowTezotopia: action,
+      setShowBTC: action,
+      setShowDexTwo: action,
       onSortFieldChange: action
     });
   }
-
-  activeOnly = true;
 
   filterAndSort(list: Array<LiquidityItemModel>) {
     return sortLiquidityList(list, this.sortField, this.sortDirection);
@@ -78,6 +98,27 @@ export class NewLiquidityListStore extends BaseFilterStore {
 
   setShowDust(state: boolean) {
     this.showDust = state;
+  }
+  setInvestedOnly(state: boolean) {
+    this.investedOnly = state;
+  }
+  setShowStable(state: boolean) {
+    this.showStable = state;
+  }
+  setShowBridged(state: boolean) {
+    this.showBridged = state;
+  }
+  setShowQuipu(state: boolean) {
+    this.showQuipu = state;
+  }
+  setShowTezotopia(state: boolean) {
+    this.showTezotopia = state;
+  }
+  setShowBTC(state: boolean) {
+    this.showBTC = state;
+  }
+  setShowDexTwo(state: boolean) {
+    this.showDexTwo = state;
   }
 
   onSortFieldChange(field: LiquiditySortField) {

@@ -1,5 +1,5 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
+@import "@styles/_variables";
+@import "@styles/_breakpoints";
 
 .filterCard {
   display: flex;
@@ -66,7 +66,7 @@
   }
 
   .switcherActiveOnly {
-    grid-row: 4 / 5; 
+    grid-row: 4 / 5;
   }
 
   .sorterContainer {
