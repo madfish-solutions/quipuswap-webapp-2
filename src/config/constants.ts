@@ -6,6 +6,9 @@ import { SupportedNetworks } from '@shared/types';
 
 import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL } from './environment';
 
+// TODO: Migrate to factory
+export const YOUVES_BASED_CONTRACT = 'KT1HgM6FFoc841E8CzwpbP3RzBsoskSQyX8B';
+
 //#region time
 export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
