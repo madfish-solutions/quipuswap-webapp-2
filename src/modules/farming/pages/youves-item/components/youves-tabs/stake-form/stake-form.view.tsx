@@ -40,6 +40,7 @@ export const StakeFormView: FC<Props> = ({
         balance={userLpTokenBalance}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
+        disabled={disabled}
       />
 
       <div className={styles.buttons}>
