@@ -8,8 +8,6 @@ import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useNewLiquidityItemStore } from '../../../../hooks';
 import styles from './dex-two-details.module.scss';
 
-const DEX_TWO_PAIR_CONTRACT = 'KT1GPJDTf8GZspCcanaG2KhMvGu3NJRqurat';
-
 export const useDexTwoDetailsViewModel = () => {
   const item = useNewLiquidityItemStore();
 
@@ -18,7 +16,8 @@ export const useDexTwoDetailsViewModel = () => {
     tokenSymbol: getTokenSymbol(token)
   }));
 
-  const poolContractUrl = `${TZKT_EXPLORER_URL}/${DEX_TWO_PAIR_CONTRACT}`;
+  const dexTwoContractAddress = item.item?.contractAddress;
+  const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
 
   return {
     apr: null,
