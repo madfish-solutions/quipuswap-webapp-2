@@ -1,3 +1,6 @@
+import { FC } from 'react';
+
+import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { Button } from '@shared/components';
@@ -13,7 +16,11 @@ import {
 import styles from './tokens-categories-filter.module.scss';
 import { useTokensCategoriesFilter } from './tokens-categories-filter.vm';
 
-export const TokensCategoriesFilter = observer(() => {
+interface Props {
+  className?: string;
+}
+
+export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
   const {
     showStable,
     showBridged,
@@ -30,7 +37,7 @@ export const TokensCategoriesFilter = observer(() => {
   } = useTokensCategoriesFilter();
 
   return (
-    <div className={styles.root}>
+    <div className={cx(className, styles.root)}>
       <Button theme="quaternary" onClick={toggleShowStable}>
         <StableCategory colored={showStable} />
       </Button>

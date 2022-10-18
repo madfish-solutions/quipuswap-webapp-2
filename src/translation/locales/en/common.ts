@@ -154,5 +154,6 @@ export const common = {
   opportunity: 'Opportunity',
   reconnectionModalText:
     'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
-  Reconnect: 'Reconnect'
+  Reconnect: 'Reconnect',
+  tokensFilter: 'Tokens filter'
 } as const;
