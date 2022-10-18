@@ -83,6 +83,7 @@ export interface TokenWithQSNetworkType extends Token {
 }
 
 export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenIdFa12 = Omit<Token, 'TokenId'>;
 export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {

@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { CoinflipPage } from '@modules/coinflip';
 import { PageNotFoundPage } from '@modules/errors';
-import { FarmingPage } from '@modules/farming';
+import { FarmingRouter } from '@modules/farming';
 import { HomePage } from '@modules/home';
 import { LiquidityPage } from '@modules/liquidity';
 import { NewLiquidityPageRouter } from '@modules/new-liquidity';
@@ -28,7 +28,7 @@ export const AppRouter: FC = () => (
 
     <Route path={`${AppRootRoutes.Stableswap}/*`} element={<StableswapRouter />} />
 
-    <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingPage />} />
+    <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingRouter />} />
     <Route path={`${AppRootRoutes.Voting}/*`} element={<VotingPage />} />
     <Route path={`${AppRootRoutes.Coinflip}/*`} element={<CoinflipPage />} />
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 
-export const useFarmingPageViewModel = () => {
+export const useFarmingRouterViewModel = () => {
   const [isInitialazied, setIsInitialazied] = useState(false);
   const rootStore = useRootStore();
 

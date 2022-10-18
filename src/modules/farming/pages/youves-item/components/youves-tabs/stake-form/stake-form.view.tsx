@@ -1,52 +1,50 @@
 import { FC } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-import { observer } from 'mobx-react-lite';
-
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-interface Props {
-  inputAmount: string;
-  handleSubmit: () => void;
-  userTokenBalance: BigNumber;
-  tokens: Array<Token>;
-  handleInputAmountChange: (value: string) => void;
-  disabled: boolean;
-  isSubmitting: boolean;
-}
+import { StakeProps } from './stake-props.interface';
 
-export const StakeFormView: FC<Props> = observer(
-  ({ inputAmount, handleSubmit, userTokenBalance, tokens, handleInputAmountChange, disabled, isSubmitting }) => {
-    const { t } = useTranslation();
+export const StakeFormView: FC<StakeProps> = ({
+  inputAmount,
+  handleSubmit,
+  userLpTokenBalance,
+  tokenA,
+  tokenB,
+  handleInputAmountChange,
+  disabled,
+  isSubmitting,
+  inputAmountError
+}) => {
+  const { t } = useTranslation();
 
-    return (
-      <form onSubmit={handleSubmit}>
-        <TokenInput
-          id="stake-form"
-          label={t('common|Amount')}
-          value={inputAmount}
-          balance={userTokenBalance}
-          tokens={tokens}
-          onInputChange={handleInputAmountChange}
-        />
+  return (
+    <form onSubmit={handleSubmit}>
+      <TokenInput
+        id="stake-form"
+        label={t('common|Amount')}
+        value={inputAmount}
+        error={inputAmountError}
+        balance={userLpTokenBalance}
+        tokens={[tokenA, tokenB]}
+        onInputChange={handleInputAmountChange}
+        disabled={disabled}
+      />
 
-        <div className={styles.buttons}>
-          <ConnectWalletOrDoSomething>
-            <Button
-              type="submit"
-              className={styles.button}
-              disabled={disabled}
-              loading={isSubmitting}
-              data-test-id="stakeButton"
-            >
-              {t('farm|Stake')}
-            </Button>
-          </ConnectWalletOrDoSomething>
-        </div>
-      </form>
-    );
-  }
-);
+      <div className={styles.buttons}>
+        <ConnectWalletOrDoSomething>
+          <Button
+            type="submit"
+            className={styles.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            data-test-id="stakeButton"
+          >
+            {t('farm|Stake')}
+          </Button>
+        </ConnectWalletOrDoSomething>
+      </div>
+    </form>
+  );
+};
