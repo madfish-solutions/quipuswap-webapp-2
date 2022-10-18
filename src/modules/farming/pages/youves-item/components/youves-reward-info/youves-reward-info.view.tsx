@@ -34,8 +34,9 @@ interface Props {
   handleHarvest: () => void;
   isHarvestAvailable: boolean;
   symbolsString: string;
-  shareAmount: BigNumber;
-  shareAmountDollarEquivalent: BigNumber;
+  userTotalDeposit: BigNumber;
+  userTotalDepositDollarEquivalent: BigNumber;
+  rewadsDueDate: number;
 }
 
 export const YouvesRewardInfoView: FC<Props> = observer(
@@ -51,8 +52,9 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     handleHarvest,
     isHarvestAvailable,
     symbolsString,
-    shareAmount,
-    shareAmountDollarEquivalent
+    userTotalDeposit,
+    userTotalDepositDollarEquivalent,
+    rewadsDueDate
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const { t } = useTranslation();
@@ -81,10 +83,10 @@ export const YouvesRewardInfoView: FC<Props> = observer(
           data-test-id="yourShare"
         >
           <StateCurrencyAmount
-            amount={shareAmount}
+            amount={userTotalDeposit}
             className={styles.statsValueText}
             currency={symbolsString}
-            dollarEquivalent={shareAmountDollarEquivalent}
+            dollarEquivalent={userTotalDepositDollarEquivalent}
             labelSize="large"
           />
         </YouvesStatsItem>
@@ -96,7 +98,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
             tooltipContent={t('farm|feeEndsInTooltip')}
             data-test-id="lockPeriodEndsIn"
           >
-            <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />
+            <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={rewadsDueDate} />
           </YouvesStatsItem>
         )}
       </RewardInfo>
