@@ -6,7 +6,7 @@ import { TabProps } from '../tab-props.interface';
 import { StakeFormView } from './stake-form.view';
 import { useStakeFormViewModel } from './use-stake-form.vm';
 
-export const StakeForm: FC<TabProps> = observer(({ ...props }) => {
+export const StakeForm: FC<TabProps> = observer(props => {
   const params = useStakeFormViewModel(props);
 
   return <StakeFormView {...params} />;
