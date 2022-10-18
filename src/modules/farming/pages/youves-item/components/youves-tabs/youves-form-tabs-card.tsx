@@ -5,10 +5,11 @@ import styles from '@styles/CommonContainer.module.scss';
 
 import { YouvesFormTabs } from '../../types';
 import { StakeForm } from './stake-form';
+import { TabProps } from './tab-props.interface';
 import { UnstakeForm } from './unstake-form';
 import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
-export const YouvesFormTabsCard: FC = () => {
+export const YouvesFormTabsCard: FC<TabProps> = ({ ...props }) => {
   const noop = false;
   const { currentTab, setCurrentTab, isStakeForm } = useFarmingFormTabsCardViewModel();
 
@@ -32,7 +33,7 @@ export const YouvesFormTabsCard: FC = () => {
       contentClassName={styles.content}
       data-test-id="youvesFromTabsCard"
     >
-      {isStakeForm ? <StakeForm /> : <UnstakeForm />}
+      {isStakeForm ? <StakeForm {...props} /> : <UnstakeForm {...props} />}
     </Card>
   );
 };
