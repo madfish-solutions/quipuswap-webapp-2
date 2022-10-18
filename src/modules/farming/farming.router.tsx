@@ -19,7 +19,7 @@ export const FarmingRouter: FC = () => {
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
         <Route path={`${AppRootRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
-        <Route path="/:id" element={<YouvesItemPage />} />
+        <Route path="/youves/:contractAddress" element={<YouvesItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );

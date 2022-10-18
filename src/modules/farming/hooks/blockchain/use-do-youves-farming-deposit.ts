@@ -16,7 +16,7 @@ export const useDoYouvesFarmingDeposit = () => {
   const { showErrorToast } = useToasts();
 
   const doDeposit = useCallback(
-    async (stakeId: BigNumber.Value, balance: BigNumber.Value) => {
+    async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber.Value) => {
       const logData = {
         accountPkh,
         stakeId: new BigNumber(stakeId).toNumber(),
@@ -27,6 +27,7 @@ export const useDoYouvesFarmingDeposit = () => {
         const operation = await YouvesFarmingApi.deposit(
           defined(tezos),
           defined(accountPkh),
+          contractAddress,
           new BigNumber(stakeId),
           new BigNumber(balance)
         );
