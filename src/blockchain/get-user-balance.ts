@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getReadOnlyTezos } from '@shared/dapp';
-import { Standard, Token } from '@shared/types';
+import { Standard, TokenId } from '@shared/types';
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
@@ -49,5 +49,5 @@ export const getUserBalance = async (
   return nat;
 };
 
-export const getUserTokenBalance = async (tezos: TezosToolkit, account: string, token: Token) =>
+export const getUserTokenBalance = async (tezos: TezosToolkit, account: string, token: TokenId) =>
   await getUserBalance(tezos, account, token.contractAddress, token.type, token.fa2TokenId);

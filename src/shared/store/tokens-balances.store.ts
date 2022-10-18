@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { toReal, getRandomId, isEmptyArray, isExist, isTokenEqual, saveBigNumber } from '@shared/helpers';
+import { getRandomId, isEmptyArray, isExist, isTokenEqual, saveBigNumber, toReal } from '@shared/helpers';
 
 import { Optional, Token } from '../types';
 import { RootStore } from './root.store';
