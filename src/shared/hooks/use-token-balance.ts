@@ -7,7 +7,7 @@ import { Optional, Token } from '@shared/types';
 import { useAuthStore } from './use-auth-store';
 import { useTokensBalancesStore } from './use-tokens-balances-store';
 
-export const useTokenBalance = (token: Optional<Token>): Optional<BigNumber> => {
+export const useTokenBalance = (token: Optional<Token>): Nullable<BigNumber> => {
   const tokensBalancesStore = useTokensBalancesStore();
   const { accountPkh } = useAuthStore();
 
@@ -23,5 +23,5 @@ export const useTokenBalance = (token: Optional<Token>): Optional<BigNumber> => 
     }
   }, [token, tokensBalancesStore, accountPkh]);
 
-  return tokensBalancesStore.getBalance(token);
+  return tokensBalancesStore.getBalance(token) ?? null;
 };
