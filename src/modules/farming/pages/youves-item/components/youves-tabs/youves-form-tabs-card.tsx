@@ -9,7 +9,7 @@ import { TabProps } from './tab-props.interface';
 import { UnstakeForm } from './unstake-form';
 import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
-export const YouvesFormTabsCard: FC<TabProps> = ({ ...props }) => {
+export const YouvesFormTabsCard: FC<TabProps> = props => {
   const noop = false;
   const { currentTab, setCurrentTab, isStakeForm } = useFarmingFormTabsCardViewModel();
 
