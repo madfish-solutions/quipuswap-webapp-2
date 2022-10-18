@@ -42,7 +42,7 @@ export const sortTokensContracts = (tokenA: TokenId, tokenB: TokenId): SortToken
   }
 
   // tokenA.contractAddress === tokenB.contractAddress
-  if (tokenA.fa2TokenId! < tokenB.fa2TokenId!) {
+  if (isTokenFa2(tokenA) && isTokenFa2(tokenB) && tokenA.fa2TokenId < tokenB.fa2TokenId) {
     return getSort(tokenA, tokenB, SortType.RightRight);
   }
 
