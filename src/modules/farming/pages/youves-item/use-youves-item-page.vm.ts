@@ -52,7 +52,7 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
         if (!_lpToken) {
           throw new Error(NOT_FOUND_MESSAGE);
         }
-        const _stakes = await YouvesFarmingApi.getStakes(tezos, accountPkh, contractAddress);
+        const _stakes = await YouvesFarmingApi.getStakesIds(tezos, accountPkh, contractAddress);
         const _tokens = await LpTokensApi.getTokens(tezos, _lpToken);
 
         setLpTokenId(_lpToken);
