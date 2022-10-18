@@ -14,7 +14,7 @@ export interface TokenInputViewModelProps {
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
-  value: string;
+  value: Nullable<string>;
   balance?: Optional<BigNumber.Value>;
   balanceText?: string;
   id?: string;

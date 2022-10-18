@@ -5,22 +5,22 @@ import { observer } from 'mobx-react-lite';
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
+import { useTranslation } from '@translation';
 
-import { DexTwoDetails, DexTwoRemoveLiqForm } from './components';
-import { useDexTwoItemViewModel } from './dex-two-item.vm';
+import { DexTwoClaimRewardsFrom, DexTwoDetails } from './components';
 
-export const DexTwoRemoveLiq: FC = observer(() => {
-  const { t, title } = useDexTwoItemViewModel();
+export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) => {
+  const { t } = useTranslation();
 
   return (
     <>
-      <PageTitle data-test-id="dexTwoRemoveLiqTitle">
-        {t('common|Remove')} {title}
+      <PageTitle data-test-id="dexTwoClaimRewardsTitle">
+        {t('common|Add')} {title}
       </PageTitle>
 
       <StickyBlock>
-        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.remove}>
-          <DexTwoRemoveLiqForm />
+        <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.claim}>
+          <DexTwoClaimRewardsFrom />
         </NewLiquidityFormTabsCard>
         <DexTwoDetails />
       </StickyBlock>
