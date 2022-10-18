@@ -2,7 +2,6 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { YOUVES_BASED_CONTRACT } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
 import { Standard, TokenIdFa2 } from '@shared/types';
 
@@ -14,8 +13,8 @@ export namespace YouvesFarmingApi {
     };
   }
 
-  export const getToken = async (tezos: TezosToolkit): Promise<TokenIdFa2> => {
-    const storage = await getStorageInfo<IFarmingStorage>(tezos, YOUVES_BASED_CONTRACT);
+  export const getToken = async (tezos: TezosToolkit, contractAddress: string): Promise<TokenIdFa2> => {
+    const storage = await getStorageInfo<IFarmingStorage>(tezos, contractAddress);
     const { id, address } = storage.deposit_token;
 
     return {
@@ -25,8 +24,8 @@ export namespace YouvesFarmingApi {
     };
   };
 
-  export const getStakes = async (tezos: TezosToolkit, accountPkh: string) => {
-    const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
+  export const getStakes = async (tezos: TezosToolkit, accountPkh: string, contractAddress: string) => {
+    const contract = await tezos.contract.at(contractAddress);
 
     return await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
   };
@@ -34,15 +33,16 @@ export namespace YouvesFarmingApi {
   export const deposit = async (
     tezos: TezosToolkit,
     accountPkh: string,
+    contractAddress: string,
     stakeId: BigNumber.Value,
     tokenAmount: BigNumber.Value
   ) => {
-    const contract = await tezos.contract.at(YOUVES_BASED_CONTRACT);
+    const contract = await tezos.contract.at(contractAddress);
 
     const params = contract.methods.deposit(new BigNumber(stakeId), new BigNumber(tokenAmount)).toTransferParams();
 
-    const token = await getToken(tezos);
+    const token = await getToken(tezos, contractAddress);
 
-    return await withApproveApi(tezos, YOUVES_BASED_CONTRACT, token, accountPkh, tokenAmount, [params]);
+    return await withApproveApi(tezos, contractAddress, token, accountPkh, tokenAmount, [params]);
   };
 }
