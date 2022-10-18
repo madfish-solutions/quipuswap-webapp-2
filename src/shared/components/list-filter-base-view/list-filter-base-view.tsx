@@ -13,23 +13,31 @@ export interface ListFilterBaseViewProps {
   sorterProps: SorterProps;
   leftSide?: ReactNode;
   rightSide?: ReactNode;
+  contentClassName?: string;
+  sorterClassName?: string;
 }
 
 export const ListFilterBaseView: FC<ListFilterBaseViewProps> = ({
   sorterProps,
   switcherDataList,
   leftSide,
-  rightSide
+  rightSide,
+  contentClassName,
+  sorterClassName
 }) => {
   return (
-    <Card contentClassName={styles.cardContent} className={styles.filterCard} data-test-id="ListFilterInputView">
+    <Card
+      contentClassName={cx(styles.cardContent, contentClassName)}
+      className={styles.filterCard}
+      data-test-id="ListFilterInputView"
+    >
       {leftSide}
 
       <Iterator render={SwitcherLabel} data={switcherDataList} />
 
       {rightSide}
 
-      <div className={cx(styles.switcherContainer, styles.sorterContainer)}>
+      <div className={cx(sorterClassName, styles.switcherContainer, styles.sorterContainer)}>
         <SorterView {...sorterProps} />
       </div>
     </Card>

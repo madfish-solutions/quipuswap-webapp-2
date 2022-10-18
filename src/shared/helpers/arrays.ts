@@ -32,6 +32,8 @@ export const isLastElementIndex = (index: number, array: unknown[]) => index ===
 export const isFirstElementIndex = (index: number) => index === FISRT_INDEX;
 
 export const getFirstElement = <T>(array: T[]): T => array[FISRT_INDEX];
+export const getPenultimateElement = <T>(array: T[]): T => array[array.length - 2];
+export const getLastElementFromArray = <T>(array: T[]): T => array[array.length - 1];
 
 export const toArray = <T>(entity: T | Array<T>): Array<T> => (Array.isArray(entity) ? entity : [entity]);
 

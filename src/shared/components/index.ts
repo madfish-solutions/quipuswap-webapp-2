@@ -69,3 +69,4 @@ export * from './youtube';
 export * from './dex-two-add-liq-form-view';
 export * from './dex-two-remove-liq-form-view';
 export * from './advertising';
+export * from './tokens-filter';
