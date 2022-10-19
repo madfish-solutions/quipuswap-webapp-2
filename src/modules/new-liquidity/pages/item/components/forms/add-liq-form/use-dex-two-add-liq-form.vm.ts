@@ -121,5 +121,11 @@ export const useDexTwoAddLiqFormViewModel = () => {
     shouldShowBakerInput
   };
 
-  return { data, onSubmit: formik.handleSubmit, bakerData };
+  return {
+    data,
+    onSubmit: formik.handleSubmit,
+    bakerData,
+    isSubmitting: formik.isSubmitting,
+    setSubmitting: formik.setSubmitting
+  };
 };
