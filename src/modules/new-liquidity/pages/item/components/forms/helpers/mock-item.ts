@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 
 export const MOCK_ITEM = {
+  contractAddress: '',
   apr: null,
   id: new BigNumber(1),
   maxApr: null,

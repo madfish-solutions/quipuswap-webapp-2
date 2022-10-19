@@ -42,6 +42,7 @@ export const common = {
   'e.g. Kscwf2r3...': 'e.g. Kscwf2r3...',
   Add: 'Add',
   Remove: 'Remove',
+  Claim: 'Claim',
   Create: 'Create',
   Unstake: 'Unstake',
   'Sell Price': 'Sell Price',

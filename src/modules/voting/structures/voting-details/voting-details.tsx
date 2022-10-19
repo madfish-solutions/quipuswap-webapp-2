@@ -145,7 +145,7 @@ export const VotingDetails: FC = () => {
           wrapperClassName={s.youtubeList}
           render={YouTube}
           data={[
-            { video: eQuipuSwapVideo.HowToVoteForTheLPBacker },
+            { video: eQuipuSwapVideo.HowToVoteForTheLPBaker },
             { video: eQuipuSwapVideo.HowToCollectRewardsForBaking }
           ]}
         />
