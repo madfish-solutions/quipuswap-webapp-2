@@ -1,11 +1,11 @@
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, isNotDefined } from '@shared/helpers';
 
+import { FormProps } from '../form-props.interface';
 import { TabProps } from '../tab-props.interface';
-import { StakeProps } from './stake-props.interface';
 import { useStakeFormForming } from './use-stake-form-forming';
 
-export const useStakeFormViewModel = (props: TabProps): StakeProps => {
+export const useStakeFormViewModel = (props: TabProps): FormProps => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 

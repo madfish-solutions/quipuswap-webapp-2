@@ -1,24 +1,23 @@
-import { useState } from 'react';
+import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { defined, isNotDefined } from '@shared/helpers';
 
-import BigNumber from 'bignumber.js';
+import { FormProps } from '../form-props.interface';
+import { useStakeFormForming } from '../stake-form/use-stake-form-forming';
+import { TabProps } from '../tab-props.interface';
 
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+export const useUnstakeFormViewModel = (props: TabProps): FormProps => {
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
 
-export const useUnstakeFormViewModel = () => {
-  const [inputAmount, inputAmountChange] = useState('');
+  const { contractAddress, stakeId, lpToken, userLpTokenBalance } = props;
+  const form = useStakeFormForming(defined(contractAddress, 'Contract address'), stakeId, lpToken, userLpTokenBalance);
 
-  const handleSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('submit');
-  };
+  const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
 
   return {
-    inputAmount,
-    isSubmitting: false,
-    handleSubmit,
-    userTokenBalance: new BigNumber(10),
-    disabled: false,
-    handleInputAmountChange: inputAmountChange,
-    tokens: [QUIPU_TOKEN, TEZOS_TOKEN]
+    ...props,
+    ...form,
+    userLpTokenBalance,
+    disabled
   };
 };
