@@ -12,7 +12,7 @@ interface IFarmingStorage {
   };
 }
 
-export class YouvesFarmingApi {
+export class BlockchainYouvesFarmingApi {
   static async getToken(tezos: TezosToolkit, contractAddress: string): Promise<TokenIdFa2> {
     const storage = await getStorageInfo<IFarmingStorage>(tezos, contractAddress);
     const { id, address } = storage.deposit_token;
@@ -28,6 +28,25 @@ export class YouvesFarmingApi {
     const contract = await tezos.contract.at(contractAddress);
 
     return await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
+  }
+
+  static async getStakeById(tezos: TezosToolkit, stakeId: BigNumber, accountPkh: string, contractAddress: string) {
+    const contract = await tezos.contract.at(contractAddress);
+
+    return await contract.contractViews.view_stake(stakeId).executeView({ viewCaller: accountPkh });
+  }
+
+  static async getStakes(contractAddress: string, accountPkh: string, tezos: TezosToolkit) {
+    const stakesIds = await this.getStakesIds(tezos, accountPkh, contractAddress);
+
+    return {
+      stakes: await Promise.all(
+        stakesIds.map(async (stakeId: BigNumber) => ({
+          id: stakeId,
+          ...(await BlockchainYouvesFarmingApi.getStakeById(tezos, stakeId, accountPkh, contractAddress))
+        }))
+      )
+    };
   }
 
   static async deposit(

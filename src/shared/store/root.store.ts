@@ -6,6 +6,7 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore,
+  FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
 import {
@@ -44,6 +45,7 @@ export class RootStore {
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
+  farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
   harvestAndRollStore: Nullable<IHarvestAndRollStore> = null;
 
   stableswapListStore: Nullable<IStableswapListStore> = null;
@@ -204,6 +206,13 @@ export class RootStore {
     if (isNull(this.farmingItemStore)) {
       const { FarmingItemStore } = await import('@modules/farming/store/farming-item.store');
       this.farmingItemStore = new FarmingItemStore(this);
+    }
+  }
+
+  async createFarmingYouvesItemStore() {
+    if (isNull(this.farmingYouvesItemStore)) {
+      const { FarmingYouvesItemStore } = await import('@modules/farming/store/farming-youves-item.store');
+      this.farmingYouvesItemStore = new FarmingYouvesItemStore(this);
     }
   }
 
