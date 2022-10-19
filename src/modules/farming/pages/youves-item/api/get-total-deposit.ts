@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
