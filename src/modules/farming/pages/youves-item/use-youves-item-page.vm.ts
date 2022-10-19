@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { LpTokensApi } from '@blockchain';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { defined, getTokensNames, isNotDefined, isNotFoundError, NOT_FOUND_MESSAGE } from '@shared/helpers';
+import { defined, getTokensNames, isExist, isNotDefined, isNotFoundError, NOT_FOUND_MESSAGE } from '@shared/helpers';
 import { useToken, useTokenBalance } from '@shared/hooks';
 import { Token, TokenAddress, TokenIdFa2 } from '@shared/types';
 import { useToasts } from '@shared/utils';
@@ -19,9 +19,14 @@ const DEFAULT_TOKENS: { tokenA: Nullable<TokenAddress>; tokenB: Nullable<TokenAd
   tokenB: null
 };
 
+const FIRST_INDEX = 0;
+const NEW_STAKE_INDEX = 0;
+const NEW_STAKE = new BigNumber(NEW_STAKE_INDEX);
+
 const getTitle = (tokenA: Nullable<Token>, tokenB: Nullable<Token>): string =>
   `Farming ${tokenA && tokenB ? getTokensNames([tokenA, tokenB]) : '...'}`;
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -43,7 +48,7 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
   // Load LP token & User stakes
   useEffect(() => {
     (async () => {
-      if (isNotDefined(tezos) || isNotDefined(accountPkh) || isNotDefined(contractAddress)) {
+      if (isNotDefined(tezos) || isNotDefined(contractAddress)) {
         return;
       }
 
@@ -52,12 +57,15 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
         if (!_lpToken) {
           throw new Error(NOT_FOUND_MESSAGE);
         }
-        const _stakes = await YouvesFarmingApi.getStakesIds(tezos, accountPkh, contractAddress);
-        const _tokens = await LpTokensApi.getTokens(tezos, _lpToken);
 
+        const _tokens = await LpTokensApi.getTokens(tezos, _lpToken);
         setLpTokenId(_lpToken);
-        setStakes(_stakes);
         setTokens(_tokens);
+
+        if (accountPkh) {
+          const _stakes = await YouvesFarmingApi.getStakesIds(tezos, accountPkh, contractAddress);
+          setStakes(_stakes);
+        }
       } catch (error) {
         showErrorToast(error as Error);
         if (isNotFoundError(error as Error)) {
@@ -67,12 +75,13 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
     })();
   }, [accountPkh, contractAddress, navigate, showErrorToast, tezos]);
 
+  const stakeId = isExist(stakes[FIRST_INDEX]) ? stakes[FIRST_INDEX] : NEW_STAKE;
+
   return {
     title,
     contractAddress: defined(contractAddress, 'Contract Address'),
     stakes,
-    // TODO: Next Epic
-    stakeId: new BigNumber(0),
+    stakeId,
     lpToken,
     userLpTokenBalance,
     tokenA,
