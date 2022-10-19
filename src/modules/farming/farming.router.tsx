@@ -12,13 +12,14 @@ import { FarmsListPage } from './pages/list';
 import { YouvesItemPage } from './pages/youves-item';
 
 export const FarmingRouter: FC = () => {
-  const { isInitialazied } = useFarmingRouterViewModel();
+  const { isInitialized } = useFarmingRouterViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
         <Route path={`${AppRootRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
+        <Route path={`${AppRootRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
         <Route path="/youves/:contractAddress" element={<YouvesItemPage />} />
       </SentryRoutes>
     </StateWrapper>
