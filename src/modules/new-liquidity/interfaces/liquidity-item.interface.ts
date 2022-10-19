@@ -1,9 +1,31 @@
 import { BigNumber } from 'bignumber.js';
 
-import { BlockInfo } from '@shared/types';
+import { BlockInfo, ActiveStatus, Token } from '@shared/types';
 
 import { Categories } from './icon-enum';
 import { LiquidityTokenInfo } from './liquidity-token-info.interface';
+
+export interface PreparedLiquidityItem {
+  id: BigNumber;
+  type: string;
+  tvlInUsd: BigNumber;
+  maxApr: Nullable<number>;
+  itemStats: Array<{
+    cellName: string;
+    tooltip: string;
+    amounts: {
+      amount: BigNumber | number;
+      currency: string;
+      dollarEquivalent?: BigNumber;
+      dollarEquivalentOnly?: boolean;
+    };
+  }>;
+  categories: Array<Categories>;
+  visibleIcon: boolean;
+  inputToken: Array<Token>;
+  href: string;
+  status: { status: ActiveStatus; filled: boolean };
+}
 
 export interface LiquidityItem {
   id: BigNumber;
