@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
@@ -25,11 +26,10 @@ export const getTotalDeposit = async (
   );
 
   const ids: Array<BigNumber> = (await stakes_owner_lookup.get(accountPkh)) ?? [];
-  const userStakes = await Promise.all(
-    ids.map(async (id: BigNumber) => {
-      return (await stakes.get<YouvesFarmStakes>(Number(id)))?.stake ?? ZERO_BN;
-    })
-  );
+  const stakesArrayPromise = ids.map(async (id: BigNumber) => {
+    return stakes.get<YouvesFarmStakes>(Number(id));
+  });
+  const userArrayStakes = await Promise.all(stakesArrayPromise);
 
   const depositTokenMetadata = await getTokenMetadata({
     contractAddress: deposit_token.address,
@@ -38,9 +38,9 @@ export const getTotalDeposit = async (
   const depositTokenDecimals = depositTokenMetadata?.decimals ?? ZERO_AMOUNT;
   const depositTokenPrecision = Number(`1e${depositTokenDecimals}`);
 
-  return userStakes
+  return userArrayStakes
     .reduce((prev, curr) => {
-      return prev.plus(curr);
+      return prev.plus(curr?.stake ?? ZERO_BN);
     }, ZERO_BN)
     .dividedBy(depositTokenPrecision)
     .decimalPlaces(depositTokenDecimals);
