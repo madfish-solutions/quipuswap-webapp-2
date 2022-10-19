@@ -3,12 +3,11 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 import * as yup from 'yup';
 
-import { defined, getFormikError, toAtomic } from '@shared/helpers';
+import { defined, getFormikError, numberAsString, toAtomic } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
-import { useDoYouvesFarmingDeposit } from '../../../../../hooks';
-import { StakeFormFields } from '../../../../item/components/farming-tabs/stake-form/stake-form.interface';
+import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore } from '../../../../../hooks';
 
 enum FormFields {
   inputAmount = 'inputAmount'
@@ -20,7 +19,7 @@ interface FormValues {
 
 const getValidationSchema = (userBalance: Optional<BigNumber>) =>
   yup.object().shape({
-    [StakeFormFields.inputAmount]: balanceAmountSchema(userBalance).required('Value is required')
+    [FormFields.inputAmount]: balanceAmountSchema(userBalance).required('Value is required')
   });
 
 export const useStakeFormForming = (
@@ -29,7 +28,9 @@ export const useStakeFormForming = (
   lpFullToken: Nullable<Token>,
   userLpTokenBalance: Optional<BigNumber>
 ) => {
+  const farmingYouvesItemStore = useFarmingYouvesItemStore();
   const { doDeposit } = useDoYouvesFarmingDeposit();
+  const farmingItem = farmingYouvesItemStore.item;
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
@@ -50,7 +51,12 @@ export const useStakeFormForming = (
     onSubmit: handleSubmit
   });
 
-  const inputAmountChange = async (value: string) => await formik.setFieldValue(FormFields.inputAmount, value);
+  const inputAmountChange = async (value: string) => {
+    const decimals = defined(farmingItem).stakedToken.metadata.decimals;
+    const { fixedValue, realValue } = numberAsString(value, decimals);
+    farmingYouvesItemStore.setInputAmount(fixedValue);
+    await formik.setFieldValue(FormFields.inputAmount, realValue);
+  };
 
   const disabled = formik.isSubmitting;
 

@@ -10,8 +10,7 @@ export const StakeFormView: FC<StakeProps> = ({
   inputAmount,
   handleSubmit,
   userLpTokenBalance,
-  tokenA,
-  tokenB,
+  tokens,
   handleInputAmountChange,
   disabled,
   isSubmitting,
@@ -27,7 +26,7 @@ export const StakeFormView: FC<StakeProps> = ({
         value={inputAmount}
         error={inputAmountError}
         balance={userLpTokenBalance}
-        tokens={[tokenA, tokenB]}
+        tokens={tokens}
         onInputChange={handleInputAmountChange}
         disabled={disabled}
       />

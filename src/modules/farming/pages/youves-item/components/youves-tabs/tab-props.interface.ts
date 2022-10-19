@@ -2,12 +2,18 @@ import BigNumber from 'bignumber.js';
 
 import { Token } from '@shared/types';
 
+interface YouvesStake {
+  id: BigNumber;
+  stake: BigNumber;
+  disc_factor: BigNumber;
+  age_timestamp: string;
+}
+
 export interface TabProps {
   contractAddress: string;
-  stakes: BigNumber[];
+  stakes: YouvesStake[];
   stakeId: BigNumber;
   lpToken: Nullable<Token>;
   userLpTokenBalance: Nullable<BigNumber>;
-  tokenA: Nullable<Token>;
-  tokenB: Nullable<Token>;
+  tokens: Token[];
 }
