@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
@@ -6,6 +6,7 @@ import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getSymbolsString } from '@shared/helpers';
+import { useOnBlock } from '@shared/hooks';
 
 import { getRewardsDueDate } from '../../api/get-rewards-due-date';
 import { getTotalDeposit } from '../../api/get-total-deposit';
@@ -26,14 +27,18 @@ export const useYouvesRewardInfoViewModel = () => {
     console.log('click');
   };
 
-  useEffect(() => {
-    (async () => {
-      const dueDate = await getRewardsDueDate(tezos, accountPkh, contractAddress);
-      setRewardsDueDate(dueDate);
-      const totalDeposit = await getTotalDeposit(tezos, accountPkh, contractAddress);
-      setTotalDeposit(totalDeposit);
-    })();
+  const getUserStakeInfo = useCallback(async () => {
+    const dueDate = await getRewardsDueDate(tezos, accountPkh, contractAddress);
+    setRewardsDueDate(dueDate);
+    const totalDeposit = await getTotalDeposit(tezos, accountPkh, contractAddress);
+    setTotalDeposit(totalDeposit);
   }, [accountPkh, tezos]);
+
+  useEffect(() => {
+    getUserStakeInfo();
+  }, [getUserStakeInfo]);
+
+  useOnBlock(getUserStakeInfo);
 
   return {
     claimablePendingRewards: new BigNumber(1000),
