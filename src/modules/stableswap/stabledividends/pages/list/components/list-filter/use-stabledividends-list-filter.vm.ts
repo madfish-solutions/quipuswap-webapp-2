@@ -1,7 +1,7 @@
 import cx from 'classnames';
 
 import { useStableDividendsFilterStore } from '@modules/stableswap/hooks';
-import { ListFilterViewProps } from '@shared/components';
+import { ListFilterInputViewProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -9,7 +9,7 @@ import { useTranslation } from '@translation';
 import { StableDividendsSortField, StableDividendsSortFieldItem } from '../../types';
 import styles from './stabledividends-list-filter.module.scss';
 
-export const useStableDividendsListFilterViewModel = (): ListFilterViewProps => {
+export const useStableDividendsListFilterViewModel = (): ListFilterInputViewProps => {
   const { t } = useTranslation();
   const stableDividendsFilterStore = useStableDividendsFilterStore();
 

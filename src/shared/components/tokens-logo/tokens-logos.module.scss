@@ -13,7 +13,32 @@ $logos-quantity: 4;
   }
 }
 
-.root {
+.root,
+.container {
   display: flex;
+}
+
+.root {
   @include create-index-offset($logos-quantity);
+}
+
+.container {
+  align-items: center;
+
+  div {
+    margin-left: 8px;
+    margin-right: 16px;
+  }
+}
+
+.dark {
+  .container {
+    color: $hover-primary-02-fallback;
+  }
+}
+
+.light {
+  .container {
+    color: $hover-primary-01-fallback;
+  }
 }

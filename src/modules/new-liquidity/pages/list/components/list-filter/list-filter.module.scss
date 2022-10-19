@@ -1,0 +1,42 @@
+@import "@styles/_variables";
+@import "@styles/_breakpoints";
+
+.filterCard {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  flex-wrap: wrap !important;
+
+  * {
+    width: fit-content !important;
+    order: 4 !important;
+  }
+}
+
+.sorterView {
+  order: 1 !important;
+  align-self: flex-end !important;
+}
+
+.leftSide {
+  flex: 1 !important;
+  order: 2 !important;
+}
+
+.rightSide {
+  order: 3 !important;
+}
+
+@include media('>Ltablet') {
+  .filterCard {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  .rightSide,
+  .sorterView {
+    order: 4 !important;
+  }
+}
