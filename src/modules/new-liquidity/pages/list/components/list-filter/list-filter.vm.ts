@@ -62,7 +62,7 @@ export const useListFilterViewModel = () => {
       onClick: setShowDust,
       disabled: isNull(accountPkh),
       switcherDTI: 'stakedOnlySwitcher',
-      translation: 'ShowDust',
+      translation: t('newLiquidity|showDust'),
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
@@ -72,7 +72,7 @@ export const useListFilterViewModel = () => {
       onClick: setInvestedOnly,
       disabled: isNull(accountPkh),
       switcherDTI: 'stakedOnlySwitcher',
-      translation: 'InvestedOnly',
+      translation: t('newLiquidity|investedOnly'),
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)

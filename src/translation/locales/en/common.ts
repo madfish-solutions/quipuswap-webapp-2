@@ -156,5 +156,5 @@ export const common = {
   reconnectionModalText:
     'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
   Reconnect: 'Reconnect',
-  tokensFilter: 'Tokens filter'
+  tokensFilter: 'Filter by tokens'
 } as const;
