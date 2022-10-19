@@ -26,5 +26,7 @@ export const newLiquidity = {
   bakerReward: 'Baker reward',
   heyBro: 'Hey, bro!',
   migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
-  why: 'Why?'
+  why: 'Why?',
+  showDust: 'Show Dust',
+  investedOnly: 'Invested Only'
 } as const;
