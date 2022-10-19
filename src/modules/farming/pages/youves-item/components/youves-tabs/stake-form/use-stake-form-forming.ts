@@ -53,8 +53,7 @@ export const useStakeFormForming = (
 
   const inputAmountChange = async (value: string) => {
     const decimals = defined(farmingItem).stakedToken.metadata.decimals;
-    const { fixedValue, realValue } = numberAsString(value, decimals);
-    farmingYouvesItemStore.setInputAmount(fixedValue);
+    const { realValue } = numberAsString(value, decimals);
     await formik.setFieldValue(FormFields.inputAmount, realValue);
   };
 

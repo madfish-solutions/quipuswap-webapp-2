@@ -3,15 +3,14 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { isNull, MakeInterval, saveBigNumber } from '@shared/helpers';
+import { isNull, MakeInterval } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
-import { YouvesFarmingApi } from '../api/blockchain/youves-farming.api';
-import { UserTokenBalanceModel, YouvesFarmingItemResponseModel, YouvesUsersInfoModel } from '../models';
+import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
+import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
+import { YouvesFarmingItemResponseModel, YouvesStakesResponseModel } from '../models';
 import { YouvesFormTabs } from '../pages/youves-item/types';
-
-const DEFAULT_INPUT_AMOUNT = 0;
 
 const defaultItem = {
   item: null,
@@ -29,7 +28,7 @@ export class FarmingYouvesItemStore {
   //#region item store region
   @Led({
     default: defaultItem,
-    loader: async self => await YouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof defaultItem>;
@@ -39,60 +38,38 @@ export class FarmingYouvesItemStore {
   }
   //#endregion item store region
 
-  //#region available balance store
-  @Led({
-    default: defaultAvailableBalance,
-    loader: async self => await self.getUserTokenBalance(),
-    model: UserTokenBalanceModel
-  })
-  readonly availableBalanceStore: LoadingErrorData<UserTokenBalanceModel, typeof defaultAvailableBalance>;
-
-  get availableBalance() {
-    return this.availableBalanceStore.model.balance;
-  }
-  //#endregion available balance store
-
-  //#region user info store
+  //#region stakes store
   @Led({
     default: { value: null },
     loader: async self => await self.getUserInfo(),
-    model: YouvesUsersInfoModel
+    model: YouvesStakesResponseModel
   })
-  readonly userInfoStore: LoadingErrorData<YouvesUsersInfoModel, { stakes: [] }>;
+  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: [] }>;
 
-  get userInfo() {
-    return this.userInfoStore.model;
+  get stakes() {
+    return this.stakesStore.model.stakes;
   }
-  //#endregion user info store
+  //#endregion stakes store
 
   currentTab = YouvesFormTabs.stake;
-  inputAmount: Nullable<BigNumber> = new BigNumber(DEFAULT_INPUT_AMOUNT);
 
   claimableRewards: Nullable<BigNumber> = null;
   longTermRewards: Nullable<BigNumber> = null;
   readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
-  readonly updateUserInfoInterval = new MakeInterval(
-    async () => this.userInfoStore.load(),
-    FARM_USER_INFO_UPDATE_INTERVAL
-  );
+  readonly updateStakesInterval = new MakeInterval(async () => this.stakesStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
-      inputAmount: observable,
       claimableRewards: observable,
       longTermRewards: observable,
 
       setTab: action,
-      clearBalance: action,
-      setInputAmount: action,
       updatePendingRewards: action,
 
-      availableBalance: computed,
       item: computed,
-      userInfo: computed
+      stakes: computed
     });
-    this.clearBalance();
   }
 
   async getClaimableRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
@@ -105,10 +82,15 @@ export class FarmingYouvesItemStore {
 
   async makePendingRewardsLiveable() {
     this.pendingRewardsInterval.start();
-    this.updateUserInfoInterval.start();
+    this.updateStakesInterval.start();
   }
 
   updatePendingRewards() {
+    if (isNull(this.rootStore.authStore.accountPkh)) {
+      this.claimableRewards = null;
+      this.longTermRewards = null;
+    }
+
     // TODO: implement real calculations
     this.claimableRewards = (this.claimableRewards ?? new BigNumber(ZERO_AMOUNT)).plus(1);
     this.longTermRewards = (this.longTermRewards ?? new BigNumber(ZERO_AMOUNT)).plus(2);
@@ -116,19 +98,11 @@ export class FarmingYouvesItemStore {
 
   clearIntervals() {
     this.pendingRewardsInterval.stop();
-    this.updateUserInfoInterval.stop();
+    this.updateStakesInterval.stop();
   }
 
   setTab(tab: YouvesFormTabs) {
     this.currentTab = tab;
-  }
-
-  setInputAmount(inputAmount: Nullable<BigNumber.Value>) {
-    this.inputAmount = saveBigNumber(inputAmount, null);
-  }
-
-  clearBalance() {
-    this.setInputAmount(DEFAULT_INPUT_AMOUNT);
   }
 
   setFarmingAddress(farmingAddress: Nullable<string>) {
@@ -142,7 +116,7 @@ export class FarmingYouvesItemStore {
       return { stakes: [] };
     }
 
-    return await YouvesFarmingApi.getUserInfo(this.farmingAddress, authStore.accountPkh, tezos);
+    return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
   async getUserTokenBalance() {
