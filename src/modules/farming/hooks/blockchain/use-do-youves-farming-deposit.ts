@@ -7,7 +7,7 @@ import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { YouvesFarmingApi } from '../../api/blockchain/youves-farming.api';
+import { BlockchainYouvesFarmingApi } from '../../api/blockchain/youves-farming.api';
 import { useGetYouvesFarmingItem } from '../loaders';
 
 export const useDoYouvesFarmingDeposit = () => {
@@ -26,7 +26,7 @@ export const useDoYouvesFarmingDeposit = () => {
       };
       try {
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT', logData);
-        const operation = await YouvesFarmingApi.deposit(
+        const operation = await BlockchainYouvesFarmingApi.deposit(
           defined(tezos),
           defined(accountPkh),
           contractAddress,

@@ -20,7 +20,7 @@ export class YouvesFarmingItemDto {
   earnExchangeRate: Nullable<BigNumber>;
 
   @Typed({ type: BigNumber })
-  vestingPeriod: BigNumber;
+  vestingPeriodSeconds: BigNumber;
 
   @Typed()
   address: string;

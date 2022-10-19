@@ -8,7 +8,7 @@ import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
-import { useToken } from '@shared/hooks';
+import { useToken, useTokenBalance } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -31,10 +31,10 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
   const item = farmingYouvesItemStore.item;
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
   const stakedToken = useToken(item?.stakedToken ?? null);
-  const stakedTokenBalance = farmingYouvesItemStore.availableBalance;
-  const stakes = farmingYouvesItemStore.userInfo.stakes;
+  const stakedTokenBalance = useTokenBalance(stakedToken);
+  const stakes = farmingYouvesItemStore.stakes;
 
-  const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? getTokensNames(tokens) : '...' });
+  const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
 
   useEffect(() => {
     if ((!dAppReady || isUndefined(contractAddress)) && prevAccountPkhRef.current === accountPkh) {
@@ -65,16 +65,12 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
   }, [stakedTokenBalance]);
 
   useEffect(() => {
-    console.log('userInfo', farmingYouvesItemStore.userInfo);
-  }, [farmingYouvesItemStore.userInfo]);
+    console.log('stakes', stakes);
+  }, [stakes]);
 
   useEffect(() => {
     console.log('currentTab', farmingYouvesItemStore.currentTab);
   }, [farmingYouvesItemStore.currentTab]);
-
-  useEffect(() => {
-    console.log('inputAmount', farmingYouvesItemStore.inputAmount?.toFixed());
-  }, [farmingYouvesItemStore.inputAmount]);
 
   useEffect(() => {
     console.log('rewards', {
