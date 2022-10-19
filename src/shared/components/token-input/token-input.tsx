@@ -6,14 +6,16 @@ import { observer } from 'mobx-react-lite';
 import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
+import { isNull } from '@shared/helpers';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import { Shevron } from '@shared/svg';
 
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
+import { DashPlug } from '../dash-plug';
 import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
-import { StateCurrencyAmount } from '../state-components';
+import { StateCurrencyAmount, StateWrapper } from '../state-components';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
@@ -99,17 +101,25 @@ export const TokenInput: FC<TokenInputProps> = observer(
             <div className={styles.balance}>
               {shownBalance && <Balance text={balanceText} balance={balance} colorMode={colorThemeMode} />}
             </div>
-            <input
-              id={id}
-              className={cx(styles.item, styles.input)}
-              onFocus={handleInputFocus}
-              onBlur={handleInputBlur}
-              ref={inputRef}
-              value={value}
-              autoComplete="off"
-              disabled={!isFormReady || disabled}
-              onChange={handleInputChange}
-            />
+            {readOnly ? (
+              <div className={cx(styles.item, styles.readOnlyValue)}>
+                <StateWrapper isLoading={isNull(value)} loaderFallback={<DashPlug zoom={1.45} />}>
+                  {value}
+                </StateWrapper>
+              </div>
+            ) : (
+              <input
+                id={id}
+                className={cx(styles.item, styles.input)}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                ref={inputRef}
+                value={value ?? ''}
+                autoComplete="off"
+                disabled={!isFormReady || disabled}
+                onChange={handleInputChange}
+              />
+            )}
             <div className={styles.dangerContainer}>
               {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
               <Button

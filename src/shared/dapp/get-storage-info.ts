@@ -1,6 +1,8 @@
 import { TezosToolkit } from '@taquito/taquito';
 import memoizee from 'memoizee';
 
+export type TaquitoContract = Awaited<ReturnType<typeof getContract>>;
+
 const getContractPure = async (tezos: TezosToolkit, address: string) => tezos.contract.at(address);
 
 export const getContract = memoizee(getContractPure, { promise: true });
