@@ -7,17 +7,21 @@ import { getTokenAddress, getTokenSlug, isString } from '../helpers';
 import { mapToken } from '../mapping/token.map';
 import { useTokensStore } from './use-tokens-store';
 
-export const useToken = (tokenSlugOrAddress: TokenAddress | string): Nullable<Token> => {
+export const useToken = (tokenSlugOrAddress: Nullable<TokenAddress | string>): Nullable<Token> => {
   const tokensStore = useTokensStore();
 
-  const tokenSlug = isString(tokenSlugOrAddress) ? tokenSlugOrAddress : getTokenSlug(tokenSlugOrAddress);
-  const tokenAddress = getTokenAddress(tokenSlug);
+  const tokenSlug = tokenSlugOrAddress
+    ? isString(tokenSlugOrAddress)
+      ? tokenSlugOrAddress
+      : getTokenSlug(tokenSlugOrAddress)
+    : null;
 
   useEffect(() => {
     (async () => {
-      if (tokensStore.getToken(tokenSlug)) {
+      if (!tokenSlug || tokensStore.getToken(tokenSlug)) {
         return;
       }
+      const tokenAddress = getTokenAddress(tokenSlug);
       const tokenMetaRaw = await getTokenMetadata(tokenAddress);
       if (tokenMetaRaw) {
         const token = mapToken({
@@ -27,7 +31,7 @@ export const useToken = (tokenSlugOrAddress: TokenAddress | string): Nullable<To
         tokensStore.setToken(tokenSlug, token);
       }
     })();
-  }, [tokenAddress, tokenSlug, tokensStore]);
+  }, [tokenSlug, tokensStore]);
 
   return tokensStore.getToken(tokenSlug);
 };

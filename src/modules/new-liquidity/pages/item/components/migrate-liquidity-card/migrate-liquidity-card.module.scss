@@ -1,0 +1,63 @@
+@import "@styles/_variables.scss";
+
+.migrateCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 32px;
+  padding: 32px;
+
+  span {
+    width: fit-content;
+    flex-shrink: 2;
+  }
+
+  svg {
+    flex-shrink: 1;
+  }
+}
+
+.why {
+  color: white;
+}
+
+.why,
+.migrateDescription {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.heyBro {
+  display: flex;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+
+.light {
+  .migrateDescription {
+    background: $brand-01;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.dark {
+  .migrateDescription {
+    background: $brand-02;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+.light.migrateCard {
+  border: 2px dashed $hover-primary-01-fallback;
+}
+
+.dark.migrateCard {
+  border: 2px dashed $hover-primary-02-fallback;
+}

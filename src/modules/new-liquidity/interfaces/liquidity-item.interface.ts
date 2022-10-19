@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { ActiveStatus, BlockInfo, Token } from '@shared/types';
+import { BlockInfo, ActiveStatus, Token } from '@shared/types';
 
 import { Categories } from './icon-enum';
 import { LiquidityTokenInfo } from './liquidity-token-info.interface';
@@ -30,6 +30,7 @@ export interface PreparedLiquidityItem {
 export interface LiquidityItem {
   id: BigNumber;
   type: string;
+  contractAddress: string;
   tvlInUsd: BigNumber;
   apr: Nullable<number>;
   totalSupply: BigNumber;
@@ -37,6 +38,7 @@ export interface LiquidityItem {
   volumeForWeek: Nullable<BigNumber>;
   poolLabels: Array<Categories>;
   tokensInfo: Array<LiquidityTokenInfo>;
+  accordanceSlug?: string;
   feesRate: string;
 }
 

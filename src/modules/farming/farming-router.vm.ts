@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 
-export const useFarmingPageViewModel = () => {
-  const [isInitialazied, setIsInitialazied] = useState(false);
+export const useFarmingRouterViewModel = () => {
+  const [isInitialized, setIsInitialized] = useState(false);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -22,10 +22,10 @@ export const useFarmingPageViewModel = () => {
           await rootStore.createHarvestAndRollStore();
         }
       } finally {
-        setIsInitialazied(true);
+        setIsInitialized(true);
       }
     })();
   }, [rootStore]);
 
-  return { isInitialazied };
+  return { isInitialized };
 };

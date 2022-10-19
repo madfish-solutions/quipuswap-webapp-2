@@ -16,7 +16,9 @@ export const useNewLiquidityPageViewModel = () => {
   const newLiquidityListStore = useNewLiquidityListStore();
   const { getNewLiquidityList } = useGetNewLiquidityList();
   const { getNewLiquidityStats } = useGetNewLiquidityStats();
+
   const [shownItems, setShownItems] = useState<Array<PreparedLiquidityItem>>([]);
+
   const { t } = useTranslation();
   const title = t('common|Liquidity');
 
