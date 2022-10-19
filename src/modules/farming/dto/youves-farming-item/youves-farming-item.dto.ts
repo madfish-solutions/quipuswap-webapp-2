@@ -39,4 +39,10 @@ export class YouvesFarmingItemDto {
 
   @Typed({ type: BigNumber })
   staked: BigNumber;
+
+  @Typed({ type: BigNumber, nullable: true })
+  tvlInUsd: Nullable<BigNumber>;
+
+  @Typed()
+  tvlInStakedToken: BigNumber;
 }
