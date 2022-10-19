@@ -4,7 +4,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 
 export const useFarmingRouterViewModel = () => {
-  const [isInitialazied, setIsInitialazied] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -22,10 +22,10 @@ export const useFarmingRouterViewModel = () => {
           await rootStore.createHarvestAndRollStore();
         }
       } finally {
-        setIsInitialazied(true);
+        setIsInitialized(true);
       }
     })();
   }, [rootStore]);
 
-  return { isInitialazied };
+  return { isInitialized };
 };
