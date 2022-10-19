@@ -123,8 +123,11 @@ export const getTokensName = (token: RawOrMappedToken, optionalToken: Optional<R
   return optionalToken ? `${getTokenSymbol(token)} / ${getTokenSymbol(optionalToken)}` : getTokenSymbol(token);
 };
 
-export const getSymbolsString = (tokens: RawOrMappedToken | Array<RawOrMappedToken>, sliceAmount?: number) => {
-  const clearTokens = toArray(tokens).filter(Boolean);
+export const getSymbolsString = (
+  tokens: Nullable<RawOrMappedToken> | Array<Nullable<RawOrMappedToken>>,
+  sliceAmount?: number
+) => {
+  const clearTokens: RawOrMappedToken[] = toArray(tokens).filter(Boolean) as RawOrMappedToken[];
 
   if (isEmptyArray(clearTokens)) {
     return EMPTY_STRING;

@@ -6,7 +6,7 @@ import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
 
-import { DexTwoRemoveLiqForm } from './components';
+import { DexTwoDetails, DexTwoRemoveLiqForm } from './components';
 import { useDexTwoItemViewModel } from './dex-two-item.vm';
 
 export const DexTwoRemoveLiq: FC = observer(() => {
@@ -22,6 +22,7 @@ export const DexTwoRemoveLiq: FC = observer(() => {
         <NewLiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.remove}>
           <DexTwoRemoveLiqForm />
         </NewLiquidityFormTabsCard>
+        <DexTwoDetails />
       </StickyBlock>
     </>
   );

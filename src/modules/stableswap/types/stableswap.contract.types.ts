@@ -2,6 +2,10 @@ import { MichelsonMap } from '@taquito/taquito';
 
 import { address, BigMap, nat, timestamp } from '@shared/types';
 
+interface TezToken {
+  tez: never;
+}
+
 interface FA12Token {
   fa12: address;
 }
@@ -13,7 +17,7 @@ interface FA2Token {
   };
 }
 
-export type TokensValue = FA12Token | FA2Token;
+export type TokensValue = TezToken | FA12Token | FA2Token;
 
 interface TokensInfoValue {
   rate_f: nat;
