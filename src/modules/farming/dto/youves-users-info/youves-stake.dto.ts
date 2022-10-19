@@ -3,13 +3,13 @@ import BigNumber from 'bignumber.js';
 import { Typed } from '@shared/decorators';
 
 export class YouvesStakeDto {
-  @Typed({ type: BigNumber })
+  @Typed()
   id: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   stake: BigNumber;
 
-  @Typed({ type: BigNumber })
+  @Typed()
   disc_factor: BigNumber;
 
   @Typed()

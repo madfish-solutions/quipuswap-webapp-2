@@ -2,7 +2,6 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { YouvesFarmingItemModel } from '@modules/farming/models';
 import { getStorageInfo } from '@shared/dapp';
 import { Standard, TokenIdFa2 } from '@shared/types';
 
@@ -37,11 +36,11 @@ export class YouvesFarmingApi {
     return await contract.contractViews.view_stake(stakeId).executeView({ viewCaller: accountPkh });
   }
 
-  static async getItem(address: string) {
+  static async getYouvesFarmingItem(farmAddress: string) {
     // TODO: fetch data from real backend
     return {
       item: {
-        address,
+        address: farmAddress,
         apr: '365',
         depositExchangeRate: '3',
         depositTokenUrl: 'https://ghostnet.tzkt.io',
@@ -105,14 +104,14 @@ export class YouvesFarmingApi {
     };
   }
 
-  static async getUserInfo(item: YouvesFarmingItemModel, accountPkh: string, tezos: TezosToolkit) {
-    const stakesIds = await this.getStakesIds(tezos, accountPkh, item.address);
+  static async getUserInfo(contractAddress: string, accountPkh: string, tezos: TezosToolkit) {
+    const stakesIds = await this.getStakesIds(tezos, accountPkh, contractAddress);
 
     return {
       stakes: await Promise.all(
         stakesIds.map(async (stakeId: BigNumber) => ({
           id: stakeId,
-          ...(await YouvesFarmingApi.getStakeById(tezos, stakeId, accountPkh, item.address))
+          ...(await YouvesFarmingApi.getStakeById(tezos, stakeId, accountPkh, contractAddress))
         }))
       )
     };

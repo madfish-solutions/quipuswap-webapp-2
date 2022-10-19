@@ -19,20 +19,22 @@ export const useGetYouvesFarmingItem = () => {
 
   const getFarmingItem = useCallback(
     async (farmingAddress: Optional<string>) => {
-      if (isReady && isExist(farmingAddress)) {
-        try {
-          farmingYouvesItemStore.setFarmingAddress(farmingAddress);
-          await farmingYouvesItemStore.itemStore.load();
-          await Promise.all([
-            farmingYouvesItemStore.availableBalanceStore.load(),
-            farmingYouvesItemStore.userInfoStore.load()
-          ]);
-          farmingYouvesItemStore.updatePendingRewards();
-        } catch (error) {
-          showErrorToast(error as Error);
-          if (isNotFoundError(error as Error)) {
-            navigate(`${AppRootRoutes.NotFound}/${farmingAddress}`);
-          }
+      try {
+        if (!isReady || !isExist(farmingAddress)) {
+          return;
+        }
+
+        farmingYouvesItemStore.setFarmingAddress(farmingAddress);
+        await farmingYouvesItemStore.itemStore.load();
+        await Promise.all([
+          farmingYouvesItemStore.availableBalanceStore.load(),
+          farmingYouvesItemStore.userInfoStore.load()
+        ]);
+        farmingYouvesItemStore.updatePendingRewards();
+      } catch (error) {
+        showErrorToast(error as Error);
+        if (isNotFoundError(error as Error)) {
+          navigate(`${AppRootRoutes.NotFound}/${farmingAddress}`);
         }
       }
     },
