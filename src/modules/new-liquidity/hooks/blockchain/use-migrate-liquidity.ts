@@ -24,6 +24,7 @@ export const useMigrateLiquidity = () => {
   const {
     settings: { transactionDeadline }
   } = useSettingsStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [canMigrateLiquidity, setCanMigrateLiquidity] = useState(false);
   const [dexOneBalanceLP, setDexOneBalanceLP] = useState<BigNumber>(new BigNumber(ZERO_AMOUNT));
 
@@ -74,7 +75,8 @@ export const useMigrateLiquidity = () => {
     };
   };
 
-  const onMigrateLiquidity = async () => {
+  const handleMigrateLiquidity = async () => {
+    setIsSubmitting(true);
     if (!canMigrateLiquidity) {
       return;
     }
@@ -106,8 +108,10 @@ export const useMigrateLiquidity = () => {
       await getMigrationParams();
     } catch (error) {
       showErrorToast(error as Error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return { canMigrateLiquidity, onMigrateLiquidity };
+  return { canMigrateLiquidity, handleMigrateLiquidity, isSubmitting };
 };
