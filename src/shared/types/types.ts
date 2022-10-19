@@ -167,7 +167,7 @@ export interface TokenDataMap {
 export interface VoteFormValues {
   balance1: number;
   selectedBaker: string;
-  currentBacker?: string;
+  currentBaker?: string;
 }
 
 export interface PoolTableType {
