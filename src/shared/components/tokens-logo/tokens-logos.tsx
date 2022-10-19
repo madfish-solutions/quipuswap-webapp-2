@@ -2,14 +2,14 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { getTokenSymbol, toArray } from '@shared/helpers';
+import { defined, getTokenSymbol, toArray } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { Iterator } from '../iterator';
 import { TokenLogo } from '../token-logo';
 import styles from './tokens-logos.module.scss';
 
-type TokensList = Token | Array<Token>;
+type TokensList = Nullable<Token> | Array<Nullable<Token>>;
 
 interface TokensLogosPropsAbstraction {
   tokens: TokensList;
@@ -33,11 +33,13 @@ interface FillTokensLogosProps extends FillTokensLogos, TokensLogosPropsAbstract
 type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
 const prepareTokens = (tokens: TokensList, layoutProps: FixedTokensLogos | FillTokensLogos) => {
-  return toArray(tokens).map(token => ({
-    src: token.metadata.thumbnailUri,
-    tokenSymbol: getTokenSymbol(token),
-    ...layoutProps
-  }));
+  return toArray(tokens)
+    .filter(Boolean)
+    .map(token => ({
+      src: defined(token).metadata.thumbnailUri,
+      tokenSymbol: getTokenSymbol(defined(token)),
+      ...layoutProps
+    }));
 };
 
 export const TokensLogos: FC<TokensLogosProps> = props => {

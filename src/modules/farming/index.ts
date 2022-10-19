@@ -1,1 +1,1 @@
-export * from './farming.page';
+export * from './farming.router';

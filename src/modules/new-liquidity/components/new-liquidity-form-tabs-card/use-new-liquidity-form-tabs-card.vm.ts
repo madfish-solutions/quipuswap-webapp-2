@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -23,6 +23,30 @@ export const useNewLiquidityFormTabsCardViewModel = () => {
   const navigate = useNavigate();
   const { pairSlug } = useParams();
 
+  const _TabsContent = useMemo(() => {
+    const isTez = pairSlug?.split('-').some(item => item === 'tez');
+
+    return [
+      {
+        id: NewLiquidityFormTabs.add,
+        label: i18n.t('common|Add')
+      },
+      {
+        id: NewLiquidityFormTabs.remove,
+        label: i18n.t('common|Remove')
+      }
+    ].concat(
+      isTez
+        ? [
+            {
+              id: NewLiquidityFormTabs.claim,
+              label: i18n.t('common|Claim')
+            }
+          ]
+        : []
+    );
+  }, [pairSlug]);
+
   const changeTabHandle = useCallback(
     (tab: NewLiquidityFormTabs) => {
       const url = `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${tab}/${pairSlug}`;
@@ -34,6 +58,7 @@ export const useNewLiquidityFormTabsCardViewModel = () => {
 
   return {
     isLoading: false, // TODO store initialize, when itemStore will be ready
-    changeTabHandle
+    changeTabHandle,
+    TabsContent: _TabsContent
   };
 };

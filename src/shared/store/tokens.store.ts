@@ -29,7 +29,11 @@ export class TokensStore {
     this.tokens.set(tokenSlug, token);
   }
 
-  getToken(tokenSlug: string): Nullable<Token> {
+  getToken(tokenSlug: Nullable<string>): Nullable<Token> {
+    if (!tokenSlug) {
+      return null;
+    }
+
     return this.tokens.get(tokenSlug) ?? null;
   }
 

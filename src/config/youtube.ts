@@ -2,7 +2,7 @@ export enum eQuipuSwapVideo {
   //Swap
   HowToSwapUnlistedTokens = 'HowToSwapUnlistedTokens',
   //Voting
-  HowToVoteForTheLPBacker = 'HowToVoteForTheLPBacker',
+  HowToVoteForTheLPBaker = 'HowToVoteForTheLPBaker',
   HowToCollectRewardsForBaking = 'HowToCollectRewardsForBaking',
   //Liquidity
   HowToSeeLPTokensInYourWallet = 'HowToSeeLPTokensInYourWallet',
@@ -22,7 +22,7 @@ export const QuipuSwapVideo = {
     name: 'How to Swap Unlisted Tokens on QuipuSwap?'
   },
   //Voting
-  [eQuipuSwapVideo.HowToVoteForTheLPBacker]: {
+  [eQuipuSwapVideo.HowToVoteForTheLPBaker]: {
     videoId: 'Hyvj26-d-Do',
     name: 'What is Baking? How to Vote for LP Baker?'
   },
