@@ -1,6 +1,7 @@
 import cx from 'classnames';
 
 import { DEFAULT_DECIMALS } from '@config/constants';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getTokenSymbol, toReal } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
@@ -15,13 +16,16 @@ export const useDexTwoDetailsViewModel = () => {
     tokenSymbol: getTokenSymbol(token)
   }));
 
+  const dexTwoContractAddress = item.item?.contractAddress;
+  const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
+
   return {
     apr: null,
     feesRate: null,
     weeklyVolume: null,
     tvlInUsd: item?.item?.tvlInUsd,
     totalLpSupply: item?.item?.totalSupply && toReal(item?.item?.totalSupply, DEFAULT_DECIMALS),
-    poolContractUrl: '/',
+    poolContractUrl,
     cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
     pieChartData: pieChartData ?? []
   };

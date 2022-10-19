@@ -126,11 +126,11 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const isVetoUnavailable = !currentCandidate && currentTab.id === VotingTabs.veto;
-  const isBackerChooseRequired = !isBakerChoosen && currentTab.id === VotingTabs.vote;
-  const isBackerBanned = currentTab.id === VotingTabs.vote && isBanned;
+  const isBakerChooseRequired = !isBakerChoosen && currentTab.id === VotingTabs.vote;
+  const isBakerBanned = currentTab.id === VotingTabs.vote && isBanned;
 
   const isVoteOrVetoButtonDisabled = () =>
-    !values.balance1 || isBackerBanned || isFormError || isBackerChooseRequired || isVetoUnavailable;
+    !values.balance1 || isBakerBanned || isFormError || isBakerChooseRequired || isVetoUnavailable;
 
   const validateBalance_ =
     accountPkh && availableBalance ? validateBalance(new BigNumber(availableBalance)) : () => undefined;

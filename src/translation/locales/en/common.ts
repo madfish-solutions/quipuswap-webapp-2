@@ -42,6 +42,7 @@ export const common = {
   'e.g. Kscwf2r3...': 'e.g. Kscwf2r3...',
   Add: 'Add',
   Remove: 'Remove',
+  Claim: 'Claim',
   Create: 'Create',
   Unstake: 'Unstake',
   'Sell Price': 'Sell Price',
@@ -154,5 +155,6 @@ export const common = {
   opportunity: 'Opportunity',
   reconnectionModalText:
     'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
-  Reconnect: 'Reconnect'
+  Reconnect: 'Reconnect',
+  tokensFilter: 'Filter by tokens'
 } as const;

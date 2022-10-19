@@ -19,6 +19,14 @@ export const newLiquidity = {
   stablePool: 'From 2 to 4 tokens with the equal value',
   back: 'Back',
   noPool: 'Can’t find appropriate pool? Create own!',
+  migrate: 'Migrate',
+  assetsMigrated: 'Assets successfully migrated',
   successfullyAdded: 'Liquidity has been successfully added',
-  successfullyRemoved: 'Liquidity has been successfully removed'
+  successfullyRemoved: 'Liquidity has been successfully removed',
+  bakerReward: 'Baker reward',
+  heyBro: 'Hey, bro!',
+  migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
+  why: 'Why?',
+  showDust: 'Show Dust',
+  investedOnly: 'Invested Only'
 } as const;
