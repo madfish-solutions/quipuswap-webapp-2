@@ -1,6 +1,6 @@
-import { TabProps } from '../tab-props.interface';
+import { TabProps } from './tab-props.interface';
 
-export interface StakeProps extends TabProps {
+export interface FormProps extends TabProps {
   inputAmount: string;
   handleSubmit: () => void;
   handleInputAmountChange: (value: string) => void;
