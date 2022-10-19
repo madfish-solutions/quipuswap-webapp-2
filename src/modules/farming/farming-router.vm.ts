@@ -20,6 +20,7 @@ export const useFarmingRouterViewModel = () => {
           await rootStore.createFarmingItemStore();
           await rootStore.createCoinflipStore();
           await rootStore.createHarvestAndRollStore();
+          await rootStore.createFarmingYouvesItemStore();
         }
       } finally {
         setIsInitialized(true);

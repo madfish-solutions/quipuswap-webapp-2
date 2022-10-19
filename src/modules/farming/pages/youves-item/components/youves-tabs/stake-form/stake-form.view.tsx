@@ -9,9 +9,8 @@ import { StakeProps } from './stake-props.interface';
 export const StakeFormView: FC<StakeProps> = ({
   inputAmount,
   handleSubmit,
-  userLpTokenBalance,
-  tokenA,
-  tokenB,
+  stakedTokenBalance,
+  tokens,
   handleInputAmountChange,
   disabled,
   isSubmitting,
@@ -26,8 +25,8 @@ export const StakeFormView: FC<StakeProps> = ({
         label={t('common|Amount')}
         value={inputAmount}
         error={inputAmountError}
-        balance={userLpTokenBalance}
-        tokens={[tokenA, tokenB]}
+        balance={stakedTokenBalance}
+        tokens={tokens}
         onInputChange={handleInputAmountChange}
         disabled={disabled}
       />
