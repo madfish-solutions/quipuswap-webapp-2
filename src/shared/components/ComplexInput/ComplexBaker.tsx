@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { BakerLogo } from '@shared/elements';
 import { isEmptyString, isExist } from '@shared/helpers';
-import { getWhitelistedBakerName, isBackerNotEmpty } from '@shared/helpers/bakers';
+import { getWhitelistedBakerName, isBakerNotEmpty } from '@shared/helpers/bakers';
 import { BakersModal } from '@shared/modals';
 import { Shevron } from '@shared/svg';
 import { Nullable, WhitelistedBaker } from '@shared/types';
@@ -55,7 +55,7 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
             handleChange(selectedBaker);
           }
           if (inputRef.current) {
-            inputRef.current.value = isBackerNotEmpty(selectedBaker) ? selectedBaker.name : '';
+            inputRef.current.value = isBakerNotEmpty(selectedBaker) ? selectedBaker.name : '';
           }
           setTokensModal(false);
         }}
@@ -75,8 +75,8 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
           <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
             <BakerLogo
-              bakerName={baker && isBackerNotEmpty(baker) ? baker.name : ''}
-              bakerIcon={baker && isBackerNotEmpty(baker) ? baker.logo : ''}
+              bakerName={baker && isBakerNotEmpty(baker) ? baker.name : ''}
+              bakerIcon={baker && isBakerNotEmpty(baker) ? baker.logo : ''}
             />
             <h6 className={cx(s.token, s.bakerLabel)} title={buttonText}>
               {buttonText}

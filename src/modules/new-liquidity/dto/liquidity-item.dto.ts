@@ -3,15 +3,18 @@ import { BigNumber } from 'bignumber.js';
 import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 
-import { Categories, LiquidityItem, LiquidityItemResponse } from '../interfaces';
+import { Categories, LiquidityItem, LiquidityItemResponse, PoolType } from '../interfaces';
 import { LiquidityTokenInfoDto } from './liquidity-token-info.dto';
 
 export class LiquidityItemDto implements LiquidityItem {
   @Typed()
   id: BigNumber;
 
+  @Typed({ type: String })
+  type: PoolType;
+
   @Typed()
-  type: string;
+  contractAddress: string;
 
   @Typed()
   feesRate: string;
@@ -39,6 +42,9 @@ export class LiquidityItemDto implements LiquidityItem {
 
   @Typed({ type: LiquidityTokenInfoDto, isArray: true })
   tokensInfo: Array<LiquidityTokenInfoDto>;
+
+  @Typed({ type: String, optional: true })
+  accordanceSlug: string;
 }
 
 export class LiquidityItemResponseDto implements LiquidityItemResponse {

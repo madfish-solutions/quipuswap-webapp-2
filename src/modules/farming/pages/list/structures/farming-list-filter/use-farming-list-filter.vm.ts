@@ -1,7 +1,7 @@
 import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
-import { ListFilterViewProps } from '@shared/components';
+import { ListFilterInputViewProps } from '@shared/components';
 import { isNull, isDirrectOrder } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -9,7 +9,7 @@ import { useTranslation } from '@translation';
 import { FarmingSortField, FarmingSortFieldItem } from '../../types';
 import styles from './farming-list-filter.module.scss';
 
-export const useFarmingListFilterViewModel = (): ListFilterViewProps => {
+export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
   const { accountPkh } = useAuthStore();
   const farmingFilterStore = useFarmingFilterStore();
 

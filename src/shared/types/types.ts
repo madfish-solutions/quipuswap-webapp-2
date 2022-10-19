@@ -83,6 +83,7 @@ export interface TokenWithQSNetworkType extends Token {
 }
 
 export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenIdFa12 = Omit<Token, 'TokenId'>;
 export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
@@ -106,6 +107,7 @@ export interface TokenMetadata {
   symbol: string;
   name: string;
   thumbnailUri: string;
+  categories?: Array<string>;
 }
 
 export enum DexPairType {
@@ -165,7 +167,7 @@ export interface TokenDataMap {
 export interface VoteFormValues {
   balance1: number;
   selectedBaker: string;
-  currentBacker?: string;
+  currentBaker?: string;
 }
 
 export interface PoolTableType {
