@@ -13,7 +13,7 @@ export interface TabProps {
   contractAddress: string;
   stakes: YouvesStake[];
   stakeId: BigNumber;
-  lpToken: Nullable<Token>;
-  userLpTokenBalance: Nullable<BigNumber>;
+  stakedToken: Nullable<Token>;
+  stakedTokenBalance: Nullable<BigNumber>;
   tokens: Token[];
 }

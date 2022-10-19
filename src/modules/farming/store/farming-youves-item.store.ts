@@ -29,7 +29,7 @@ export class FarmingYouvesItemStore {
   //#region item store region
   @Led({
     default: defaultItem,
-    loader: async self => await YouvesFarmingApi.getItem(self.farmingAddress),
+    loader: async self => await YouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof defaultItem>;
@@ -138,11 +138,11 @@ export class FarmingYouvesItemStore {
   async getUserInfo() {
     const { tezos, authStore } = this.rootStore;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
       return { stakes: [] };
     }
 
-    return await YouvesFarmingApi.getUserInfo(this.item, authStore.accountPkh, tezos);
+    return await YouvesFarmingApi.getUserInfo(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
   async getUserTokenBalance() {
