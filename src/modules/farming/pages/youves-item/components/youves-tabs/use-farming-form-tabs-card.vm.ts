@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
+
+import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 
 import { YouvesFormTabs } from '../../types';
 
@@ -14,8 +16,14 @@ export const TabsContent = [
 ];
 
 export const useFarmingFormTabsCardViewModel = () => {
-  const [currentTab, setCurrentTab] = useState(YouvesFormTabs.stake);
+  const farmingYouvesItemStore = useFarmingYouvesItemStore();
+  const currentTab = farmingYouvesItemStore.currentTab;
   const isStakeForm = currentTab === YouvesFormTabs.stake;
+
+  const setCurrentTab = useCallback(
+    (tabName: YouvesFormTabs) => farmingYouvesItemStore.setTab(tabName),
+    [farmingYouvesItemStore]
+  );
 
   return {
     currentTab,
