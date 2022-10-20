@@ -19,8 +19,9 @@ interface Props {
   data: TokenInputProps[];
   bakerData: BakerProps;
   onSubmit: () => void;
+  isSubmitting?: boolean;
   canMigrateLiquidity?: boolean;
-  onMigrateLiquidity?: () => void;
+  handleMigrateLiquidity?: () => Promise<void> | void;
 }
 
 export const DexTwoAddLiqFormView: FC<Props> = ({
@@ -28,7 +29,8 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
   onSubmit,
   bakerData,
   canMigrateLiquidity,
-  onMigrateLiquidity
+  handleMigrateLiquidity,
+  isSubmitting
 }) => {
   const { t } = useTranslation();
 
@@ -60,7 +62,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
               {t('common|Add')}
             </Button>
             {canMigrateLiquidity && (
-              <Button theme="primary" type="button" onClick={onMigrateLiquidity}>
+              <Button theme="primary" type="button" loading={isSubmitting} onClick={handleMigrateLiquidity}>
                 {t('newLiquidity|migrate')}
               </Button>
             )}

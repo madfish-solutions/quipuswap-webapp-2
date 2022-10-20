@@ -1,90 +1,95 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
-import { LpTokensApi } from '@blockchain';
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { defined, getTokensNames, isExist, isNotDefined, isNotFoundError, NOT_FOUND_MESSAGE } from '@shared/helpers';
+import { FISRT_INDEX } from '@config/constants';
+import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
+import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
+import { useAccountPkh, useReady } from '@providers/use-dapp';
+import { defined, getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
 import { useToken, useTokenBalance } from '@shared/hooks';
-import { Token, TokenAddress, TokenIdFa2 } from '@shared/types';
-import { useToasts } from '@shared/utils';
+import { Token } from '@shared/types';
+import { useTranslation } from '@translation';
 
-import { YouvesFarmingApi } from '../../api/blockchain/youves-farming.api';
 import { TabProps } from './components/youves-tabs/tab-props.interface';
 
-const DEFAULT_TOKENS: { tokenA: Nullable<TokenAddress>; tokenB: Nullable<TokenAddress> } = {
-  tokenA: null,
-  tokenB: null
-};
-
-const FIRST_INDEX = 0;
-const NEW_STAKE_INDEX = 0;
-const NEW_STAKE = new BigNumber(NEW_STAKE_INDEX);
-
-const getTitle = (tokenA: Nullable<Token>, tokenB: Nullable<Token>): string =>
-  `Farming ${tokenA && tokenB ? getTokensNames([tokenA, tokenB]) : '...'}`;
+const DEFAULT_TOKENS: Token[] = [];
+const FALLBACK_STAKE_ID = new BigNumber(0);
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
-  const tezos = useTezos();
+  const { t } = useTranslation();
   const accountPkh = useAccountPkh();
-  const { showErrorToast } = useToasts();
+  const dAppReady = useReady();
+  const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
-  const navigate = useNavigate();
   const { contractAddress } = useParams();
 
-  const [stakes, setStakes] = useState<BigNumber[]>([]);
-  const [lpTokenId, setLpTokenId] = useState<Nullable<TokenIdFa2>>(null);
-  const [tokens, setTokens] = useState(DEFAULT_TOKENS);
-  const tokenA = useToken(tokens.tokenA);
-  const tokenB = useToken(tokens.tokenB);
-  const lpToken = useToken(lpTokenId);
-  const userLpTokenBalance = useTokenBalance(lpToken);
+  const farmingYouvesItemStore = useFarmingYouvesItemStore();
+  const { getFarmingItem } = useGetYouvesFarmingItem();
 
-  const title = getTitle(tokenA, tokenB);
+  const item = farmingYouvesItemStore.item;
+  const tokens = item?.tokens ?? DEFAULT_TOKENS;
+  const stakedToken = useToken(item?.stakedToken ?? null);
+  const stakedTokenBalance = useTokenBalance(stakedToken);
+  const stakes = farmingYouvesItemStore.stakes;
 
-  // Load LP token & User stakes
+  const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
+
   useEffect(() => {
-    (async () => {
-      if (isNotDefined(tezos) || isNotDefined(contractAddress)) {
-        return;
-      }
+    if ((!dAppReady || isUndefined(contractAddress)) && prevAccountPkhRef.current === accountPkh) {
+      return;
+    }
 
-      try {
-        const _lpToken = await YouvesFarmingApi.getToken(tezos, contractAddress);
-        if (!_lpToken) {
-          throw new Error(NOT_FOUND_MESSAGE);
-        }
+    void getFarmingItem(contractAddress);
+    prevAccountPkhRef.current = accountPkh;
+  }, [getFarmingItem, dAppReady, contractAddress, accountPkh]);
 
-        const _tokens = await LpTokensApi.getTokens(tezos, _lpToken);
-        setLpTokenId(_lpToken);
-        setTokens(_tokens);
+  useEffect(() => {
+    if (isNull(farmingYouvesItemStore)) {
+      return;
+    }
 
-        if (accountPkh) {
-          const _stakes = await YouvesFarmingApi.getStakesIds(tezos, accountPkh, contractAddress);
-          setStakes(_stakes);
-        }
-      } catch (error) {
-        showErrorToast(error as Error);
-        if (isNotFoundError(error as Error)) {
-          navigate(`${AppRootRoutes.NotFound}/${contractAddress}`);
-        }
-      }
-    })();
-  }, [accountPkh, contractAddress, navigate, showErrorToast, tezos]);
+    farmingYouvesItemStore.makePendingRewardsLiveable();
 
-  const stakeId = isExist(stakes[FIRST_INDEX]) ? stakes[FIRST_INDEX] : NEW_STAKE;
+    return () => farmingYouvesItemStore.clearIntervals();
+  }, [farmingYouvesItemStore]);
+
+  /* eslint-disable no-console */
+  useEffect(() => {
+    console.log('item', item);
+  }, [item]);
+
+  useEffect(() => {
+    console.log('availableBalance', stakedTokenBalance?.toFixed());
+  }, [stakedTokenBalance]);
+
+  useEffect(() => {
+    console.log('stakes', stakes);
+  }, [stakes]);
+
+  useEffect(() => {
+    console.log('currentTab', farmingYouvesItemStore.currentTab);
+  }, [farmingYouvesItemStore.currentTab]);
+
+  useEffect(() => {
+    console.log('rewards', {
+      claimableRewards: farmingYouvesItemStore.claimableRewards?.toFixed(),
+      longTermRewards: farmingYouvesItemStore.longTermRewards?.toFixed()
+    });
+  }, [farmingYouvesItemStore.claimableRewards, farmingYouvesItemStore.longTermRewards]);
+  /* eslint-enable no-console */
+
+  const stakeId = stakes?.[FISRT_INDEX]?.id ?? FALLBACK_STAKE_ID;
 
   return {
     title,
     contractAddress: defined(contractAddress, 'Contract Address'),
     stakes,
     stakeId,
-    lpToken,
-    userLpTokenBalance,
-    tokenA,
-    tokenB
+    stakedToken,
+    stakedTokenBalance,
+    tokens
   };
 };

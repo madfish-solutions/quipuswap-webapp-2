@@ -1,6 +1,6 @@
 import cx from 'classnames';
 
-import { ListFilterViewProps } from '@shared/components';
+import { ListFilterInputViewProps } from '@shared/components';
 import { isDirrectOrder } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -9,7 +9,7 @@ import { useStableswapFilterStore } from '../../../../../hooks';
 import { StableswapSortField, StableswapSortFieldItem } from '../../types';
 import styles from './stableswap-liquidity-list-filter.module.scss';
 
-export const useStableswapLiquidityListFilterViewModel = (): ListFilterViewProps => {
+export const useStableswapLiquidityListFilterViewModel = (): ListFilterInputViewProps => {
   const { t } = useTranslation();
   const stableswapFilterStore = useStableswapFilterStore();
 
