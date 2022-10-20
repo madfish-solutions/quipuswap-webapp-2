@@ -59,7 +59,9 @@ export class BackendYouvesFarmingApi {
         },
         staked: '102000000',
         tvlInUsd: '300',
-        tvlInStakedToken: '100'
+        tvlInStakedToken: '100',
+        dailyDistribution: '15',
+        dailyDistributionDollarEquivalent: '22.5'
       },
       blockInfo: {
         level: 1350486,

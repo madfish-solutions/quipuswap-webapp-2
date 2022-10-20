@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { DAYS_IN_YEAR, MS_IN_SECOND } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
@@ -58,8 +56,8 @@ export const useYouvesDetailsViewModel = () => {
     tvlDollarEquivalent: item.tvlInUsd,
     apr: apr,
     daily: apr?.dividedBy(DAYS_IN_YEAR) ?? null,
-    dailyDistribution: new BigNumber(100),
-    dailyDistributionDollarEquivalent: new BigNumber(100),
+    dailyDistribution: item.dailyDistribution,
+    dailyDistributionDollarEquivalent: item.dailyDistributionDollarEquivalent,
     vestingPeriod: item.vestingPeriodSeconds.times(MS_IN_SECOND).toNumber(),
     stakeStatus: ActiveStatus.ACTIVE,
     shouldShowTags: true,
