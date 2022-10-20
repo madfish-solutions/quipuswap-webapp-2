@@ -3,11 +3,10 @@ import { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
-import { FISRT_INDEX } from '@config/constants';
 import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { defined, getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
+import { defined, getLastElementFromArray, getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
 import { useToken, useTokenBalance } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -85,7 +84,7 @@ export const useYouvesItemPageViewModel = (): { title: string } & TabProps => {
     contractAddress: defined(contractAddress, 'Contract Address'),
     stakes,
     // TODO: Next Epic
-    stakeId: stakes?.[FISRT_INDEX]?.id ?? FALLBACK_STAKE_ID,
+    stakeId: (stakes && getLastElementFromArray(stakes)?.id) ?? FALLBACK_STAKE_ID,
     stakedToken,
     stakedTokenBalance,
     tokens
