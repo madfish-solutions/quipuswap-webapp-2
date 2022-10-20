@@ -9,17 +9,21 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
-import { YouvesFarmingItemResponseModel, YouvesStakesResponseModel } from '../models';
+import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
 import { YouvesFormTabs } from '../pages/youves-item/types';
 
-const defaultItem = {
+const DEFAULT_ITEM = {
   item: null,
   blockInfo: null
 };
 
-const defaultAvailableBalance = {
+const DEFAULT_AVAILABLE_BALANCE = {
   balance: null
 };
+
+interface Stakes {
+  stakes: YouvesStakeModel[];
+}
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
@@ -27,11 +31,11 @@ export class FarmingYouvesItemStore {
 
   //#region item store region
   @Led({
-    default: defaultItem,
+    default: DEFAULT_ITEM,
     loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
     model: YouvesFarmingItemResponseModel
   })
-  readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof defaultItem>;
+  readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
 
   get item() {
     return this.itemStore.model.item;
@@ -44,10 +48,10 @@ export class FarmingYouvesItemStore {
     loader: async self => await self.getUserInfo(),
     model: YouvesStakesResponseModel
   })
-  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: [] }>;
+  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, Stakes>;
 
-  get stakes() {
-    return this.stakesStore.model.stakes;
+  get stakes(): YouvesStakeModel[] {
+    return this.stakesStore.model.stakes ?? [];
   }
   //#endregion stakes store
 
@@ -123,7 +127,7 @@ export class FarmingYouvesItemStore {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return defaultAvailableBalance;
+      return DEFAULT_AVAILABLE_BALANCE;
     }
 
     return {

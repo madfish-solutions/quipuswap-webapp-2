@@ -17,7 +17,7 @@ export const TabsContent = [
 
 export const useFarmingFormTabsCardViewModel = () => {
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const currentTab = farmingYouvesItemStore.currentTab;
+  const { currentTab } = farmingYouvesItemStore;
   const isStakeForm = currentTab === YouvesFormTabs.stake;
 
   const setCurrentTab = useCallback(
