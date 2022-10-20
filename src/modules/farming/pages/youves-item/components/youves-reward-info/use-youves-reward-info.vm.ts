@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
@@ -15,8 +16,8 @@ import { getTotalDeposit } from '../../api/get-total-deposit';
 
 export const useYouvesRewardInfoViewModel = () => {
   // TODO: remove useState when store will be ready
-  const [userTotalDeposit, setTotalDeposit] = useState(new BigNumber(0));
-  const [rewadsDueDate, setRewardsDueDate] = useState(0);
+  const [userTotalDeposit, setTotalDeposit] = useState(ZERO_AMOUNT_BN);
+  const [rewadsDueDate, setRewardsDueDate] = useState(ZERO_AMOUNT);
   const { tezos } = useRootStore();
   const { doHarvest } = useDoYouvesHarvest();
   const accountPkh = useAccountPkh();
@@ -43,8 +44,8 @@ export const useYouvesRewardInfoViewModel = () => {
 
   const getUserStakeInfo = useCallback(async () => {
     if (!youvesFarmingItem) {
-      setRewardsDueDate(0);
-      setTotalDeposit(new BigNumber(0));
+      setRewardsDueDate(ZERO_AMOUNT);
+      setTotalDeposit(ZERO_AMOUNT_BN);
 
       return;
     }
