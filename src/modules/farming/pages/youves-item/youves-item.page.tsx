@@ -21,6 +21,7 @@ export const YouvesItemPage: FC = observer(() => {
         <YouvesFormTabsCard {...props} />
         <YouvesDetails />
       </StickyBlock>
+      <div>({`${props.stakeId}`})</div>
     </>
   );
 });
