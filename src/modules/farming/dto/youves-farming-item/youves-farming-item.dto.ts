@@ -16,6 +16,12 @@ export class YouvesFarmingItemDto {
   @Typed({ type: BigNumber })
   discFactor: BigNumber;
 
+  @Typed()
+  dailyDistribution: BigNumber;
+
+  @Typed()
+  dailyDistributionDollarEquivalent: BigNumber;
+
   @Typed({ type: BigNumber, nullable: true })
   earnExchangeRate: Nullable<BigNumber>;
 
