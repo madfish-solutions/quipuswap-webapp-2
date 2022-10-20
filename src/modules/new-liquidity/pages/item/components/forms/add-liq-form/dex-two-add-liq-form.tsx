@@ -7,8 +7,9 @@ import { DexTwoAddLiqFormView } from '@shared/components';
 import { useDexTwoAddLiqFormViewModel } from './use-dex-two-add-liq-form.vm';
 
 interface Props {
+  isSubmitting?: boolean;
   canMigrateLiquidity?: boolean;
-  onMigrateLiquidity?: () => void;
+  handleMigrateLiquidity?: () => void;
 }
 
 export const DexTwoAddLiqForm: FC<Props> = observer(props => {

@@ -1,15 +1,44 @@
+import { useCallback, useEffect, useState } from 'react';
+
 import BigNumber from 'bignumber.js';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { useRootStore } from '@providers/root-store-provider';
+import { useAccountPkh } from '@providers/use-dapp';
 import { getSymbolsString } from '@shared/helpers';
+import { useOnBlock } from '@shared/hooks';
+
+import { getRewardsDueDate } from '../../api/get-rewards-due-date';
+import { getTotalDeposit } from '../../api/get-total-deposit';
+
+const contractAddress = 'KT1HgM6FFoc841E8CzwpbP3RzBsoskSQyX8B';
 
 export const useYouvesRewardInfoViewModel = () => {
+  // TODO: remove useState when store will be ready
+  const [userTotalDeposit, setTotalDeposit] = useState(new BigNumber(0));
+  const [rewadsDueDate, setRewardsDueDate] = useState(0);
+  const { tezos } = useRootStore();
+  const accountPkh = useAccountPkh();
+
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
 
   const handleHarvest = () => {
     // eslint-disable-next-line no-console
     console.log('click');
   };
+
+  const getUserStakeInfo = useCallback(async () => {
+    const dueDate = await getRewardsDueDate(tezos, accountPkh, contractAddress);
+    setRewardsDueDate(dueDate);
+    const totalDeposit = await getTotalDeposit(tezos, accountPkh, contractAddress);
+    setTotalDeposit(totalDeposit);
+  }, [accountPkh, tezos]);
+
+  useEffect(() => {
+    getUserStakeInfo();
+  }, [getUserStakeInfo]);
+
+  useOnBlock(getUserStakeInfo);
 
   return {
     claimablePendingRewards: new BigNumber(1000),
@@ -23,7 +52,8 @@ export const useYouvesRewardInfoViewModel = () => {
     handleHarvest,
     isHarvestAvailable: true,
     symbolsString,
-    shareAmount: new BigNumber(100),
-    shareAmountDollarEquivalent: new BigNumber(150)
+    userTotalDeposit,
+    userTotalDepositDollarEquivalent: new BigNumber(150),
+    rewadsDueDate
   };
 };
