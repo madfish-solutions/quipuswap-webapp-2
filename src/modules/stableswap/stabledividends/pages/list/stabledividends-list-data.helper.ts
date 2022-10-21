@@ -45,7 +45,7 @@ export const stableDividendsListDataHelper = (
     {
       cellName: i18n.t('stableswap|apy'),
       amounts: {
-        amount: item.apy,
+        amount: item.maxApy,
         currency: PERCENT,
         amountDecimals: 2
       }

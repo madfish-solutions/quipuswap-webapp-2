@@ -20,7 +20,7 @@ const sortByApy = (
   first: StableswapDividendsItemModel,
   second: StableswapDividendsItemModel,
   sortDirection: SortDirection
-) => sortBigNumber(first.apy, second.apy, sortDirection);
+) => sortBigNumber(first.maxApy, second.maxApy, sortDirection);
 
 const sortByTvl = (
   first: StableswapDividendsItemModel,
