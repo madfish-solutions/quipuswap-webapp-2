@@ -1,17 +1,16 @@
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useRootStore } from '@providers/root-store-provider';
 import { isNotDefined } from '@shared/helpers';
-import { useToken, useTokenBalance } from '@shared/hooks';
+import { useAuthStore, useToken, useTokenBalance } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
-import { FormProps } from '../form-props.interface';
+import { StakeFormProps } from './stake-form-props.interface';
 import { useStakeFormForming } from './use-stake-form-forming';
 
-export const useStakeFormViewModel = (): FormProps => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+export const useStakeFormViewModel = (): StakeFormProps => {
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
 
-  const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const { item, tokens, farmingAddress, currentStakeId } = farmingYouvesItemStore;
+  const { item, tokens, farmingAddress, currentStakeId } = useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
   const stakedTokenBalance = useTokenBalance(stakedToken);
 

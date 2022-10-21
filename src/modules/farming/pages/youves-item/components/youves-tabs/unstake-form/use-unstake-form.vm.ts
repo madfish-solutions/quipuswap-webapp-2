@@ -1,22 +1,21 @@
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useRootStore } from '@providers/root-store-provider';
 import { isNotDefined, toReal } from '@shared/helpers';
-import { useToken } from '@shared/hooks';
+import { useAuthStore, useToken } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
-import { FormProps } from '../form-props.interface';
+import { UnstakeFormProps } from './unstake-form-props.interface';
 import { useUnstakeFormForming } from './use-unstake-form-forming';
 
-export const useUnstakeFormViewModel = (): FormProps => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+export const useUnstakeFormViewModel = (): UnstakeFormProps => {
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
 
-  const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance } = farmingYouvesItemStore;
+  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance } = useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
 
   const balance =
     currentStakeBalance && stakedToken ? toReal(currentStakeBalance, stakedToken.metadata.decimals) : null;
-  const inputAmount = balance ? balance.toString() : '';
+  const inputAmount = balance ? balance.toFixed() : '';
 
   const form = useUnstakeFormForming(farmingAddress, currentStakeId, balance);
 

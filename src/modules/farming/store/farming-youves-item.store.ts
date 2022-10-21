@@ -4,7 +4,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
-  OPPOSITE_INDEX,
+  LAST_INDEX,
   ZERO_AMOUNT
 } from '@config/constants';
 import { isNull, MakeInterval } from '@shared/helpers';
@@ -99,9 +99,7 @@ export class FarmingYouvesItemStore {
     }
 
     // TODO: implement real calculations
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     this.claimableRewards = (this.claimableRewards ?? new BigNumber(ZERO_AMOUNT)).plus(1);
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     this.longTermRewards = (this.longTermRewards ?? new BigNumber(ZERO_AMOUNT)).plus(2);
   }
 
@@ -132,7 +130,7 @@ export class FarmingYouvesItemStore {
   }
 
   get currentStake() {
-    return this.stakes[this.stakes.length - OPPOSITE_INDEX] ?? null;
+    return this.stakes.at(LAST_INDEX) ?? null;
   }
 
   get currentStakeBalance() {
