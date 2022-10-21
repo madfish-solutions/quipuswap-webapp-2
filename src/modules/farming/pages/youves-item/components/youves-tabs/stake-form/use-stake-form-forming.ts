@@ -8,6 +8,7 @@ import { Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore } from '../../../../../hooks';
+import { useYouvesStakeConfirmationPopup } from './use-stake-confirmation-popup';
 
 enum FormFields {
   inputAmount = 'inputAmount'
@@ -26,21 +27,25 @@ export const useStakeFormForming = (
   contractAddress: string,
   stakeId: BigNumber,
   lpFullToken: Nullable<Token>,
-  userLpTokenBalance: Optional<BigNumber>
+  userLpTokenBalance: Optional<BigNumber>,
+  totalDeposit: Optional<BigNumber>
 ) => {
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
+  const confirmationPopup = useYouvesStakeConfirmationPopup(totalDeposit);
   const { doDeposit } = useDoYouvesFarmingDeposit();
   const farmingItem = farmingYouvesItemStore.item;
 
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
-    await doDeposit(
-      contractAddress,
-      stakeId,
-      toAtomic(new BigNumber(values.inputAmount), defined(lpFullToken, 'LP Full Token').metadata.decimals)
-    );
-    actions.resetForm();
-    actions.setSubmitting(false);
+    confirmationPopup(async () => {
+      actions.setSubmitting(true);
+      await doDeposit(
+        contractAddress,
+        stakeId,
+        toAtomic(new BigNumber(values.inputAmount), defined(lpFullToken, 'LP Full Token').metadata.decimals)
+      );
+      actions.resetForm();
+      actions.setSubmitting(false);
+    });
   };
 
   const formik = useFormik({

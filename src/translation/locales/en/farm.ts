@@ -110,5 +110,6 @@ export const farm = {
   longTerm: 'Long Term Rewards',
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
-  vestingPeriodTooltip: 'TODO: add tooltip for vesting period'
+  vestingPeriodTooltip: 'TODO: add tooltip for vesting period',
+  youvesConfirmationUpdateStake: 'Attention! Additional stake may cause some undesired effects.'
 } as const;
