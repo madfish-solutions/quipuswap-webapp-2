@@ -22,6 +22,15 @@ export class StableswapDividendsItemDto extends AbstractStableItemDto {
   apy: BigNumber;
 
   @Typed()
+  apyOneWeek: BigNumber;
+
+  @Typed()
+  apyOneMonth: BigNumber;
+
+  @Typed()
+  apyOneQuarter: BigNumber;
+
+  @Typed()
   atomicTvl: BigNumber;
 
   @Typed({ type: TokenDto })

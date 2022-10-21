@@ -14,6 +14,10 @@ export class StableswapDividendsItemModel extends StableswapDividendsItemDto {
     }
   }
 
+  get maxApy() {
+    return BigNumber.max(this.apy, this.apyOneWeek, this.apyOneMonth, this.apyOneQuarter);
+  }
+
   get maxApr() {
     return BigNumber.max(this.apr, this.aprOneWeek, this.aprOneMonth, this.aprOneQuarter);
   }
