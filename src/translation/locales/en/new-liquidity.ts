@@ -28,5 +28,6 @@ export const newLiquidity = {
   migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
   why: 'Why?',
   showDust: 'Show Dust',
-  investedOnly: 'Invested Only'
+  investedOnly: 'Invested Only',
+  poolAlreadyExists: 'Pool already exists'
 } as const;
