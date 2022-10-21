@@ -29,24 +29,26 @@ import styles from './youves-details.module.scss';
 
 interface Props {
   labels: Array<LabelComponentProps>;
-  tvl: BigNumber;
-  tvlDollarEquivalent: BigNumber;
-  apr: BigNumber;
-  daily: BigNumber;
-  dailyDistribution: BigNumber;
-  dailyDistributionDollarEquivalent: BigNumber;
-  vestingPeriod: number;
+  tvl: Nullable<BigNumber>;
+  tvlDollarEquivalent: Nullable<BigNumber>;
+  apr: Nullable<BigNumber>;
+  daily: Nullable<BigNumber>;
+  dailyDistribution: Nullable<BigNumber>;
+  dailyDistributionDollarEquivalent: Nullable<BigNumber>;
+  vestingPeriod: Nullable<number>;
   stakeStatus: ActiveStatus;
   shouldShowTags: boolean;
-  stakedTokenSymbol: string;
-  rewardTokenSymbol: string;
+  stakedTokenSymbol: Nullable<string>;
+  rewardTokenSymbol: Nullable<string>;
   isLoading: boolean;
   isError: boolean;
   isDetails: boolean;
   tabsContent: Array<{ id: DetailsTabs; label: string }>;
   activeId: DetailsTabs;
   setTabId: (id: string) => void;
-  currentStakeId: string;
+  tokenContractUrl: string;
+  farmingContractUrl: string;
+  currentStakeId: Nullable<string>;
 }
 
 export const YouvesDetailsView: FC<Props> = observer(
@@ -69,6 +71,8 @@ export const YouvesDetailsView: FC<Props> = observer(
     tabsContent,
     activeId,
     setTabId,
+    tokenContractUrl,
+    farmingContractUrl,
     currentStakeId
   }) => {
     const { t } = useTranslation();
@@ -150,10 +154,10 @@ export const YouvesDetailsView: FC<Props> = observer(
             </DetailsCardCell>
 
             <DetailsCardCell
-              cellName={t('farm|Lock Period')}
-              tooltipContent={t('farm|lockPeriodTooltip')}
+              cellName={t('farm|Vesting Period')}
+              tooltipContent={t('farm|vestingPeriodTooltip')}
               className={CardCellClassName}
-              data-test-id="lockPeriod"
+              data-test-id="vestingPeriod"
             >
               <StateData isLoading={isLoading} data={vestingPeriod}>
                 {value => <TimespanView value={value} />}
@@ -164,7 +168,7 @@ export const YouvesDetailsView: FC<Props> = observer(
               <Button
                 className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
                 theme="inverse"
-                href={'/'}
+                href={tokenContractUrl}
                 external
                 icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
                 data-test-id="tokenContractButton"
@@ -175,7 +179,7 @@ export const YouvesDetailsView: FC<Props> = observer(
               <Button
                 className={cx(commonContainerStyles.detailsButton, styles.stakeDetailsButton)}
                 theme="inverse"
-                href={'/'}
+                href={farmingContractUrl}
                 external
                 icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
                 data-test-id="farmingContractButton"

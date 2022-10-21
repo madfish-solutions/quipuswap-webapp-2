@@ -6,11 +6,11 @@ export class BackendYouvesFarmingApi {
         address: farmAddress,
         apr: '365',
         depositExchangeRate: '3',
-        depositTokenUrl: 'https://ghostnet.tzkt.io',
+        depositTokenUrl: 'https://ghostnet.tzkt.io/KT1GPJDTf8GZspCcanaG2KhMvGu3NJRqurat',
         discFactor: '1000000000000000000',
         earnExchangeRate: '1.5',
-        vestingPeriodSeconds: '1048576',
-        stakeUrl: 'https://ghostnet.tzkt.io',
+        vestingPeriodSeconds: '7776000',
+        stakeUrl: `https://ghostnet.tzkt.io/${farmAddress}`,
         stakedToken: {
           type: 'FA2',
           isWhitelisted: true,
@@ -57,7 +57,11 @@ export class BackendYouvesFarmingApi {
             thumbnailUri: 'https://quipuswap.com/tokens/quipu.png'
           }
         },
-        staked: '102000000'
+        staked: '102000000',
+        tvlInUsd: '300',
+        tvlInStakedToken: '100',
+        dailyDistribution: '15',
+        dailyDistributionDollarEquivalent: '22.5'
       },
       blockInfo: {
         level: 1350486,

@@ -3,9 +3,10 @@ import { action, makeObservable, observable } from 'mobx';
 import { isExist } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
 
+import { StableswapDividendsItemModel } from '../models';
 import { sortStableDividendsList } from '../stabledividends/pages/list/helpers';
 import { StableDividendsSortField } from '../stabledividends/pages/list/types';
-import { StableDividendsItem, StakerInfo } from '../types';
+import { StakerInfo } from '../types';
 
 export class StableDividendsFilterStore extends BaseFilterStore {
   stakedOnly = false;
@@ -27,7 +28,7 @@ export class StableDividendsFilterStore extends BaseFilterStore {
     });
   }
 
-  filterAndSort(list: Array<StableDividendsItem & StakerInfo>) {
+  filterAndSort(list: Array<StableswapDividendsItemModel & StakerInfo>) {
     let localList = [...list];
     if (this.stakedOnly) {
       localList = localList.filter(({ yourDeposit }) => isExist(yourDeposit) && yourDeposit.isGreaterThan('0'));
