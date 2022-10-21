@@ -35,7 +35,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   }, [getFarmingItem, dAppReady, contractAddress, accountPkh]);
 
   /*
-    Liveable Rewards
+    Liveable Rewards.
    */
   useEffect(() => {
     if (isNull(farmingYouvesItemStore)) {

@@ -21,10 +21,6 @@ const DEFAULT_ITEM = {
   blockInfo: null
 };
 
-interface Stakes {
-  stakes: YouvesStakeModel[];
-}
-
 const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
@@ -46,11 +42,11 @@ export class FarmingYouvesItemStore {
 
   //#region stakes store
   @Led({
-    default: { value: null },
+    default: { stakes: [] },
     loader: async self => await self.getStakes(),
     model: YouvesStakesResponseModel
   })
-  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, Stakes>;
+  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: YouvesStakeModel[] }>;
 
   get stakes(): YouvesStakeModel[] {
     return this.stakesStore.model.stakes ?? [];
@@ -72,14 +68,6 @@ export class FarmingYouvesItemStore {
       item: computed,
       stakes: computed
     });
-  }
-
-  async getClaimableRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
-    return null;
-  }
-
-  async getLongTermRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
-    return null;
   }
 
   async makePendingRewardsLiveable() {

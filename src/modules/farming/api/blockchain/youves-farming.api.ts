@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { getStorageInfo } from '@shared/dapp';
+import { getContract, getStorageInfo } from '@shared/dapp';
 import { Standard, TokenIdFa2 } from '@shared/types';
 
 interface IFarmingStorage {
@@ -25,13 +25,13 @@ export class BlockchainYouvesFarmingApi {
   }
 
   static async getStakesIds(tezos: TezosToolkit, accountPkh: string, contractAddress: string) {
-    const contract = await tezos.contract.at(contractAddress);
+    const contract = await getContract(tezos, contractAddress);
 
     return await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
   }
 
   static async getStakeById(tezos: TezosToolkit, accountPkh: string, contractAddress: string, stakeId: BigNumber) {
-    const contract = await tezos.contract.at(contractAddress);
+    const contract = await getContract(tezos, contractAddress);
 
     return await contract.contractViews.view_stake(stakeId).executeView({ viewCaller: accountPkh });
   }
@@ -63,6 +63,12 @@ export class BlockchainYouvesFarmingApi {
     const token = await this.getToken(tezos, contractAddress);
 
     return await withApproveApi(tezos, contractAddress, token, accountPkh, tokenAmount, [params]);
+  }
+
+  static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
+    const contract = await tezos.wallet.at(contractAddress);
+
+    return await contract.methods.claim(new BigNumber(stakeId)).send();
   }
 
   static async withdraw(
