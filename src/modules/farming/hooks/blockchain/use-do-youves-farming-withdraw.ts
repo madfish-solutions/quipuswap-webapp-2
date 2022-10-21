@@ -2,8 +2,9 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
@@ -11,8 +12,8 @@ import { BlockchainYouvesFarmingApi } from '../../api/blockchain/youves-farming.
 import { useGetYouvesFarmingItem } from '../loaders';
 
 export const useDoYouvesFarmingWithdraw = () => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
@@ -34,7 +35,7 @@ export const useDoYouvesFarmingWithdraw = () => {
           balance
         );
 
-        await confirmOperation(operation.opHash, { message: 'Stake successful' });
+        await confirmOperation(operation.opHash, { message: 'Withdraw successful' });
         amplitudeService.logEvent('YOUVES_FARMING_WITHDRAW_SUCCESS', logData);
         await delayedGetFarmingItem(contractAddress);
       } catch (error) {

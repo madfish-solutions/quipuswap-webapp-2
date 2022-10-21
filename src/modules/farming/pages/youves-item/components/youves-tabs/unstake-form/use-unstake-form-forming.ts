@@ -1,22 +1,10 @@
-import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
-import { FormikHelpers } from 'formik/dist/types';
-import { noop } from 'rxjs';
-import * as yup from 'yup';
+import { FormEvent, useState } from 'react';
 
-import { defined, getFormikError } from '@shared/helpers';
+import BigNumber from 'bignumber.js';
+
+import { defined } from '@shared/helpers';
 
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';
-
-enum FormFields {
-  inputAmount = 'inputAmount'
-}
-
-interface FormValues {
-  [FormFields.inputAmount]: string;
-}
-
-const getValidationSchema = () => yup.object().shape({});
 
 export const useUnstakeFormForming = (
   contractAddress: Nullable<string>,
@@ -24,32 +12,19 @@ export const useUnstakeFormForming = (
   balance: Nullable<BigNumber>
 ) => {
   const { doWithdraw } = useDoYouvesFarmingWithdraw();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    actions.setSubmitting(true);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setIsSubmitting(true);
     await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
-    actions.resetForm();
-    actions.setSubmitting(false);
+    setIsSubmitting(false);
   };
 
-  const formik = useFormik({
-    validationSchema: getValidationSchema(),
-    initialValues: {
-      [FormFields.inputAmount]: ''
-    },
-    onSubmit: handleSubmit
-  });
-
-  const inputAmountChange = noop;
-
-  const disabled = formik.isSubmitting;
-
   return {
-    handleSubmit: formik.handleSubmit,
-    inputAmount: formik.values[FormFields.inputAmount],
-    inputAmountError: getFormikError(formik, FormFields.inputAmount),
-    handleInputAmountChange: inputAmountChange,
-    isSubmitting: formik.isSubmitting,
-    disabled
+    handleSubmit: handleSubmit,
+    isSubmitting,
+    disabled: isSubmitting
   };
 };

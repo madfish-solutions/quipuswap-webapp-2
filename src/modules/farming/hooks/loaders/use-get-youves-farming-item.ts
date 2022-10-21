@@ -29,8 +29,6 @@ export const useGetYouvesFarmingItem = () => {
         await farmingYouvesItemStore.stakesStore.load();
         farmingYouvesItemStore.updatePendingRewards();
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('error', error);
         showErrorToast(error as Error);
         if (isNotFoundError(error as Error)) {
           navigate(`${AppRootRoutes.NotFound}/${farmingAddress}`);

@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
-import { useAccountPkh, useReady } from '@providers/use-dapp';
+import { useReady } from '@providers/use-dapp';
 import { getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -13,7 +14,7 @@ const DEFAULT_TOKENS: Token[] = [];
 
 export const useYouvesItemPageViewModel = (): { title: string } => {
   const { t } = useTranslation();
-  const accountPkh = useAccountPkh();
+  const { accountPkh } = useAuthStore();
   const dAppReady = useReady();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 

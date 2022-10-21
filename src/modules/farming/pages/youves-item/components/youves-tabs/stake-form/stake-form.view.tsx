@@ -4,9 +4,9 @@ import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/componen
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { FormProps } from '../form-props.interface';
+import { StakeFormProps } from './stake-form-props.interface';
 
-export const StakeFormView: FC<FormProps> = ({
+export const StakeFormView: FC<StakeFormProps> = ({
   inputAmount,
   handleSubmit,
   balance,
