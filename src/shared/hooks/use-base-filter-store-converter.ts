@@ -12,7 +12,6 @@ export const useBaseFilterStoreConverter = (store: BaseFilterStore) => {
 
   const onSearchChange = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
-      event.stopPropagation();
       if (isNull(event)) {
         return;
       }
@@ -23,7 +22,6 @@ export const useBaseFilterStoreConverter = (store: BaseFilterStore) => {
 
   const onTokenIdChange = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
-      event.stopPropagation();
       if (isNull(event) || isNull(event.target)) {
         return;
       }

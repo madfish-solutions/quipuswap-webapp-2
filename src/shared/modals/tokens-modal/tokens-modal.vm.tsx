@@ -103,8 +103,6 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const preventFocusToParent = (e: React.SyntheticEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    // eslint-disable-next-line no-console
-    console.log('preventFocusToParent');
   };
 
   return {
