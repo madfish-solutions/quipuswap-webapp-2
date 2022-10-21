@@ -23,7 +23,7 @@ export const useTokensModalTabsService = (): TabsProps<TokensModalTab> => {
   const [activeId, setActiveId] = useState<TokensModalTab>(getFirstElement(tabsContent).id);
 
   return {
-    values: tabsContent,
+    tabs: tabsContent,
     activeId,
     setActiveId
   };

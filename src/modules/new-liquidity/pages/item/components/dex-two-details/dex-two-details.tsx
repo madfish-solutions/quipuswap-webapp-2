@@ -10,11 +10,7 @@ import { useTranslation } from '@translation';
 import { DexTwoDetailsView } from '../dex-two-details-view';
 import { useDexTwoDetailsViewModel } from './dex-two-details.vm';
 
-interface Props {
-  className?: string;
-}
-
-export const DexTwoDetails: FC<Props> = ({ className }) => {
+export const DexTwoDetails: FC = () => {
   const { t } = useTranslation();
   const detailsViewProps = useDexTwoDetailsViewModel();
   const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
@@ -25,7 +21,7 @@ export const DexTwoDetails: FC<Props> = ({ className }) => {
   return (
     <Card
       header={{
-        content: <Tabs values={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
+        content: <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
         className: commonContainerStyles.header
       }}
       contentClassName={commonContainerStyles.content}

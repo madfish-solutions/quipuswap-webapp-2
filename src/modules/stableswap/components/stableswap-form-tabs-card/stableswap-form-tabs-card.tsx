@@ -29,7 +29,7 @@ export const StableswapFormTabsCard: CFC<Props> = observer(({ subpath, tabActive
       subheader={{
         content: (
           <Tabs
-            values={TabsContent[subpath]}
+            tabs={TabsContent[subpath]}
             activeId={tabActiveId}
             setActiveId={id => changeTabHandle(id as StableswapFormTabs)}
             className={styles.tabs}

@@ -23,12 +23,7 @@ export const Details: FC = observer(() => {
     <Card
       header={{
         content: (
-          <Tabs
-            values={tabsContent}
-            activeId={activeId}
-            setActiveId={setTabId}
-            className={commonContainerStyles.tabs}
-          />
+          <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={commonContainerStyles.tabs} />
         ),
         className: commonContainerStyles.header
       }}
