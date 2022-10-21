@@ -1,5 +1,5 @@
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { isNotDefined } from '@shared/helpers';
+import { isNotDefined, toReal } from '@shared/helpers';
 import { useToken } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
@@ -11,19 +11,22 @@ export const useUnstakeFormViewModel = (): FormProps => {
   const accountPkh = useAccountPkh();
 
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const { item, tokens, farmingAddress, currentStakeId, currentStake } = farmingYouvesItemStore;
+  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance } = farmingYouvesItemStore;
   const stakedToken = useToken(item?.stakedToken ?? null);
 
-  const stakeBalance = currentStake?.stake ?? null;
+  const form = useStakeFormForming(farmingAddress, currentStakeId, stakedToken, currentStakeBalance);
 
-  const form = useStakeFormForming(farmingAddress, currentStakeId, stakedToken, stakeBalance);
+  const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh) || !currentStakeBalance;
 
-  const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
+  const balance =
+    currentStakeBalance && stakedToken ? toReal(currentStakeBalance, stakedToken.metadata.decimals) : null;
+  const inputAmount = balance ? balance.toString() : '';
 
   return {
     ...form,
+    inputAmount,
     disabled,
     tokens,
-    balance: stakeBalance
+    balance
   };
 };

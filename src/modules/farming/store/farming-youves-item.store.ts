@@ -135,6 +135,10 @@ export class FarmingYouvesItemStore {
     return this.stakes[this.stakes.length - OPPOSITE_INDEX] ?? null;
   }
 
+  get currentStakeBalance() {
+    return this.currentStake?.stake ?? null;
+  }
+
   get currentStakeId() {
     const NEW_STAKE = 0;
     const FALLBACK_STAKE_ID = new BigNumber(NEW_STAKE);
