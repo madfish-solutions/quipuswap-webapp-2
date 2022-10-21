@@ -1,6 +1,7 @@
-import { PERCENT } from '@config/constants';
 import { useNewLiquidityListStore } from '@modules/new-liquidity/hooks';
 import { useTranslation } from '@translation';
+
+const MAX_SLIDES_TO_SHOW = 2;
 
 export const useListStatsViewModel = () => {
   const newLiquidityStatsStore = useNewLiquidityListStore();
@@ -14,13 +15,6 @@ export const useListStatsViewModel = () => {
       testId: 'statsTVL'
     },
     {
-      title: t('newLiquidity|maxApr'),
-      tooltip: t('newLiquidity|maxAprTooltip'),
-      amount: newLiquidityStatsStore?.stats?.maxApr ?? null,
-      currency: PERCENT,
-      testId: 'statsMaxAPR'
-    },
-    {
       title: t('newLiquidity|pools'),
       tooltip: t('newLiquidity|poolsTooltip'),
       amount: newLiquidityStatsStore?.stats?.poolsCount ?? null,
@@ -31,6 +25,6 @@ export const useListStatsViewModel = () => {
 
   return {
     stats,
-    slidesToShow: 3
+    slidesToShow: MAX_SLIDES_TO_SHOW
   };
 };
