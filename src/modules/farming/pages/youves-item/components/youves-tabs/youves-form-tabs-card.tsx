@@ -5,11 +5,10 @@ import styles from '@styles/CommonContainer.module.scss';
 
 import { YouvesFormTabs } from '../../types';
 import { StakeForm } from './stake-form';
-import { TabProps } from './tab-props.interface';
 import { UnstakeForm } from './unstake-form';
 import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
-export const YouvesFormTabsCard: FC<TabProps> = props => {
+export const YouvesFormTabsCard: FC = props => {
   const { currentTab, setCurrentTab, isStakeForm } = useFarmingFormTabsCardViewModel();
 
   return (
