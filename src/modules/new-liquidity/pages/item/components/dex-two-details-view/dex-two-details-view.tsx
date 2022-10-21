@@ -40,7 +40,12 @@ export const DexTwoDetailsView: FC<Props> = ({
   return (
     <>
       <div className={styles.cellsWrapper}>
-        <DetailsCardCell cellName={t('stableswap|tvl')} className={cardCellClassName} data-test-id="tvlInUsd">
+        <DetailsCardCell
+          cellName={t('stableswap|tvl')}
+          className={cardCellClassName}
+          tooltipContent={t('newLiquidity|tvlTooltip')}
+          data-test-id="tvlInUsd"
+        >
           <StateCurrencyAmount
             amount={tvlInUsd}
             isLoading={isLoading}
@@ -54,6 +59,7 @@ export const DexTwoDetailsView: FC<Props> = ({
         <DetailsCardCell
           cellName={t('stableswap|weeklyVolume')}
           className={cardCellClassName}
+          tooltipContent={t('newLiquidity|weeklyVolumeTooltip')}
           data-test-id="totalLpSupply"
         >
           <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
@@ -61,14 +67,25 @@ export const DexTwoDetailsView: FC<Props> = ({
         <DetailsCardCell
           cellName={t('stableswap|Total LP Supply')}
           className={cardCellClassName}
+          tooltipContent={t('newLiquidity|totalLpSupplyTooltip')}
           data-test-id="totalLpSupply"
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
-        <DetailsCardCell cellName={t('stableswap|feesRate')} className={cardCellClassName} data-test-id="totalLpSupply">
+        <DetailsCardCell
+          cellName={t('stableswap|feesRate')}
+          className={cardCellClassName}
+          tooltipContent={t('newLiquidity|feesRateTooltip')}
+          data-test-id="totalLpSupply"
+        >
           <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
-        <DetailsCardCell cellName={t('stableswap|apr')} className={cardCellClassName} data-test-id="totalLpSupply">
+        <DetailsCardCell
+          cellName={t('stableswap|apr')}
+          className={cardCellClassName}
+          tooltipContent={t('newLiquidity|aprTooltip')}
+          data-test-id="totalLpSupply"
+        >
           <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
       </div>
