@@ -64,4 +64,20 @@ export class BlockchainYouvesFarmingApi {
 
     return await withApproveApi(tezos, contractAddress, token, accountPkh, tokenAmount, [params]);
   }
+
+  static async withdraw(
+    tezos: TezosToolkit,
+    accountPkh: string,
+    contractAddress: string,
+    stakeId: BigNumber.Value,
+    balance: BigNumber
+  ) {
+    const contract = await tezos.contract.at(contractAddress);
+
+    const params = contract.methods.withdraw(new BigNumber(stakeId)).toTransferParams();
+
+    const token = await this.getToken(tezos, contractAddress);
+
+    return await withApproveApi(tezos, contractAddress, token, accountPkh, balance, [params]);
+  }
 }

@@ -9,7 +9,16 @@ import { useTranslation } from '@translation';
 import { FormProps } from '../form-props.interface';
 
 export const UnstakeFormView: FC<FormProps> = observer(
-  ({ inputAmount, isSubmitting, balance, handleSubmit, disabled, handleInputAmountChange, tokens }) => {
+  ({
+    inputAmount,
+    isSubmitting,
+    inputAmountError,
+    balance,
+    handleSubmit,
+    disabled,
+    handleInputAmountChange,
+    tokens
+  }) => {
     const { t } = useTranslation();
 
     return (
@@ -23,6 +32,7 @@ export const UnstakeFormView: FC<FormProps> = observer(
           disabled={disabled}
           readOnly
           balance={balance}
+          error={inputAmountError}
         />
 
         <div className={s.buttons}>
