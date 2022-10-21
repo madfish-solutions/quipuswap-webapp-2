@@ -21,7 +21,6 @@ import { Tabs as DetailsTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
 import { ActiveStatus } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
-import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { StateData } from '../state-data';
@@ -47,7 +46,9 @@ interface Props {
   tabsContent: Array<{ id: DetailsTabs; label: string }>;
   activeId: DetailsTabs;
   setTabId: (id: string) => void;
+  currentStakeId: string;
 }
+
 export const YouvesDetailsView: FC<Props> = observer(
   ({
     labels,
@@ -67,10 +68,11 @@ export const YouvesDetailsView: FC<Props> = observer(
     isDetails,
     tabsContent,
     activeId,
-    setTabId
+    setTabId,
+    currentStakeId
   }) => {
     const { t } = useTranslation();
-    const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
+    const CardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
     return (
       <Card
@@ -91,6 +93,10 @@ export const YouvesDetailsView: FC<Props> = observer(
       >
         {isDetails ? (
           <>
+            <DetailsCardCell cellName="Stake ID" className={CardCellClassName} data-test-id="stake-id">
+              <StateCurrencyAmount amount={currentStakeId} />
+            </DetailsCardCell>
+
             {shouldShowTags && (
               <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
                 <div className={styles.tags}>
