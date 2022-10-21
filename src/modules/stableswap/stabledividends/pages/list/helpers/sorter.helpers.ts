@@ -1,29 +1,42 @@
-import { StableDividendsItem, StakerInfo } from '@modules/stableswap/types';
+import { StableswapDividendsItemModel } from '@modules/stableswap/models';
+import { StakerInfo } from '@modules/stableswap/types';
 import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { StableDividendsSortField } from '../types';
 
-const sortById = (first: StableDividendsItem, second: StableDividendsItem, sortDirection: SortDirection) =>
-  sortBigNumber(first.id, second.id, sortDirection);
+const sortById = (
+  first: StableswapDividendsItemModel,
+  second: StableswapDividendsItemModel,
+  sortDirection: SortDirection
+) => sortBigNumber(first.id, second.id, sortDirection);
 
-const sortByApr = (first: StableDividendsItem, second: StableDividendsItem, sortDirection: SortDirection) =>
-  sortBigNumber(first.apr, second.apr, sortDirection);
+const sortByApr = (
+  first: StableswapDividendsItemModel,
+  second: StableswapDividendsItemModel,
+  sortDirection: SortDirection
+) => sortBigNumber(first.maxApr, second.maxApr, sortDirection);
 
-const sortByApy = (first: StableDividendsItem, second: StableDividendsItem, sortDirection: SortDirection) =>
-  sortBigNumber(first.apy, second.apy, sortDirection);
+const sortByApy = (
+  first: StableswapDividendsItemModel,
+  second: StableswapDividendsItemModel,
+  sortDirection: SortDirection
+) => sortBigNumber(first.apy, second.apy, sortDirection);
 
-const sortByTvl = (first: StableDividendsItem, second: StableDividendsItem, sortDirection: SortDirection) =>
-  sortBigNumber(first.tvl, second.tvl, sortDirection);
+const sortByTvl = (
+  first: StableswapDividendsItemModel,
+  second: StableswapDividendsItemModel,
+  sortDirection: SortDirection
+) => sortBigNumber(first.tvl, second.tvl, sortDirection);
 
 const sortByDeposit = (
-  first: StableDividendsItem & StakerInfo,
-  second: StableDividendsItem & StakerInfo,
+  first: StableswapDividendsItemModel & StakerInfo,
+  second: StableswapDividendsItemModel & StakerInfo,
   sortDirection: SortDirection
 ) => sortBigNumber(first.yourDeposit, second.yourDeposit, sortDirection);
 
 const sortByEarned = (
-  first: StableDividendsItem & StakerInfo,
-  second: StableDividendsItem & StakerInfo,
+  first: StableswapDividendsItemModel & StakerInfo,
+  second: StableswapDividendsItemModel & StakerInfo,
   sortDirection: SortDirection
 ) => sortBigNumber(first.yourEarnedInUsd, second.yourEarnedInUsd, sortDirection);
 
@@ -37,14 +50,14 @@ const stableDividendsingSorts = {
 };
 
 const sortStableDividends = (
-  first: StableDividendsItem & StakerInfo,
-  second: StableDividendsItem & StakerInfo,
+  first: StableswapDividendsItemModel & StakerInfo,
+  second: StableswapDividendsItemModel & StakerInfo,
   sortField: StableDividendsSortField,
   sortDirection: SortDirection
 ) => stableDividendsingSorts[sortField](first, second, sortDirection);
 
 export const sortStableDividendsList = (
-  list: Array<StableDividendsItem & StakerInfo>,
+  list: Array<StableswapDividendsItemModel & StakerInfo>,
   sortField: StableDividendsSortField,
   sortDirection: SortDirection
 ) => {

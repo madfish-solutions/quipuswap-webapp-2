@@ -10,6 +10,15 @@ export class StableswapDividendsItemDto extends AbstractStableItemDto {
   apr: BigNumber;
 
   @Typed()
+  aprOneWeek: BigNumber;
+
+  @Typed()
+  aprOneMonth: BigNumber;
+
+  @Typed()
+  aprOneQuarter: BigNumber;
+
+  @Typed()
   apy: BigNumber;
 
   @Typed()
