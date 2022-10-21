@@ -4,12 +4,18 @@ import BigNumber from 'bignumber.js';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 
+import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
+
 export const useUnstakeFormViewModel = () => {
+  const confirmationPopup = useYouvesUnstakeConfirmationPopup();
   const [inputAmount, inputAmountChange] = useState('');
 
-  const handleSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('submit');
+  const handleSubmit = (e: React.FormEvent<unknown>) => {
+    e.preventDefault();
+    confirmationPopup(async () => {
+      // eslint-disable-next-line no-console
+      console.log('submit');
+    });
   };
 
   return {

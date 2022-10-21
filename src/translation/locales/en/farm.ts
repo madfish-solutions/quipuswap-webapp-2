@@ -111,5 +111,6 @@ export const farm = {
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
   vestingPeriodTooltip: 'TODO: add tooltip for vesting period',
-  youvesConfirmationUpdateStake: 'Attention! Additional stake may cause some undesired effects.'
+  youvesConfirmationUpdateStake: 'Attention! Additional stake may cause some undesired effects.',
+  youvesConfirmationUnstake: 'Attention! You may lose some rewards in case of unstaking before due date.'
 } as const;
