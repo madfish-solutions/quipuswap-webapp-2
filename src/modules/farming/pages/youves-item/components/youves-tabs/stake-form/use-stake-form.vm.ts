@@ -9,12 +9,14 @@ export const useStakeFormViewModel = (props: TabProps): StakeProps => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const { contractAddress, stakeId, stakedToken, stakedTokenBalance } = props;
+  const { contractAddress, stakeId, stakedToken, stakedTokenBalance, stakes } = props;
+  const currentStake = stakes.find(stake => stake.id.eq(stakeId));
   const form = useStakeFormForming(
     defined(contractAddress, 'Contract address'),
     stakeId,
     stakedToken,
-    stakedTokenBalance
+    stakedTokenBalance,
+    currentStake?.stake
   );
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
