@@ -97,10 +97,6 @@ export const YouvesDetailsView: FC<Props> = observer(
       >
         {isDetails ? (
           <>
-            <DetailsCardCell cellName="Stake ID" className={CardCellClassName} data-test-id="stake-id">
-              <StateCurrencyAmount amount={currentStakeId} />
-            </DetailsCardCell>
-
             {shouldShowTags && (
               <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} data-test-id="tags">
                 <div className={styles.tags}>
@@ -108,6 +104,9 @@ export const YouvesDetailsView: FC<Props> = observer(
                 </div>
               </DetailsCardCell>
             )}
+            <DetailsCardCell cellName="Stake ID" className={CardCellClassName} data-test-id="stake-id">
+              <StateCurrencyAmount amount={currentStakeId} isLoading={false} />
+            </DetailsCardCell>
             <DetailsCardCell
               cellName={t('farm|tvl')}
               className={CardCellClassName}

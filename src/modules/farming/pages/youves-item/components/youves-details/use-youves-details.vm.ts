@@ -11,7 +11,7 @@ import { getTimeLockDescription } from '../../helpers/parse-timelock';
 export const useYouvesDetailsViewModel = () => {
   const { t } = useTranslation();
 
-  const { currentStakeId } = useFarmingYouvesItemStore();
+  const { currentStake, currentStakeId } = useFarmingYouvesItemStore();
 
   const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
     detailsLabel: t('farm|Farming Details'),
@@ -75,6 +75,6 @@ export const useYouvesDetailsViewModel = () => {
     setTabId,
     tokenContractUrl: item.depositTokenUrl,
     farmingContractUrl: item.stakeUrl,
-    currentStakeId: currentStakeId.toFixed()
+    currentStakeId: currentStake ? currentStakeId.toFixed() : null
   };
 };
