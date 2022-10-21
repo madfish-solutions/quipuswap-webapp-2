@@ -15,7 +15,6 @@ import { Token } from '@shared/types';
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
-import { YouvesFormTabs } from '../pages/youves-item/types';
 
 const DEFAULT_ITEM = {
   item: null,
@@ -58,8 +57,6 @@ export class FarmingYouvesItemStore {
   }
   //#endregion stakes store
 
-  currentTab = YouvesFormTabs.stake;
-
   claimableRewards: Nullable<BigNumber> = null;
   longTermRewards: Nullable<BigNumber> = null;
   readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
@@ -67,11 +64,9 @@ export class FarmingYouvesItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      currentTab: observable,
       claimableRewards: observable,
       longTermRewards: observable,
 
-      setTab: action,
       updatePendingRewards: action,
 
       item: computed,
@@ -106,10 +101,6 @@ export class FarmingYouvesItemStore {
   clearIntervals() {
     this.pendingRewardsInterval.stop();
     this.updateStakesInterval.stop();
-  }
-
-  setTab(tab: YouvesFormTabs) {
-    this.currentTab = tab;
   }
 
   setFarmingAddress(farmingAddress: Nullable<string>) {

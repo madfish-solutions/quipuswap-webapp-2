@@ -27,7 +27,7 @@ export const NewLiquidityFormTabsCard: CFC<Props> = observer(({ tabActiveId, chi
       subheader={{
         content: (
           <Tabs
-            values={TabsContent}
+            tabs={TabsContent}
             activeId={tabActiveId}
             setActiveId={id => changeTabHandle(id as NewLiquidityFormTabs)}
             className={styles.tabs}

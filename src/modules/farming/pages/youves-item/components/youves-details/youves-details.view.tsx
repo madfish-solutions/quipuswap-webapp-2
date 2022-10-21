@@ -79,7 +79,7 @@ export const YouvesDetailsView: FC<Props> = observer(
         header={{
           content: (
             <Tabs
-              values={tabsContent}
+              tabs={tabsContent}
               activeId={activeId}
               setActiveId={setTabId}
               className={commonContainerStyles.tabs}

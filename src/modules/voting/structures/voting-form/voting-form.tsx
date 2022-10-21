@@ -141,9 +141,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     <>
       <Card
         header={{
-          content: (
-            <Tabs values={TabsContent} activeId={votingTab} setActiveId={handleSetActiveId} className={s.tabs} />
-          ),
+          content: <Tabs tabs={TabsContent} activeId={votingTab} setActiveId={handleSetActiveId} className={s.tabs} />,
           className: s.header
         }}
         contentClassName={s.content}

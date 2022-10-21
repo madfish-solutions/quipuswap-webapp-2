@@ -22,7 +22,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const { item, stakes } = farmingYouvesItemStore;
+  const { item } = farmingYouvesItemStore;
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
 
   useEffect(() => {
@@ -48,10 +48,6 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   }, [farmingYouvesItemStore]);
 
   /* eslint-disable no-console */
-  useEffect(() => {
-    console.log('stakes', stakes);
-  }, [stakes]);
-
   useEffect(() => {
     console.log('rewards', {
       claimableRewards: farmingYouvesItemStore.claimableRewards?.toFixed(),

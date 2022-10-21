@@ -6,17 +6,17 @@ import styles from '@styles/CommonContainer.module.scss';
 import { YouvesFormTabs } from '../../types';
 import { StakeForm } from './stake-form';
 import { UnstakeForm } from './unstake-form';
-import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
+import { useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
 export const YouvesFormTabsCard: FC = props => {
-  const { currentTab, setCurrentTab, isStakeForm } = useFarmingFormTabsCardViewModel();
+  const { currentTab, setCurrentTab, isStakeForm, tabs } = useFarmingFormTabsCardViewModel();
 
   return (
     <Card
       header={{
         content: (
           <Tabs
-            values={TabsContent}
+            tabs={tabs}
             activeId={currentTab}
             setActiveId={id => setCurrentTab(id as YouvesFormTabs)}
             className={styles.tabs}
