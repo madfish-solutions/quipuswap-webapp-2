@@ -1,11 +1,16 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
+import {
+  FARM_REWARD_UPDATE_INTERVAL,
+  FARM_USER_INFO_UPDATE_INTERVAL,
+  OPPOSITE_INDEX,
+  ZERO_AMOUNT
+} from '@config/constants';
 import { isNull, MakeInterval } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
+import { Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
@@ -17,13 +22,11 @@ const DEFAULT_ITEM = {
   blockInfo: null
 };
 
-const DEFAULT_AVAILABLE_BALANCE = {
-  balance: null
-};
-
 interface Stakes {
   stakes: YouvesStakeModel[];
 }
+
+const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
@@ -45,7 +48,7 @@ export class FarmingYouvesItemStore {
   //#region stakes store
   @Led({
     default: { value: null },
-    loader: async self => await self.getUserInfo(),
+    loader: async self => await self.getStakes(),
     model: YouvesStakesResponseModel
   })
   readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, Stakes>;
@@ -96,7 +99,9 @@ export class FarmingYouvesItemStore {
     }
 
     // TODO: implement real calculations
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     this.claimableRewards = (this.claimableRewards ?? new BigNumber(ZERO_AMOUNT)).plus(1);
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     this.longTermRewards = (this.longTermRewards ?? new BigNumber(ZERO_AMOUNT)).plus(2);
   }
 
@@ -113,7 +118,10 @@ export class FarmingYouvesItemStore {
     this.farmingAddress = farmingAddress;
   }
 
-  async getUserInfo() {
+  /*
+    Using in the stakesStore
+   */
+  async getStakes() {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
@@ -123,16 +131,18 @@ export class FarmingYouvesItemStore {
     return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
-  async getUserTokenBalance() {
-    const { tezos, authStore } = this.rootStore;
+  get currentStake() {
+    return this.stakes[this.stakes.length - OPPOSITE_INDEX] ?? null;
+  }
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return DEFAULT_AVAILABLE_BALANCE;
-    }
+  get currentStakeId() {
+    const NEW_STAKE = 0;
+    const FALLBACK_STAKE_ID = new BigNumber(NEW_STAKE);
 
-    return {
-      balance: await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken),
-      token: this.item.stakedToken
-    };
+    return this.currentStake?.id ?? FALLBACK_STAKE_ID;
+  }
+
+  get tokens() {
+    return this.item?.tokens ?? DEFAULT_TOKENS;
   }
 }

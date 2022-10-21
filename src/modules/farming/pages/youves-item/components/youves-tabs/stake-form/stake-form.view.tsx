@@ -9,7 +9,7 @@ import { FormProps } from '../form-props.interface';
 export const StakeFormView: FC<FormProps> = ({
   inputAmount,
   handleSubmit,
-  stakedTokenBalance,
+  balance,
   tokens,
   handleInputAmountChange,
   disabled,
@@ -25,7 +25,7 @@ export const StakeFormView: FC<FormProps> = ({
         label={t('common|Amount')}
         value={inputAmount}
         error={inputAmountError}
-        balance={stakedTokenBalance}
+        balance={balance}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
         disabled={disabled}

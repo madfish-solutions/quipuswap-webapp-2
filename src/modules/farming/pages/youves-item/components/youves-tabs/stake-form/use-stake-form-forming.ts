@@ -23,7 +23,7 @@ const getValidationSchema = (userBalance: Optional<BigNumber>) =>
   });
 
 export const useStakeFormForming = (
-  contractAddress: string,
+  contractAddress: Nullable<string>,
   stakeId: BigNumber,
   lpFullToken: Nullable<Token>,
   userLpTokenBalance: Optional<BigNumber>
@@ -35,7 +35,7 @@ export const useStakeFormForming = (
   const handleSubmit = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     actions.setSubmitting(true);
     await doDeposit(
-      contractAddress,
+      defined(contractAddress, 'Contract address'),
       stakeId,
       toAtomic(new BigNumber(values.inputAmount), defined(lpFullToken, 'LP Full Token').metadata.decimals)
     );

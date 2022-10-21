@@ -15,7 +15,7 @@ export const FarmingRouter: FC = () => {
   const { isInitialized } = useFarmingRouterViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>Loading...</div>}>
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
         <Route path={`${AppRootRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
