@@ -9,7 +9,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
-import { YouvesFarmingItemResponseModel, YouvesStakesResponseModel } from '../models';
+import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
 import { YouvesFormTabs } from '../pages/youves-item/types';
 
 const defaultItem = {
@@ -40,11 +40,11 @@ export class FarmingYouvesItemStore {
 
   //#region stakes store
   @Led({
-    default: { value: null },
+    default: { stakes: [] },
     loader: async self => await self.getUserInfo(),
     model: YouvesStakesResponseModel
   })
-  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: [] }>;
+  readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: YouvesStakeModel[] }>;
 
   get stakes() {
     return this.stakesStore.model.stakes;
