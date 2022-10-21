@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { getTokenSlug, isExist, multipliedIfPossible } from '@shared/helpers';
+import { getTokenSlug, isExist, isNotDefined, multipliedIfPossible } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 
 import { useClaimRewards } from './use-claim-rewards';
@@ -29,7 +29,7 @@ export const useDexTwoClaimRewardsFromViewModel = () => {
       rewardValue: '',
       balance,
       doClaim,
-      disabled: !isExist(balance) || !isExist(rewards),
+      disabled: isNotDefined(balance) || isNotDefined(rewards) || rewards.isZero(),
       loading: submitting,
       rewardDollarEquivalent: null
     }),
