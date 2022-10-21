@@ -11,7 +11,7 @@ import { useTranslation } from '@translation';
 interface Props {
   inputAmount: string;
   isSubmitting: boolean;
-  handleSubmit: () => void;
+  handleSubmit: React.FormEventHandler<HTMLFormElement>;
   userTokenBalance: BigNumber;
   disabled: boolean;
   handleInputAmountChange: (value: string) => void;
