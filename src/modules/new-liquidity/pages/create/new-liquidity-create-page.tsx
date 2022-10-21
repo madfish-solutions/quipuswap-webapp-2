@@ -10,14 +10,14 @@ import { useNewLiquidityCreatePageViewModel } from './new-liquidity-create-page.
 
 export const NewLiquidityCreatePage: FC = observer(() => {
   const { t } = useTranslation();
-  const { data, bakerData, onSubmit } = useNewLiquidityCreatePageViewModel();
+  const params = useNewLiquidityCreatePageViewModel();
 
   return (
     <>
       <PageTitle data-test-id="dexTwoCreatePoolTitle">{t('common|Create')}</PageTitle>
       <StickyBlock>
         <NewLiquidityCard>
-          <DexTwoCreateForm data={data} bakerData={bakerData} onSubmit={onSubmit} />
+          <DexTwoCreateForm {...params} />
         </NewLiquidityCard>
       </StickyBlock>
     </>

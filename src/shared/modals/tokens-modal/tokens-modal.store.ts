@@ -21,7 +21,7 @@ export class TokensModalStore {
   minQuantity: Nullable<number> = null;
 
   inputIndex: Nullable<number> = null;
-  choosenTokensSingleModal: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
+  chosenTokensSingleModal: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
 
   private tokensResolver: Nullable<TokensResolver> = null;
 
@@ -66,7 +66,7 @@ export class TokensModalStore {
       minQuantity: observable,
 
       inputIndex: observable,
-      choosenTokensSingleModal: observable,
+      chosenTokensSingleModal: observable,
 
       setOpenState: action,
       toggleChosenToken: action,
@@ -95,7 +95,7 @@ export class TokensModalStore {
       return;
     }
 
-    this.choosenTokensSingleModal[this.inputIndex] = token;
+    this.chosenTokensSingleModal[this.inputIndex] = token;
     this.close();
   }
 

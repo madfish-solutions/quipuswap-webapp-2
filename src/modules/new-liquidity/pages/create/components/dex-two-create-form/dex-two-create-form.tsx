@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import {
+  AlarmMessage,
   Button,
   ComplexBaker,
   ComplexBakerProps,
@@ -19,15 +20,23 @@ interface BakerProps extends ComplexBakerProps {
   shouldShowBakerInput: boolean;
 }
 
+interface CommonData {
+  disabled: boolean;
+  loading: boolean;
+  isPoolExist: boolean;
+}
+
 interface Props {
   data: TokenInputProps[];
   bakerData: BakerProps;
+  commonData: CommonData;
   onSubmit: () => void;
 }
 
-export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData }) => {
+export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData, commonData }) => {
   const { t } = useTranslation();
 
+  const { disabled, loading, isPoolExist } = commonData;
   const { value, error, handleChange, shouldShowBakerInput } = bakerData;
 
   return (
@@ -42,13 +51,14 @@ export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData }) => {
           className={stylesCommonContainer.mt24}
         />
       )}
+      {isPoolExist && <AlarmMessage message={t('newLiquidity|poolAlreadyExists')} className={styles['mt-24']} />}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
             type="submit"
             className={stylesCommonContainer.button}
-            disabled={false}
-            loading={false}
+            disabled={disabled}
+            loading={loading}
             data-test-id="dexTwoCreatePoolButton"
           >
             {t('common|Create')}
