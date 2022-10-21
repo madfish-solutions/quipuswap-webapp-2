@@ -2,15 +2,19 @@ import BigNumber from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
+import { StableswapDividendsItemModel } from '@modules/stableswap/models';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
-import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '@modules/stableswap/types';
+import { StableDividendsFormTabs, StakerInfo } from '@modules/stableswap/types';
 import { extractTokens, isNull } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
-export const stableDividendsListDataHelper = (item: StableDividendsItem & StakerInfo, accountPkh: Nullable<string>) => {
+export const stableDividendsListDataHelper = (
+  item: StableswapDividendsItemModel & StakerInfo,
+  accountPkh: Nullable<string>
+) => {
   const shouldShowUserStats =
     !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarnedInUsd?.gt(DEFAULT_VALUE));
 
@@ -33,7 +37,7 @@ export const stableDividendsListDataHelper = (item: StableDividendsItem & Staker
     {
       cellName: i18n.t('stableswap|apr'),
       amounts: {
-        amount: item.apr,
+        amount: item.maxApr,
         currency: PERCENT,
         amountDecimals: 2
       }
