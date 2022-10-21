@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
@@ -7,7 +7,6 @@ import { useCreateNewLiquidityPool } from '@modules/new-liquidity/hooks/blockcha
 import {
   canDelegate,
   getInputsAmountFormFormikValues,
-  getTokenPairSlug,
   isExist,
   isTezosToken,
   numberAsString,
@@ -16,13 +15,13 @@ import {
 import { useTokensBalancesOnly } from '@shared/hooks';
 import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-modal-store';
-import { Token, WhitelistedBaker } from '@shared/types';
+import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { getDexTwoLiquidityItemApi } from '../../api/get-dex-two-liquidity-item.api';
 import { getInputSlugByIndex } from './components/helpers';
 import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
 import { NewLiqCreateInput } from './new-liquidity-create.interface';
+import { useIsPoolExist } from './use-is-pool-exist';
 import { useNewLiqudityCreateValidation } from './use-new-liquidity-create-validation';
 
 const ZERO_DECIMALS = 0;
@@ -34,26 +33,7 @@ export const useNewLiquidityCreatePageViewModel = () => {
   const tokensModalStore = useTokensModalStore();
   const chosenTokens = tokensModalStore.chosenTokensSingleModal;
 
-  const [isPoolExist, setIsPoolExist] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      if (chosenTokens.length === 2) {
-        try {
-          const result = await getDexTwoLiquidityItemApi(getTokenPairSlug(...(chosenTokens as [Token, Token])));
-          if (result.item) {
-            setIsPoolExist(true);
-          } else {
-            setIsPoolExist(false);
-          }
-        } catch (error) {
-          setIsPoolExist(false);
-        }
-      }
-    })();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify([...chosenTokens])]);
+  const { isPoolExist } = useIsPoolExist(chosenTokens);
 
   const userBalances = useTokensBalancesOnly(chosenTokens.filter(isExist));
   const shouldShowBakerInput = canDelegate(chosenTokens);
