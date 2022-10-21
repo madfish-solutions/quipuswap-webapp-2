@@ -6,10 +6,14 @@ import { useYoutubeTabs } from '@shared/hooks';
 import { ActiveStatus } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useFarmingYouvesItemStore } from '../../../../hooks';
 import { getTimeLockDescription } from '../../helpers/parse-timelock';
 
 export const useYouvesDetailsViewModel = () => {
   const { t } = useTranslation();
+
+  const { currentStakeId } = useFarmingYouvesItemStore();
+
   const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
     detailsLabel: t('farm|Farming Details'),
     page: t('common|Farming')
@@ -39,6 +43,7 @@ export const useYouvesDetailsViewModel = () => {
     isDetails,
     tabsContent,
     activeId,
-    setTabId
+    setTabId,
+    currentStakeId: currentStakeId.toFixed()
   };
 };
