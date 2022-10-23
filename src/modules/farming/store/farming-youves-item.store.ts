@@ -1,25 +1,27 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
+import {
+  FARM_REWARD_UPDATE_INTERVAL,
+  FARM_USER_INFO_UPDATE_INTERVAL,
+  LAST_INDEX,
+  ZERO_AMOUNT
+} from '@config/constants';
 import { isNull, MakeInterval } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
+import { Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
-import { YouvesFormTabs } from '../pages/youves-item/types';
 
-const defaultItem = {
+const DEFAULT_ITEM = {
   item: null,
   blockInfo: null
 };
 
-const defaultAvailableBalance = {
-  balance: null
-};
+const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
@@ -27,11 +29,11 @@ export class FarmingYouvesItemStore {
 
   //#region item store region
   @Led({
-    default: defaultItem,
+    default: DEFAULT_ITEM,
     loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
     model: YouvesFarmingItemResponseModel
   })
-  readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof defaultItem>;
+  readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
 
   get item() {
     return this.itemStore.model.item;
@@ -41,17 +43,15 @@ export class FarmingYouvesItemStore {
   //#region stakes store
   @Led({
     default: { stakes: [] },
-    loader: async self => await self.getUserInfo(),
+    loader: async self => await self.getStakes(),
     model: YouvesStakesResponseModel
   })
   readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: YouvesStakeModel[] }>;
 
-  get stakes() {
-    return this.stakesStore.model.stakes;
+  get stakes(): YouvesStakeModel[] {
+    return this.stakesStore.model.stakes ?? [];
   }
   //#endregion stakes store
-
-  currentTab = YouvesFormTabs.stake;
 
   claimableRewards: Nullable<BigNumber> = null;
   longTermRewards: Nullable<BigNumber> = null;
@@ -60,24 +60,14 @@ export class FarmingYouvesItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      currentTab: observable,
       claimableRewards: observable,
       longTermRewards: observable,
 
-      setTab: action,
       updatePendingRewards: action,
 
       item: computed,
       stakes: computed
     });
-  }
-
-  async getClaimableRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
-    return null;
-  }
-
-  async getLongTermRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
-    return null;
   }
 
   async makePendingRewardsLiveable() {
@@ -101,15 +91,14 @@ export class FarmingYouvesItemStore {
     this.updateStakesInterval.stop();
   }
 
-  setTab(tab: YouvesFormTabs) {
-    this.currentTab = tab;
-  }
-
   setFarmingAddress(farmingAddress: Nullable<string>) {
     this.farmingAddress = farmingAddress;
   }
 
-  async getUserInfo() {
+  /*
+    Using in the stakesStore
+   */
+  async getStakes() {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
@@ -119,16 +108,22 @@ export class FarmingYouvesItemStore {
     return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
-  async getUserTokenBalance() {
-    const { tezos, authStore } = this.rootStore;
+  get currentStake() {
+    return this.stakes.at(LAST_INDEX) ?? null;
+  }
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
-      return defaultAvailableBalance;
-    }
+  get currentStakeBalance() {
+    return this.currentStake?.stake ?? null;
+  }
 
-    return {
-      balance: await getUserTokenBalance(tezos, authStore.accountPkh, this.item.stakedToken),
-      token: this.item.stakedToken
-    };
+  get currentStakeId() {
+    const NEW_STAKE = 0;
+    const FALLBACK_STAKE_ID = new BigNumber(NEW_STAKE);
+
+    return this.currentStake?.id ?? FALLBACK_STAKE_ID;
+  }
+
+  get tokens() {
+    return this.item?.tokens ?? DEFAULT_TOKENS;
   }
 }
