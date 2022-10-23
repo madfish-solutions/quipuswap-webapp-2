@@ -11,16 +11,21 @@ import { FarmingItemPage } from './pages/item';
 import { FarmsListPage } from './pages/list';
 import { YouvesItemPage } from './pages/youves-item';
 
+export enum FarmingRoutes {
+  Youves = '/youves'
+}
+
 export const FarmingRouter: FC = () => {
   const { isInitialized } = useFarmingRouterViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>Loading...</div>}>
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
         <Route path={`${AppRootRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
         <Route path={`${AppRootRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
-        <Route path="/youves/:contractAddress" element={<YouvesItemPage />} />
+        <Route path={`${FarmingRoutes.Youves}/:contractAddress`} element={<YouvesItemPage />} />
+        <Route path={`${FarmingRoutes.Youves}/:contractAddress/:tab`} element={<YouvesItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
