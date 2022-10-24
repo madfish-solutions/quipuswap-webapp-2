@@ -12,13 +12,15 @@ import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 
 // TODO: Add fa12 support when contracts will be ready
 
+const ZERO_BN = new BigNumber(ZERO_AMOUNT);
+
 export const getUserRewards = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
   contractAddress: Undefined<string>
 ) => {
   if (isNull(tezos) || isNull(accountPkh) || isUndefined(contractAddress)) {
-    return { claimable_reward: new BigNumber(ZERO_AMOUNT), full_reward: new BigNumber(ZERO_AMOUNT) };
+    return { claimable_reward: ZERO_BN, full_reward: ZERO_BN };
   }
 
   let _disc_factor;
@@ -36,7 +38,7 @@ export const getUserRewards = async (
 
   const current_rewards =
     (await getUserBalance(tezos, contractAddress, reward_token.address, Standard.Fa2, reward_token.id.toNumber())) ??
-    new BigNumber(ZERO_AMOUNT);
+    ZERO_BN;
 
   if (total_stake.isGreaterThan(ZERO_AMOUNT)) {
     const reward = current_rewards.minus(last_rewards);
@@ -55,13 +57,13 @@ export const getUserRewards = async (
     isUndefined(stake_stake) ||
     isUndefined(_disc_factor)
   ) {
-    return { claimable_reward: new BigNumber(ZERO_AMOUNT), full_reward: new BigNumber(ZERO_AMOUNT) };
+    return { claimable_reward: ZERO_BN, full_reward: ZERO_BN };
   }
 
   const max_release_period_ms = max_release_period.multipliedBy(MS_IN_SECOND).toNumber();
 
   const stake_age = Math.min(Date.now() - new Date(stake_age_timestamp).getTime(), max_release_period_ms);
-  const curr_disc_factor = _disc_factor?.minus(stake_disc_factor);
+  const curr_disc_factor = _disc_factor.minus(stake_disc_factor);
   const full_reward = stake_stake.multipliedBy(curr_disc_factor).idiv(PRECISION_FACTOR);
   const claimable_reward = full_reward.multipliedBy(stake_age).idiv(max_release_period_ms);
 
