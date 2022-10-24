@@ -1,3 +1,4 @@
-export const NOT_FOUND_MESSAGE = 'Cannot parse contract id';
+export const NOT_FOUND_MESSAGES = ['Cannot parse contract id', 'is invalid'];
 
-export const isNotFoundError = (error: Error): boolean => error.message.includes(NOT_FOUND_MESSAGE);
+export const isNotFoundError = (error: Error): boolean =>
+  NOT_FOUND_MESSAGES.some(message => error.message.includes(message));
