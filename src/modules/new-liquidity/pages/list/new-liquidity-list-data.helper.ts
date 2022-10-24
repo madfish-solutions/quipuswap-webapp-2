@@ -80,7 +80,7 @@ export const newLiquidityListDataHelper = ({
   if (!isNull(maxApr)) {
     itemStats.push({
       cellName: i18n.t('newLiquidity|maxApr'),
-      tooltip: 'Max APR tooltip',
+      tooltip: i18n.t('newLiquidity|maxAprTooltip'),
       amounts: {
         amount: maxApr,
         currency: PERCENT

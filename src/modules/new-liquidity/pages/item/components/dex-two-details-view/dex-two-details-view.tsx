@@ -60,7 +60,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           cellName={t('stableswap|weeklyVolume')}
           className={cardCellClassName}
           tooltipContent={t('newLiquidity|weeklyVolumeTooltip')}
-          data-test-id="totalLpSupply"
+          data-test-id="weeklyVolume"
         >
           <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
@@ -76,7 +76,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           cellName={t('stableswap|feesRate')}
           className={cardCellClassName}
           tooltipContent={t('newLiquidity|feesRateTooltip')}
-          data-test-id="totalLpSupply"
+          data-test-id="feesRate"
         >
           <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
@@ -84,7 +84,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           cellName={t('stableswap|apr')}
           className={cardCellClassName}
           tooltipContent={t('newLiquidity|aprTooltip')}
-          data-test-id="totalLpSupply"
+          data-test-id="apr"
         >
           <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
