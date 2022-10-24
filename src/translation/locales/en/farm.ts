@@ -112,6 +112,9 @@ export const farm = {
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
   vestingPeriodTooltip: 'TODO: add tooltip for vesting period',
-  youvesConfirmationUpdateStake: 'Attention! Additional stake may cause some undesired effects.',
+  youvesConfirmationNewStake:
+    'Note: It is a long-term farm. The longer your stake, the bigger reward you can claim. Stake can be withdrawn any time.',
+  youvesConfirmationUpdateStake:
+    'Note: It is a long-term farm. The new deposit will increase the waiting time to {{waitingTime}} and {{reward}} of your entitled total rewards will be lost.',
   youvesConfirmationUnstake: 'Attention! You may lose some rewards in case of unstaking before due date.'
 } as const;
