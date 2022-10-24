@@ -1,23 +1,31 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { useParams } from 'react-router-dom';
 
+import { ZERO_AMOUNT } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { getSymbolsString } from '@shared/helpers';
 import { useOnBlock } from '@shared/hooks';
 
+import { getUserRewards } from '../../api';
 import { getRewardsDueDate } from '../../api/get-rewards-due-date';
 import { getTotalDeposit } from '../../api/get-total-deposit';
 
-const contractAddress = 'KT1HgM6FFoc841E8CzwpbP3RzBsoskSQyX8B';
+const DEFAULT_REWARDS = {
+  claimable_reward: new BigNumber(ZERO_AMOUNT),
+  full_reward: new BigNumber(ZERO_AMOUNT)
+};
 
 export const useYouvesRewardInfoViewModel = () => {
   // TODO: remove useState when store will be ready
   const [userTotalDeposit, setTotalDeposit] = useState(new BigNumber(0));
   const [rewadsDueDate, setRewardsDueDate] = useState(0);
+  const [rewards, setRewards] = useState(DEFAULT_REWARDS);
   const { tezos } = useRootStore();
+  const { contractAddress } = useParams();
   const accountPkh = useAccountPkh();
 
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
@@ -28,11 +36,13 @@ export const useYouvesRewardInfoViewModel = () => {
   };
 
   const getUserStakeInfo = useCallback(async () => {
+    const userRewards = await getUserRewards(tezos, accountPkh, contractAddress);
+    setRewards(userRewards);
     const dueDate = await getRewardsDueDate(tezos, accountPkh, contractAddress);
     setRewardsDueDate(dueDate);
     const totalDeposit = await getTotalDeposit(tezos, accountPkh, contractAddress);
     setTotalDeposit(totalDeposit);
-  }, [accountPkh, tezos]);
+  }, [accountPkh, contractAddress, tezos]);
 
   useEffect(() => {
     getUserStakeInfo();
@@ -41,8 +51,8 @@ export const useYouvesRewardInfoViewModel = () => {
   useOnBlock(getUserStakeInfo);
 
   return {
-    claimablePendingRewards: new BigNumber(1000),
-    longTermPendingRewards: new BigNumber(1000),
+    claimablePendingRewards: rewards.claimable_reward,
+    longTermPendingRewards: rewards.full_reward,
     claimablePendingRewardsInUsd: new BigNumber(1500),
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,

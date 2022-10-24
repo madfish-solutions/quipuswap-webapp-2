@@ -4,7 +4,8 @@ import { BigNumber } from 'bignumber.js';
 import { ZERO_AMOUNT } from '@config/constants';
 import { getTokenMetadata } from '@shared/api';
 import { getStorageInfo } from '@shared/dapp';
-import { isNull } from '@shared/helpers';
+import { isNull, isUndefined } from '@shared/helpers';
+import { Undefined } from '@shared/types';
 
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 
@@ -13,9 +14,9 @@ const ZERO_BN = new BigNumber(ZERO_AMOUNT);
 export const getTotalDeposit = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  contractAddress: string
+  contractAddress: Undefined<string>
 ) => {
-  if (isNull(tezos) || isNull(accountPkh)) {
+  if (isNull(tezos) || isNull(accountPkh) || isUndefined(contractAddress)) {
     return ZERO_BN;
   }
 
