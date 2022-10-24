@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
-
 import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
@@ -60,14 +59,14 @@ export const useYouvesRewardInfoViewModel = () => {
 
       return;
     }
-    
+
     const userRewards = await getUserRewards(tezos, accountPkh, contractAddress);
     setRewards(userRewards);
     const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.address);
     setRewardsDueDate(dueDate);
     const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.address);
     setTotalDeposit(totalDeposit);
-  }, [accountPkh, tezos, youvesFarmingItem]);
+  }, [accountPkh, contractAddress, tezos, youvesFarmingItem]);
 
   useEffect(() => {
     getUserStakeInfo();
