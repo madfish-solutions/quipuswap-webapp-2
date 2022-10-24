@@ -4,7 +4,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 
 import { isTezosToken } from '../helpers/get-token-appellation';
 import { getTokenSlug } from '../helpers/tokens/token-slug';
-import { TokenAddress } from '../types';
+import { TokenAddress } from '../types/types';
 
 const DEFAULT_TOKEN_ID = 0;
 
