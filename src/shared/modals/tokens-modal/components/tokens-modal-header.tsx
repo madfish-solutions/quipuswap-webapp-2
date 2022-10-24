@@ -18,6 +18,10 @@ export interface TokensModalHeaderProps {
   handleTokenIdChange: (value: FormEvent<HTMLInputElement>) => void;
   handleIncrement: () => void;
   handleDecrement: () => void;
+  handleSearchInputClick?: React.MouseEventHandler<HTMLInputElement>;
+  handleTokenIdInputClick?: React.MouseEventHandler<HTMLInputElement>;
+  handleSearchInputKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
+  handleTokenIdInputKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 const Tabs = UntypedTabs as FC<TabsProps<TokensModalTab>>;
@@ -32,7 +36,11 @@ export const TokensModalHeader: FC<TokensModalHeaderProps> = ({
   handeTokensSearchChange,
   handleTokenIdChange,
   handleIncrement,
-  handleDecrement
+  handleDecrement,
+  handleSearchInputClick,
+  handleSearchInputKeyPress,
+  handleTokenIdInputClick,
+  handleTokenIdInputKeyPress
 }) => (
   <>
     <div className={tabsClassName}>
@@ -42,6 +50,8 @@ export const TokensModalHeader: FC<TokensModalHeaderProps> = ({
       <Input
         value={search}
         onChange={handeTokensSearchChange}
+        onClick={handleSearchInputClick}
+        onKeyPress={handleSearchInputKeyPress}
         StartAdornment={Search}
         placeholder={i18n.t('common|Search')}
         readOnly={false}
@@ -51,6 +61,8 @@ export const TokensModalHeader: FC<TokensModalHeaderProps> = ({
         <NumberInput
           value={tokenIdValue}
           onChange={handleTokenIdChange}
+          onClick={handleTokenIdInputClick}
+          onKeyPress={handleTokenIdInputKeyPress}
           placeholder={i18n.t('common|Token ID')}
           step={STEP}
           min={MIN_TOKEN_ID}

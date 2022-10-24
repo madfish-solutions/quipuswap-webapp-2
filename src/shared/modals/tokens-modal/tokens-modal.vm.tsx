@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo } from 'react';
 
 import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { Button } from '@shared/components';
@@ -101,6 +101,10 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const showTokenIdInput = isValidContractAddress(search);
 
+  const preventFocusToParent = (e: SyntheticEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   return {
     isSearching,
     setTokens,
@@ -125,7 +129,11 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
       handeTokensSearchChange,
       handleTokenIdChange,
       handleIncrement,
-      handleDecrement
+      handleDecrement,
+      handleSearchInputClick: preventFocusToParent,
+      handleTokenIdInputClick: preventFocusToParent,
+      handleSearchInputKeyPress: preventFocusToParent,
+      handleTokenIdInputKeyPress: preventFocusToParent
     }
   };
 };
