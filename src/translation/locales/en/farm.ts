@@ -111,7 +111,8 @@ export const farm = {
   longTerm: 'Long Term Rewards',
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
-  vestingPeriodTooltip: 'TODO: add tooltip for vesting period',
+  vestingPeriodTooltip:
+    'The longer you stake, the higher your yield. Vesting period shows how long you should stake to receive the full rewards. Claiming earlier results in smaller reward allocation and distributes the difference to the full rewards back to the pool.',
   youvesConfirmationNewStake:
     'Note: It is a long-term farm. The longer your stake, the bigger reward you can claim. Stake can be withdrawn any time.',
   youvesConfirmationUpdateStake:
