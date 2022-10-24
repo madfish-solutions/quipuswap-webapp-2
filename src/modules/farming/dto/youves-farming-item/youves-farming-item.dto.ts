@@ -51,4 +51,7 @@ export class YouvesFarmingItemDto {
 
   @Typed()
   tvlInStakedToken: BigNumber;
+
+  @Typed()
+  expectedRewards: BigNumber;
 }

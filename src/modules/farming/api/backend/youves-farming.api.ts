@@ -61,7 +61,8 @@ export class BackendYouvesFarmingApi {
         tvlInUsd: '300',
         tvlInStakedToken: '100',
         dailyDistribution: '15',
-        dailyDistributionDollarEquivalent: '22.5'
+        dailyDistributionDollarEquivalent: '22.5',
+        maxReleasePeriodSeconds: '7776000'
       },
       blockInfo: {
         level: 1350486,

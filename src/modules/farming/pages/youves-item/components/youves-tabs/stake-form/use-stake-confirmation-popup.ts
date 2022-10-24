@@ -1,27 +1,49 @@
 import BigNumber from 'bignumber.js';
 
-import { isExist } from '@shared/helpers';
-import { Optional } from '@shared/types';
+import { formatValueBalance, getFullTimelockDescription, isExist } from '@shared/helpers';
+import { Optional, Token } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
 import { i18n } from '@translation';
 
-const getConfirmationMessage = (depositBalance: Optional<BigNumber>) => {
-  if (!isExist(depositBalance) || depositBalance.isZero()) {
+export interface ConfirmationMessageParams {
+  totalDeposit: Optional<BigNumber>;
+  waitingTimeSeconds: BigNumber.Value;
+  rewardToken: Token;
+  lostRewardAmount: BigNumber;
+}
+
+const getConfirmationMessage = ({
+  totalDeposit,
+  waitingTimeSeconds,
+  rewardToken,
+  lostRewardAmount
+}: ConfirmationMessageParams) => {
+  if (!isExist(totalDeposit) || totalDeposit.isZero()) {
+    return i18n.t('farm|youvesConfirmationNewStake');
+  }
+
+  if (lostRewardAmount.isZero()) {
     return null;
   }
 
-  // TODO: add logic bound with due date
-  return i18n.t('farm|youvesConfirmationUpdateStake');
+  return i18n.t('farm|youvesConfirmationUpdateStake', {
+    waitingTime: getFullTimelockDescription(waitingTimeSeconds, true),
+    reward: `${formatValueBalance(lostRewardAmount, rewardToken.metadata.decimals)} ${rewardToken.metadata.symbol}`
+  });
 };
 
-export const useYouvesStakeConfirmationPopup = (totalDeposit: Optional<BigNumber>) => {
+export const useYouvesStakeConfirmationPopup = (
+  getConfirmationMessageParams: (amountToStake: BigNumber) => ConfirmationMessageParams
+) => {
   const { openConfirmationModal } = useConfirmationModal();
 
-  const message = getConfirmationMessage(totalDeposit);
+  return (yesCallback: () => Promise<void>, amountToStake: BigNumber) => {
+    const message = getConfirmationMessage(getConfirmationMessageParams(amountToStake));
 
-  if (isExist(message)) {
-    return (yesCallback: () => Promise<void>) => openConfirmationModal({ message, yesCallback });
-  }
+    if (isExist(message)) {
+      return openConfirmationModal({ message, yesCallback });
+    }
 
-  return async (callback: () => Promise<void>) => callback();
+    return yesCallback();
+  };
 };
