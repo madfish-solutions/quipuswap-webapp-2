@@ -7,6 +7,7 @@ export const newLiquidity = {
   TVL: 'TVL',
   tvl: 'Total Value Locked',
   tvlTooltip: 'Total amount of assets locked in pool.',
+  tvlTooltipStats: 'Total amount of assets locked across all pools.',
   APR: 'APR',
   aprUpTo: 'APR up to',
   aprTooltip: 'Annual percentage rate which is earned by liquidity providers from trading fees.',
