@@ -1,25 +1,16 @@
 import { FC } from 'react';
 
-import { BigNumber } from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
+import { noop } from 'rxjs';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { Token } from '@shared/types';
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-interface Props {
-  inputAmount: string;
-  isSubmitting: boolean;
-  handleSubmit: React.FormEventHandler<HTMLFormElement>;
-  userTokenBalance: BigNumber;
-  disabled: boolean;
-  handleInputAmountChange: (value: string) => void;
-  tokens: Array<Token>;
-}
+import { UnstakeFormProps } from './unstake-form-props.interface';
 
-export const UnstakeFormView: FC<Props> = observer(
-  ({ inputAmount, isSubmitting, handleSubmit, userTokenBalance, disabled, handleInputAmountChange, tokens }) => {
+export const UnstakeFormView: FC<UnstakeFormProps> = observer(
+  ({ inputAmount, isSubmitting, balance, handleSubmit, disabled, tokens }) => {
     const { t } = useTranslation();
 
     return (
@@ -28,9 +19,11 @@ export const UnstakeFormView: FC<Props> = observer(
           id="unstake-form"
           label={t('common|Amount')}
           value={inputAmount}
-          balance={userTokenBalance}
           tokens={tokens}
-          onInputChange={handleInputAmountChange}
+          onInputChange={noop}
+          disabled={disabled}
+          balance={balance}
+          readOnly
         />
 
         <div className={s.buttons}>

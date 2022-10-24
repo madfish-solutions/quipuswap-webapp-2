@@ -96,6 +96,7 @@ export const farm = {
   iAmIn: 'Yes, I am in!',
   'Harvest successful': 'Harvest successful',
   'Stake successful': 'Stake successful',
+  'Unstake successful': 'Unstake successful',
   Token: 'Token',
   Full: 'Full',
   Claimable: 'Claimable',
