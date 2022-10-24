@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo } from 'react';
 
 import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { Button } from '@shared/components';
@@ -101,7 +101,7 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
 
   const showTokenIdInput = isValidContractAddress(search);
 
-  const preventFocusToParent = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const preventFocusToParent = (e: SyntheticEvent<HTMLInputElement>) => {
     e.stopPropagation();
   };
 
