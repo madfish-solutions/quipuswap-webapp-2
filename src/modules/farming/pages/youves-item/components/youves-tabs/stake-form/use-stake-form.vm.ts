@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { MS_IN_SECOND, ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
-import { isNotDefined } from '@shared/helpers';
+import { isNotDefined, toReal } from '@shared/helpers';
 import { useAuthStore, useToken, useTokenBalance } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
@@ -18,7 +18,8 @@ export const useStakeFormViewModel = (): StakeFormProps => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
 
-  const { item, tokens, farmingAddress, currentStakeId, stakes } = useFarmingYouvesItemStore();
+  const { item, tokens, farmingAddress, currentStakeId, stakes, claimableRewards, longTermRewards } =
+    useFarmingYouvesItemStore();
   const currentStake = stakes.find(stake => stake.id.eq(currentStakeId));
   const stakedToken = useToken(item?.stakedToken ?? null);
   const stakedTokenBalance = useTokenBalance(stakedToken);
@@ -51,10 +52,13 @@ export const useStakeFormViewModel = (): StakeFormProps => {
         totalDeposit: currentStake?.stake,
         waitingTimeSeconds,
         rewardToken: item.rewardToken,
-        lostRewardAmount: new BigNumber(5)
+        lostRewardAmount: toReal(
+          longTermRewards?.minus(claimableRewards ?? ZERO_AMOUNT_BN) ?? ZERO_AMOUNT_BN,
+          item.rewardToken
+        )
       };
     },
-    [currentStake, item]
+    [currentStake, item, claimableRewards, longTermRewards]
   );
 
   const form = useStakeFormForming(
