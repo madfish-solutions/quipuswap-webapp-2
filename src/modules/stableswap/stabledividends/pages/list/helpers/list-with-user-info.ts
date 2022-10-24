@@ -1,10 +1,13 @@
-import { StableDividendsItem, StakerInfo } from '@modules/stableswap/types';
+import { StableswapDividendsItemModel } from '@modules/stableswap/models';
+import { StakerInfo } from '@modules/stableswap/types';
 
-export const listWithUserInfo = (listStore: Array<StableDividendsItem>, stakerInfo: Array<StakerInfo>) => {
-  return listStore.map((item: StableDividendsItem, index: number) => {
+export const listWithUserInfo = (listStore: Array<StableswapDividendsItemModel>, stakerInfo: Array<StakerInfo>) => {
+  return listStore.map((item: StableswapDividendsItemModel, index: number) => {
     return {
       ...item,
       ...stakerInfo[index],
+      maxApr: item.maxApr,
+      maxApy: item.maxApy,
       tvl: item.tvl,
       stableDividendsItemUrl: item.stableDividendsItemUrl
     };
