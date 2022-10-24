@@ -2,9 +2,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
-import { getTokenMetadata } from '@shared/api';
-import { getStorageInfo } from '@shared/dapp';
-import { isNull } from '@shared/helpers';
+import { getTokenMetadata } from '@shared/api/get-tokens-metadata.api';
+import { getStorageInfo } from '@shared/dapp/get-storage-info';
+import { isNull } from '@shared/helpers/type-checks';
 
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 
