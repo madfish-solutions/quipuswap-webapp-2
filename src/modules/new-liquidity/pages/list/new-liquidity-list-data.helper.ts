@@ -43,7 +43,7 @@ export const newLiquidityListDataHelper = ({
   if (!isNull(tvlInUsd)) {
     itemStats.push({
       cellName: i18n.t('newLiquidity|TVL'),
-      tooltip: 'TVL tooltip',
+      tooltip: i18n.t('newLiquidity|tvlTooltip'),
       amounts: {
         amount: tvlInUsd,
         currency: DOLLAR,
