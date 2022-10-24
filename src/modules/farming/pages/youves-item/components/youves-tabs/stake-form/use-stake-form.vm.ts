@@ -44,7 +44,7 @@ export const useStakeFormViewModel = (): StakeFormProps => {
       const newStakedAmount = stakedAmount.plus(amountToStakeAtoms);
       const newAgeTimestamp = now.minus(stakedAmount.times(stakeAge).idiv(newStakedAmount));
       const waitingTimeSeconds = Math.max(
-        getNowTimestampSeconds() - newAgeTimestamp.toNumber() + item.vestingPeriodSeconds.toNumber(),
+        newAgeTimestamp.minus(now).plus(item.vestingPeriodSeconds).toNumber(),
         ZERO_AMOUNT
       );
 
