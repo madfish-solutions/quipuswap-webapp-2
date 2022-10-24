@@ -48,9 +48,11 @@ export const getUserRewards = async (
   const ids: Array<BigNumber> = (await stakes_owner_lookup.get(accountPkh)) ?? [];
 
   const last_stake = (await stakes.get<YouvesFarmStakes>(Number(getLastElement(ids)))) ?? undefined;
+
   if (isUndefined(last_stake)) {
     return DEFAULT_REWARDS;
   }
+
   const { stake: ls_stake, age_timestamp: ls_age_timestamp, disc_factor: ls_disc_factor } = last_stake;
 
   if (
@@ -59,7 +61,7 @@ export const getUserRewards = async (
     isUndefined(ls_stake) ||
     isUndefined(_disc_factor)
   ) {
-    return { claimable_reward: ZERO_AMOUNT_BN, full_reward: ZERO_AMOUNT_BN };
+    return DEFAULT_REWARDS;
   }
 
   const max_release_period_ms = max_release_period.multipliedBy(MS_IN_SECOND).toNumber();
