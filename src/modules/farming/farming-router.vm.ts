@@ -13,7 +13,10 @@ export const useFarmingRouterViewModel = () => {
         if (
           isNull(rootStore.farmingFilterStore) ||
           isNull(rootStore.farmingItemStore) ||
-          isNull(rootStore.farmingListStore)
+          isNull(rootStore.farmingListStore) ||
+          isNull(rootStore.coinflipStore) ||
+          isNull(rootStore.harvestAndRollStore) ||
+          isNull(rootStore.farmingYouvesItemStore)
         ) {
           await rootStore.createFarmingFilterStore();
           await rootStore.createFarmingListStore();

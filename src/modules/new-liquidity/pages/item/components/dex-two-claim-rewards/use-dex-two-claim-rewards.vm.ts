@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { getTokenSlug, isExist, multipliedIfPossible } from '@shared/helpers';
+import { getTokenSlug, isExist, isNotDefined, multipliedIfPossible } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 
 import { useClaimRewards } from './use-claim-rewards';
@@ -16,14 +16,24 @@ export const useDexTwoClaimRewardsFromViewModel = () => {
   const { claim } = useClaimRewards();
   const { rewards } = useNewLiquidityRewards();
 
+  const [submitting, setSubmitting] = useState(false);
+
+  const doClaim = useCallback(async () => {
+    setSubmitting(true);
+    await claim();
+    setSubmitting(false);
+  }, [claim]);
+
   const preParams = useMemo(
     () => ({
       rewardValue: '',
       balance,
-      doClaim: claim,
+      doClaim,
+      disabled: isNotDefined(balance) || isNotDefined(rewards) || rewards.isZero(),
+      loading: submitting,
       rewardDollarEquivalent: null
     }),
-    [balance, claim]
+    [balance, doClaim, rewards, submitting]
   );
 
   if (isExist(item)) {
