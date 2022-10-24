@@ -4,12 +4,12 @@ import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/componen
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { StakeProps } from './stake-props.interface';
+import { StakeFormProps } from './stake-form-props.interface';
 
-export const StakeFormView: FC<StakeProps> = ({
+export const StakeFormView: FC<StakeFormProps> = ({
   inputAmount,
   handleSubmit,
-  stakedTokenBalance,
+  balance,
   tokens,
   handleInputAmountChange,
   disabled,
@@ -25,7 +25,7 @@ export const StakeFormView: FC<StakeProps> = ({
         label={t('common|Amount')}
         value={inputAmount}
         error={inputAmountError}
-        balance={stakedTokenBalance}
+        balance={balance}
         tokens={tokens}
         onInputChange={handleInputAmountChange}
         disabled={disabled}

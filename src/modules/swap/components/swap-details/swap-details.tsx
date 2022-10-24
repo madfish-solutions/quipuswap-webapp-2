@@ -73,7 +73,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   return (
     <Card
       header={{
-        content: <Tabs values={tabsContent} activeId={activeId} setActiveId={setTabId} className={styles.tabs} />,
+        content: <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={styles.tabs} />,
         className: styles.header
       }}
       contentClassName={styles.content}

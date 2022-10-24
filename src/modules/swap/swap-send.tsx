@@ -87,7 +87,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           header={{
             content: (
               <Tabs
-                values={TabsContent}
+                tabs={TabsContent}
                 activeId={defined(action)}
                 setActiveId={handleTabSwitch}
                 className={styles.tabs}
