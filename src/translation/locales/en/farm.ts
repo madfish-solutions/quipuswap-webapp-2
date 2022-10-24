@@ -116,5 +116,6 @@ export const farm = {
     'Note: It is a long-term farm. The longer your stake, the bigger reward you can claim. Stake can be withdrawn any time.',
   youvesConfirmationUpdateStake:
     'Note: It is a long-term farm. The new deposit will increase the waiting time to {{waitingTime}} and {{reward}} of your entitled total rewards will be lost.',
-  youvesConfirmationUnstake: 'Attention! You may lose some rewards in case of unstaking before due date.'
+  youvesConfirmationUnstake:
+    'Note: It is a long-term farm. Your claimable rewards will be claimed along with your withdrawal. All further rewards will be lost.'
 } as const;
