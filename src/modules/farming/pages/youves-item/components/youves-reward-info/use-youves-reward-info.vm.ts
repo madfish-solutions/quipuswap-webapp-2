@@ -7,7 +7,8 @@ import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getLastElementFromArray, getSymbolsString } from '@shared/helpers';
+import { getLastElementFromArray } from '@shared/helpers/arrays';
+import { getSymbolsString } from '@shared/helpers/get-token-appellation';
 import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 

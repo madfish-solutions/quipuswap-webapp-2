@@ -5,7 +5,7 @@ import { isValidTokenSlug } from '@shared/validators';
 
 import { isEmptyArray, isLastElementIndex, isSingleElement, toArray } from './arrays';
 import { shortize } from './shortize';
-import { getTokenSlug } from './tokens';
+import { getTokenSlug } from './tokens/token-slug';
 import { isExist } from './type-checks';
 
 type isAddress = boolean;
