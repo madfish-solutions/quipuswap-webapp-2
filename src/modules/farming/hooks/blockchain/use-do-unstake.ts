@@ -8,11 +8,13 @@ import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
+import { useTranslation } from '@translation';
 
 import { getStakeUnstakeLogData } from '../../helpers';
 import { useFarmingTimeout } from './use-farming-timeout';
 
 export const useDoUnstake = () => {
+  const { t } = useTranslation();
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
@@ -30,7 +32,7 @@ export const useDoUnstake = () => {
           defined(farmingItem).id,
           balance
         );
-        await confirmOperation(operation.opHash, { message: 'Unstake successful' });
+        await confirmOperation(operation.opHash, { message: t('farm|Unstake successful') });
         amplitudeService.logEvent('UNSTAKE_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);
@@ -40,7 +42,7 @@ export const useDoUnstake = () => {
         });
       }
     },
-    [timeout, isUnlocked, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
+    [timeout, isUnlocked, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, t, showErrorToast]
   );
 
   return { doUnstake };

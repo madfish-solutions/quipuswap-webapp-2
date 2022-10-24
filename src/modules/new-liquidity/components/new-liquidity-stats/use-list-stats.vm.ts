@@ -10,7 +10,7 @@ export const useListStatsViewModel = () => {
   const stats = [
     {
       title: t('newLiquidity|tvl'),
-      tooltip: t('newLiquidity|tvlTooltip'),
+      tooltip: t('newLiquidity|tvlTooltipStats'),
       amount: newLiquidityStatsStore?.stats?.totalValueLocked ?? null,
       testId: 'statsTVL'
     },

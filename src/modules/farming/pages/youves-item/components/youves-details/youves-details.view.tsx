@@ -48,7 +48,9 @@ interface Props {
   setTabId: (id: string) => void;
   tokenContractUrl: string;
   farmingContractUrl: string;
+  currentStakeId: Nullable<string>;
 }
+
 export const YouvesDetailsView: FC<Props> = observer(
   ({
     labels,
@@ -70,7 +72,8 @@ export const YouvesDetailsView: FC<Props> = observer(
     activeId,
     setTabId,
     tokenContractUrl,
-    farmingContractUrl
+    farmingContractUrl,
+    currentStakeId
   }) => {
     const { t } = useTranslation();
     const CardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
@@ -80,7 +83,7 @@ export const YouvesDetailsView: FC<Props> = observer(
         header={{
           content: (
             <Tabs
-              values={tabsContent}
+              tabs={tabsContent}
               activeId={activeId}
               setActiveId={setTabId}
               className={commonContainerStyles.tabs}
@@ -101,6 +104,9 @@ export const YouvesDetailsView: FC<Props> = observer(
                 </div>
               </DetailsCardCell>
             )}
+            <DetailsCardCell cellName="Stake ID" className={CardCellClassName} data-test-id="stake-id">
+              <StateCurrencyAmount amount={currentStakeId} isLoading={false} />
+            </DetailsCardCell>
             <DetailsCardCell
               cellName={t('farm|tvl')}
               className={CardCellClassName}

@@ -66,12 +66,7 @@ export const FarmingDetails: FC = observer(() => {
     <Card
       header={{
         content: (
-          <Tabs
-            values={tabsContent}
-            activeId={activeId}
-            setActiveId={setTabId}
-            className={commonContainerStyles.tabs}
-          />
+          <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={commonContainerStyles.tabs} />
         ),
         status: stakeStatus,
         className: commonContainerStyles.header
