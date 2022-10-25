@@ -1,24 +1,25 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { BaseFilterStore, RootStore } from '@shared/store';
+import { BaseFilterStore } from '@shared/store';
 
-import { sortLiquidityList } from '../helpers';
+import { filterByStableSwap, sortLiquidityList } from '../helpers';
 import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
 
 export class LiquidityListFiltersStore extends BaseFilterStore {
   showDust = false;
   investedOnly = false;
-  showStable = true;
-  showBridged = true;
-  showQuipu = true;
-  showTezotopia = true;
-  showBTC = true;
-  showDexTwo = true;
+
+  showStable = false;
+  showBridged = false;
+  showQuipu = false;
+  showTezotopia = false;
+  showBTC = false;
+  showDexTwo = false;
 
   sortField: LiquiditySortField = LiquiditySortField.ID;
 
-  constructor(private rootStore: RootStore) {
+  constructor() {
     super();
 
     makeObservable(this, {
@@ -45,7 +46,9 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   }
 
   filterAndSort(list: Array<LiquidityItemModel>): Array<LiquidityItemModel> {
-    return sortLiquidityList(list, this.sortField, this.sortDirection);
+    const filtered = list.filter(filterByStableSwap(this.showStable));
+
+    return sortLiquidityList(filtered, this.sortField, this.sortDirection);
   }
 
   setShowDust(state: boolean) {
@@ -54,6 +57,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   setInvestedOnly(state: boolean) {
     this.investedOnly = state;
   }
+
   setShowStable(state: boolean) {
     this.showStable = state;
   }
