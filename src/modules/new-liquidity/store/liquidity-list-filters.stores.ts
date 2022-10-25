@@ -2,17 +2,20 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore, RootStore } from '@shared/store';
 
+import { sortLiquidityList } from '../helpers';
+import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
 
 export class LiquidityListFiltersStore extends BaseFilterStore {
   showDust = false;
   investedOnly = false;
   showStable = true;
-  showBridged = false;
-  showQuipu = false;
-  showTezotopia = false;
-  showBTC = false;
-  showDexTwo = false;
+  showBridged = true;
+  showQuipu = true;
+  showTezotopia = true;
+  showBTC = true;
+  showDexTwo = true;
+
   sortField: LiquiditySortField = LiquiditySortField.ID;
 
   constructor(private rootStore: RootStore) {
@@ -39,6 +42,10 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       setShowDexTwo: action,
       onSortFieldChange: action
     });
+  }
+
+  filterAndSort(list: Array<LiquidityItemModel>): Array<LiquidityItemModel> {
+    return sortLiquidityList(list, this.sortField, this.sortDirection);
   }
 
   setShowDust(state: boolean) {

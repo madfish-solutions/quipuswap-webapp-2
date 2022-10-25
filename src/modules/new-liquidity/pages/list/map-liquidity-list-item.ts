@@ -34,7 +34,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
   }
 };
 
-export const newLiquidityListDataHelper = ({
+export const mapLiquidityListItem = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
 }: LiquidityItemResponse): PreparedLiquidityItem => {
   const tokens = tokensInfo.map(({ token }) => token);

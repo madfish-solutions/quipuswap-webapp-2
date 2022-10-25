@@ -78,23 +78,23 @@ export class RootStore {
     makeObservable(this, {
       tezos: observable,
 
-      farmingListStore: false,
-      farmingFilterStore: false,
-      farmingItemStore: false,
+      farmingListStore: observable,
+      farmingFilterStore: observable,
+      farmingItemStore: observable,
 
-      stableswapListStore: false,
-      stableswapItemStore: false,
-      stableswapItemFormStore: false,
-      stableswapFilterStore: false,
+      stableswapListStore: observable,
+      stableswapItemStore: observable,
+      stableswapItemFormStore: observable,
+      stableswapFilterStore: observable,
 
-      stableDividendsListStore: false,
-      stableDividendsFilterStore: false,
-      stableDividendsItemStore: false,
+      stableDividendsListStore: observable,
+      stableDividendsFilterStore: observable,
+      stableDividendsItemStore: observable,
 
-      newLiquidityListStore: false,
-      newLiquidityItemStore: false,
+      newLiquidityListStore: observable,
+      newLiquidityItemStore: observable,
 
-      coinflipStore: false,
+      coinflipStore: observable,
 
       setTezos: action,
       createFarmingListStore: action,
@@ -112,7 +112,8 @@ export class RootStore {
       createStableDividendsItemStore: action,
 
       createNewLiquidityListStore: action,
-      createNewLiquidityItemStore: action
+      createNewLiquidityItemStore: action,
+      createLiquidityListFiltersStore: action
     });
   }
 
@@ -125,8 +126,11 @@ export class RootStore {
       const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
       this.newLiquidityListStore = new NewLiquidityListStore(this);
     }
+  }
+
+  async createLiquidityListFiltersStore() {
     if (isNull(this.liquidityListFiltersStore)) {
-      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filter.stores');
+      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filters.stores');
       this.liquidityListFiltersStore = new LiquidityListFiltersStore(this);
     }
   }

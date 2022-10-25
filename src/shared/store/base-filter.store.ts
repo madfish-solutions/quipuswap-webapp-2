@@ -65,6 +65,8 @@ export class BaseFilterStore {
 
   onSortDirectionToggle() {
     this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
+    // eslint-disable-next-line no-console
+    console.log('onSortDirectionToggle', this.sortDirection);
   }
 
   protected tokenMatchesSearch({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {

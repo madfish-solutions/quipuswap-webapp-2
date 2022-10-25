@@ -28,6 +28,10 @@ export class LiquidityItemModel extends LiquidityItemResponseDto {
     return this.item.tokensInfo[SECOND_TUPLE_INDEX].atomicTokenTvl;
   }
 
+  get tvlInUsd() {
+    return this.item.tvlInUsd;
+  }
+
   get totalLpSupply() {
     return this.item.totalSupply;
   }

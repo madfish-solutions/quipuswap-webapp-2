@@ -1,7 +1,8 @@
 import { computed, makeObservable } from 'mobx';
 
+import { defined } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { BaseFilterStore, LoadingErrorData, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getNewLiquidityListApi, getNewLiquidityStatsApi } from '../api';
 import { LiquidityListModel, NewLiquidityResponseModel } from '../models';
@@ -24,7 +25,7 @@ const DEFAULT_RESPONSE_DATA = {
 };
 
 @ModelBuilder()
-export class NewLiquidityListStore extends BaseFilterStore {
+export class NewLiquidityListStore {
   //#region liquidity list store
   @Led({
     default: defaultList,
@@ -34,9 +35,7 @@ export class NewLiquidityListStore extends BaseFilterStore {
   readonly listStore: LoadingErrorData<LiquidityListModel, typeof defaultList>;
 
   get list() {
-    // TODO
-    // this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
-    return this.listStore.model.list;
+    return defined(this.rootStore.liquidityListFiltersStore).filterAndSort(this.listStore.model.list);
   }
   //#endregion liquidity list store
 
@@ -54,8 +53,6 @@ export class NewLiquidityListStore extends BaseFilterStore {
   //#endregion liquidity stats store
 
   constructor(private rootStore: RootStore) {
-    super();
-
     makeObservable(this, {
       list: computed,
       stats: computed
