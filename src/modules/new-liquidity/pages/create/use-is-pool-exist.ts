@@ -18,20 +18,24 @@ export const useIsPoolExist = (chosenTokens: Array<Token>): PoolLinkExist | Pool
 
   useEffect(() => {
     (async () => {
-      if (isArrayPairTuple(chosenTokens)) {
-        try {
-          const tokenSlug = getTokenPairSlug(...chosenTokens);
+      if (!isArrayPairTuple(chosenTokens)) {
+        reset();
 
-          const result = await getDexTwoLiquidityItemApi(tokenSlug);
-          if (result.item) {
-            setIsPoolExist(true);
-            setExistingPoolLink(DexLink.getCpmmPoolLink(chosenTokens));
-          } else {
-            reset();
-          }
-        } catch (error) {
-          reset();
+        return;
+      }
+
+      try {
+        const tokenSlug = getTokenPairSlug(...chosenTokens);
+
+        const result = await getDexTwoLiquidityItemApi(tokenSlug);
+        if (!result.item) {
+          throw new Error('Pool not found');
         }
+
+        setIsPoolExist(true);
+        setExistingPoolLink(DexLink.getCpmmPoolLink(chosenTokens));
+      } catch (error) {
+        reset();
       }
     })();
 

@@ -1,6 +1,5 @@
-interface ClassNameProps {
-  className?: string;
-}
+import { ClassNameProps } from '@shared/types';
+
 interface MessageProps extends ClassNameProps {
   message: string;
 }
