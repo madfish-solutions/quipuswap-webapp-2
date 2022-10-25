@@ -1,6 +1,7 @@
 import cx from 'classnames';
 
 import styles from '@modules/farming/pages/list/structures/farming-list-filter/farming-list-filter.module.scss';
+import { SwitcherLabelProps } from '@shared/components';
 import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
@@ -56,7 +57,7 @@ export const useListFilterViewModel = () => {
     return liquidityListFiltersStore.setInvestedOnly(state);
   };
 
-  const switcherDataList = [
+  const switcherDataList: SwitcherLabelProps[] = [
     {
       value: showDust,
       onClick: setShowDust,
