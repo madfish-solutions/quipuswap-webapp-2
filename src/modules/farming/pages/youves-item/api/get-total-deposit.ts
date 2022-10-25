@@ -31,8 +31,8 @@ export const getTotalDeposit = async (
   const userArrayStakes = await Promise.all(stakesArrayPromise);
 
   const depositTokenMetadata = await getTokenMetadata({
-    contractAddress: deposit_token.address,
-    fa2TokenId: Number(deposit_token.id)
+    contractAddress: deposit_token.token_address,
+    fa2TokenId: Number(deposit_token.token_id)
   });
   const depositTokenDecimals = depositTokenMetadata?.decimals ?? ZERO_AMOUNT;
   const depositTokenPrecision = Number(`1e${depositTokenDecimals}`);
