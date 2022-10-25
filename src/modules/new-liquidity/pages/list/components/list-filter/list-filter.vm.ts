@@ -67,8 +67,13 @@ export const useListFilterViewModel = () => {
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
-    },
-    {
+    }
+  ];
+
+  // TODO: Add user balances to items
+  const isInvestedOnly = false;
+  if (isInvestedOnly) {
+    switcherDataList.push({
       value: investedOnly,
       onClick: setInvestedOnly,
       disabled: isNull(accountPkh),
@@ -77,8 +82,8 @@ export const useListFilterViewModel = () => {
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translationClassName: styles.switcherTranslation,
       className: cx(styles.switcherContainer, styles.switcherStakeOnly)
-    }
-  ];
+    });
+  }
 
   const inputDTI = {
     searchInputDTI: 'searchInput',
