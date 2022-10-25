@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
@@ -6,6 +7,7 @@ import {
   filterByBridget,
   filterByBTC,
   filterByDexTwo,
+  filterByDust,
   filterByQuipu,
   filterByStableSwap,
   filterByTezotopia,
@@ -13,6 +15,9 @@ import {
 } from '../helpers';
 import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
+
+const DUST_THRESHOLD = 100;
+const DUST_THRESHOLD_BN = new BigNumber(DUST_THRESHOLD);
 
 export class LiquidityListFiltersStore extends BaseFilterStore {
   showDust = false;
@@ -57,6 +62,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
 
   filterAndSort(list: Array<LiquidityItemModel>): Array<LiquidityItemModel> {
     return list
+      .filter(filterByDust(this.showDust, DUST_THRESHOLD_BN))
       .filter(filterByStableSwap(this.showStable))
       .filter(filterByBridget(this.showBridged))
       .filter(filterByQuipu(this.showQuipu))
