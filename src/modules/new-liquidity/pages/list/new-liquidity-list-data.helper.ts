@@ -34,7 +34,7 @@ export const newLiquidityListDataHelper = ({
   if (!isNull(tvlInUsd)) {
     itemStats.push({
       cellName: i18n.t('newLiquidity|TVL'),
-      tooltip: 'TVL tooltip',
+      tooltip: i18n.t('newLiquidity|tvlTooltip'),
       amounts: {
         amount: tvlInUsd,
         currency: DOLLAR,
@@ -71,7 +71,7 @@ export const newLiquidityListDataHelper = ({
   if (!isNull(maxApr)) {
     itemStats.push({
       cellName: i18n.t('newLiquidity|maxApr'),
-      tooltip: 'Max APR tooltip',
+      tooltip: i18n.t('newLiquidity|maxAprTooltip'),
       amounts: {
         amount: maxApr,
         currency: PERCENT

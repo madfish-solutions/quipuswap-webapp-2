@@ -10,6 +10,9 @@ import { getTimeLockDescription } from '../../helpers/parse-timelock';
 
 export const useYouvesDetailsViewModel = () => {
   const { t } = useTranslation();
+
+  const { currentStake, currentStakeId } = useFarmingYouvesItemStore();
+
   const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
     detailsLabel: t('farm|Farming Details'),
     page: t('common|Farming')
@@ -38,7 +41,8 @@ export const useYouvesDetailsViewModel = () => {
       activeId,
       setTabId,
       tokenContractUrl: TZKT_EXPLORER_URL,
-      farmingContractUrl: TZKT_EXPLORER_URL
+      farmingContractUrl: TZKT_EXPLORER_URL,
+      currentStakeId: null
     };
   }
 
@@ -70,6 +74,7 @@ export const useYouvesDetailsViewModel = () => {
     activeId,
     setTabId,
     tokenContractUrl: item.depositTokenUrl,
-    farmingContractUrl: item.stakeUrl
+    farmingContractUrl: item.stakeUrl,
+    currentStakeId: currentStake ? currentStakeId.toFixed() : null
   };
 };

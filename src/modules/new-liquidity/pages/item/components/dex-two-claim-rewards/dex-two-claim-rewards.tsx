@@ -10,7 +10,8 @@ import { useDexTwoClaimRewardsFromViewModel } from './use-dex-two-claim-rewards.
 
 export const DexTwoClaimRewardsFrom = observer(() => {
   const { t } = useTranslation();
-  const { rewardValue, rewardDollarEquivalent, balance, doClaim } = useDexTwoClaimRewardsFromViewModel();
+  const { rewardValue, rewardDollarEquivalent, balance, disabled, loading, doClaim } =
+    useDexTwoClaimRewardsFromViewModel();
 
   return (
     <div>
@@ -29,8 +30,8 @@ export const DexTwoClaimRewardsFrom = observer(() => {
             type="submit"
             onClick={doClaim}
             className={stylesCommonContainer.button}
-            disabled={false}
-            loading={false}
+            disabled={disabled}
+            loading={loading}
             data-test-id="dexTwoClaimRewardsButton"
           >
             {t('common|Claim')}
