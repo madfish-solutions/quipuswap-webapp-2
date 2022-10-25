@@ -1,4 +1,4 @@
-import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helpers';
+import { sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
@@ -14,25 +14,7 @@ const sortings = {
   [LiquiditySortField.TVL]: sortByTvl
 };
 
-const sortLiquidity = (
-  first: LiquidityItemModel,
-  second: LiquidityItemModel,
-  sortField: LiquiditySortField,
-  sortDirection: SortDirection
-) => sortings[sortField](first, second, sortDirection);
-
-export const sortLiquidityList = (
-  list: Array<LiquidityItemModel>,
-  sortField: LiquiditySortField,
-  sortDirection: SortDirection
-) => {
-  if (isNull(sortField)) {
-    return list;
-  }
-
-  const localList = cloneArray(list);
-
-  localList.sort((first, second) => sortLiquidity(first, second, sortField, sortDirection));
-
-  return localList;
-};
+export const sortLiquidityItems =
+  (sortField: LiquiditySortField, sortDirection: SortDirection) =>
+  (first: LiquidityItemModel, second: LiquidityItemModel) =>
+    sortings[sortField](first, second, sortDirection);

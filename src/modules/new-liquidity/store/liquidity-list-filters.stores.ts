@@ -2,7 +2,15 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
 
-import { filterByStableSwap, sortLiquidityList } from '../helpers';
+import {
+  filterByBridget,
+  filterByBTC,
+  filterByDexTwo,
+  filterByQuipu,
+  filterByStableSwap,
+  filterByTezotopia,
+  sortLiquidityItems
+} from '../helpers';
 import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
 
@@ -25,12 +33,14 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
     makeObservable(this, {
       showDust: observable,
       investedOnly: observable,
+
       showStable: observable,
       showBridged: observable,
       showQuipu: observable,
       showTezotopia: observable,
       showBTC: observable,
       showDexTwo: observable,
+
       sortField: observable,
 
       setShowDust: action,
@@ -46,9 +56,14 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   }
 
   filterAndSort(list: Array<LiquidityItemModel>): Array<LiquidityItemModel> {
-    const filtered = list.filter(filterByStableSwap(this.showStable));
-
-    return sortLiquidityList(filtered, this.sortField, this.sortDirection);
+    return list
+      .filter(filterByStableSwap(this.showStable))
+      .filter(filterByBridget(this.showBridged))
+      .filter(filterByQuipu(this.showQuipu))
+      .filter(filterByTezotopia(this.showTezotopia))
+      .filter(filterByBTC(this.showBTC))
+      .filter(filterByDexTwo(this.showDexTwo))
+      .sort(sortLiquidityItems(this.sortField, this.sortDirection));
   }
 
   setShowDust(state: boolean) {
