@@ -29,5 +29,5 @@ export const newLiquidity = {
   why: 'Why?',
   showDust: 'Show Dust',
   investedOnly: 'Invested Only',
-  poolAlreadyExists: 'Pool already exists'
+  poolAlreadyExists: 'Pool already exists. Check out'
 } as const;
