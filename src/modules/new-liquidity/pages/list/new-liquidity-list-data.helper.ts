@@ -2,8 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { NewLiquidityRoutes } from '@modules/new-liquidity/new-liquidity-routes.enum';
-import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
+import { getCpmmPoolLink } from '@modules/new-liquidity/helpers';
 import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getTokenPairSlug, isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
@@ -18,10 +17,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 
   switch (type) {
     case PoolType.DEX_TWO:
-      return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${getTokenPairSlug(
-        aToken,
-        bToken
-      )}`;
+      return getCpmmPoolLink([aToken, bToken]);
     case PoolType.TOKEN_TOKEN:
     case PoolType.TEZ_TOKEN:
       return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
