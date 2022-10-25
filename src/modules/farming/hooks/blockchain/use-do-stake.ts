@@ -9,11 +9,13 @@ import { defined } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { Token, WhitelistedBaker } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
+import { useTranslation } from '@translation';
 
 import { getStakeUnstakeLogData } from '../../helpers';
 import { useFarmingTimeout } from './use-farming-timeout';
 
 export const useDoStake = () => {
+  const { t } = useTranslation();
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
@@ -38,7 +40,7 @@ export const useDoStake = () => {
           defined(selectedBaker).address
         );
 
-        await confirmOperation(operation.opHash, { message: 'Stake successful' });
+        await confirmOperation(operation.opHash, { message: t('farm|Stake successful') });
         amplitudeService.logEvent('STAKE_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);
@@ -48,7 +50,7 @@ export const useDoStake = () => {
         });
       }
     },
-    [timeout, isUnlocked, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
+    [timeout, isUnlocked, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, t, showErrorToast]
   );
 
   return { doStake };
