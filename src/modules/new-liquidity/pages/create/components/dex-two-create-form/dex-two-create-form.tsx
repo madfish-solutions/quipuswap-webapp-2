@@ -10,10 +10,12 @@ import {
   TokenInput,
   TokenInputProps
 } from '@shared/components';
+import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { NewLiquidityPoolExist } from '../new-liquidity-pool-exist';
 import styles from './dex-two-create-form.module.scss';
 
 interface BakerProps extends ComplexBakerProps {
@@ -39,6 +41,11 @@ export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData, commonD
   const { disabled, loading, isPoolExist } = commonData;
   const { value, error, handleChange, shouldShowBakerInput } = bakerData;
 
+  const tokens = data
+    .map(inputValue => inputValue.tokens)
+    .flat()
+    .filter(isExist);
+
   return (
     <form onSubmit={onSubmit}>
       <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
@@ -51,7 +58,11 @@ export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData, commonD
           className={stylesCommonContainer.mt24}
         />
       )}
-      {isPoolExist && <AlarmMessage message={t('newLiquidity|poolAlreadyExists')} className={styles['mt-24']} />}
+      {isPoolExist && (
+        <AlarmMessage className={styles['mt-24']}>
+          <NewLiquidityPoolExist className={styles.poolExistWarning} tokens={tokens} />
+        </AlarmMessage>
+      )}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
