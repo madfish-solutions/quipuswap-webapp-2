@@ -5,12 +5,11 @@ import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useLiquidityListFiltersStore, useNewLiquidityListStore } from '../../../../hooks';
+import { useLiquidityListFiltersStore } from '../../../../hooks';
 import { LiquiditySortField, LiquiditySortFieldItem } from '../../types';
 
 export const useListFilterViewModel = () => {
   const { accountPkh } = useAuthStore();
-  const newLiquidityListStore = useNewLiquidityListStore();
   const liquidityListFiltersStore = useLiquidityListFiltersStore();
 
   const {
@@ -25,7 +24,7 @@ export const useListFilterViewModel = () => {
     handleDecrement,
 
     handleSortDirectionToggle
-  } = useBaseFilterStoreConverter(newLiquidityListStore);
+  } = useBaseFilterStoreConverter(liquidityListFiltersStore);
 
   const { showDust, investedOnly, sortField } = liquidityListFiltersStore;
   const { t } = useTranslation();
