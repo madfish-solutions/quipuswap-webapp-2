@@ -36,6 +36,9 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
     toggleShowDexTwo
   } = useTokensCategoriesFilter();
 
+  // TODO Remove it after adding all categories
+  const isShowDexTwo = false;
+
   return (
     <div className={cx(className, styles.root)}>
       <Tooltip content="StableSwap Pools">
@@ -73,13 +76,15 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
           </Button>
         </div>
       </Tooltip>
-      <Tooltip content="Dex 2.0 Pools">
-        <div>
-          <Button theme="quaternary" onClick={toggleShowDexTwo}>
-            <DexTwoCategoryIcon colored={showDexTwo} />
-          </Button>
-        </div>
-      </Tooltip>
+      {isShowDexTwo && (
+        <Tooltip content="Dex 2.0 Pools">
+          <div>
+            <Button theme="quaternary" onClick={toggleShowDexTwo}>
+              <DexTwoCategoryIcon colored={showDexTwo} />
+            </Button>
+          </div>
+        </Tooltip>
+      )}
     </div>
   );
 });

@@ -17,17 +17,11 @@ export const NewLiquidityListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
-
       <NewLiquidityStats />
-
       <HotPools pools={hotPools} />
-
       <CreateOwnPool />
-
       <ListFilter />
-
       <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
       <div ref={lastElementRef} className={styles.lastElement} />
     </>
