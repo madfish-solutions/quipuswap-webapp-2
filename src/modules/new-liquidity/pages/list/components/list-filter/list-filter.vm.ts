@@ -5,12 +5,13 @@ import { isDirrectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useNewLiquidityListStore } from '../../../../hooks';
+import { useLiquidityListFiltersStore, useNewLiquidityListStore } from '../../../../hooks';
 import { LiquiditySortField, LiquiditySortFieldItem } from '../../types';
 
 export const useListFilterViewModel = () => {
   const { accountPkh } = useAuthStore();
   const newLiquidityListStore = useNewLiquidityListStore();
+  const liquidityListFiltersStore = useLiquidityListFiltersStore();
 
   const {
     search,
@@ -26,13 +27,13 @@ export const useListFilterViewModel = () => {
     handleSortDirectionToggle
   } = useBaseFilterStoreConverter(newLiquidityListStore);
 
-  const { showDust, investedOnly, sortField } = newLiquidityListStore;
+  const { showDust, investedOnly, sortField } = liquidityListFiltersStore;
   const { t } = useTranslation();
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as LiquiditySortFieldItem;
 
-    return newLiquidityListStore.onSortFieldChange(item.field);
+    return liquidityListFiltersStore.onSortFieldChange(item.field);
   };
 
   const sortingValues: LiquiditySortFieldItem[] = [
@@ -50,10 +51,10 @@ export const useListFilterViewModel = () => {
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
   const setShowDust = (state: boolean) => {
-    return newLiquidityListStore.setShowDust(state);
+    return liquidityListFiltersStore.setShowDust(state);
   };
   const setInvestedOnly = (state: boolean) => {
-    return newLiquidityListStore.setInvestedOnly(state);
+    return liquidityListFiltersStore.setInvestedOnly(state);
   };
 
   const switcherDataList = [

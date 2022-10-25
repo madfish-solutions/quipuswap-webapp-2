@@ -11,7 +11,8 @@ import {
 } from '@modules/farming/store';
 import {
   NewLiquidityListStore as INewLiquidityListStore,
-  NewLiquidityItemStore as INewLiquidityItemStore
+  NewLiquidityItemStore as INewLiquidityItemStore,
+  LiquidityListFiltersStore as ILiquidityListFiltersStore
 } from '@modules/new-liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
@@ -59,6 +60,7 @@ export class RootStore {
 
   newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
   newLiquidityItemStore: Nullable<INewLiquidityItemStore> = null;
+  liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -76,23 +78,23 @@ export class RootStore {
     makeObservable(this, {
       tezos: observable,
 
-      farmingListStore: observable,
-      farmingFilterStore: observable,
-      farmingItemStore: observable,
+      farmingListStore: false,
+      farmingFilterStore: false,
+      farmingItemStore: false,
 
-      stableswapListStore: observable,
-      stableswapItemStore: observable,
-      stableswapItemFormStore: observable,
-      stableswapFilterStore: observable,
+      stableswapListStore: false,
+      stableswapItemStore: false,
+      stableswapItemFormStore: false,
+      stableswapFilterStore: false,
 
-      stableDividendsListStore: observable,
-      stableDividendsFilterStore: observable,
-      stableDividendsItemStore: observable,
+      stableDividendsListStore: false,
+      stableDividendsFilterStore: false,
+      stableDividendsItemStore: false,
 
-      newLiquidityListStore: observable,
-      newLiquidityItemStore: observable,
+      newLiquidityListStore: false,
+      newLiquidityItemStore: false,
 
-      coinflipStore: observable,
+      coinflipStore: false,
 
       setTezos: action,
       createFarmingListStore: action,
@@ -122,6 +124,10 @@ export class RootStore {
     if (isNull(this.newLiquidityListStore)) {
       const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
       this.newLiquidityListStore = new NewLiquidityListStore(this);
+    }
+    if (isNull(this.liquidityListFiltersStore)) {
+      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filter.stores');
+      this.liquidityListFiltersStore = new LiquidityListFiltersStore(this);
     }
   }
 
