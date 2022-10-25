@@ -45,7 +45,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
         header={{
           content: (
             <Tabs
-              values={TABS_CONTENT}
+              tabs={TABS_CONTENT}
               activeId={tab.id}
               setActiveId={id => handleChangeTab(id as LiquidityTabs)}
               className={styles.tabs}
@@ -73,7 +73,7 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
       </Card>
       <Card
         header={{
-          content: <Tabs values={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
+          content: <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
           className: s.header
         }}
         contentClassName={styles.LiquidityDetails}
