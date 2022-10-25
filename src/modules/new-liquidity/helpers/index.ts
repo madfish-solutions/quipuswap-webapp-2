@@ -6,3 +6,4 @@ export * from './get-user-tokens-amount-by-shares';
 export * from './get-value-with-fee';
 export * from './is-hot-pool';
 export * from './sorter.helpers';
+export * from './filter.helpers';
