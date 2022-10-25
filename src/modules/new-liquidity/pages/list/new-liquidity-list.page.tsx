@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Iterator, ListItemCard, PageTitle, TestnetAlert } from '@shared/components';
+import { ListItemCard, PageTitle, TestnetAlert, VirtualList } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { CreateOwnPool, HotPools, NewLiquidityStats } from '../../components';
@@ -11,7 +11,7 @@ import styles from './new-liquidity-list-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
 
 export const NewLiquidityListPage: FC = observer(() => {
-  const { list, hotPools, lastElementRef } = useNewLiquidityPageViewModel();
+  const { list, hotPools } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (
@@ -22,8 +22,7 @@ export const NewLiquidityListPage: FC = observer(() => {
       <HotPools pools={hotPools} />
       <CreateOwnPool />
       <ListFilter />
-      <Iterator render={ListItemCard} data={list} wrapperClassName={styles.newLiquidityList} isGrouped />
-      <div ref={lastElementRef} className={styles.lastElement} />
+      <VirtualList items={list} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
     </>
   );
 });
