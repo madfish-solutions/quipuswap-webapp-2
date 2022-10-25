@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -29,6 +29,10 @@ export const useLiquidityBakerRewards = ({ bucketContract }: UseLiquidityBakerRe
 
     setRewards(bigNumberRewards);
   }, [accountPkh, bucketContract, item, tezos]);
+
+  useEffect(() => {
+    void getRewards();
+  }, [getRewards]);
 
   useOnBlock(getRewards);
 

@@ -22,7 +22,7 @@ export const FarmingFormTabsCard: FC = observer(() => {
       header={{
         content: (
           <Tabs
-            values={TabsContent}
+            tabs={TabsContent}
             activeId={currentTab}
             setActiveId={id => changeTabHandle(id as FarmingFormTabs)}
             className={styles.tabs}

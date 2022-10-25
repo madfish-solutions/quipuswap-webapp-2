@@ -96,6 +96,7 @@ export const farm = {
   iAmIn: 'Yes, I am in!',
   'Harvest successful': 'Harvest successful',
   'Stake successful': 'Stake successful',
+  'Unstake successful': 'Unstake successful',
   Token: 'Token',
   Full: 'Full',
   Claimable: 'Claimable',
@@ -110,5 +111,6 @@ export const farm = {
   longTerm: 'Long Term Rewards',
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
-  vestingPeriodTooltip: 'TODO: add tooltip for vesting period'
+  vestingPeriodTooltip:
+    'The longer you stake, the higher your yield. Vesting period shows how long you should stake to receive the full rewards. Claiming earlier results in smaller reward allocation and distributes the difference to the full rewards back to the pool.'
 } as const;
