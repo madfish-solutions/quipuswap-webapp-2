@@ -33,7 +33,7 @@ export const useNewLiquidityCreatePageViewModel = () => {
   const tokensModalStore = useTokensModalStore();
   const chosenTokens = tokensModalStore.chosenTokensSingleModal;
 
-  const { isPoolExist } = useIsPoolExist(chosenTokens);
+  const { isPoolExist, link } = useIsPoolExist(chosenTokens);
 
   const userBalances = useTokensBalancesOnly(chosenTokens.filter(isExist));
   const shouldShowBakerInput = canDelegate(chosenTokens);
@@ -126,7 +126,8 @@ export const useNewLiquidityCreatePageViewModel = () => {
   const commonData = {
     disabled: !formik.isValid || formik.isSubmitting || isPoolExist,
     loading: formik.isSubmitting,
-    isPoolExist
+    isPoolExist,
+    link
   };
 
   return { data, bakerData, onSubmit: formik.handleSubmit, commonData };

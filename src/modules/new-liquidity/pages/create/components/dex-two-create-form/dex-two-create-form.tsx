@@ -10,7 +10,6 @@ import {
   TokenInput,
   TokenInputProps
 } from '@shared/components';
-import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
@@ -26,6 +25,7 @@ interface CommonData {
   disabled: boolean;
   loading: boolean;
   isPoolExist: boolean;
+  link: string;
 }
 
 interface Props {
@@ -38,13 +38,8 @@ interface Props {
 export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData, commonData }) => {
   const { t } = useTranslation();
 
-  const { disabled, loading, isPoolExist } = commonData;
+  const { disabled, loading, isPoolExist, link } = commonData;
   const { value, error, handleChange, shouldShowBakerInput } = bakerData;
-
-  const tokens = data
-    .map(inputValue => inputValue.tokens)
-    .flat()
-    .filter(isExist);
 
   return (
     <form onSubmit={onSubmit}>
@@ -60,7 +55,7 @@ export const DexTwoCreateForm: FC<Props> = ({ data, onSubmit, bakerData, commonD
       )}
       {isPoolExist && (
         <AlarmMessage className={styles['mt-24']}>
-          <NewLiquidityPoolExist className={styles.poolExistWarning} tokens={tokens} />
+          <NewLiquidityPoolExist className={styles.poolExistWarning} link={link} />
         </AlarmMessage>
       )}
       <div className={stylesCommonContainer.buttons}>
