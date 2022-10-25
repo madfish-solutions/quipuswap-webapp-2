@@ -4,17 +4,17 @@ import { Button } from '@shared/components';
 import { useTranslation } from '@translation';
 
 interface Props {
-  link: string;
+  existingPoolLink: string;
   className?: string;
 }
 
-export const NewLiquidityPoolExist: FC<Props> = ({ className, link }) => {
+export const NewLiquidityPoolExist: FC<Props> = ({ className, existingPoolLink }) => {
   const { t } = useTranslation();
 
   return (
     <div className={className}>
       <div>{t('newLiquidity|poolAlreadyExists')}</div>{' '}
-      <Button theme="inverse" href={link}>
+      <Button theme="inverse" href={existingPoolLink}>
         {t('newLiquidity|here')}
       </Button>
     </div>
