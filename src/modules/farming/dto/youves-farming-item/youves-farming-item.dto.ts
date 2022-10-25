@@ -13,6 +13,12 @@ export class YouvesFarmingItemDto {
   @Typed()
   depositTokenUrl: string;
 
+  @Typed({ type: TokenDto })
+  depositToken: TokenDto;
+
+  @Typed()
+  lastRewards: string;
+
   @Typed({ type: BigNumber })
   discFactor: BigNumber;
 

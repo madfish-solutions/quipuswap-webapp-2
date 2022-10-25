@@ -12,7 +12,7 @@ import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 
 // TODO: Add fa12 support when contracts will be ready
 
-const DEFAULT_REWARDS = { claimable_reward: ZERO_AMOUNT_BN, full_reward: ZERO_AMOUNT_BN };
+const DEFAULT_REWARDS = { claimableReward: ZERO_AMOUNT_BN, longTermReward: ZERO_AMOUNT_BN };
 
 export const getUserRewards = async (
   tezos: Nullable<TezosToolkit>,
@@ -56,7 +56,7 @@ export const getUserRewards = async (
   const { tokenDecimals, tokenPrecision } = await getTokenDecimalsAndPrecision(deposit_token.address, deposit_token.id);
 
   return {
-    claimable_reward: claimable_reward.dividedBy(tokenPrecision).decimalPlaces(tokenDecimals),
-    full_reward: full_reward.dividedBy(tokenPrecision).decimalPlaces(tokenDecimals)
+    claimableReward: claimable_reward.dividedBy(tokenPrecision).decimalPlaces(tokenDecimals),
+    longTermReward: full_reward.dividedBy(tokenPrecision).decimalPlaces(tokenDecimals)
   };
 };
