@@ -131,7 +131,7 @@ export class RootStore {
   async createLiquidityListFiltersStore() {
     if (isNull(this.liquidityListFiltersStore)) {
       const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filters.stores');
-      this.liquidityListFiltersStore = new LiquidityListFiltersStore(this);
+      this.liquidityListFiltersStore = new LiquidityListFiltersStore();
     }
   }
 

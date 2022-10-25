@@ -1,7 +1,15 @@
 import { Categories } from '../interfaces';
 import { LiquidityItemModel } from '../models';
 
-export const filterByStableSwap =
-  (showStable: boolean) =>
+const filterByCategory =
+  (enable: boolean, category: Categories) =>
   ({ item }: LiquidityItemModel) =>
-    showStable ? item.poolLabels.includes(Categories.Stable) : true;
+    enable ? item.poolLabels.includes(category) : true;
+
+export const filterByStableSwap = (showStable: boolean) => filterByCategory(showStable, Categories.Stable);
+export const filterByBridget = (showBridged: boolean) => filterByCategory(showBridged, Categories.Bridge);
+export const filterByQuipu = (showQuipu: boolean) => filterByCategory(showQuipu, Categories.QuipuSwap);
+export const filterByTezotopia = (showTezotopia: boolean) => filterByCategory(showTezotopia, Categories.Tezotopia);
+export const filterByBTC = (showBTC: boolean) => filterByCategory(showBTC, Categories.BTC);
+// TODO
+export const filterByDexTwo = (showDexTwo: boolean) => () => true;
