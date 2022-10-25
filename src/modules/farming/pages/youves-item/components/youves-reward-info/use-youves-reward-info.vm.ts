@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useParams } from 'react-router-dom';
 
 import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
@@ -12,22 +11,14 @@ import { getLastElementFromArray, getSymbolsString } from '@shared/helpers';
 import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
-import { getUserRewards } from '../../api';
 import { getRewardsDueDate } from '../../api/get-rewards-due-date';
 import { getTotalDeposit } from '../../api/get-total-deposit';
-
-const DEFAULT_REWARDS = {
-  claimable_reward: new BigNumber(ZERO_AMOUNT),
-  full_reward: new BigNumber(ZERO_AMOUNT)
-};
 
 export const useYouvesRewardInfoViewModel = () => {
   // TODO: remove useState when store will be ready
   const [userTotalDeposit, setTotalDeposit] = useState(ZERO_AMOUNT_BN);
   const [rewadsDueDate, setRewardsDueDate] = useState(ZERO_AMOUNT);
-  const [rewards, setRewards] = useState(DEFAULT_REWARDS);
   const { tezos } = useRootStore();
-  const { contractAddress } = useParams();
   const { doHarvest } = useDoYouvesHarvest();
   const accountPkh = useAccountPkh();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
@@ -35,6 +26,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const youvesFarmingItem = youvesFarmingItemStore.item;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
+  const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
 
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
 
@@ -55,18 +47,15 @@ export const useYouvesRewardInfoViewModel = () => {
     if (!youvesFarmingItem) {
       setRewardsDueDate(ZERO_AMOUNT);
       setTotalDeposit(ZERO_AMOUNT_BN);
-      setRewards(DEFAULT_REWARDS);
 
       return;
     }
 
-    const userRewards = await getUserRewards(tezos, accountPkh, contractAddress);
-    setRewards(userRewards);
     const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.address);
     setRewardsDueDate(dueDate);
     const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.address);
     setTotalDeposit(totalDeposit);
-  }, [accountPkh, contractAddress, tezos, youvesFarmingItem]);
+  }, [accountPkh, tezos, youvesFarmingItem]);
 
   useEffect(() => {
     getUserStakeInfo();
@@ -75,8 +64,8 @@ export const useYouvesRewardInfoViewModel = () => {
   useOnBlock(getUserStakeInfo);
 
   return {
-    claimablePendingRewards: rewards.claimable_reward,
-    longTermPendingRewards: rewards.full_reward,
+    claimablePendingRewards: claimableRewards,
+    longTermPendingRewards: longTermRewards,
     claimablePendingRewardsInUsd: new BigNumber(1500),
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,

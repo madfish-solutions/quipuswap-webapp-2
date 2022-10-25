@@ -1,10 +1,15 @@
 import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, PRECISION_FACTOR } from '@config/constants';
+import { YouvesStakeDto } from '@modules/farming/dto';
 
 import { YouvesFarmStakes } from '../api/types';
 
-export const getRewards = (userStake: YouvesFarmStakes, maxReleasePerios: BigNumber, discFactor: BigNumber) => {
+export const getRewards = (
+  userStake: YouvesFarmStakes | YouvesStakeDto,
+  maxReleasePerios: BigNumber,
+  discFactor: BigNumber
+) => {
   const { stake: ls_stake, age_timestamp: ls_age_timestamp, disc_factor: ls_disc_factor } = userStake;
   const max_release_period_ms = maxReleasePerios.multipliedBy(MS_IN_SECOND).toNumber();
 

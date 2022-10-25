@@ -22,8 +22,8 @@ const modeClass = {
 // TODO: Add tooltip (claimable / long term)
 
 interface Props {
-  claimablePendingRewards: BigNumber;
-  longTermPendingRewards: BigNumber;
+  claimablePendingRewards: Nullable<BigNumber>;
+  longTermPendingRewards: Nullable<BigNumber>;
   claimablePendingRewardsInUsd: BigNumber;
   shouldShowCountdown: boolean;
   shouldShowCountdownValue: boolean;
