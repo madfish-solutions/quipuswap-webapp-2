@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
+import { Token } from '@shared/types';
 
 import {
   filterByBridget,
@@ -11,6 +12,7 @@ import {
   filterByQuipu,
   filterByStableSwap,
   filterByTezotopia,
+  filterByTokens,
   sortLiquidityItems
 } from '../helpers';
 import { LiquidityItemModel } from '../models';
@@ -20,6 +22,8 @@ const DUST_THRESHOLD = 100;
 const DUST_THRESHOLD_BN = new BigNumber(DUST_THRESHOLD);
 
 export class LiquidityListFiltersStore extends BaseFilterStore {
+  tokens: Nullable<Array<Token>> = null;
+
   showDust = false;
   investedOnly = false;
 
@@ -36,6 +40,8 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
     super();
 
     makeObservable(this, {
+      tokens: observable,
+
       showDust: observable,
       investedOnly: observable,
 
@@ -48,6 +54,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
 
       sortField: observable,
 
+      setTokens: action,
       setShowDust: action,
       setInvestedOnly: action,
       setShowStable: action,
@@ -62,6 +69,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
 
   filterAndSort(list: Array<LiquidityItemModel>): Array<LiquidityItemModel> {
     return list
+      .filter(filterByTokens(this.tokens))
       .filter(filterByDust(this.showDust, DUST_THRESHOLD_BN))
       .filter(filterByStableSwap(this.showStable))
       .filter(filterByBridget(this.showBridged))
@@ -70,6 +78,10 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       .filter(filterByBTC(this.showBTC))
       .filter(filterByDexTwo(this.showDexTwo))
       .sort(sortLiquidityItems(this.sortField, this.sortDirection));
+  }
+
+  setTokens(tokens: Nullable<Array<Token>>) {
+    this.tokens = tokens;
   }
 
   setShowDust(state: boolean) {

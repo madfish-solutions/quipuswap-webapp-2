@@ -1,4 +1,4 @@
-import { FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX } from '@config/constants';
+import { FIRST_TUPLE_INDEX, FOURTH_TUPLE_INDEX, SECOND_TUPLE_INDEX, THIRD_TUPLE_INDEX } from '@config/constants';
 
 import { LiquidityItemResponseDto } from '../dto';
 
@@ -46,6 +46,14 @@ export class LiquidityItemModel extends LiquidityItemResponseDto {
 
   get bToken() {
     return this.item.tokensInfo[SECOND_TUPLE_INDEX].token;
+  }
+
+  get cToken() {
+    return this.item.tokensInfo[THIRD_TUPLE_INDEX]?.token ?? null;
+  }
+
+  get dToken() {
+    return this.item.tokensInfo[FOURTH_TUPLE_INDEX]?.token ?? null;
   }
 
   get tokensInfo() {
