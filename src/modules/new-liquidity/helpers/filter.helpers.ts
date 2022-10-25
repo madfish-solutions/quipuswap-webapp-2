@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 import { Categories } from '../interfaces';
 import { LiquidityItemModel } from '../models';
 
@@ -11,5 +13,10 @@ export const filterByBridget = (showBridged: boolean) => filterByCategory(showBr
 export const filterByQuipu = (showQuipu: boolean) => filterByCategory(showQuipu, Categories.QuipuSwap);
 export const filterByTezotopia = (showTezotopia: boolean) => filterByCategory(showTezotopia, Categories.Tezotopia);
 export const filterByBTC = (showBTC: boolean) => filterByCategory(showBTC, Categories.BTC);
-// TODO
-export const filterByDexTwo = (showDexTwo: boolean) => () => true;
+// TODO Tezotopia -> DexTwo
+export const filterByDexTwo = (showDexTwo: boolean) => filterByCategory(showDexTwo, Categories.Tezotopia);
+
+export const filterByDust =
+  (showDust: boolean, dustThreshold: BigNumber) =>
+  ({ item }: LiquidityItemModel) =>
+    showDust ? true : item.tvlInUsd.gt(dustThreshold);
