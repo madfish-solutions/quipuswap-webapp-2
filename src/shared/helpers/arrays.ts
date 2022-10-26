@@ -40,3 +40,7 @@ export const toArray = <T>(entity: T | Array<T>): Array<T> => (Array.isArray(ent
 export const isInArray = <T>(item: T, list: Array<T>): boolean => list.includes(item);
 
 export const isSomeInArray = <T>(list: Array<T>, items: Array<T>): boolean => list.some(item => isInArray(item, items));
+
+export const isArrayPairTuple = <T>(array: Array<T>): array is [T, T] => {
+  return array.length === 2;
+};
