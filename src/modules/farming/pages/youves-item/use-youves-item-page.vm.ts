@@ -25,6 +25,9 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const { item } = farmingYouvesItemStore;
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
 
+  /*
+    Load Farming Item
+   */
   useEffect(() => {
     if ((!dAppReady || isUndefined(contractAddress)) && prevAccountPkhRef.current === accountPkh) {
       return;
