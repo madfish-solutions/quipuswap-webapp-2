@@ -1,12 +1,12 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 
+import { defined } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
-import { BaseFilterStore, LoadingErrorData, RootStore } from '@shared/store';
+import { LoadingErrorData, RootStore } from '@shared/store';
 
-import { getNewLiquidityStatsApi, getNewLiquidityListApi } from '../api';
-import { LiquidityItemModel, LiquidityListModel, NewLiquidityResponseModel } from '../models';
-import { sortLiquidityList } from '../pages/list/helpers';
-import { LiquiditySortField } from '../pages/list/types';
+import { getNewLiquidityListApi, getNewLiquidityStatsApi } from '../api';
+import { isHotPool } from '../helpers';
+import { LiquidityListModel, NewLiquidityResponseModel } from '../models';
 
 const defaultList = {
   list: []
@@ -26,17 +26,7 @@ const DEFAULT_RESPONSE_DATA = {
 };
 
 @ModelBuilder()
-export class NewLiquidityListStore extends BaseFilterStore {
-  showDust = false;
-  investedOnly = false;
-  showStable = true;
-  showBridged = false;
-  showQuipu = false;
-  showTezotopia = false;
-  showBTC = false;
-  showDexTwo = false;
-  sortField: LiquiditySortField = LiquiditySortField.ID;
-
+export class NewLiquidityListStore {
   //#region liquidity list store
   @Led({
     default: defaultList,
@@ -46,7 +36,11 @@ export class NewLiquidityListStore extends BaseFilterStore {
   readonly listStore: LoadingErrorData<LiquidityListModel, typeof defaultList>;
 
   get list() {
-    return this.listStore.model.list;
+    return defined(this.rootStore.liquidityListFiltersStore).filterAndSort(this.listStore.model.list);
+  }
+
+  get hotPools() {
+    return this.listStore.model.list.filter(({ id, type }) => isHotPool(id, type));
   }
   //#endregion liquidity list store
 
@@ -64,64 +58,10 @@ export class NewLiquidityListStore extends BaseFilterStore {
   //#endregion liquidity stats store
 
   constructor(private rootStore: RootStore) {
-    super();
-
     makeObservable(this, {
-      showDust: observable,
-      investedOnly: observable,
-      showStable: observable,
-      showBridged: observable,
-      showQuipu: observable,
-      showTezotopia: observable,
-      showBTC: observable,
-      showDexTwo: observable,
-      sortField: observable,
-
       list: computed,
-      stats: computed,
-
-      setShowDust: action,
-      setInvestedOnly: action,
-      setShowStable: action,
-      setShowBridged: action,
-      setShowQuipu: action,
-      setShowTezotopia: action,
-      setShowBTC: action,
-      setShowDexTwo: action,
-      onSortFieldChange: action
+      hotPools: computed,
+      stats: computed
     });
-  }
-
-  filterAndSort(list: Array<LiquidityItemModel>) {
-    return sortLiquidityList(list, this.sortField, this.sortDirection);
-  }
-
-  setShowDust(state: boolean) {
-    this.showDust = state;
-  }
-  setInvestedOnly(state: boolean) {
-    this.investedOnly = state;
-  }
-  setShowStable(state: boolean) {
-    this.showStable = state;
-  }
-  setShowBridged(state: boolean) {
-    this.showBridged = state;
-  }
-  setShowQuipu(state: boolean) {
-    this.showQuipu = state;
-  }
-  setShowTezotopia(state: boolean) {
-    this.showTezotopia = state;
-  }
-  setShowBTC(state: boolean) {
-    this.showBTC = state;
-  }
-  setShowDexTwo(state: boolean) {
-    this.showDexTwo = state;
-  }
-
-  onSortFieldChange(field: LiquiditySortField) {
-    this.sortField = field;
   }
 }

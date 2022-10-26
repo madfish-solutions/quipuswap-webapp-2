@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Button } from '@shared/components';
+import { Button, Tooltip } from '@shared/components';
 import {
   BridgeCategory,
   BtcCategory,
@@ -33,29 +33,59 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
-    toggleShowDexTwo
+    toggleShowDexTwo,
+    translation
   } = useTokensCategoriesFilter();
+
+  // TODO Remove it after adding all categories
+  const isShowDexTwo = false;
 
   return (
     <div className={cx(className, styles.root)}>
-      <Button theme="quaternary" onClick={toggleShowStable}>
-        <StableCategory colored={showStable} />
-      </Button>
-      <Button theme="quaternary" onClick={toggleShowBridged}>
-        <BridgeCategory colored={showBridged} />
-      </Button>
-      <Button theme="quaternary" onClick={toggleShowQuipu}>
-        <QuipuCategory colored={showQuipu} />
-      </Button>
-      <Button theme="quaternary" onClick={toggleShowTezotopia}>
-        <TezotopiaCategory colored={showTezotopia} />
-      </Button>
-      <Button theme="quaternary" onClick={toggleShowBTC}>
-        <BtcCategory colored={showBTC} />
-      </Button>
-      <Button theme="quaternary" onClick={toggleShowDexTwo}>
-        <DexTwoCategoryIcon colored={showDexTwo} />
-      </Button>
+      <Tooltip content={translation.tooltipStableSwap}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowStable}>
+            <StableCategory colored={showStable} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip content={translation.tooltipBridge}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowBridged}>
+            <BridgeCategory colored={showBridged} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip content={translation.tooltipQuipu}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowQuipu}>
+            <QuipuCategory colored={showQuipu} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip content={translation.tooltipTezotopia}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowTezotopia}>
+            <TezotopiaCategory colored={showTezotopia} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip content={translation.tooltipBTC}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowBTC}>
+            <BtcCategory colored={showBTC} />
+          </Button>
+        </div>
+      </Tooltip>
+      {isShowDexTwo && (
+        <Tooltip content={translation.tooltipDexTwo}>
+          <div>
+            <Button theme="quaternary" onClick={toggleShowDexTwo}>
+              <DexTwoCategoryIcon colored={showDexTwo} />
+            </Button>
+          </div>
+        </Tooltip>
+      )}
     </div>
   );
 });
