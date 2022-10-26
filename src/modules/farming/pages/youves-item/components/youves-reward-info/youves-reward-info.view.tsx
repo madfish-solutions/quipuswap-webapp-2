@@ -95,7 +95,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
           <YouvesStatsItem
             itemName={t('farm|Vesting period ends in')}
             loading={false}
-            tooltipContent={t('farm|feeEndsInTooltip')}
+            tooltipContent={t('farm|vestingPeriodIndsInTooltip')}
             data-test-id="lockPeriodEndsIn"
           >
             <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={rewadsDueDate} />
