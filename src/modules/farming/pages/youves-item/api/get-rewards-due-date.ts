@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
-import { getLastElement, isNull, isUndefined } from '@shared/helpers';
+import { getLastElement, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
 import { Undefined } from '@shared/types';
 
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
@@ -21,9 +21,13 @@ export const getRewardsDueDate = async (
 
   const storage = await getStorageInfo<YouvesFarmStorage>(tezos, contractAddress);
   const ids: Array<BigNumber> = (await storage.stakes_owner_lookup.get(accountPkh)) ?? [];
+
+  if (isEmptyArray(ids)) {
+    return NO_DUE_DATE;
+  }
+
   const { max_release_period } = storage;
-  const ageTimestamp =
-    (await storage.stakes.get<YouvesFarmStakes>(Number(getLastElement(ids))))?.age_timestamp ?? undefined;
+  const ageTimestamp = (await storage.stakes.get<YouvesFarmStakes>(getLastElement(ids)))?.age_timestamp ?? undefined;
 
   if (isUndefined(ageTimestamp)) {
     return NO_DUE_DATE;

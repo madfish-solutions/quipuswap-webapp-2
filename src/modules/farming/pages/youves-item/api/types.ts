@@ -2,8 +2,8 @@ import { BigMapAbstraction } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 interface TokenInfo {
-  id: BigNumber;
-  address: string;
+  token_id: BigNumber;
+  token_address: string;
 }
 
 export interface YouvesFarmStorage {

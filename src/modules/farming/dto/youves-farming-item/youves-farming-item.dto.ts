@@ -32,7 +32,10 @@ export class YouvesFarmingItemDto {
   vestingPeriodSeconds: BigNumber;
 
   @Typed()
-  address: string;
+  contractAddress: string;
+
+  @Typed()
+  id: string;
 
   @Typed()
   stakeUrl: string;

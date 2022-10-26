@@ -79,6 +79,10 @@ export const formatValueBalance = (
   maxAmountWithoutLetters = MAX_AMOUNT_WITHOUT_LETTERS
 ): string => {
   const bn = new BigNumber(amount);
+  if (!bn.isFinite()) {
+    return bn.toString();
+  }
+
   if (bn.gte(maxAmountWithoutLetters)) {
     return shortNumberWithLetters(amount, amountDecimals);
   }

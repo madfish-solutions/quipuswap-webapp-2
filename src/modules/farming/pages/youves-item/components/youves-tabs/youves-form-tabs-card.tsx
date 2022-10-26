@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { observer } from 'mobx-react-lite';
+
 import { Card, Tabs } from '@shared/components';
 import styles from '@styles/CommonContainer.module.scss';
 
@@ -8,7 +10,7 @@ import { StakeForm } from './stake-form';
 import { UnstakeForm } from './unstake-form';
 import { useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
-export const YouvesFormTabsCard: FC = props => {
+export const YouvesFormTabsCard: FC = observer(() => {
   const { currentTab, setCurrentTab, isStakeForm, tabs } = useFarmingFormTabsCardViewModel();
 
   return (
@@ -27,7 +29,7 @@ export const YouvesFormTabsCard: FC = props => {
       contentClassName={styles.content}
       data-test-id="youvesFromTabsCard"
     >
-      {isStakeForm ? <StakeForm {...props} /> : <UnstakeForm {...props} />}
+      {isStakeForm ? <StakeForm /> : <UnstakeForm />}
     </Card>
   );
-};
+});
