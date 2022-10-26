@@ -18,7 +18,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const dAppReady = useReady();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
-  const { contractAddress } = useParams();
+  const { id } = useParams();
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
@@ -26,13 +26,13 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
 
   useEffect(() => {
-    if ((!dAppReady || isUndefined(contractAddress)) && prevAccountPkhRef.current === accountPkh) {
+    if ((!dAppReady || isUndefined(id)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
 
-    void getFarmingItem(contractAddress);
+    void getFarmingItem(id);
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, contractAddress, accountPkh]);
+  }, [getFarmingItem, dAppReady, id, accountPkh]);
 
   /*
     Liveable Rewards.

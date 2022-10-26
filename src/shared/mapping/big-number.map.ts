@@ -9,5 +9,11 @@ export const bigNumberMapper = (arg: unknown, optional: Undefined<boolean>, null
     return arg;
   }
 
-  return new BigNumber(arg as BigNumber.Value);
+  const result = new BigNumber(arg as BigNumber.Value);
+
+  if (!result.isFinite()) {
+    return new BigNumber(Number.MAX_SAFE_INTEGER);
+  }
+
+  return result;
 };

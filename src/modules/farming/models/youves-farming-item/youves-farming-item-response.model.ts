@@ -5,6 +5,8 @@ export class YouvesFarmingItemResponseModel extends YouvesFarmingItemResponseDto
   item: YouvesFarmingItemModel;
 
   constructor(dto: YouvesFarmingItemResponseDto) {
+    // eslint-disable-next-line no-console
+    console.log('YouvesFarmingItemResponseModel', dto);
     super();
 
     for (const key in dto) {
