@@ -7,6 +7,7 @@ export class BackendYouvesFarmingApi {
         apr: '365',
         depositExchangeRate: '3',
         depositTokenUrl: 'https://ghostnet.tzkt.io/KT1GPJDTf8GZspCcanaG2KhMvGu3NJRqurat',
+        lastRewards: '2863352',
         discFactor: '1000000000000000000',
         earnExchangeRate: '1.5',
         vestingPeriodSeconds: '7776000',

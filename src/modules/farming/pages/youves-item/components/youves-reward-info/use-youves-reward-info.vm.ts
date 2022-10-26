@@ -27,6 +27,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const youvesFarmingItem = youvesFarmingItemStore.item;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
+  const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
 
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
 
@@ -64,8 +65,8 @@ export const useYouvesRewardInfoViewModel = () => {
   useOnBlock(getUserStakeInfo);
 
   return {
-    claimablePendingRewards: new BigNumber(1000),
-    longTermPendingRewards: new BigNumber(1000),
+    claimablePendingRewards: claimableRewards,
+    longTermPendingRewards: longTermRewards,
     claimablePendingRewardsInUsd: new BigNumber(1500),
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,

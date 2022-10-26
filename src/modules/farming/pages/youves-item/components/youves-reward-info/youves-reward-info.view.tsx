@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -23,12 +22,12 @@ const modeClass = {
 // TODO: Add tooltip (claimable / long term)
 
 interface Props {
-  claimablePendingRewards: BigNumber;
-  longTermPendingRewards: BigNumber;
+  claimablePendingRewards: Nullable<BigNumber>;
+  longTermPendingRewards: Nullable<BigNumber>;
   claimablePendingRewardsInUsd: BigNumber;
   shouldShowCountdown: boolean;
   shouldShowCountdownValue: boolean;
-  timestamp: number;
+  rewadsDueDate: number;
   farmingLoading: boolean;
   rewardTokenDecimals: number;
   handleHarvest: () => void;
@@ -36,7 +35,6 @@ interface Props {
   symbolsString: string;
   userTotalDeposit: BigNumber;
   userTotalDepositDollarEquivalent: BigNumber;
-  rewadsDueDate: number;
 }
 
 export const YouvesRewardInfoView: FC<Props> = observer(
@@ -46,15 +44,14 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     claimablePendingRewardsInUsd,
     shouldShowCountdown,
     shouldShowCountdownValue,
-    timestamp,
+    rewadsDueDate,
     farmingLoading,
     rewardTokenDecimals,
     handleHarvest,
     isHarvestAvailable,
     symbolsString,
     userTotalDeposit,
-    userTotalDepositDollarEquivalent,
-    rewadsDueDate
+    userTotalDepositDollarEquivalent
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const { t } = useTranslation();
@@ -74,7 +71,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         buttonText={t('farm|Harvest')}
         rewardTooltip={t('farm|singleFarmRewardTooltip')}
         disabled={!isHarvestAvailable}
-        currency={DOLLAR}
+        currency="QUIPU"
       >
         <YouvesStatsItem
           itemName={t('farm|Your Share')}
