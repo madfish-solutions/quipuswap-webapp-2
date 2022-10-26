@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { formatValueBalance, getFullTimelockDescription, isExist } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { NoopAsync, Optional, Token } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
 import { i18n } from '@translation';
 
@@ -9,26 +9,26 @@ export interface ConfirmationMessageParams {
   totalDeposit: Optional<BigNumber>;
   waitingTimeSeconds: BigNumber.Value;
   rewardToken: Token;
-  lostRewardAmount: BigNumber;
+  realLostRewardAmount: BigNumber;
 }
 
 const getConfirmationMessage = ({
   totalDeposit,
   waitingTimeSeconds,
   rewardToken,
-  lostRewardAmount
+  realLostRewardAmount
 }: ConfirmationMessageParams) => {
   if (!isExist(totalDeposit) || totalDeposit.isZero()) {
     return i18n.t('farm|youvesConfirmationNewStake');
   }
 
-  if (lostRewardAmount.isZero()) {
+  if (realLostRewardAmount.isZero()) {
     return null;
   }
 
   return i18n.t('farm|youvesConfirmationUpdateStake', {
     waitingTime: getFullTimelockDescription(waitingTimeSeconds, true),
-    reward: `${formatValueBalance(lostRewardAmount, rewardToken.metadata.decimals)} ${rewardToken.metadata.symbol}`
+    reward: `${formatValueBalance(realLostRewardAmount, rewardToken.metadata.decimals)} ${rewardToken.metadata.symbol}`
   });
 };
 
@@ -37,7 +37,7 @@ export const useYouvesStakeConfirmationPopup = (
 ) => {
   const { openConfirmationModal } = useConfirmationModal();
 
-  return (yesCallback: () => Promise<void>, amountToStake: BigNumber) => {
+  return (yesCallback: NoopAsync, amountToStake: BigNumber) => {
     const message = getConfirmationMessage(getConfirmationMessageParams(amountToStake));
 
     if (isExist(message)) {

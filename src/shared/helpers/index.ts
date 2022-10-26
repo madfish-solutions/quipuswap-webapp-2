@@ -3,6 +3,7 @@ export * from './bignumber';
 export * from './blockchain';
 export * from './connect-wallet';
 export * from './crutches';
+export * from './date';
 export * from './dex';
 export * from './formaters';
 export * from './forms';
