@@ -33,7 +33,7 @@ const DEFAULT_ITEM = {
   blockInfo: null
 };
 
-const DEFAULT_CONTRACT_BALANCE = { balance: ZERO_AMOUNT_BN };
+const DEFAULT_CONTRACT_BALANCE = { balance: null };
 
 const DEFAULT_TOKENS: Token[] = [];
 
@@ -96,7 +96,8 @@ export class FarmingYouvesItemStore {
       updatePendingRewards: action,
 
       item: computed,
-      stakes: computed
+      stakes: computed,
+      contractBalance: computed
     });
   }
 
@@ -106,22 +107,14 @@ export class FarmingYouvesItemStore {
   }
 
   async updatePendingRewards() {
-    const { tezos } = this.rootStore;
-
-    if (
-      !isExist(getLastElement(this.stakes)) ||
-      !isExist(this.itemStore.model.item) ||
-      !isExist(this.contractBalance) ||
-      isNull(tezos) ||
-      isNull(this.farmingAddress)
-    ) {
+    if (!isExist(getLastElement(this.stakes)) || isNull(this.itemStore.model.item) || isNull(this.contractBalance)) {
       return DEFAULT_REWARDS;
     }
 
     let _disc_factor;
 
     const item = this.itemStore.model.item;
-    const { depositToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
+    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
 
     if (staked.isGreaterThan(ZERO_AMOUNT)) {
       const reward = this.contractBalance.minus(lastRewards);
@@ -139,7 +132,7 @@ export class FarmingYouvesItemStore {
       vestingPeriodSeconds.multipliedBy(MS_IN_SECOND),
       _disc_factor
     );
-    const tokenDecimals = depositToken.metadata.decimals;
+    const tokenDecimals = stakedToken.metadata.decimals;
     const tokenPrecision = `1e${tokenDecimals}`;
 
     this.claimableRewards = claimable_reward.dividedBy(tokenPrecision);
@@ -168,15 +161,17 @@ export class FarmingYouvesItemStore {
     return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
+  // TODO: Add fa12 support when contracts will be ready
   async getContractBalance() {
     const { tezos } = this.rootStore;
 
-    if (isNull(tezos) || isNull(this.farmingAddress) || !isExist(this.itemStore.model.item)) {
+    if (isNull(tezos) || isNull(this.farmingAddress) || isNull(this.itemStore.model.item)) {
       return DEFAULT_CONTRACT_BALANCE;
     }
 
     const item = this.itemStore.model.item;
     const { rewardToken } = item;
+
     const balance =
       (await getUserBalance(
         tezos,

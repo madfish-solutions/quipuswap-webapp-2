@@ -8,18 +8,6 @@ export class BackendYouvesFarmingApi {
         depositExchangeRate: '3',
         depositTokenUrl: 'https://ghostnet.tzkt.io/KT1GPJDTf8GZspCcanaG2KhMvGu3NJRqurat',
         lastRewards: '2863352',
-        depositToken: {
-          type: 'FA2',
-          contractAddress: 'KT1GPJDTf8GZspCcanaG2KhMvGu3NJRqurat',
-          fa2TokenId: 0,
-          isWhitelisted: true,
-          metadata: {
-            decimals: 6,
-            symbol: 'QUIPU',
-            name: 'Quipuswap LP Token',
-            thumbnailUri: 'https://quipuswap.com/QPLP.png'
-          }
-        },
         discFactor: '1000000000000000000',
         earnExchangeRate: '1.5',
         vestingPeriodSeconds: '7776000',
