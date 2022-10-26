@@ -25,13 +25,13 @@ export const filterByDust =
     showDust ? true : item.tvlInUsd.gt(dustThreshold);
 
 export const filterByTokens =
-  (tokens: Nullable<Array<Token>>) =>
-  ({ aToken, bToken, cToken, dToken }: LiquidityItemModel) => {
-    if (!tokens || !tokens.length) {
+  (filterTokens: Nullable<Array<Token>>) =>
+  ({ tokens }: LiquidityItemModel) => {
+    if (!filterTokens || !filterTokens.length) {
       return true;
     }
 
-    const dexTokens = [aToken, bToken, cToken, dToken].filter(isExist).map(getTokenSlug);
+    const dexTokens = tokens.filter(isExist).map(getTokenSlug);
 
-    return tokens.map(getTokenSlug).every(token => dexTokens.includes(token));
+    return filterTokens.map(getTokenSlug).every(token => dexTokens.includes(token));
   };
