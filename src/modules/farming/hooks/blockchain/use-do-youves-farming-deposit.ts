@@ -23,7 +23,7 @@ export const useDoYouvesFarmingDeposit = () => {
       const logData = {
         accountPkh,
         stakeId: new BigNumber(stakeId).toNumber(),
-        balance: new BigNumber(stakeId).toFixed()
+        balance: new BigNumber(balance).toFixed()
       };
       try {
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT', logData);

@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import BigNumber from 'bignumber.js';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
@@ -41,7 +39,7 @@ export const useYouvesRewardInfoViewModel = () => {
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
     await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
 
-    await delayedGetFarmingItem(farmingItemWithBalances.address);
+    await delayedGetFarmingItem(farmingItemWithBalances.contractAddress);
   };
 
   const getUserStakeInfo = useCallback(async () => {
@@ -52,11 +50,26 @@ export const useYouvesRewardInfoViewModel = () => {
       return;
     }
 
-    const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.address);
+    const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.contractAddress);
     setRewardsDueDate(dueDate);
-    const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.address);
+    const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.contractAddress);
     setTotalDeposit(totalDeposit);
   }, [accountPkh, tezos, youvesFarmingItem]);
+
+  const claimablePendingRewardsInUsd = useMemo(
+    () => claimableRewards?.times(youvesFarmingItem?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
+    [claimableRewards, youvesFarmingItem]
+  );
+
+  const longTermPendingRewardsInUsd = useMemo(
+    () => longTermRewards?.times(youvesFarmingItem?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
+    [longTermRewards, youvesFarmingItem]
+  );
+
+  const userTotalDepositDollarEquivalent = useMemo(
+    () => userTotalDeposit.times(youvesFarmingItem?.depositExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
+    [userTotalDeposit, youvesFarmingItem]
+  );
 
   useEffect(() => {
     getUserStakeInfo();
@@ -67,7 +80,8 @@ export const useYouvesRewardInfoViewModel = () => {
   return {
     claimablePendingRewards: claimableRewards,
     longTermPendingRewards: longTermRewards,
-    claimablePendingRewardsInUsd: new BigNumber(1500),
+    claimablePendingRewardsInUsd,
+    longTermPendingRewardsInUsd,
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,
     timestamp: 10000,
@@ -78,7 +92,7 @@ export const useYouvesRewardInfoViewModel = () => {
     symbolsString,
     userTotalDeposit,
     rewardTokenCurrency,
-    userTotalDepositDollarEquivalent: new BigNumber(150),
+    userTotalDepositDollarEquivalent,
     rewadsDueDate
   };
 };

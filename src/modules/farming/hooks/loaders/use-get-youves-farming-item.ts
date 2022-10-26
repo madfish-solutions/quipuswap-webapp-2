@@ -24,7 +24,7 @@ export const useGetYouvesFarmingItem = () => {
           return;
         }
 
-        farmingYouvesItemStore.setFarmingAddress(farmingAddress);
+        farmingYouvesItemStore.setFarmingId(farmingAddress);
         await farmingYouvesItemStore.itemStore.load();
         await farmingYouvesItemStore.stakesStore.load();
         await farmingYouvesItemStore.contractBalanceStore.load();

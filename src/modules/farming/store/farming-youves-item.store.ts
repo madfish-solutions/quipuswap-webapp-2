@@ -39,12 +39,12 @@ const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
-  farmingAddress: Nullable<string> = null;
+  farmingId: Nullable<string> = null;
 
   //#region item store region
   @Led({
     default: DEFAULT_ITEM,
-    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingId),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
@@ -150,8 +150,8 @@ export class FarmingYouvesItemStore {
     this.updateStakesInterval.stop();
   }
 
-  setFarmingAddress(farmingAddress: Nullable<string>) {
-    this.farmingAddress = farmingAddress;
+  setFarmingId(farmingId: Nullable<string>) {
+    this.farmingId = farmingId;
   }
 
   /*
@@ -160,28 +160,27 @@ export class FarmingYouvesItemStore {
   async getStakes() {
     const { tezos, authStore } = this.rootStore;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.item)) {
       return { stakes: [] };
     }
 
-    return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
+    return await BlockchainYouvesFarmingApi.getStakes(this.item.contractAddress, authStore.accountPkh, tezos);
   }
 
   // TODO: Add fa12 support when contracts will be ready
   async getContractBalance() {
     const { tezos } = this.rootStore;
 
-    if (isNull(tezos) || isNull(this.farmingAddress) || isNull(this.itemStore.model.item)) {
+    if (isNull(tezos) || isNull(this.item)) {
       return DEFAULT_CONTRACT_BALANCE;
     }
 
-    const item = this.itemStore.model.item;
-    const { rewardToken } = item;
+    const { contractAddress, rewardToken } = this.item;
 
     const balance =
       (await getUserBalance(
         tezos,
-        this.farmingAddress,
+        contractAddress,
         rewardToken.contractAddress,
         Standard.Fa2,
         rewardToken.fa2TokenId

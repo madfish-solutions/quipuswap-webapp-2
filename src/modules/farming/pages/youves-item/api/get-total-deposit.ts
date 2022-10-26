@@ -29,7 +29,10 @@ export const getTotalDeposit = async (
   });
   const userArrayStakes = await Promise.all(stakesArrayPromise);
 
-  const { tokenDecimals, tokenPrecision } = await getTokenDecimalsAndPrecision(deposit_token.address, deposit_token.id);
+  const { tokenDecimals, tokenPrecision } = await getTokenDecimalsAndPrecision(
+    deposit_token.token_address,
+    deposit_token.token_id
+  );
 
   return userArrayStakes
     .reduce((prev, curr) => {

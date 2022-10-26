@@ -10,11 +10,11 @@ export const useStakeFormViewModel = (): StakeFormProps => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
 
-  const { item, tokens, farmingAddress, currentStakeId } = useFarmingYouvesItemStore();
+  const { item, tokens, currentStakeId } = useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
   const stakedTokenBalance = useTokenBalance(stakedToken);
 
-  const form = useStakeFormForming(farmingAddress, currentStakeId, stakedToken, stakedTokenBalance);
+  const form = useStakeFormForming(item?.contractAddress ?? null, currentStakeId, stakedToken, stakedTokenBalance);
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
 
