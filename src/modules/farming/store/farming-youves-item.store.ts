@@ -20,18 +20,20 @@ import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
 import { YouvesStakeDto } from '../dto';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
-import { getUserRewards } from '../pages/youves-item/api';
+import { YouvesContractBalanceModel } from '../models/youves-contract-balance';
 import { getRewards } from '../pages/youves-item/helpers/get-rewards';
 
 const DEFAULT_REWARDS = {
-  claimableReward: ZERO_AMOUNT_BN,
-  longTermReward: ZERO_AMOUNT_BN
+  claimableReward: null,
+  longTermReward: null
 };
 
 const DEFAULT_ITEM = {
   item: null,
   blockInfo: null
 };
+
+const DEFAULT_CONTRACT_BALANCE = { balance: ZERO_AMOUNT_BN };
 
 const DEFAULT_TOKENS: Token[] = [];
 
@@ -65,6 +67,19 @@ export class FarmingYouvesItemStore {
   }
   //#endregion stakes store
 
+  //#region stakes store
+  @Led({
+    default: DEFAULT_CONTRACT_BALANCE,
+    loader: async self => await self.getContractBalance(),
+    model: YouvesContractBalanceModel
+  })
+  readonly contractBalanceStore: LoadingErrorData<YouvesContractBalanceModel, typeof DEFAULT_CONTRACT_BALANCE>;
+
+  get contractBalance() {
+    return this.contractBalanceStore.model.balance;
+  }
+  //#endregion stakes store
+
   claimableRewards: Nullable<BigNumber> = null;
   longTermRewards: Nullable<BigNumber> = null;
   readonly pendingRewardsInterval = new MakeInterval(
@@ -94,8 +109,9 @@ export class FarmingYouvesItemStore {
     const { tezos } = this.rootStore;
 
     if (
-      !isExist(getLastElement(this.stakesStore.model.stakes)) ||
+      !isExist(getLastElement(this.stakes)) ||
       !isExist(this.itemStore.model.item) ||
+      !isExist(this.contractBalance) ||
       isNull(tezos) ||
       isNull(this.farmingAddress)
     ) {
@@ -105,19 +121,10 @@ export class FarmingYouvesItemStore {
     let _disc_factor;
 
     const item = this.itemStore.model.item;
-    const { depositToken, lastRewards, vestingPeriodSeconds, staked, discFactor, rewardToken } = item;
-
-    const current_contract_balance =
-      (await getUserBalance(
-        tezos,
-        this.farmingAddress,
-        rewardToken.contractAddress,
-        Standard.Fa2,
-        rewardToken.fa2TokenId
-      )) ?? ZERO_AMOUNT_BN;
+    const { depositToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
 
     if (staked.isGreaterThan(ZERO_AMOUNT)) {
-      const reward = current_contract_balance.minus(lastRewards);
+      const reward = this.contractBalance.minus(lastRewards);
       _disc_factor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
     }
 
@@ -125,7 +132,7 @@ export class FarmingYouvesItemStore {
       return DEFAULT_REWARDS;
     }
 
-    const stakes = getLastElement(this.stakesStore.model.stakes) as YouvesStakeDto;
+    const stakes = getLastElement(this.stakes) as YouvesStakeDto;
 
     const { claimable_reward, full_reward } = getRewards(
       stakes,
@@ -161,14 +168,27 @@ export class FarmingYouvesItemStore {
     return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
   }
 
-  async getRewards() {
-    const { tezos, authStore } = this.rootStore;
+  async getContractBalance() {
+    const { tezos } = this.rootStore;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
-      return DEFAULT_REWARDS;
+    if (isNull(tezos) || isNull(this.farmingAddress) || !isExist(this.itemStore.model.item)) {
+      return DEFAULT_CONTRACT_BALANCE;
     }
 
-    return await getUserRewards(tezos, authStore.accountPkh, this.farmingAddress);
+    const item = this.itemStore.model.item;
+    const { rewardToken } = item;
+    const balance =
+      (await getUserBalance(
+        tezos,
+        this.farmingAddress,
+        rewardToken.contractAddress,
+        Standard.Fa2,
+        rewardToken.fa2TokenId
+      )) ?? ZERO_AMOUNT_BN;
+
+    return {
+      balance
+    };
   }
 
   get currentStake() {
