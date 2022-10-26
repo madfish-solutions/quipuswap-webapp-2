@@ -23,6 +23,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const youvesFarmingItemStore = useFarmingYouvesItemStore();
   const youvesFarmingItem = youvesFarmingItemStore.item;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
+  const rewardToken = useToken(youvesFarmingItem?.rewardToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
   const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
 
@@ -39,7 +40,7 @@ export const useYouvesRewardInfoViewModel = () => {
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
     await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
 
-    await delayedGetFarmingItem(farmingItemWithBalances.contractAddress);
+    await delayedGetFarmingItem(farmingItemWithBalances.id);
   };
 
   const getUserStakeInfo = useCallback(async () => {
@@ -56,16 +57,6 @@ export const useYouvesRewardInfoViewModel = () => {
     setTotalDeposit(totalDeposit);
   }, [accountPkh, tezos, youvesFarmingItem]);
 
-  const claimablePendingRewardsInUsd = useMemo(
-    () => claimableRewards?.times(youvesFarmingItem?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
-    [claimableRewards, youvesFarmingItem]
-  );
-
-  const longTermPendingRewardsInUsd = useMemo(
-    () => longTermRewards?.times(youvesFarmingItem?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
-    [longTermRewards, youvesFarmingItem]
-  );
-
   const userTotalDepositDollarEquivalent = useMemo(
     () => userTotalDeposit.times(youvesFarmingItem?.depositExchangeRate ?? ZERO_AMOUNT_BN) ?? null,
     [userTotalDeposit, youvesFarmingItem]
@@ -80,13 +71,12 @@ export const useYouvesRewardInfoViewModel = () => {
   return {
     claimablePendingRewards: claimableRewards,
     longTermPendingRewards: longTermRewards,
-    claimablePendingRewardsInUsd,
-    longTermPendingRewardsInUsd,
+    claimablePendingRewardsInUsd: youvesFarmingItemStore.claimableRewardsInUsd,
+    longTermPendingRewardsInUsd: youvesFarmingItemStore.longTermRewardsInUsd,
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,
-    timestamp: 10000,
     farmingLoading: false,
-    rewardTokenDecimals: 6,
+    rewardTokenDecimals: rewardToken?.metadata.decimals ?? ZERO_AMOUNT,
     handleHarvest,
     isHarvestAvailable: true,
     symbolsString,
