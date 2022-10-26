@@ -1,6 +1,9 @@
+import { useTranslation } from '@translation';
+
 import { useLiquidityListFiltersStore } from '../../../../hooks';
 
 export const useTokensCategoriesFilter = () => {
+  const { t } = useTranslation();
   const liquidityListFiltersStore = useLiquidityListFiltersStore();
 
   const { showStable, showBridged, showQuipu, showTezotopia, showBTC, showDexTwo } = liquidityListFiltersStore;
@@ -24,6 +27,16 @@ export const useTokensCategoriesFilter = () => {
     return liquidityListFiltersStore.setShowDexTwo(!showDexTwo);
   };
 
+  const translation = {
+    investedOnly: t('newLiquidity|investedOnly'),
+    tooltipStableSwap: t('newLiquidity|tooltipStableSwap'),
+    tooltipBridge: t('newLiquidity|tooltipBridge'),
+    tooltipQuipu: t('newLiquidity|tooltipQuipu'),
+    tooltipTezotopia: t('newLiquidity|tooltipTezotopia'),
+    tooltipBTC: t('newLiquidity|tooltipBTC'),
+    tooltipDexTwo: t('newLiquidity|tooltipDexTwo')
+  };
+
   return {
     showStable,
     showBridged,
@@ -36,6 +49,7 @@ export const useTokensCategoriesFilter = () => {
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
-    toggleShowDexTwo
+    toggleShowDexTwo,
+    translation
   };
 };

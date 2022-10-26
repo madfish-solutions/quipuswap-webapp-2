@@ -11,7 +11,7 @@ interface Props<T> {
   wrapperClassName?: string;
 }
 
-// TODO
+// TODO: https://madfish.atlassian.net/browse/QUIPU-458
 export function VirtualList<T>({ items, render, wrapperClassName }: Props<T>) {
   const lastElementRef = useRef<HTMLDivElement>(null);
 

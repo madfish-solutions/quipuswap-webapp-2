@@ -33,7 +33,8 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
-    toggleShowDexTwo
+    toggleShowDexTwo,
+    translation
   } = useTokensCategoriesFilter();
 
   // TODO Remove it after adding all categories
@@ -41,35 +42,35 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
 
   return (
     <div className={cx(className, styles.root)}>
-      <Tooltip content="StableSwap Pools">
+      <Tooltip content={translation.tooltipStableSwap}>
         <div>
           <Button theme="quaternary" onClick={toggleShowStable}>
             <StableCategory colored={showStable} />
           </Button>
         </div>
       </Tooltip>
-      <Tooltip content="Pools with Bridged tokens">
+      <Tooltip content={translation.tooltipBridge}>
         <div>
           <Button theme="quaternary" onClick={toggleShowBridged}>
             <BridgeCategory colored={showBridged} />
           </Button>
         </div>
       </Tooltip>
-      <Tooltip content="Pools with Quipu">
+      <Tooltip content={translation.tooltipQuipu}>
         <div>
           <Button theme="quaternary" onClick={toggleShowQuipu}>
             <QuipuCategory colored={showQuipu} />
           </Button>
         </div>
       </Tooltip>
-      <Tooltip content="Tezotopia Pools">
+      <Tooltip content={translation.tooltipTezotopia}>
         <div>
           <Button theme="quaternary" onClick={toggleShowTezotopia}>
             <TezotopiaCategory colored={showTezotopia} />
           </Button>
         </div>
       </Tooltip>
-      <Tooltip content="BTC Pools">
+      <Tooltip content={translation.tooltipBTC}>
         <div>
           <Button theme="quaternary" onClick={toggleShowBTC}>
             <BtcCategory colored={showBTC} />
@@ -77,7 +78,7 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
         </div>
       </Tooltip>
       {isShowDexTwo && (
-        <Tooltip content="Dex 2.0 Pools">
+        <Tooltip content={translation.tooltipDexTwo}>
           <div>
             <Button theme="quaternary" onClick={toggleShowDexTwo}>
               <DexTwoCategoryIcon colored={showDexTwo} />
