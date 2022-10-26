@@ -5,6 +5,7 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getNewLiquidityListApi, getNewLiquidityStatsApi } from '../api';
+import { isHotPool } from '../helpers';
 import { LiquidityListModel, NewLiquidityResponseModel } from '../models';
 
 const defaultList = {
@@ -37,6 +38,10 @@ export class NewLiquidityListStore {
   get list() {
     return defined(this.rootStore.liquidityListFiltersStore).filterAndSort(this.listStore.model.list);
   }
+
+  get hotPools() {
+    return this.listStore.model.list.filter(({ id, type }) => isHotPool(id, type));
+  }
   //#endregion liquidity list store
 
   //#region liquidity stats store
@@ -55,6 +60,7 @@ export class NewLiquidityListStore {
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       list: computed,
+      hotPools: computed,
       stats: computed
     });
   }

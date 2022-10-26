@@ -3,14 +3,12 @@ import { useEffect } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { isHotPool } from '../../helpers';
 import { useGetNewLiquidityList, useGetNewLiquidityStats, useNewLiquidityListStore } from '../../hooks';
-import { PreparedLiquidityItem } from '../../interfaces';
 import { mapLiquidityListItem } from './map-liquidity-list-item';
 
 export const useNewLiquidityPageViewModel = () => {
   const isReady = useReady();
-  const { list } = useNewLiquidityListStore();
+  const { list, hotPools } = useNewLiquidityListStore();
   const { getNewLiquidityList } = useGetNewLiquidityList();
   const { getNewLiquidityStats } = useGetNewLiquidityStats();
 
@@ -24,14 +22,12 @@ export const useNewLiquidityPageViewModel = () => {
     }
   }, [getNewLiquidityList, getNewLiquidityStats, isReady]);
 
-  const dataList = list.map(mapLiquidityListItem) ?? [];
-  const hotPools = dataList.filter(({ id, type }) => isHotPool(id, type));
-
-  const shownItems: PreparedLiquidityItem[] = list.map(mapLiquidityListItem);
+  const preparedList = list.map(mapLiquidityListItem);
+  const preparedHotPools = hotPools.map(mapLiquidityListItem);
 
   return {
     title,
-    list: shownItems,
-    hotPools
+    preparedList,
+    preparedHotPools
   };
 };

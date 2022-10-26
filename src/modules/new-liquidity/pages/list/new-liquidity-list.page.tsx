@@ -11,7 +11,7 @@ import styles from './new-liquidity-list-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
 
 export const NewLiquidityListPage: FC = observer(() => {
-  const { list, hotPools } = useNewLiquidityPageViewModel();
+  const { preparedList, preparedHotPools } = useNewLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (
@@ -19,10 +19,10 @@ export const NewLiquidityListPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
       <NewLiquidityStats />
-      <HotPools pools={hotPools} />
+      <HotPools pools={preparedHotPools} />
       <CreateOwnPool />
       <ListFilter />
-      <VirtualList items={list} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
+      <VirtualList items={preparedList} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
     </>
   );
 });
