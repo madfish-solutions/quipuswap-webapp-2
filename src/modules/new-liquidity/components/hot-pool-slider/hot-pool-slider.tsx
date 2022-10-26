@@ -76,6 +76,9 @@ export const HotPoolSlider: CFC<Props> = ({ poolsCount, className, children }) =
   if (poolsCount < MAX_SLIDES_TO_SHOW) {
     SliderSettings.slidesToShow = poolsCount;
     SliderSettings.responsive[FISRT_INDEX].settings.slidesToShow = poolsCount;
+  } else {
+    SliderSettings.slidesToShow = MAX_SLIDES_TO_SHOW;
+    SliderSettings.responsive[FISRT_INDEX].settings.slidesToShow = MAX_SLIDES_TO_SHOW;
   }
 
   return (
