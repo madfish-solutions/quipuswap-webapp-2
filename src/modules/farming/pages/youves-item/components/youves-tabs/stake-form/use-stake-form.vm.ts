@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { MS_IN_SECOND, ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
-import { isNotDefined, toReal } from '@shared/helpers';
+import { isNotDefined } from '@shared/helpers';
 import { useAuthStore, useToken, useTokenBalance } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
@@ -52,10 +52,7 @@ export const useStakeFormViewModel = (): StakeFormProps => {
         totalDeposit: currentStake?.stake,
         waitingTimeSeconds,
         rewardToken: item.rewardToken,
-        lostRewardAmount: toReal(
-          longTermRewards?.minus(claimableRewards ?? ZERO_AMOUNT_BN) ?? ZERO_AMOUNT_BN,
-          item.rewardToken
-        )
+        lostRewardAmount: longTermRewards?.minus(claimableRewards ?? ZERO_AMOUNT_BN) ?? ZERO_AMOUNT_BN
       };
     },
     [currentStake, item, claimableRewards, longTermRewards]
