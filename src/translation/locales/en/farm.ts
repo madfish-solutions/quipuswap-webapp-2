@@ -37,6 +37,7 @@ export const farm = {
     'The baker you prefer to vote for with your tokens on the Dex to increase chances this baker will be chosen as the delegate for the pool.',
   feeEndsInTooltip:
     'Countdown till the moment when the stake can be withdrawn without paying the unlock fee and without burning earned rewards.',
+  vestingPeriodIndsInTooltip: 'After this time full rewards will be claimable.',
   singleFarmRewardTooltip: 'Your unclaimed farming reward from this farm.',
   select: 'Select',
   fullCardTooltip: 'Add Liquidity to the selected liquidity pool, stake liquidity tokens here, earn rewards.',
