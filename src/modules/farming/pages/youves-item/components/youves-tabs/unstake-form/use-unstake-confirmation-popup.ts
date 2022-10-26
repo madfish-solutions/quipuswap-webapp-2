@@ -16,5 +16,5 @@ export const useYouvesUnstakeConfirmationPopup = () => {
     return (yesCallback: NoopAsync) => openConfirmationModal({ message, yesCallback });
   }
 
-  return async (callback: () => NoopAsync) => callback();
+  return async (callback: NoopAsync) => callback();
 };
