@@ -107,17 +107,25 @@ export class FarmingYouvesItemStore {
   }
 
   async updatePendingRewards() {
-    if (!isExist(getLastElement(this.stakes)) || isNull(this.itemStore.model.item) || isNull(this.contractBalance)) {
-      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
-      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+    // eslint-disable-next-line no-console
+    console.log('updatePendingRewards', this.item, this.contractBalance?.toFixed(), this.stakesStore.isLoading);
+    if (isNull(this.item) || isNull(this.contractBalance) || this.stakesStore.isLoading) {
+      this.claimableRewards = null;
+      this.longTermRewards = null;
+
+      return;
+    }
+
+    if (!isExist(getLastElement(this.stakes))) {
+      this.claimableRewards = ZERO_AMOUNT_BN;
+      this.longTermRewards = ZERO_AMOUNT_BN;
 
       return;
     }
 
     let _disc_factor;
 
-    const item = this.itemStore.model.item;
-    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
+    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = this.item;
 
     if (staked.isGreaterThan(ZERO_AMOUNT)) {
       const reward = this.contractBalance.minus(lastRewards);
@@ -208,5 +216,13 @@ export class FarmingYouvesItemStore {
 
   get tokens() {
     return this.item?.tokens ?? DEFAULT_TOKENS;
+  }
+
+  get claimableRewardsInUsd() {
+    return this.claimableRewards?.times(this.item?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null;
+  }
+
+  get longTermRewardsInUsd() {
+    return this.longTermRewards?.times(this.item?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null;
   }
 }

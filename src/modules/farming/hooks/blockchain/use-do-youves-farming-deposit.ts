@@ -19,7 +19,7 @@ export const useDoYouvesFarmingDeposit = () => {
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
 
   const doDeposit = useCallback(
-    async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber.Value) => {
+    async (contractAddress: string, farmingId: string, stakeId: BigNumber.Value, balance: BigNumber.Value) => {
       const logData = {
         accountPkh,
         stakeId: new BigNumber(stakeId).toNumber(),
@@ -37,7 +37,7 @@ export const useDoYouvesFarmingDeposit = () => {
 
         await confirmOperation(operation.opHash, { message: 'Deposit successful' });
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_SUCCESS', logData);
-        await delayedGetFarmingItem(contractAddress);
+        await delayedGetFarmingItem(farmingId);
       } catch (error) {
         showErrorToast(error as Error);
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_FAILED', {

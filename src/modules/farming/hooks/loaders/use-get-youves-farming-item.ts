@@ -18,13 +18,13 @@ export const useGetYouvesFarmingItem = () => {
   const navigate = useNavigate();
 
   const getFarmingItem = useCallback(
-    async (farmingAddress: Optional<string>) => {
+    async (farmingId: Optional<string>) => {
       try {
-        if (!isReady || !isExist(farmingAddress)) {
+        if (!isReady || !isExist(farmingId)) {
           return;
         }
 
-        farmingYouvesItemStore.setFarmingId(farmingAddress);
+        farmingYouvesItemStore.setFarmingId(farmingId);
         await farmingYouvesItemStore.itemStore.load();
         await farmingYouvesItemStore.stakesStore.load();
         await farmingYouvesItemStore.contractBalanceStore.load();
@@ -32,7 +32,7 @@ export const useGetYouvesFarmingItem = () => {
       } catch (error) {
         showErrorToast(error as Error);
         if (isNotFoundError(error as Error)) {
-          navigate(`${AppRootRoutes.NotFound}/${farmingAddress}`);
+          navigate(`${AppRootRoutes.NotFound}/${farmingId}`);
         }
       }
     },
@@ -40,9 +40,9 @@ export const useGetYouvesFarmingItem = () => {
   );
 
   const delayedGetFarmingItem = useCallback(
-    async (farmingAddress: string) => {
+    async (farmingId: string) => {
       await sleep(DELAY_BEFORE_DATA_UPDATE);
-      await getFarmingItem(farmingAddress);
+      await getFarmingItem(farmingId);
     },
     [getFarmingItem]
   );

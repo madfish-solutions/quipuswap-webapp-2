@@ -19,7 +19,7 @@ export const useDoYouvesFarmingWithdraw = () => {
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
 
   const doWithdraw = useCallback(
-    async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber) => {
+    async (contractAddress: string, farmingId: string, stakeId: BigNumber.Value, balance: BigNumber) => {
       const logData = {
         accountPkh,
         stakeId: new BigNumber(stakeId).toNumber(),
@@ -37,7 +37,7 @@ export const useDoYouvesFarmingWithdraw = () => {
 
         await confirmOperation(operation.opHash, { message: 'Withdraw successful' });
         amplitudeService.logEvent('YOUVES_FARMING_WITHDRAW_SUCCESS', logData);
-        await delayedGetFarmingItem(contractAddress);
+        await delayedGetFarmingItem(farmingId);
       } catch (error) {
         showErrorToast(error as Error);
         amplitudeService.logEvent('YOUVES_FARMING_WITHDRAW_FAILED', {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -6,7 +6,7 @@ import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
 import { useReady } from '@providers/use-dapp';
 import { getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -18,7 +18,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const dAppReady = useReady();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
-  const { contractAddress } = useParams();
+  const { id } = useParams();
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
@@ -26,13 +26,13 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
 
   useEffect(() => {
-    if ((!dAppReady || isUndefined(contractAddress)) && prevAccountPkhRef.current === accountPkh) {
+    if ((!dAppReady || isUndefined(id)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
 
-    void getFarmingItem(contractAddress);
+    void getFarmingItem(id);
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, contractAddress, accountPkh]);
+  }, [getFarmingItem, dAppReady, id, accountPkh]);
 
   /*
     Liveable Rewards.
@@ -46,6 +46,16 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
 
     return () => farmingYouvesItemStore.clearIntervals();
   }, [farmingYouvesItemStore]);
+
+  const updateFarmingItem = useCallback(() => {
+    if (isUndefined(id)) {
+      return;
+    }
+
+    void getFarmingItem(id);
+  }, [getFarmingItem, id]);
+
+  useOnBlock(updateFarmingItem);
 
   const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
 

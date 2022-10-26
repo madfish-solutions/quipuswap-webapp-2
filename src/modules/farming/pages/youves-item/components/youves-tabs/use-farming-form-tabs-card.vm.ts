@@ -22,7 +22,7 @@ export const TABS_CONTENT: ITab[] = [
 
 export const useFarmingFormTabsCardViewModel = () => {
   const navigate = useNavigate();
-  const { contractAddress, tab } = useParams();
+  const { id, tab } = useParams();
 
   const { currentStakeBalance } = useFarmingYouvesItemStore();
 
@@ -31,9 +31,9 @@ export const useFarmingFormTabsCardViewModel = () => {
 
   const setCurrentTab = useCallback(
     (tabName: YouvesFormTabs) => {
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${contractAddress}/${tabName}`);
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${id}/${tabName}`);
     },
-    [contractAddress, navigate]
+    [id, navigate]
   );
 
   const tabs = useMemo(() => {
