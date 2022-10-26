@@ -110,8 +110,6 @@ export const LIQUIDITY_DEX_TWO_ITEM_API_URL = `${LIQUIDITY_API_URL}/${DEX_TWO_IT
 //#region mix
 export const FIRST_TUPLE_INDEX = 0;
 export const SECOND_TUPLE_INDEX = 1;
-export const THIRD_TUPLE_INDEX = 2;
-export const FOURTH_TUPLE_INDEX = 3;
 
 export const MOCK_LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
 export const TAB_INDEX = 0;

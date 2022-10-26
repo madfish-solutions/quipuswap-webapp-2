@@ -61,7 +61,7 @@ export const useListFilterViewModel = () => {
     {
       value: showDust,
       onClick: setShowDust,
-      disabled: isNull(accountPkh),
+      disabled: false,
       switcherDTI: 'stakedOnlySwitcher',
       translation: t('newLiquidity|showDust'),
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
