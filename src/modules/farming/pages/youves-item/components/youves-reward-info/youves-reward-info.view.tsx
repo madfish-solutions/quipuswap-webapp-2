@@ -33,6 +33,7 @@ interface Props {
   handleHarvest: () => void;
   isHarvestAvailable: boolean;
   symbolsString: string;
+  rewardTokenCurrency: string;
   userTotalDeposit: BigNumber;
   userTotalDepositDollarEquivalent: BigNumber;
 }
@@ -50,6 +51,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     handleHarvest,
     isHarvestAvailable,
     symbolsString,
+    rewardTokenCurrency,
     userTotalDeposit,
     userTotalDepositDollarEquivalent
   }) => {
@@ -71,7 +73,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         buttonText={t('farm|Harvest')}
         rewardTooltip={t('farm|singleFarmRewardTooltip')}
         disabled={!isHarvestAvailable}
-        currency="QUIPU"
+        currency={rewardTokenCurrency}
       >
         <YouvesStatsItem
           itemName={t('farm|Your Share')}
