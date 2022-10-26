@@ -2,15 +2,11 @@ import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT } from '@config/constants';
-import { NewLiquidityRoutes } from '@modules/new-liquidity/new-liquidity-routes.enum';
-import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
-import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
-import { getTokenPairSlug, isNull } from '@shared/helpers';
+import { DexLink } from '@modules/new-liquidity/helpers';
+import { isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
 
-import { LiquidityTabs } from '../../../liquidity';
-import { StableswapRoutes } from '../../../stableswap';
 import { LiquidityItemResponse, PoolType, PreparedLiquidityItem } from '../../interfaces';
 
 const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
@@ -18,23 +14,18 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 
   switch (type) {
     case PoolType.DEX_TWO:
-      return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${getTokenPairSlug(
-        aToken,
-        bToken
-      )}`;
+      return DexLink.getCpmmPoolLink([aToken, bToken]);
     case PoolType.TOKEN_TOKEN:
     case PoolType.TEZ_TOKEN:
-      return `${AppRootRoutes.Liquidity}/${LiquidityTabs.Add}/${getTokenPairSlug(aToken, bToken)}`;
+      return DexLink.getOldLiquidityPoolLink([aToken, bToken]);
     case PoolType.STABLESWAP:
-      return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${
-        StableswapLiquidityFormTabs.add
-      }/${id.toFixed()}`;
+      return DexLink.getStableswapPoolLink(id);
     default:
       return `${AppRootRoutes.Liquidity}`;
   }
 };
 
-export const newLiquidityListDataHelper = ({
+export const mapLiquidityListItem = ({
   item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
 }: LiquidityItemResponse): PreparedLiquidityItem => {
   const tokens = tokensInfo.map(({ token }) => token);
