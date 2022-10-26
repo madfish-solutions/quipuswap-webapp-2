@@ -110,3 +110,21 @@ export interface FarmingItem extends UserBalances {
   udp: string;
   withdrawalFee: BigNumber;
 }
+
+export interface FarmItemCommon {
+  id: BigNumber;
+  contractAddress?: string;
+
+  stakedToken: Token;
+  rewardToken: Token;
+  tokens: Array<Token>;
+
+  tvlInUsd: Nullable<BigNumber>;
+  apr: BigNumber;
+  apy: BigNumber;
+
+  old: boolean;
+
+  timelock?: string;
+  stakeStatus: Token;
+}

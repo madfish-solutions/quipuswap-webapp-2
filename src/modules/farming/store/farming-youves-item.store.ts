@@ -7,7 +7,7 @@ import {
   LAST_INDEX,
   ZERO_AMOUNT
 } from '@config/constants';
-import { isNull, MakeInterval } from '@shared/helpers';
+import { isExist, isNull, MakeInterval } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Token } from '@shared/types';
@@ -25,12 +25,12 @@ const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
-  farmingAddress: Nullable<string> = null;
+  id = '0';
 
   //#region item store region
   @Led({
     default: DEFAULT_ITEM,
-    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
@@ -60,10 +60,12 @@ export class FarmingYouvesItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
+      id: observable,
       claimableRewards: observable,
       longTermRewards: observable,
 
       updatePendingRewards: action,
+      setFarmingId: action,
 
       item: computed,
       stakes: computed
@@ -91,8 +93,8 @@ export class FarmingYouvesItemStore {
     this.updateStakesInterval.stop();
   }
 
-  setFarmingAddress(farmingAddress: Nullable<string>) {
-    this.farmingAddress = farmingAddress;
+  setFarmingId(id: string) {
+    this.id = id;
   }
 
   /*
@@ -101,11 +103,15 @@ export class FarmingYouvesItemStore {
   async getStakes() {
     const { tezos, authStore } = this.rootStore;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || !isExist(this.itemStore.model.item?.contractAddress)) {
       return { stakes: [] };
     }
 
-    return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
+    return await BlockchainYouvesFarmingApi.getStakes(
+      this.itemStore.model.item!.contractAddress,
+      authStore.accountPkh,
+      tezos
+    );
   }
 
   get currentStake() {

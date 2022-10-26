@@ -6,7 +6,7 @@ import { Nullable, Token, Undefined } from '@shared/types';
 
 import { UsersInfoValue, RawUsersInfoValue, FarmingContractStorage, UsersInfoKey } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
-import { FarmingItemModel } from '../models';
+import { FarmingItemCommonModel, FarmingItemModel } from '../models';
 
 export interface UserBalances {
   depositBalance: string;
@@ -45,6 +45,7 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
+/** @deprecated */
 export const getUserPendingReward = (
   userInfo: UsersInfoValue,
   farmingItemModel: FarmingItemModel,
@@ -72,6 +73,34 @@ export const getUserPendingReward = (
   return fromRewardPrecision(pending);
 };
 
+export const getUserPendingRewardNew = (
+  userInfo: UsersInfoValue,
+  farmingItemModel: FarmingItemCommonModel,
+  timestamp: number = Date.now()
+  // eslint-disable-next-line sonarjs/no-identical-functions
+) => {
+  const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
+
+  if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
+    return ZERO_BN;
+  }
+
+  const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime!).getTime());
+  let reward = new BigNumber(
+    Math.floor((timeFrom - new Date(farmingItemModel.udp!).getTime()) / MS_IN_SECOND)
+  ).multipliedBy(rewardPerSecond!);
+
+  if (reward.isNegative()) {
+    reward = ZERO_BN;
+  }
+
+  const rewardPerShare = farmingItemModel.rewardPerShare!.plus(reward.dividedBy(totalStaked));
+
+  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
+
+  return fromRewardPrecision(pending);
+};
+
 export const getUserPendingRewardWithFee = (
   userInfo: UsersInfoValue,
   item: FarmingItemModel,
@@ -85,7 +114,7 @@ export const getUserPendingRewardWithFee = (
     withFee: pendingRewards.multipliedBy(fixedHarvestFee)
   };
 };
-
+/** @deprecated */
 export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingItemModel: FarmingItemModel) => {
   if (!userInfo) {
     return {
@@ -95,6 +124,23 @@ export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingIt
   }
 
   const reward = getUserPendingReward(userInfo, farmingItemModel);
+
+  return {
+    depositBalance: userInfo.staked.toFixed(),
+    earnBalance: reward.toFixed()
+  };
+};
+
+// eslint-disable-next-line sonarjs/no-identical-functions
+export const getBalancesNew = (userInfo: Undefined<UsersInfoValueWithId>, farmingItemModel: FarmingItemCommonModel) => {
+  if (!userInfo) {
+    return {
+      depositBalance: '0',
+      earnBalance: '0'
+    };
+  }
+
+  const reward = getUserPendingRewardNew(userInfo, farmingItemModel);
 
   return {
     depositBalance: userInfo.staked.toFixed(),
@@ -124,6 +170,7 @@ export const getAllFarmUserInfo = async (
   return usersInfoValues;
 };
 
+/** @deprecated */
 export const getUserFarmBalances = async (
   accountAddress: string,
   storage: FarmingContractStorage,
@@ -135,6 +182,28 @@ export const getUserFarmBalances = async (
     const farm = list.find(item => item.id.toFixed() === index.toString());
     if (farm) {
       const balance = getBalances(usersInfoValue, farm);
+
+      acc.set(farm.id.toFixed(), balance);
+    }
+
+    return acc;
+  }, new Map<string, UserBalances>());
+
+  return balances;
+};
+
+export const getUserFarmBalancesNew = async (
+  accountAddress: string,
+  storage: FarmingContractStorage,
+  list: Array<FarmingItemCommonModel>
+  // eslint-disable-next-line sonarjs/no-identical-functions
+) => {
+  const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
+
+  const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
+    const farm = list.find(item => item.id.toFixed() === index.toString());
+    if (farm && farm.old) {
+      const balance = getBalancesNew(usersInfoValue, farm);
 
       acc.set(farm.id.toFixed(), balance);
     }

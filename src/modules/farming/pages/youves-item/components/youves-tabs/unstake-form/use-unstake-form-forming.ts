@@ -10,11 +10,7 @@ import { FarmingRoutes } from '../../../../../farming.router';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';
 import { YouvesFormTabs } from '../../../types';
 
-export const useUnstakeFormForming = (
-  contractAddress: Nullable<string>,
-  stakeId: BigNumber,
-  balance: Nullable<BigNumber>
-) => {
+export const useUnstakeFormForming = (id: Nullable<string>, stakeId: BigNumber, balance: Nullable<BigNumber>) => {
   const { doWithdraw } = useDoYouvesFarmingWithdraw();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -23,9 +19,9 @@ export const useUnstakeFormForming = (
     event.preventDefault();
 
     setIsSubmitting(true);
-    await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
+    await doWithdraw(defined(id, 'Contract address'), stakeId, defined(balance, 'Balance'));
     setIsSubmitting(false);
-    navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${contractAddress}/${YouvesFormTabs.stake}`);
+    navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${id}/${YouvesFormTabs.stake}`);
   };
 
   return {

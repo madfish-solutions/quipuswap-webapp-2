@@ -39,7 +39,7 @@ export const useYouvesRewardInfoViewModel = () => {
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
     await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
 
-    await delayedGetFarmingItem(farmingItemWithBalances.address);
+    await delayedGetFarmingItem(farmingItemWithBalances.contractAddress);
   };
 
   const getUserStakeInfo = useCallback(async () => {
@@ -50,9 +50,9 @@ export const useYouvesRewardInfoViewModel = () => {
       return;
     }
 
-    const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.address);
+    const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.contractAddress);
     setRewardsDueDate(dueDate);
-    const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.address);
+    const totalDeposit = await getTotalDeposit(tezos, accountPkh, youvesFarmingItem.contractAddress);
     setTotalDeposit(totalDeposit);
   }, [accountPkh, tezos, youvesFarmingItem]);
 

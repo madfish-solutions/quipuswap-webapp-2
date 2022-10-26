@@ -6,6 +6,7 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore,
+  FarmingListCommonStore as IFarmingListCommonStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
@@ -43,6 +44,7 @@ export class RootStore {
   tokensModalStore: TokensModalStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
+  farmingListCommonStore: Nullable<IFarmingListCommonStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
@@ -81,6 +83,7 @@ export class RootStore {
       farmingItemStore: observable,
 
       stableswapListStore: observable,
+      farmingListCommonStore: observable,
       stableswapItemStore: observable,
       stableswapItemFormStore: observable,
       stableswapFilterStore: observable,
@@ -96,6 +99,7 @@ export class RootStore {
 
       setTezos: action,
       createFarmingListStore: action,
+      createFarmingListCommonStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
       createCoinflipStore: action,
@@ -192,6 +196,13 @@ export class RootStore {
     if (isNull(this.farmingListStore)) {
       const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
+    }
+  }
+
+  async createFarmingListCommonStore() {
+    if (isNull(this.farmingListCommonStore)) {
+      const { FarmingListCommonStore } = await import('@modules/farming/store/farming-list-common.store');
+      this.farmingListCommonStore = new FarmingListCommonStore(this);
     }
   }
 

@@ -29,7 +29,7 @@ export class YouvesFarmingItemDto {
   vestingPeriodSeconds: BigNumber;
 
   @Typed()
-  address: string;
+  contractAddress: string;
 
   @Typed()
   stakeUrl: string;
