@@ -18,9 +18,11 @@ import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-moda
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { DexTwoCreateFormCommonData } from './components/dex-two-create-form/dex-two-create-form.types';
 import { getInputSlugByIndex } from './components/helpers';
 import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
 import { NewLiqCreateInput } from './new-liquidity-create.interface';
+import { useIsPoolExist } from './use-is-pool-exist';
 import { useNewLiqudityCreateValidation } from './use-new-liquidity-create-validation';
 
 const ZERO_DECIMALS = 0;
@@ -30,16 +32,18 @@ export const useNewLiquidityCreatePageViewModel = () => {
   const { t } = useTranslation();
   const { createNewLiquidityPool } = useCreateNewLiquidityPool();
   const tokensModalStore = useTokensModalStore();
-  const choosedTokens = tokensModalStore.choosenTokensSingleModal;
+  const { chosenTokensSingleModal } = tokensModalStore;
 
-  const userBalances = useTokensBalancesOnly(choosedTokens.filter(isExist));
-  const shouldShowBakerInput = canDelegate(choosedTokens);
+  const { isPoolExist, existingPoolLink } = useIsPoolExist(chosenTokensSingleModal);
 
-  const validationSchema = useNewLiqudityCreateValidation(choosedTokens, userBalances, shouldShowBakerInput);
+  const userBalances = useTokensBalancesOnly(chosenTokensSingleModal.filter(isExist));
+  const shouldShowBakerInput = canDelegate(chosenTokensSingleModal);
+
+  const validationSchema = useNewLiqudityCreateValidation(chosenTokensSingleModal, userBalances, shouldShowBakerInput);
 
   const handleSubmit = useCallback(
     async <T extends Record<string, string>>(values: T, actions: FormikHelpers<T>) => {
-      if (!choosedTokens.every(isExist)) {
+      if (!chosenTokensSingleModal.every(isExist)) {
         return;
       }
 
@@ -48,7 +52,9 @@ export const useNewLiquidityCreatePageViewModel = () => {
       const valuesBN = getInputsAmountFormFormikValues(values);
 
       const candidate = shouldShowBakerInput ? values[NewLiqCreateInput.BAKER_INPUT] : ZERO_BAKER_ADDRESS;
-      const tokensAndAmount = getTokensAndAmounts(valuesBN, choosedTokens).sort((a, b) => sortTokens(a.token, b.token));
+      const tokensAndAmount = getTokensAndAmounts(valuesBN, chosenTokensSingleModal).sort((a, b) =>
+        sortTokens(a.token, b.token)
+      );
 
       if (isTezosToken(tokensAndAmount[0].token)) {
         tokensAndAmount.reverse();
@@ -59,7 +65,7 @@ export const useNewLiquidityCreatePageViewModel = () => {
       actions.resetForm();
       actions.setSubmitting(false);
     },
-    [choosedTokens, createNewLiquidityPool, shouldShowBakerInput]
+    [chosenTokensSingleModal, createNewLiquidityPool, shouldShowBakerInput]
   );
 
   const formik = useFormik({
@@ -73,7 +79,7 @@ export const useNewLiquidityCreatePageViewModel = () => {
   });
 
   const handleInputChange = (index: number) => {
-    const localToken = choosedTokens[index];
+    const localToken = chosenTokensSingleModal[index];
     const localTokenDecimals = localToken ? localToken.metadata.decimals : ZERO_DECIMALS;
 
     return async (inputAmount: string) => {
@@ -92,17 +98,17 @@ export const useNewLiquidityCreatePageViewModel = () => {
       tokensModalStore.setInputIndex(index);
       const [token] =
         (await chooseTokens({
-          disabledTokens: choosedTokens.filter(isExist),
+          disabledTokens: chosenTokensSingleModal.filter(isExist),
           min: SINGLE_TOKEN_VALUE,
           max: SINGLE_TOKEN_VALUE
         })) ?? [];
 
       tokensModalStore.setChooseToken(token);
     },
-    [tokensModalStore, chooseTokens, choosedTokens]
+    [tokensModalStore, chooseTokens, chosenTokensSingleModal]
   );
 
-  const data = choosedTokens.map((token, index) => ({
+  const data = chosenTokensSingleModal.map((token, index) => ({
     value: (formik.values as FormikValues)[getInputSlugByIndex(index)],
     error: (formik.errors as FormikErrors<FormikValues>)[getInputSlugByIndex(index)] as string,
     label: t('common|Input'),
@@ -120,5 +126,14 @@ export const useNewLiquidityCreatePageViewModel = () => {
     shouldShowBakerInput
   };
 
-  return { data, bakerData, onSubmit: formik.handleSubmit };
+  const disabled = !formik.isValid || formik.isSubmitting || isPoolExist;
+
+  const commonData = {
+    disabled,
+    loading: formik.isSubmitting,
+    isPoolExist,
+    existingPoolLink
+  } as DexTwoCreateFormCommonData;
+
+  return { data, bakerData, onSubmit: formik.handleSubmit, commonData };
 };
