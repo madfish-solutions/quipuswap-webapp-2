@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { MS_IN_SECOND } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
 import { getLastElement, isNull, isUndefined } from '@shared/helpers';
+import { Undefined } from '@shared/types';
 
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 
@@ -12,9 +13,9 @@ const NO_DUE_DATE = 0;
 export const getRewardsDueDate = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  contractAddress: string
+  contractAddress: Undefined<string>
 ) => {
-  if (isNull(tezos) || isNull(accountPkh)) {
+  if (isNull(tezos) || isNull(accountPkh) || isUndefined(contractAddress)) {
     return NO_DUE_DATE;
   }
 
