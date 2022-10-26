@@ -108,7 +108,6 @@ export class FarmingYouvesItemStore {
 
   async updatePendingRewards() {
     // eslint-disable-next-line no-console
-    console.log('updatePendingRewards', this.item, this.contractBalance?.toFixed(), this.stakesStore.isLoading);
     if (isNull(this.item) || isNull(this.contractBalance) || this.stakesStore.isLoading) {
       this.claimableRewards = null;
       this.longTermRewards = null;
@@ -216,13 +215,5 @@ export class FarmingYouvesItemStore {
 
   get tokens() {
     return this.item?.tokens ?? DEFAULT_TOKENS;
-  }
-
-  get claimableRewardsInUsd() {
-    return this.claimableRewards?.times(this.item?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null;
-  }
-
-  get longTermRewardsInUsd() {
-    return this.longTermRewards?.times(this.item?.earnExchangeRate ?? ZERO_AMOUNT_BN) ?? null;
   }
 }
