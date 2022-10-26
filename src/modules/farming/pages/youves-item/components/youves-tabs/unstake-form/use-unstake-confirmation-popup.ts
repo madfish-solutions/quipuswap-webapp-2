@@ -1,4 +1,5 @@
 import { isExist } from '@shared/helpers';
+import { NoopAsync } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
 import { i18n } from '@translation';
 
@@ -12,8 +13,8 @@ export const useYouvesUnstakeConfirmationPopup = () => {
   const message = getConfirmationMessage();
 
   if (isExist(message)) {
-    return (yesCallback: () => Promise<void>) => openConfirmationModal({ message, yesCallback });
+    return (yesCallback: NoopAsync) => openConfirmationModal({ message, yesCallback });
   }
 
-  return async (callback: () => Promise<void>) => callback();
+  return async (callback: () => NoopAsync) => callback();
 };
