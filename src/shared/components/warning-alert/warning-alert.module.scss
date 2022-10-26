@@ -1,0 +1,9 @@
+@import "@styles/_variables";
+
+.root {
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: $elevation-06;
+  color: $support-warning;
+  border: 1px solid $support-warning;
+}

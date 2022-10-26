@@ -35,6 +35,10 @@ export const newLiquidity = {
   why: 'Why?',
   showDust: 'Show Dust',
   investedOnly: 'Invested Only',
+  poolAlreadyExists: 'Pool already exists. Check out',
+  here: 'here',
+  emptyPoolWarning:
+    'Note: you provide liquidity to the empty pool and initialise its exchange rates. Make sure the value of both assets is provided 50/50.',
   tooltipStableSwap: 'StableSwap Pools',
   tooltipBridge: 'Pools with Bridged tokens',
   tooltipQuipu: 'Pools with Quipu',
