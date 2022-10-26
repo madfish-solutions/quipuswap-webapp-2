@@ -30,6 +30,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
 
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
+  const rewardTokenCurrency = getSymbolsString(youvesFarmingItemStore.item?.rewardToken ?? null);
 
   const handleHarvest = async () => {
     // TODO: add real balances, which are important for analytics
@@ -77,6 +78,7 @@ export const useYouvesRewardInfoViewModel = () => {
     isHarvestAvailable: true,
     symbolsString,
     userTotalDeposit,
+    rewardTokenCurrency,
     userTotalDepositDollarEquivalent: new BigNumber(150),
     rewadsDueDate
   };

@@ -108,7 +108,10 @@ export class FarmingYouvesItemStore {
 
   async updatePendingRewards() {
     if (!isExist(getLastElement(this.stakes)) || isNull(this.itemStore.model.item) || isNull(this.contractBalance)) {
-      return DEFAULT_REWARDS;
+      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
+      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+
+      return;
     }
 
     let _disc_factor;
@@ -122,7 +125,10 @@ export class FarmingYouvesItemStore {
     }
 
     if (isUndefined(_disc_factor)) {
-      return DEFAULT_REWARDS;
+      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
+      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+
+      return;
     }
 
     const stakes = getLastElement(this.stakes) as YouvesStakeDto;
