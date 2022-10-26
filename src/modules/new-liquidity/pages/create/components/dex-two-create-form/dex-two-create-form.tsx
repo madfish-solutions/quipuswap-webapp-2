@@ -35,7 +35,7 @@ export const DexTwoCreateForm: FC<DexTwoCreateFormProps> = ({ data, onSubmit, ba
         />
       )}
       {isPoolExist && (
-        <AlarmMessage className={styles['mt-24']}>
+        <AlarmMessage className={stylesCommonContainer.mt24}>
           <NewLiquidityPoolExist className={styles.poolExistWarning} existingPoolLink={existingPoolLink} />
         </AlarmMessage>
       )}
