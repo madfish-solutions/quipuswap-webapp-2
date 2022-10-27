@@ -20,6 +20,7 @@ export const useGetConfirmationMessageParams = () => {
           realLostRewardAmount: ZERO_AMOUNT_BN
         };
       }
+      // TODO: https://madfish.atlassian.net/browse/QUIPU-521
       const currentAgeTimestamp = Math.floor(
         new Date(currentStake?.age_timestamp ?? ZERO_AMOUNT).getTime() / MS_IN_SECOND
       );
