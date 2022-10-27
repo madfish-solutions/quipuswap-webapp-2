@@ -1,10 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
+import { FISRT_INDEX, OPPOSITE_INDEX, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
-import { useAddLiquidity } from '@modules/new-liquidity/hooks/blockchain';
+import { useAddLiquidity, useCreateNewLiquidityPool } from '@modules/new-liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
   calculateShares,
@@ -13,6 +13,7 @@ import {
   isTezosToken,
   numberAsString,
   saveBigNumber,
+  toAtomic,
   toAtomicIfPossible,
   toFixed,
   toRealIfPossible
@@ -29,10 +30,13 @@ export const useDexTwoAddLiqFormViewModel = () => {
   const newLiquidityItemStore = useNewLiquidityItemStore();
   const item = newLiquidityItemStore.item!; // TODO: fix MOCK, when store will be ready
   const { addLiquidity } = useAddLiquidity();
+  const { createNewLiquidityPool } = useCreateNewLiquidityPool();
+  const poolIsEmpty = item.totalSupply.isZero();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
     isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo
   );
+  const shouldShowBakerInput = tokensInfo.some(({ token }) => isTezosToken(token));
 
   const handleSubmit = async (values: FormikValues, actions: FormikHelpers<NewLiquidityFormValues>) => {
     actions.setSubmitting(true);
@@ -40,15 +44,24 @@ export const useDexTwoAddLiqFormViewModel = () => {
     const candidate = values[Input.THIRD_INPUT];
     const inputAmounts = getInputsAmountFormFormikValues(values);
 
-    await addLiquidity(inputAmounts, candidate);
+    if (poolIsEmpty) {
+      await createNewLiquidityPool(
+        tokensInfo.map((tokenInfo, index) => {
+          const token = tokenInfo.token;
+
+          return { amount: toAtomic(inputAmounts[index], token), token };
+        }),
+        shouldShowBakerInput ? candidate : ZERO_BAKER_ADDRESS
+      );
+    } else {
+      await addLiquidity(inputAmounts, candidate);
+    }
 
     actions.resetForm();
     actions.setSubmitting(false);
   };
 
   const userBalances = getUserBalances(tokensInfo);
-
-  const shouldShowBakerInput = tokensInfo.some(({ token }) => isTezosToken(token));
 
   const validationSchema = useDexTwoAddLiqValidation(userBalances, item, shouldShowBakerInput);
 
@@ -78,15 +91,24 @@ export const useDexTwoAddLiqFormViewModel = () => {
       const { realValue, fixedValue } = numberAsString(inputAmount, locDecimals);
       const atomicInputAmountBN = toAtomicIfPossible(saveBigNumber(fixedValue, null), locDecimals);
 
-      const shares = calculateShares(atomicInputAmountBN, locAtomicTokenTvl, item.totalSupply);
+      if (poolIsEmpty) {
+        formik.setFieldValue(locInputField, realValue);
+      } else {
+        const shares = calculateShares(atomicInputAmountBN, locAtomicTokenTvl, item.totalSupply);
 
-      const notLocalInputValue = calculateOutputWithToken(shares, item.totalSupply, notLocAtomicTokenTvl, notLocToken);
-      const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
+        const notLocalInputValue = calculateOutputWithToken(
+          shares,
+          item.totalSupply,
+          notLocAtomicTokenTvl,
+          notLocToken
+        );
+        const realNotLocalInputValue = toRealIfPossible(notLocalInputValue, notLocDecimals);
 
-      formik.setValues({
-        [locInputField]: realValue,
-        [notLocInputField]: toFixed(realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN))
-      });
+        formik.setValues({
+          [locInputField]: realValue,
+          [notLocInputField]: toFixed(realNotLocalInputValue?.decimalPlaces(notLocDecimals, BigNumber.ROUND_DOWN))
+        });
+      }
     };
   };
 
@@ -120,12 +142,14 @@ export const useDexTwoAddLiqFormViewModel = () => {
     handleChange: onBakerChange,
     shouldShowBakerInput
   };
+  const warningMessage = poolIsEmpty ? t('newLiquidity|emptyPoolWarning') : null;
 
   return {
     data,
     onSubmit: formik.handleSubmit,
     bakerData,
     isSubmitting: formik.isSubmitting,
-    setSubmitting: formik.setSubmitting
+    setSubmitting: formik.setSubmitting,
+    warningMessage
   };
 };

@@ -9,8 +9,14 @@ import { defined } from '@shared/helpers';
 import { FarmingRoutes } from '../../../../../farming.router';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';
 import { YouvesFormTabs } from '../../../types';
+import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
 
-export const useUnstakeFormForming = (id: Nullable<string>, stakeId: BigNumber, balance: Nullable<BigNumber>) => {
+export const useUnstakeFormForming = (
+  contractAddress: Nullable<string>,
+  stakeId: BigNumber,
+  balance: Nullable<BigNumber>
+) => {
+  const confirmationPopup = useYouvesUnstakeConfirmationPopup();
   const { doWithdraw } = useDoYouvesFarmingWithdraw();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -18,10 +24,12 @@ export const useUnstakeFormForming = (id: Nullable<string>, stakeId: BigNumber, 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setIsSubmitting(true);
-    await doWithdraw(defined(id, 'Contract address'), stakeId, defined(balance, 'Balance'));
-    setIsSubmitting(false);
-    navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${id}/${YouvesFormTabs.stake}`);
+    confirmationPopup(async () => {
+      setIsSubmitting(true);
+      await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
+      setIsSubmitting(false);
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${contractAddress}/${YouvesFormTabs.stake}`);
+    });
   };
 
   return {

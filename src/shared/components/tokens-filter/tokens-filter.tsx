@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 import { isNull } from '@shared/helpers';
 import { TokensModal } from '@shared/modals/tokens-modal';
@@ -15,7 +16,7 @@ interface Props {
   className?: string;
 }
 
-export const TokensFilter: FC<Props> = ({ className }) => {
+export const TokensFilter: FC<Props> = observer(({ className }) => {
   const { t } = useTranslation();
   const { tokens, handleSelectTokensClick } = useTokensFilterViewModel();
 
@@ -30,4 +31,4 @@ export const TokensFilter: FC<Props> = ({ className }) => {
       </div>
     </>
   );
-};
+});

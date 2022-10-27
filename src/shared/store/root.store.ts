@@ -12,7 +12,8 @@ import {
 } from '@modules/farming/store';
 import {
   NewLiquidityListStore as INewLiquidityListStore,
-  NewLiquidityItemStore as INewLiquidityItemStore
+  NewLiquidityItemStore as INewLiquidityItemStore,
+  LiquidityListFiltersStore as ILiquidityListFiltersStore
 } from '@modules/new-liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
@@ -61,6 +62,7 @@ export class RootStore {
 
   newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
   newLiquidityItemStore: Nullable<INewLiquidityItemStore> = null;
+  liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -114,7 +116,8 @@ export class RootStore {
       createStableDividendsItemStore: action,
 
       createNewLiquidityListStore: action,
-      createNewLiquidityItemStore: action
+      createNewLiquidityItemStore: action,
+      createLiquidityListFiltersStore: action
     });
   }
 
@@ -126,6 +129,13 @@ export class RootStore {
     if (isNull(this.newLiquidityListStore)) {
       const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
       this.newLiquidityListStore = new NewLiquidityListStore(this);
+    }
+  }
+
+  async createLiquidityListFiltersStore() {
+    if (isNull(this.liquidityListFiltersStore)) {
+      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filters.stores');
+      this.liquidityListFiltersStore = new LiquidityListFiltersStore();
     }
   }
 

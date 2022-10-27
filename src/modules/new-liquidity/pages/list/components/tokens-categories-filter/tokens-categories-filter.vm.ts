@@ -1,27 +1,40 @@
-import { useNewLiquidityListStore } from '../../../../hooks';
+import { useTranslation } from '@translation';
+
+import { useLiquidityListFiltersStore } from '../../../../hooks';
 
 export const useTokensCategoriesFilter = () => {
-  const newLiquidityListStore = useNewLiquidityListStore();
+  const { t } = useTranslation();
+  const liquidityListFiltersStore = useLiquidityListFiltersStore();
 
-  const { showStable, showBridged, showQuipu, showTezotopia, showBTC, showDexTwo } = newLiquidityListStore;
+  const { showStable, showBridged, showQuipu, showTezotopia, showBTC, showDexTwo } = liquidityListFiltersStore;
 
   const toggleShowStable = () => {
-    return newLiquidityListStore.setShowStable(!showStable);
+    return liquidityListFiltersStore.setShowStable(!showStable);
   };
   const toggleShowBridged = () => {
-    return newLiquidityListStore.setShowBridged(!showBridged);
+    return liquidityListFiltersStore.setShowBridged(!showBridged);
   };
   const toggleShowQuipu = () => {
-    return newLiquidityListStore.setShowQuipu(!showQuipu);
+    return liquidityListFiltersStore.setShowQuipu(!showQuipu);
   };
   const toggleShowTezotopia = () => {
-    return newLiquidityListStore.setShowTezotopia(!showTezotopia);
+    return liquidityListFiltersStore.setShowTezotopia(!showTezotopia);
   };
   const toggleShowBTC = () => {
-    return newLiquidityListStore.setShowBTC(!showBTC);
+    return liquidityListFiltersStore.setShowBTC(!showBTC);
   };
   const toggleShowDexTwo = () => {
-    return newLiquidityListStore.setShowDexTwo(!showDexTwo);
+    return liquidityListFiltersStore.setShowDexTwo(!showDexTwo);
+  };
+
+  const translation = {
+    investedOnly: t('newLiquidity|investedOnly'),
+    tooltipStableSwap: t('newLiquidity|tooltipStableSwap'),
+    tooltipBridge: t('newLiquidity|tooltipBridge'),
+    tooltipQuipu: t('newLiquidity|tooltipQuipu'),
+    tooltipTezotopia: t('newLiquidity|tooltipTezotopia'),
+    tooltipBTC: t('newLiquidity|tooltipBTC'),
+    tooltipDexTwo: t('newLiquidity|tooltipDexTwo')
   };
 
   return {
@@ -36,6 +49,7 @@ export const useTokensCategoriesFilter = () => {
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
-    toggleShowDexTwo
+    toggleShowDexTwo,
+    translation
   };
 };

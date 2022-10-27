@@ -1,25 +1,39 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { getUserBalance } from '@blockchain';
 import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
-  ZERO_AMOUNT
+  MS_IN_SECOND,
+  PRECISION_FACTOR,
+  ZERO_AMOUNT,
+  ZERO_AMOUNT_BN
 } from '@config/constants';
-import { isExist, isNull, MakeInterval } from '@shared/helpers';
+import { getLastElement, isExist, isNull, isUndefined, MakeInterval } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Token } from '@shared/types';
+import { Standard, Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
+import { YouvesStakeDto } from '../dto';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
+import { YouvesContractBalanceModel } from '../models/youves-contract-balance';
+import { getRewards } from '../pages/youves-item/helpers/get-rewards';
+
+const DEFAULT_REWARDS = {
+  claimableReward: null,
+  longTermReward: null
+};
 
 const DEFAULT_ITEM = {
   item: null,
   blockInfo: null
 };
+
+const DEFAULT_CONTRACT_BALANCE = { balance: null };
 
 const DEFAULT_TOKENS: Token[] = [];
 
@@ -38,6 +52,10 @@ export class FarmingYouvesItemStore {
   get item() {
     return this.itemStore.model.item;
   }
+
+  get farmingAddress() {
+    return this.item?.contractAddress ?? null;
+  }
   //#endregion item store region
 
   //#region stakes store
@@ -53,9 +71,25 @@ export class FarmingYouvesItemStore {
   }
   //#endregion stakes store
 
+  //#region stakes store
+  @Led({
+    default: DEFAULT_CONTRACT_BALANCE,
+    loader: async self => await self.getContractBalance(),
+    model: YouvesContractBalanceModel
+  })
+  readonly contractBalanceStore: LoadingErrorData<YouvesContractBalanceModel, typeof DEFAULT_CONTRACT_BALANCE>;
+
+  get contractBalance() {
+    return this.contractBalanceStore.model.balance;
+  }
+  //#endregion stakes store
+
   claimableRewards: Nullable<BigNumber> = null;
   longTermRewards: Nullable<BigNumber> = null;
-  readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
+  readonly pendingRewardsInterval = new MakeInterval(
+    async () => this.updatePendingRewards(),
+    FARM_REWARD_UPDATE_INTERVAL
+  );
   readonly updateStakesInterval = new MakeInterval(async () => this.stakesStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
@@ -68,7 +102,8 @@ export class FarmingYouvesItemStore {
       setFarmingId: action,
 
       item: computed,
-      stakes: computed
+      stakes: computed,
+      contractBalance: computed
     });
   }
 
@@ -77,15 +112,43 @@ export class FarmingYouvesItemStore {
     this.updateStakesInterval.start();
   }
 
-  updatePendingRewards() {
-    if (isNull(this.rootStore.authStore.accountPkh)) {
-      this.claimableRewards = null;
-      this.longTermRewards = null;
+  async updatePendingRewards() {
+    if (!isExist(getLastElement(this.stakes)) || isNull(this.itemStore.model.item) || isNull(this.contractBalance)) {
+      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
+      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+
+      return;
     }
 
-    // TODO: implement real calculations
-    this.claimableRewards = (this.claimableRewards ?? new BigNumber(ZERO_AMOUNT)).plus(1);
-    this.longTermRewards = (this.longTermRewards ?? new BigNumber(ZERO_AMOUNT)).plus(2);
+    let _disc_factor;
+
+    const item = this.itemStore.model.item;
+    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
+
+    if (staked.isGreaterThan(ZERO_AMOUNT)) {
+      const reward = this.contractBalance.minus(lastRewards);
+      _disc_factor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
+    }
+
+    if (isUndefined(_disc_factor)) {
+      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
+      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+
+      return;
+    }
+
+    const stakes = getLastElement(this.stakes) as YouvesStakeDto;
+
+    const { claimable_reward, full_reward } = getRewards(
+      stakes,
+      vestingPeriodSeconds.multipliedBy(MS_IN_SECOND),
+      _disc_factor
+    );
+    const tokenDecimals = stakedToken.metadata.decimals;
+    const tokenPrecision = `1e${tokenDecimals}`;
+
+    this.claimableRewards = claimable_reward.dividedBy(tokenPrecision);
+    this.longTermRewards = full_reward.dividedBy(tokenDecimals);
   }
 
   clearIntervals() {
@@ -112,6 +175,31 @@ export class FarmingYouvesItemStore {
       authStore.accountPkh,
       tezos
     );
+  }
+
+  // TODO: Add fa12 support when contracts will be ready
+  async getContractBalance() {
+    const { tezos } = this.rootStore;
+
+    if (isNull(tezos) || isNull(this.farmingAddress) || isNull(this.itemStore.model.item)) {
+      return DEFAULT_CONTRACT_BALANCE;
+    }
+
+    const item = this.itemStore.model.item;
+    const { rewardToken } = item;
+
+    const balance =
+      (await getUserBalance(
+        tezos,
+        this.farmingAddress,
+        rewardToken.contractAddress,
+        Standard.Fa2,
+        rewardToken.fa2TokenId
+      )) ?? ZERO_AMOUNT_BN;
+
+    return {
+      balance
+    };
   }
 
   get currentStake() {
