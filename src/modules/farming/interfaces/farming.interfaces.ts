@@ -126,5 +126,5 @@ export interface FarmItemCommon {
   old: boolean;
 
   timelock?: string;
-  stakeStatus: Token;
+  stakeStatus: ActiveStatus;
 }

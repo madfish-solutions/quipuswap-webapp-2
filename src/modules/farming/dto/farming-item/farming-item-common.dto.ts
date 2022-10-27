@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
+import { ActiveStatus } from '@shared/types';
 
 import { FarmItemCommon } from '../../interfaces';
 
@@ -39,11 +40,8 @@ export class FarmingItemCommonDto implements FarmItemCommon {
   @Typed()
   old: boolean;
 
-  @Typed()
-  timelock?: string;
-
-  @Typed()
-  stakeStatus: TokenDto;
+  @Typed({ type: String, isEnum: true })
+  stakeStatus: ActiveStatus;
 
   @Typed()
   staked: BigNumber;
@@ -59,4 +57,10 @@ export class FarmingItemCommonDto implements FarmItemCommon {
 
   @Typed({ type: BigNumber, optional: true })
   rewardPerSecond?: BigNumber;
+
+  @Typed({ type: String, optional: true })
+  timelock?: string;
+
+  @Typed({ type: BigNumber, optional: true })
+  withdrawalFee?: BigNumber;
 }
