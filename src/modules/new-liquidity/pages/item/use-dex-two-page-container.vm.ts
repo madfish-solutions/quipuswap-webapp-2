@@ -2,18 +2,19 @@ import { useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
+import { useGetNewLiquidityItem, useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 
 export const useDexTwoPageContainerViewModel = () => {
   const { pairSlug } = useParams();
   const newLiquidityItemStore = useNewLiquidityItemStore();
+  const { getNewLiquidityItem } = useGetNewLiquidityItem();
 
   useEffect(() => {
     newLiquidityItemStore.setTokenPairSlug(pairSlug!);
-    void newLiquidityItemStore.itemSore.load();
+    void getNewLiquidityItem();
 
     return () => newLiquidityItemStore.itemSore.resetData();
-  }, [newLiquidityItemStore, pairSlug]);
+  }, [getNewLiquidityItem, newLiquidityItemStore, pairSlug]);
 
   return {
     isInitialized: Boolean(newLiquidityItemStore.item)
