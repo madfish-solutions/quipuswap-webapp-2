@@ -4,14 +4,34 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { isEqual, isTezosToken, isTokenFa12, isTokenFa2, saveBigNumber } from '@shared/helpers';
-import { AmountToken, Token } from '@shared/types';
+import { address, AmountToken, nat, Token } from '@shared/types';
 
 enum KeyChar {
   A = 'a',
   B = 'b'
 }
 
-export const mapTokenToBlockchainToken = (token: Token, index: number) => {
+interface TezToken {
+  tez: never;
+}
+
+interface FA12Token {
+  fa12: address;
+}
+
+interface FA2Token {
+  fa2: {
+    token: address;
+    id: nat;
+  };
+}
+
+export type BlockchainToken = TezToken | FA12Token | FA2Token;
+
+// TODO: fix string to const string
+export type BlockchainTokenDictionary = { [key: string]: BlockchainToken };
+
+export const convertToBlockchainToken = (token: Token, index: number): BlockchainTokenDictionary => {
   const FIRST_TOKEN = 0;
   const keySymbol = isEqual(index, FIRST_TOKEN) ? KeyChar.A : KeyChar.B;
 
@@ -33,7 +53,7 @@ export const mapTokenToBlockchainToken = (token: Token, index: number) => {
   } else {
     return {
       [`token_${keySymbol}`]: {
-        tez: {}
+        tez: {} as never
       }
     };
   }
@@ -47,7 +67,7 @@ const prepareNewPoolData = (tokensAndAmounts: Array<AmountToken>) => {
   let mutezAmount = new BigNumber(NO_TZ_TOKEN_VALUE);
 
   tokensAndAmounts.forEach(({ token, amount }, index) => {
-    Object.assign(tokensPairParams, mapTokenToBlockchainToken(token, index));
+    Object.assign(tokensPairParams, convertToBlockchainToken(token, index));
     amounts.push(amount);
 
     if (isTezosToken(token)) {
