@@ -1,10 +1,13 @@
 import { BigNumber } from 'bignumber.js';
 
+import { AppRootRoutes } from '@app.router';
+import { NEW_FARMINGS } from '@config/config';
 import { PERCENT, ZERO_AMOUNT_BN } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
-import { getTokenSymbol, isNull } from '@shared/helpers';
+import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import { getFarmingLabel } from '../../helpers';
 import { FarmingListItemWithBalances } from './types';
 
 interface StateCurrAmount {
@@ -22,6 +25,8 @@ export const farmingListCommonDataHelper = (
   farmingItem: FarmingListItemWithBalances,
   accountPkh: Nullable<string>
 ): ListItemCardProps => {
+  const labels = getFarmingLabel(farmingItem);
+
   const shouldShowUserStats =
     !isNull(accountPkh) &&
     (farmingItem.depositBalance?.gt(ZERO_AMOUNT_BN) || farmingItem.earnBalance?.gt(ZERO_AMOUNT_BN));
@@ -80,11 +85,16 @@ export const farmingListCommonDataHelper = (
     : undefined;
 
   return {
+    labels,
     itemStats,
     userStats,
-    href: farmingItem.old ? `/farming/v1/${farmingItem.id}` : `/farming/youves/${farmingItem.id}`,
+    href:
+      farmingItem.old || isUndefined(farmingItem.old)
+        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${farmingItem.id}`
+        : `${AppRootRoutes.Farming}${AppRootRoutes.Youves}/${farmingItem.id}`,
     inputToken: farmingItem.tokens,
-    status: { status: farmingItem.stakeStatus, label: farmingItem.stakeStatus, filled: true },
+    isNew: NEW_FARMINGS.includes(farmingItem.id.toFixed()),
+    status: { status: farmingItem.stakeStatus, filled: true },
     outputToken: farmingItem.rewardToken
   };
 };
