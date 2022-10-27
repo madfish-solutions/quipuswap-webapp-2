@@ -56,14 +56,16 @@ export const DexTwoDetailsView: FC<Props> = ({
             isLeftCurrency
           />
         </DetailsCardCell>
-        <DetailsCardCell
-          cellName={t('stableswap|weeklyVolume')}
-          className={cardCellClassName}
-          tooltipContent={t('newLiquidity|weeklyVolumeTooltip')}
-          data-test-id="weeklyVolume"
-        >
-          <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
-        </DetailsCardCell>
+        {weeklyVolume && (
+          <DetailsCardCell
+            cellName={t('stableswap|weeklyVolume')}
+            className={cardCellClassName}
+            tooltipContent={t('newLiquidity|weeklyVolumeTooltip')}
+            data-test-id="weeklyVolume"
+          >
+            <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
+          </DetailsCardCell>
+        )}
         <DetailsCardCell
           cellName={t('stableswap|Total LP Supply')}
           className={cardCellClassName}
@@ -72,22 +74,26 @@ export const DexTwoDetailsView: FC<Props> = ({
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
-        <DetailsCardCell
-          cellName={t('stableswap|feesRate')}
-          className={cardCellClassName}
-          tooltipContent={t('newLiquidity|feesRateTooltip')}
-          data-test-id="feesRate"
-        >
-          <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
-        </DetailsCardCell>
-        <DetailsCardCell
-          cellName={t('stableswap|apr')}
-          className={cardCellClassName}
-          tooltipContent={t('newLiquidity|aprTooltip')}
-          data-test-id="apr"
-        >
-          <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />
-        </DetailsCardCell>
+        {feesRate && (
+          <DetailsCardCell
+            cellName={t('stableswap|feesRate')}
+            className={cardCellClassName}
+            tooltipContent={t('newLiquidity|feesRateTooltip')}
+            data-test-id="feesRate"
+          >
+            <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
+          </DetailsCardCell>
+        )}
+        {apr && (
+          <DetailsCardCell
+            cellName={t('stableswap|apr')}
+            className={cardCellClassName}
+            tooltipContent={t('newLiquidity|aprTooltip')}
+            data-test-id="apr"
+          >
+            <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />
+          </DetailsCardCell>
+        )}
       </div>
       <PieChartQs data={pieChartData} />
       <div className={commonContainerStyles.detailsButtons}>
