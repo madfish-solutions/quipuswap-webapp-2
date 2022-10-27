@@ -36,6 +36,10 @@ export class NewLiquidityListStore {
   readonly listStore: LoadingErrorData<LiquidityListModel, typeof defaultList>;
 
   get list() {
+    return this.listStore.model.list;
+  }
+
+  get filteredList() {
     return defined(this.rootStore.liquidityListFiltersStore).filterAndSort(this.listStore.model.list);
   }
 
@@ -60,6 +64,7 @@ export class NewLiquidityListStore {
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       list: computed,
+      filteredList: computed,
       hotPools: computed,
       stats: computed
     });
