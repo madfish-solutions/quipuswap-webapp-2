@@ -95,7 +95,12 @@ export const useMigrateLiquidity = () => {
       const operation = await migrateLiquidity(
         tezos,
         accountPkh,
-        { contractAddress: itemStore.contractAddress, id: itemStore.item.id, tokensInfo: itemStore.item.tokensInfo },
+        {
+          contractAddress: itemStore.contractAddress,
+          id: itemStore.item.id,
+          tokensInfo: itemStore.item.tokensInfo,
+          totalLpSupply: itemStore.item.totalSupply
+        },
         {
           contractAddress,
           type,
