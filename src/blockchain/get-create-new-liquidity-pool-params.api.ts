@@ -2,28 +2,29 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { mapTokenToBlockchainToken } from '@modules/new-liquidity/api';
+import { BlockchainTokenDictionary, convertToBlockchainToken } from '@modules/new-liquidity/api';
 import { getContract } from '@shared/dapp';
 import { isTezosToken } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
 
+const NO_TZ_TOKEN_VALUE = 0;
+
+const tryExtractMutezOrZero = (tokensAndAmounts: Array<AmountToken>) => {
+  const tezosTokenAmount = tokensAndAmounts.find(token => isTezosToken(token.token));
+
+  return tezosTokenAmount ? tezosTokenAmount.amount : new BigNumber(NO_TZ_TOKEN_VALUE);
+};
+
+const convertToBlockchainTokensDictionary = (tokensAndAmounts: Array<AmountToken>) =>
+  tokensAndAmounts.reduce(
+    (acc, { token, amount }, index) => ({ ...acc, ...convertToBlockchainToken(token, index) }),
+    {} as BlockchainTokenDictionary
+  );
+
 const prepareNewPoolData = (tokensAndAmounts: Array<AmountToken>) => {
-  const NO_TZ_TOKEN_VALUE = 0;
-
-  const tokensPairParams = {};
-  const amounts: Array<BigNumber> = [];
-  let mutezAmount = new BigNumber(NO_TZ_TOKEN_VALUE);
-
-  tokensAndAmounts.forEach(({ token, amount }, index) => {
-    Object.assign(tokensPairParams, mapTokenToBlockchainToken(token, index));
-    amounts.push(amount);
-
-    if (isTezosToken(token)) {
-      mutezAmount = amount;
-    }
-  });
-
-  const [token_a_in, token_b_in] = amounts;
+  const tokensPairParams = convertToBlockchainTokensDictionary(tokensAndAmounts);
+  const [token_a_in, token_b_in] = tokensAndAmounts.map(({ amount }) => amount);
+  const mutezAmount = tryExtractMutezOrZero(tokensAndAmounts);
 
   return {
     tokensPairParams,
