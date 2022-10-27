@@ -7,20 +7,20 @@ import { Standard, TokenIdFa2 } from '@shared/types';
 
 interface IFarmingStorage {
   deposit_token: {
-    id: BigNumber;
-    address: string;
+    token_id: BigNumber;
+    token_address: string;
   };
 }
 
 export class BlockchainYouvesFarmingApi {
   static async getToken(tezos: TezosToolkit, contractAddress: string): Promise<TokenIdFa2> {
     const storage = await getStorageInfo<IFarmingStorage>(tezos, contractAddress);
-    const { id, address } = storage.deposit_token;
+    const { token_id, token_address } = storage.deposit_token;
 
     return {
       type: Standard.Fa2,
-      fa2TokenId: id.toNumber(),
-      contractAddress: address
+      fa2TokenId: token_id.toNumber(),
+      contractAddress: token_address
     };
   }
 
