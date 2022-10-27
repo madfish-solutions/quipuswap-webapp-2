@@ -11,6 +11,5 @@ export enum AppRootRoutes {
   Coinflip = '/coinflip',
   NewLiquidity = '/new-liquidity',
   VersionOne = '/v1',
-  Youves = '/youves',
   NotFound = '/404'
 }

@@ -37,6 +37,7 @@ export const farm = {
     'The baker you prefer to vote for with your tokens on the Dex to increase chances this baker will be chosen as the delegate for the pool.',
   feeEndsInTooltip:
     'Countdown till the moment when the stake can be withdrawn without paying the unlock fee and without burning earned rewards.',
+  vestingPeriodIndsInTooltip: 'After this time full rewards will be claimable.',
   singleFarmRewardTooltip: 'Your unclaimed farming reward from this farm.',
   select: 'Select',
   fullCardTooltip: 'Add Liquidity to the selected liquidity pool, stake liquidity tokens here, earn rewards.',
@@ -112,5 +113,11 @@ export const farm = {
   farmingTokens: 'Farming {{tokens}}',
   'Vesting Period': 'Vesting Period',
   vestingPeriodTooltip:
-    'The longer you stake, the higher your yield. Vesting period shows how long you should stake to receive the full rewards. Claiming earlier results in smaller reward allocation and distributes the difference to the full rewards back to the pool.'
+    'The longer you stake, the higher your yield. Vesting period shows how long you should stake to receive the full rewards. Claiming earlier results in smaller reward allocation and distributes the difference to the full rewards back to the pool.',
+  youvesConfirmationNewStake:
+    'Note: It is a long-term farm. The longer your stake, the bigger reward you can claim. Stake can be withdrawn any time.',
+  youvesConfirmationUpdateStake:
+    'Note: It is a long-term farm. The new deposit will increase the waiting time to {{waitingTime}} and {{reward}} of your entitled total rewards will be lost.',
+  youvesConfirmationUnstake:
+    'Note: It is a long-term farm. Your claimable rewards will be claimed along with your withdrawal. All further rewards will be lost.'
 } as const;

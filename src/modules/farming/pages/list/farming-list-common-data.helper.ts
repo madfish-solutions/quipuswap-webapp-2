@@ -7,6 +7,7 @@ import { ListItemCardProps } from '@shared/components';
 import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import { FarmingRoutes } from '../../farming.router';
 import { getFarmingLabel } from '../../helpers';
 import { FarmingListItemWithBalances } from './types';
 
@@ -91,7 +92,7 @@ export const farmingListCommonDataHelper = (
     href:
       farmingItem.old || isUndefined(farmingItem.old)
         ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${farmingItem.id}`
-        : `${AppRootRoutes.Farming}${AppRootRoutes.Youves}/${farmingItem.id}`,
+        : `${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${farmingItem.id}`,
     inputToken: farmingItem.tokens,
     isNew: NEW_FARMINGS.includes(farmingItem.id.toFixed()),
     status: { status: farmingItem.stakeStatus, filled: true },

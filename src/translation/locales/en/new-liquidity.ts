@@ -19,7 +19,7 @@ export const newLiquidity = {
   feesRateTooltip: 'Trading fees charged in this pool.',
   totalLpSupplyTooltip: 'Number of liquidity provider tokens.',
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
-  succsess: 'Succsessful',
+  succsess: 'Successful',
   createPool: 'Create Pool',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
@@ -34,5 +34,15 @@ export const newLiquidity = {
   migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
   why: 'Why?',
   showDust: 'Show Dust',
-  investedOnly: 'Invested Only'
+  investedOnly: 'Invested Only',
+  poolAlreadyExists: 'Pool already exists. Check out',
+  here: 'here',
+  emptyPoolWarning:
+    'Note: you provide liquidity to the empty pool and initialise its exchange rates. Make sure the value of both assets is provided 50/50.',
+  tooltipStableSwap: 'StableSwap Pools',
+  tooltipBridge: 'Pools with Bridged tokens',
+  tooltipQuipu: 'Pools with Quipu',
+  tooltipTezotopia: 'Tezotopia Pools',
+  tooltipBTC: 'BTC Pools',
+  tooltipDexTwo: 'Dex 2.0 Pools'
 } as const;

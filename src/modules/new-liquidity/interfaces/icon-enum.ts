@@ -4,4 +4,6 @@ export enum Categories {
   QuipuSwap = 'QuipuSwap',
   Bridge = 'Bridge',
   Tezotopia = 'Tezotopia'
+  // TODO
+  // DexTwo = 'DexTwo'
 }
