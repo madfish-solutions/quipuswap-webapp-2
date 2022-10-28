@@ -8,18 +8,16 @@ import {
   AnalyticsIcon,
   FarmIcon,
   FeedbackIcon,
+  GameIcon,
   HomeIcon,
   LiquidityIcon,
   MoreIcon,
   StableswapIcon,
-  SwapIcon,
-  GameIcon,
-  NewLiquidityIcon
+  SwapIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
-import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -63,13 +61,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Liquidity,
     label: i18n.t('common|Liquidity'),
     Icon: LiquidityIcon
-  },
-  {
-    id: 'NewLiquidity',
-    to: AppRootRoutes.NewLiquidity,
-    label: i18n.t('newLiquidity|newLiquidity'),
-    Icon: NewLiquidityIcon,
-    hide: isProd()
   },
   {
     id: 'Farming',

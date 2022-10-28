@@ -2,7 +2,7 @@ import { ContractAbstraction, Wallet } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_TOKEN_ID_BN } from '@config/constants';
-import { PoolType } from '@modules/new-liquidity/interfaces';
+import { PoolType } from '@modules/liquidity/interfaces';
 
 import { getRemoveLiquidityParamsTezToken } from './get-remove-liquidity-params-tez-token';
 import { getRemoveLiquidityParamsTokenToken } from './get-remove-liquidity-params-token-token';
