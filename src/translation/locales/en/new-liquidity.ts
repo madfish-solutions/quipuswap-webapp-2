@@ -39,10 +39,10 @@ export const newLiquidity = {
   here: 'here',
   emptyPoolWarning:
     'Note: you provide liquidity to the empty pool and initialise its exchange rates. Make sure the value of both assets is provided 50/50.',
-  tooltipStableSwap: 'StableSwap Pools',
-  tooltipBridge: 'Pools with Bridged tokens',
-  tooltipQuipu: 'Pools with Quipu',
-  tooltipTezotopia: 'Tezotopia Pools',
-  tooltipBTC: 'BTC Pools',
-  tooltipDexTwo: 'Dex 2.0 Pools'
+  tooltipStableSwap: 'Stable',
+  tooltipBridge: 'Bridge',
+  tooltipQuipu: 'QuipuSwap',
+  tooltipTezotopia: 'Tezotopia',
+  tooltipBTC: 'BTC-based',
+  tooltipDexTwo: 'Dex 2.0'
 } as const;
