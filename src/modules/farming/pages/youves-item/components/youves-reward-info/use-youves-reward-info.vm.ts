@@ -23,25 +23,25 @@ export const useYouvesRewardInfoViewModel = () => {
   const accountPkh = useAccountPkh();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
   const youvesFarmingItemStore = useFarmingYouvesItemStore();
-  const youvesFarmingItem = youvesFarmingItemStore.item;
+  const { item: youvesFarmingItem, id } = youvesFarmingItemStore;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
   const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
 
   const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
-  const rewardTokenCurrency = getSymbolsString(youvesFarmingItemStore.item?.rewardToken ?? null);
+  const rewardTokenCurrency = getSymbolsString(youvesFarmingItem?.rewardToken ?? null);
 
   const handleHarvest = async () => {
     // TODO: add real balances, which are important for analytics
     const farmingItemWithBalances = {
       ...youvesFarmingItem!,
-      depositBalance: null,
+      depositBalance: youvesFarmingItemStore.currentStake?.stake ?? ZERO_AMOUNT_BN,
       earnBalance
     };
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
     await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
 
-    await delayedGetFarmingItem(farmingItemWithBalances.contractAddress);
+    await delayedGetFarmingItem(id);
   };
 
   const getUserStakeInfo = useCallback(async () => {
