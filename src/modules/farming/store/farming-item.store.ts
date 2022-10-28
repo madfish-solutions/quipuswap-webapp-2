@@ -184,6 +184,9 @@ export class FarmingItemStore {
     this.old = old;
   }
 
+  /*
+    Using in the model
+   */
   async getUserInfo() {
     const { tezos, authStore } = this.rootStore;
 
