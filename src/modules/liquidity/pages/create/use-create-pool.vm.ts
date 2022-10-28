@@ -17,10 +17,10 @@ export const useCreatePoolViewModel = () => {
     uiStore.colorThemeMode === ColorModes.Dark ? CreateStablePoolDark : CreateStablePoolLight;
 
   const translations = {
-    createPool: t('newLiquidity|createPool'),
-    regularPool: t('newLiquidity|regularPool'),
-    stablePool: t('newLiquidity|stablePool'),
-    back: t('newLiquidity|back')
+    createPool: t('liquidity|createPool'),
+    regularPool: t('liquidity|regularPool'),
+    stablePool: t('liquidity|stablePool'),
+    back: t('liquidity|back')
   };
 
   return {

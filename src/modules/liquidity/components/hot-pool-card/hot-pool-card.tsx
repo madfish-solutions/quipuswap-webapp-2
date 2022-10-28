@@ -49,7 +49,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens, href }) => {
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={fixedTvl}
-              label={t('newLiquidity|TVL')}
+              label={t('liquidity|TVL')}
               currency={DOLLAR}
               data-test-id="TVL"
             />
@@ -58,7 +58,7 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens, href }) => {
               className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
               size="large"
               volume={fixedApr}
-              label={t('newLiquidity|aprUpTo')}
+              label={t('liquidity|aprUpTo')}
               currency={PERCENT}
               data-test-id="aprUpTo"
             />

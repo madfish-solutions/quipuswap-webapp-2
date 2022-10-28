@@ -9,14 +9,14 @@ export const useListStatsViewModel = () => {
 
   const stats = [
     {
-      title: t('newLiquidity|tvl'),
-      tooltip: t('newLiquidity|tvlTooltipStats'),
+      title: t('liquidity|tvl'),
+      tooltip: t('liquidity|tvlTooltipStats'),
       amount: liquidityStatsStore?.stats?.totalValueLocked ?? null,
       testId: 'statsTVL'
     },
     {
-      title: t('newLiquidity|pools'),
-      tooltip: t('newLiquidity|poolsTooltip'),
+      title: t('liquidity|pools'),
+      tooltip: t('liquidity|poolsTooltip'),
       amount: liquidityStatsStore?.stats?.poolsCount ?? null,
       currency: null,
       testId: 'statsPools'

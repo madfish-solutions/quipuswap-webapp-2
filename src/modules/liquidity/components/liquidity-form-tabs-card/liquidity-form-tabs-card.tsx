@@ -37,7 +37,7 @@ export const LiquidityFormTabsCard: CFC<Props> = observer(({ tabActiveId, childr
         className: styles.header
       }}
       contentClassName={styles.content}
-      data-test-id="newLiquidityFromTabsCard"
+      data-test-id="liquidityFromTabsCard"
     >
       {children}
     </Card>

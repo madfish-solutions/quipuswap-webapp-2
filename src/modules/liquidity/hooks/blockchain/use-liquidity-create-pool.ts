@@ -59,7 +59,7 @@ export const useCreateLiquidityPool = () => {
         );
 
         log('CREATE_POOL_SUCCESSFULL', logData);
-        await confirmOperation(operation.opHash, { message: t('newLiquidity|succsess') });
+        await confirmOperation(operation.opHash, { message: t('liquidity|successful') });
       } catch (error) {
         log('CREATE_POOL_FAILED', { ...logData, error });
         showErrorToast(error as Error);

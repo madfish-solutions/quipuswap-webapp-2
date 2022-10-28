@@ -23,11 +23,11 @@ export const MigrateLiquidityCard = () => {
     >
       <span>
         <div className={styles.heyBro}>
-          {t('newLiquidity|heyBro')}
+          {t('liquidity|heyBro')}
           <Tooltip content={<div>Tooltip!</div>} />
         </div>
-        <span className={styles.migrateDescription}>{t('newLiquidity|migrateAssets')}</span>
-        <span className={styles.why}>{t('newLiquidity|why')}</span>
+        <span className={styles.migrateDescription}>{t('liquidity|migrateAssets')}</span>
+        <span className={styles.why}>{t('liquidity|why')}</span>
       </span>
       <MigrateLiquidityIcon />
     </Card>

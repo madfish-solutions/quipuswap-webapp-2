@@ -4,7 +4,6 @@ import { common } from './common';
 import { farm } from './farm';
 import { home } from './home';
 import { liquidity } from './liquidity';
-import { newLiquidity } from './new-liquidity';
 import { settings } from './settings';
 import { stableswap } from './stable-swap';
 import { swap } from './swap';
@@ -20,6 +19,5 @@ export const locales = {
   voting,
   settings,
   stableswap,
-  coinflip,
-  newLiquidity
+  coinflip
 };
