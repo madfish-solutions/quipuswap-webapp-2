@@ -3,12 +3,12 @@ import { useTranslation } from '@translation';
 
 export const useDexTwoItemViewModel = () => {
   const { t } = useTranslation();
-  const newLiquidityItemStore = useLiquidityItemStore();
+  const liquidityItemStore = useLiquidityItemStore();
   const migrateLiquidity = useMigrateLiquidity();
 
   return {
     t,
-    title: newLiquidityItemStore.pageTitle,
+    title: liquidityItemStore.pageTitle,
     migrateLiquidity
   };
 };

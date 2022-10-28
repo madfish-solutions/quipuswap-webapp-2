@@ -14,7 +14,7 @@ export const LiquidityCard: CFC = ({ children }) => {
         className: CommonContainerStyles.header
       }}
       contentClassName={CommonContainerStyles.content}
-      data-test-id="newLiquidityFormCard"
+      data-test-id="liquidityFormCard"
     >
       {children}
     </Card>

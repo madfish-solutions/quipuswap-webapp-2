@@ -13,25 +13,25 @@ export const useGetLiquidityItem = () => {
   const authStore = useAuthStore();
   const isReady = useReady();
 
-  const newLiquidityItemStore = useLiquidityItemStore();
+  const liquidityItemStore = useLiquidityItemStore();
 
-  const getNewLiquidityItem = useCallback(async () => {
+  const getLiquidityItem = useCallback(async () => {
     if (isReady) {
       try {
-        await newLiquidityItemStore.itemSore.load();
+        await liquidityItemStore.itemSore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }
     }
     // We need it only for dependency for loading list based on it.
     noopMap(authStore.accountPkh);
-  }, [authStore.accountPkh, isReady, newLiquidityItemStore.itemSore, showErrorToast]);
+  }, [authStore.accountPkh, isReady, liquidityItemStore.itemSore, showErrorToast]);
 
-  const delayedGetNewLiquidityItem = useCallback(async () => {
+  const delayedGetLiquidityItem = useCallback(async () => {
     await sleep(DELAY_BEFORE_DATA_UPDATE);
 
-    await getNewLiquidityItem();
-  }, [getNewLiquidityItem]);
+    await getLiquidityItem();
+  }, [getLiquidityItem]);
 
-  return { getNewLiquidityItem, delayedGetNewLiquidityItem };
+  return { getLiquidityItem, delayedGetLiquidityItem };
 };

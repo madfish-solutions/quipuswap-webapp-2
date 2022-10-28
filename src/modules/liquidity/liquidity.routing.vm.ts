@@ -9,15 +9,15 @@ export const useLiquidityRouterViewModel = () => {
 
   useEffect(() => {
     (async () => {
-      if (isNull(rootStore.newLiquidityListStore)) {
-        await rootStore.createNewLiquidityListStore();
+      if (isNull(rootStore.liquidityListStore)) {
+        await rootStore.createLiquidityListStore();
       }
       if (isNull(rootStore.liquidityListFiltersStore)) {
         await rootStore.createLiquidityListFiltersStore();
       }
 
-      if (isNull(rootStore.newLiquidityItemStore)) {
-        await rootStore.createNewLiquidityItemStore();
+      if (isNull(rootStore.liquidityItemStore)) {
+        await rootStore.createLiquidityItemStore();
       }
       setIsInitialized(true);
     })();

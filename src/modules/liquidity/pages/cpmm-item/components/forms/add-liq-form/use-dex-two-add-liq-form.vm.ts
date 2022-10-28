@@ -8,6 +8,7 @@ import { useAddLiquidity, useCreateLiquidityPool } from '@modules/liquidity/hook
 import {
   calculateOutputWithToken,
   calculateShares,
+  defined,
   getInputsAmountFormFormikValues,
   isEqual,
   isTezosToken,
@@ -27,12 +28,12 @@ import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
-  const newLiquidityItemStore = useLiquidityItemStore();
-  const item = newLiquidityItemStore.item!; // TODO: fix MOCK, when store will be ready
+  const liquidityItemStore = useLiquidityItemStore();
+  const item = defined(liquidityItemStore.item, 'liquidityItemStore.item');
   const { addLiquidity } = useAddLiquidity();
   const { createNewLiquidityPool } = useCreateLiquidityPool();
   const poolIsEmpty = item.totalSupply.isZero();
-  const { delayedGetNewLiquidityItem } = useGetLiquidityItem();
+  const { delayedGetLiquidityItem } = useGetLiquidityItem();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
     isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo
@@ -61,7 +62,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
     actions.resetForm();
     actions.setSubmitting(false);
 
-    await delayedGetNewLiquidityItem();
+    await delayedGetLiquidityItem();
   };
 
   const userBalances = getUserBalances(tokensInfo);

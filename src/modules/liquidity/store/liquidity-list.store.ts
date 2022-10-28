@@ -26,7 +26,7 @@ const DEFAULT_RESPONSE_DATA = {
 };
 
 @ModelBuilder()
-export class NewLiquidityListStore {
+export class LiquidityListStore {
   //#region liquidity list store
   @Led({
     default: defaultList,

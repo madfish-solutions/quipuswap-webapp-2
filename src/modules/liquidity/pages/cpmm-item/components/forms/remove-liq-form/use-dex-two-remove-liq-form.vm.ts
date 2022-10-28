@@ -22,10 +22,10 @@ const LP_INDEX = 2;
 export const useDexTwoRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { removeLiquidity } = useRemoveLiquidity();
-  const newLiquidityItemStore = useLiquidityItemStore();
-  const item = newLiquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
+  const liquidityItemStore = useLiquidityItemStore();
+  const item = liquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
   const { handleInputChange, handleLpInputChange } = useCalculateValues();
-  const { delayedGetNewLiquidityItem } = useGetLiquidityItem();
+  const { delayedGetLiquidityItem } = useGetLiquidityItem();
 
   const lpToken = useMemo(
     () => ({
@@ -63,7 +63,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     actions.resetForm();
     actions.setSubmitting(false);
 
-    await delayedGetNewLiquidityItem();
+    await delayedGetLiquidityItem();
   };
 
   const validationSchema = useDexTwoRemoveLiqValidation(lockeds, item, lpToken, lpTokenBalance);

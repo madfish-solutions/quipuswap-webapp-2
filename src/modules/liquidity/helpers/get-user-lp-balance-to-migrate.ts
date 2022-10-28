@@ -4,12 +4,12 @@ import { getUserLpBalanceInDex } from '@blockchain';
 import { PoolType } from '@modules/liquidity/interfaces';
 import { isExist, isNull, isUndefined } from '@shared/helpers';
 
-import { NewLiquidityItemStore } from '../store';
+import { LiquidityItemStore } from '../store';
 
 export const getUserLpBalanceToMigrate = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  liquidityItem: NewLiquidityItemStore
+  liquidityItem: LiquidityItemStore
 ) => {
   const isAccordanceSlug = isExist(liquidityItem.accordanceItem);
   const isDexTwo = liquidityItem.type === PoolType.DEX_TWO;
