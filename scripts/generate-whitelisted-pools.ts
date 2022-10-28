@@ -1,11 +1,11 @@
 import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
-import { loadT2tDex } from '@modules/new-liquidity/pages/liquidity/hooks/helpers/load-t2t-dex';
-import { loadTokenToTokenPairInfo } from '@modules/new-liquidity/pages/liquidity/liquidity-cards/blockchain/getters';
+import { loadT2tDex } from '@modules/liquidity/pages/liquidity/hooks/helpers/load-t2t-dex';
+import { loadTokenToTokenPairInfo } from '@modules/liquidity/pages/liquidity/liquidity-cards/blockchain/getters';
 
 import { NETWORK_ID, RPC_URLS } from '../src/config/environment';
-import { loadTezDex } from '../src/modules/new-liquidity/pages/liquidity/hooks/helpers/load-tez-dex';
+import { loadTezDex } from '../src/modules/liquidity/pages/liquidity/hooks/helpers/load-tez-dex';
 import { FastRpcClient, isExist } from '../src/shared/helpers';
 import { Token, TokenMetadata } from '../src/shared/types';
 

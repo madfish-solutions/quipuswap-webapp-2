@@ -14,7 +14,7 @@ import {
   NewLiquidityListStore as INewLiquidityListStore,
   NewLiquidityItemStore as INewLiquidityItemStore,
   LiquidityListFiltersStore as ILiquidityListFiltersStore
-} from '@modules/new-liquidity';
+} from '@modules/liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
@@ -127,21 +127,21 @@ export class RootStore {
 
   async createNewLiquidityListStore() {
     if (isNull(this.newLiquidityListStore)) {
-      const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
+      const { NewLiquidityListStore } = await import('@modules/liquidity/store/new-liquidity-list.store');
       this.newLiquidityListStore = new NewLiquidityListStore(this);
     }
   }
 
   async createLiquidityListFiltersStore() {
     if (isNull(this.liquidityListFiltersStore)) {
-      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filters.stores');
+      const { LiquidityListFiltersStore } = await import('@modules/liquidity/store/liquidity-list-filters.stores');
       this.liquidityListFiltersStore = new LiquidityListFiltersStore();
     }
   }
 
   async createNewLiquidityItemStore() {
     if (isNull(this.newLiquidityItemStore)) {
-      const { NewLiquidityItemStore } = await import('@modules/new-liquidity/store/new-liquidity-item.store');
+      const { NewLiquidityItemStore } = await import('@modules/liquidity/store/new-liquidity-item.store');
       this.newLiquidityItemStore = new NewLiquidityItemStore(this);
     }
   }

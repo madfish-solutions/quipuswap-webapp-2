@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { BlockchainTokenDictionary, convertToBlockchainToken } from '@modules/new-liquidity/api';
+import { BlockchainTokenDictionary, convertToBlockchainToken } from '@modules/liquidity/api';
 import { getContract } from '@shared/dapp';
 import { isTezosToken } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
