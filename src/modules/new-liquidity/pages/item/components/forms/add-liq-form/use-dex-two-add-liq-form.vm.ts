@@ -3,7 +3,7 @@ import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { FISRT_INDEX, OPPOSITE_INDEX, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
-import { useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
+import { useGetNewLiquidityItem, useNewLiquidityItemStore } from '@modules/new-liquidity/hooks';
 import { useAddLiquidity, useCreateNewLiquidityPool } from '@modules/new-liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
@@ -32,6 +32,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   const { addLiquidity } = useAddLiquidity();
   const { createNewLiquidityPool } = useCreateNewLiquidityPool();
   const poolIsEmpty = item.totalSupply.isZero();
+  const { delayedGetNewLiquidityItem } = useGetNewLiquidityItem();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
     isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo
@@ -59,6 +60,8 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
     actions.resetForm();
     actions.setSubmitting(false);
+
+    await delayedGetNewLiquidityItem();
   };
 
   const userBalances = getUserBalances(tokensInfo);
