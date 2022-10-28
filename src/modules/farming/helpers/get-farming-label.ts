@@ -1,12 +1,16 @@
 import { NO_TIMELOCK_VALUE, NO_WITHDRAWAL_FEE_VALUE } from '@config/constants';
 import { LabelComponentProps } from '@shared/components';
-import { getTimeLockDescription } from '@shared/helpers';
+import { getTimeLockDescription, isUndefined } from '@shared/helpers';
 import { i18n } from '@translation';
 
-import { FarmingItemModel } from '../models';
+import { FarmingItemCommonModel, FarmingItemModel } from '../models';
 
-export const getFarmingLabel = (item: FarmingItemModel): Array<LabelComponentProps> => {
+export const getFarmingLabel = (item: FarmingItemModel | FarmingItemCommonModel): Array<LabelComponentProps> => {
   const { timelock, withdrawalFee } = item;
+
+  if (isUndefined(timelock) || isUndefined(withdrawalFee)) {
+    return [];
+  }
 
   const timeLockLabel = getTimeLockDescription(timelock);
 

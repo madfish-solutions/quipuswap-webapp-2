@@ -4,3 +4,4 @@ export * from './farming-list-response.dto';
 export * from './farming-list-balances.dto';
 export * from './farming-user-info.dto';
 export * from './farming-user-info-response.dto';
+export * from './farming-list-common-response.dto';
