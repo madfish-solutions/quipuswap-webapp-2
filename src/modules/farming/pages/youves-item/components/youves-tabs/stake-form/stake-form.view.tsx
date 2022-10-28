@@ -1,6 +1,9 @@
 import { FC } from 'react';
 
+import cx from 'classnames';
+
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
+import { isExist } from '@shared/helpers';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -14,7 +17,8 @@ export const StakeFormView: FC<StakeFormProps> = ({
   handleInputAmountChange,
   disabled,
   isSubmitting,
-  inputAmountError
+  inputAmountError,
+  investHref
 }) => {
   const { t } = useTranslation();
 
@@ -30,6 +34,17 @@ export const StakeFormView: FC<StakeFormProps> = ({
         onInputChange={handleInputAmountChange}
         disabled={disabled}
       />
+
+      {isExist(investHref) && (
+        <Button
+          className={cx(styles.mt24, styles.minimalFlex)}
+          theme="underlined"
+          href={investHref}
+          data-test-id="investButton"
+        >
+          {t('common|Invest')}
+        </Button>
+      )}
 
       <div className={styles.buttons}>
         <ConnectWalletOrDoSomething>

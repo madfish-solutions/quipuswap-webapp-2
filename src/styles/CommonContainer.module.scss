@@ -3,7 +3,7 @@
 
 .youtubeList {
   display: flex;
-  flex-direction:  column;
+  flex-direction: column;
   row-gap: 16px;
 }
 
@@ -35,6 +35,10 @@
 }
 .mb24 {
   margin-bottom: 24px;
+}
+.minimalFlex {
+  display: flex;
+  width: fit-content;
 }
 
 .mt12 {
@@ -201,7 +205,7 @@
   margin: 0 0 0 auto;
   max-width: 280px;
 }
-@include media('>Lphone', '<=tablet') {
+@include media(">Lphone", "<=tablet") {
   .routeLine,
   .cellCenter {
     align-items: center;
@@ -237,7 +241,7 @@
     }
   }
 }
-@include media('>tablet', '<Ltablet') {
+@include media(">tablet", "<Ltablet") {
   .routeLine {
     align-items: flex-start;
   }
@@ -247,7 +251,7 @@
   column-gap: 24px;
   margin-top: 24px;
 }
-@include media('>Ltablet') {
+@include media(">Ltablet") {
   .routeLine {
     align-items: center;
   }
