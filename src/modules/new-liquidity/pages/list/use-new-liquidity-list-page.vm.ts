@@ -8,7 +8,7 @@ import { mapLiquidityListItem } from './map-liquidity-list-item';
 
 export const useNewLiquidityPageViewModel = () => {
   const isReady = useReady();
-  const { list, hotPools } = useNewLiquidityListStore();
+  const { filteredList, hotPools } = useNewLiquidityListStore();
   const { getNewLiquidityList } = useGetNewLiquidityList();
   const { getNewLiquidityStats } = useGetNewLiquidityStats();
 
@@ -22,7 +22,7 @@ export const useNewLiquidityPageViewModel = () => {
     }
   }, [getNewLiquidityList, getNewLiquidityStats, isReady]);
 
-  const preparedList = list.map(mapLiquidityListItem);
+  const preparedList = filteredList.map(mapLiquidityListItem);
   const preparedHotPools = hotPools.map(mapLiquidityListItem);
 
   return {
