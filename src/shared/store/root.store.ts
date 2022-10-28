@@ -6,12 +6,14 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore,
+  FarmingListCommonStore as IFarmingListCommonStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
 import {
   NewLiquidityListStore as INewLiquidityListStore,
-  NewLiquidityItemStore as INewLiquidityItemStore
+  NewLiquidityItemStore as INewLiquidityItemStore,
+  LiquidityListFiltersStore as ILiquidityListFiltersStore
 } from '@modules/new-liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
@@ -43,6 +45,7 @@ export class RootStore {
   tokensModalStore: TokensModalStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
+  farmingListCommonStore: Nullable<IFarmingListCommonStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
@@ -59,6 +62,7 @@ export class RootStore {
 
   newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
   newLiquidityItemStore: Nullable<INewLiquidityItemStore> = null;
+  liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
@@ -81,6 +85,7 @@ export class RootStore {
       farmingItemStore: observable,
 
       stableswapListStore: observable,
+      farmingListCommonStore: observable,
       stableswapItemStore: observable,
       stableswapItemFormStore: observable,
       stableswapFilterStore: observable,
@@ -96,6 +101,7 @@ export class RootStore {
 
       setTezos: action,
       createFarmingListStore: action,
+      createFarmingListCommonStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
       createCoinflipStore: action,
@@ -110,7 +116,8 @@ export class RootStore {
       createStableDividendsItemStore: action,
 
       createNewLiquidityListStore: action,
-      createNewLiquidityItemStore: action
+      createNewLiquidityItemStore: action,
+      createLiquidityListFiltersStore: action
     });
   }
 
@@ -122,6 +129,13 @@ export class RootStore {
     if (isNull(this.newLiquidityListStore)) {
       const { NewLiquidityListStore } = await import('@modules/new-liquidity/store/new-liquidity-list.store');
       this.newLiquidityListStore = new NewLiquidityListStore(this);
+    }
+  }
+
+  async createLiquidityListFiltersStore() {
+    if (isNull(this.liquidityListFiltersStore)) {
+      const { LiquidityListFiltersStore } = await import('@modules/new-liquidity/store/liquidity-list-filters.stores');
+      this.liquidityListFiltersStore = new LiquidityListFiltersStore();
     }
   }
 
@@ -192,6 +206,13 @@ export class RootStore {
     if (isNull(this.farmingListStore)) {
       const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
+    }
+  }
+
+  async createFarmingListCommonStore() {
+    if (isNull(this.farmingListCommonStore)) {
+      const { FarmingListCommonStore } = await import('@modules/farming/store/farming-list-common.store');
+      this.farmingListCommonStore = new FarmingListCommonStore(this);
     }
   }
 

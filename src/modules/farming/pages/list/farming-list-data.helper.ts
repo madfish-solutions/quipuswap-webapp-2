@@ -34,7 +34,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     {
       cellName: i18n.t('farm|tvl'),
       amounts: {
-        amount: item.tvlInStakedToken,
+        amount: item.tvlInUsd,
         dollarEquivalent: item.tvlInUsd,
         currency: statedTokenSymbol,
         dollarEquivalentOnly: true

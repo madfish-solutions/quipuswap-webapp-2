@@ -10,14 +10,14 @@ export const useUnstakeFormViewModel = (): UnstakeFormProps => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
 
-  const { item, tokens, currentStakeId, currentStakeBalance, farmingId } = useFarmingYouvesItemStore();
+  const { item, tokens, currentStakeId, currentStakeBalance, id } = useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
 
   const balance =
     currentStakeBalance && stakedToken ? toReal(currentStakeBalance, stakedToken.metadata.decimals) : null;
   const inputAmount = balance ? balance.toFixed() : '';
 
-  const form = useUnstakeFormForming(item?.contractAddress ?? null, farmingId, currentStakeId, balance);
+  const form = useUnstakeFormForming(item?.contractAddress ?? null, id, currentStakeId, balance);
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh) || !currentStakeBalance;
 
