@@ -1,1 +1,1 @@
-export * from './new-liquidity-form-value.interface';
+export * from './liquidity-form-value.interface';

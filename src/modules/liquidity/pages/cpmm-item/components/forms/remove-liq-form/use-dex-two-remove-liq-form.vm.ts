@@ -14,7 +14,7 @@ import { useTranslation } from '@translation';
 import { getUserBalances, getFormikInitialValues, getInputsAmountFormFormikValues } from '../helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { useCalculateValues } from '../hooks';
-import { Input, NewLiquidityFormValues } from '../interface';
+import { Input, LiquidityFormValues } from '../interface';
 import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
 
 const LP_INDEX = 2;
@@ -51,7 +51,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
 
   const lockeds = item.tokensInfo.map(tokenInfo => toReal(tokenInfo.atomicTokenTvl, tokenInfo.token));
 
-  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<NewLiquidityFormValues>) => {
+  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<LiquidityFormValues>) => {
     actions.setSubmitting(true);
 
     const inputAmounts = getInputsAmountFormFormikValues(values);

@@ -1,2 +1,2 @@
-export * from './new-liquidity-card';
+export * from './liquidity-card';
 export * from './dex-two-create-form';

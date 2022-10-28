@@ -6,7 +6,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getLiquidityListApi, getLiquidityStatsApi } from '../api';
 import { isHotPool } from '../helpers';
-import { LiquidityListModel, NewLiquidityResponseModel } from '../models';
+import { LiquidityListModel, LiquidityResponseModel } from '../models';
 
 const defaultList = {
   list: []
@@ -52,9 +52,9 @@ export class NewLiquidityListStore {
   @Led({
     default: DEFAULT_RESPONSE_DATA,
     loader: getLiquidityStatsApi,
-    model: NewLiquidityResponseModel
+    model: LiquidityResponseModel
   })
-  readonly statsStore: LoadingErrorData<NewLiquidityResponseModel, typeof DEFAULT_RESPONSE_DATA>;
+  readonly statsStore: LoadingErrorData<LiquidityResponseModel, typeof DEFAULT_RESPONSE_DATA>;
 
   get stats() {
     return this.statsStore.model.stats;

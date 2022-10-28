@@ -7,11 +7,11 @@ import { useTranslation } from '@translation';
 
 import { CreateOwnPool, HotPools, LiquidityStats } from '../../components';
 import { ListFilter } from './components';
-import styles from './new-liquidity-list-page.module.scss';
-import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
+import styles from './liquidity-list-page.module.scss';
+import { useLiquidityPageViewModel } from './use-liquidity-list-page.vm';
 
-export const NewLiquidityListPage: FC = observer(() => {
-  const { preparedList, preparedHotPools } = useNewLiquidityPageViewModel();
+export const LiquidityListPage: FC = observer(() => {
+  const { preparedList, preparedHotPools } = useLiquidityPageViewModel();
   const { t } = useTranslation();
 
   return (

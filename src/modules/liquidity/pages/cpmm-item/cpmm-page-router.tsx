@@ -7,7 +7,7 @@ import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { LiquidityTabs } from '../../liquidity-routes.enum';
-import { CpmmNewLiquidityCreatePage } from '../create';
+import { LiquidityCreatePage } from '../create';
 import { CpmmDexTwoClaimRewards } from './cpmm-dex-two-claim-rewards';
 import { DexTwoAddLiq } from './dex-two-add-liq';
 import { DexTwoRemoveLiq } from './dex-two-remove-liq';
@@ -22,7 +22,7 @@ export const CpmmPageRouter: FC = observer(() => {
         <Route path={`${LiquidityTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
         <Route path={`${LiquidityTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
         <Route path={`${LiquidityTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
-        <Route path={`${LiquidityTabs.create}`} element={<CpmmNewLiquidityCreatePage />} />
+        <Route path={`${LiquidityTabs.create}`} element={<LiquidityCreatePage />} />
       </SentryRoutes>
     </StateWrapper>
   );

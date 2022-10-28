@@ -1,1 +1,1 @@
-export * from './new-liquidity-list.page';
+export * from './liquidity-list.page';

@@ -12,7 +12,7 @@ import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { NewLiquidityPoolExist } from '../new-liquidity-pool-exist';
+import { LiquidityPoolExist } from '../liquidity-pool-exist';
 import styles from './dex-two-create-form.module.scss';
 import { DexTwoCreateFormProps } from './dex-two-create-form.types';
 
@@ -36,7 +36,7 @@ export const DexTwoCreateForm: FC<DexTwoCreateFormProps> = ({ data, onSubmit, ba
       )}
       {isPoolExist && (
         <AlarmMessage className={stylesCommonContainer.mt24}>
-          <NewLiquidityPoolExist className={styles.poolExistWarning} existingPoolLink={existingPoolLink} />
+          <LiquidityPoolExist className={styles.poolExistWarning} existingPoolLink={existingPoolLink} />
         </AlarmMessage>
       )}
       <div className={stylesCommonContainer.buttons}>
