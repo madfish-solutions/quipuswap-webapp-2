@@ -24,7 +24,7 @@ export const useDoYouvesHarvest = () => {
       const exchangeRate = farmingItem.earnExchangeRate ?? ZERO_BN;
       const logData = {
         harvest: {
-          farmAddress: farmingItem.address,
+          farmAddress: farmingItem.contractAddress,
           rewardToken: `${farmingItem.rewardToken.contractAddress}_${farmingItem.rewardToken.fa2TokenId}`,
           rewardsInToken: rewardsInToken.toNumber(),
           rewardsInUsd: rewardsInToken.multipliedBy(exchangeRate).toNumber(),
@@ -36,7 +36,7 @@ export const useDoYouvesHarvest = () => {
         amplitudeService.logEvent('YOUVES_HARVEST', logData);
         const operation = await BlockchainYouvesFarmingApi.harvest(
           defined(rootStore.tezos),
-          farmingItem.address,
+          farmingItem.contractAddress,
           stakeId
         );
 

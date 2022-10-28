@@ -11,7 +11,7 @@ export const useStakeFormViewModel = (): StakeFormProps => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
 
-  const { item, tokens, farmingAddress, currentStakeId } = useFarmingYouvesItemStore();
+  const { item, tokens, currentStakeId, farmingAddress } = useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
   const stakedTokenBalance = useTokenBalance(stakedToken);
   const getConfirmationMessageParams = useGetConfirmationMessageParams();
