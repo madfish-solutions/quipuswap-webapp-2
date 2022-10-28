@@ -80,25 +80,33 @@ export const useMigrateLiquidity = () => {
     if (!canMigrateLiquidity) {
       return;
     }
-    const accordanceItem = itemStore.accordanceItem;
+    const { accordanceItem } = itemStore;
 
     if (!isExist(accordanceItem) || isNull(tezos) || isNull(accountPkh) || !isExist(itemStore.item)) {
       return;
     }
 
+    const { tokens, contractAddress, type, id } = accordanceItem;
+
     const amounts = calculateTokensAmounts();
+    const [aToken, bToken] = tokens;
 
     try {
       const operation = await migrateLiquidity(
         tezos,
         accountPkh,
-        { contractAddress: itemStore.contractAddress, id: itemStore.item.id, tokensInfo: itemStore.item.tokensInfo },
         {
-          contractAddress: accordanceItem.contractAddress,
-          type: accordanceItem.type,
-          id: accordanceItem.id,
-          aToken: accordanceItem.aToken,
-          bToken: accordanceItem.bToken
+          contractAddress: itemStore.contractAddress,
+          id: itemStore.item.id,
+          tokensInfo: itemStore.item.tokensInfo,
+          totalLpSupply: itemStore.item.totalSupply
+        },
+        {
+          contractAddress,
+          type,
+          id,
+          aToken,
+          bToken
         },
         amounts,
         dexOneBalanceLP,
