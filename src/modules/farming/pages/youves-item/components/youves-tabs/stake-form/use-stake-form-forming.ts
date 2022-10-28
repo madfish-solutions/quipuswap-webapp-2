@@ -42,12 +42,7 @@ export const useStakeFormForming = (
 
     confirmationPopup(async () => {
       actions.setSubmitting(true);
-      await doDeposit(
-        defined(contractAddress, 'Contract address'),
-        defined(farmingId, 'Farming id'),
-        stakeId,
-        atomicInputAmount
-      );
+      await doDeposit(defined(contractAddress, 'Contract address'), stakeId, atomicInputAmount);
       actions.resetForm();
       actions.setSubmitting(false);
     }, atomicInputAmount);

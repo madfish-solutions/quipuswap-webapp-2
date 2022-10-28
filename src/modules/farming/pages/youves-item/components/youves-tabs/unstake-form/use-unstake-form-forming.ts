@@ -27,12 +27,7 @@ export const useUnstakeFormForming = (
 
     confirmationPopup(async () => {
       setIsSubmitting(true);
-      await doWithdraw(
-        defined(contractAddress, 'Contract address'),
-        defined(farmingId, 'Farming id'),
-        stakeId,
-        defined(balance, 'Balance')
-      );
+      await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
       setIsSubmitting(false);
       navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${farmingId}/${YouvesFormTabs.stake}`);
     });
