@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import { observer } from 'mobx-react-lite';
-
 import { NewLiquidityFormTabsCard } from '@modules/new-liquidity/components';
 import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { PageTitle, StickyBlock } from '@shared/components';
@@ -9,7 +7,7 @@ import { useTranslation } from '@translation';
 
 import { DexTwoClaimRewardsFrom, DexTwoDetails } from './components';
 
-export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) => {
+export const CpmmDexTwoClaimRewards: FC<{ title: string }> = ({ title }) => {
   const { t } = useTranslation();
 
   return (
@@ -26,4 +24,4 @@ export const DexTwoClaimRewards: FC<{ title: string }> = observer(({ title }) =>
       </StickyBlock>
     </>
   );
-});
+};
