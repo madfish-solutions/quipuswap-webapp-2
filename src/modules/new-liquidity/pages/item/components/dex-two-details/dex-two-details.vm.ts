@@ -26,6 +26,7 @@ export const useDexTwoDetailsViewModel = () => {
     tvlInUsd: newLiquidityItemStore?.item?.tvlInUsd,
     totalLpSupply:
       newLiquidityItemStore?.item?.totalSupply && toReal(newLiquidityItemStore?.item?.totalSupply, DEFAULT_DECIMALS),
+    atomicTotalLpSupply: newLiquidityItemStore?.item?.totalSupply,
     poolContractUrl,
     cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
     pieChartData: pieChartData ?? []
