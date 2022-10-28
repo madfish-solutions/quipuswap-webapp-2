@@ -11,8 +11,8 @@ import {
   HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
 import {
-  NewLiquidityListStore as INewLiquidityListStore,
-  NewLiquidityItemStore as INewLiquidityItemStore,
+  LiquidityListStore as ILiquidityListStore,
+  LiquidityItemStore as ILiquidityItemStore,
   LiquidityListFiltersStore as ILiquidityListFiltersStore
 } from '@modules/liquidity';
 import {
@@ -60,8 +60,8 @@ export class RootStore {
   stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
   stableDividendsItemStore: Nullable<IStableDividendsItemStore> = null;
 
-  newLiquidityListStore: Nullable<INewLiquidityListStore> = null;
-  newLiquidityItemStore: Nullable<INewLiquidityItemStore> = null;
+  liquidityListStore: Nullable<ILiquidityListStore> = null;
+  liquidityItemStore: Nullable<ILiquidityItemStore> = null;
   liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
@@ -94,8 +94,8 @@ export class RootStore {
       stableDividendsFilterStore: observable,
       stableDividendsItemStore: observable,
 
-      newLiquidityListStore: observable,
-      newLiquidityItemStore: observable,
+      liquidityListStore: observable,
+      liquidityItemStore: observable,
 
       coinflipStore: observable,
 
@@ -115,8 +115,8 @@ export class RootStore {
       createStableDividendsFilterStore: action,
       createStableDividendsItemStore: action,
 
-      createNewLiquidityListStore: action,
-      createNewLiquidityItemStore: action,
+      createLiquidityListStore: action,
+      createLiquidityItemStore: action,
       createLiquidityListFiltersStore: action
     });
   }
@@ -125,10 +125,10 @@ export class RootStore {
     this.tezos = tezos;
   }
 
-  async createNewLiquidityListStore() {
-    if (isNull(this.newLiquidityListStore)) {
-      const { NewLiquidityListStore } = await import('@modules/liquidity/store/new-liquidity-list.store');
-      this.newLiquidityListStore = new NewLiquidityListStore(this);
+  async createLiquidityListStore() {
+    if (isNull(this.liquidityListStore)) {
+      const { LiquidityListStore } = await import('@modules/liquidity/store/liquidity-list.store');
+      this.liquidityListStore = new LiquidityListStore(this);
     }
   }
 
@@ -139,10 +139,10 @@ export class RootStore {
     }
   }
 
-  async createNewLiquidityItemStore() {
-    if (isNull(this.newLiquidityItemStore)) {
-      const { NewLiquidityItemStore } = await import('@modules/liquidity/store/new-liquidity-item.store');
-      this.newLiquidityItemStore = new NewLiquidityItemStore(this);
+  async createLiquidityItemStore() {
+    if (isNull(this.liquidityItemStore)) {
+      const { LiquidityItemStore } = await import('@modules/liquidity/store/liquidity-item.store');
+      this.liquidityItemStore = new LiquidityItemStore(this);
     }
   }
 

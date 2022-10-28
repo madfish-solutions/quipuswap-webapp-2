@@ -7,20 +7,20 @@ import { useLiquidityListStore } from '../store';
 
 export const useGetLiquidityStats = () => {
   const { showErrorToast } = useToasts();
-  const newLiquidityListStore = useLiquidityListStore();
+  const liquidityListStore = useLiquidityListStore();
   const isReady = useReady();
 
-  const getNewLiquidityStats = useCallback(async () => {
+  const getLiquidityStats = useCallback(async () => {
     if (!isReady) {
       return;
     }
 
     try {
-      await newLiquidityListStore?.statsStore.load();
+      await liquidityListStore?.statsStore.load();
     } catch (error) {
       showErrorToast(error as Error);
     }
-  }, [isReady, showErrorToast, newLiquidityListStore?.statsStore]);
+  }, [isReady, showErrorToast, liquidityListStore?.statsStore]);
 
-  return { getNewLiquidityStats };
+  return { getLiquidityStats };
 };

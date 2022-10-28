@@ -11,21 +11,21 @@ export const useGetLiquidityList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const newLiquidityListStore = useLiquidityListStore();
+  const liquidityListStore = useLiquidityListStore();
 
-  const getNewLiquidityList = useCallback(async () => {
-    if (!isReady || !newLiquidityListStore) {
+  const getLiquidityList = useCallback(async () => {
+    if (!isReady || !liquidityListStore) {
       return;
     }
 
     try {
-      await newLiquidityListStore.listStore.load();
+      await liquidityListStore.listStore.load();
     } catch (error) {
       showErrorToast(error as Error);
     }
     // We need it only for dependency for loading list based on it.
     noopMap(authStore.accountPkh);
-  }, [isReady, newLiquidityListStore, authStore.accountPkh, showErrorToast]);
+  }, [isReady, liquidityListStore, authStore.accountPkh, showErrorToast]);
 
-  return { getNewLiquidityList };
+  return { getLiquidityList };
 };

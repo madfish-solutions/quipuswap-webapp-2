@@ -10,7 +10,7 @@ import { getDexTwoLiquidityItemApi } from '../api/get-dex-two-liquidity-item.api
 import { LiquidityItemModel } from '../models';
 
 @ModelBuilder()
-export class NewLiquidityItemStore {
+export class LiquidityItemStore {
   tokenPairSlug: string;
 
   //#region dex two liquidity item store
@@ -84,7 +84,7 @@ export class NewLiquidityItemStore {
   }
 
   get accordanceItem(): Undefined<LiquidityItemModel> {
-    return this.rootStore.newLiquidityListStore?.list.find(itemModel => {
+    return this.rootStore.liquidityListStore?.list.find(itemModel => {
       return itemModel.item.accordanceSlug === this.accordanceSlug;
     });
   }

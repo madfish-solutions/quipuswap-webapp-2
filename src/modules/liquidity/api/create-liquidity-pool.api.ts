@@ -87,13 +87,13 @@ const prepareNewPoolData = (tokensAndAmounts: Array<AmountToken>) => {
 
 export const createLiquidityPoolApi = async (
   tezos: TezosToolkit,
-  newLiquidityContractAddress: string,
+  liquidityContractAddress: string,
   tokensAndAmounts: Array<AmountToken>,
   accountPkh: string,
   candidate: string,
   timestamp: string
 ) => {
-  const newLiquidityPoolContract = await tezos.wallet.at(newLiquidityContractAddress);
+  const liquidityPoolContract = await tezos.wallet.at(liquidityContractAddress);
 
   const { tokensPairParams, token_a_in, token_b_in, mutezAmount } = prepareNewPoolData(tokensAndAmounts);
 
@@ -107,11 +107,11 @@ export const createLiquidityPoolApi = async (
     referral_code: QUIPUSWAP_REFERRAL_CODE
   };
 
-  const addPoolTransferParams = newLiquidityPoolContract.methodsObject
+  const addPoolTransferParams = liquidityPoolContract.methodsObject
     .launch_exchange(params)
     .toTransferParams({ storageLimit: 10000, mutez: true, amount: mutezAmount.toNumber() });
 
-  return await withApproveApiForManyTokens(tezos, newLiquidityContractAddress, tokensAndAmounts, accountPkh, [
+  return await withApproveApiForManyTokens(tezos, liquidityContractAddress, tokensAndAmounts, accountPkh, [
     addPoolTransferParams
   ]);
 };
