@@ -35,13 +35,15 @@ export const useYouvesFarmingItemRewards = () => {
 
   useOnBlock(updateTotalDeposit);
 
-  const claimablePendingRewardsInUsd = useMemo(() => {
-    return multipliedIfPossible(claimableRewards, youvesFarmingItem?.earnExchangeRate);
-  }, [claimableRewards, youvesFarmingItem?.earnExchangeRate]);
+  const claimablePendingRewardsInUsd = useMemo(
+    () => multipliedIfPossible(claimableRewards, youvesFarmingItem?.earnExchangeRate),
+    [claimableRewards, youvesFarmingItem?.earnExchangeRate]
+  );
 
-  const longTermPendingRewardsInUsd = useMemo(() => {
-    return multipliedIfPossible(longTermRewards, youvesFarmingItem?.earnExchangeRate);
-  }, [longTermRewards, youvesFarmingItem?.earnExchangeRate]);
+  const longTermPendingRewardsInUsd = useMemo(
+    () => multipliedIfPossible(longTermRewards, youvesFarmingItem?.earnExchangeRate),
+    [longTermRewards, youvesFarmingItem?.earnExchangeRate]
+  );
 
   const userTotalDepositDollarEquivalent = useMemo(
     () => multipliedIfPossible(userTotalDeposit, youvesFarmingItem?.depositExchangeRate) ?? ZERO_AMOUNT_BN,
