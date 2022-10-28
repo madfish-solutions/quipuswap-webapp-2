@@ -1,39 +1,76 @@
-import { FC, useRef } from 'react';
+/* eslint-disable no-console */
+import { memo, useEffect, useRef, useState } from 'react';
 
-import { Iterator } from '../iterator';
+import { isEmptyArray } from 'formik';
+import { nextTick } from 'process';
 
-// const STEP = 10;
+import { isExist, isNull } from '@shared/helpers';
 
-interface Props<T> {
-  items: T[];
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  render: FC<any>;
-  wrapperClassName?: string;
+import { Iterator, IteratorComponent } from '../iterator';
+
+const START_INDEX = 0;
+const STEP = 10;
+const MAX_ITEMS = 50;
+
+function useVirtualListViewModel<T>(items: Array<T>) {
+  const lastElementRef = useRef<HTMLDivElement>(null);
+  const lastElementIntersectionObserver = useRef<Nullable<IntersectionObserver>>(null);
+
+  const tenLastItemsOffset = useRef(0);
+
+  const [shownItems, setShownItems] = useState<typeof items>([]);
+
+  useEffect(() => {
+    let lastIndexOfShownItem = 10;
+
+    if (isNull(lastElementRef.current) || isExist(lastElementIntersectionObserver.current) || isEmptyArray(items)) {
+      return;
+    }
+
+    lastElementIntersectionObserver.current = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || isNull(lastElementRef.current) || lastIndexOfShownItem > items.length) {
+        return;
+      }
+
+      lastIndexOfShownItem = lastIndexOfShownItem + STEP;
+
+      const startIndex = Math.max(START_INDEX, lastIndexOfShownItem - MAX_ITEMS);
+
+      const newItems = items.slice(startIndex, lastIndexOfShownItem);
+
+      const isLastIterationBeforeFirstElementsWillBeHidden = MAX_ITEMS - lastIndexOfShownItem < STEP;
+      const isEndOfItems = items.length - lastIndexOfShownItem < STEP;
+
+      if (isLastIterationBeforeFirstElementsWillBeHidden && !isEndOfItems) {
+        if (tenLastItemsOffset.current == 0) {
+          tenLastItemsOffset.current = lastElementRef.current.offsetTop;
+        }
+        window.scrollTo({ top: tenLastItemsOffset.current });
+      }
+
+      console.log({ startIndex, lastIndexOfShownItem, newItems, originalLength: items.length });
+
+      setShownItems(newItems);
+      nextTick(() => console.log(lastElementRef.current?.offsetTop));
+    });
+
+    lastElementIntersectionObserver.current.observe(lastElementRef.current);
+  }, [items, lastElementRef]);
+
+  return {
+    lastElementRef,
+    shownItems
+  };
 }
 
 // TODO: https://madfish.atlassian.net/browse/QUIPU-458
-export function VirtualList<T>({ items, render, wrapperClassName }: Props<T>) {
-  const lastElementRef = useRef<HTMLDivElement>(null);
-
-  // const [shownItems, setShownItems] = useState<Array<T>>([]);
-  //
-  // useEffect(() => {
-  //   let itemsToShow = 0;
-  //
-  //   if (lastElementRef.current) {
-  //     const infiniteObserver = new IntersectionObserver(([entry]) => {
-  //       if (entry.isIntersecting) {
-  //         setShownItems(items.splice(FISRT_INDEX, (itemsToShow += STEP)));
-  //       }
-  //     });
-  //     infiniteObserver.observe(lastElementRef.current);
-  //   }
-  // }, [lastElementRef, items]);
+export const VirtualList: IteratorComponent = memo(props => {
+  const { lastElementRef, shownItems } = useVirtualListViewModel(props.data);
 
   return (
     <>
-      <Iterator render={render} data={items} wrapperClassName={wrapperClassName} isGrouped />
+      <Iterator {...props} isGrouped data={shownItems} />
       <div ref={lastElementRef} style={{ height: 1, backgroundColor: 'transparent' }} />
     </>
   );
-}
+}) as IteratorComponent;
