@@ -6,12 +6,11 @@ import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
-  MS_IN_SECOND,
   PRECISION_FACTOR,
   ZERO_AMOUNT,
   ZERO_AMOUNT_BN
 } from '@config/constants';
-import { getLastElement, isExist, isNull, isUndefined, MakeInterval } from '@shared/helpers';
+import { getLastElement, isExist, isNull, isUndefined, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Standard, Token } from '@shared/types';
@@ -123,7 +122,7 @@ export class FarmingYouvesItemStore {
     let _disc_factor;
 
     const item = this.itemStore.model.item;
-    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
+    const { lastRewards, vestingPeriodSeconds, staked, discFactor, rewardToken } = item;
 
     if (staked.isGreaterThan(ZERO_AMOUNT)) {
       const reward = this.contractBalance.minus(lastRewards);
@@ -139,16 +138,12 @@ export class FarmingYouvesItemStore {
 
     const stakes = getLastElement(this.stakes) as YouvesStakeDto;
 
-    const { claimable_reward, full_reward } = getRewards(
-      stakes,
-      vestingPeriodSeconds.multipliedBy(MS_IN_SECOND),
-      _disc_factor
-    );
-    const tokenDecimals = stakedToken.metadata.decimals;
-    const tokenPrecision = `1e${tokenDecimals}`;
+    const { claimable_reward, full_reward } = getRewards(stakes, vestingPeriodSeconds, _disc_factor);
+    // eslint-disable-next-line no-console
+    console.log(claimable_reward.toFixed(), full_reward.toFixed());
 
-    this.claimableRewards = claimable_reward.dividedBy(tokenPrecision);
-    this.longTermRewards = full_reward.dividedBy(tokenDecimals);
+    this.claimableRewards = toReal(claimable_reward, rewardToken);
+    this.longTermRewards = toReal(full_reward, rewardToken);
   }
 
   clearIntervals() {
