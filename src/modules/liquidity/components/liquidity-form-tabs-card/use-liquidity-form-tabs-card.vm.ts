@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { i18n } from '@translation';
 
-import { LiquidityRoutes, NewLiquidityFormTabs } from '../../liquidity-routes.enum';
+import { LiquidityRoutes, LiquidityTabs } from '../../liquidity-routes.enum';
 
 export const useLiquidityFormTabsCardViewModel = () => {
   const navigate = useNavigate();
@@ -16,18 +16,18 @@ export const useLiquidityFormTabsCardViewModel = () => {
 
     return [
       {
-        id: NewLiquidityFormTabs.add,
+        id: LiquidityTabs.add,
         label: i18n.t('common|Add')
       },
       {
-        id: NewLiquidityFormTabs.remove,
+        id: LiquidityTabs.remove,
         label: i18n.t('common|Remove')
       }
     ].concat(
       isTez
         ? [
             {
-              id: NewLiquidityFormTabs.claim,
+              id: LiquidityTabs.claim,
               label: i18n.t('common|Claim')
             }
           ]
@@ -36,7 +36,7 @@ export const useLiquidityFormTabsCardViewModel = () => {
   }, [pairSlug]);
 
   const changeTabHandle = useCallback(
-    (tab: NewLiquidityFormTabs) => {
+    (tab: LiquidityTabs) => {
       const url = `${AppRootRoutes.Liquidity}${LiquidityRoutes.cpmm}/${tab}/${pairSlug}`;
 
       navigate(url);

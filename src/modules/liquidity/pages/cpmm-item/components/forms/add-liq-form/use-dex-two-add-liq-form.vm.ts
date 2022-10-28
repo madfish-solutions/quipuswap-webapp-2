@@ -3,8 +3,8 @@ import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { FISRT_INDEX, OPPOSITE_INDEX, ZERO_BAKER_ADDRESS } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
-import { useGetNewLiquidityItem, useNewLiquidityItemStore } from '@modules/liquidity/hooks';
-import { useAddLiquidity, useCreateNewLiquidityPool } from '@modules/liquidity/hooks/blockchain';
+import { useGetLiquidityItem, useLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useAddLiquidity, useCreateLiquidityPool } from '@modules/liquidity/hooks/blockchain';
 import {
   calculateOutputWithToken,
   calculateShares,
@@ -27,12 +27,12 @@ import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
   const item = newLiquidityItemStore.item!; // TODO: fix MOCK, when store will be ready
   const { addLiquidity } = useAddLiquidity();
-  const { createNewLiquidityPool } = useCreateNewLiquidityPool();
+  const { createNewLiquidityPool } = useCreateLiquidityPool();
   const poolIsEmpty = item.totalSupply.isZero();
-  const { delayedGetNewLiquidityItem } = useGetNewLiquidityItem();
+  const { delayedGetNewLiquidityItem } = useGetLiquidityItem();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
     isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo

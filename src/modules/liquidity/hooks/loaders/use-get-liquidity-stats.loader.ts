@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useNewLiquidityListStore } from '../store';
+import { useLiquidityListStore } from '../store';
 
-export const useGetNewLiquidityStats = () => {
+export const useGetLiquidityStats = () => {
   const { showErrorToast } = useToasts();
-  const newLiquidityListStore = useNewLiquidityListStore();
+  const newLiquidityListStore = useLiquidityListStore();
   const isReady = useReady();
 
   const getNewLiquidityStats = useCallback(async () => {

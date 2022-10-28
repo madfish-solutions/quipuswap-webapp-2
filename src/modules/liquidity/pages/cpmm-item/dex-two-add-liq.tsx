@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { PageTitle, StickyBlock } from '@shared/components';
 
-import { NewLiquidityFormTabs } from '../../liquidity-routes.enum';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoAddLiqForm, DexTwoDetails, MigrateLiquidityCard } from './components';
 import styles from './dex-two-add-liq.module.scss';
 import { useDexTwoItemViewModel } from './dex-two-item.vm';
@@ -22,7 +22,7 @@ export const DexTwoAddLiq: FC = observer(() => {
       <StickyBlock>
         <div className={styles.formAndMigrationContainer}>
           {migrateLiquidity.canMigrateLiquidity && <MigrateLiquidityCard />}
-          <LiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.add}>
+          <LiquidityFormTabsCard tabActiveId={LiquidityTabs.add}>
             <DexTwoAddLiqForm {...migrateLiquidity} />
           </LiquidityFormTabsCard>
         </div>

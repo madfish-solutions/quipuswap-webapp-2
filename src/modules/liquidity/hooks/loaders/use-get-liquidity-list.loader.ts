@@ -5,13 +5,13 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useNewLiquidityListStore } from '../store';
+import { useLiquidityListStore } from '../store';
 
-export const useGetNewLiquidityList = () => {
+export const useGetLiquidityList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const newLiquidityListStore = useNewLiquidityListStore();
+  const newLiquidityListStore = useLiquidityListStore();
 
   const getNewLiquidityList = useCallback(async () => {
     if (!isReady || !newLiquidityListStore) {

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { getTokenSlug, getTokenSymbol } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
 
-export const getNewLiquidityCreatePoolData = (
+export const getLiquidityCreatePoolData = (
   tezos: TezosToolkit,
   dexTwoContract: string,
   tokensAndAmounts: Array<AmountToken>,

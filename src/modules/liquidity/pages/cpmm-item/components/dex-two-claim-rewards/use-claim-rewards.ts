@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 
 import { claimLiquidityBakerRewards } from '@modules/liquidity/api';
-import { useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAmplitudeService, useAuthStore } from '@shared/hooks';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 
 export const useClaimRewards = () => {
-  const { item } = useNewLiquidityItemStore();
+  const { item } = useLiquidityItemStore();
   const { tezos } = useRootStore();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();

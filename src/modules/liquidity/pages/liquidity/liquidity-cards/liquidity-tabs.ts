@@ -1,7 +1,4 @@
-export enum LiquidityTabs {
-  Add = 'add',
-  Remove = 'remove'
-}
+import { LiquidityTabs } from '../../../liquidity-routes.enum';
 
 export interface LiquidityTab {
   id: LiquidityTabs;
@@ -10,11 +7,11 @@ export interface LiquidityTab {
 
 export const TABS_CONTENT: LiquidityTab[] = [
   {
-    id: LiquidityTabs.Add,
+    id: LiquidityTabs.add,
     label: 'Add'
   },
   {
-    id: LiquidityTabs.Remove,
+    id: LiquidityTabs.remove,
     label: 'Remove'
   }
 ];

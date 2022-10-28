@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { createLiquidityPoolApi } from '@modules/liquidity/api';
-import { getNewLiquidityCreatePoolData } from '@modules/liquidity/helpers/get-new-liquidity-create-pool-data';
 import { useRootStore } from '@providers/root-store-provider';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getTokenSlug, getTransactionDeadline, isNull } from '@shared/helpers';
@@ -12,7 +11,9 @@ import { AmountToken } from '@shared/types';
 import { useToasts, useConfirmOperation } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-export const useCreateNewLiquidityPool = () => {
+import { getLiquidityCreatePoolData } from '../../helpers';
+
+export const useCreateLiquidityPool = () => {
   const { tezos } = useRootStore();
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
@@ -32,7 +33,7 @@ export const useCreateNewLiquidityPool = () => {
 
       const tokensExchangeRates = tokensAndAmounts.map(({ token }) => exchangeRates[getTokenSlug(token)]);
 
-      const logData = getNewLiquidityCreatePoolData(
+      const logData = getLiquidityCreatePoolData(
         tezos,
         DEX_TWO_CONTRACT_ADDRESS,
         tokensAndAmounts,

@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
-import { NewLiquidityLabels } from '@modules/liquidity/components';
+import { LiquidityLabels } from '@modules/liquidity/components';
 import { Categories } from '@modules/liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
@@ -92,7 +92,7 @@ export const ListItemCard: FC<ListItemCardProps> = ({
 
           <div className={styles.statusAndlabelsContainer}>
             {!isNewLiquidity && <LabelComponent {...status} />}
-            {isExist(categories) && !isEmptyArray(categories) && <NewLiquidityLabels categories={categories} />}
+            {isExist(categories) && !isEmptyArray(categories) && <LiquidityLabels categories={categories} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={LabelComponent} data={labels} />

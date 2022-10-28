@@ -1,11 +1,11 @@
 import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 
-import { NewLiquidityStatsDto } from './new-liquidity-stats.dto';
+import { LiquidityStatsDto } from './liquidity-stats.dto';
 
-export class NewLiquidityResponseDto {
+export class LiquidityResponseDto {
   @Typed()
-  stats: NewLiquidityStatsDto;
+  stats: LiquidityStatsDto;
 
   @Typed()
   blockInfo: BlockInfoDto;

@@ -5,10 +5,10 @@ import { useRootStore } from '@providers/root-store-provider';
 import { TaquitoContract } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
 
-import { useNewLiquidityItemStore } from '../store';
+import { useLiquidityItemStore } from '../store';
 
 export const useBucketContract = () => {
-  const { item } = useNewLiquidityItemStore();
+  const { item } = useLiquidityItemStore();
   const { tezos } = useRootStore();
   const [bucketContract, setBucketContract] = useState<Nullable<TaquitoContract>>(null);
 

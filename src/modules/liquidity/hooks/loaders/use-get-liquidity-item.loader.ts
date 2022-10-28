@@ -1,19 +1,19 @@
 import { useCallback } from 'react';
 
 import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
-import { useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-export const useGetNewLiquidityItem = () => {
+export const useGetLiquidityItem = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
 
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
 
   const getNewLiquidityItem = useCallback(async () => {
     if (isReady) {

@@ -1,10 +1,10 @@
-import { useNewLiquidityListStore } from '@modules/liquidity/hooks';
+import { useLiquidityListStore } from '@modules/liquidity/hooks';
 import { useTranslation } from '@translation';
 
 const MAX_SLIDES_TO_SHOW = 2;
 
 export const useListStatsViewModel = () => {
-  const newLiquidityStatsStore = useNewLiquidityListStore();
+  const newLiquidityStatsStore = useLiquidityListStore();
   const { t } = useTranslation();
 
   const stats = [

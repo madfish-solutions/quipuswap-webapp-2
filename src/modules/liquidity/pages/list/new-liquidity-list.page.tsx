@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { ListItemCard, PageTitle, TestnetAlert, VirtualList } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { CreateOwnPool, HotPools, NewLiquidityStats } from '../../components';
+import { CreateOwnPool, HotPools, LiquidityStats } from '../../components';
 import { ListFilter } from './components';
 import styles from './new-liquidity-list-page.module.scss';
 import { useNewLiquidityPageViewModel } from './use-new-liquidity-list-page.vm';
@@ -18,7 +18,7 @@ export const NewLiquidityListPage: FC = observer(() => {
     <>
       <TestnetAlert />
       <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
-      <NewLiquidityStats />
+      <LiquidityStats />
       <HotPools pools={preparedHotPools} />
       <CreateOwnPool />
       <ListFilter />
