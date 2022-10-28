@@ -146,7 +146,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
     handleChange: onBakerChange,
     shouldShowBakerInput
   };
-  const warningMessage = poolIsEmpty ? t('newLiquidity|emptyPoolWarning') : null;
+  const warningMessage = poolIsEmpty ? t('liquidity|emptyPoolWarning') : null;
 
   return {
     data,

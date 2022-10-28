@@ -112,7 +112,7 @@ export const useMigrateLiquidity = () => {
         dexOneBalanceLP,
         transactionDeadline
       );
-      await confirmOperation(operation.opHash, { message: t('newLiquidity|assetsMigrated') });
+      await confirmOperation(operation.opHash, { message: t('liquidity|assetsMigrated') });
       await getMigrationParams();
     } catch (error) {
       showErrorToast(error as Error);

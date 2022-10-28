@@ -43,7 +43,7 @@ export const DexTwoDetailsView: FC<Props> = ({
         <DetailsCardCell
           cellName={t('stableswap|tvl')}
           className={cardCellClassName}
-          tooltipContent={t('newLiquidity|tvlTooltip')}
+          tooltipContent={t('liquidity|tvlTooltip')}
           data-test-id="tvlInUsd"
         >
           <StateCurrencyAmount
@@ -60,7 +60,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           <DetailsCardCell
             cellName={t('stableswap|weeklyVolume')}
             className={cardCellClassName}
-            tooltipContent={t('newLiquidity|weeklyVolumeTooltip')}
+            tooltipContent={t('liquidity|weeklyVolumeTooltip')}
             data-test-id="weeklyVolume"
           >
             <StateCurrencyAmount amount={weeklyVolume} isLoading={isLoading} loaderFallback={<DashPlug />} />
@@ -69,7 +69,7 @@ export const DexTwoDetailsView: FC<Props> = ({
         <DetailsCardCell
           cellName={t('stableswap|Total LP Supply')}
           className={cardCellClassName}
-          tooltipContent={t('newLiquidity|totalLpSupplyTooltip')}
+          tooltipContent={t('liquidity|totalLpSupplyTooltip')}
           data-test-id="totalLpSupply"
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
@@ -78,7 +78,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           <DetailsCardCell
             cellName={t('stableswap|feesRate')}
             className={cardCellClassName}
-            tooltipContent={t('newLiquidity|feesRateTooltip')}
+            tooltipContent={t('liquidity|feesRateTooltip')}
             data-test-id="feesRate"
           >
             <StateCurrencyAmount amount={feesRate} isLoading={isLoading} loaderFallback={<DashPlug />} />
@@ -88,7 +88,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           <DetailsCardCell
             cellName={t('stableswap|apr')}
             className={cardCellClassName}
-            tooltipContent={t('newLiquidity|aprTooltip')}
+            tooltipContent={t('liquidity|aprTooltip')}
             data-test-id="apr"
           >
             <StateCurrencyAmount amount={apr} isLoading={isLoading} loaderFallback={<DashPlug />} />

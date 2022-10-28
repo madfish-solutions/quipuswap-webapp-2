@@ -74,7 +74,7 @@ export const useAddLiquidity = () => {
         candidate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('newLiquidity|successfullyAdded') });
+      await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
     } catch (error) {
       showErrorToast(error as Error);
     }

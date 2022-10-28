@@ -33,8 +33,8 @@ export const mapLiquidityListItem = ({
 
   if (!isNull(tvlInUsd)) {
     itemStats.push({
-      cellName: i18n.t('newLiquidity|TVL'),
-      tooltip: i18n.t('newLiquidity|tvlTooltip'),
+      cellName: i18n.t('liquidity|TVL'),
+      tooltip: i18n.t('liquidity|tvlTooltip'),
       amounts: {
         amount: tvlInUsd,
         currency: DOLLAR,
@@ -46,7 +46,7 @@ export const mapLiquidityListItem = ({
 
   if (!isNull(volumeForWeek)) {
     itemStats.push({
-      cellName: i18n.t('newLiquidity|volume'),
+      cellName: i18n.t('liquidity|volume'),
       tooltip: 'Volume tooltip',
       amounts: {
         amount: volumeForWeek,
@@ -59,7 +59,7 @@ export const mapLiquidityListItem = ({
 
   if (!isNull(apr)) {
     itemStats.push({
-      cellName: i18n.t('newLiquidity|APR'),
+      cellName: i18n.t('liquidity|APR'),
       tooltip: 'APR tooltip',
       amounts: {
         amount: apr,
@@ -70,8 +70,8 @@ export const mapLiquidityListItem = ({
 
   if (!isNull(maxApr)) {
     itemStats.push({
-      cellName: i18n.t('newLiquidity|maxApr'),
-      tooltip: i18n.t('newLiquidity|maxAprTooltip'),
+      cellName: i18n.t('liquidity|maxApr'),
+      tooltip: i18n.t('liquidity|maxAprTooltip'),
       amounts: {
         amount: maxApr,
         currency: PERCENT

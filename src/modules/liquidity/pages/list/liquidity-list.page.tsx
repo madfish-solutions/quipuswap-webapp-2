@@ -17,12 +17,12 @@ export const LiquidityListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{t('newLiquidity|Liquidity')}</PageTitle>
+      <PageTitle>{t('liquidity|Liquidity')}</PageTitle>
       <LiquidityStats />
       <HotPools pools={preparedHotPools} />
       <CreateOwnPool />
       <ListFilter />
-      <VirtualList items={preparedList} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
+      <VirtualList items={preparedList} render={ListItemCard} wrapperClassName={styles.liquidityList} />
     </>
   );
 });

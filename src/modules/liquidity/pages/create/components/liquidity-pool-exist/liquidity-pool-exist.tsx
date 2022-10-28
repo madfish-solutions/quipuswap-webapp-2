@@ -13,9 +13,9 @@ export const LiquidityPoolExist: FC<Props> = ({ className, existingPoolLink }) =
 
   return (
     <div className={className}>
-      <div>{t('newLiquidity|poolAlreadyExists')}</div>{' '}
+      <div>{t('liquidity|poolAlreadyExists')}</div>{' '}
       <Button theme="inverse" href={existingPoolLink}>
-        {t('newLiquidity|here')}
+        {t('liquidity|here')}
       </Button>
     </div>
   );

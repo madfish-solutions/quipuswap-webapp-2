@@ -67,7 +67,7 @@ export const useRemoveLiquidity = () => {
         item.currentDelegate,
         itemId
       );
-      await confirmOperation(operation.opHash, { message: t('newLiquidity|successfullyRemoved') });
+      await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
     } catch (error) {
       showErrorToast(error as Error);
     }

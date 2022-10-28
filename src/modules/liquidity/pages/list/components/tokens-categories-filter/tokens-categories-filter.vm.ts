@@ -28,13 +28,13 @@ export const useTokensCategoriesFilter = () => {
   };
 
   const translation = {
-    investedOnly: t('newLiquidity|investedOnly'),
-    tooltipStableSwap: t('newLiquidity|tooltipStableSwap'),
-    tooltipBridge: t('newLiquidity|tooltipBridge'),
-    tooltipQuipu: t('newLiquidity|tooltipQuipu'),
-    tooltipTezotopia: t('newLiquidity|tooltipTezotopia'),
-    tooltipBTC: t('newLiquidity|tooltipBTC'),
-    tooltipDexTwo: t('newLiquidity|tooltipDexTwo')
+    investedOnly: t('liquidity|investedOnly'),
+    tooltipStableSwap: t('liquidity|tooltipStableSwap'),
+    tooltipBridge: t('liquidity|tooltipBridge'),
+    tooltipQuipu: t('liquidity|tooltipQuipu'),
+    tooltipTezotopia: t('liquidity|tooltipTezotopia'),
+    tooltipBTC: t('liquidity|tooltipBTC'),
+    tooltipDexTwo: t('liquidity|tooltipDexTwo')
   };
 
   return {
