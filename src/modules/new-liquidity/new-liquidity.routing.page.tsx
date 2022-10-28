@@ -6,7 +6,8 @@ import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../errors';
-import { NewLiquidityRoutes } from './new-liquidity-routes.enum';
+import { LiquidityPage } from '../liquidity';
+import { NewLiquidityRoutes, TabsLiquidityRoutes } from './new-liquidity-routes.enum';
 import { useNewLiquidityViewModel } from './new-liquidity.routing.vm';
 import { CreatePoolPage, PageContainerAdd, PageContainerRemove, NewLiquidityListPage, CpmmPageRouter } from './pages';
 import { NewLiquidityCreatePage } from './pages/create';
@@ -36,6 +37,9 @@ export const NewLiquidityPageRouter: FC = () => {
         />
 
         <Route path={`${NewLiquidityRoutes.cpmm}/*`} element={<CpmmPageRouter />} />
+
+        <Route path={`${TabsLiquidityRoutes.add}/*`} element={<LiquidityPage />} />
+        <Route path={`${TabsLiquidityRoutes.remove}/*`} element={<LiquidityPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>

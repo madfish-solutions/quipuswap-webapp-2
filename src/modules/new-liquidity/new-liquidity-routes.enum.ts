@@ -1,6 +1,10 @@
 export enum NewLiquidityRoutes {
   root = '/',
   cpmm = '/cpmm',
-  create = '/create',
-  v1 = '/v1'
+  create = '/create'
+}
+
+export enum TabsLiquidityRoutes {
+  add = '/add',
+  remove = '/remove'
 }
