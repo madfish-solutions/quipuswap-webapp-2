@@ -88,7 +88,7 @@ export const getUserPendingRewardNew = (
   const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime!).getTime());
   let reward = new BigNumber(
     Math.floor((timeFrom - new Date(farmingItemModel.udp!).getTime()) / MS_IN_SECOND)
-  ).multipliedBy(defined(rewardPerSecond));
+  ).multipliedBy(defined(rewardPerSecond, 'rewardPerSecond'));
 
   if (reward.isNegative()) {
     reward = ZERO_BN;
