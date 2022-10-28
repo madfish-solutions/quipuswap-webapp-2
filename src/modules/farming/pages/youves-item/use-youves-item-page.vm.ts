@@ -50,15 +50,6 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
     return () => farmingYouvesItemStore.clearIntervals();
   }, [farmingYouvesItemStore]);
 
-  /* eslint-disable no-console */
-  useEffect(() => {
-    console.log('rewards', {
-      claimableRewards: farmingYouvesItemStore.claimableRewards?.toFixed(),
-      longTermRewards: farmingYouvesItemStore.longTermRewards?.toFixed()
-    });
-  }, [farmingYouvesItemStore.claimableRewards, farmingYouvesItemStore.longTermRewards]);
-  /* eslint-enable no-console */
-
   const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
 
   return {

@@ -28,7 +28,7 @@ export const useGetYouvesFarmingItem = () => {
         await farmingYouvesItemStore.itemStore.load();
         await farmingYouvesItemStore.stakesStore.load();
         await farmingYouvesItemStore.contractBalanceStore.load();
-        farmingYouvesItemStore.updatePendingRewards();
+        await farmingYouvesItemStore.updatePendingRewards();
       } catch (error) {
         showErrorToast(error as Error);
         if (isNotFoundError(error as Error)) {
