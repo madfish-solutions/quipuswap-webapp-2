@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { AppRootRoutes } from '@app.router';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useFarmingItemStore } from '@modules/farming/hooks';
-import { LiquidityTabs } from '@modules/new-liquidity/pages/liquidity/liquidity-cards/liquidity-tabs';
+import { LiquidityTabs } from '@modules/liquidity/pages/liquidity/liquidity-cards/liquidity-tabs';
 import { StableswapRoutes } from '@modules/stableswap';
 import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getFirstElement, getLiquidityUrl, getTokenPairSlug, isNull, isSingleElement } from '@shared/helpers';

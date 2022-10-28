@@ -4,8 +4,8 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
-import { NewLiquidityLabels } from '@modules/new-liquidity/components';
-import { Categories } from '@modules/new-liquidity/interfaces';
+import { NewLiquidityLabels } from '@modules/liquidity/components';
+import { Categories } from '@modules/liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
 import { ArrowDown, VisibleIcon } from '@shared/svg';

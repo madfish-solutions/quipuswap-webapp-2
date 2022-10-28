@@ -2,7 +2,7 @@ import { ContractAbstraction, ContractMethod, TransferParams, Wallet } from '@ta
 import { BigNumber } from 'bignumber.js';
 
 import { DUMMY_BAKER } from '@config/bakers';
-import { LiquidityTokenInfo } from '@modules/new-liquidity/interfaces';
+import { LiquidityTokenInfo } from '@modules/liquidity/interfaces';
 import { isTezosToken } from '@shared/helpers';
 
 export const getAddLiquidityParams = async (

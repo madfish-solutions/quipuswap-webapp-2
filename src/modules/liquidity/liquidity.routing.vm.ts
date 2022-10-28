@@ -1,0 +1,27 @@
+import { useEffect, useState } from 'react';
+
+import { useRootStore } from '@providers/root-store-provider';
+import { isNull } from '@shared/helpers';
+
+export const useLiquidityRouterViewModel = () => {
+  const rootStore = useRootStore();
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isNull(rootStore.newLiquidityListStore)) {
+        await rootStore.createNewLiquidityListStore();
+      }
+      if (isNull(rootStore.liquidityListFiltersStore)) {
+        await rootStore.createLiquidityListFiltersStore();
+      }
+
+      if (isNull(rootStore.newLiquidityItemStore)) {
+        await rootStore.createNewLiquidityItemStore();
+      }
+      setIsInitialized(true);
+    })();
+  }, [rootStore]);
+
+  return { isInitialized };
+};

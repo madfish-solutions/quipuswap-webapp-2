@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_TOKEN_ID_BN } from '@config/constants';
-import { PoolType } from '@modules/new-liquidity/interfaces';
+import { PoolType } from '@modules/liquidity/interfaces';
 
 import { getUserLpBalanceDexTwo } from './get-user-lp-balance-dex-two';
 import { getUserLpBalanceTezToken } from './get-user-lp-balance-tez-token';
