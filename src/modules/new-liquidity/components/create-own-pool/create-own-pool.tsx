@@ -25,7 +25,7 @@ export const CreateOwnPool: FC = () => {
       <Button
         className={styles.button}
         external
-        href={`${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.create}`}
+        href={`${AppRootRoutes.Liquidity}${NewLiquidityRoutes.create}`}
         theme="secondary"
       >
         {t('newLiquidity|createPool')}

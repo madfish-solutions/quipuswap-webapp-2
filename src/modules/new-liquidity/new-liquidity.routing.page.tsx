@@ -6,10 +6,9 @@ import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../errors';
-import { LiquidityPage } from '../liquidity';
 import { NewLiquidityRoutes, TabsLiquidityRoutes } from './new-liquidity-routes.enum';
 import { useNewLiquidityViewModel } from './new-liquidity.routing.vm';
-import { CpmmPageRouter, CreateNewPoolPage, NewLiquidityListPage } from './pages';
+import { CpmmPageRouter, CreateNewPoolPage, NewLiquidityListPage, LiquidityPage } from './pages';
 
 export const NewLiquidityPageRouter: FC = () => {
   const { isInitialized } = useNewLiquidityViewModel();

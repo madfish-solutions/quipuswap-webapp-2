@@ -19,7 +19,7 @@ export const FormHeader: FC<Props> = ({ className }) => {
   return (
     <div className={cx(styles.root, className)}>
       <Button
-        href={AppRootRoutes.NewLiquidity}
+        href={AppRootRoutes.Liquidity}
         theme="quaternary"
         icon
         className={styles.arrowButton}

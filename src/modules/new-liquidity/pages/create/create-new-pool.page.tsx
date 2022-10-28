@@ -29,7 +29,7 @@ export const CreateNewPoolPage: FC = observer(() => {
           content: (
             <div className={styles.headerContent}>
               <Button
-                href={AppRootRoutes.NewLiquidity}
+                href={AppRootRoutes.Liquidity}
                 theme="quaternary"
                 icon={<ArrowDown className={styles.backArrow} />}
                 className={styles.arrowButton}
@@ -45,7 +45,7 @@ export const CreateNewPoolPage: FC = observer(() => {
           <h2 className={styles.subtitle}>{regularPool}</h2>
           <Button
             className={styles.button}
-            href={`${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}${NewLiquidityRoutes.create}`}
+            href={`${AppRootRoutes.Liquidity}${NewLiquidityRoutes.cpmm}${NewLiquidityRoutes.create}`}
           >
             {createPool}
           </Button>
