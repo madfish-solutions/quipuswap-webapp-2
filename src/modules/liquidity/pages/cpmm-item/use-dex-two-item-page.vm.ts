@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
-import { useCpmmPairSlug, useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useCpmmPairSlug, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useTranslation } from '@translation';
 
 export const useCpmmViewModel = () => {
   const { t } = useTranslation();
   const { pairSlug } = useCpmmPairSlug();
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
 
   useEffect(() => {
     newLiquidityItemStore.setTokenPairSlug(pairSlug!);

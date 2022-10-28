@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { TEZOS_TOKEN } from '@config/tokens';
-import { useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getTokenSlug, isExist, isNotDefined, multipliedIfPossible } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
@@ -11,7 +11,7 @@ import { useNewLiquidityRewards } from './use-new-liquidity-rewards';
 
 export const useDexTwoClaimRewardsFromViewModel = () => {
   const balance = useTokenBalance(TEZOS_TOKEN);
-  const { item } = useNewLiquidityItemStore();
+  const { item } = useLiquidityItemStore();
   const exchangeRate = useNewExchangeRates();
   const { claim } = useClaimRewards();
   const { rewards } = useNewLiquidityRewards();

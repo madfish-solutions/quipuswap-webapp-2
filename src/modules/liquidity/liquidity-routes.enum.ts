@@ -4,7 +4,7 @@ export enum LiquidityRoutes {
   create = '/create'
 }
 
-export enum NewLiquidityFormTabs {
+export enum LiquidityTabs {
   add = 'add',
   remove = 'remove',
   create = 'create',

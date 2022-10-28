@@ -4,7 +4,7 @@ import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { FISRT_INDEX } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
-import { useGetNewLiquidityItem, useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useGetLiquidityItem, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/liquidity/hooks/blockchain';
 import { isEqual, toReal } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
@@ -22,10 +22,10 @@ const LP_INDEX = 2;
 export const useDexTwoRemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { removeLiquidity } = useRemoveLiquidity();
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
   const item = newLiquidityItemStore.item ?? MOCK_ITEM; // TODO: fix MOCK, when store will be ready
   const { handleInputChange, handleLpInputChange } = useCalculateValues();
-  const { delayedGetNewLiquidityItem } = useGetNewLiquidityItem();
+  const { delayedGetNewLiquidityItem } = useGetLiquidityItem();
 
   const lpToken = useMemo(
     () => ({

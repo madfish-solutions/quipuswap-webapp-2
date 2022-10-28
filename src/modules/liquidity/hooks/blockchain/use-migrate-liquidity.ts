@@ -12,12 +12,12 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { getUserTokensAmountByShares, getUserLpBalanceToMigrate, getLpBasedOnToken } from '../../helpers';
-import { useNewLiquidityItemStore } from '../store';
+import { useLiquidityItemStore } from '../store';
 
 export const useMigrateLiquidity = () => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
-  const itemStore = useNewLiquidityItemStore();
+  const itemStore = useLiquidityItemStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
   const { t } = useTranslation();

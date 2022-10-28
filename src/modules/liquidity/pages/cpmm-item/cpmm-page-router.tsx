@@ -6,7 +6,7 @@ import { Route } from 'react-router-dom';
 import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
-import { NewLiquidityFormTabs } from '../../liquidity-routes.enum';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { CpmmNewLiquidityCreatePage } from '../create';
 import { CpmmDexTwoClaimRewards } from './cpmm-dex-two-claim-rewards';
 import { DexTwoAddLiq } from './dex-two-add-liq';
@@ -19,10 +19,10 @@ export const CpmmPageRouter: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <SentryRoutes>
-        <Route path={`${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
-        <Route path={`${NewLiquidityFormTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
-        <Route path={`${NewLiquidityFormTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
-        <Route path={`${NewLiquidityFormTabs.create}`} element={<CpmmNewLiquidityCreatePage />} />
+        <Route path={`${LiquidityTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
+        <Route path={`${LiquidityTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
+        <Route path={`${LiquidityTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
+        <Route path={`${LiquidityTabs.create}`} element={<CpmmNewLiquidityCreatePage />} />
       </SentryRoutes>
     </StateWrapper>
   );

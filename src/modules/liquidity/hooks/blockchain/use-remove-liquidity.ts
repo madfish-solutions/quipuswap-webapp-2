@@ -21,7 +21,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeDexTwoLiquidityApi } from '../../api';
-import { useNewLiquidityItemStore } from '../store';
+import { useLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
   const { tezos } = useRootStore();
@@ -32,7 +32,7 @@ export const useRemoveLiquidity = () => {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
-  const { item } = useNewLiquidityItemStore();
+  const { item } = useLiquidityItemStore();
 
   const removeLiquidity = async (inputAmounts: FormikValues, shares: BigNumber) => {
     if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {

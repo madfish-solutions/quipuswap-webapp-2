@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Typed } from '@shared/decorators';
 
-export class NewLiquidityStatsDto {
+export class LiquidityStatsDto {
   @Typed()
   totalValueLocked: BigNumber;
 

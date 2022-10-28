@@ -4,7 +4,7 @@ import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { NewLiquidityFormTabs } from '../../liquidity-routes.enum';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoClaimRewardsFrom, DexTwoDetails } from './components';
 
 export const CpmmDexTwoClaimRewards: FC<{ title: string }> = ({ title }) => {
@@ -17,7 +17,7 @@ export const CpmmDexTwoClaimRewards: FC<{ title: string }> = ({ title }) => {
       </PageTitle>
 
       <StickyBlock>
-        <LiquidityFormTabsCard tabActiveId={NewLiquidityFormTabs.claim}>
+        <LiquidityFormTabsCard tabActiveId={LiquidityTabs.claim}>
           <DexTwoClaimRewardsFrom />
         </LiquidityFormTabsCard>
         <DexTwoDetails />

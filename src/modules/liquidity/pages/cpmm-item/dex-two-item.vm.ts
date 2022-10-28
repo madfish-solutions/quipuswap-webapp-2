@@ -1,9 +1,9 @@
-import { useMigrateLiquidity, useNewLiquidityItemStore } from '@modules/liquidity/hooks';
+import { useMigrateLiquidity, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useTranslation } from '@translation';
 
 export const useDexTwoItemViewModel = () => {
   const { t } = useTranslation();
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
   const migrateLiquidity = useMigrateLiquidity();
 
   return {

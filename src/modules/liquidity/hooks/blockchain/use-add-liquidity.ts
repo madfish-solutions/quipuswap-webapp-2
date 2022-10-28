@@ -22,7 +22,7 @@ import { useTranslation } from '@translation';
 
 import { addDexTwoLiquidityApi } from '../../api';
 import { getValueWithFee } from '../../helpers';
-import { useNewLiquidityItemStore } from '../store';
+import { useLiquidityItemStore } from '../store';
 
 export const useAddLiquidity = () => {
   const { tezos } = useRootStore();
@@ -33,7 +33,7 @@ export const useAddLiquidity = () => {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
-  const { item } = useNewLiquidityItemStore();
+  const { item } = useLiquidityItemStore();
 
   const addLiquidity = async (inputAmounts: FormikValues, candidate: string) => {
     if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {

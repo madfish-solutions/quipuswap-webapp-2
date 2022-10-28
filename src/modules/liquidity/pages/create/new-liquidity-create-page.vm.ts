@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { SINGLE_TOKEN_VALUE, ZERO_BAKER_ADDRESS } from '@config/constants';
-import { useCreateNewLiquidityPool } from '@modules/liquidity/hooks/blockchain/use-new-liquidity-create-pool';
 import {
   canDelegate,
   getInputsAmountFormFormikValues,
@@ -18,6 +17,7 @@ import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-moda
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useCreateLiquidityPool } from '../../hooks/blockchain/use-liquidity-create-pool';
 import { DexTwoCreateFormCommonData } from './components/dex-two-create-form/dex-two-create-form.types';
 import { getInputSlugByIndex } from './components/helpers';
 import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
@@ -30,7 +30,7 @@ const ZERO_DECIMALS = 0;
 export const useNewLiquidityCreatePageViewModel = () => {
   const { chooseTokens } = useChooseTokens();
   const { t } = useTranslation();
-  const { createNewLiquidityPool } = useCreateNewLiquidityPool();
+  const { createNewLiquidityPool } = useCreateLiquidityPool();
   const tokensModalStore = useTokensModalStore();
   const { chosenTokensSingleModal } = tokensModalStore;
 

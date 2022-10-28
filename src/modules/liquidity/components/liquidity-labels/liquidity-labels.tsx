@@ -4,7 +4,7 @@ import { isNull } from '@shared/helpers';
 import { StableCategory, BtcCategory, QuipuCategory, BridgeCategory, TezotopiaCategory } from '@shared/svg/categories';
 
 import { Categories } from '../../interfaces';
-import styles from './new-liquidity-labels.module.scss';
+import styles from './liquidity-labels.module.scss';
 
 const Component: Record<Categories, FC> = {
   [Categories.Stable]: StableCategory,
@@ -18,7 +18,7 @@ interface Props {
   categories: Array<Categories>;
 }
 
-export const NewLiquidityLabels: FC<Props> = ({ categories }) => {
+export const LiquidityLabels: FC<Props> = ({ categories }) => {
   const icons = categories.map(category => Component[category]);
 
   return (

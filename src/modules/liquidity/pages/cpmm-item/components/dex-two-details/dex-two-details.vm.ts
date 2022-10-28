@@ -5,11 +5,11 @@ import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getTokenSymbol, toReal } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
-import { useNewLiquidityItemStore } from '../../../../hooks';
+import { useLiquidityItemStore } from '../../../../hooks';
 import styles from './dex-two-details.module.scss';
 
 export const useDexTwoDetailsViewModel = () => {
-  const newLiquidityItemStore = useNewLiquidityItemStore();
+  const newLiquidityItemStore = useLiquidityItemStore();
 
   const pieChartData = newLiquidityItemStore?.item?.tokensInfo.map(({ atomicTokenTvl, token }) => ({
     value: toReal(atomicTokenTvl, token.metadata.decimals ?? DEFAULT_DECIMALS).toNumber(),

@@ -6,9 +6,10 @@ import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { getLiquidityUrl } from '@shared/helpers';
 import { Nullable, Token, TokenPair } from '@shared/types';
 
+import { LiquidityTabs } from '../../../liquidity-routes.enum';
 import { useDexContract } from '../hooks';
 import { findToken, parseUrl } from './helpers';
-import { getTabById, LiquidityTabs } from './liquidity-tabs';
+import { getTabById } from './liquidity-tabs';
 
 const handleSearchPromise = async (
   searchPromise: Promise<Nullable<Token>>,
