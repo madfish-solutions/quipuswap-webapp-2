@@ -22,7 +22,7 @@ export const NewLiquidityListPage: FC = observer(() => {
       <HotPools pools={preparedHotPools} />
       <CreateOwnPool />
       <ListFilter />
-      <VirtualList items={preparedList} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
+      <VirtualList data={preparedList} render={ListItemCard} wrapperClassName={styles.newLiquidityList} />
     </>
   );
 });
