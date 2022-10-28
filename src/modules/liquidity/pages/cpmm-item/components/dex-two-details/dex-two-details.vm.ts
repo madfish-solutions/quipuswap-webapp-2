@@ -2,6 +2,7 @@ import cx from 'classnames';
 
 import { DEFAULT_DECIMALS } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
+import { opportunityHelper } from '@modules/stableswap/stableswap-liquidity/pages/item/opportunity.helper';
 import { getTokenSymbol, toReal } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
@@ -19,16 +20,21 @@ export const useDexTwoDetailsViewModel = () => {
   const dexTwoContractAddress = liquidityItemStore.item?.contractAddress;
   const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
 
+  const opportunities = liquidityItemStore?.item?.opportunities?.map(opportunityHelper);
+
   return {
-    apr: null,
-    feesRate: null,
-    weeklyVolume: null,
-    tvlInUsd: liquidityItemStore?.item?.tvlInUsd,
-    totalLpSupply:
-      liquidityItemStore?.item?.totalSupply && toReal(liquidityItemStore?.item?.totalSupply, DEFAULT_DECIMALS),
-    atomicTotalLpSupply: liquidityItemStore?.item?.totalSupply,
-    poolContractUrl,
-    cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
-    pieChartData: pieChartData ?? []
+    detailsViewProps: {
+      apr: null,
+      feesRate: null,
+      weeklyVolume: null,
+      tvlInUsd: liquidityItemStore?.item?.tvlInUsd,
+      totalLpSupply:
+        liquidityItemStore?.item?.totalSupply && toReal(liquidityItemStore?.item?.totalSupply, DEFAULT_DECIMALS),
+      atomicTotalLpSupply: liquidityItemStore?.item?.totalSupply,
+      poolContractUrl,
+      cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
+      pieChartData: pieChartData ?? []
+    },
+    opportunities: opportunities ?? []
   };
 };
