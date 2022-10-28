@@ -139,8 +139,6 @@ export class FarmingYouvesItemStore {
     const stakes = getLastElement(this.stakes) as YouvesStakeDto;
 
     const { claimable_reward, full_reward } = getRewards(stakes, vestingPeriodSeconds, _disc_factor);
-    // eslint-disable-next-line no-console
-    console.log(claimable_reward.toFixed(), full_reward.toFixed());
 
     this.claimableRewards = toReal(claimable_reward, rewardToken);
     this.longTermRewards = toReal(full_reward, rewardToken);
