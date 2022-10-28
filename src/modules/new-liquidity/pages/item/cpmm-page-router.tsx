@@ -12,7 +12,7 @@ import { DexTwoClaimRewards } from './dex-two-claim-rewards';
 import { DexTwoRemoveLiq } from './dex-two-remove-liq';
 import { useCpmmViewModel } from './use-dex-two-item-page.vm';
 
-export const CpmmPage: FC = observer(() => {
+export const CpmmPageRouter: FC = observer(() => {
   const { isInitialized, title } = useCpmmViewModel();
 
   return (
