@@ -13,7 +13,8 @@ import styles from './reward-info.module.scss';
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
   longTermPendingRewards: Nullable<BigNumber>;
-  dollarEquivalent?: Nullable<BigNumber.Value>;
+  claimableRewardDollarEquivalent?: Nullable<BigNumber.Value>;
+  pendingRewardDollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   className?: string;
   containerClassName?: string;
@@ -37,7 +38,8 @@ interface Props {
 const ZERO_REWARDS = 0;
 
 export const RewardInfo: CFC<Props> = ({
-  dollarEquivalent,
+  claimableRewardDollarEquivalent,
+  pendingRewardDollarEquivalent,
   amountDecimals,
   className,
   containerClassName,
@@ -80,7 +82,8 @@ export const RewardInfo: CFC<Props> = ({
           className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
           longTermPendingRewards={longTermPendingRewards}
-          dollarEquivalent={dollarEquivalent}
+          claimableRewardDollarEquivalent={claimableRewardDollarEquivalent}
+          pendingRewardDollarEquivalent={pendingRewardDollarEquivalent}
           amountDecimals={amountDecimals}
           currency={currency}
         />
