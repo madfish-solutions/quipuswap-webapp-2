@@ -49,7 +49,7 @@ export const useCpmmPairSlug = () => {
     try {
       return getCpmmPairSlug(params);
     } catch {
-      navigate(AppRootRoutes.NewLiquidity);
+      navigate(AppRootRoutes.Liquidity);
     }
   }, [navigate, params]);
 

@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
 import { FISRT_INDEX } from '@config/constants';
-import { LP_TOKEN } from '@modules/new-liquidity/pages/item/components/forms/helpers/mock-lp-token';
+import { LP_TOKEN } from '@modules/new-liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {

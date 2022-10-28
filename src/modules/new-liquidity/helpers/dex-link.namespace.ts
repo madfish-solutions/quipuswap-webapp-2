@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
-import { LiquidityTabs } from '@modules/liquidity';
+import { LiquidityTabs } from '@modules/new-liquidity/pages/liquidity';
 import { StableswapRoutes } from '@modules/stableswap';
 import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { getTokenPairSlug } from '@shared/helpers';
@@ -14,7 +14,7 @@ export namespace DexLink {
   export const getCpmmPoolLink = (tokenPair: [Token, Token]) => {
     const tokenPairSlug = getTokenPairSlug(...tokenPair);
 
-    return `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${tokenPairSlug}`;
+    return `${AppRootRoutes.Liquidity}${NewLiquidityRoutes.cpmm}/${NewLiquidityFormTabs.add}/${tokenPairSlug}`;
   };
 
   export const getOldLiquidityPoolLink = (tokenPair: [Token, Token]) => {

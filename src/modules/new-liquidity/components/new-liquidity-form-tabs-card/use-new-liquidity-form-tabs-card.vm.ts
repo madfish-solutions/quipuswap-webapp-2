@@ -49,7 +49,7 @@ export const useNewLiquidityFormTabsCardViewModel = () => {
 
   const changeTabHandle = useCallback(
     (tab: NewLiquidityFormTabs) => {
-      const url = `${AppRootRoutes.NewLiquidity}${NewLiquidityRoutes.cpmm}/${tab}/${pairSlug}`;
+      const url = `${AppRootRoutes.Liquidity}${NewLiquidityRoutes.cpmm}/${tab}/${pairSlug}`;
 
       navigate(url);
     },
