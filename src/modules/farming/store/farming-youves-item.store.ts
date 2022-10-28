@@ -39,18 +39,22 @@ const DEFAULT_TOKENS: Token[] = [];
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
-  farmingAddress: Nullable<string> = null;
+  id = '0';
 
   //#region item store region
   @Led({
     default: DEFAULT_ITEM,
-    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.farmingAddress),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
 
   get item() {
     return this.itemStore.model.item;
+  }
+
+  get farmingAddress() {
+    return this.item?.contractAddress ?? null;
   }
   //#endregion item store region
 
@@ -90,10 +94,12 @@ export class FarmingYouvesItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
+      id: observable,
       claimableRewards: observable,
       longTermRewards: observable,
 
       updatePendingRewards: action,
+      setFarmingId: action,
 
       item: computed,
       stakes: computed,
@@ -150,8 +156,8 @@ export class FarmingYouvesItemStore {
     this.updateStakesInterval.stop();
   }
 
-  setFarmingAddress(farmingAddress: Nullable<string>) {
-    this.farmingAddress = farmingAddress;
+  setFarmingId(id: string) {
+    this.id = id;
   }
 
   /*
@@ -160,11 +166,15 @@ export class FarmingYouvesItemStore {
   async getStakes() {
     const { tezos, authStore } = this.rootStore;
 
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(this.farmingAddress)) {
+    if (isNull(tezos) || isNull(authStore.accountPkh) || !isExist(this.itemStore.model.item?.contractAddress)) {
       return { stakes: [] };
     }
 
-    return await BlockchainYouvesFarmingApi.getStakes(this.farmingAddress, authStore.accountPkh, tezos);
+    return await BlockchainYouvesFarmingApi.getStakes(
+      this.itemStore.model.item!.contractAddress,
+      authStore.accountPkh,
+      tezos
+    );
   }
 
   // TODO: Add fa12 support when contracts will be ready

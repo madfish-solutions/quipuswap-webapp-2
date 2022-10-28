@@ -10,7 +10,7 @@ import { useFarmingListPageViewModel } from './use-farming-list-page.vm';
 import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const FarmsListPage = observer(() => {
-  const { isLoading, list, title, opened } = useFarmingListPageViewModel();
+  const { isLoading, listCommon, title, opened } = useFarmingListPageViewModel();
   const { stats } = useListStatsViewModel();
 
   return (
@@ -24,7 +24,7 @@ export const FarmsListPage = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
         <FarmingListFilter />
         <Iterator
-          data={list}
+          data={listCommon}
           render={ListItemCard}
           fallback={<EmptyFarmingList />}
           isGrouped
