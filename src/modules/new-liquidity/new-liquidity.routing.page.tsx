@@ -8,7 +8,7 @@ import { SentryRoutes } from '@shared/services';
 import { PageNotFoundPage } from '../errors';
 import { NewLiquidityRoutes } from './new-liquidity-routes.enum';
 import { useNewLiquidityViewModel } from './new-liquidity.routing.vm';
-import { CreatePoolPage, PageContainerAdd, PageContainerRemove, NewLiquidityListPage, CpmmPage } from './pages';
+import { CreatePoolPage, PageContainerAdd, PageContainerRemove, NewLiquidityListPage, CpmmPageRouter } from './pages';
 import { NewLiquidityCreatePage } from './pages/create';
 import { NewLiquidityFormTabs } from './types';
 
@@ -35,7 +35,7 @@ export const NewLiquidityPageRouter: FC = () => {
           element={<NewLiquidityCreatePage />}
         />
 
-        <Route path={`${NewLiquidityRoutes.cpmm}/*`} element={<CpmmPage />} />
+        <Route path={`${NewLiquidityRoutes.cpmm}/*`} element={<CpmmPageRouter />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>
