@@ -3,16 +3,16 @@ import { FarmingItemCommonResponseModel, FarmingItemCommonModel } from '../farmi
 
 export class FarmingListCommonResponseModel extends FarmingListCommonResponseDto {
   list: Array<FarmingItemCommonResponseModel>;
-  indexedList: { [id: string]: FarmingItemCommonModel };
+  indexedDictionary: { [id: string]: FarmingItemCommonModel };
 
   constructor(dto: FarmingListCommonResponseDto) {
     super();
 
     this.list = dto.list.map(data => new FarmingItemCommonResponseModel(data));
-    this.indexedList = Object.fromEntries(this.list.map(({ item }) => [item.id.toFixed(), item]));
+    this.indexedDictionary = Object.fromEntries(this.list.map(({ item }) => [item.id.toFixed(), item]));
   }
 
   getFarmingItemModelById(id: string) {
-    return this.indexedList[id];
+    return this.indexedDictionary[id];
   }
 }
