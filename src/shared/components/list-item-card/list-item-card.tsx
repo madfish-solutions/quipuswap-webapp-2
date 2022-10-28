@@ -19,7 +19,7 @@ import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
 import styles from './list-item-card.module.scss';
 
-interface Props {
+export interface ListItemCardProps {
   href: string;
   inputToken: Token | Array<Token>;
   status: LabelComponentProps;
@@ -39,7 +39,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const ListItemCard: FC<Props> = ({
+export const ListItemCard: FC<ListItemCardProps> = ({
   inputToken,
   outputToken,
   href,
