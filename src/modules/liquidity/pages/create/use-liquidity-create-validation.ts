@@ -9,9 +9,9 @@ import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
 import { getInputSlugByIndex } from './components/helpers';
-import { NewLiqCreateInput } from './new-liquidity-create.interface';
+import { LiquidityCreateInput } from './liquidity-create.interface';
 
-export const useNewLiqudityCreateValidation = (
+export const useLiquidityCreateValidation = (
   tokens: Array<Optional<Token>>,
   userBalances: Array<Nullable<BigNumber>>,
   canDelegate: boolean
@@ -44,7 +44,7 @@ export const useNewLiqudityCreateValidation = (
 
     return yup.object().shape({
       ...shape,
-      [NewLiqCreateInput.BAKER_INPUT]: bakerSchema
+      [LiquidityCreateInput.BAKER_INPUT]: bakerSchema
     });
   }, [tokens, canDelegate, userBalances, t]);
 };

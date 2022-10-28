@@ -6,7 +6,7 @@ import { useTranslation } from '@translation';
 import { useGetLiquidityList, useGetLiquidityStats, useLiquidityListStore } from '../../hooks';
 import { mapLiquidityListItem } from './map-liquidity-list-item';
 
-export const useNewLiquidityPageViewModel = () => {
+export const useLiquidityPageViewModel = () => {
   const isReady = useReady();
   const { filteredList, hotPools } = useLiquidityListStore();
   const { getNewLiquidityList } = useGetLiquidityList();

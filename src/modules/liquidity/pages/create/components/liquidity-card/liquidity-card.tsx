@@ -3,9 +3,9 @@ import { Card, SettingsButton } from '@shared/components';
 import { CFC } from '@shared/types';
 import CommonContainerStyles from '@styles/CommonContainer.module.scss';
 
-import styles from './new-liquidity-card.module.scss';
+import styles from './liquidity-card.module.scss';
 
-export const NewLiquidityCard: CFC = ({ children }) => {
+export const LiquidityCard: CFC = ({ children }) => {
   return (
     <Card
       subheader={{

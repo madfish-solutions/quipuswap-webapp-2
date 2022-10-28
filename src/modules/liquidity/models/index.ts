@@ -1,4 +1,4 @@
 export * from './liquidity-item.model';
 export * from './liquidity-list.model';
-export * from './new-liquidity-response.model';
-export * from './new-liquidity-stats.model';
+export * from './liquidity-response.model';
+export * from './liquidity-stats.model';

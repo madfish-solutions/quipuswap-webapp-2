@@ -10,9 +10,9 @@ import { ArrowDown } from '@shared/svg';
 
 import { LiquidityRoutes } from '../../liquidity-routes.enum';
 import styles from './create-pool.module.scss';
-import { useCreatePoolViewModel } from './create-pool.vm';
+import { useCreatePoolViewModel } from './use-create-pool.vm';
 
-export const CreateNewPoolPage: FC = observer(() => {
+export const CreatePoolPage: FC = observer(() => {
   const { translations, createRegularPoolIcon, createStablePoolIcon } = useCreatePoolViewModel();
 
   const { createPool, stablePool, regularPool, back } = translations;

@@ -8,7 +8,7 @@ interface Props {
   className?: string;
 }
 
-export const NewLiquidityPoolExist: FC<Props> = ({ className, existingPoolLink }) => {
+export const LiquidityPoolExist: FC<Props> = ({ className, existingPoolLink }) => {
   const { t } = useTranslation();
 
   return (

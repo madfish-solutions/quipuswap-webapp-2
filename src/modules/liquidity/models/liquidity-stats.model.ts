@@ -1,6 +1,6 @@
 import { LiquidityStatsDto } from '../dto';
 
-export class NewLiquidityStatsModel extends LiquidityStatsDto {
+export class LiquidityStatsModel extends LiquidityStatsDto {
   constructor(dto: LiquidityStatsDto) {
     super();
 

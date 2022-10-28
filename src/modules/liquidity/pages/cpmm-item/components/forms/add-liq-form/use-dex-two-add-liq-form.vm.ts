@@ -22,7 +22,7 @@ import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { getTokenAndFieldData, getFormikInitialValues, getUserBalances } from '../helpers';
-import { Input, NewLiquidityFormValues } from '../interface';
+import { Input, LiquidityFormValues } from '../interface';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
 export const useDexTwoAddLiqFormViewModel = () => {
@@ -39,7 +39,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   );
   const shouldShowBakerInput = tokensInfo.some(({ token }) => isTezosToken(token));
 
-  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<NewLiquidityFormValues>) => {
+  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<LiquidityFormValues>) => {
     actions.setSubmitting(true);
 
     const candidate = values[Input.THIRD_INPUT];

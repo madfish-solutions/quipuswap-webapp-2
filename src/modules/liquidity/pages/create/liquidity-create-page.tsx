@@ -5,20 +5,20 @@ import { observer } from 'mobx-react-lite';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { DexTwoCreateForm, NewLiquidityCard } from './components';
-import { useNewLiquidityCreatePageViewModel } from './new-liquidity-create-page.vm';
+import { DexTwoCreateForm, LiquidityCard } from './components';
+import { useLiquidityCreatePageViewModel } from './liquidity-create-page.vm';
 
-export const CpmmNewLiquidityCreatePage: FC = observer(() => {
+export const LiquidityCreatePage: FC = observer(() => {
   const { t } = useTranslation();
-  const params = useNewLiquidityCreatePageViewModel();
+  const params = useLiquidityCreatePageViewModel();
 
   return (
     <>
       <PageTitle data-test-id="dexTwoCreatePoolTitle">{t('common|Create')}</PageTitle>
       <StickyBlock>
-        <NewLiquidityCard>
+        <LiquidityCard>
           <DexTwoCreateForm {...params} />
-        </NewLiquidityCard>
+        </LiquidityCard>
       </StickyBlock>
     </>
   );

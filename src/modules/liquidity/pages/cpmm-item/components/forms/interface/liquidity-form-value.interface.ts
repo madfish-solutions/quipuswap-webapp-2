@@ -4,6 +4,6 @@ export enum Input {
   THIRD_INPUT = 'liq-input-2'
 }
 
-export interface NewLiquidityFormValues {
+export interface LiquidityFormValues {
   [x: string]: string;
 }
