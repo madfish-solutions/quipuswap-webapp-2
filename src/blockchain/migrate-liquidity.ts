@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { DUMMY_BAKER } from '@config/bakers';
 import { SECONDS_IN_MINUTE } from '@config/constants';
-import { LiquidityTokenInfo, PoolType } from '@modules/new-liquidity/interfaces';
+import { LiquidityTokenInfo, PoolType } from '@modules/liquidity/interfaces';
 import { getBlockchainTimestamp } from '@shared/helpers';
 import { Token } from '@shared/types';
 
