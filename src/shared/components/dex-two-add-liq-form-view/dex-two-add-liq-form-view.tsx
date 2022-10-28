@@ -67,7 +67,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
             </Button>
             {canMigrateLiquidity && (
               <Button theme="primary" type="button" loading={isSubmitting} onClick={handleMigrateLiquidity}>
-                {t('newLiquidity|migrate')}
+                {t('liquidity|migrate')}
               </Button>
             )}
           </ConnectWalletOrDoSomething>
