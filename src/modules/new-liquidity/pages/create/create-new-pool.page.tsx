@@ -12,7 +12,7 @@ import { NewLiquidityRoutes } from '../../new-liquidity-routes.enum';
 import styles from './create-pool.module.scss';
 import { useCreatePoolViewModel } from './create-pool.vm';
 
-export const CreatePoolPage: FC = observer(() => {
+export const CreateNewPoolPage: FC = observer(() => {
   const { translations, createRegularPoolIcon, createStablePoolIcon } = useCreatePoolViewModel();
 
   const { createPool, stablePool, regularPool, back } = translations;

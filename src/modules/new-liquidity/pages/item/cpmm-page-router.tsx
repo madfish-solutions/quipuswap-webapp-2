@@ -7,8 +7,9 @@ import { NewLiquidityFormTabs } from '@modules/new-liquidity/types';
 import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
+import { CpmmNewLiquidityCreatePage } from '../create';
+import { CpmmDexTwoClaimRewards } from './cpmm-dex-two-claim-rewards';
 import { DexTwoAddLiq } from './dex-two-add-liq';
-import { DexTwoClaimRewards } from './dex-two-claim-rewards';
 import { DexTwoRemoveLiq } from './dex-two-remove-liq';
 import { useCpmmViewModel } from './use-dex-two-item-page.vm';
 
@@ -20,7 +21,8 @@ export const CpmmPageRouter: FC = observer(() => {
       <SentryRoutes>
         <Route path={`${NewLiquidityFormTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
         <Route path={`${NewLiquidityFormTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
-        <Route path={`${NewLiquidityFormTabs.claim}/:pairSlug`} element={<DexTwoClaimRewards title={title} />} />
+        <Route path={`${NewLiquidityFormTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
+        <Route path={`${NewLiquidityFormTabs.create}`} element={<CpmmNewLiquidityCreatePage />} />
       </SentryRoutes>
     </StateWrapper>
   );

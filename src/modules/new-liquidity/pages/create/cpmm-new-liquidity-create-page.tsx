@@ -8,7 +8,7 @@ import { useTranslation } from '@translation';
 import { DexTwoCreateForm, NewLiquidityCard } from './components';
 import { useNewLiquidityCreatePageViewModel } from './new-liquidity-create-page.vm';
 
-export const NewLiquidityCreatePage: FC = observer(() => {
+export const CpmmNewLiquidityCreatePage: FC = observer(() => {
   const { t } = useTranslation();
   const params = useNewLiquidityCreatePageViewModel();
 
