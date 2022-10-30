@@ -91,8 +91,8 @@ export const farmingListCommonDataHelper = (
     userStats,
     href:
       farmingItem.old || isUndefined(farmingItem.old)
-        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${farmingItem.id}`
-        : `${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${farmingItem.id}`,
+        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${farmingItem.id}`
+        : `${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmingItem.id}`,
     inputToken: farmingItem.tokens,
     isNew: NEW_FARMINGS.includes(farmingItem.id.toFixed()),
     status: { status: farmingItem.stakeStatus, filled: true },
