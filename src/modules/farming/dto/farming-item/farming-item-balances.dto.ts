@@ -6,6 +6,9 @@ export class FarmingItemBalancesDto {
   @Typed()
   id: string;
 
+  @Typed()
+  contractAddress: string;
+
   @Typed({ optional: true })
   myBalance?: BigNumber;
 

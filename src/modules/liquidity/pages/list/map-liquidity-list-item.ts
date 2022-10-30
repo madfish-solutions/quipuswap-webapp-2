@@ -86,7 +86,6 @@ export const mapLiquidityListItem = ({
     maxApr,
     itemStats,
     categories: poolLabels,
-    visibleIcon: true,
     inputToken: tokens,
     href: getLiquidityHref(id, type, tokens),
     status: { status: ActiveStatus.ACTIVE, filled: true }

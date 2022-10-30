@@ -21,7 +21,6 @@ export interface PreparedLiquidityItem {
     };
   }>;
   categories: Array<Categories>;
-  visibleIcon: boolean;
   inputToken: Array<Token>;
   href: string;
   status: { status: ActiveStatus; filled: boolean };
