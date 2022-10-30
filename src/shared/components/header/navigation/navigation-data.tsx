@@ -60,7 +60,10 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Liquidity',
     to: AppRootRoutes.Liquidity,
     label: i18n.t('common|Liquidity'),
-    Icon: LiquidityIcon
+    Icon: LiquidityIcon,
+    status: (
+      <LabelComponent status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
+    )
   },
   {
     id: 'Farming',
@@ -72,10 +75,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
     label: i18n.t('common|Game'),
-    Icon: GameIcon,
-    status: (
-      <LabelComponent status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
-    )
+    Icon: GameIcon
   },
   {
     id: 'Stableswap',
