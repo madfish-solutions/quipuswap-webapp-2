@@ -37,7 +37,7 @@ export const useListFilterViewModel = () => {
   };
 
   const sortingValues: LiquiditySortFieldItem[] = [
-    { label: t('common|Default'), field: LiquiditySortField.ID },
+    { label: t('common|ID'), field: LiquiditySortField.ID },
     { label: t('farm|tvl'), field: LiquiditySortField.TVL }
   ];
 
