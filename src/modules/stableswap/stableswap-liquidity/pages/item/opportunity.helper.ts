@@ -15,6 +15,6 @@ export const opportunityHelper = (
   index: index + INDEX_INCREMENT,
   href:
     old || isUndefined(old)
-      ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${id}`
-      : `${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${id}`
+      ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${id}`
+      : `${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${id}`
 });

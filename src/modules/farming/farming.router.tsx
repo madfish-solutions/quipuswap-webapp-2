@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
 import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
@@ -12,7 +11,8 @@ import { FarmsListPage } from './pages/list';
 import { YouvesItemPage } from './pages/youves-item';
 
 export enum FarmingRoutes {
-  Youves = '/youves'
+  VersionOne = '/v1',
+  VersionTwo = '/v2'
 }
 
 export const FarmingRouter: FC = () => {
@@ -22,10 +22,10 @@ export const FarmingRouter: FC = () => {
     <StateWrapper isLoading={!isInitialized} loaderFallback={<div>Loading...</div>}>
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
-        <Route path={`${AppRootRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
-        <Route path={`${AppRootRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
-        <Route path={`${FarmingRoutes.Youves}/:id`} element={<YouvesItemPage />} />
-        <Route path={`${FarmingRoutes.Youves}/:id/:tab`} element={<YouvesItemPage />} />
+        <Route path={`${FarmingRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
+        <Route path={`${FarmingRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
+        <Route path={`${FarmingRoutes.VersionTwo}/:id`} element={<YouvesItemPage />} />
+        <Route path={`${FarmingRoutes.VersionTwo}/:id/:tab`} element={<YouvesItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
