@@ -25,7 +25,7 @@ interface UserBalances {
 }
 
 /** @deprecated */
-const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
+const injectBalanceDeprecated = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
@@ -59,7 +59,7 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
 };
 
 // eslint-disable-next-line sonarjs/no-identical-functions
-const injectBalanceNew = async (list: Array<FarmingItemCommonModel>, accountPkh: string, tezos: TezosToolkit) => {
+const injectBalance = async (list: Array<FarmingItemCommonModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
@@ -90,11 +90,13 @@ const injectBalanceNew = async (list: Array<FarmingItemCommonModel>, accountPkh:
     balances.set(key, { ...balance, ...userBalance });
   });
 
-  return { balances: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
+  return {
+    balances: list.map(item => ({ ...item, id: item.id.toFixed(), ...balances.get(item.id.toFixed()) }))
+  };
 };
 
 /** @deprecated */
-export const getFarmingListUserBalances = async (
+export const getFarmingListUserBalancesDeprecated = async (
   accountPkh: Nullable<string>,
   tezos: Nullable<TezosToolkit>,
   farmings: Array<FarmingItemModel>
@@ -103,10 +105,10 @@ export const getFarmingListUserBalances = async (
     return { balances: [] };
   }
 
-  return await injectBalance(farmings, accountPkh, tezos);
+  return await injectBalanceDeprecated(farmings, accountPkh, tezos);
 };
 
-export const getFarmingListUserBalancesNew = async (
+export const getFarmingListUserBalances = async (
   accountPkh: Nullable<string>,
   tezos: Nullable<TezosToolkit>,
   farmings: Array<FarmingItemCommonModel>
@@ -115,5 +117,5 @@ export const getFarmingListUserBalancesNew = async (
     return { balances: [] };
   }
 
-  return await injectBalanceNew(farmings, accountPkh, tezos);
+  return await injectBalance(farmings, accountPkh, tezos);
 };
