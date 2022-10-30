@@ -8,6 +8,7 @@ import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
+import { FarmingRoutes } from '../../farming.router';
 import { FarmingListItemWithBalances } from './types';
 
 const ZERO = 0;
@@ -92,7 +93,7 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     userStats,
     href:
       item.old || isUndefined(item.old)
-        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${item.id}`
+        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${item.id}`
         : `${AppRootRoutes.Farming}/${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
