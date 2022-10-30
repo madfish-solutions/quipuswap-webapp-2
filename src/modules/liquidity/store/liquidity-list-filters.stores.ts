@@ -34,7 +34,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   showBTC = false;
   showDexTwo = false;
 
-  sortField: LiquiditySortField = LiquiditySortField.ID;
+  sortField: LiquiditySortField = LiquiditySortField.TVL;
 
   constructor() {
     super();
