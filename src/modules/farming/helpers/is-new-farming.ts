@@ -1,5 +1,6 @@
-import BigNumber from 'bignumber.js';
-
 import { NEW_FARMINGS } from '@config/config';
 
-export const isNewFarming = (id: BigNumber) => NEW_FARMINGS.includes(id.toFixed());
+import { FarmingItemModel } from '../models';
+
+export const isNewFarming = (item: FarmingItemModel) =>
+  NEW_FARMINGS.some(({ id, old }) => id === item.id.toFixed() && old === item.old);
