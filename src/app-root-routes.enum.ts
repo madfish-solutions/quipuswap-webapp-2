@@ -9,6 +9,5 @@ export enum AppRootRoutes {
   Voting = '/voting',
   Stableswap = '/stableswap',
   Coinflip = '/coinflip',
-  VersionOne = '/v1',
   NotFound = '/404'
 }

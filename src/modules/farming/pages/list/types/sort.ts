@@ -1,5 +1,5 @@
 export enum FarmingSortField {
-  ID = 'ID',
+  DEFAULT = 'DEFAULT',
   APR = 'APR',
   APY = 'APY',
   TVL = 'TVL',

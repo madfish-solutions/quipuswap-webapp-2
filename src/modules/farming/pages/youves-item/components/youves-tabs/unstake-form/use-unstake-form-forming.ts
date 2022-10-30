@@ -29,7 +29,7 @@ export const useUnstakeFormForming = (
       setIsSubmitting(true);
       await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
       setIsSubmitting(false);
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${farmId}/${YouvesFormTabs.stake}`);
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmId}/${YouvesFormTabs.stake}`);
     });
   };
 

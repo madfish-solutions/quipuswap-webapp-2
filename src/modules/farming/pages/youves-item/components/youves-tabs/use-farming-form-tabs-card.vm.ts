@@ -31,7 +31,7 @@ export const useFarmingFormTabsCardViewModel = () => {
 
   const setCurrentTab = useCallback(
     (tabName: YouvesFormTabs) => {
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${id}/${tabName}`);
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${id}/${tabName}`);
     },
     [id, navigate]
   );
