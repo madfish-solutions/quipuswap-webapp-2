@@ -91,7 +91,12 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, GHOSTNET_NETWORK];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS = ['0', '1', '2', '3'];
+export const NEW_FARMINGS: Array<{ id: string; old: boolean }> = [
+  { id: '0', old: false },
+  { id: '1', old: false },
+  { id: '2', old: false },
+  { id: '3', old: false }
+];
 
 // FarmingItems with Youves
 export const YOUVES_FARMINGS = ['5', '6'];
