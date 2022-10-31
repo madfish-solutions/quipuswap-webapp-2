@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import BigNumber from 'bignumber.js';
+
 import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
@@ -30,7 +32,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const {
     claimableRewards,
     claimablePendingRewardsInUsd,
-    longTermRewards,
+    // longTermRewards,
     longTermPendingRewardsInUsd,
     userTotalDeposit,
     userTotalDepositDollarEquivalent
@@ -68,7 +70,7 @@ export const useYouvesRewardInfoViewModel = () => {
 
   return {
     claimablePendingRewards: claimableRewards,
-    longTermPendingRewards: longTermRewards,
+    longTermPendingRewards: new BigNumber(1),
     claimablePendingRewardsInUsd,
     longTermPendingRewardsInUsd,
     shouldShowCountdown: true,

@@ -37,6 +37,7 @@
 
 .statesOfCurrencysAmount {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .fullRewards {
@@ -78,8 +79,6 @@
 @include media('>SDesktop') {
   .reward {
     margin-bottom: 0;
-    gap: 75px;
-    max-width: fit-content;
   }
 
   .amount {
