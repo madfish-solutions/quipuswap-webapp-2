@@ -21,7 +21,12 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingListUserBalances, getFarmingStatsApi } from '../api';
+import {
+  getAllFarmsUserInfoApi,
+  getFarmingListApi,
+  getFarmingListUserBalancesDeprecated,
+  getFarmingStatsApi
+} from '../api';
 import {
   getEndTimestamp,
   getIsHarvestAvailable,
@@ -112,7 +117,8 @@ export class FarmingListStore {
   //#region farming list balances store
   @Led({
     default: defaultListBalances,
-    loader: async (self: FarmingListStore) => getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
+    loader: async (self: FarmingListStore) =>
+      getFarmingListUserBalancesDeprecated(self.accountPkh, self.tezos, self.listList),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;

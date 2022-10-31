@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { BlockchainTokenDictionary, convertToBlockchainToken } from '@modules/new-liquidity/api';
+import { BlockchainTokenDictionary, convertToBlockchainToken } from '@modules/liquidity/api';
 import { getContract } from '@shared/dapp';
 import { isTezosToken } from '@shared/helpers';
 import { AmountToken } from '@shared/types';
@@ -36,13 +36,13 @@ const prepareNewPoolData = (tokensAndAmounts: Array<AmountToken>) => {
 
 export const getCreateNewLiquidityPoolParams = async (
   tezos: TezosToolkit,
-  newLiquidityContractAddress: string,
+  liquidityContractAddress: string,
   tokensAndAmounts: Array<AmountToken>,
   accountPkh: string,
   candidate: string,
   timestamp: string
 ) => {
-  const newLiquidityPoolContract = await getContract(tezos, newLiquidityContractAddress);
+  const liquidityPoolContract = await getContract(tezos, liquidityContractAddress);
 
   const { tokensPairParams, token_a_in, token_b_in, mutezAmount } = prepareNewPoolData(tokensAndAmounts);
 
@@ -56,7 +56,7 @@ export const getCreateNewLiquidityPoolParams = async (
     referral_code: QUIPUSWAP_REFERRAL_CODE
   };
 
-  return newLiquidityPoolContract.methodsObject
+  return liquidityPoolContract.methodsObject
     .launch_exchange(params)
     .toTransferParams({ storageLimit: 10000, mutez: true, amount: mutezAmount.toNumber() });
 };

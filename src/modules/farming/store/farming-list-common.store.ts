@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 import { computed, makeObservable, observable } from 'mobx';
 
-import { getFarmingListCommonApi, getFarmingListUserBalancesNew } from '@modules/farming/api';
+import { getFarmingListCommonApi, getFarmingListUserBalances } from '@modules/farming/api';
 import {
   FarmingItemBalancesModel,
   FarmingItemCommonModel,
   FarmingListBalancesModel,
   FarmingListCommonResponseModel
 } from '@modules/farming/models';
-import { defined, isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
+import { isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
@@ -36,18 +36,7 @@ export class FarmingListCommonStore {
   }
 
   get farmingItemsWithBalances() {
-    if (isEmptyArray(this.listBalances)) {
-      return this.listList;
-    }
-
-    return this.listBalances.map(balances => {
-      const farmingItem = defined(
-        this.getFarmingItemModelById(balances.id),
-        `FarmingListStore: 140, id: ${balances.id}`
-      );
-
-      return { ...balances, ...farmingItem };
-    });
+    return isEmptyArray(this.listBalances) ? this.listList : this.listBalances;
   }
 
   get list() {
@@ -60,7 +49,7 @@ export class FarmingListCommonStore {
   @Led({
     default: defaultListBalances,
     loader: async (self: FarmingListCommonStore) =>
-      getFarmingListUserBalancesNew(self.accountPkh, self.tezos, self.listList),
+      getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
@@ -69,7 +58,7 @@ export class FarmingListCommonStore {
     const balances = this.listBalancesStore.model.balances;
 
     return balances.map(balance => {
-      const farmingItemModel = this.getFarmingItemModelById(balance.id);
+      const farmingItemModel = this.getFarmingItemModelById(balance.id, balance.contractAddress);
 
       const myBalance =
         farmingItemModel && balance.myBalance
@@ -86,6 +75,7 @@ export class FarmingListCommonStore {
 
       return {
         ...balance,
+        ...farmingItemModel,
         myBalance,
         depositBalance,
         earnBalance
@@ -110,8 +100,8 @@ export class FarmingListCommonStore {
     });
   }
 
-  getFarmingItemModelById(id: string): Undefined<FarmingItemCommonModel> {
-    return (this.listStore.model as FarmingListCommonResponseModel).getFarmingItemModelById?.(id);
+  getFarmingItemModelById(id: string, contractAddress: string): Undefined<FarmingItemCommonModel> {
+    return (this.listStore.model as FarmingListCommonResponseModel).getFarmingItemModelById?.(id, contractAddress);
   }
 
   getFarmingItemBalancesModelById(id: string): Undefined<FarmingItemBalancesModel> {
