@@ -26,6 +26,8 @@ interface Props {
   longTermPendingRewards: Nullable<BigNumber>;
   claimablePendingRewardsInUsd: Nullable<BigNumber>;
   longTermPendingRewardsInUsd: Nullable<BigNumber>;
+  claimableRewardsLoading: boolean;
+  longTermRewardsLoading: boolean;
   shouldShowCountdown: boolean;
   shouldShowCountdownValue: boolean;
   rewadsDueDate: number;
@@ -45,6 +47,8 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     longTermPendingRewardsInUsd,
     claimablePendingRewards,
     claimablePendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
     shouldShowCountdown,
     shouldShowCountdownValue,
     rewadsDueDate,
@@ -66,6 +70,8 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         longTermPendingRewards={longTermPendingRewards}
         claimableRewardDollarEquivalent={claimablePendingRewardsInUsd}
         pendingRewardDollarEquivalent={longTermPendingRewardsInUsd}
+        claimableRewardsLoading={claimableRewardsLoading}
+        longTermRewardsLoading={longTermRewardsLoading}
         amountDecimals={rewardTokenDecimals}
         className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
