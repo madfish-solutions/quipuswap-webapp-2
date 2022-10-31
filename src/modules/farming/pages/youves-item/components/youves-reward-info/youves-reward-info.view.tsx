@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { DOLLAR } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -23,38 +22,44 @@ const modeClass = {
 // TODO: Add tooltip (claimable / long term)
 
 interface Props {
-  claimablePendingRewards: BigNumber;
-  longTermPendingRewards: BigNumber;
-  claimablePendingRewardsInUsd: BigNumber;
+  claimablePendingRewards: Nullable<BigNumber>;
+  longTermPendingRewards: Nullable<BigNumber>;
+  claimablePendingRewardsInUsd: Nullable<BigNumber>;
+  longTermPendingRewardsInUsd: Nullable<BigNumber>;
+  claimableRewardsLoading: boolean;
+  longTermRewardsLoading: boolean;
   shouldShowCountdown: boolean;
   shouldShowCountdownValue: boolean;
-  timestamp: number;
+  rewadsDueDate: number;
   farmingLoading: boolean;
   rewardTokenDecimals: number;
   handleHarvest: () => void;
   isHarvestAvailable: boolean;
   symbolsString: string;
+  rewardTokenCurrency: string;
   userTotalDeposit: BigNumber;
   userTotalDepositDollarEquivalent: BigNumber;
-  rewadsDueDate: number;
 }
 
 export const YouvesRewardInfoView: FC<Props> = observer(
   ({
     longTermPendingRewards,
+    longTermPendingRewardsInUsd,
     claimablePendingRewards,
     claimablePendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
     shouldShowCountdown,
     shouldShowCountdownValue,
-    timestamp,
+    rewadsDueDate,
     farmingLoading,
     rewardTokenDecimals,
     handleHarvest,
     isHarvestAvailable,
     symbolsString,
+    rewardTokenCurrency,
     userTotalDeposit,
-    userTotalDepositDollarEquivalent,
-    rewadsDueDate
+    userTotalDepositDollarEquivalent
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const { t } = useTranslation();
@@ -63,7 +68,10 @@ export const YouvesRewardInfoView: FC<Props> = observer(
       <RewardInfo
         claimablePendingRewards={claimablePendingRewards}
         longTermPendingRewards={longTermPendingRewards}
-        dollarEquivalent={claimablePendingRewardsInUsd}
+        claimableRewardDollarEquivalent={claimablePendingRewardsInUsd}
+        pendingRewardDollarEquivalent={longTermPendingRewardsInUsd}
+        claimableRewardsLoading={claimableRewardsLoading}
+        longTermRewardsLoading={longTermRewardsLoading}
         amountDecimals={rewardTokenDecimals}
         className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
@@ -74,7 +82,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         buttonText={t('farm|Harvest')}
         rewardTooltip={t('farm|singleFarmRewardTooltip')}
         disabled={!isHarvestAvailable}
-        currency={DOLLAR}
+        currency={rewardTokenCurrency}
       >
         <YouvesStatsItem
           itemName={t('farm|Your Share')}
@@ -95,7 +103,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
           <YouvesStatsItem
             itemName={t('farm|Vesting period ends in')}
             loading={false}
-            tooltipContent={t('farm|feeEndsInTooltip')}
+            tooltipContent={t('farm|vestingPeriodIndsInTooltip')}
             data-test-id="lockPeriodEndsIn"
           >
             <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={rewadsDueDate} />

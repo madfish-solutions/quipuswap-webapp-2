@@ -60,7 +60,7 @@ export const VotingDetails: FC = () => {
   return (
     <Card
       header={{
-        content: <Tabs values={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
+        content: <Tabs tabs={tabsContent} activeId={activeId} setActiveId={setTabId} className={s.tabs} />,
         className: s.header
       }}
       contentClassName={s.content}

@@ -4,7 +4,7 @@ import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap
 
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID } from './environment';
+import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
@@ -24,7 +24,7 @@ export const DONATION_ADDRESS = 'tz1LpP5zU73ivpXwHnKYBDRBL3F7aoNsaGWu';
 export const APP_NAME = 'QuipuSwap';
 export const FEE_RATE = 0.3;
 export const BAKERS_API = 'https://api.baking-bad.org/v2/bakers';
-export const EXCHANGE_RATES_URL = 'https://api.templewallet.com/api/exchange-rates';
+export const EXCHANGE_RATES_URL = `${TEMPLEWALLET_API_URL}/api/exchange-rates`;
 export const IPFS_GATEWAY = 'https://cloudflare-ipfs.com/ipfs';
 
 export const YUPANA_URL = 'https://app.yupana.finance/';
@@ -91,7 +91,12 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, GHOSTNET_NETWORK];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS = ['20', '21'];
+export const NEW_FARMINGS: Array<{ id: string; old: boolean }> = [
+  { id: '0', old: false },
+  { id: '1', old: false },
+  { id: '2', old: false },
+  { id: '3', old: false }
+];
 
 // FarmingItems with Youves
 export const YOUVES_FARMINGS = ['5', '6'];

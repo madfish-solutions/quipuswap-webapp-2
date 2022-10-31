@@ -7,7 +7,8 @@ export class FarmingListBalancesModel extends FarmingListBalancesDto {
 
   constructor(dto: FarmingListBalancesDto) {
     super();
-    this.balances = dto.balances.map(balances => new FarmingItemBalancesModel(balances));
+
+    this.balances = dto.balances.map(balance => new FarmingItemBalancesModel(balance));
     this.indexedBalances = Object.fromEntries(this.balances.map(item => [item.id, item]));
   }
 

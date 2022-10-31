@@ -1,24 +1,31 @@
-import { useState } from 'react';
+import { useRootStore } from '@providers/root-store-provider';
+import { isNotDefined, toReal } from '@shared/helpers';
+import { useAuthStore, useToken } from '@shared/hooks';
 
-import BigNumber from 'bignumber.js';
+import { useFarmingYouvesItemStore } from '../../../../../hooks';
+import { UnstakeFormProps } from './unstake-form-props.interface';
+import { useUnstakeFormForming } from './use-unstake-form-forming';
 
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+export const useUnstakeFormViewModel = (): UnstakeFormProps => {
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
 
-export const useUnstakeFormViewModel = () => {
-  const [inputAmount, inputAmountChange] = useState('');
+  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance, id } = useFarmingYouvesItemStore();
+  const stakedToken = useToken(item?.stakedToken ?? null);
 
-  const handleSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('submit');
-  };
+  const balance =
+    currentStakeBalance && stakedToken ? toReal(currentStakeBalance, stakedToken.metadata.decimals) : null;
+  const inputAmount = balance ? balance.toFixed() : '';
+
+  const form = useUnstakeFormForming(farmingAddress, id, currentStakeId, balance);
+
+  const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh) || !currentStakeBalance;
 
   return {
+    ...form,
     inputAmount,
-    isSubmitting: false,
-    handleSubmit,
-    userTokenBalance: new BigNumber(10),
-    disabled: false,
-    handleInputAmountChange: inputAmountChange,
-    tokens: [QUIPU_TOKEN, TEZOS_TOKEN]
+    disabled,
+    tokens,
+    balance
   };
 };

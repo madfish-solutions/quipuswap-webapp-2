@@ -11,7 +11,7 @@ export class FarmingFilterStore extends BaseFilterStore {
   stakedOnly = false;
   activeOnly = true;
 
-  sortField: FarmingSortField = FarmingSortField.ID;
+  sortField: FarmingSortField = FarmingSortField.DEFAULT;
 
   constructor() {
     super();

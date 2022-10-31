@@ -6,11 +6,14 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import s from './tabs.module.scss';
 
+export interface ITab {
+  id: string;
+  label: string;
+  disabled?: boolean;
+}
+
 export interface TabsProps<Tab extends string = string> {
-  values: {
-    id: string;
-    label: string;
-  }[];
+  tabs: ITab[];
   activeId: Tab;
   setActiveId: (id: Tab) => void;
   className?: string;
@@ -22,7 +25,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, withUnderline = true }) => {
+export const Tabs: FC<TabsProps> = ({ tabs, activeId, setActiveId, className, withUnderline = true }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);
@@ -47,11 +50,11 @@ export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, 
         transform: activeElement.offsetLeft + 8
       });
     }
-  }, [activeId, values]);
+  }, [activeId, tabs]);
 
   return (
     <div className={compoundClassName}>
-      {values.map(({ id, label }, index) => (
+      {tabs.map(({ id, label, disabled }, index) => (
         <button
           key={id}
           type="button"
@@ -60,6 +63,7 @@ export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, 
           onClick={() => setActiveId(id)}
           ref={el => addToRefs(id, el)}
           data-test-id={`cardTab-${index}`}
+          disabled={disabled}
         >
           <span className={s.inner}>{label}</span>
         </button>

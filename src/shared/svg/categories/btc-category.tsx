@@ -29,6 +29,7 @@ export const BtcCategory: FC<Props> = ({ colored }) => {
       <>
         {valuesOfDAttribute.map((value, index) => (
           <path
+            key={value}
             d={value}
             stroke={colored ? getUrl(String.fromCharCode(asciiLetterA + index)) : themeColors.fillIconCategories}
           />

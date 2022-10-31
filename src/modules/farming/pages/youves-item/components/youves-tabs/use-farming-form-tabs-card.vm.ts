@@ -1,10 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
+import { ITab } from '@shared/components';
+
+import { FarmingRoutes } from '../../../../farming.router';
+import { useFarmingYouvesItemStore } from '../../../../hooks';
 import { YouvesFormTabs } from '../../types';
 
-export const TabsContent = [
+export const TABS_CONTENT: ITab[] = [
   {
     id: YouvesFormTabs.stake,
     label: 'Stake'
@@ -16,16 +21,29 @@ export const TabsContent = [
 ];
 
 export const useFarmingFormTabsCardViewModel = () => {
-  const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const currentTab = farmingYouvesItemStore.currentTab;
-  const isStakeForm = currentTab === YouvesFormTabs.stake;
+  const navigate = useNavigate();
+  const { id, tab } = useParams();
+
+  const { currentStakeBalance } = useFarmingYouvesItemStore();
+
+  const isStakeForm = !tab || tab === YouvesFormTabs.stake;
+  const currentTab = isStakeForm ? YouvesFormTabs.stake : YouvesFormTabs.unstake;
 
   const setCurrentTab = useCallback(
-    (tabName: YouvesFormTabs) => farmingYouvesItemStore.setTab(tabName),
-    [farmingYouvesItemStore]
+    (tabName: YouvesFormTabs) => {
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${id}/${tabName}`);
+    },
+    [id, navigate]
   );
 
+  const tabs = useMemo(() => {
+    TABS_CONTENT[1].disabled = !currentStakeBalance;
+
+    return TABS_CONTENT;
+  }, [currentStakeBalance]);
+
   return {
+    tabs,
     currentTab,
     setCurrentTab,
     isStakeForm

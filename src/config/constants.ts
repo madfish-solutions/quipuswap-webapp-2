@@ -61,6 +61,7 @@ export const LP_INPUT_KEY = 'lp-input';
 //#region arrays
 export const FISRT_INDEX = 0;
 export const OPPOSITE_INDEX = 1;
+export const LAST_INDEX = -1;
 //#endregion
 
 //#region default value for token search
@@ -165,6 +166,7 @@ export const CONTRACT_DECIMALS_PRECISION = 1e18;
 export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
 export const STABLESWAP_PRECISION_FEE = 1e10;
+export const PRECISION_FACTOR = 1e12;
 
 //#region default stableswap fee
 export const CONTRACT_DECIMALS_PRECISION_POWER = 18; // 1e18
