@@ -13,6 +13,7 @@ import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-po
 
 export const useUnstakeFormForming = (
   contractAddress: Nullable<string>,
+  farmId: string,
   stakeId: BigNumber,
   balance: Nullable<BigNumber>
 ) => {
@@ -28,7 +29,7 @@ export const useUnstakeFormForming = (
       setIsSubmitting(true);
       await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
       setIsSubmitting(false);
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${contractAddress}/${YouvesFormTabs.stake}`);
+      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmId}/${YouvesFormTabs.stake}`);
     });
   };
 

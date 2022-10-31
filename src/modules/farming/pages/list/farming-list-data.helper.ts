@@ -1,13 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
-import { NEW_FARMINGS } from '@config/config';
 import { PERCENT } from '@config/constants';
 import { getFarmingLabel } from '@modules/farming/helpers';
 import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
+import { FarmingRoutes } from '../../farming.router';
+import { isNewFarming } from '../../helpers/is-new-farming';
 import { FarmingListItemWithBalances } from './types';
 
 const ZERO = 0;
@@ -92,11 +93,11 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
     userStats,
     href:
       item.old || isUndefined(item.old)
-        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${item.id}`
+        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${item.id}`
         : `${AppRootRoutes.Farming}/${item.id}`,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
-    isNew: NEW_FARMINGS.includes(item.id.toFixed()),
+    isNew: isNewFarming(item),
     status: { status: item.stakeStatus, filled: true },
     itemDTI
   };

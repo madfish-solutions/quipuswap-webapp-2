@@ -4,11 +4,11 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 
 import { NewLabel } from '@modules/farming/pages/item/components/new-label';
-import { NewLiquidityLabels } from '@modules/new-liquidity/components';
-import { Categories } from '@modules/new-liquidity/interfaces';
+import { LiquidityLabels } from '@modules/liquidity/components';
+import { Categories } from '@modules/liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
-import { ArrowDown, VisibleIcon } from '@shared/svg';
+import { ArrowDown } from '@shared/svg';
 import { Token } from '@shared/types';
 
 import { Card } from '../card';
@@ -27,7 +27,6 @@ export interface ListItemCardProps {
   labels?: Array<LabelComponentProps>;
   outputToken?: Token | Array<Token>;
   isNewLiquidity?: boolean;
-  visibleIcon?: boolean;
   categories?: Array<Categories>;
   itemStats: Array<StateListItemCardCellProps>;
   userStats?: Array<StateListItemCardCellProps>;
@@ -45,7 +44,6 @@ export const ListItemCard: FC<ListItemCardProps> = ({
   href,
   labels,
   isNewLiquidity,
-  visibleIcon,
   categories,
   status,
   isNew,
@@ -66,7 +64,6 @@ export const ListItemCard: FC<ListItemCardProps> = ({
           <div className={styles.logosAndSymbols}>
             <div className={cx(styles.logosContainer, { [styles.inlineIcons]: isNewLiquidity })}>
               <TokensLogos tokens={inputToken} width={32} />
-              {visibleIcon && <VisibleIcon />}
               {shouldOutputTokensRender && (
                 <div className={styles.ouputTokenContainer}>
                   <ArrowDown className={styles.arrow} />
@@ -92,7 +89,7 @@ export const ListItemCard: FC<ListItemCardProps> = ({
 
           <div className={styles.statusAndlabelsContainer}>
             {!isNewLiquidity && <LabelComponent {...status} />}
-            {isExist(categories) && !isEmptyArray(categories) && <NewLiquidityLabels categories={categories} />}
+            {isExist(categories) && !isEmptyArray(categories) && <LiquidityLabels categories={categories} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
                 <Iterator render={LabelComponent} data={labels} />

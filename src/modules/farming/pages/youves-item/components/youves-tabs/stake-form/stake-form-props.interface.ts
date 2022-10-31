@@ -10,5 +10,6 @@ export interface StakeFormProps {
   isSubmitting: boolean;
   inputAmountError?: string;
   balance: Nullable<BigNumber>;
+  investHref: string;
   tokens: Token[];
 }

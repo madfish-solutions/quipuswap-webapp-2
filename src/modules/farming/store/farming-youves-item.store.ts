@@ -6,12 +6,10 @@ import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
-  MS_IN_SECOND,
   PRECISION_FACTOR,
-  ZERO_AMOUNT,
   ZERO_AMOUNT_BN
 } from '@config/constants';
-import { getLastElement, isExist, isNull, isUndefined, MakeInterval } from '@shared/helpers';
+import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Standard, Token } from '@shared/types';
@@ -113,42 +111,31 @@ export class FarmingYouvesItemStore {
   }
 
   async updatePendingRewards() {
-    if (!isExist(getLastElement(this.stakes)) || isNull(this.itemStore.model.item) || isNull(this.contractBalance)) {
+    if (!isExist(getLastElement(this.stakes)) || isNull(this.item) || isNull(this.contractBalance)) {
       this.claimableRewards = DEFAULT_REWARDS.claimableReward;
       this.longTermRewards = DEFAULT_REWARDS.longTermReward;
 
       return;
     }
 
-    let _disc_factor;
+    const { lastRewards, vestingPeriodSeconds, staked, discFactor, rewardToken } = this.item;
 
-    const item = this.itemStore.model.item;
-    const { stakedToken, lastRewards, vestingPeriodSeconds, staked, discFactor } = item;
-
-    if (staked.isGreaterThan(ZERO_AMOUNT)) {
-      const reward = this.contractBalance.minus(lastRewards);
-      _disc_factor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
-    }
-
-    if (isUndefined(_disc_factor)) {
-      this.claimableRewards = DEFAULT_REWARDS.claimableReward;
-      this.longTermRewards = DEFAULT_REWARDS.longTermReward;
+    if (staked.isZero()) {
+      this.claimableRewards = ZERO_AMOUNT_BN;
+      this.longTermRewards = ZERO_AMOUNT_BN;
 
       return;
     }
 
-    const stakes = getLastElement(this.stakes) as YouvesStakeDto;
+    const reward = this.contractBalance.minus(lastRewards);
+    const newDiscFactor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
 
-    const { claimable_reward, full_reward } = getRewards(
-      stakes,
-      vestingPeriodSeconds.multipliedBy(MS_IN_SECOND),
-      _disc_factor
-    );
-    const tokenDecimals = stakedToken.metadata.decimals;
-    const tokenPrecision = `1e${tokenDecimals}`;
+    const stake = getLastElement(this.stakes) as YouvesStakeDto;
 
-    this.claimableRewards = claimable_reward.dividedBy(tokenPrecision);
-    this.longTermRewards = full_reward.dividedBy(tokenDecimals);
+    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor);
+
+    this.claimableRewards = toReal(claimableReward, rewardToken);
+    this.longTermRewards = toReal(fullReward, rewardToken);
   }
 
   clearIntervals() {

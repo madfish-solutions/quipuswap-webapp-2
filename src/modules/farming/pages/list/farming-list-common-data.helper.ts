@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
-import { NEW_FARMINGS } from '@config/config';
 import { PERCENT, ZERO_AMOUNT_BN } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
 import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
@@ -9,6 +8,7 @@ import { i18n } from '@translation';
 
 import { FarmingRoutes } from '../../farming.router';
 import { getFarmingLabel } from '../../helpers';
+import { isNewFarming } from '../../helpers/is-new-farming';
 import { FarmingListItemWithBalances } from './types';
 
 interface StateCurrAmount {
@@ -91,10 +91,10 @@ export const farmingListCommonDataHelper = (
     userStats,
     href:
       farmingItem.old || isUndefined(farmingItem.old)
-        ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${farmingItem.id}`
-        : `${AppRootRoutes.Farming}${FarmingRoutes.Youves}/${farmingItem.id}`,
+        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${farmingItem.id}`
+        : `${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmingItem.id}`,
     inputToken: farmingItem.tokens,
-    isNew: NEW_FARMINGS.includes(farmingItem.id.toFixed()),
+    isNew: isNewFarming(farmingItem),
     status: { status: farmingItem.stakeStatus, filled: true },
     outputToken: farmingItem.rewardToken
   };

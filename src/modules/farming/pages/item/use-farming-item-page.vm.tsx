@@ -30,7 +30,7 @@ export const useFarmingItemPageViewModel = () => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getFarmingItem(new BigNumber(`${rawStakeId}`), true);
+    void getFarmingItem(new BigNumber(`${Number(rawStakeId)}`), true);
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 

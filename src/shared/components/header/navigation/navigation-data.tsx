@@ -8,18 +8,16 @@ import {
   AnalyticsIcon,
   FarmIcon,
   FeedbackIcon,
+  GameIcon,
   HomeIcon,
   LiquidityIcon,
   MoreIcon,
   StableswapIcon,
-  SwapIcon,
-  GameIcon,
-  NewLiquidityIcon
+  SwapIcon
 } from '@shared/svg';
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
-import { isProd } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -62,14 +60,10 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Liquidity',
     to: AppRootRoutes.Liquidity,
     label: i18n.t('common|Liquidity'),
-    Icon: LiquidityIcon
-  },
-  {
-    id: 'NewLiquidity',
-    to: AppRootRoutes.NewLiquidity,
-    label: i18n.t('newLiquidity|newLiquidity'),
-    Icon: NewLiquidityIcon,
-    hide: isProd()
+    Icon: LiquidityIcon,
+    status: (
+      <LabelComponent status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
+    )
   },
   {
     id: 'Farming',
@@ -81,10 +75,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     id: 'Coinflip',
     to: AppRootRoutes.Coinflip,
     label: i18n.t('common|Game'),
-    Icon: GameIcon,
-    status: (
-      <LabelComponent status={ActiveStatus.ACTIVE} filled label={newLabelText} className={styles.navigationStatus} />
-    )
+    Icon: GameIcon
   },
   {
     id: 'Stableswap',

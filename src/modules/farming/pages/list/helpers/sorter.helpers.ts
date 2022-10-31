@@ -1,10 +1,16 @@
+import { SKIP, SWAP } from '@config/constants';
 import { FarmingItemModel } from '@modules/farming/models';
 import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
-const sortById = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
-  sortBigNumber(first.id, second.id, sortDirection);
+const sortByDefault = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) => {
+  if (first.old !== second.old) {
+    return first.old ? SWAP : SKIP;
+  }
+
+  return sortBigNumber(first.id, second.id, sortDirection);
+};
 
 const sortByApr = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.apr, second.apr, sortDirection);
@@ -49,7 +55,7 @@ const sortByEarned = (
 };
 
 const farmingSorts = {
-  [FarmingSortField.ID]: sortById,
+  [FarmingSortField.DEFAULT]: sortByDefault,
   [FarmingSortField.APR]: sortByApr,
   [FarmingSortField.APY]: sortByApy,
   [FarmingSortField.TVL]: sortByTvl,

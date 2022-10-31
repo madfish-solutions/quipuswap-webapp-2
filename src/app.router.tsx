@@ -7,8 +7,7 @@ import { CoinflipPage } from '@modules/coinflip';
 import { PageNotFoundPage } from '@modules/errors';
 import { FarmingRouter } from '@modules/farming';
 import { HomePage } from '@modules/home';
-import { LiquidityPage } from '@modules/liquidity';
-import { NewLiquidityPageRouter } from '@modules/new-liquidity';
+import { LiquidityPageRouter } from '@modules/liquidity';
 import { PrivacyPolicyPage } from '@modules/privacy-policy';
 import { StableswapRouter } from '@modules/stableswap/stableswap.routing';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
@@ -23,8 +22,7 @@ export const AppRouter: FC = () => (
     <Route path={`${AppRootRoutes.Swap}/*`} element={<SwapPage />} />
     <Route path={`${AppRootRoutes.Send}/*`} element={<SendPage />} />
 
-    <Route path={`${AppRootRoutes.Liquidity}/*`} element={<LiquidityPage />} />
-    <Route path={`${AppRootRoutes.NewLiquidity}/*`} element={<NewLiquidityPageRouter />} />
+    <Route path={`${AppRootRoutes.Liquidity}/*`} element={<LiquidityPageRouter />} />
 
     <Route path={`${AppRootRoutes.Stableswap}/*`} element={<StableswapRouter />} />
 
