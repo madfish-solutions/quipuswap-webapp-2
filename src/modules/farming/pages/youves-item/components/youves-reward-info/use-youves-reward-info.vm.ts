@@ -28,10 +28,12 @@ export const useYouvesRewardInfoViewModel = () => {
   const rewardTokenCurrency = getSymbolsString(rewardToken ?? null);
 
   const {
-    claimableRewards,
+    claimablePendingRewards,
+    longTermPendingRewards,
     claimablePendingRewardsInUsd,
-    longTermRewards,
     longTermPendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
     userTotalDeposit,
     userTotalDepositDollarEquivalent
   } = useYouvesFarmingItemRewards();
@@ -67,10 +69,12 @@ export const useYouvesRewardInfoViewModel = () => {
   useOnBlock(getUserStakeInfo);
 
   return {
-    claimablePendingRewards: claimableRewards,
-    longTermPendingRewards: longTermRewards,
+    claimablePendingRewards,
+    longTermPendingRewards,
     claimablePendingRewardsInUsd,
     longTermPendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,
     farmingLoading: false,
