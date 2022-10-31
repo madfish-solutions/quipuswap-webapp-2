@@ -16,7 +16,8 @@ export const useYouvesFarmingItemRewards = () => {
   const [userTotalDeposit, setTotalDeposit] = useState(ZERO_AMOUNT_BN);
   const youvesFarmingItemStore = useFarmingYouvesItemStore();
   const youvesFarmingItem = youvesFarmingItemStore.item;
-  const { claimableRewards, longTermRewards } = youvesFarmingItemStore;
+  const { claimableRewards, longTermRewards, itemStore, stakesStore, contractBalanceStore } = youvesFarmingItemStore;
+  const rewardsInputDataLoading = itemStore.isLoading || stakesStore.isLoading || contractBalanceStore.isLoading;
 
   const updateTotalDeposit = useCallback(async () => {
     if (!youvesFarmingItem) {
@@ -36,12 +37,12 @@ export const useYouvesFarmingItemRewards = () => {
   useOnBlock(updateTotalDeposit);
 
   const claimablePendingRewardsInUsd = useMemo(
-    () => multipliedIfPossible(claimableRewards, youvesFarmingItem?.earnExchangeRate),
+    () => multipliedIfPossible(claimableRewards, youvesFarmingItem?.earnExchangeRate) ?? ZERO_AMOUNT_BN,
     [claimableRewards, youvesFarmingItem?.earnExchangeRate]
   );
 
   const longTermPendingRewardsInUsd = useMemo(
-    () => multipliedIfPossible(longTermRewards, youvesFarmingItem?.earnExchangeRate),
+    () => multipliedIfPossible(longTermRewards, youvesFarmingItem?.earnExchangeRate) ?? ZERO_AMOUNT_BN,
     [longTermRewards, youvesFarmingItem?.earnExchangeRate]
   );
 
@@ -51,10 +52,12 @@ export const useYouvesFarmingItemRewards = () => {
   );
 
   return {
-    claimableRewards,
+    claimablePendingRewards: claimableRewards ?? ZERO_AMOUNT_BN,
     claimablePendingRewardsInUsd,
-    longTermRewards,
+    longTermPendingRewards: longTermRewards ?? ZERO_AMOUNT_BN,
     longTermPendingRewardsInUsd,
+    claimableRewardsLoading: rewardsInputDataLoading,
+    longTermRewardsLoading: rewardsInputDataLoading,
     userTotalDeposit,
     userTotalDepositDollarEquivalent
   };
