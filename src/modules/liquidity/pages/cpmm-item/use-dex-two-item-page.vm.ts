@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useCpmmPairSlug, useLiquidityItemStore } from '@modules/liquidity/hooks';
-import { defined } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 export const useCpmmViewModel = () => {
@@ -10,8 +10,10 @@ export const useCpmmViewModel = () => {
   const liquidityItemStore = useLiquidityItemStore();
 
   useEffect(() => {
-    liquidityItemStore.setTokenPairSlug(defined(pairSlug, 'pairSlug'));
-    void liquidityItemStore.itemSore.load();
+    if (isExist(pairSlug)) {
+      liquidityItemStore.setTokenPairSlug(pairSlug);
+      void liquidityItemStore.itemSore.load();
+    }
 
     return () => liquidityItemStore.itemSore.resetData();
   }, [liquidityItemStore, pairSlug]);
@@ -19,6 +21,6 @@ export const useCpmmViewModel = () => {
   return {
     t,
     title: liquidityItemStore.pageTitle,
-    isInitialized: Boolean(liquidityItemStore.item)
+    isInitialized: pairSlug ? Boolean(liquidityItemStore.item) : true
   };
 };
