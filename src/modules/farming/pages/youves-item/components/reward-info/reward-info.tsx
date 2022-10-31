@@ -15,6 +15,8 @@ interface Props {
   longTermPendingRewards: Nullable<BigNumber>;
   claimableRewardDollarEquivalent?: Nullable<BigNumber.Value>;
   pendingRewardDollarEquivalent?: Nullable<BigNumber.Value>;
+  claimableRewardsLoading: boolean;
+  longTermRewardsLoading: boolean;
   amountDecimals?: number;
   className?: string;
   containerClassName?: string;
@@ -40,6 +42,8 @@ const ZERO_REWARDS = 0;
 export const RewardInfo: CFC<Props> = ({
   claimableRewardDollarEquivalent,
   pendingRewardDollarEquivalent,
+  claimableRewardsLoading,
+  longTermRewardsLoading,
   amountDecimals,
   className,
   containerClassName,
@@ -82,6 +86,8 @@ export const RewardInfo: CFC<Props> = ({
           className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
           longTermPendingRewards={longTermPendingRewards}
+          claimableRewardsLoading={claimableRewardsLoading}
+          longTermRewardsLoading={longTermRewardsLoading}
           claimableRewardDollarEquivalent={claimableRewardDollarEquivalent}
           pendingRewardDollarEquivalent={pendingRewardDollarEquivalent}
           amountDecimals={amountDecimals}
