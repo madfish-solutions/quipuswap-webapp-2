@@ -9,9 +9,9 @@ export const usePercentSelectorViewModel = () => {
 
   const pageName = determineCurrentPageName(location).toUpperCase();
 
-  const handleLogEvent = (percentValue: number) => {
+  const logEvent = (percentValue: number) => {
     log(`CLICK_${pageName}_${percentValue}_PERCENT`);
   };
 
-  return { handleLogEvent };
+  return { logEvent };
 };
