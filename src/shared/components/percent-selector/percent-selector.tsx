@@ -32,22 +32,22 @@ export const PercentSelector: FC<PercentSelectorProps> = ({
   amountCap = DEFAULT_INPUT_CAP,
   decimals
 }) => {
-  const { handleLogEvent } = usePercentSelectorViewModel();
+  const { logEvent } = usePercentSelectorViewModel();
 
   const handle25 = () => {
-    handleLogEvent(PERCENT_25);
+    logEvent(PERCENT_25);
     handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
   };
   const handle50 = () => {
-    handleLogEvent(PERCENT_50);
+    logEvent(PERCENT_50);
     handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
   };
   const handle75 = () => {
-    handleLogEvent(PERCENT_75);
+    logEvent(PERCENT_75);
     handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
   };
   const handleMAX = () => {
-    handleLogEvent(PERCENT_100);
+    logEvent(PERCENT_100);
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
   };
 
