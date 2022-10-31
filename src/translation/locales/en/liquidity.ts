@@ -56,6 +56,8 @@ export const liquidity = {
   bakerReward: 'Baker reward',
   heyBro: 'Hey, bro!',
   migrateAssets: 'Please, migrate your assets to the new ecxiting AMM version.',
+  migrateAssetsTooltip:
+    'New exchange version broadens earning opportunities by enabling flash loans as another income source. Also, Oracles feature allows a token listing in other Tezos platforms. New, improved governance for the baking rewards makes voting fair and baker rewards for liquidity providers more stable.',
   why: 'Why?',
   showDust: 'Show Dust',
   investedOnly: 'Invested Only',
