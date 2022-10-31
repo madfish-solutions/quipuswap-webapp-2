@@ -1,0 +1,52 @@
+{
+  "error": [
+    {
+      "errors": [
+        {
+          "kind": "temporary",
+          "id": "proto.014-PtKathma.michelson_v1.runtime_error",
+          "contract_handle": "KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6",
+          "contract_code": "Deprecated"
+        },
+        {
+          "kind": "temporary",
+          "id": "proto.014-PtKathma.michelson_v1.script_rejected",
+          "location": 1060,
+          "with": {
+            "string": "Dex/high-expectation"
+          }
+        }
+      ],
+      "errorDetails": "Error occurred during estimation",
+      "name": "TezosOperationError",
+      "id": "proto.014-PtKathma.michelson_v1.script_rejected",
+      "kind": "temporary",
+      "message": "Dex/high-expectation",
+      "isError": true
+    },
+    {
+      "errors": [
+        {
+          "kind": "temporary",
+          "id": "proto.014-PtKathma.michelson_v1.runtime_error",
+          "contract_handle": "KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6",
+          "contract_code": "Deprecated"
+        },
+        {
+          "kind": "temporary",
+          "id": "proto.014-PtKathma.michelson_v1.script_rejected",
+          "location": 1060,
+          "with": {
+            "string": "Dex/high-expectation"
+          }
+        }
+      ],
+      "errorDetails": "Error occurred during estimation",
+      "name": "TezosOperationError",
+      "id": "proto.014-PtKathma.michelson_v1.script_rejected",
+      "kind": "temporary",
+      "message": "Dex/high-expectation",
+      "isError": true
+    }
+  ]
+}
