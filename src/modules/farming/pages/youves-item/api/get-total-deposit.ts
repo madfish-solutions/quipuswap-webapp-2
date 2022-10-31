@@ -1,22 +1,21 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { ZERO_AMOUNT } from '@config/constants';
-import { getTokenMetadata } from '@shared/api';
+import { ZERO_AMOUNT_BN } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
-import { isNull } from '@shared/helpers';
+import { isNull, isUndefined } from '@shared/helpers';
+import { Undefined } from '@shared/types';
 
+import { getTokenDecimalsAndPrecision } from '../helpers';
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
-
-const ZERO_BN = new BigNumber(ZERO_AMOUNT);
 
 export const getTotalDeposit = async (
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  contractAddress: string
+  contractAddress: Undefined<string>
 ) => {
-  if (isNull(tezos) || isNull(accountPkh)) {
-    return ZERO_BN;
+  if (isNull(tezos) || isNull(accountPkh) || isUndefined(contractAddress)) {
+    return ZERO_AMOUNT_BN;
   }
 
   const { stakes_owner_lookup, stakes, deposit_token } = await getStorageInfo<YouvesFarmStorage>(
@@ -30,17 +29,15 @@ export const getTotalDeposit = async (
   });
   const userArrayStakes = await Promise.all(stakesArrayPromise);
 
-  const depositTokenMetadata = await getTokenMetadata({
-    contractAddress: deposit_token.address,
-    fa2TokenId: Number(deposit_token.id)
-  });
-  const depositTokenDecimals = depositTokenMetadata?.decimals ?? ZERO_AMOUNT;
-  const depositTokenPrecision = Number(`1e${depositTokenDecimals}`);
+  const { tokenDecimals, tokenPrecision } = await getTokenDecimalsAndPrecision(
+    deposit_token.token_address,
+    deposit_token.token_id
+  );
 
   return userArrayStakes
     .reduce((prev, curr) => {
-      return prev.plus(curr?.stake ?? ZERO_BN);
-    }, ZERO_BN)
-    .dividedBy(depositTokenPrecision)
-    .decimalPlaces(depositTokenDecimals);
+      return prev.plus(curr?.stake ?? ZERO_AMOUNT_BN);
+    }, ZERO_AMOUNT_BN)
+    .dividedBy(tokenPrecision)
+    .decimalPlaces(tokenDecimals);
 };

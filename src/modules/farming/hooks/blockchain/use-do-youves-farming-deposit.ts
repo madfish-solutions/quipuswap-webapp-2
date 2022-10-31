@@ -2,20 +2,23 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@shared/helpers';
+import { useAuthStore } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { BlockchainYouvesFarmingApi } from '../../api/blockchain/youves-farming.api';
 import { useGetYouvesFarmingItem } from '../loaders';
+import { useFarmingYouvesItemStore } from '../stores';
 
 export const useDoYouvesFarmingDeposit = () => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
+  const { id } = useFarmingYouvesItemStore();
 
   const doDeposit = useCallback(
     async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber.Value) => {
@@ -34,9 +37,9 @@ export const useDoYouvesFarmingDeposit = () => {
           new BigNumber(balance)
         );
 
-        await confirmOperation(operation.opHash, { message: 'Stake successful' });
+        await confirmOperation(operation.opHash, { message: 'Deposit successful' });
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_SUCCESS', logData);
-        await delayedGetFarmingItem(contractAddress);
+        await delayedGetFarmingItem(id);
       } catch (error) {
         showErrorToast(error as Error);
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_FAILED', {
@@ -45,7 +48,7 @@ export const useDoYouvesFarmingDeposit = () => {
         });
       }
     },
-    [tezos, accountPkh, confirmOperation, showErrorToast, delayedGetFarmingItem]
+    [accountPkh, tezos, confirmOperation, delayedGetFarmingItem, id, showErrorToast]
   );
 
   return { doDeposit };

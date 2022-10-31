@@ -7,9 +7,9 @@ import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { getUserFarmBalances } from '../helpers';
+import { getUserFarmBalances, getUserFarmBalancesNew } from '../helpers';
 import { FarmingContractStorageWrapper, FarmingListResponse } from '../interfaces';
-import { FarmingItemModel } from '../models';
+import { FarmingItemCommonModel, FarmingItemModel } from '../models';
 
 //TODO: change name
 export const getFarmingListApi = async () => {
@@ -24,7 +24,8 @@ interface UserBalances {
   earnBalance?: string;
 }
 
-const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
+/** @deprecated */
+const injectBalanceDeprecated = async (list: Array<FarmingItemModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
@@ -57,10 +58,60 @@ const injectBalance = async (list: Array<FarmingItemModel>, accountPkh: string, 
   return { balances: list.map(item => ({ id: item.id.toFixed(), ...balances.get(item.id.toFixed()) })) };
 };
 
-export const getFarmingListUserBalances = async (
+// eslint-disable-next-line sonarjs/no-identical-functions
+const injectBalance = async (list: Array<FarmingItemCommonModel>, accountPkh: string, tezos: TezosToolkit) => {
+  const balances: Map<string, UserBalances> = new Map();
+  const wrapStorage = await (
+    await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
+  ).storage<FarmingContractStorageWrapper>();
+
+  const storage = wrapStorage.storage;
+
+  await Promise.all(
+    // eslint-disable-next-line sonarjs/no-identical-functions
+    list.map(async item => {
+      const { stakedToken } = item;
+      const { contractAddress, type, fa2TokenId } = stakedToken;
+
+      const balanceBN = await retry(
+        async () => await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId)
+      );
+
+      const balance = saveBigNumber(balanceBN, new BigNumber(0));
+
+      balances.set(item.id.toFixed(), { myBalance: balance.toFixed() });
+    })
+  );
+
+  const userBalances = await retry(async () => await getUserFarmBalancesNew(accountPkh, storage, list));
+
+  userBalances.forEach((userBalance, key) => {
+    const balance = balances.get(key) as UserBalances;
+    balances.set(key, { ...balance, ...userBalance });
+  });
+
+  return {
+    balances: list.map(item => ({ ...item, id: item.id.toFixed(), ...balances.get(item.id.toFixed()) }))
+  };
+};
+
+/** @deprecated */
+export const getFarmingListUserBalancesDeprecated = async (
   accountPkh: Nullable<string>,
   tezos: Nullable<TezosToolkit>,
   farmings: Array<FarmingItemModel>
+) => {
+  if (isNull(accountPkh) || isNull(tezos) || isEmptyArray(farmings)) {
+    return { balances: [] };
+  }
+
+  return await injectBalanceDeprecated(farmings, accountPkh, tezos);
+};
+
+export const getFarmingListUserBalances = async (
+  accountPkh: Nullable<string>,
+  tezos: Nullable<TezosToolkit>,
+  farmings: Array<FarmingItemCommonModel>
 ) => {
   if (isNull(accountPkh) || isNull(tezos) || isEmptyArray(farmings)) {
     return { balances: [] };

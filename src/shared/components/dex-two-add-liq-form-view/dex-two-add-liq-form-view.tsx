@@ -9,6 +9,7 @@ import { ComplexBaker, ComplexBakerProps } from '../ComplexInput';
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { Iterator } from '../iterator';
 import { TokenInput, TokenInputProps } from '../token-input';
+import { WarningAlert } from '../warning-alert';
 import styles from './dex-two-add-liq-form-view.module.scss';
 
 interface BakerProps extends ComplexBakerProps {
@@ -22,6 +23,7 @@ interface Props {
   isSubmitting?: boolean;
   canMigrateLiquidity?: boolean;
   handleMigrateLiquidity?: () => Promise<void> | void;
+  warningMessage: Nullable<string>;
 }
 
 export const DexTwoAddLiqFormView: FC<Props> = ({
@@ -30,7 +32,8 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
   bakerData,
   canMigrateLiquidity,
   handleMigrateLiquidity,
-  isSubmitting
+  isSubmitting,
+  warningMessage
 }) => {
   const { t } = useTranslation();
 
@@ -49,6 +52,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
             className={stylesCommonContainer.mt24}
           />
         )}
+        <WarningAlert className={stylesCommonContainer.mt16} message={warningMessage} />
         <div className={stylesCommonContainer.buttons}>
           <ConnectWalletOrDoSomething>
             <Button
@@ -63,7 +67,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
             </Button>
             {canMigrateLiquidity && (
               <Button theme="primary" type="button" loading={isSubmitting} onClick={handleMigrateLiquidity}>
-                {t('newLiquidity|migrate')}
+                {t('liquidity|migrate')}
               </Button>
             )}
           </ConnectWalletOrDoSomething>

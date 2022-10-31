@@ -4,3 +4,4 @@ export * from './farming-list-response.model';
 export * from './farming-list-balances.model';
 export * from './farming-user-info.model';
 export * from './farming-user-info-response.model';
+export * from './farming-list-common-response.model';

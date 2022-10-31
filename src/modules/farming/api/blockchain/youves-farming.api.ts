@@ -2,36 +2,36 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
-import { getStorageInfo } from '@shared/dapp';
+import { getContract, getStorageInfo } from '@shared/dapp';
 import { Standard, TokenIdFa2 } from '@shared/types';
 
 interface IFarmingStorage {
   deposit_token: {
-    id: BigNumber;
-    address: string;
+    token_id: BigNumber;
+    token_address: string;
   };
 }
 
 export class BlockchainYouvesFarmingApi {
   static async getToken(tezos: TezosToolkit, contractAddress: string): Promise<TokenIdFa2> {
     const storage = await getStorageInfo<IFarmingStorage>(tezos, contractAddress);
-    const { id, address } = storage.deposit_token;
+    const { token_id, token_address } = storage.deposit_token;
 
     return {
       type: Standard.Fa2,
-      fa2TokenId: id.toNumber(),
-      contractAddress: address
+      fa2TokenId: token_id.toNumber(),
+      contractAddress: token_address
     };
   }
 
   static async getStakesIds(tezos: TezosToolkit, accountPkh: string, contractAddress: string) {
-    const contract = await tezos.contract.at(contractAddress);
+    const contract = await getContract(tezos, contractAddress);
 
     return await contract.contractViews.view_owner_stakes(accountPkh).executeView({ viewCaller: accountPkh });
   }
 
-  static async getStakeById(tezos: TezosToolkit, stakeId: BigNumber, accountPkh: string, contractAddress: string) {
-    const contract = await tezos.contract.at(contractAddress);
+  static async getStakeById(tezos: TezosToolkit, accountPkh: string, contractAddress: string, stakeId: BigNumber) {
+    const contract = await getContract(tezos, contractAddress);
 
     return await contract.contractViews.view_stake(stakeId).executeView({ viewCaller: accountPkh });
   }
@@ -43,7 +43,7 @@ export class BlockchainYouvesFarmingApi {
       stakes: await Promise.all(
         stakesIds.map(async (stakeId: BigNumber) => ({
           id: stakeId,
-          ...(await BlockchainYouvesFarmingApi.getStakeById(tezos, stakeId, accountPkh, contractAddress))
+          ...(await BlockchainYouvesFarmingApi.getStakeById(tezos, accountPkh, contractAddress, stakeId))
         }))
       )
     };
@@ -63,5 +63,27 @@ export class BlockchainYouvesFarmingApi {
     const token = await this.getToken(tezos, contractAddress);
 
     return await withApproveApi(tezos, contractAddress, token, accountPkh, tokenAmount, [params]);
+  }
+
+  static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
+    const contract = await tezos.wallet.at(contractAddress);
+
+    return await contract.methods.claim(new BigNumber(stakeId)).send();
+  }
+
+  static async withdraw(
+    tezos: TezosToolkit,
+    accountPkh: string,
+    contractAddress: string,
+    stakeId: BigNumber.Value,
+    balance: BigNumber
+  ) {
+    const contract = await tezos.contract.at(contractAddress);
+
+    const params = contract.methods.withdraw(new BigNumber(stakeId)).toTransferParams();
+
+    const token = await this.getToken(tezos, contractAddress);
+
+    return await withApproveApi(tezos, contractAddress, token, accountPkh, balance, [params]);
   }
 }

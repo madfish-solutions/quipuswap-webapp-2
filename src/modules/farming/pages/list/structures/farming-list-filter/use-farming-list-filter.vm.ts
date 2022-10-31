@@ -37,7 +37,7 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
   };
 
   const sortValues: FarmingSortFieldItem[] = [
-    { label: t('common|Default'), field: FarmingSortField.ID },
+    { label: t('common|Default'), field: FarmingSortField.DEFAULT },
     { label: t('farm|apr'), field: FarmingSortField.APR },
     { label: t('farm|apy'), field: FarmingSortField.APY },
     { label: t('farm|tvl'), field: FarmingSortField.TVL }

@@ -10,7 +10,7 @@ import { YouvesFormTabsCard } from './components/youves-tabs';
 import { useYouvesItemPageViewModel } from './use-youves-item-page.vm';
 
 export const YouvesItemPage: FC = observer(() => {
-  const { title, ...props } = useYouvesItemPageViewModel();
+  const { title } = useYouvesItemPageViewModel();
 
   return (
     <>
@@ -18,7 +18,7 @@ export const YouvesItemPage: FC = observer(() => {
       <PageTitle data-test-id="youvesItemPageTitle">{title}</PageTitle>
       <YouvesRewardInfo />
       <StickyBlock>
-        <YouvesFormTabsCard {...props} />
+        <YouvesFormTabsCard />
         <YouvesDetails />
       </StickyBlock>
     </>

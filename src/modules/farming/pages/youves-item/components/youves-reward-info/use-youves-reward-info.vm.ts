@@ -1,38 +1,66 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import BigNumber from 'bignumber.js';
-
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
+import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getSymbolsString } from '@shared/helpers';
-import { useOnBlock } from '@shared/hooks';
+import { getLastElementFromArray, getSymbolsString } from '@shared/helpers';
+import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 
 import { getRewardsDueDate } from '../../api/get-rewards-due-date';
-import { getTotalDeposit } from '../../api/get-total-deposit';
-
-const contractAddress = 'KT1HgM6FFoc841E8CzwpbP3RzBsoskSQyX8B';
+import { useYouvesFarmingItemRewards } from './use-youves-rewards';
 
 export const useYouvesRewardInfoViewModel = () => {
-  // TODO: remove useState when store will be ready
-  const [userTotalDeposit, setTotalDeposit] = useState(new BigNumber(0));
-  const [rewadsDueDate, setRewardsDueDate] = useState(0);
+  // TODO: remove useState using store
+  const [rewadsDueDate, setRewardsDueDate] = useState(ZERO_AMOUNT);
   const { tezos } = useRootStore();
+  const { doHarvest } = useDoYouvesHarvest();
   const accountPkh = useAccountPkh();
+  const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
+  const youvesFarmingItemStore = useFarmingYouvesItemStore();
+  const { item: youvesFarmingItem, id } = youvesFarmingItemStore;
+  const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
+  const rewardToken = useToken(youvesFarmingItem?.rewardToken ?? null);
+  const earnBalance = useTokenBalance(stakedToken);
 
-  const symbolsString = getSymbolsString([QUIPU_TOKEN, TEZOS_TOKEN]);
+  const symbolsString = getSymbolsString(youvesFarmingItem?.tokens ?? null);
+  const rewardTokenCurrency = getSymbolsString(rewardToken ?? null);
 
-  const handleHarvest = () => {
-    // eslint-disable-next-line no-console
-    console.log('click');
+  const {
+    claimablePendingRewards,
+    longTermPendingRewards,
+    claimablePendingRewardsInUsd,
+    longTermPendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
+    userTotalDeposit,
+    userTotalDepositDollarEquivalent
+  } = useYouvesFarmingItemRewards();
+
+  const handleHarvest = async () => {
+    // TODO: add real balances, which are important for analytics
+    const farmingItemWithBalances = {
+      ...youvesFarmingItem!,
+      depositBalance: youvesFarmingItemStore.currentStake?.stake ?? ZERO_AMOUNT_BN,
+      earnBalance
+    };
+    amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
+    await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
+
+    await delayedGetFarmingItem(id);
   };
 
   const getUserStakeInfo = useCallback(async () => {
-    const dueDate = await getRewardsDueDate(tezos, accountPkh, contractAddress);
+    if (!youvesFarmingItem) {
+      setRewardsDueDate(ZERO_AMOUNT);
+
+      return;
+    }
+
+    const dueDate = await getRewardsDueDate(tezos, accountPkh, youvesFarmingItem.contractAddress);
     setRewardsDueDate(dueDate);
-    const totalDeposit = await getTotalDeposit(tezos, accountPkh, contractAddress);
-    setTotalDeposit(totalDeposit);
-  }, [accountPkh, tezos]);
+  }, [accountPkh, tezos, youvesFarmingItem]);
 
   useEffect(() => {
     getUserStakeInfo();
@@ -41,19 +69,22 @@ export const useYouvesRewardInfoViewModel = () => {
   useOnBlock(getUserStakeInfo);
 
   return {
-    claimablePendingRewards: new BigNumber(1000),
-    longTermPendingRewards: new BigNumber(1000),
-    claimablePendingRewardsInUsd: new BigNumber(1500),
+    claimablePendingRewards,
+    longTermPendingRewards,
+    claimablePendingRewardsInUsd,
+    longTermPendingRewardsInUsd,
+    claimableRewardsLoading,
+    longTermRewardsLoading,
     shouldShowCountdown: true,
     shouldShowCountdownValue: true,
-    timestamp: 10000,
     farmingLoading: false,
-    rewardTokenDecimals: 6,
+    rewardTokenDecimals: rewardToken?.metadata.decimals ?? ZERO_AMOUNT,
     handleHarvest,
     isHarvestAvailable: true,
     symbolsString,
     userTotalDeposit,
-    userTotalDepositDollarEquivalent: new BigNumber(150),
+    rewardTokenCurrency,
+    userTotalDepositDollarEquivalent,
     rewadsDueDate
   };
 };

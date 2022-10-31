@@ -20,7 +20,10 @@ const modeClass = {
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;
   longTermPendingRewards: Nullable<BigNumber>;
-  dollarEquivalent?: Nullable<BigNumber.Value>;
+  claimableRewardDollarEquivalent?: Nullable<BigNumber.Value>;
+  pendingRewardDollarEquivalent?: Nullable<BigNumber.Value>;
+  claimableRewardsLoading: boolean;
+  longTermRewardsLoading: boolean;
   amountDecimals?: number;
   currency: string;
   className?: string;
@@ -28,10 +31,13 @@ interface Props {
 
 export const YouvesPendingRewards: FC<Props> = ({
   currency,
-  dollarEquivalent,
+  claimableRewardDollarEquivalent,
+  pendingRewardDollarEquivalent,
   amountDecimals = USD_DECIMALS,
   claimablePendingRewards,
   longTermPendingRewards,
+  claimableRewardsLoading,
+  longTermRewardsLoading,
   className
 }) => {
   const accountPkh = useAccountPkh();
@@ -55,7 +61,8 @@ export const YouvesPendingRewards: FC<Props> = ({
                 className={styles.amount}
                 amount={claimablePendingRewards}
                 currency={currency}
-                dollarEquivalent={dollarEquivalent}
+                dollarEquivalent={claimableRewardDollarEquivalent}
+                isLoading={claimableRewardsLoading}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 data-test-id="claimableRewards"
@@ -65,7 +72,8 @@ export const YouvesPendingRewards: FC<Props> = ({
                 className={styles.amount}
                 amount={longTermPendingRewards}
                 currency={currency}
-                dollarEquivalent={dollarEquivalent}
+                dollarEquivalent={pendingRewardDollarEquivalent}
+                isLoading={longTermRewardsLoading}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 data-test-id="longTermRewards"

@@ -1,22 +1,23 @@
-import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { DUMMY_BAKER } from '@config/bakers';
 import { SECONDS_IN_MINUTE } from '@config/constants';
-import { LiquidityTokenInfo, PoolType } from '@modules/new-liquidity/interfaces';
+import { LiquidityTokenInfo, PoolType } from '@modules/liquidity/interfaces';
 import { getBlockchainTimestamp } from '@shared/helpers';
-import { Token, TokenAddress } from '@shared/types';
+import { Token } from '@shared/types';
 
 import { getAddLiquidityParams } from './get-add-liquidity-params';
+import { getCreateNewLiquidityPoolParams } from './get-create-new-liquidity-pool-params.api';
 import { getDexOneRemoveLiquidityParams } from './get-dex-one-remove-liquidity-params';
-import { getApproveParams } from './with-approve.api';
+import { withApproveApiForManyTokens } from './with-approve.api';
 
 interface IAccordance {
   contractAddress: string;
   id: BigNumber;
   type: PoolType;
-  aToken: Token | TokenAddress;
-  bToken: Token | TokenAddress;
+  aToken: Token;
+  bToken: Token;
 }
 
 interface IAmounts {
@@ -29,6 +30,7 @@ interface IDexTwo {
   id: BigNumber;
   contractAddress: string;
   tokensInfo: Array<LiquidityTokenInfo>;
+  totalLpSupply: BigNumber;
 }
 
 export const migrateLiquidity = async (
@@ -58,35 +60,27 @@ export const migrateLiquidity = async (
     accordance.id
   );
 
-  const addLiqParams = await getAddLiquidityParams(
-    accountPkh,
-    dexTwoContract,
-    dexTwo.id,
-    amounts,
-    deadline,
-    dexTwo.tokensInfo
-  );
+  const tokensAndAmounts = [
+    { amount: amounts.amountA, token: accordance.aToken },
+    { amount: amounts.amountB, token: accordance.bToken }
+  ];
 
-  const addLiqParamsWithAllowanceA = await getApproveParams(
-    tezos,
-    dexTwo.contractAddress,
-    accordance.aToken,
-    accountPkh,
-    amounts.amountA,
-    [addLiqParams]
-  );
-
-  const addLiqParamsWithBothAllowances = await getApproveParams(
-    tezos,
-    dexTwo.contractAddress,
-    accordance.bToken,
-    accountPkh,
-    amounts.amountB,
-    addLiqParamsWithAllowanceA
-  );
+  const addLiqParams = dexTwo.totalLpSupply.isZero()
+    ? await getCreateNewLiquidityPoolParams(
+        tezos,
+        dexTwoContract.address,
+        tokensAndAmounts,
+        accountPkh,
+        DUMMY_BAKER,
+        deadline
+      )
+    : await getAddLiquidityParams(accountPkh, dexTwoContract, dexTwo.id, amounts, deadline, dexTwo.tokensInfo);
 
   try {
-    return await batchify(tezos.wallet.batch([]), [removeLiqParams, ...addLiqParamsWithBothAllowances]).send();
+    return await withApproveApiForManyTokens(tezos, dexTwo.contractAddress, tokensAndAmounts, accountPkh, [
+      removeLiqParams,
+      addLiqParams
+    ]);
   } catch (error) {
     throw Error('Error while migrating liquidity');
   }

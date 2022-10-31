@@ -1,28 +1,40 @@
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { defined, isNotDefined } from '@shared/helpers';
+import { DexLink } from '@modules/liquidity/helpers';
+import { useRootStore } from '@providers/root-store-provider';
+import { isNotDefined } from '@shared/helpers';
+import { useAuthStore, useToken, useTokenBalance } from '@shared/hooks';
+import { Token } from '@shared/types';
 
-import { TabProps } from '../tab-props.interface';
-import { StakeProps } from './stake-props.interface';
+import { useFarmingYouvesItemStore } from '../../../../../hooks';
+import { StakeFormProps } from './stake-form-props.interface';
+import { useGetConfirmationMessageParams } from './use-get-confirmation-message-params';
 import { useStakeFormForming } from './use-stake-form-forming';
 
-export const useStakeFormViewModel = (props: TabProps): StakeProps => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
+export const useStakeFormViewModel = (): StakeFormProps => {
+  const { tezos } = useRootStore();
+  const { accountPkh } = useAuthStore();
 
-  const { contractAddress, stakeId, stakedToken, stakedTokenBalance } = props;
+  const { item, tokens, currentStakeId, farmingAddress } = useFarmingYouvesItemStore();
+  const stakedToken = useToken(item?.stakedToken ?? null);
+  const stakedTokenBalance = useTokenBalance(stakedToken);
+  const getConfirmationMessageParams = useGetConfirmationMessageParams();
+
   const form = useStakeFormForming(
-    defined(contractAddress, 'Contract address'),
-    stakeId,
+    farmingAddress,
+    currentStakeId,
     stakedToken,
-    stakedTokenBalance
+    stakedTokenBalance,
+    getConfirmationMessageParams
   );
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
 
+  const investHref = tokens.length ? DexLink.getCpmmPoolLink(tokens as [Token, Token]) : '';
+
   return {
-    ...props,
     ...form,
-    stakedTokenBalance,
-    disabled
+    disabled,
+    tokens,
+    investHref,
+    balance: stakedTokenBalance
   };
 };

@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
+import { FarmingRoutes } from '@modules/farming/farming.router';
 import { isUndefined } from '@shared/helpers';
 import { Undefined } from '@shared/types';
 
@@ -14,6 +15,6 @@ export const opportunityHelper = (
   index: index + INDEX_INCREMENT,
   href:
     old || isUndefined(old)
-      ? `${AppRootRoutes.Farming}${AppRootRoutes.VersionOne}/${id}`
-      : `${AppRootRoutes.Farming}/${id}`
+      ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${id}`
+      : `${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${id}`
 });
