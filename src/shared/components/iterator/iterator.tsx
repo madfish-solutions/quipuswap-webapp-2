@@ -14,7 +14,7 @@ interface IteratorProps<T> {
   keyFn?: (item: T) => Undefined<string | number>;
 }
 
-type IteratorComponent = <T>(props: IteratorProps<T>) => ReactElement<T> | ReactElement;
+export type IteratorComponent = <T>(props: IteratorProps<T>) => ReactElement<T> | ReactElement;
 
 export const Iterator: IteratorComponent = ({
   data,
