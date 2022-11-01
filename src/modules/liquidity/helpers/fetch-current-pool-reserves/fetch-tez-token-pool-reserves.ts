@@ -13,8 +13,8 @@ export const fetchTezTokenPoolReserves = async (contractInstance: ContractAbstra
   const accordanceStorageTez = await contractInstance.storage<ITezTokenStorage>();
 
   return {
-    aTokenAtomicTvl: accordanceStorageTez.storage.tez_pool,
-    bTokenAtomicTvl: accordanceStorageTez.storage.token_pool,
+    aTokenAtomicTvl: accordanceStorageTez.storage.token_pool,
+    bTokenAtomicTvl: accordanceStorageTez.storage.tez_pool,
     totalLpSupply: accordanceStorageTez.storage.total_supply
   };
 };
