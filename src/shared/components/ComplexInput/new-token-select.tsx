@@ -197,6 +197,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
             value={balance?.toFixed() ?? '0'}
             handleBalance={handlePercentageSelect}
             amountCap={getTokenInputAmountCap(token)}
+            inputName={`newTokenSelect-${id}`}
           />
         </Scaffolding>
         <ComplexError error={error} data-test-id="error" />

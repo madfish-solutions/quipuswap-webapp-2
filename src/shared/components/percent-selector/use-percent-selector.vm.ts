@@ -1,16 +1,11 @@
-import { useLocation } from 'react-router-dom';
-
-import { determineCurrentPageName } from '@shared/helpers';
-import { useAmplitudeService } from '@shared/hooks';
+import { amplitudeService } from '@shared/services';
 
 export const usePercentSelectorViewModel = () => {
-  const location = useLocation();
-  const { log } = useAmplitudeService();
-
-  const pageName = determineCurrentPageName(location).toUpperCase();
-
-  const logEvent = (percentValue: number) => {
-    log(`CLICK_${pageName}_${percentValue}_PERCENT`);
+  const logEvent = (percent: number, inputName: string) => {
+    amplitudeService.logEvent(`CLICK_PRECENT_SELECTOR`, {
+      percent,
+      input: inputName
+    });
   };
 
   return { logEvent };
