@@ -15,6 +15,7 @@ interface PercentSelectorProps {
   value: Optional<BigNumber.Value>;
   amountCap?: BigNumber;
   decimals?: number;
+  inputName: string;
 }
 
 const DEFAULT_INPUT_CAP = new BigNumber('0');
@@ -30,24 +31,25 @@ export const PercentSelector: FC<PercentSelectorProps> = ({
   handleBalance,
   value,
   amountCap = DEFAULT_INPUT_CAP,
-  decimals
+  decimals,
+  inputName
 }) => {
   const { logEvent } = usePercentSelectorViewModel();
 
   const handle25 = () => {
-    logEvent(PERCENT_25);
+    logEvent(PERCENT_25, inputName);
     handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
   };
   const handle50 = () => {
-    logEvent(PERCENT_50);
+    logEvent(PERCENT_50, inputName);
     handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
   };
   const handle75 = () => {
-    logEvent(PERCENT_75);
+    logEvent(PERCENT_75, inputName);
     handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
   };
   const handleMAX = () => {
-    logEvent(PERCENT_100);
+    logEvent(PERCENT_100, inputName);
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
   };
 

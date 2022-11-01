@@ -101,6 +101,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         error={validatedOutputMessageA}
         disabled
         notSelectable
+        id="liquidity-remove-output"
         data-test-id="outputA"
       />
       <Plus className={styles.iconButton} />
@@ -116,6 +117,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         placeholder="0.0"
         disabled
         notSelectable
+        id="liquidity-remove-output"
         data-test-id="outputB"
       />
       {isDeadlineAndSlippageVisible && (

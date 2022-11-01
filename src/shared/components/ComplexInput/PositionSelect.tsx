@@ -179,7 +179,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance ?? null} handleBalance={handleBalance} />
+          <PercentSelector value={balance ?? null} handleBalance={handleBalance} inputName={`positionSelect-${id}`} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>
