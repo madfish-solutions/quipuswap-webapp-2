@@ -199,3 +199,9 @@ export const FALLBACK_DECIMALS = 0;
 
 // Referal code
 export const QUIPUSWAP_REFERRAL_CODE = new BigNumber(1);
+
+// PERCENT
+export const PERCENT_25 = 25;
+export const PERCENT_50 = 50;
+export const PERCENT_75 = 75;
+export const PERCENT_100 = 100;
