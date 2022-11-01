@@ -92,6 +92,7 @@ export const useMigrateLiquidity = () => {
     const { tokens, contractAddress, type, id } = accordanceItem;
 
     const amounts = await calculateTokensAmounts();
+
     const [aToken, bToken] = tokens;
 
     try {
