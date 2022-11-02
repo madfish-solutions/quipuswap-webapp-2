@@ -8,7 +8,7 @@ import {
   FarmingListBalancesModel,
   FarmingListCommonResponseModel
 } from '@modules/farming/models';
-import { saveBigNumber, toReal } from '@shared/helpers';
+import { isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
@@ -35,11 +35,13 @@ export class FarmingListCommonStore {
     return this.listStore.model.list.map(({ item }) => item);
   }
 
+  get farmingItemsWithBalances() {
+    return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
+  }
+
   get filteredList() {
-    return this.rootStore.farmingFilterStore?.filterAndSort(
-      // @ts-ignore
-      isExist(this.accountPkh) ? this.listBalances : this.list
-    );
+    //@ts-ignore
+    return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
   }
 
   //#region farming list balances store
