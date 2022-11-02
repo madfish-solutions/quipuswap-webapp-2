@@ -7,7 +7,11 @@ export const getBucketContractApi = async (tezos: TezosToolkit, contractAddress:
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const storage = await getStorageInfo<any>(tezos, contractAddress);
 
-  const pairValue = await storage.storage.pairs.get(poolId);
+  const { bucket: bucketAddress } = await storage.storage.pairs.get(poolId);
 
-  return await getContract(tezos, pairValue.bucket);
+  if (bucketAddress) {
+    return await getContract(tezos, bucketAddress);
+  }
+
+  return null;
 };
