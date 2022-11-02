@@ -3,16 +3,18 @@ import { FC } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR } from '@config/constants';
+import { StateData } from '@modules/farming/pages/item/components/state-data';
 import { PieChartQs } from '@shared/charts';
-import { Button, DashPlug, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { Button, CandidateButton, DashPlug, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
-import { Optional } from '@shared/types';
+import { Optional, WhitelistedBaker } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import styles from './dex-two-details-view.module.scss';
 
 interface Props {
+  currentBaker: Nullable<WhitelistedBaker>;
   isLoading?: boolean;
   poolContractUrl: string;
   cardCellClassName: string;
@@ -33,7 +35,8 @@ export const DexTwoDetailsView: FC<Props> = ({
   pieChartData,
   totalLpSupply,
   poolContractUrl,
-  cardCellClassName
+  cardCellClassName,
+  currentBaker
 }) => {
   const { t } = useTranslation();
 
@@ -73,6 +76,16 @@ export const DexTwoDetailsView: FC<Props> = ({
           data-test-id="totalLpSupply"
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
+        </DetailsCardCell>
+        <DetailsCardCell
+          cellName={t('liquidity|currentBaker')}
+          className={cardCellClassName}
+          tooltipContent={t('liquidity|currentBakerTooltip')}
+          data-test-id="currentBaker"
+        >
+          <StateData isLoading={isLoading} data={currentBaker}>
+            {baker => <CandidateButton candidate={baker} />}
+          </StateData>
         </DetailsCardCell>
         {feesRate && (
           <DetailsCardCell
