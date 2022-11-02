@@ -90,8 +90,10 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
     const error = formik.errors[inputSlug];
     const token = item.tokensInfo[index].token;
     const decimals = token.metadata.decimals;
+    const id = 'remove-liq-input';
 
     return {
+      id,
       value,
       error,
       index,
