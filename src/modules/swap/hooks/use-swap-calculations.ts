@@ -61,6 +61,8 @@ export const useSwapCalculations = () => {
 
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
+  // eslint-disable-next-line no-console
+  console.log(bestTrade);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
   useTokensLoader(tokensSlugs);
