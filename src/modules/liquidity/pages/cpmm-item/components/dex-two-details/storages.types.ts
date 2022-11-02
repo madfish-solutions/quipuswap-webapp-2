@@ -7,10 +7,10 @@ interface DexTwoPool {
   token_b_price_cml: nat;
   total_supply: nat;
   last_block_timestamp: Date | string;
-  bucket: string;
+  bucket: Nullable<string>;
 }
 
-export interface BucketStorage {
+export interface BucketContractStorage {
   previous_delegated: string;
   current_delegated: string;
   next_candidate: string;

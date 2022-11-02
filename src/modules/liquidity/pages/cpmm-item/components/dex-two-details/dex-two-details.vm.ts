@@ -12,10 +12,11 @@ import { useDexTwoPoolBaker } from './use-dex-two-pool-baker';
 
 export const useDexTwoDetailsViewModel = () => {
   const liquidityItemStore = useLiquidityItemStore();
-  const item = liquidityItemStore?.item;
+  const dexTwoPool = liquidityItemStore?.item;
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-610
   const { baker: currentBaker, bakerIsLoading } = useDexTwoPoolBaker();
 
-  const pieChartData = item?.tokensInfo.map(({ atomicTokenTvl, token }) => ({
+  const liquidityChartData = dexTwoPool?.tokensInfo.map(({ atomicTokenTvl, token }) => ({
     value: toReal(atomicTokenTvl, token.metadata.decimals ?? DEFAULT_DECIMALS).toNumber(),
     tokenSymbol: getTokenSymbol(token)
   }));
@@ -23,7 +24,7 @@ export const useDexTwoDetailsViewModel = () => {
   const dexTwoContractAddress = liquidityItemStore.item?.contractAddress;
   const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
 
-  const opportunities = item?.opportunities?.map(opportunityHelper);
+  const opportunities = dexTwoPool?.opportunities?.map(opportunityHelper);
 
   const isLoading = !isExist(liquidityItemStore) || liquidityItemStore.itemIsLoading || bakerIsLoading;
 
@@ -34,12 +35,12 @@ export const useDexTwoDetailsViewModel = () => {
       feesRate: null,
       isLoading,
       weeklyVolume: null,
-      tvlInUsd: item?.tvlInUsd,
-      totalLpSupply: item?.totalSupply && toReal(item?.totalSupply, DEFAULT_DECIMALS),
-      atomicTotalLpSupply: item?.totalSupply,
+      tvlInUsd: dexTwoPool?.tvlInUsd,
+      totalLpSupply: dexTwoPool?.totalSupply && toReal(dexTwoPool?.totalSupply, DEFAULT_DECIMALS),
+      atomicTotalLpSupply: dexTwoPool?.totalSupply,
       poolContractUrl,
       cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
-      pieChartData: pieChartData ?? []
+      liquidityChartData: liquidityChartData ?? []
     },
     opportunities: opportunities ?? []
   };

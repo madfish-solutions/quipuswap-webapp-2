@@ -23,7 +23,7 @@ interface Props {
   tvlInUsd: Optional<BigNumber>;
   weeklyVolume: Optional<BigNumber>;
   totalLpSupply: Optional<BigNumber>;
-  pieChartData: Array<{ value: number; tokenSymbol: string }>;
+  liquidityChartData: Array<{ value: number; tokenSymbol: string }>;
 }
 
 export const DexTwoDetailsView: FC<Props> = ({
@@ -32,7 +32,7 @@ export const DexTwoDetailsView: FC<Props> = ({
   feesRate,
   tvlInUsd,
   isLoading,
-  pieChartData,
+  liquidityChartData,
   totalLpSupply,
   poolContractUrl,
   cardCellClassName,
@@ -108,7 +108,7 @@ export const DexTwoDetailsView: FC<Props> = ({
           </DetailsCardCell>
         )}
       </div>
-      <PieChartQs data={pieChartData} />
+      <PieChartQs data={liquidityChartData} />
       <div className={commonContainerStyles.detailsButtons}>
         <Button
           className={commonContainerStyles.detailsButton}
