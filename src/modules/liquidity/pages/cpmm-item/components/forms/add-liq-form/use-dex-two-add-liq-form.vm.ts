@@ -126,8 +126,10 @@ export const useDexTwoAddLiqFormViewModel = () => {
     const error = formik.errors[inputSlug];
     const token = tokensInfo[index].token;
     const decimals = token.metadata.decimals;
+    const id = 'add-liq-input';
 
     return {
+      id,
       value,
       error,
       index,
