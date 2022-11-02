@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
-import { getTokenSlug } from '@shared/helpers';
+import { getTokenSlug, PoolType } from '@shared/helpers';
 
 import { StableswapItemModel } from '../models';
 import { StableswapTokensInfo } from '../types';
@@ -11,7 +11,8 @@ export const getStableswapLiquidityLogData = (
   inputAmounts: Array<Nullable<BigNumber>>,
   shares: BigNumber,
   liquiditySlippage: BigNumber,
-  item: StableswapItemModel
+  item: StableswapItemModel,
+  type: PoolType
 ) => {
   const [token1Info, token2Info, token3Info, token4Info] = tokensInfo;
 
@@ -31,6 +32,7 @@ export const getStableswapLiquidityLogData = (
     tvlUsd: tokensInfo
       .reduce((sum, tokenInfo) => sum.plus(tokenInfo.reservesInUsd), new BigNumber(ZERO_AMOUNT))
       .toNumber(),
-    totalLpSupply: item.totalLpSupply.toNumber()
+    totalLpSupply: item.totalLpSupply.toNumber(),
+    poolType: type
   };
 };
