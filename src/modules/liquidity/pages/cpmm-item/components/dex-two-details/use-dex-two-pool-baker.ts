@@ -1,60 +1,36 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
-import BigNumber from 'bignumber.js';
 import useSWR from 'swr';
 
-import { useLiquidityItemStore } from '@modules/liquidity/hooks';
+import { makeBaker } from '@modules/farming/pages/item/helpers';
+import { useBucketContract } from '@modules/liquidity/hooks';
 import { useBakers } from '@providers/dapp-bakers';
-import { useTezos } from '@providers/use-dapp';
-import { getStorageInfo } from '@shared/dapp';
 import { isExist } from '@shared/helpers';
-import { Optional } from '@shared/types';
 
-import { BucketContractStorage, DexTwoContractStorage } from './storages.types';
+interface BucketContractStorage {
+  previous_delegated: string;
+  current_delegated: string;
+  next_candidate: string;
+}
 
 export const useDexTwoPoolBaker = () => {
   const { data: bakers, loading: bakersLoading } = useBakers();
-  const liquidityItemStore = useLiquidityItemStore();
-  const tezos = useTezos();
-  const dexTwoPool = liquidityItemStore?.item;
+  const { bucketContract } = useBucketContract();
 
-  const getDexTwoPoolBakerAddress = useCallback(
-    async (_: string, dexTwoContractAddress: Optional<string>, dexTwoPoolId: Optional<BigNumber>) => {
-      if (!isExist(dexTwoContractAddress) || !isExist(tezos) || !isExist(dexTwoPoolId)) {
-        return null;
-      }
+  const getDexTwoPoolBakerAddress = useCallback(async () => {
+    if (!isExist(bucketContract)) {
+      return null;
+    }
 
-      const { storage: dexTwoPoolStorage } = await getStorageInfo<DexTwoContractStorage>(tezos, dexTwoContractAddress);
-      const pair = await dexTwoPoolStorage.pairs.get(dexTwoPoolId);
-      const bucketAddress = pair?.bucket;
+    const bucketStorage = await bucketContract.storage<BucketContractStorage>();
 
-      if (!isExist(bucketAddress)) {
-        return null;
-      }
+    return bucketStorage.current_delegated;
+  }, [bucketContract]);
 
-      const bucketStorage = await getStorageInfo<BucketContractStorage>(tezos, bucketAddress);
-
-      return bucketStorage.current_delegated;
-    },
-    [tezos]
-  );
-
-  const { data: dexTwoPoolBakerAddress, isValidating: dexTwoPoolBakerAddressLoading } = useSWR(
-    ['dex-two-pool-baker-address', dexTwoPool?.contractAddress, dexTwoPool?.id],
+  const { data: bakerAddress, isValidating: bakerAddressLoading } = useSWR(
+    ['dex-two-pool-baker-address', bucketContract?.address],
     getDexTwoPoolBakerAddress
   );
 
-  const baker = useMemo(() => {
-    if (isExist(dexTwoPoolBakerAddress)) {
-      return (
-        bakers.find(knownBaker => knownBaker.address === dexTwoPoolBakerAddress) ?? { address: dexTwoPoolBakerAddress }
-      );
-    }
-
-    return null;
-  }, [dexTwoPoolBakerAddress, bakers]);
-
-  const bakerIsLoading = bakersLoading || dexTwoPoolBakerAddressLoading;
-
-  return { baker, bakerIsLoading };
+  return { baker: makeBaker(bakerAddress, bakers), bakerIsLoading: bakersLoading || bakerAddressLoading };
 };
