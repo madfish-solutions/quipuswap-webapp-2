@@ -186,6 +186,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
               amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
               value={balance}
               handleBalance={handleBalance}
+              inputName={`tokenSelect-${id}`}
             />
           </Scaffolding>
         ) : null}
