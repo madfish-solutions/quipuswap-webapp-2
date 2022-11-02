@@ -44,7 +44,7 @@ export const useFarmingListPageViewModel = () => {
 
   const data = list?.map(item => farmingListDataHelper(item, accountPkh));
 
-  const dataCommon = farmingListCommonStore.list?.map(item => farmingListCommonDataHelper(item, accountPkh));
+  const dataCommon = farmingListCommonStore.filteredList?.map(item => farmingListCommonDataHelper(item, accountPkh));
 
   return {
     isLoading,
