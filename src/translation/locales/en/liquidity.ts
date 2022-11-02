@@ -70,5 +70,8 @@ export const liquidity = {
   tooltipQuipu: 'QuipuSwap',
   tooltipTezotopia: 'Tezotopia',
   tooltipBTC: 'BTC-based',
-  tooltipDexTwo: 'Dex 2.0 Pools'
+  tooltipDexTwo: 'Dex 2.0 Pools',
+  currentBaker: 'Current baker',
+  currentBakerTooltip:
+    'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.'
 } as const;
