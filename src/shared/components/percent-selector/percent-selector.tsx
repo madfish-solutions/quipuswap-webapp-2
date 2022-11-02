@@ -4,11 +4,11 @@ import BigNumber from 'bignumber.js';
 
 import { PERCENT_25, PERCENT_50, PERCENT_75, PERCENT_100 } from '@config/constants';
 import { defined, formatIntegerWithDecimals, isNull } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 import { Nullable, Optional } from '@shared/types';
 
 import { Button } from '../button';
 import styles from './percent-selector.module.scss';
-import { usePercentSelectorViewModel } from './use-percent-selector.vm';
 
 interface PercentSelectorProps {
   handleBalance?: (state: string) => void;
@@ -18,6 +18,7 @@ interface PercentSelectorProps {
   inputName: string;
 }
 
+const AMPLITUDE_LOG_MESSAGE = 'CLICK_PRECENT_SELECTOR';
 const DEFAULT_INPUT_CAP = new BigNumber('0');
 const MIN_SELECTABLE_VALUE = 0;
 
@@ -34,22 +35,39 @@ export const PercentSelector: FC<PercentSelectorProps> = ({
   decimals,
   inputName
 }) => {
-  const { logEvent } = usePercentSelectorViewModel();
-
   const handle25 = () => {
-    logEvent(PERCENT_25, inputName);
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_25,
+      inputName
+    });
+
     handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
   };
+
   const handle50 = () => {
-    logEvent(PERCENT_50, inputName);
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_50,
+      inputName
+    });
+
     handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
   };
+
   const handle75 = () => {
-    logEvent(PERCENT_75, inputName);
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_75,
+      inputName
+    });
+
     handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
   };
+
   const handleMAX = () => {
-    logEvent(PERCENT_100, inputName);
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_100,
+      inputName
+    });
+
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
   };
 
