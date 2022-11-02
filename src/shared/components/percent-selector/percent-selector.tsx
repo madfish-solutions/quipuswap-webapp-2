@@ -2,11 +2,13 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { PERCENT_25, PERCENT_50, PERCENT_75, PERCENT_100 } from '@config/constants';
 import { defined, formatIntegerWithDecimals, isNull } from '@shared/helpers';
 import { Nullable, Optional } from '@shared/types';
 
 import { Button } from '../button';
 import styles from './percent-selector.module.scss';
+import { usePercentSelectorViewModel } from './use-percent-selector.vm';
 
 interface PercentSelectorProps {
   handleBalance?: (state: string) => void;
@@ -30,11 +32,24 @@ export const PercentSelector: FC<PercentSelectorProps> = ({
   amountCap = DEFAULT_INPUT_CAP,
   decimals
 }) => {
-  const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
-  const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
-  const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
-  const handleMAX = () =>
+  const { logEvent } = usePercentSelectorViewModel();
+
+  const handle25 = () => {
+    logEvent(PERCENT_25);
+    handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
+  };
+  const handle50 = () => {
+    logEvent(PERCENT_50);
+    handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
+  };
+  const handle75 = () => {
+    logEvent(PERCENT_75);
+    handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
+  };
+  const handleMAX = () => {
+    logEvent(PERCENT_100);
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
+  };
 
   const disabled = isNull(value);
 
