@@ -22,7 +22,7 @@ export namespace DexLink {
   };
 
   export const getStableswapPoolLink = (id: BigNumber) => {
-    return `${AppRootRoutes.Stableswap}/${StableswapRoutes.liquidity}/${
+    return `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${
       StableswapLiquidityFormTabs.add
     }/${id.toFixed()}`;
   };

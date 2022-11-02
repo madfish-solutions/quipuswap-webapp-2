@@ -10,6 +10,7 @@ import {
   calculateShares,
   defined,
   getInputsAmountFormFormikValues,
+  getLastElementFromArray,
   isEqual,
   isTezosToken,
   numberAsString,
@@ -44,7 +45,13 @@ export const useDexTwoAddLiqFormViewModel = () => {
     actions.setSubmitting(true);
 
     const candidate = values[Input.THIRD_INPUT];
-    const inputAmounts = getInputsAmountFormFormikValues(values);
+    // TODO: https://madfish.atlassian.net/browse/QUIPU-571
+    const inputAmounts = getInputsAmountFormFormikValues(values, ([aKey], [bKey]) => {
+      const aValue = Number(getLastElementFromArray(aKey.split('-')));
+      const bValue = Number(getLastElementFromArray(bKey.split('-')));
+
+      return aValue - bValue;
+    });
 
     if (poolIsEmpty) {
       await createNewLiquidityPool(
