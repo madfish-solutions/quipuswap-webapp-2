@@ -38,7 +38,7 @@ export class FarmingListCommonStore {
   get filteredList() {
     return this.rootStore.farmingFilterStore?.filterAndSort(
       // @ts-ignore
-      isExist(this.rootStore.authStore.accountPkh) ? this.listBalances : this.list
+      isExist(this.accountPkh) ? this.listBalances : this.list
     );
   }
 
