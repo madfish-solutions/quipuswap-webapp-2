@@ -149,6 +149,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
             amountCap={amountCap}
             value={balance}
             handleBalance={handlePercentageSelect}
+            inputName={`tokenInput-${id}`}
           />
         </Scaffolding>
         {error && <ComplexError error={error} />}

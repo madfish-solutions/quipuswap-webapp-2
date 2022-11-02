@@ -2,7 +2,9 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { PERCENT_25, PERCENT_50, PERCENT_75, PERCENT_100 } from '@config/constants';
 import { defined, formatIntegerWithDecimals, isNull } from '@shared/helpers';
+import { amplitudeService } from '@shared/services';
 import { Nullable, Optional } from '@shared/types';
 
 import { Button } from '../button';
@@ -13,8 +15,10 @@ interface PercentSelectorProps {
   value: Optional<BigNumber.Value>;
   amountCap?: BigNumber;
   decimals?: number;
+  inputName: string;
 }
 
+const AMPLITUDE_LOG_MESSAGE = 'CLICK_PRECENT_SELECTOR';
 const DEFAULT_INPUT_CAP = new BigNumber('0');
 const MIN_SELECTABLE_VALUE = 0;
 
@@ -28,13 +32,44 @@ export const PercentSelector: FC<PercentSelectorProps> = ({
   handleBalance,
   value,
   amountCap = DEFAULT_INPUT_CAP,
-  decimals
+  decimals,
+  inputName
 }) => {
-  const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
-  const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
-  const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
-  const handleMAX = () =>
+  const handle25 = () => {
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_25,
+      inputName
+    });
+
+    handleBalance?.(multipliedByPercent(defined(value), 0.25, decimals));
+  };
+
+  const handle50 = () => {
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_50,
+      inputName
+    });
+
+    handleBalance?.(multipliedByPercent(defined(value), 0.5, decimals));
+  };
+
+  const handle75 = () => {
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_75,
+      inputName
+    });
+
+    handleBalance?.(multipliedByPercent(defined(value), 0.75, decimals));
+  };
+
+  const handleMAX = () => {
+    amplitudeService.logEvent(AMPLITUDE_LOG_MESSAGE, {
+      percent: PERCENT_100,
+      inputName
+    });
+
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
+  };
 
   const disabled = isNull(value);
 
