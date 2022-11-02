@@ -8,7 +8,7 @@ import {
   FarmingListBalancesModel,
   FarmingListCommonResponseModel
 } from '@modules/farming/models';
-import { isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
+import { saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
@@ -31,25 +31,21 @@ export class FarmingListCommonStore {
   readonly listStore: LoadingErrorData<FarmingListCommonResponseModel, typeof defaultList>;
 
   //TODO: change name
-  get listList() {
+  get list() {
     return this.listStore.model.list.map(({ item }) => item);
   }
 
-  get farmingItemsWithBalances() {
-    return isEmptyArray(this.listBalances) ? this.listList : this.listBalances;
-  }
-
-  get list() {
-    //TODO: Check for accountPkh!
-    //@ts-ignore
-    return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
+  get filteredList() {
+    return this.rootStore.farmingFilterStore?.filterAndSort(
+      // @ts-ignore
+      isExist(this.rootStore.authStore.accountPkh) ? this.listBalances : this.list
+    );
   }
 
   //#region farming list balances store
   @Led({
     default: defaultListBalances,
-    loader: async (self: FarmingListCommonStore) =>
-      getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
+    loader: async (self: FarmingListCommonStore) => getFarmingListUserBalances(self.accountPkh, self.tezos, self.list),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
@@ -96,7 +92,7 @@ export class FarmingListCommonStore {
     makeObservable(this, {
       listStore: observable,
 
-      listList: computed
+      list: computed
     });
   }
 
