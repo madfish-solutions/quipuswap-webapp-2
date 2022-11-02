@@ -11,7 +11,12 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getUserTokensAmountByShares, getUserLpBalanceToMigrate, getLpBasedOnToken } from '../../helpers';
+import {
+  getUserTokensAmountByShares,
+  getUserLpBalanceToMigrate,
+  getLpBasedOnToken,
+  fetchCurrentPoolReserves
+} from '../../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useMigrateLiquidity = () => {
@@ -43,25 +48,23 @@ export const useMigrateLiquidity = () => {
     (async () => await getMigrationParams())();
   }, [getMigrationParams, itemStore, accountPkh, tezos]);
 
-  const calculateTokensAmounts = () => {
+  const calculateTokensAmounts = async () => {
     const accordanceItem = itemStore.accordanceItem;
-    if (!accordanceItem) {
+    if (!accordanceItem || isNull(tezos)) {
       return {
         amountA: ZERO_AMOUNT_BN,
         amountB: ZERO_AMOUNT_BN,
         shares: ZERO_AMOUNT_BN
       };
     }
-    const amountA = getUserTokensAmountByShares(
-      accordanceItem.aTokenAtomicTvl,
-      dexOneBalanceLP,
-      accordanceItem.totalLpSupply
-    );
-    const amountB = getUserTokensAmountByShares(
-      accordanceItem.bTokenAtomicTvl,
-      dexOneBalanceLP,
-      accordanceItem.totalLpSupply
-    );
+    const { aTokenAtomicTvl, bTokenAtomicTvl, totalLpSupply } = await fetchCurrentPoolReserves(tezos, {
+      id: accordanceItem.id,
+      type: accordanceItem.type,
+      contractAddress: accordanceItem.contractAddress
+    });
+
+    const amountA = getUserTokensAmountByShares(aTokenAtomicTvl, dexOneBalanceLP, totalLpSupply);
+    const amountB = getUserTokensAmountByShares(bTokenAtomicTvl, dexOneBalanceLP, totalLpSupply);
 
     const lpBasedOnTokenA = getLpBasedOnToken(amountA, itemStore.totalLpSupply, itemStore.aTokenAtomicTvl);
     const lpBasedOnTokenB = getLpBasedOnToken(amountB, itemStore.totalLpSupply, itemStore.bTokenAtomicTvl);
@@ -88,7 +91,8 @@ export const useMigrateLiquidity = () => {
 
     const { tokens, contractAddress, type, id } = accordanceItem;
 
-    const amounts = calculateTokensAmounts();
+    const amounts = await calculateTokensAmounts();
+
     const [aToken, bToken] = tokens;
 
     try {
