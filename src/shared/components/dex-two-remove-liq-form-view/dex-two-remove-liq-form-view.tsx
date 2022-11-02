@@ -30,6 +30,7 @@ export const DexTwoRemoveLiqFormView: FC<Props> = ({ data, onSubmit, lpData }) =
         balance={balance}
         tokens={tokens}
         onInputChange={onInputChange}
+        id="dex-two-remove-liq-form"
       />
 
       <ArrowDown className={styles.svg} />

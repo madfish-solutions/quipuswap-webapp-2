@@ -23,6 +23,7 @@ export const DexTwoClaimRewardsFrom = observer(() => {
         balance={balance}
         onInputChange={noop}
         tokens={TEZOS_TOKEN}
+        id="baker-reward"
       />
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>

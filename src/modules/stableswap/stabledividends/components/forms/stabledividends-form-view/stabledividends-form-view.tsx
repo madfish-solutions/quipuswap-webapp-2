@@ -7,6 +7,7 @@ import { Optional, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
 export interface StableDividendsFormViewProps {
+  id: string;
   handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
   label: string;
   inputAmount: string;
@@ -21,6 +22,7 @@ export interface StableDividendsFormViewProps {
 }
 
 export const StableDividendsFormView: FC<StableDividendsFormViewProps> = ({
+  id,
   handleSubmit,
   label,
   inputAmount,
@@ -35,7 +37,7 @@ export const StableDividendsFormView: FC<StableDividendsFormViewProps> = ({
 }) => (
   <form onSubmit={handleSubmit}>
     <TokenInput
-      id="stake-form"
+      id={id}
       label={label}
       value={inputAmount}
       balance={balance}

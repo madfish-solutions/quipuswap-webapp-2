@@ -56,8 +56,10 @@ export const useUntakeFormViewModel = (): StableDividendsFormViewProps => {
   const label = t('common|Amount');
   const buttonText = t('common|Unstake');
   const balanceText = t('common|Available balance');
+  const id = 'unstake-form';
 
   return {
+    id,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],
     isSubmitting: formik.isSubmitting,

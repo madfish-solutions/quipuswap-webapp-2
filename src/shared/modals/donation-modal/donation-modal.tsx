@@ -88,6 +88,7 @@ export const DonationModal: FC = () => {
           className={styles.input}
           value={values.amount}
           placeholder="0.00"
+          id="donation-modal"
         />
         {isNull(accountPkh) ? (
           <ConnectWalletButton className={styles.button} />
