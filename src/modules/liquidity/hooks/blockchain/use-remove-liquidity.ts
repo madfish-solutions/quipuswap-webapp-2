@@ -1,25 +1,28 @@
 import BigNumber from 'bignumber.js';
-import { FormikValues } from 'formik';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FISRT_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
 import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   decreaseBySlippage,
+  determinePoolTypeAmplitude,
   extractTokens,
   getTransactionDeadline,
   isExist,
   isNull,
   isTezosToken,
   sortTokens,
-  toAtomic
+  toAtomic,
+  toReal
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
+import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { getDexTwoLiquidityLogData } from '../..//helpers';
 import { removeDexTwoLiquidityApi } from '../../api';
 import { useLiquidityItemStore } from '../store';
 
@@ -34,12 +37,13 @@ export const useRemoveLiquidity = () => {
   const accountPkh = useAccountPkh();
   const { item } = useLiquidityItemStore();
 
-  const removeLiquidity = async (inputAmounts: FormikValues, shares: BigNumber) => {
+  const removeLiquidity = async (inputAmounts: Array<Nullable<BigNumber>>, shares: BigNumber) => {
     if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
       return;
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
+    const poolType = determinePoolTypeAmplitude(tokens);
 
     const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).minus(1).integerValue(BigNumber.ROUND_DOWN)
@@ -57,7 +61,18 @@ export const useRemoveLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
+    const logData = {
+      dexTwoLiquidityRemove: getDexTwoLiquidityLogData(
+        item.tokensInfo,
+        toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS),
+        liquiditySlippage,
+        item,
+        poolType
+      )
+    };
+
     try {
+      amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE', logData);
       const operation = await removeDexTwoLiquidityApi(
         tezos,
         atomicLpTokenBalance,
@@ -68,8 +83,10 @@ export const useRemoveLiquidity = () => {
         itemId
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
+      amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
+      amplitudeService.logEvent('DEX_TWO__LIQUIDITY_REMOVE_FAILED', { ...logData, error });
     }
   };
 

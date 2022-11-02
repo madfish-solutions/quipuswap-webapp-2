@@ -8,3 +8,4 @@ export * from './is-hot-pool';
 export * from './dex-link.namespace';
 export * from './sorter.helpers';
 export * from './filter.helpers';
+export * from './get-dex-two-liquidity-log-data';
