@@ -76,6 +76,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenA}
         disabled={!tokenB}
         placeholder="0.0"
+        id="add-liq-input-token-a"
         data-test-id="addLiquidityTokenA"
       />
       <Plus className={styles.iconButton} />
@@ -93,6 +94,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenB}
         disabled={!tokenA}
         placeholder="0.0"
+        id="add-liq-input-token-b"
         data-test-id="addLiquidityTokenB"
       />
       {isDeadlineAndSkippageVisible && (

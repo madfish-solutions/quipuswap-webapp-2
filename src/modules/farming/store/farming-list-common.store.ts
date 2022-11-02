@@ -31,16 +31,15 @@ export class FarmingListCommonStore {
   readonly listStore: LoadingErrorData<FarmingListCommonResponseModel, typeof defaultList>;
 
   //TODO: change name
-  get listList() {
+  get list() {
     return this.listStore.model.list.map(({ item }) => item);
   }
 
   get farmingItemsWithBalances() {
-    return isEmptyArray(this.listBalances) ? this.listList : this.listBalances;
+    return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
   }
 
-  get list() {
-    //TODO: Check for accountPkh!
+  get filteredList() {
     //@ts-ignore
     return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
   }
@@ -48,8 +47,7 @@ export class FarmingListCommonStore {
   //#region farming list balances store
   @Led({
     default: defaultListBalances,
-    loader: async (self: FarmingListCommonStore) =>
-      getFarmingListUserBalances(self.accountPkh, self.tezos, self.listList),
+    loader: async (self: FarmingListCommonStore) => getFarmingListUserBalances(self.accountPkh, self.tezos, self.list),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
@@ -96,7 +94,7 @@ export class FarmingListCommonStore {
     makeObservable(this, {
       listStore: observable,
 
-      listList: computed
+      list: computed
     });
   }
 

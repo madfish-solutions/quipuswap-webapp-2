@@ -61,8 +61,10 @@ export const useStakeFormViewModel = (): StableDividendsFormViewProps => {
 
   const label = t('common|Amount');
   const buttonText = t('common|Stake');
+  const id = 'stake-form';
 
   return {
+    id,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[FormFields.inputAmount],
     isSubmitting: formik.isSubmitting,
