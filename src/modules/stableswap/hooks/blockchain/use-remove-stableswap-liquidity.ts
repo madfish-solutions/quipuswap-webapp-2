@@ -7,6 +7,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import {
   cloneArray,
   decreaseBySlippage,
+  determinePoolTypeAmplitude,
   getTransactionDeadline,
   isExist,
   isNull,
@@ -62,6 +63,8 @@ export const useRemoveStableswapLiquidity = () => {
       const fees = [providersFee, stakersFee, interfaceFee, devFee];
 
       const tokens = tokensInfo.map(({ token }) => token);
+      const poolType = determinePoolTypeAmplitude(tokens);
+
       const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
@@ -85,7 +88,8 @@ export const useRemoveStableswapLiquidity = () => {
           inputAmountsFixed,
           shares,
           liquiditySlippage,
-          item
+          item,
+          poolType
         )
       };
 

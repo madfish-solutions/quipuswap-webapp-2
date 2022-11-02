@@ -1,27 +1,31 @@
+/* eslint-disable no-console */
 import BigNumber from 'bignumber.js';
-import { FormikValues } from 'formik';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FISRT_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
 import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   decreaseBySlippage,
+  determinePoolTypeAmplitude,
   extractTokens,
   getTransactionDeadline,
   isExist,
   isNull,
   isTezosToken,
   sortTokens,
-  toAtomic
+  toAtomic,
+  toReal
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
+import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { addDexTwoLiquidityApi } from '../../api';
 import { getValueWithFee } from '../../helpers';
+import { getDexTwoLiquidityLogData } from '../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useAddLiquidity = () => {
@@ -35,12 +39,13 @@ export const useAddLiquidity = () => {
   const accountPkh = useAccountPkh();
   const { item } = useLiquidityItemStore();
 
-  const addLiquidity = async (inputAmounts: FormikValues, candidate: string) => {
+  const addLiquidity = async (inputAmounts: Array<Nullable<BigNumber>>, candidate: string) => {
     if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
       return;
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
+    const poolType = determinePoolTypeAmplitude(tokens);
 
     const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
@@ -64,7 +69,18 @@ export const useAddLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
+    const logData = {
+      dexTwoLiquidityAdd: getDexTwoLiquidityLogData(
+        item.tokensInfo,
+        toReal(sharesWithSlippage, LP_TOKEN_DECIMALS),
+        liquiditySlippage,
+        item,
+        poolType
+      )
+    };
+
     try {
+      amplitudeService.logEvent('DEX_TWO__LIQUIDITY_ADD', logData);
       const operation = await addDexTwoLiquidityApi(
         tezos,
         sharesWithSlippage,
@@ -75,8 +91,10 @@ export const useAddLiquidity = () => {
         itemId
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
+      amplitudeService.logEvent('DEX_TWO_LIQUIDITY_ADD_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
+      amplitudeService.logEvent('DEX_TWO__LIQUIDITY_ADD_FAILED', { ...logData, error });
     }
   };
 
