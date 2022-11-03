@@ -8,7 +8,7 @@ import { StableDividendsFormTabs, StakerInfo } from '@modules/stableswap/types';
 import { extractTokens, isNull } from '@shared/helpers';
 import { i18n } from '@translation';
 
-import { defineWhitelistedOrActiveStatus } from './helpers/define-whitelisted-or-active-status';
+import { defineItemLabel } from './helpers';
 
 const DEFAULT_VALUE = new BigNumber('0');
 
@@ -20,7 +20,7 @@ export const stableDividendsListDataHelper = (
     !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarnedInUsd?.gt(DEFAULT_VALUE));
 
   const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${item.stableDividendsItemUrl}`;
-  const status = defineWhitelistedOrActiveStatus(item.isWhitelisted);
+  const status = defineItemLabel(item);
   const extractedTokens = extractTokens(item.tokensInfo);
 
   const itemDTI = `stable-dividends-item-${item.id}`;
