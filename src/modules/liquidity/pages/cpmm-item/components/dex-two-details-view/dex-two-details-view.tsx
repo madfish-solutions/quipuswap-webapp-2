@@ -14,8 +14,10 @@ import { useTranslation } from '@translation';
 import styles from './dex-two-details-view.module.scss';
 
 interface Props {
+  canHaveBaker?: boolean;
   currentBaker: Nullable<WhitelistedBaker>;
-  isLoading?: boolean;
+  currentBakerIsLoading: boolean;
+  isLoading: boolean;
   poolContractUrl: string;
   cardCellClassName: string;
   apr: Optional<BigNumber>;
@@ -36,7 +38,9 @@ export const DexTwoDetailsView: FC<Props> = ({
   totalLpSupply,
   poolContractUrl,
   cardCellClassName,
-  currentBaker
+  canHaveBaker,
+  currentBaker,
+  currentBakerIsLoading
 }) => {
   const { t } = useTranslation();
 
@@ -77,16 +81,18 @@ export const DexTwoDetailsView: FC<Props> = ({
         >
           <StateCurrencyAmount amount={totalLpSupply} isLoading={isLoading} loaderFallback={<DashPlug />} />
         </DetailsCardCell>
-        <DetailsCardCell
-          cellName={t('liquidity|currentBaker')}
-          className={cardCellClassName}
-          tooltipContent={t('liquidity|currentBakerTooltip')}
-          data-test-id="currentBaker"
-        >
-          <StateData isLoading={isLoading} data={currentBaker}>
-            {baker => <CandidateButton candidate={baker} />}
-          </StateData>
-        </DetailsCardCell>
+        {canHaveBaker && (
+          <DetailsCardCell
+            cellName={t('liquidity|currentBaker')}
+            className={cardCellClassName}
+            tooltipContent={t('liquidity|currentBakerTooltip')}
+            data-test-id="currentBaker"
+          >
+            <StateData isLoading={currentBakerIsLoading} data={currentBaker}>
+              {baker => <CandidateButton candidate={baker} />}
+            </StateData>
+          </DetailsCardCell>
+        )}
         {feesRate && (
           <DetailsCardCell
             cellName={t('stableswap|feesRate')}
