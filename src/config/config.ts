@@ -107,6 +107,8 @@ export const YOUVES_LINK = 'https://app.youves.com/earn';
 // Hot Pools
 export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
   { id: '6', type: PoolType.STABLESWAP },
+  { id: '7', type: PoolType.DEX_TWO },
+  { id: '8', type: PoolType.DEX_TWO },
   { id: '0', type: PoolType.DEX_TWO },
   { id: '1', type: PoolType.DEX_TWO },
   { id: '2', type: PoolType.DEX_TWO },
