@@ -2,6 +2,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
+import { PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
 import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
@@ -104,7 +105,13 @@ export const YOUVES_FARMINGS = ['5', '6'];
 export const YOUVES_LINK = 'https://app.youves.com/earn';
 
 // Hot Pools
-export const HOT_POOLS = ['0', '1', '2', '3'];
+export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
+  { id: '6', type: PoolType.STABLESWAP },
+  { id: '0', type: PoolType.DEX_TWO },
+  { id: '1', type: PoolType.DEX_TWO },
+  { id: '2', type: PoolType.DEX_TWO },
+  { id: '3', type: PoolType.DEX_TWO }
+];
 
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
