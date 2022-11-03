@@ -67,6 +67,7 @@ export const FarmingRewardInfo: FC = observer(() => {
         tooltipContent={t('farm|yourShareTooltip')}
         data-test-id="yourShare"
       >
+        {/* TODO: https://madfish.atlassian.net/browse/QUIPU-622 */}
         <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
           {({ depositBalance }) => (
             <StateCurrencyAmount
