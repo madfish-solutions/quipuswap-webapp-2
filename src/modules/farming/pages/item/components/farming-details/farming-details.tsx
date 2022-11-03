@@ -138,6 +138,7 @@ export const FarmingDetails: FC = observer(() => {
                 className={CardCellClassName}
                 data-test-id="currentDelegate"
               >
+                {/* TODO: https://madfish.atlassian.net/browse/QUIPU-622 */}
                 <StateData isLoading={isLoading} data={currentDelegate}>
                   {delegate => <CandidateButton candidate={delegate} />}
                 </StateData>
