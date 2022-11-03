@@ -14,7 +14,7 @@ export const useDexTwoDetailsViewModel = () => {
   const { item, itemIsLoading } = useLiquidityItemStore();
   const canHaveBaker = item?.tokensInfo.some(({ token }) => isTezosToken(token));
   // TODO: https://madfish.atlassian.net/browse/QUIPU-610
-  const { currentBaker, currentBakerIsLoading } = useDexTwoPoolCurrentBaker();
+  const currentBaker = useDexTwoPoolCurrentBaker();
 
   const liquidityChartData = item?.tokensInfo.map(({ atomicTokenTvl, token }) => ({
     value: toReal(atomicTokenTvl, token.metadata.decimals ?? DEFAULT_DECIMALS).toNumber(),
@@ -31,7 +31,6 @@ export const useDexTwoDetailsViewModel = () => {
       apr: null,
       canHaveBaker,
       currentBaker,
-      currentBakerIsLoading,
       feesRate: null,
       isLoading: itemIsLoading,
       weeklyVolume: null,

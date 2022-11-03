@@ -8,7 +8,7 @@ import { useBucketContract } from '@modules/liquidity/hooks';
 import { useBakers } from '@providers/dapp-bakers';
 
 export const useDexTwoPoolCurrentBaker = () => {
-  const { data: bakers, loading: bakersLoading } = useBakers();
+  const { data: bakers, loading: bakersLoading, error: bakersError } = useBakers();
   const { bucketContract } = useBucketContract();
 
   const getDexTwoPoolBakerAddress = useCallback(
@@ -16,10 +16,14 @@ export const useDexTwoPoolCurrentBaker = () => {
     [bucketContract]
   );
 
-  const { data: bakerAddress, isValidating: bakerAddressLoading } = useSWR(
-    ['dex-two-pool-baker-address', bucketContract?.address],
-    getDexTwoPoolBakerAddress
-  );
+  const {
+    data: bakerAddress,
+    isValidating: bakerAddressLoading,
+    error: bakerAddressError
+  } = useSWR(['dex-two-pool-baker-address', bucketContract?.address], getDexTwoPoolBakerAddress);
 
-  return { currentBaker: makeBaker(bakerAddress, bakers), currentBakerIsLoading: bakersLoading || bakerAddressLoading };
+  const errorData = bakersError || bakerAddressError;
+  const error = errorData ? new Error(errorData) : null;
+
+  return { data: makeBaker(bakerAddress, bakers), loading: bakersLoading || bakerAddressLoading, error };
 };
