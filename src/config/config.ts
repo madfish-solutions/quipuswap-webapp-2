@@ -96,7 +96,10 @@ export const NEW_FARMINGS: Array<{ id: string; old: boolean }> = [
   { id: '0', old: false },
   { id: '1', old: false },
   { id: '2', old: false },
-  { id: '3', old: false }
+  { id: '3', old: false },
+  { id: '4', old: false },
+  { id: '5', old: false },
+  { id: '6', old: false }
 ];
 
 // FarmingItems with Youves
