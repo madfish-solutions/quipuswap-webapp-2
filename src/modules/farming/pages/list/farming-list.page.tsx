@@ -11,8 +11,6 @@ import { useListStatsViewModel } from './use-list-stats.vm';
 
 export const FarmsListPage = observer(() => {
   const { isLoading, listCommon, title, opened } = useFarmingListPageViewModel();
-  // eslint-disable-next-line no-console
-  console.log('listCommon', [...listCommon]);
   const { stats } = useListStatsViewModel();
 
   return (
