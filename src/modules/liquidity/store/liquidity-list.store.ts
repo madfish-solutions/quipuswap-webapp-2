@@ -5,7 +5,7 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getLiquidityListApi, getLiquidityStatsApi } from '../api';
-import { isHotPool } from '../helpers';
+import { isHotPool, sortHotPool } from '../helpers';
 import { LiquidityListModel, LiquidityResponseModel } from '../models';
 
 const defaultList = {
@@ -44,7 +44,7 @@ export class LiquidityListStore {
   }
 
   get hotPools() {
-    return this.listStore.model.list.filter(({ id, type }) => isHotPool(id, type));
+    return this.listStore.model.list.filter(isHotPool).sort(sortHotPool);
   }
   //#endregion liquidity list store
 
