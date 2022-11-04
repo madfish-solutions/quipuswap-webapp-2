@@ -6,14 +6,14 @@ import { Cell, Pie, PieChart } from 'recharts';
 import { COLORS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import { DefaultChart } from '../components/default-chart';
+import { PieChartData } from '../types';
 import styles from './pie-chart-qs.module.scss';
+import { usePieCharViewModel } from './use-pie-chart-qs.vm';
 
-interface Props {
-  data: Array<{ value: number; tokenSymbol: string }>;
-}
-
-export const PieChartQs: FC<Props> = ({ data }) => {
+export const PieChartQs: FC<PieChartData> = ({ data }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { pieChartExists } = usePieCharViewModel(data);
 
   return (
     <div
@@ -22,22 +22,28 @@ export const PieChartQs: FC<Props> = ({ data }) => {
         [styles.light]: colorThemeMode === ColorModes.Light
       })}
     >
-      <PieChart width={200} height={200}>
-        <Pie data={data} innerRadius={80} outerRadius={100} dataKey="value" stroke="none">
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+      {pieChartExists ? (
+        <PieChart width={200} height={200}>
+          <Pie data={data} innerRadius={80} outerRadius={100} dataKey="value" stroke="none">
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      ) : (
+        <DefaultChart />
+      )}
+      {pieChartExists && (
+        <ul>
+          {data.map(({ tokenValue, tokenSymbol }, index) => (
+            <li key={index} className={styles.li}>
+              <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+              <span className={styles.tokenSymbol}>{tokenSymbol}</span>
+              <span className={styles.tokenAmount}>{tokenValue}</span>
+            </li>
           ))}
-        </Pie>
-      </PieChart>
-      <ul>
-        {data.map(({ value, tokenSymbol }, index) => (
-          <li key={index} className={styles.li}>
-            <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-            <span className={styles.tokenSymbol}>{tokenSymbol}</span>
-            <span className={styles.tokenAmount}>{value}</span>
-          </li>
-        ))}
-      </ul>
+        </ul>
+      )}
     </div>
   );
 };
