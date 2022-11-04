@@ -11,21 +11,29 @@ import { FarmsListPage } from './pages/list';
 import { YouvesItemPage } from './pages/youves-item';
 
 export enum FarmingRoutes {
-  VersionOne = '/v1',
-  VersionTwo = '/v2'
+  VersionOne = 'v1',
+  VersionTwo = 'v2',
+  VersionThree = 'v3'
 }
 
 export const FarmingRouter: FC = () => {
-  const { isInitialized } = useFarmingRouterViewModel();
+  const { isInitialized, error } = useFarmingRouterViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>Loading...</div>}>
+    <StateWrapper
+      isLoading={!isInitialized}
+      loaderFallback={<div>Loading...</div>}
+      isError={!!error}
+      errorFallback={<div>Error: {JSON.stringify(error)}</div>}
+    >
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />
-        <Route path={`${FarmingRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
-        <Route path={`${FarmingRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
-        <Route path={`${FarmingRoutes.VersionTwo}/:id`} element={<YouvesItemPage />} />
-        <Route path={`${FarmingRoutes.VersionTwo}/:id/:tab`} element={<YouvesItemPage />} />
+
+        <Route path={`/${FarmingRoutes.VersionOne}/:id`} element={<FarmingItemPage />} />
+        <Route path={`/${FarmingRoutes.VersionOne}/:id/:tab`} element={<FarmingItemPage />} />
+
+        <Route path={`/:version/:id`} element={<YouvesItemPage />} />
+        <Route path={`/:version/:id/:tab`} element={<YouvesItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );

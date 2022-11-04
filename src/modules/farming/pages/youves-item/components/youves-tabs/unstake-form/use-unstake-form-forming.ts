@@ -3,17 +3,18 @@ import { FormEvent, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
 import { defined } from '@shared/helpers';
 
-import { FarmingRoutes } from '../../../../../farming.router';
+import { getFarmItemUrl } from '../../../../../helpers';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';
+import { FarmVersion } from '../../../../../interfaces';
 import { YouvesFormTabs } from '../../../types';
 import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
 
 export const useUnstakeFormForming = (
   contractAddress: Nullable<string>,
-  farmId: string,
+  id: string,
+  version: FarmVersion,
   stakeId: BigNumber,
   balance: Nullable<BigNumber>
 ) => {
@@ -29,7 +30,7 @@ export const useUnstakeFormForming = (
       setIsSubmitting(true);
       await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
       setIsSubmitting(false);
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmId}/${YouvesFormTabs.stake}`);
+      navigate(`${getFarmItemUrl({ id, version })}/${YouvesFormTabs.stake}`);
     });
   };
 

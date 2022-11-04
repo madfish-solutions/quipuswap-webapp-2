@@ -5,6 +5,7 @@ import { isNull } from '@shared/helpers';
 
 export const useFarmingRouterViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<Nullable<Error>>(null);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -27,11 +28,13 @@ export const useFarmingRouterViewModel = () => {
           await rootStore.createHarvestAndRollStore();
           await rootStore.createFarmingYouvesItemStore();
         }
+      } catch (e) {
+        setError(e as Error);
       } finally {
         setIsInitialized(true);
       }
     })();
   }, [rootStore]);
 
-  return { isInitialized };
+  return { isInitialized, error };
 };

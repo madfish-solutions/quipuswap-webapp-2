@@ -4,6 +4,8 @@ import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 import { ActiveStatus } from '@shared/types';
 
+import { FarmVersion } from '../../interfaces';
+
 export class FarmingItemDto {
   @Typed({ type: BigNumber, nullable: true })
   apr: Nullable<BigNumber>;
@@ -77,6 +79,10 @@ export class FarmingItemDto {
   @Typed()
   withdrawalFee: BigNumber;
 
+  @Typed({ isEnum: true })
+  version: FarmVersion;
+
   @Typed()
+  /** @deprecated */
   old: boolean;
 }
