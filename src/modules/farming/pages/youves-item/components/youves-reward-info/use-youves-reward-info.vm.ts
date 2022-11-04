@@ -8,7 +8,7 @@ import { getLastElementFromArray, getSymbolsString } from '@shared/helpers';
 import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
-import { getRewardsDueDate } from '../../api/get-rewards-due-date';
+import { getRewardsDueDate } from '../../api';
 import { useYouvesFarmingItemRewards } from './use-youves-rewards';
 
 export const useYouvesRewardInfoViewModel = () => {
@@ -68,7 +68,11 @@ export const useYouvesRewardInfoViewModel = () => {
 
   useOnBlock(getUserStakeInfo);
 
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+  const isBlocked = youvesFarmingItem?.contractAddress === 'KT1Mb9PJYb2XME6nkepFRUGGdo2xedkBNe7z';
+
   return {
+    isBlocked,
     claimablePendingRewards,
     longTermPendingRewards,
     claimablePendingRewardsInUsd,
