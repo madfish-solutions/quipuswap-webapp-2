@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 import { DexLink } from '@modules/liquidity/helpers';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNotDefined } from '@shared/helpers';
@@ -28,7 +30,13 @@ export const useStakeFormViewModel = (): StakeFormProps => {
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh);
 
-  const investHref = tokens.length ? DexLink.getCpmmPoolLink(tokens as [Token, Token]) : '';
+  const investHref =
+    tokens.length === 2
+      ? DexLink.getCpmmPoolLink(tokens as [Token, Token])
+      : tokens.length === 3
+      ? //TODO: create stableswap pool link by real id https://madfish.atlassian.net/browse/QUIPU-621
+        DexLink.getStableswapPoolLink(new BigNumber(6))
+      : '';
 
   return {
     ...form,
