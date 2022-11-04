@@ -1,13 +1,13 @@
 import { isTezosToken } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-export enum PoolType {
+export enum TwoAssetsDexPoolType {
   TEZ_TOKEN = 'TezosToToken',
   TOKEN_TOKEN = 'TokenToToken'
 }
 
-export const determinePoolTypeAmplitude = (tokens: Array<Token>) => {
+export const determineTwoAssetsDexPoolTypeAmplitude = (tokens: Array<Token>) => {
   const isTezosTokenPool = tokens.some(isTezosToken);
 
-  return isTezosTokenPool ? PoolType.TEZ_TOKEN : PoolType.TOKEN_TOKEN;
+  return isTezosTokenPool ? TwoAssetsDexPoolType.TEZ_TOKEN : TwoAssetsDexPoolType.TOKEN_TOKEN;
 };

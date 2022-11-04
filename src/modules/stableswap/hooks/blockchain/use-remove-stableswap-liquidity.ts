@@ -8,7 +8,7 @@ import {
   cloneArray,
   decreaseBySlippage,
   getTransactionDeadline,
-  determinePoolTypeAmplitude,
+  determineTwoAssetsDexPoolTypeAmplitude,
   isExist,
   isNull,
   saveBigNumber,
@@ -63,7 +63,7 @@ export const useRemoveStableswapLiquidity = () => {
       const fees = [providersFee, stakersFee, interfaceFee, devFee];
 
       const tokens = tokensInfo.map(({ token }) => token);
-      const poolType = determinePoolTypeAmplitude(tokens);
+      const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
       const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 

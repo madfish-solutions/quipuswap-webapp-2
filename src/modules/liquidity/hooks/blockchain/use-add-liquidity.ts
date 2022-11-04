@@ -6,7 +6,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   decreaseBySlippage,
-  determinePoolTypeAmplitude,
+  determineTwoAssetsDexPoolTypeAmplitude,
   extractTokens,
   getTransactionDeadline,
   isExist,
@@ -43,7 +43,7 @@ export const useAddLiquidity = () => {
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
-    const poolType = determinePoolTypeAmplitude(tokens);
+    const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
     const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)

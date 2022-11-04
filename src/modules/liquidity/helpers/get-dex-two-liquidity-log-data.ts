@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
 import { LiquidityItemDto, LiquidityTokenInfoDto } from '@modules/liquidity/dto';
-import { getTokenSlug, PoolType } from '@shared/helpers';
+import { getTokenSlug, TwoAssetsDexPoolType } from '@shared/helpers';
 
 export const getDexTwoLiquidityLogData = (
   tokensInfo: Array<LiquidityTokenInfoDto>,
   shares: BigNumber,
   liquiditySlippage: BigNumber,
   item: LiquidityItemDto,
-  type: PoolType
+  type: TwoAssetsDexPoolType
 ) => {
   const [firstTokenInfo, secondTokenInfo] = tokensInfo;
 
