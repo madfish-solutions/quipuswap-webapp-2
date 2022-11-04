@@ -4,7 +4,7 @@ import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 import { ActiveStatus } from '@shared/types';
 
-import { FarmItemCommon } from '../../interfaces';
+import { FarmItemCommon, FarmVersion } from '../../interfaces';
 
 export class FarmingItemCommonDto implements FarmItemCommon {
   @Typed()
@@ -37,7 +37,11 @@ export class FarmingItemCommonDto implements FarmItemCommon {
   @Typed()
   depositExchangeRate: BigNumber;
 
+  @Typed({ isEnum: true })
+  version: FarmVersion;
+
   @Typed()
+  /** @deprecated */
   old: boolean;
 
   @Typed({ type: String, isEnum: true })

@@ -87,14 +87,16 @@ export const farmingListDataHelper = (item: FarmingListItemWithBalances, account
       ]
     : undefined;
 
+  const href =
+    item.old || isUndefined(item.old)
+      ? `${AppRootRoutes.Farming}/${FarmingRoutes.VersionOne}/${item.id}`
+      : `${AppRootRoutes.Farming}/${item.id}`;
+
   return {
     labels,
     itemStats,
     userStats,
-    href:
-      item.old || isUndefined(item.old)
-        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${item.id}`
-        : `${AppRootRoutes.Farming}/${item.id}`,
+    href,
     inputToken: item.tokens,
     outputToken: item.rewardToken,
     isNew: isNewFarming(item),

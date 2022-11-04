@@ -18,7 +18,7 @@ export const useDoYouvesFarmingWithdraw = () => {
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
-  const { id } = useFarmingYouvesItemStore();
+  const { id, version } = useFarmingYouvesItemStore();
 
   const doWithdraw = useCallback(
     async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber) => {
@@ -39,7 +39,7 @@ export const useDoYouvesFarmingWithdraw = () => {
 
         await confirmOperation(operation.opHash, { message: 'Withdraw successful' });
         amplitudeService.logEvent('YOUVES_FARMING_WITHDRAW_SUCCESS', logData);
-        await delayedGetFarmingItem(id);
+        await delayedGetFarmingItem(id, defined(version, 'version'));
       } catch (error) {
         showErrorToast(error as Error);
         amplitudeService.logEvent('YOUVES_FARMING_WITHDRAW_FAILED', {
@@ -48,7 +48,7 @@ export const useDoYouvesFarmingWithdraw = () => {
         });
       }
     },
-    [accountPkh, tezos, confirmOperation, delayedGetFarmingItem, id, showErrorToast]
+    [accountPkh, tezos, confirmOperation, delayedGetFarmingItem, id, version, showErrorToast]
   );
 
   return { doWithdraw };
