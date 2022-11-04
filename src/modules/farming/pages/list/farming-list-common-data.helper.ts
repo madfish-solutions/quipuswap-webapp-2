@@ -86,14 +86,16 @@ export const farmingListCommonDataHelper = (
       ]
     : undefined;
 
+  const href =
+    farmingItem.old || isUndefined(farmingItem.old)
+      ? `${AppRootRoutes.Farming}/${FarmingRoutes.VersionOne}/${farmingItem.id}`
+      : `${AppRootRoutes.Farming}/${FarmingRoutes.VersionTwo}/${farmingItem.id}`;
+
   return {
     labels,
     itemStats,
     userStats,
-    href:
-      farmingItem.old || isUndefined(farmingItem.old)
-        ? `${AppRootRoutes.Farming}${FarmingRoutes.VersionOne}/${farmingItem.id}`
-        : `${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${farmingItem.id}`,
+    href,
     inputToken: farmingItem.tokens,
     isNew: isNewFarming(farmingItem),
     status: { status: farmingItem.stakeStatus, filled: true },

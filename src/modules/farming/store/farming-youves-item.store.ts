@@ -17,6 +17,7 @@ import { Standard, Token } from '@shared/types';
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
 import { YouvesStakeDto } from '../dto';
+import { FarmVersion } from '../interfaces';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
 import { YouvesContractBalanceModel } from '../models/youves-contract-balance';
 import { getRewards } from '../pages/youves-item/helpers/get-rewards';
@@ -38,6 +39,7 @@ const DEFAULT_TOKENS: Token[] = [];
 @ModelBuilder()
 export class FarmingYouvesItemStore {
   id = '0';
+  version: Nullable<FarmVersion> = null;
 
   //#region item store region
   @Led({
@@ -145,6 +147,10 @@ export class FarmingYouvesItemStore {
 
   setFarmingId(id: string) {
     this.id = id;
+  }
+
+  setFarmingVersion(version: FarmVersion) {
+    this.version = version;
   }
 
   /*
