@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
@@ -100,10 +101,17 @@ export const YouvesRewardInfoView: FC<Props> = observer(
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '1.5rem',
-              color: 'rgba(255, 255, 0, 0.8)'
+              color: 'rgba(255, 255, 0, 0.8)',
+              paddingLeft: 8
             }}
           >
-            Oops. This farm doesn't generate yield. The new one will spark in a few hours 🤗
+            <p>
+              Oops. This farm doesn't generate yield. You are welcome to use{' '}
+              <Link to="/farming/v3/0" style={{ textDecoration: 'underline' }}>
+                this one
+              </Link>{' '}
+              🤗
+            </p>
           </div>
         )}
         <YouvesStatsItem
