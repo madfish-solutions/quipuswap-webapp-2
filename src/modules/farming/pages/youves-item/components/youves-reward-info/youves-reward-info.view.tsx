@@ -22,6 +22,7 @@ const modeClass = {
 // TODO: Add tooltip (claimable / long term)
 
 interface Props {
+  isBlocked: boolean;
   claimablePendingRewards: Nullable<BigNumber>;
   longTermPendingRewards: Nullable<BigNumber>;
   claimablePendingRewardsInUsd: Nullable<BigNumber>;
@@ -43,6 +44,7 @@ interface Props {
 
 export const YouvesRewardInfoView: FC<Props> = observer(
   ({
+    isBlocked,
     longTermPendingRewards,
     longTermPendingRewardsInUsd,
     claimablePendingRewards,
@@ -84,6 +86,26 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         disabled={!isHarvestAvailable}
         currency={rewardTokenCurrency}
       >
+        {/* TODO: https://madfish.atlassian.net/browse/QUIPU-636 */}
+        {isBlocked && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: '#000',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.5rem',
+              color: 'rgba(255, 255, 0, 0.8)'
+            }}
+          >
+            Oops. This farm doesn't generate yield. The new one will spark in a few hours 🤗
+          </div>
+        )}
         <YouvesStatsItem
           itemName={t('farm|Your Share')}
           loading={farmingLoading}
