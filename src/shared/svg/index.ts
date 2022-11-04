@@ -63,3 +63,4 @@ export * from './confettis';
 export * from './yupana-logo';
 export * from './opportunity-ticket';
 export * from './migrate-liquidity-icon';
+export * from './chart';

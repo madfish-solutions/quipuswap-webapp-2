@@ -22,3 +22,4 @@ export * from './use-amplitude-service';
 export * from './use-mobile-detect';
 export * from './use-token-amount-in-usd';
 export * from './youtube';
+export * from './use-token-exchange-rate';
