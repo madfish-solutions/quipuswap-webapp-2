@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { ITab } from '@shared/components';
 
-import { FarmingRoutes } from '../../../../farming.router';
 import { useFarmingYouvesItemStore } from '../../../../hooks';
 import { YouvesFormTabs } from '../../types';
 
@@ -22,7 +21,7 @@ export const TABS_CONTENT: ITab[] = [
 
 export const useFarmingFormTabsCardViewModel = () => {
   const navigate = useNavigate();
-  const { id, tab } = useParams();
+  const { id, tab, version } = useParams();
 
   const { currentStakeBalance } = useFarmingYouvesItemStore();
 
@@ -31,9 +30,9 @@ export const useFarmingFormTabsCardViewModel = () => {
 
   const setCurrentTab = useCallback(
     (tabName: YouvesFormTabs) => {
-      navigate(`${AppRootRoutes.Farming}${FarmingRoutes.VersionTwo}/${id}/${tabName}`);
+      navigate(`${AppRootRoutes.Farming}/${version}/${id}/${tabName}`);
     },
-    [id, navigate]
+    [id, navigate, version]
   );
 
   const tabs = useMemo(() => {

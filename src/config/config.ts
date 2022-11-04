@@ -2,6 +2,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
+import { FarmVersion } from '@modules/farming/interfaces';
 import { PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
@@ -92,14 +93,14 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, GHOSTNET_NETWORK];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS: Array<{ id: string; old: boolean }> = [
-  { id: '0', old: false },
-  { id: '1', old: false },
-  { id: '2', old: false },
-  { id: '3', old: false },
-  { id: '4', old: false },
-  { id: '5', old: false },
-  { id: '6', old: false }
+export const NEW_FARMINGS: Array<{ id: string; version: FarmVersion }> = [
+  { id: '0', version: FarmVersion.v3 },
+  { id: '0', version: FarmVersion.v2 },
+  { id: '1', version: FarmVersion.v2 },
+  { id: '2', version: FarmVersion.v2 },
+  { id: '3', version: FarmVersion.v2 },
+  { id: '5', version: FarmVersion.v2 },
+  { id: '6', version: FarmVersion.v2 }
 ];
 
 // FarmingItems with Youves

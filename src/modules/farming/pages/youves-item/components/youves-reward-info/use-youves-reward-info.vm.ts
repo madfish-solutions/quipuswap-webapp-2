@@ -4,11 +4,11 @@ import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getLastElementFromArray, getSymbolsString } from '@shared/helpers';
+import { defined, getLastElementFromArray, getSymbolsString } from '@shared/helpers';
 import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
-import { getRewardsDueDate } from '../../api/get-rewards-due-date';
+import { getRewardsDueDate } from '../../api';
 import { useYouvesFarmingItemRewards } from './use-youves-rewards';
 
 export const useYouvesRewardInfoViewModel = () => {
@@ -19,7 +19,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const accountPkh = useAccountPkh();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
   const youvesFarmingItemStore = useFarmingYouvesItemStore();
-  const { item: youvesFarmingItem, id } = youvesFarmingItemStore;
+  const { item: youvesFarmingItem, id, version } = youvesFarmingItemStore;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const rewardToken = useToken(youvesFarmingItem?.rewardToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
@@ -48,7 +48,7 @@ export const useYouvesRewardInfoViewModel = () => {
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
     await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
 
-    await delayedGetFarmingItem(id);
+    await delayedGetFarmingItem(id, defined(version, 'version'));
   };
 
   const getUserStakeInfo = useCallback(async () => {
@@ -68,7 +68,11 @@ export const useYouvesRewardInfoViewModel = () => {
 
   useOnBlock(getUserStakeInfo);
 
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+  const isBlocked = youvesFarmingItem?.contractAddress === 'KT1Mb9PJYb2XME6nkepFRUGGdo2xedkBNe7z';
+
   return {
+    isBlocked,
     claimablePendingRewards,
     longTermPendingRewards,
     claimablePendingRewardsInUsd,
