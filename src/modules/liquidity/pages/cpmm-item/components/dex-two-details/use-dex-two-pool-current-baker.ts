@@ -4,12 +4,15 @@ import useSWR from 'swr';
 
 import { makeBaker } from '@modules/farming/pages/item/helpers';
 import { BlockchainDexTwoLiquidityApi } from '@modules/liquidity/api';
-import { useBucketContract } from '@modules/liquidity/hooks';
+import { useBucketContract, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useBakers } from '@providers/dapp-bakers';
+import { isTezosToken } from '@shared/helpers';
 
 export const useDexTwoPoolCurrentBaker = () => {
+  const { item } = useLiquidityItemStore();
   const { data: bakers, loading: bakersLoading, error: bakersError } = useBakers();
   const { bucketContract } = useBucketContract();
+  const canHaveBaker = item?.tokensInfo.some(({ token }) => isTezosToken(token));
 
   const getDexTwoPoolBakerAddress = useCallback(
     async () => await BlockchainDexTwoLiquidityApi.getBakerAddress(bucketContract),
@@ -25,5 +28,8 @@ export const useDexTwoPoolCurrentBaker = () => {
   const errorData = bakersError || bakerAddressError;
   const error = errorData ? new Error(errorData) : null;
 
-  return { data: makeBaker(bakerAddress, bakers), loading: bakersLoading || bakerAddressLoading, error };
+  return {
+    currentBaker: { data: makeBaker(bakerAddress, bakers), loading: bakersLoading || bakerAddressLoading, error },
+    canHaveBaker
+  };
 };

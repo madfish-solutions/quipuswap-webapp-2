@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
 import { DashPlug } from '@shared/components/dash-plug';
-import { Entity } from '@shared/types';
+import { LedEntity } from '@shared/types';
 
 interface FallbackProps {
   isLoading?: boolean;
 }
 
 export interface StateDataProps<T> {
-  entity: Entity<T>;
+  entity: LedEntity<T>;
   children: (data: T) => JSX.Element;
   Fallback?: FC<FallbackProps>;
 }

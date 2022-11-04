@@ -1,19 +1,19 @@
-interface EntityLoading {
+interface LedEntityLoading {
   loading: true;
   error: unknown;
   data: unknown;
 }
 
-interface EntityError {
+interface LedEntityError {
   loading: false;
   error: Error;
   data: unknown;
 }
 
-interface EntityData<T> {
+interface LedEntityData<T> {
   loading: false;
   error: null;
   data: T;
 }
 
-export type Entity<T> = EntityLoading | EntityError | EntityData<T>;
+export type LedEntity<T> = LedEntityLoading | LedEntityError | LedEntityData<T>;

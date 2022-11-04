@@ -6,7 +6,7 @@ import { DOLLAR } from '@config/constants';
 import { PieChartQs } from '@shared/charts';
 import { Button, CandidateButton, DashPlug, DetailsCardCell, StateCurrencyAmount, StateData } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
-import { Entity, Optional, WhitelistedBaker } from '@shared/types';
+import { LedEntity, Optional, WhitelistedBaker } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -14,7 +14,7 @@ import styles from './dex-two-details-view.module.scss';
 
 interface Props {
   canHaveBaker?: boolean;
-  currentBaker: Entity<Nullable<WhitelistedBaker>>;
+  currentBaker: LedEntity<Nullable<WhitelistedBaker>>;
   isLoading: boolean;
   poolContractUrl: string;
   cardCellClassName: string;

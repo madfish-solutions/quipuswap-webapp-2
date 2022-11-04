@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { DEFAULT_DECIMALS } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { opportunityHelper } from '@modules/stableswap/stableswap-liquidity/pages/item/opportunity.helper';
-import { getTokenSymbol, isTezosToken, toReal } from '@shared/helpers';
+import { getTokenSymbol, toReal } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
 import { useLiquidityItemStore } from '../../../../hooks';
@@ -12,9 +12,8 @@ import { useDexTwoPoolCurrentBaker } from './use-dex-two-pool-current-baker';
 
 export const useDexTwoDetailsViewModel = () => {
   const { item, itemIsLoading } = useLiquidityItemStore();
-  const canHaveBaker = item?.tokensInfo.some(({ token }) => isTezosToken(token));
   // TODO: https://madfish.atlassian.net/browse/QUIPU-610
-  const currentBaker = useDexTwoPoolCurrentBaker();
+  const { currentBaker, canHaveBaker } = useDexTwoPoolCurrentBaker();
 
   const liquidityChartData = item?.tokensInfo.map(({ atomicTokenTvl, token }) => ({
     value: toReal(atomicTokenTvl, token.metadata.decimals ?? DEFAULT_DECIMALS).toNumber(),
