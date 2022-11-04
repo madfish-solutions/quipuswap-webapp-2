@@ -8,6 +8,16 @@ import { FarmingItemCommonModel, FarmingItemModel } from '../models';
 export const getFarmingLabel = (item: FarmingItemModel | FarmingItemCommonModel): Array<LabelComponentProps> => {
   const { timelock, withdrawalFee } = item;
 
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+  if (!item.old && item.id.toFixed() === '4') {
+    return [
+      {
+        status: item.stakeStatus,
+        label: i18n.t('farm|pending')
+      }
+    ];
+  }
+
   if (isUndefined(timelock) || isUndefined(withdrawalFee)) {
     return [];
   }
