@@ -7,6 +7,7 @@ import {
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
   PRECISION_FACTOR,
+  PRECISION_FACTOR_STABLESWAP_LP,
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
@@ -129,12 +130,15 @@ export class FarmingYouvesItemStore {
       return;
     }
 
+    const precision = this.version === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
+
     const reward = this.contractBalance.minus(lastRewards);
-    const newDiscFactor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
+    // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+    const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(staked));
 
     const stake = getLastElement(this.stakes) as YouvesStakeDto;
 
-    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor);
+    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor, precision);
 
     this.claimableRewards = toReal(claimableReward, rewardToken);
     this.longTermRewards = toReal(fullReward, rewardToken);
