@@ -4,7 +4,7 @@ import { DEFAULT_DECIMALS } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { opportunityHelper } from '@modules/stableswap/stableswap-liquidity/pages/item/opportunity.helper';
 import { getTokenSymbol, toReal } from '@shared/helpers';
-import { useTokenExchangeRate } from '@shared/hooks/use-token-exchange-rate';
+import { useTokenExchangeRate } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
 import { useLiquidityItemStore } from '../../../../hooks';
