@@ -10,6 +10,8 @@ import { useAuthStore } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { mapFarmVersion } from '../../helpers';
+
 const DEFAULT_TOKENS: Token[] = [];
 
 export const useYouvesItemPageViewModel = (): { title: string } => {
@@ -18,7 +20,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const dAppReady = useReady();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
-  const { id } = useParams();
+  const { id, version } = useParams();
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
@@ -33,9 +35,9 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
       return;
     }
 
-    void getFarmingItem(id);
+    void getFarmingItem(id, mapFarmVersion(version));
     prevAccountPkhRef.current = accountPkh;
-  }, [getFarmingItem, dAppReady, id, accountPkh]);
+  }, [getFarmingItem, dAppReady, id, version, accountPkh]);
 
   /*
     Liveable Rewards.

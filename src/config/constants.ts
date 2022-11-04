@@ -91,8 +91,17 @@ export const DEX_TWO_ITEM = 'dex-two-item';
 // TODO: change api address => change farm => dividends (if needed)
 export const DIVIDENDS = 'farm';
 
+// TODO: Move const related to farming to separate file
+
 export const FARMING_LIST_API_URL = `${FARMING_API_URL}/${LIST}`;
 export const FARMING_LIST_API_URL_V2 = `${FARMING_API_URL}/v2/${LIST}`;
+export const FARMING_LIST_API_URL_V3 = `${FARMING_API_URL}/v3/${LIST}`;
+
+export const FARMING_COMMON_LIST_API_URL = `${FARMING_API_URL}/v3/all-farms`;
+
+export const FARMING_ITEM_API_URL_V2 = `${FARMING_API_URL}/v3/multi`;
+export const FARMING_ITEM_API_URL_V3 = `${FARMING_API_URL}/v3/multi-v2`;
+
 export const FARMING_NEW_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
 export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
 
@@ -167,6 +176,7 @@ export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
 export const STABLESWAP_PRECISION_FEE = 1e10;
 export const PRECISION_FACTOR = 1e12;
+export const PRECISION_FACTOR_STABLESWAP_LP = 1e24;
 
 //#region default stableswap fee
 export const CONTRACT_DECIMALS_PRECISION_POWER = 18; // 1e18
