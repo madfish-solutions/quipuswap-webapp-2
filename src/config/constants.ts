@@ -176,6 +176,7 @@ export const TOKEN_DECIMALS_PRECISION = 1e6;
 export const PRECISION_PERCENT = 1e2;
 export const STABLESWAP_PRECISION_FEE = 1e10;
 export const PRECISION_FACTOR = 1e12;
+export const PRECISION_FACTOR_STABLESWAP_LP = 1e24;
 
 //#region default stableswap fee
 export const CONTRACT_DECIMALS_PRECISION_POWER = 18; // 1e18
