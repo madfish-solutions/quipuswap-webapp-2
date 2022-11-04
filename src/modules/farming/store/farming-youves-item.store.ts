@@ -44,7 +44,7 @@ export class FarmingYouvesItemStore {
   //#region item store region
   @Led({
     default: DEFAULT_ITEM,
-    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id, self.version),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
