@@ -14,7 +14,7 @@ import {
   toAtomic,
   extractTokens,
   getTransactionDeadline,
-  determinePoolTypeAmplitude
+  determineTwoAssetsDexPoolTypeAmplitude
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
@@ -60,7 +60,7 @@ export const useAddStableswapLiquidity = () => {
       const { contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
 
       const tokens = extractTokens(tokensInfo);
-      const poolType = determinePoolTypeAmplitude(tokens);
+      const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
         isNull(amount) || amount.isNaN()

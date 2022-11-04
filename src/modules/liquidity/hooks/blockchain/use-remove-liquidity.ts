@@ -6,7 +6,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   decreaseBySlippage,
-  determinePoolTypeAmplitude,
+  determineTwoAssetsDexPoolTypeAmplitude,
   extractTokens,
   getTransactionDeadline,
   isExist,
@@ -22,8 +22,8 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getDexTwoLiquidityLogData } from '../..//helpers';
 import { removeDexTwoLiquidityApi } from '../../api';
+import { getDexTwoLiquidityLogData } from '../../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
@@ -43,7 +43,7 @@ export const useRemoveLiquidity = () => {
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
-    const poolType = determinePoolTypeAmplitude(tokens);
+    const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
     const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).minus(1).integerValue(BigNumber.ROUND_DOWN)
