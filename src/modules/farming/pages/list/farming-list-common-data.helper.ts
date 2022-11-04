@@ -1,13 +1,11 @@
 import { BigNumber } from 'bignumber.js';
 
-import { AppRootRoutes } from '@app.router';
 import { PERCENT, ZERO_AMOUNT_BN } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
-import { getTokenSymbol, isNull, isUndefined } from '@shared/helpers';
+import { getTokenSymbol, isNull } from '@shared/helpers';
 import { i18n } from '@translation';
 
-import { FarmingRoutes } from '../../farming.router';
-import { getFarmingLabel } from '../../helpers';
+import { getFarmingLabel, getFarmItemUrl } from '../../helpers';
 import { isNewFarming } from '../../helpers/is-new-farming';
 import { FarmingListItemWithBalances } from './types';
 
@@ -86,10 +84,7 @@ export const farmingListCommonDataHelper = (
       ]
     : undefined;
 
-  const href =
-    farmingItem.old || isUndefined(farmingItem.old)
-      ? `${AppRootRoutes.Farming}/${FarmingRoutes.VersionOne}/${farmingItem.id}`
-      : `${AppRootRoutes.Farming}/${FarmingRoutes.VersionTwo}/${farmingItem.id}`;
+  const href = getFarmItemUrl(farmingItem);
 
   return {
     labels,
