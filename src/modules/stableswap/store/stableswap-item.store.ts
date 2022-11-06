@@ -1,24 +1,26 @@
-import { BigNumber } from 'bignumber.js';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 
-import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorData, RootStore } from '@shared/store';
-import { Nullable } from '@shared/types';
+import { LedProposal, ModelBuilderProposal } from '@shared/model-builder';
+import { LoadingErrorDataProposal, RootStore } from '@shared/store';
 
 import { getStableswapItemApi } from '../api';
 import { StableswapItemModel } from '../models';
+import { RawStableswapItem } from '../types';
 
-@ModelBuilder()
+@ModelBuilderProposal()
 export class StableswapItemStore {
-  poolId: Nullable<BigNumber> = null;
-
   //#region item store
-  @Led({
+  @LedProposal({
     default: null,
-    loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId),
+    loader: getStableswapItemApi,
     model: StableswapItemModel
   })
-  readonly itemStore: LoadingErrorData<StableswapItemModel, null>;
+  readonly itemStore: LoadingErrorDataProposal<
+    StableswapItemModel,
+    null,
+    Parameters<typeof getStableswapItemApi>,
+    RawStableswapItem
+  >;
 
   get item() {
     return this.itemStore.model;
@@ -27,15 +29,7 @@ export class StableswapItemStore {
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      poolId: observable,
-
-      setPoolId: action,
-
       item: computed
     });
-  }
-
-  setPoolId(poolId: BigNumber) {
-    this.poolId = poolId;
   }
 }

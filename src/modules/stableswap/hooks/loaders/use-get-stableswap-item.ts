@@ -19,8 +19,7 @@ export const useGetStableswapItem = () => {
       }
 
       try {
-        stableswapItemStore.setPoolId(poolId);
-        await stableswapItemStore.itemStore.load();
+        await stableswapItemStore.itemStore.load(poolId);
       } catch (error) {
         showErrorToast(error as Error);
       }

@@ -1,5 +1,6 @@
+/* eslint-disable sonarjs/no-identical-functions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoadingErrorData } from '../store';
+import { LoadingErrorData, LoadingErrorDataProposal } from '../store';
 import { Constructable } from '../types';
 import { LED_METADATA_KEY } from './led-metadata-key';
 import { createConfigMap, MapperConfig } from './mapper';
@@ -15,9 +16,28 @@ export const ModelBuilder = () => {
         const ledFields = Reflect.getOwnMetadata<Array<LedMetadataValue>>(LED_METADATA_KEY, Constructor.prototype);
 
         ledFields.forEach(({ propertyKey, default: defaultData, loader, model }) => {
-          const mapperConfig: MapperConfig = createConfigMap(model.prototype)!;
+          const mapperConfig: MapperConfig = createConfigMap(model.prototype);
 
           this[propertyKey] = new LoadingErrorData(defaultData, async () => loader(this), mapperConfig, model);
+        });
+      }
+    };
+  };
+};
+
+export const ModelBuilderProposal = () => {
+  return function <T extends Constructable>(Constructor: T) {
+    return class extends Constructor {
+      [key: LedMetadataValue['propertyKey']]: LoadingErrorDataProposal<object, any, any>;
+      constructor(...args: any[]) {
+        super(...args);
+
+        const ledFields = Reflect.getOwnMetadata<Array<LedMetadataValue>>(LED_METADATA_KEY, Constructor.prototype);
+
+        ledFields.forEach(({ propertyKey, default: defaultData, loader, model }) => {
+          const mapperConfig: MapperConfig = createConfigMap(model.prototype);
+
+          this[propertyKey] = new LoadingErrorDataProposal(defaultData, loader, mapperConfig, model);
         });
       }
     };
