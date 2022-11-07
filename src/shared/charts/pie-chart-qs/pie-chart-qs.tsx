@@ -23,26 +23,34 @@ export const PieChartQs: FC<PieChartData> = ({ data }) => {
       })}
     >
       {pieChartExists ? (
-        <PieChart width={200} height={200}>
-          <Pie data={data} innerRadius={80} outerRadius={100} dataKey="value" stroke="none">
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        <>
+          <ul className={styles.ul}>
+            {data.map(({ tokenValue, tokenSymbol }, index) => (
+              <li key={index} className={styles.li}>
+                <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                <span className={styles.tokenSymbol}>{tokenSymbol}</span>
+                <span className={styles.tokenAmount}>{tokenValue}</span>
+              </li>
             ))}
-          </Pie>
-        </PieChart>
+          </ul>
+          <PieChart width={200} height={200}>
+            <Pie
+              data={data}
+              innerRadius={80}
+              outerRadius={100}
+              dataKey="value"
+              stroke="none"
+              startAngle={-270}
+              endAngle={90}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </>
       ) : (
         <DefaultChart />
-      )}
-      {pieChartExists && (
-        <ul>
-          {data.map(({ tokenValue, tokenSymbol }, index) => (
-            <li key={index} className={styles.li}>
-              <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-              <span className={styles.tokenSymbol}>{tokenSymbol}</span>
-              <span className={styles.tokenAmount}>{tokenValue}</span>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );
