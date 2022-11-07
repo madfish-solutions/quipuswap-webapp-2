@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { formatValueBalance, getFullTimelockDescription, isExist } from '@shared/helpers';
+import { getFullTimelockDescription, isExist } from '@shared/helpers';
 import { NoopAsync, Optional, Token } from '@shared/types';
 import { useConfirmationModal } from '@shared/utils';
 import { i18n } from '@translation';
@@ -27,8 +27,7 @@ const getConfirmationMessage = ({
   }
 
   return i18n.t('farm|youvesConfirmationUpdateStake', {
-    waitingTime: getFullTimelockDescription(waitingTimeSeconds, true),
-    reward: `${formatValueBalance(realLostRewardAmount, rewardToken.metadata.decimals)} ${rewardToken.metadata.symbol}`
+    waitingTime: getFullTimelockDescription(waitingTimeSeconds, true)
   });
 };
 
