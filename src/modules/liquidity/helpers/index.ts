@@ -5,7 +5,7 @@ export * from './get-tez-value';
 export * from './get-user-lp-balance-to-migrate';
 export * from './get-user-tokens-amount-by-shares';
 export * from './get-value-with-fee';
-export * from './is-hot-pool';
+export * from './hot-pools';
 export * from './dex-link.namespace';
 export * from './sorter.helpers';
 export * from './filter.helpers';

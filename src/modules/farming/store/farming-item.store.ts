@@ -11,6 +11,7 @@ import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
 import { getUserPendingReward } from '../helpers';
+import { FarmVersion } from '../interfaces';
 import { FarmingItemResponseModel, UsersInfoResponseModel, UserTokenBalanceModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 import { FarmingItemWithBalances } from '../pages/list/types';
@@ -29,12 +30,15 @@ const defaultAvailableBalance = {
 @ModelBuilder()
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;
+
+  version: Nullable<FarmVersion> = null;
+  /** @deprecated */
   old = true;
 
   //#region item store region
   @Led({
     default: defaultItem,
-    loader: async self => await getFarmingItemApi(self.farmingId, self.old),
+    loader: async self => await getFarmingItemApi(self.farmingId, self.version, self.old),
     model: FarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<FarmingItemResponseModel, typeof defaultItem>;
@@ -180,6 +184,11 @@ export class FarmingItemStore {
     this.farmingId = farmingId;
   }
 
+  setVersion(version: Nullable<FarmVersion>) {
+    this.version = version;
+  }
+
+  /** @deprecated */
   setOld(old: boolean) {
     this.old = old;
   }

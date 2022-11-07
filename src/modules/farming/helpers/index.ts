@@ -5,3 +5,5 @@ export * from './helpers';
 export * from './get-min-end-time';
 export * from './get-farming-label';
 export * from './get-rewards';
+export * from './map-farm-version';
+export * from './get-farm-item-url';
