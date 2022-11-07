@@ -28,8 +28,8 @@ export const PieChartQs: FC<PieChartData> = ({ data }) => {
             {data.map(({ tokenValue, tokenSymbol }, index) => (
               <li key={index} className={styles.li}>
                 <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                <span className={styles.tokenSymbol}>{tokenSymbol}</span>
                 <span className={styles.tokenAmount}>{tokenValue}</span>
+                <span className={styles.tokenSymbol}>{tokenSymbol}</span>
               </li>
             ))}
           </ul>
