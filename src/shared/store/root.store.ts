@@ -6,6 +6,7 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStore as IFarmingListStore,
+  FarmingListStatsStore as IFarmingListStatsStore,
   FarmingListCommonStore as IFarmingListCommonStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
@@ -45,6 +46,7 @@ export class RootStore {
   tokensModalStore: TokensModalStore;
 
   farmingListStore: Nullable<IFarmingListStore> = null;
+  farmingListStatsStore: Nullable<IFarmingListStatsStore> = null;
   farmingListCommonStore: Nullable<IFarmingListCommonStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
@@ -81,6 +83,7 @@ export class RootStore {
       tezos: observable,
 
       farmingListStore: observable,
+      farmingListStatsStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
@@ -101,6 +104,7 @@ export class RootStore {
 
       setTezos: action,
       createFarmingListStore: action,
+      createFarmingListStatsStore: action,
       createFarmingListCommonStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
@@ -206,6 +210,13 @@ export class RootStore {
     if (isNull(this.farmingListStore)) {
       const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
+    }
+  }
+
+  async createFarmingListStatsStore() {
+    if (isNull(this.farmingListStatsStore)) {
+      const { FarmingListStatsStore } = await import('@modules/farming/store/farming-list-stats.store');
+      this.farmingListStatsStore = new FarmingListStatsStore(this);
     }
   }
 

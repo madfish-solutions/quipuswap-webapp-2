@@ -21,12 +21,7 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token, Undefined } from '@shared/types';
 
-import {
-  getAllFarmsUserInfoApi,
-  getFarmingListApi,
-  getFarmingListUserBalancesDeprecated,
-  getFarmingStatsApi
-} from '../api';
+import { getAllFarmsUserInfoApi, getFarmingListApi, getFarmingListUserBalancesDeprecated } from '../api';
 import {
   getEndTimestamp,
   getIsHarvestAvailable,
@@ -41,7 +36,6 @@ import {
   FarmingItemResponseModel,
   FarmingListBalancesModel,
   FarmingListResponseModel,
-  FarmingStatsResponseModel,
   UserInfoModel,
   UserInfoResponseModel
 } from '../models';
@@ -64,11 +58,6 @@ const DEFAULT_REWARDS = {
   claimableRewardsWithoutFee: new BigNumber(ZERO_AMOUNT)
 };
 
-const defaultStats = {
-  stats: null,
-  blockInfo: null
-};
-
 const defaultList = {
   list: [] as Array<FarmingItemResponseModel>
 };
@@ -83,19 +72,6 @@ const defaultUserInfo = {
 
 @ModelBuilder()
 export class FarmingListStore {
-  //#region farming stats store
-  @Led({
-    default: defaultStats,
-    loader: getFarmingStatsApi,
-    model: FarmingStatsResponseModel
-  })
-  readonly statsStore: LoadingErrorData<FarmingStatsResponseModel, typeof defaultStats>;
-
-  get stats() {
-    return this.statsStore.model.stats;
-  }
-  //#endregion farming stats store
-
   //#region farming list store
   @Led({
     default: defaultList,
@@ -118,7 +94,7 @@ export class FarmingListStore {
   @Led({
     default: defaultListBalances,
     loader: async (self: FarmingListStore) =>
-      getFarmingListUserBalancesDeprecated(self.accountPkh, self.tezos, self.listList),
+      getFarmingListUserBalancesDeprecated(self.rootStore.authStore.accountPkh, self.rootStore.tezos, self.listList),
     model: FarmingListBalancesModel
   })
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
@@ -241,15 +217,11 @@ export class FarmingListStore {
       updatePendingRewards: action,
 
       list: computed,
-      stats: computed,
       listList: computed,
       listBalances: computed,
       farmingItemsWithBalances: computed,
       claimablePendingRewards: computed,
-      isLoading: computed,
-
-      accountPkh: computed,
-      tezos: computed
+      isLoading: computed
     });
   }
 

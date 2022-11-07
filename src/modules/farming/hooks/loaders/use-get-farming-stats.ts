@@ -5,11 +5,11 @@ import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
 import { useToasts } from '@shared/utils';
 
-import { useFarmingListStore } from '../stores';
+import { useFarmingListStatsStore } from '../stores';
 
 export const useGetFarmingStats = () => {
   const { showErrorToast } = useToasts();
-  const { statsStore } = useFarmingListStore();
+  const { statsStore } = useFarmingListStatsStore();
   const isReady = useReady();
 
   const getFarmingStats = useCallback(async () => {
