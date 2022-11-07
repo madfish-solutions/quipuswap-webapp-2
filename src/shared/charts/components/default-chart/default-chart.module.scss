@@ -1,0 +1,34 @@
+@import '@styles/variables';
+
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 200px;
+}
+
+.text {
+  width: 100px;
+  text-align: center;
+}
+
+.upDefaultOfChart {
+  position: absolute;
+  top: 0;
+}
+
+.bottomDefaultOfChart {
+  position: absolute;
+  bottom: 0;
+}
+
+.light {
+  color: $chart-01;
+}
+
+.dark {
+  color: $chart-02;
+}

@@ -21,10 +21,15 @@ export const useDetailsViewModel = () => {
     const { providersFee, stakersFee, devFee, interfaceFee, totalLpSupply, tvlInUsd, poolContractUrl, tokensInfo } =
       item;
 
-    const pieChartData = tokensInfo.map(({ token, reserves }) => ({
-      value: reserves.decimalPlaces(DEFAULT_DECIMALS).toNumber(),
-      tokenSymbol: getTokenSymbol(token)
-    }));
+    const pieChartData = tokensInfo.map(({ token, reserves }) => {
+      const tokenValue = reserves.decimalPlaces(DEFAULT_DECIMALS).toNumber();
+
+      return {
+        value: tokenValue,
+        tokenValue,
+        tokenSymbol: getTokenSymbol(token)
+      };
+    });
 
     return {
       isLoading,
