@@ -18,12 +18,12 @@ import { farmingListDataHelper } from './farming-list-data.helper';
 export const useFarmingListPageViewModel = () => {
   const isReady = useReady();
   const { accountPkh } = useAuthStore();
-  const farmingListStore = useFarmingListStore();
   const farmingListCommonStore = useFarmingListCommonStore();
   const { getFarmingList } = useGetFarmingList();
   const { getFarmingListCommon } = useGetFarmingListCommon();
   const { getFarmingStats } = useGetFarmingStats();
   const { opened } = useHarvestAndRollStore();
+  const { list, isLoading } = useFarmingListStore();
 
   const { t } = useTranslation();
   const title = t('common|Farming');
@@ -38,9 +38,6 @@ export const useFarmingListPageViewModel = () => {
       void getFarmingStats();
     }
   }, [getFarmingList, getFarmingListCommon, getFarmingStats, isReady]);
-
-  const { listStore, list } = farmingListStore;
-  const { isLoading } = listStore;
 
   const data = list?.map(item => farmingListDataHelper(item, accountPkh));
 

@@ -3,14 +3,15 @@ import { useCallback } from 'react';
 import { ZERO_AMOUNT } from '@config/constants';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../helpers';
-import { useFarmingListStore } from './stores/use-farming-list-store';
+import { useFarmingListStore } from './stores';
 
 export const useStakedOnlyFarmIds = () => {
   const farmingListStore = useFarmingListStore();
+  const { listList } = farmingListStore;
 
   const getStakedOnlyFarmIds = useCallback(
     () =>
-      farmingListStore.listList
+      listList
         .filter(({ id }) =>
           farmingListStore.getFarmingItemBalancesModelById(id.toFixed())?.earnBalance?.gt(ZERO_AMOUNT)
         )
@@ -22,7 +23,7 @@ export const useStakedOnlyFarmIds = () => {
           return getIsHarvestAvailable(endTimestamp);
         })
         .map(({ id }) => id),
-    [farmingListStore]
+    [farmingListStore, listList]
   );
 
   return { getStakedOnlyFarmIds };
