@@ -1,3 +1,5 @@
+@import '@styles/variables';
+
 .root {
   position: relative;
   display: flex;
@@ -24,9 +26,9 @@
 }
 
 .light {
-  color: #1373E4;
+  color: $chart-01;
 }
 
 .dark {
-  color: #F9A605;
+  color: $chart-02;
 }
