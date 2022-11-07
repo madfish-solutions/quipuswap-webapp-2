@@ -12,6 +12,7 @@ import { getTokensNames, isNull, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { FarmVersion } from '../../interfaces';
 import styles from './farming-item.page.module.scss';
 
 export const useFarmingItemPageViewModel = () => {
@@ -30,7 +31,7 @@ export const useFarmingItemPageViewModel = () => {
     if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getFarmingItem(new BigNumber(`${Number(rawStakeId)}`), true);
+    void getFarmingItem(new BigNumber(`${Number(rawStakeId)}`), FarmVersion.v1, true);
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 

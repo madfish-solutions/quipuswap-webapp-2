@@ -3,10 +3,21 @@ import { LabelComponentProps } from '@shared/components';
 import { getTimeLockDescription, isUndefined } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import { FarmVersion } from '../interfaces';
 import { FarmingItemCommonModel, FarmingItemModel } from '../models';
 
 export const getFarmingLabel = (item: FarmingItemModel | FarmingItemCommonModel): Array<LabelComponentProps> => {
   const { timelock, withdrawalFee } = item;
+
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+  if (item.version === FarmVersion.v2 && item.id.toFixed() === '4') {
+    return [
+      {
+        status: item.stakeStatus,
+        label: i18n.t('farm|pending')
+      }
+    ];
+  }
 
   if (isUndefined(timelock) || isUndefined(withdrawalFee)) {
     return [];

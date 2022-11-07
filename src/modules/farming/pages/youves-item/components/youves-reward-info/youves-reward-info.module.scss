@@ -2,6 +2,10 @@
 @import "@styles/variables";
 @import "@styles/text";
 
+.rewardInfo {
+  position: relative;
+}
+
 @include media('>SDesktop') {
   .titleLoader {
     height: 4.573rem;

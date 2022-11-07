@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js';
 import { BlockInfoWrap, Nullable, RawToken, Token } from '@shared/types';
 import { ActiveStatus } from '@shared/types/active-statuts-enum';
 
+import { FarmVersion } from './farm-version.enum';
+
 export interface RawFarmingStats {
   totalValueLocked: string;
   totalDailyReward: string;
@@ -123,6 +125,9 @@ export interface FarmItemCommon {
   apr: BigNumber;
   apy: BigNumber;
 
+  version: FarmVersion;
+
+  /** @deprecated */
   old: boolean;
 
   timelock?: string;

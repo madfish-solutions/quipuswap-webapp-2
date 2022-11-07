@@ -5,8 +5,8 @@ import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection 
 import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
 const sortByDefault = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) => {
-  if (first.old !== second.old) {
-    return first.old ? SWAP : SKIP;
+  if (first.version !== second.version) {
+    return first.version < second.version ? SWAP : SKIP;
   }
 
   return sortBigNumber(first.id, second.id, sortDirection);
