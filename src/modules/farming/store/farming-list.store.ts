@@ -163,6 +163,23 @@ export class FarmingListStore {
     return (this.listBalancesStore.model as FarmingListBalancesModel).getFarmingItemBalancesModelById?.(id);
   }
 
+  getUserRewardsLogData(ids: Array<BigNumber>) {
+    const userEarnBalancesInUsd = ids.map(id => {
+      const { earnBalance } = defined(
+        this.getFarmingItemBalancesModelById(id.toFixed()),
+        `getUserRewardsLogData, getFarmingItemBalancesModelById, id:${id.toFixed()}`
+      );
+      const { earnExchangeRate } = defined(
+        this.getFarmingItemModelById(id.toFixed()),
+        `getUserRewardsLogData, getFarmingItemModelById, id:${id.toFixed()}`
+      );
+
+      return (earnBalance && earnBalance.multipliedBy(earnExchangeRate ?? ZERO_AMOUNT)) ?? null;
+    });
+
+    return getSumOfNumbers(userEarnBalancesInUsd);
+  }
+
   //#endregion farming list balances store
 
   //#region farming list user info
@@ -229,6 +246,7 @@ export class FarmingListStore {
       listBalances: computed,
       farmingItemsWithBalances: computed,
       claimablePendingRewards: computed,
+      isLoading: computed,
 
       accountPkh: computed,
       tezos: computed
@@ -291,6 +309,10 @@ export class FarmingListStore {
 
       this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
     }
+  }
+
+  get isLoading() {
+    return this.listStore.isLoading;
   }
 
   private prepareRewards(id: string) {

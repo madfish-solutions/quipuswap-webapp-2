@@ -7,7 +7,6 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getUserRewardsLogData } from '../../helpers';
 import { useFarmingListStore } from '../stores';
 import { useStakedOnlyFarmIds } from '../use-staked-only-farm-ids';
 
@@ -24,7 +23,7 @@ export const useDoHarvestAll = () => {
     const logData = {
       harvestAll: {
         farmingIds: stakedOnlyFarmIds.map(id => id.toFixed()),
-        rewardsInUsd: Number(getUserRewardsLogData(farmingListStore, stakedOnlyFarmIds).toFixed())
+        rewardsInUsd: Number(farmingListStore.getUserRewardsLogData(stakedOnlyFarmIds).toFixed())
       }
     };
 
