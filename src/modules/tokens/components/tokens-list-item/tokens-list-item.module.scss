@@ -10,8 +10,15 @@
   align-items: center;
   column-gap: 8px;
 
+  .buttons {
+    visibility: hidden;
+  }
+
   &:hover {
     background-color: $hover-dark-row;
+    .button {
+      visibility: visible;
+    }
   }
 }
 
@@ -39,8 +46,6 @@
 }
 
 .balance {
-  // TODO
-  width: 160px;
 }
 
 .amountClassName {
@@ -51,4 +56,16 @@
 .labels {
   width: 160px;
   display: flex;
+}
+
+.buttonsBlock, .buttons {
+  display: flex;
+  column-gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.button {
+  width: auto;
 }

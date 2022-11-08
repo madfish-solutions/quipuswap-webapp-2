@@ -8,7 +8,7 @@ import styles from './tokens-list.page.module.scss';
 import { useTokensListPageViewModel } from './use-tokens-list-page.vm';
 
 export const TokensListPage = observer(() => {
-  const { tokens } = useTokensListPageViewModel();
+  const { tokens, onFavoriteClick, onHideClick } = useTokensListPageViewModel();
 
   return (
     <>
@@ -16,7 +16,12 @@ export const TokensListPage = observer(() => {
       <PageTitle data-test-id="tokensListPageTitle">Tokens</PageTitle>
       <div className={styles.list}>
         {tokens.map(token => (
-          <TokensListItem key={getTokenSlug(token)} token={token} />
+          <TokensListItem
+            key={getTokenSlug(token)}
+            token={token}
+            onFavoriteClick={() => onFavoriteClick(token)}
+            onHideClick={() => onHideClick(token)}
+          />
         ))}
       </div>
     </>
