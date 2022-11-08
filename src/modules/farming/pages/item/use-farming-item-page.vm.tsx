@@ -20,18 +20,20 @@ export const useFarmingItemPageViewModel = () => {
   const dAppReady = useReady();
   const { getFarmingItem } = useGetFarmingItem();
   const accountPkh = useAccountPkh();
-  const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const prevAccountPkhRef = useRef<Nullable<string>>(null);
   const { id: rawStakeId } = useParams();
 
   /*
     Load data
   */
   useEffect(() => {
-    if (!dAppReady || isUndefined(rawStakeId) || prevAccountPkhRef.current === accountPkh) {
-      return;
-    }
-    void getFarmingItem(rawStakeId, FarmVersion.v1, true);
-    prevAccountPkhRef.current = accountPkh;
+    (async () => {
+      if (!dAppReady || isUndefined(rawStakeId) || prevAccountPkhRef.current === accountPkh) {
+        return;
+      }
+      await getFarmingItem(rawStakeId, FarmVersion.v1, true);
+      prevAccountPkhRef.current = accountPkh;
+    })();
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 
   useEffect(() => {
@@ -63,5 +65,5 @@ export const useFarmingItemPageViewModel = () => {
 
   const isYouves = YOUVES_FARMINGS.includes(`${farmingItem?.id}`);
 
-  return { isLoading, farmingItem, getTitle, isYouves };
+  return { isLoading, farmingItem, title: getTitle(), isYouves };
 };
