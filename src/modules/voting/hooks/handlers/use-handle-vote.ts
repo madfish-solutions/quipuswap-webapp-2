@@ -4,7 +4,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { submitForm } from '@modules/voting/helpers/blockchain/voting';
 import { useVotingDex, useVotingRouting } from '@modules/voting/helpers/voting.provider';
 import { useTezos } from '@providers/use-dapp';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getDollarEquivalent } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { VoteFormValues } from '@shared/types';

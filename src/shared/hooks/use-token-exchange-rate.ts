@@ -1,4 +1,4 @@
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
 

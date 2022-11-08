@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getTokenSlug, getTokenSymbol, isNull } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';

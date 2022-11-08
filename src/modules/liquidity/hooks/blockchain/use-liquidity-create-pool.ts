@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { createLiquidityPoolApi } from '@modules/liquidity/api';
 import { useRootStore } from '@providers/root-store-provider';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getTokenSlug, getTransactionDeadline, isNull } from '@shared/helpers';
 import { useAmplitudeService, useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';

@@ -8,7 +8,7 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
 import { useAccountPkh } from '@providers/use-dapp';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import {
   amountsAreEqual,
   getSymbolsString,

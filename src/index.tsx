@@ -9,7 +9,7 @@ import { DAppBakerProvider } from '@providers/dapp-bakers';
 import { DAppTokensProvider } from '@providers/dapp-tokens';
 import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppProvider } from '@providers/use-dapp';
-import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
+import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-exchange-rate';
 import { DexGraphProvider } from '@shared/hooks';
 import { sentryService } from '@shared/services';
 

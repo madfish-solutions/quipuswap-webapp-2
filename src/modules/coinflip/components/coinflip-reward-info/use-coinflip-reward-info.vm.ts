@@ -1,5 +1,5 @@
 import { useCoinflipStore } from '@modules/coinflip/hooks';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { isExist, isNotEmptyArray, isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 

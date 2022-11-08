@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useLiquidityItemStore } from '@modules/liquidity/hooks';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getTokenSlug, isExist, isNotDefined, multipliedIfPossible } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
 
