@@ -1,19 +1,24 @@
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { PageTitle, TestnetAlert } from '@shared/components';
+import { getTokenSlug } from '@shared/helpers';
 
+import { TokensListItem } from '../../components';
+import styles from './tokens-list.page.module.scss';
 import { useTokensListPageViewModel } from './use-tokens-list-page.vm';
 
 export const TokensListPage = observer(() => {
-  const { isLoading } = useTokensListPageViewModel();
+  const { tokens } = useTokensListPageViewModel();
 
   return (
     <>
       <TestnetAlert />
       <PageTitle data-test-id="tokensListPageTitle">Tokens</PageTitle>
-      <StateWrapper isLoading={isLoading} loaderFallback={<>Loading...</>}>
-        Hello world
-      </StateWrapper>
+      <div className={styles.list}>
+        {tokens.map(token => (
+          <TokensListItem key={getTokenSlug(token)} token={token} />
+        ))}
+      </div>
     </>
   );
 });

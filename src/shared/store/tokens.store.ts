@@ -11,10 +11,6 @@ export class TokensStore {
   tokens: TokensMap = new Map<string, Nullable<Token>>();
   loading = false;
 
-  get tokensList() {
-    return [...this.tokens.values()].filter(isExist);
-  }
-
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       tokens: observable,
@@ -23,6 +19,10 @@ export class TokensStore {
       setToken: action,
       setLoading: action
     });
+  }
+
+  get tokensList() {
+    return [...this.tokens.values()].filter(isExist);
   }
 
   setToken(tokenSlug: string, token: Nullable<Token>) {
