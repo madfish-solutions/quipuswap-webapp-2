@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { ZERO_AMOUNT } from '@config/constants';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../helpers';
-import { useFarmingListCommonStore, useFarmingListRewardsStore } from './stores';
+import { useFarmingListStore, useFarmingListRewardsStore } from './stores';
 
 export const useStakedOnlyFarmIds = () => {
   const farmingListRewardsStore = useFarmingListRewardsStore();
-  const farmingListStore = useFarmingListCommonStore();
+  const farmingListStore = useFarmingListStore();
   const { list } = farmingListStore;
 
   const getStakedOnlyFarmIds = useCallback(
