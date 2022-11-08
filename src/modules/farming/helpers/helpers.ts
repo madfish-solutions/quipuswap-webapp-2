@@ -2,9 +2,9 @@ import { BigNumber } from 'bignumber.js';
 
 import { MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@config/constants';
 import { defined, isExist, isNull, toReal } from '@shared/helpers';
-import { Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
-import { FarmingContractStorage, IRawUsersInfoValue, UsersInfoKey, IUsersInfoValue } from '../interfaces';
+import { FarmingContractStorage, IRawUsersInfoValue, IUsersInfoValue, UsersInfoKey } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
@@ -166,7 +166,7 @@ export const getUserInfoLastStakedTime = (userInfo: Nullable<IUsersInfoValue>) =
   userInfo ? new Date(userInfo.last_staked).getTime() : null;
 
 export const getEndTimestamp = (
-  farmingItem: Undefined<FarmingListItemModel | FarmingItemV1WithBalances>,
+  farmingItem: Optional<FarmingListItemModel | FarmingItemV1WithBalances>,
   lastStakedTime: Nullable<number>
 ) =>
   isExist(lastStakedTime) && isExist(farmingItem) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;

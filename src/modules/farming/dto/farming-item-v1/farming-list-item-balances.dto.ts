@@ -6,7 +6,7 @@ export class FarmingListItemBalancesDto {
   @Typed()
   id: string;
 
-  @Typed()
+  @Typed({ optional: true })
   contractAddress?: string;
 
   @Typed({ optional: true })

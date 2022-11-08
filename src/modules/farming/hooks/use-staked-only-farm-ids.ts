@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { ZERO_AMOUNT } from '@config/constants';
+import { getId } from '@shared/helpers';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../helpers';
 import { useFarmingListStore, useFarmingListRewardsStore } from './stores';
@@ -21,7 +22,7 @@ export const useStakedOnlyFarmIds = () => {
 
           return getIsHarvestAvailable(endTimestamp);
         })
-        .map(({ id }) => id),
+        .map(getId),
     [farmingListRewardsStore, farmingListStore, list]
   );
 

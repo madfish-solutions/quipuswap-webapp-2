@@ -5,6 +5,7 @@ import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import {
   defined,
+  getId,
   getSumOfNumbers,
   getTokenSlug,
   getUniqArray,
@@ -26,7 +27,8 @@ import {
   getIsHarvestAvailable,
   getRewardsInUsd,
   getUserInfoLastStakedTime,
-  getUserPendingReward
+  getUserPendingReward,
+  isStakedFarming
 } from '../helpers';
 import { FarmingItem } from '../interfaces';
 import { FarmingListUserInfoModel, FarmingListUserInfoResponseModel } from '../models';
@@ -162,9 +164,10 @@ export class FarmingListRewardsStore {
       this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
-      const stakedFarmingsIds = listBalances
-        .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
-        .map(({ id }) => id);
+      debugger;
+      const stakedFarmingsIds = listBalances.filter(isStakedFarming).map(getId);
+      // eslint-disable-next-line no-console
+      console.log('stakedFarmingsIds', stakedFarmingsIds);
 
       const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
       const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
@@ -262,7 +265,7 @@ export class FarmingListRewardsStore {
 
           return earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token);
         })
-        .map(({ id }) => id) ?? []
+        .map(getId) ?? []
     );
   }
 
