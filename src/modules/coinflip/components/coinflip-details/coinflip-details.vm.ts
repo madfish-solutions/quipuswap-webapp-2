@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { COINFLIP_CONTRACT_DECIMALS, COINFLIP_TOKEN_DECIMALS } from '@config/config';
 import { QUIPU_TOKEN_DECIMALS_PRECISION } from '@config/tokens';
 import { useRootStore } from '@providers/root-store-provider';
-import { useExchangeRates } from '@providers/use-new-exchange-rate';
+import { useExchangeRates } from '@providers/use-exchange-rate';
 import { bigNumberToString, toReal, isNull } from '@shared/helpers';
 import { useAuthStore, useOnBlock } from '@shared/hooks';
 import { Token } from '@shared/types';

@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { MAINNET_QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useExchangeRates } from '@providers/use-new-exchange-rate';
+import { useExchangeRates } from '@providers/use-exchange-rate';
 import { QuipuToken } from '@shared/svg';
 
 import { amplitudeService } from '../../../services';

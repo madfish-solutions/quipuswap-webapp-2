@@ -8,7 +8,7 @@ import { EMPTY_POOL_AMOUNT } from '@config/constants';
 import { NETWORK_ID, TOKEN_TO_TOKEN_DEX } from '@config/environment';
 import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit, useTezos } from '@providers/use-dapp';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { UnexpectedEmptyValueError } from '@shared/errors';
 import {
   defined,

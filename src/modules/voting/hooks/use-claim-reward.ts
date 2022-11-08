@@ -4,7 +4,7 @@ import { batchify, FoundDex, withdrawReward } from '@quipuswap/sdk';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { getDollarEquivalent, getTokenSlug, getTokenSymbol } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { Nullable } from '@shared/types';

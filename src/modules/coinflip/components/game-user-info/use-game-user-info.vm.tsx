@@ -6,7 +6,7 @@ import { Column, HeaderGroup, MetaBase, Cell } from 'react-table';
 import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { TokenRewardCell } from '@modules/farming/pages/list/components/token-reward-cell';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
+import { useNewExchangeRates } from '@providers/use-exchange-rate';
 import { TokenInfo } from '@shared/elements';
 import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
 import { i18n } from '@translation';

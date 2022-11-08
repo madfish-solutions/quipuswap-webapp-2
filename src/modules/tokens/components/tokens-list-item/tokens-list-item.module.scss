@@ -1,3 +1,7 @@
+@import "@styles/variables";
+@import "@styles/text";
+@import "@styles/breakpoints";
+
 .item {
   height: 64px;
   padding: 0 24px;
@@ -5,4 +9,28 @@
   display: flex;
   align-items: center;
   column-gap: 8px;
+}
+
+.tokenDescription {
+  margin-left: 8px;
+  // TODO
+  width: 200px;
+}
+
+.tokenSymbol {
+  @include ellipsis;
+}
+
+.tokenName {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+
+  color: $text-03;
+  @include ellipsis;
+}
+
+.balance {
+  // TODO
+  width: 100px;
 }

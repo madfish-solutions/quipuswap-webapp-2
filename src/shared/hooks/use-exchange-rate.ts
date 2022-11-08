@@ -15,6 +15,7 @@ interface ExchangeRateEntry extends RawExchangeRateEntry {
   tokenAddress: string;
 }
 
+/** deprecated */
 export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
   const tezos = useTezos();
 
