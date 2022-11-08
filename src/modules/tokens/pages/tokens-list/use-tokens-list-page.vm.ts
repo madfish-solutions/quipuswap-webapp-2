@@ -1,12 +1,9 @@
-import { useReady } from '@providers/use-dapp';
-import { useAuthStore } from '@shared/hooks';
+import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 
 export const useTokensListPageViewModel = () => {
-  const isReady = useReady();
-  const { accountPkh } = useAuthStore();
-  const isLoading = !isReady || !accountPkh;
+  const { managedTokens } = useTokensManagerStore();
 
   return {
-    isLoading
+    tokens: managedTokens
   };
 };
