@@ -3,10 +3,10 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useDollarEquivalent } from '@providers/use-dollar-equivalent';
-import { StateCurrencyAmount, TokensLogos } from '@shared/components';
+import { LabelComponent, StateCurrencyAmount, TokensLogos } from '@shared/components';
 import { getTokenName, getTokenSymbol } from '@shared/helpers';
 import { useTokenBalance } from '@shared/hooks';
-import { ManagedToken } from '@shared/types';
+import { ActiveStatus, ManagedToken } from '@shared/types';
 
 import styles from './tokens-list-item.module.scss';
 
@@ -27,6 +27,11 @@ export const TokensListItem: FC<Props> = observer(({ token }) => {
         <h6 className={styles.tokenSymbol}>{getTokenSymbol(token, TOKEN_NAME_MAX_LENGTH)}</h6>
         <div className={styles.tokenName}>{getTokenName(token, TOKEN_NAME_MAX_LENGTH)}</div>
       </div>
+      <div className={styles.labels}>
+        {token.categories?.map(category => (
+          <LabelComponent label={category} status={ActiveStatus.ACTIVE} />
+        ))}
+      </div>
       <div className={styles.balance}>
         {tokenBalance && tokenBalance.gt('0') && (
           <StateCurrencyAmount
@@ -36,7 +41,6 @@ export const TokensListItem: FC<Props> = observer(({ token }) => {
           />
         )}
       </div>
-      <div>({JSON.stringify(token.categories)})</div>
     </div>
   );
 });
