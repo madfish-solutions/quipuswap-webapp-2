@@ -18,6 +18,9 @@
 }
 
 .tokenSymbol {
+  font-size: 1.5rem;
+  font-weight: normal;
+
   @include ellipsis;
 }
 
@@ -26,11 +29,17 @@
   font-size: 12px;
   line-height: 16px;
 
+
   color: $text-03;
   @include ellipsis;
 }
 
 .balance {
   // TODO
-  width: 100px;
+  width: 160px;
+}
+
+.amountClassName {
+  font-size: 1.5rem;
+  font-weight: normal;
 }

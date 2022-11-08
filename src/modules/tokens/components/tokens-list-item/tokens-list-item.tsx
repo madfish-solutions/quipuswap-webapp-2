@@ -22,14 +22,21 @@ export const TokensListItem: FC<Props> = observer(({ token }) => {
 
   return (
     <div className={styles.item}>
-      <TokensLogos width={40} tokens={token} />
+      <TokensLogos width={48} tokens={token} />
       <div className={styles.tokenDescription}>
         <h6 className={styles.tokenSymbol}>{getTokenSymbol(token, TOKEN_NAME_MAX_LENGTH)}</h6>
         <div className={styles.tokenName}>{getTokenName(token, TOKEN_NAME_MAX_LENGTH)}</div>
       </div>
       <div className={styles.balance}>
-        <StateCurrencyAmount amount={tokenBalance} dollarEquivalent={dollarEquivalent} />
+        {tokenBalance && tokenBalance.gt('0') && (
+          <StateCurrencyAmount
+            amount={tokenBalance}
+            dollarEquivalent={dollarEquivalent}
+            amountClassName={styles.amountClassName}
+          />
+        )}
       </div>
+      <div>({JSON.stringify(token.categories)})</div>
     </div>
   );
 });
