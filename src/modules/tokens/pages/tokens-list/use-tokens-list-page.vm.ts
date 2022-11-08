@@ -1,9 +1,9 @@
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
 
 export const useTokensListPageViewModel = () => {
-  const { managedTokens } = useTokensManagerStore();
+  const { filteredManagedTokens } = useTokensManagerStore();
 
   return {
-    tokens: managedTokens
+    tokens: filteredManagedTokens
   };
 };
