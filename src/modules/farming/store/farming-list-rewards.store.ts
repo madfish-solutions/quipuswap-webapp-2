@@ -164,10 +164,7 @@ export class FarmingListRewardsStore {
       this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
-      debugger;
       const stakedFarmingsIds = listBalances.filter(isStakedFarming).map(getId);
-      // eslint-disable-next-line no-console
-      console.log('stakedFarmingsIds', stakedFarmingsIds);
 
       const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
       const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
