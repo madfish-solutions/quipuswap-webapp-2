@@ -4,7 +4,7 @@ import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
 import { getFarmingStatsApi } from '../api';
-import { FarmingStatsResponseModel } from '../models';
+import { FarmingListStatsResponseModel } from '../models';
 
 const defaultStats = {
   stats: null,
@@ -17,9 +17,9 @@ export class FarmingListStatsStore {
   @Led({
     default: defaultStats,
     loader: getFarmingStatsApi,
-    model: FarmingStatsResponseModel
+    model: FarmingListStatsResponseModel
   })
-  readonly statsStore: LoadingErrorData<FarmingStatsResponseModel, typeof defaultStats>;
+  readonly statsStore: LoadingErrorData<FarmingListStatsResponseModel, typeof defaultStats>;
 
   get stats() {
     return this.statsStore.model.stats;

@@ -4,7 +4,7 @@ import { Typed } from '@shared/decorators';
 
 import { FarmingStats } from '../../interfaces';
 
-export class FarmingStatsDto implements FarmingStats {
+export class FarmingListStatsDto implements FarmingStats {
   @Typed()
   totalValueLocked: BigNumber;
 

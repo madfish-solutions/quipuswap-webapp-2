@@ -1,8 +1,12 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
+import { IFarmingListUsersInfoValueWithId } from '@modules/farming/helpers';
 import { Typed } from '@shared/decorators';
 
-export class UsersInfoDto {
+export class FarmingListUserInfoDto implements IFarmingListUsersInfoValueWithId {
+  @Typed()
+  id: BigNumber;
+
   @Typed()
   last_staked: Date;
 
@@ -22,5 +26,5 @@ export class UsersInfoDto {
   prev_staked: BigNumber;
 
   @Typed({ isArray: true, type: String })
-  allowances: string[];
+  allowances: Array<string>;
 }

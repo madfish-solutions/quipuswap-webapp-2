@@ -1,8 +1,8 @@
 import { Typed } from '@shared/decorators';
 
-import { FarmingItemCommonResponseDto } from '../../dto';
+import { FarmingListItemResponseDto } from '../../dto';
 
 export class FarmingListResponseDto {
-  @Typed({ isArray: true, type: FarmingItemCommonResponseDto })
-  list: Array<FarmingItemCommonResponseDto>;
+  @Typed({ isArray: true, type: FarmingListItemResponseDto })
+  list: Array<FarmingListItemResponseDto>;
 }

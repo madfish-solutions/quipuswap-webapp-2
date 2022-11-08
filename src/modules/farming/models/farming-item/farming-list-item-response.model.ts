@@ -1,15 +1,15 @@
-import { FarmingItemCommonResponseDto } from '../../dto';
+import { FarmingListItemResponseDto } from '../../dto';
 import { FarmingListItemModel } from './farming-list-item.model';
 
-export class FarmingListItemResponseModel extends FarmingItemCommonResponseDto {
+export class FarmingListItemResponseModel extends FarmingListItemResponseDto {
   item: FarmingListItemModel;
 
-  constructor(dto: FarmingItemCommonResponseDto) {
+  constructor(dto: FarmingListItemResponseDto) {
     super();
 
     for (const key in dto) {
       //@ts-ignore
-      this[key] = dto[key as keyof FarmingItemCommonResponseDto];
+      this[key] = dto[key as keyof FarmingListItemResponseDto];
     }
 
     this.item = new FarmingListItemModel(dto.item);

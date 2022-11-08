@@ -9,8 +9,8 @@ import {
   FarmingStats,
   RawFarmingItem,
   RawFarmingStats,
-  RawUsersInfoValue,
-  UsersInfoValue
+  IRawUsersInfoValue,
+  IUsersInfoValue
 } from '../interfaces';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
 
@@ -73,7 +73,7 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalClaimedReward: new BigNumber(raw.totalClaimedReward)
 });
 
-export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<UsersInfoValue> =>
+export const mapUsersInfoValue = (raw: Nullable<IRawUsersInfoValue>): Nullable<IUsersInfoValue> =>
   raw && {
     ...raw,
     last_staked: new Date(raw.last_staked)
