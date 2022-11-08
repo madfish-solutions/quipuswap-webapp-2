@@ -29,7 +29,7 @@ import {
   getUserPendingReward
 } from '../helpers';
 import { FarmingItem } from '../interfaces';
-import { UserInfoModel, UserInfoResponseModel } from '../models';
+import { FarmingListUserInfoModel, FarmingListUserInfoResponseModel } from '../models';
 
 const ZERO_BN = new BigNumber(ZERO_AMOUNT);
 
@@ -59,12 +59,12 @@ export class FarmingListRewardsStore {
   @Led({
     default: defaultUserInfo,
     loader: async (self: FarmingListRewardsStore) => await self.getUserInfo(),
-    model: UserInfoResponseModel
+    model: FarmingListUserInfoResponseModel
   })
-  readonly _userInfo: LoadingErrorData<UserInfoResponseModel, typeof defaultUserInfo>;
+  readonly _userInfo: LoadingErrorData<FarmingListUserInfoResponseModel, typeof defaultUserInfo>;
   private farmsWithBalancesIsd: Nullable<Array<BigNumber>> = null;
 
-  get userInfo(): Array<UserInfoModel> {
+  get userInfo(): Array<FarmingListUserInfoModel> {
     return this._userInfo.model.userInfo;
   }
   //#endregion farming list user info

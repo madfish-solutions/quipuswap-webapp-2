@@ -3,7 +3,7 @@ import { BlockInfoDto } from '@shared/dto';
 
 import { FarmingListItemDto } from './farming-list-item.dto';
 
-export class FarmingItemCommonResponseDto {
+export class FarmingListItemResponseDto {
   @Typed()
   item: FarmingListItemDto;
 
