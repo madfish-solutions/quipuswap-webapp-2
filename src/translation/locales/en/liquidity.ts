@@ -70,5 +70,7 @@ export const liquidity = {
   tooltipQuipu: 'QuipuSwap',
   tooltipTezotopia: 'Tezotopia',
   tooltipBTC: 'BTC-based',
-  tooltipDexTwo: 'Dex 2.0 Pools'
+  tooltipDexTwo: 'Dex 2.0 Pools',
+  // Chart
+  defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

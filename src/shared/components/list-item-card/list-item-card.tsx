@@ -22,7 +22,7 @@ import styles from './list-item-card.module.scss';
 export interface ListItemCardProps {
   href: string;
   inputToken: Token | Array<Token>;
-  status: LabelComponentProps;
+  status: Nullable<LabelComponentProps>;
   isNew?: boolean;
   labels?: Array<LabelComponentProps>;
   outputToken?: Token | Array<Token>;
@@ -88,7 +88,7 @@ export const ListItemCard: FC<ListItemCardProps> = ({
           </div>
 
           <div className={styles.statusAndlabelsContainer}>
-            {!isNewLiquidity && <LabelComponent {...status} />}
+            {!isNewLiquidity && status && <LabelComponent {...status} />}
             {isExist(categories) && !isEmptyArray(categories) && <LiquidityLabels categories={categories} />}
             {!isUndefined(labels) && !isEmptyArray(labels) && (
               <div className={styles.labelsContainer}>
