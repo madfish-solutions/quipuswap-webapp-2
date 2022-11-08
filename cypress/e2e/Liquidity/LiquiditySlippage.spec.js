@@ -2,7 +2,7 @@
 
 import { MICRO_WAIT_TIMEOUT } from '../../const';
 
-describe('Select different slippage and check if max invested is ok', () => {
+describe.skip('Select different slippage and check if max invested is ok', () => {
   beforeEach(() => {
     cy.visit('/liquidity');
     cy.get('[data-test-id="acceptCookieButton"]').click();

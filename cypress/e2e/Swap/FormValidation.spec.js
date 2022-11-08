@@ -20,10 +20,10 @@ describe('Check error notification', () => {
   it('Should_DisplayError_When_AmountOfFromFieldTooBig', () => {
     cy.get('[for="swap-send-from"]').click().type('133332222221');
     cy.wait(FIELD_WAIT_TIMEOUT);
-    cy.get('[data-test-id="swapPageTokenSelect"] [data-test-id="from"] [data-test-id="error"]')
+    cy.get('[data-test-id="shouldShowPriceImpactWarning"] [data-test-id="errorLabel"]')
       .invoke('text')
       .then(text => {
-        expect(text).to.contain('Value has to be a number between 0.000001');
+        expect(text).to.contain('Note! Your price impact is 100.00%. Double check the output amount');
       });
   });
   it('Should_DisplayError_When_FieldIsEmpty', () => {
