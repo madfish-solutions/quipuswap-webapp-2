@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR } from '@config/constants';
-import { PieChartQs } from '@shared/charts';
+import { PieChart, PieChartQs } from '@shared/charts';
 import { Button, CandidateButton, DashPlug, DetailsCardCell, StateCurrencyAmount, StateData } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import { LedEntity, Optional, WhitelistedBaker } from '@shared/types';
@@ -23,7 +23,7 @@ interface Props {
   tvlInUsd: Optional<BigNumber>;
   weeklyVolume: Optional<BigNumber>;
   totalLpSupply: Optional<BigNumber>;
-  liquidityChartData: Array<{ value: number; tokenSymbol: string }>;
+  liquidityChartData: Array<PieChart>;
 }
 
 export const DexTwoDetailsView: FC<Props> = ({
