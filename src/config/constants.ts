@@ -195,7 +195,7 @@ export const DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION = new BigNumber(DEFAU
 export const TESTNET_EXCHANGE_RATE = 1.5;
 
 //Charts
-export const COLORS = ['#1373E4', '#2ED33E', '#F9A605', '#FF8042'];
+export const COLORS = ['#1373E4', '#F9A605', '#2ED33E', '#FF8042'];
 
 // Baker
 export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
