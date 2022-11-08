@@ -1,6 +1,6 @@
 import { FarmingItemUsersInfoResponseDto } from '../../dto';
 
-export class UsersInfoResponseModel extends FarmingItemUsersInfoResponseDto {
+export class FarmingItemUsersInfoResponseModel extends FarmingItemUsersInfoResponseDto {
   constructor(dto: FarmingItemUsersInfoResponseDto) {
     super();
 

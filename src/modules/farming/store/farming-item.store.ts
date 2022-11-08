@@ -12,7 +12,7 @@ import { Nullable, WhitelistedBaker } from '@shared/types';
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
 import { getUserPendingRewardForFarmingV1 } from '../helpers';
 import { FarmVersion } from '../interfaces';
-import { FarmingItemV1ResponseModel, UsersInfoResponseModel, UserTokenBalanceModel } from '../models';
+import { FarmingItemV1ResponseModel, FarmingItemUsersInfoResponseModel, UserTokenBalanceModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
 import { FarmingItemV1WithBalances } from '../pages/list/types';
 
@@ -65,9 +65,9 @@ export class FarmingItemStore {
   @Led({
     default: { value: null },
     loader: async self => await self.getUserInfo(),
-    model: UsersInfoResponseModel
+    model: FarmingItemUsersInfoResponseModel
   })
-  readonly userInfoStore: LoadingErrorData<UsersInfoResponseModel, { value: null }>;
+  readonly userInfoStore: LoadingErrorData<FarmingItemUsersInfoResponseModel, { value: null }>;
 
   get userInfo() {
     return this.userInfoStore.model.value;
