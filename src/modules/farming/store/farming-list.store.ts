@@ -8,10 +8,12 @@ import {
   FarmingListItemModel,
   FarmingListResponseModel
 } from '@modules/farming/models';
-import { isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
+import { defined, isEmptyArray, isExist, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
+
+import { FarmingListItemWithBalances } from '../pages/list/types';
 
 const defaultList = {
   list: []
@@ -48,7 +50,6 @@ export class FarmingListStore {
     });
   }
 
-  //TODO: change name
   get list() {
     return this.listStore.model.list.map(({ item }) => item);
   }
@@ -57,42 +58,45 @@ export class FarmingListStore {
     return this.listStore.isLoading;
   }
 
-  get farmingItemsWithBalances() {
+  get farmingItemsWithBalances(): FarmingListItemWithBalances[] {
     return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
   }
 
   get filteredList() {
-    //@ts-ignore
     return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
   }
 
-  get listBalances() {
+  get listBalances(): FarmingListItemWithBalances[] {
     const balances = this.listBalancesStore.model.balances;
 
-    return balances.map(balance => {
-      const farmingItemModel = this.getFarmingItemModelById(balance.id, balance.contractAddress);
+    return balances
+      .map(balance => ({
+        balance,
+        farmingItemModel: this.getFarmingItemModelById(balance.id, balance.contractAddress)
+      }))
+      .filter(({ farmingItemModel }) => isExist(farmingItemModel))
+      .map(({ balance, farmingItemModel }) => {
+        const myBalance =
+          farmingItemModel && balance.myBalance
+            ? toReal(saveBigNumber(balance.myBalance, new BigNumber('0')), farmingItemModel.stakedToken)
+            : null;
+        const depositBalance =
+          farmingItemModel && balance.depositBalance
+            ? toReal(saveBigNumber(balance.depositBalance, new BigNumber('0')), farmingItemModel.stakedToken)
+            : null;
+        const earnBalance =
+          farmingItemModel && balance.earnBalance
+            ? toReal(saveBigNumber(balance.earnBalance, new BigNumber('0')), farmingItemModel.rewardToken)
+            : null;
 
-      const myBalance =
-        farmingItemModel && balance.myBalance
-          ? toReal(saveBigNumber(balance.myBalance, new BigNumber('0')), farmingItemModel.stakedToken)
-          : null;
-      const depositBalance =
-        farmingItemModel && balance.depositBalance
-          ? toReal(saveBigNumber(balance.depositBalance, new BigNumber('0')), farmingItemModel.stakedToken)
-          : null;
-      const earnBalance =
-        farmingItemModel && balance.earnBalance
-          ? toReal(saveBigNumber(balance.earnBalance, new BigNumber('0')), farmingItemModel.rewardToken)
-          : null;
-
-      return {
-        ...balance,
-        ...farmingItemModel,
-        myBalance,
-        depositBalance,
-        earnBalance
-      };
-    });
+        return {
+          ...balance,
+          ...defined(farmingItemModel),
+          myBalance,
+          depositBalance,
+          earnBalance
+        };
+      });
   }
 
   getFarmingItemModelById(id: string, contractAddress?: string): Undefined<FarmingListItemModel> {
