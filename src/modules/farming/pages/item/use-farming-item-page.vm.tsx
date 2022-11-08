@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
 import { YOUVES_FARMINGS } from '@config/config';
@@ -28,10 +27,10 @@ export const useFarmingItemPageViewModel = () => {
     Load data
   */
   useEffect(() => {
-    if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
+    if (!dAppReady || isUndefined(rawStakeId) || prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getFarmingItem(new BigNumber(`${Number(rawStakeId)}`), FarmVersion.v1, true);
+    void getFarmingItem(rawStakeId, FarmVersion.v1, true);
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 

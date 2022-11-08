@@ -1,18 +1,28 @@
+import { BigNumber } from 'bignumber.js';
+
+import { Undefined } from '@shared/types';
+
 import { FarmingListResponseDto } from '../../dto';
-import { FarmingItemModel, FarmingItemResponseModel } from '../farming-item';
+import { FarmingListItemResponseModel, FarmingListItemModel } from '../farming-item';
 
 export class FarmingListResponseModel extends FarmingListResponseDto {
-  list: Array<FarmingItemResponseModel>;
-  indexedList: { [id: string]: FarmingItemModel };
+  list: Array<FarmingListItemResponseModel>;
+  indexedDictionary: { [id: string]: FarmingListItemModel };
 
   constructor(dto: FarmingListResponseDto) {
     super();
 
-    this.list = dto.list.map(data => new FarmingItemResponseModel(data));
-    this.indexedList = Object.fromEntries(this.list.map(({ item }) => [item.id.toFixed(), item]));
+    this.list = dto.list.map(data => new FarmingListItemResponseModel(data));
+    this.indexedDictionary = Object.fromEntries(
+      this.list.map(({ item }) => [this.getId(item.id, item.contractAddress), item])
+    );
   }
 
-  getFarmingItemModelById(id: string) {
-    return this.indexedList[id];
+  getId(id: BigNumber.Value, contractAddress: Undefined<string>) {
+    return contractAddress ? `${new BigNumber(id).toFixed()}-${contractAddress}` : new BigNumber(id).toFixed();
+  }
+
+  getFarmingItemModelById(id: string, contractAddress?: string) {
+    return this.indexedDictionary[this.getId(id, contractAddress)];
   }
 }

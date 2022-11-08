@@ -5,9 +5,9 @@ import { CoinflipStore as ICoinflipStore } from '@modules/coinflip';
 import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
-  FarmingListStore as IFarmingListStore,
   FarmingListStatsStore as IFarmingListStatsStore,
-  FarmingListCommonStore as IFarmingListCommonStore,
+  FarmingListRewardsStore as IFarmingListRewardsStore,
+  FarmingListStore as IFarmingListStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
 } from '@modules/farming/store';
@@ -47,7 +47,7 @@ export class RootStore {
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingListStatsStore: Nullable<IFarmingListStatsStore> = null;
-  farmingListCommonStore: Nullable<IFarmingListCommonStore> = null;
+  farmingListRewardsStore: Nullable<IFarmingListRewardsStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
@@ -82,13 +82,13 @@ export class RootStore {
     makeObservable(this, {
       tezos: observable,
 
-      farmingListStore: observable,
       farmingListStatsStore: observable,
+      farmingListRewardsStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
       stableswapListStore: observable,
-      farmingListCommonStore: observable,
+      farmingListStore: observable,
       stableswapItemStore: observable,
       stableswapItemFormStore: observable,
       stableswapFilterStore: observable,
@@ -103,9 +103,9 @@ export class RootStore {
       coinflipStore: observable,
 
       setTezos: action,
-      createFarmingListStore: action,
       createFarmingListStatsStore: action,
-      createFarmingListCommonStore: action,
+      createFarmingListRewardsStore: action,
+      createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
       createCoinflipStore: action,
@@ -206,13 +206,6 @@ export class RootStore {
     }
   }
 
-  async createFarmingListStore() {
-    if (isNull(this.farmingListStore)) {
-      const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
-      this.farmingListStore = new FarmingListStore(this);
-    }
-  }
-
   async createFarmingListStatsStore() {
     if (isNull(this.farmingListStatsStore)) {
       const { FarmingListStatsStore } = await import('@modules/farming/store/farming-list-stats.store');
@@ -220,10 +213,17 @@ export class RootStore {
     }
   }
 
-  async createFarmingListCommonStore() {
-    if (isNull(this.farmingListCommonStore)) {
-      const { FarmingListCommonStore } = await import('@modules/farming/store/farming-list-common.store');
-      this.farmingListCommonStore = new FarmingListCommonStore(this);
+  async createFarmingListRewardsStore() {
+    if (isNull(this.farmingListRewardsStore)) {
+      const { FarmingListRewardsStore } = await import('@modules/farming/store/farming-list-rewards.store');
+      this.farmingListRewardsStore = new FarmingListRewardsStore(this);
+    }
+  }
+
+  async createFarmingListStore() {
+    if (isNull(this.farmingListStore)) {
+      const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
+      this.farmingListStore = new FarmingListStore(this);
     }
   }
 

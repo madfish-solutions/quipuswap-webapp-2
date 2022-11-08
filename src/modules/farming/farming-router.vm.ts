@@ -14,17 +14,17 @@ export const useFarmingRouterViewModel = () => {
         if (
           isNull(rootStore.farmingFilterStore) ||
           isNull(rootStore.farmingItemStore) ||
-          isNull(rootStore.farmingListStore) ||
           isNull(rootStore.farmingListStatsStore) ||
-          isNull(rootStore.farmingListCommonStore) ||
+          isNull(rootStore.farmingListRewardsStore) ||
+          isNull(rootStore.farmingListStore) ||
           isNull(rootStore.coinflipStore) ||
           isNull(rootStore.harvestAndRollStore) ||
           isNull(rootStore.farmingYouvesItemStore)
         ) {
           await rootStore.createFarmingFilterStore();
-          await rootStore.createFarmingListStore();
           await rootStore.createFarmingListStatsStore();
-          await rootStore.createFarmingListCommonStore();
+          await rootStore.createFarmingListRewardsStore();
+          await rootStore.createFarmingListStore();
           await rootStore.createFarmingItemStore();
           await rootStore.createCoinflipStore();
           await rootStore.createHarvestAndRollStore();

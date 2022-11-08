@@ -6,7 +6,13 @@ import { ActiveStatus } from '@shared/types';
 
 import { FarmVersion } from '../../interfaces';
 
-export class FarmingItemDto {
+export class FarmingItemV1Dto {
+  @Typed()
+  id: string;
+
+  @Typed()
+  contractAddress: string;
+
   @Typed({ type: BigNumber, nullable: true })
   apr: Nullable<BigNumber>;
 
@@ -30,9 +36,6 @@ export class FarmingItemDto {
 
   @Typed()
   harvestFee: BigNumber;
-
-  @Typed()
-  id: BigNumber;
 
   @Typed()
   nextDelegate: string;
