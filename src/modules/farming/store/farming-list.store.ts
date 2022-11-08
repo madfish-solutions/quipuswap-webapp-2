@@ -8,7 +8,7 @@ import {
   FarmingListItemModel,
   FarmingListResponseModel
 } from '@modules/farming/models';
-import { defined, isEmptyArray, isExist, saveBigNumber, toReal } from '@shared/helpers';
+import { defined, isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Undefined } from '@shared/types';
@@ -67,14 +67,13 @@ export class FarmingListStore {
   }
 
   get listBalances(): FarmingListItemWithBalances[] {
-    const balances = this.listBalancesStore.model.balances;
+    const { balances } = this.listBalancesStore.model;
 
     return balances
       .map(balance => ({
         balance,
         farmingItemModel: this.getFarmingItemModelById(balance.id, balance.contractAddress)
       }))
-      .filter(({ farmingItemModel }) => isExist(farmingItemModel))
       .map(({ balance, farmingItemModel }) => {
         const myBalance =
           farmingItemModel && balance.myBalance
@@ -91,7 +90,7 @@ export class FarmingListStore {
 
         return {
           ...balance,
-          ...defined(farmingItemModel),
+          ...defined(farmingItemModel, balance.id),
           myBalance,
           depositBalance,
           earnBalance
@@ -99,7 +98,7 @@ export class FarmingListStore {
       });
   }
 
-  getFarmingItemModelById(id: string, contractAddress?: string): Undefined<FarmingListItemModel> {
+  getFarmingItemModelById(id: string, contractAddress?: string): Nullable<FarmingListItemModel> {
     return (this.listStore.model as FarmingListResponseModel).getFarmingItemModelById?.(id, contractAddress);
   }
 
