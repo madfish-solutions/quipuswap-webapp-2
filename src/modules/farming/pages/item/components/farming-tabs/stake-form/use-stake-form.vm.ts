@@ -9,6 +9,7 @@ import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoStake } from '@modules/farming/hooks/blockchain/use-do-stake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { bigNumberToString, toAtomic, defined, isNull, isExist, getFormikError, numberAsString } from '@shared/helpers';
+import { useMount } from '@shared/hooks';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
 
 import { canDelegate } from '../../../helpers';
@@ -23,6 +24,7 @@ export const useStakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
+  const { isNextStepsRelevant } = useMount();
   const { farmingItem, inputAmount, selectedBaker } = farmingItemStore;
 
   const availableBalance = farmingItemStore.availableBalance;
@@ -42,6 +44,11 @@ export const useStakeFormViewModel = () => {
       const token = defined(farmingItem).stakedToken;
       // TODO: Move to model
       const atomicInputAmount = toAtomic(defined(inputAmount), token);
+
+      if (!isNextStepsRelevant.value) {
+        return;
+      }
+
       await doStake(defined(farmingItem), atomicInputAmount, token, defined(selectedBaker));
     }
 

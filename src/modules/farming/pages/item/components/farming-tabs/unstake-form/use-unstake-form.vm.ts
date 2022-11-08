@@ -6,6 +6,7 @@ import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoUnstake } from '@modules/farming/hooks/blockchain/use-do-unstake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { bigNumberToString, defined, getFormikError, isExist, numberAsString, toAtomic } from '@shared/helpers';
+import { useMount } from '@shared/hooks';
 
 import { UnstakeFormFields, UnstakeFormValues } from './unstake-form.interface';
 import { useUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
@@ -16,6 +17,8 @@ export const useUnstakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
+  const { isNextStepsRelevant } = useMount();
+
   const { inputAmount, farmingItem } = farmingItemStore;
 
   const userTokenBalance = farmingItem?.depositBalance ? bigNumberToString(farmingItem?.depositBalance) : undefined;
@@ -38,6 +41,10 @@ export const useUnstakeFormViewModel = () => {
   ) => {
     confirmationPopup(async () => {
       await handleUnstakeSubmit(values, actions);
+
+      if (!isNextStepsRelevant.value) {
+        return;
+      }
 
       await delayedGetFarmingItem(defined(farmingItem, 'farmingItem').id, defined(farmingItem, 'farmingItem').version);
     });
