@@ -1,14 +1,14 @@
 import { FarmingListBalancesDto } from '../../dto';
-import { FarmingItemBalancesModel } from '../farming-item';
+import { FarmingListItemBalancesModel } from '../farming-item';
 
 export class FarmingListBalancesModel extends FarmingListBalancesDto {
-  balances: FarmingItemBalancesModel[];
-  indexedBalances: { [id: string]: FarmingItemBalancesModel };
+  balances: FarmingListItemBalancesModel[];
+  indexedBalances: { [id: string]: FarmingListItemBalancesModel };
 
   constructor(dto: FarmingListBalancesDto) {
     super();
 
-    this.balances = dto.balances.map(balance => new FarmingItemBalancesModel(balance));
+    this.balances = dto.balances.map(balance => new FarmingListItemBalancesModel(balance));
     this.indexedBalances = Object.fromEntries(this.balances.map(item => [item.id, item]));
   }
 

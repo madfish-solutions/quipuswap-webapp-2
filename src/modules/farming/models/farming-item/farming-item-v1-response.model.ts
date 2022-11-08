@@ -1,8 +1,8 @@
 import { FarmingItemResponseDto } from '../../dto';
-import { FarmingItemModel } from './farming-item.model';
+import { FarmingItemV1Model } from './farming-item-v1.model';
 
-export class FarmingItemResponseModel extends FarmingItemResponseDto {
-  item: FarmingItemModel;
+export class FarmingItemV1ResponseModel extends FarmingItemResponseDto {
+  item: FarmingItemV1Model;
 
   constructor(dto: FarmingItemResponseDto) {
     super();
@@ -12,6 +12,6 @@ export class FarmingItemResponseModel extends FarmingItemResponseDto {
       this[key] = dto[key as keyof FarmingItemResponseDto];
     }
 
-    this.item = new FarmingItemModel(dto.item);
+    this.item = new FarmingItemV1Model(dto.item);
   }
 }

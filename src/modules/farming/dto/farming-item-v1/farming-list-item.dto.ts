@@ -6,9 +6,9 @@ import { ActiveStatus } from '@shared/types';
 
 import { FarmItemCommon, FarmVersion } from '../../interfaces';
 
-export class FarmingItemCommonDto implements FarmItemCommon {
+export class FarmingListItemDto implements FarmItemCommon {
   @Typed()
-  id: BigNumber;
+  id: string;
 
   @Typed()
   contractAddress?: string;

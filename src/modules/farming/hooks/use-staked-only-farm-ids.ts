@@ -3,27 +3,26 @@ import { useCallback } from 'react';
 import { ZERO_AMOUNT } from '@config/constants';
 
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../helpers';
-import { useFarmingListStore } from './stores';
+import { useFarmingListCommonStore, useFarmingListRewardsStore } from './stores';
 
 export const useStakedOnlyFarmIds = () => {
-  const farmingListStore = useFarmingListStore();
-  const { listList } = farmingListStore;
+  const farmingListRewardsStore = useFarmingListRewardsStore();
+  const farmingListStore = useFarmingListCommonStore();
+  const { list } = farmingListStore;
 
   const getStakedOnlyFarmIds = useCallback(
     () =>
-      listList
-        .filter(({ id }) =>
-          farmingListStore.getFarmingItemBalancesModelById(id.toFixed())?.earnBalance?.gt(ZERO_AMOUNT)
-        )
+      list
+        .filter(({ id }) => farmingListStore.getFarmingItemBalancesModelById(id)?.earnBalance?.gt(ZERO_AMOUNT))
         .filter(farmingItem => {
-          const userInfo = farmingListStore.findUserInfo(farmingItem.id.toFixed());
+          const userInfo = farmingListRewardsStore.findUserInfo(farmingItem.id);
           const lastStakedTime = getUserInfoLastStakedTime(userInfo);
           const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
 
           return getIsHarvestAvailable(endTimestamp);
         })
         .map(({ id }) => id),
-    [farmingListStore, listList]
+    [farmingListRewardsStore, farmingListStore, list]
   );
 
   return { getStakedOnlyFarmIds };

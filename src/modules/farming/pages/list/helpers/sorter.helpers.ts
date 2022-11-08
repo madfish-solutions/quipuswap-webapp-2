@@ -1,25 +1,39 @@
+import { BigNumber } from 'bignumber.js';
+
 import { SKIP, SWAP } from '@config/constants';
-import { FarmingItemModel } from '@modules/farming/models';
 import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
-const sortByDefault = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) => {
+const sortByDefault = (
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
+  sortDirection: SortDirection
+) => {
   if (first.version !== second.version) {
     return first.version < second.version ? SWAP : SKIP;
   }
 
-  return sortBigNumber(first.id, second.id, sortDirection);
+  return sortBigNumber(new BigNumber(first.id), new BigNumber(second.id), sortDirection);
 };
 
-const sortByApr = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
-  sortBigNumber(first.apr, second.apr, sortDirection);
+const sortByApr = (
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
+  sortDirection: SortDirection
+) => sortBigNumber(first.apr, second.apr, sortDirection);
 
-const sortByApy = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
-  sortBigNumber(first.apy, second.apy, sortDirection);
+const sortByApy = (
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
+  sortDirection: SortDirection
+) => sortBigNumber(first.apy, second.apy, sortDirection);
 
-const sortByTvl = (first: FarmingItemModel, second: FarmingItemModel, sortDirection: SortDirection) =>
-  sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
+const sortByTvl = (
+  first: FarmingListItemWithBalances,
+  second: FarmingListItemWithBalances,
+  sortDirection: SortDirection
+) => sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 
 const sortByBalance = (
   first: FarmingListItemWithBalances,

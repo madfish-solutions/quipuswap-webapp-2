@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 
-import {
-  useFarmingListCommonStore,
-  useFarmingListStore,
-  useGetFarmingListCommon,
-  useHarvestAndRollStore
-} from '@modules/farming/hooks';
+import { useFarmingListCommonStore, useGetFarmingListCommon, useHarvestAndRollStore } from '@modules/farming/hooks';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
 import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
 import { useReady } from '@providers/use-dapp';
@@ -23,7 +18,7 @@ export const useFarmingListPageViewModel = () => {
   const { getFarmingListCommon } = useGetFarmingListCommon();
   const { getFarmingStats } = useGetFarmingStats();
   const { opened } = useHarvestAndRollStore();
-  const { list, isLoading } = useFarmingListStore();
+  const { list, isLoading } = useFarmingListCommonStore();
 
   const { t } = useTranslation();
   const title = t('common|Farming');

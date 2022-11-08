@@ -63,10 +63,6 @@ export interface RawFarmingItem {
   earnBalance?: string;
 }
 
-export interface FarmingListResponse extends BlockInfoWrap {
-  list: Array<RawFarmingItem>;
-}
-
 export interface FarmingItemResponse extends BlockInfoWrap {
   item: RawFarmingItem;
 }
@@ -114,7 +110,7 @@ export interface FarmingItem extends UserBalances {
 }
 
 export interface FarmItemCommon {
-  id: BigNumber;
+  id: string;
   contractAddress?: string;
 
   stakedToken: Token;

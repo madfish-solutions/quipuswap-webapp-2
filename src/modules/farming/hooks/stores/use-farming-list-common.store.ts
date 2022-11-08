@@ -1,9 +1,9 @@
 import { useRootStore } from '@providers/root-store-provider';
 
-import { FarmingListCommonStore } from '../../store';
+import { FarmingListStore } from '../../store';
 
 export const useFarmingListCommonStore = () => {
-  const { farmingListCommonStore } = useRootStore();
+  const { farmingListStore } = useRootStore();
 
-  return farmingListCommonStore as FarmingListCommonStore;
+  return farmingListStore as FarmingListStore;
 };

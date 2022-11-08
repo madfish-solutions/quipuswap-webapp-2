@@ -3,7 +3,13 @@ import BigNumber from 'bignumber.js';
 import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 
-export class YouvesFarmingItemDto {
+export class FarmingItemV2YouvesDto {
+  @Typed()
+  id: string;
+
+  @Typed()
+  contractAddress: string;
+
   @Typed({ type: BigNumber, nullable: true })
   apr: Nullable<BigNumber>;
 
@@ -30,9 +36,6 @@ export class YouvesFarmingItemDto {
 
   @Typed({ type: BigNumber })
   vestingPeriodSeconds: BigNumber;
-
-  @Typed()
-  contractAddress: string;
 
   @Typed()
   stakeUrl: string;

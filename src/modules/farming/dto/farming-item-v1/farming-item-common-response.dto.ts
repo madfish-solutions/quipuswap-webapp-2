@@ -1,11 +1,11 @@
 import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 
-import { YouvesFarmingItemDto } from './youves-farming-item.dto';
+import { FarmingListItemDto } from './farming-list-item.dto';
 
-export class YouvesFarmingItemResponseDto {
+export class FarmingItemCommonResponseDto {
   @Typed()
-  item: YouvesFarmingItemDto;
+  item: FarmingListItemDto;
 
   @Typed()
   blockInfo: BlockInfoDto;

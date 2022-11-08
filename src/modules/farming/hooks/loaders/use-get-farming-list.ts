@@ -7,13 +7,13 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useFarmingListStore } from '../stores';
+import { useFarmingListCommonStore } from '../stores';
 
 export const useGetFarmingList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const { listStore, listBalancesStore } = useFarmingListStore();
+  const { listStore, listBalancesStore } = useFarmingListCommonStore();
 
   const getFarmingList = useCallback(async () => {
     if (isReady) {
