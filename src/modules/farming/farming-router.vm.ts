@@ -5,7 +5,7 @@ import { isNull } from '@shared/helpers';
 
 export const useFarmingRouterViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);
-  const [error, setError] = useState<Nullable<Error>>(null);
+  const [error, setError] = useState<Nullable<string>>(null);
   const rootStore = useRootStore();
 
   useEffect(() => {
@@ -31,7 +31,9 @@ export const useFarmingRouterViewModel = () => {
           await rootStore.createFarmingYouvesItemStore();
         }
       } catch (e) {
-        setError(e as Error);
+        // eslint-disable-next-line no-console
+        console.log('page.error', e);
+        setError((e as Error).message);
       } finally {
         setIsInitialized(true);
       }

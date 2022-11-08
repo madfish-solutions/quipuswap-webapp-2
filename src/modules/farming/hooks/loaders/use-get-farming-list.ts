@@ -7,13 +7,13 @@ import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
 
-import { useFarmingListCommonStore } from '../stores';
+import { useFarmingListStore } from '../stores';
 
 export const useGetFarmingList = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const isReady = useReady();
-  const { listStore, listBalancesStore } = useFarmingListCommonStore();
+  const { listStore, listBalancesStore } = useFarmingListStore();
 
   const getFarmingList = useCallback(async () => {
     if (isReady) {
@@ -21,6 +21,8 @@ export const useGetFarmingList = () => {
         await listStore.load();
         await listBalancesStore.load();
       } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('getFarmingList.error', error);
         showErrorToast(error as Error);
       }
     }

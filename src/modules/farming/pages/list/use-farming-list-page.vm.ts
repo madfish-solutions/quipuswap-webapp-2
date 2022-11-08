@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useFarmingListCommonStore, useGetFarmingListCommon, useHarvestAndRollStore } from '@modules/farming/hooks';
+import { useFarmingListStore, useHarvestAndRollStore } from '@modules/farming/hooks';
 import { useGetFarmingList } from '@modules/farming/hooks/loaders/use-get-farming-list';
 import { useGetFarmingStats } from '@modules/farming/hooks/loaders/use-get-farming-stats';
 import { useReady } from '@providers/use-dapp';
@@ -13,12 +13,11 @@ import { farmingListDataHelper } from './farming-list-data.helper';
 export const useFarmingListPageViewModel = () => {
   const isReady = useReady();
   const { accountPkh } = useAuthStore();
-  const farmingListCommonStore = useFarmingListCommonStore();
+  const farmingListCommonStore = useFarmingListStore();
   const { getFarmingList } = useGetFarmingList();
-  const { getFarmingListCommon } = useGetFarmingListCommon();
   const { getFarmingStats } = useGetFarmingStats();
   const { opened } = useHarvestAndRollStore();
-  const { list, isLoading } = useFarmingListCommonStore();
+  const { list, isLoading } = useFarmingListStore();
 
   const { t } = useTranslation();
   const title = t('common|Farming');
@@ -29,10 +28,9 @@ export const useFarmingListPageViewModel = () => {
   useEffect(() => {
     if (isReady) {
       void getFarmingList();
-      void getFarmingListCommon();
       void getFarmingStats();
     }
-  }, [getFarmingList, getFarmingListCommon, getFarmingStats, isReady]);
+  }, [getFarmingList, getFarmingStats, isReady]);
 
   const data = list?.map(item => farmingListDataHelper(item, accountPkh));
 

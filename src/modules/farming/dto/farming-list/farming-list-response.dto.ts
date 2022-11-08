@@ -1,6 +1,6 @@
 import { Typed } from '@shared/decorators';
 
-import { FarmingListItemResponseDto } from '../../dto';
+import { FarmingListItemResponseDto } from '../farming-list-item';
 
 export class FarmingListResponseDto {
   @Typed({ isArray: true, type: FarmingListItemResponseDto })
