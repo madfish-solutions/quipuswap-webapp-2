@@ -53,6 +53,12 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     Icon: HomeIcon
   },
   {
+    id: 'Tokens',
+    to: AppRootRoutes.Tokens,
+    label: 'Tokens',
+    Icon: StableswapIcon
+  },
+  {
     id: 'Swap',
     to: AppRootRoutes.Swap,
     label: i18n.t('common|Swap'),

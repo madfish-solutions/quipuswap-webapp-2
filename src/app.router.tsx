@@ -12,12 +12,15 @@ import { PrivacyPolicyPage } from '@modules/privacy-policy';
 import { StableswapRouter } from '@modules/stableswap/stableswap.routing';
 import { SendPage, SwapPage } from '@modules/swap/swap.page';
 import { TermsOfServicePage } from '@modules/terms-of-service';
+import { TokensRouter } from '@modules/tokens/tokens.router';
 import { VotingPage } from '@modules/voting';
 import { SentryRoutes } from '@shared/services';
 
 export const AppRouter: FC = () => (
   <SentryRoutes>
     <Route path={AppRootRoutes.Root} element={<HomePage />} />
+
+    <Route path={`${AppRootRoutes.Tokens}/*`} element={<TokensRouter />} />
 
     <Route path={`${AppRootRoutes.Swap}/*`} element={<SwapPage />} />
     <Route path={`${AppRootRoutes.Send}/*`} element={<SendPage />} />
