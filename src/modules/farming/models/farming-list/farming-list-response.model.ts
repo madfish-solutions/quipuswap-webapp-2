@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { Undefined } from '@shared/types';
 
 import { FarmingListResponseDto } from '../../dto';
-import { FarmingListItemResponseModel, FarmingListItemModel } from '../farming-item';
+import { FarmingListItemModel, FarmingListItemResponseModel } from '../farming-list-item';
 
 export class FarmingListResponseModel extends FarmingListResponseDto {
   list: Array<FarmingListItemResponseModel>;
