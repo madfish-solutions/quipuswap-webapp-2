@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Input fields are recalculating after entering in another field data', () => {
+describe.skip('Input fields are recalculating after entering in another field data', () => {
   beforeEach(() => {
     cy.visit('/liquidity');
     cy.get('[data-test-id="acceptCookieButton"]').click();
