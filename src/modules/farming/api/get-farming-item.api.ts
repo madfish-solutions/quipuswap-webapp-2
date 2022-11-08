@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { FARMING_LIST_API_URL, FARMING_LIST_API_URL_V2, FARMING_LIST_API_URL_V3 } from '@config/constants';
 import { Nullable } from '@shared/types';
 
@@ -21,12 +19,12 @@ const getUrl = (version: FarmVersion, old = true) => {
   }
 };
 
-export const getFarmingItemApi = async (farmingId: Nullable<BigNumber>, version: FarmVersion, old = true) => {
+export const getFarmingItemApi = async (farmingId: Nullable<string>, version: FarmVersion, old = true) => {
   if (!farmingId) {
     throw new Error('Failed to get nullable farmingId');
   }
 
-  const response = await fetch(`${getUrl(version, old)}/${farmingId.toFixed()}`);
+  const response = await fetch(`${getUrl(version, old)}/${farmingId}`);
 
   return (await response.json()) as FarmingItemResponse;
 };
