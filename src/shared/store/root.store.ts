@@ -39,8 +39,9 @@ export class RootStore {
   authStore: AuthStore;
   uiStore: UiStore;
   settingsStore: SettingsStore;
-  tokensBalancesStore: TokensBalancesStore;
+
   tokensStore: TokensStore;
+  tokensBalancesStore: TokensBalancesStore;
   tokensManagerStore: TokensManagerStore;
   tokensModalStore: TokensModalStore;
 
@@ -72,8 +73,9 @@ export class RootStore {
     this.authStore = new AuthStore(this);
     this.uiStore = new UiStore(this);
     this.settingsStore = new SettingsStore(this);
-    this.tokensBalancesStore = new TokensBalancesStore(this);
+
     this.tokensStore = new TokensStore(this);
+    this.tokensBalancesStore = new TokensBalancesStore(this);
     this.tokensManagerStore = new TokensManagerStore(this);
     this.tokensModalStore = new TokensModalStore(this);
 

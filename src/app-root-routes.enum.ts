@@ -1,13 +1,17 @@
 export enum AppRootRoutes {
   Root = '/',
-  PrivacyPolicy = '/privacy-policy',
-  TermsOfService = '/terms-of-service',
-  Liquidity = '/liquidity',
+
+  Tokens = '/tokens',
   Swap = '/swap',
   Send = '/send',
+  Liquidity = '/liquidity',
   Farming = '/farming',
-  Voting = '/voting',
   Stableswap = '/stableswap',
   Coinflip = '/coinflip',
+  Voting = '/voting',
+
+  PrivacyPolicy = '/privacy-policy',
+  TermsOfService = '/terms-of-service',
+
   NotFound = '/404'
 }
