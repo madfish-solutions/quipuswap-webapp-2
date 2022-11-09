@@ -14,7 +14,7 @@ import { Countdown } from '../countdown';
 import { FarmingRewardHeader } from '../farming-reward-header';
 import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
-import { StateData } from '../state-data';
+import { DeprecatedStateData } from '../state-data';
 import styles from './farming-reward-info.module.scss';
 import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
@@ -67,7 +67,8 @@ export const FarmingRewardInfo: FC = observer(() => {
         tooltipContent={t('farm|yourShareTooltip')}
         data-test-id="yourShare"
       >
-        <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
+        {/* TODO: https://madfish.atlassian.net/browse/QUIPU-622 */}
+        <DeprecatedStateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
           {({ depositBalance }) => (
             <StateCurrencyAmount
               amount={depositBalance}
@@ -77,7 +78,7 @@ export const FarmingRewardInfo: FC = observer(() => {
               labelSize="large"
             />
           )}
-        </StateData>
+        </DeprecatedStateData>
       </FarmingStatsItem>
 
       {shouldShowCandidate && (
@@ -87,7 +88,7 @@ export const FarmingRewardInfo: FC = observer(() => {
           tooltipContent={t('farm|yourDelegateTooltip')}
           data-test-id="yourDelegate"
         >
-          <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
+          <DeprecatedStateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
               <a
                 href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
@@ -98,7 +99,7 @@ export const FarmingRewardInfo: FC = observer(() => {
                 {getBakerName(delegate)}
               </a>
             )}
-          </StateData>
+          </DeprecatedStateData>
         </FarmingStatsItem>
       )}
 
@@ -109,9 +110,9 @@ export const FarmingRewardInfo: FC = observer(() => {
           tooltipContent={t('farm|feeEndsInTooltip')}
           data-test-id="lockPeriodEndsIn"
         >
-          <StateData data={endTime} Fallback={RewardDashPlugFallback}>
+          <DeprecatedStateData data={endTime} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}
-          </StateData>
+          </DeprecatedStateData>
         </FarmingStatsItem>
       )}
     </RewardInfo>

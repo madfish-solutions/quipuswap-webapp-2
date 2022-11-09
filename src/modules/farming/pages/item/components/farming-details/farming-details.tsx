@@ -22,7 +22,7 @@ import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
-import { StateData } from '../state-data';
+import { DeprecatedStateData } from '../state-data';
 import { TimespanView } from '../timespan-view';
 import styles from './farming-details.module.scss';
 import { useFarmingDetailsViewModel } from './use-farming-details.vm';
@@ -138,9 +138,10 @@ export const FarmingDetails: FC = observer(() => {
                 className={CardCellClassName}
                 data-test-id="currentDelegate"
               >
-                <StateData isLoading={isLoading} data={currentDelegate}>
+                {/* TODO: https://madfish.atlassian.net/browse/QUIPU-622 */}
+                <DeprecatedStateData isLoading={isLoading} data={currentDelegate}>
                   {delegate => <CandidateButton candidate={delegate} />}
-                </StateData>
+                </DeprecatedStateData>
               </DetailsCardCell>
 
               <DetailsCardCell
@@ -149,9 +150,9 @@ export const FarmingDetails: FC = observer(() => {
                 className={CardCellClassName}
                 data-test-id="nextDelegate"
               >
-                <StateData isLoading={isLoading} data={nextDelegate}>
+                <DeprecatedStateData isLoading={isLoading} data={nextDelegate}>
                   {delegate => <CandidateButton candidate={delegate} />}
-                </StateData>
+                </DeprecatedStateData>
               </DetailsCardCell>
             </>
           )}
@@ -162,9 +163,9 @@ export const FarmingDetails: FC = observer(() => {
             className={CardCellClassName}
             data-test-id="farmingEndsIn"
           >
-            <StateData isLoading={isLoading} data={endTime}>
+            <DeprecatedStateData isLoading={isLoading} data={endTime}>
               {timestamp => <Countdown endTimestamp={timestamp} />}
-            </StateData>
+            </DeprecatedStateData>
           </DetailsCardCell>
 
           {shouldShowLockPeriod && (
@@ -174,9 +175,9 @@ export const FarmingDetails: FC = observer(() => {
               className={CardCellClassName}
               data-test-id="lockPeriod"
             >
-              <StateData isLoading={isLoading} data={timelock}>
+              <DeprecatedStateData isLoading={isLoading} data={timelock}>
                 {value => <TimespanView value={value} />}
-              </StateData>
+              </DeprecatedStateData>
             </DetailsCardCell>
           )}
 
@@ -187,9 +188,9 @@ export const FarmingDetails: FC = observer(() => {
               className={CardCellClassName}
               data-test-id="withdrawalFee"
             >
-              <StateData isLoading={isLoading} data={withdrawalFee}>
+              <DeprecatedStateData isLoading={isLoading} data={withdrawalFee}>
                 {_withdrawalFee => <StatePercentage isLoading={false} value={_withdrawalFee} />}
-              </StateData>
+              </DeprecatedStateData>
             </DetailsCardCell>
           )}
 
@@ -199,9 +200,9 @@ export const FarmingDetails: FC = observer(() => {
             className={CardCellClassName}
             data-test-id="interfaceFee"
           >
-            <StateData isLoading={isLoading} data={harvestFee}>
+            <DeprecatedStateData isLoading={isLoading} data={harvestFee}>
               {_harvestFee => <StatePercentage isLoading={false} value={_harvestFee} />}
-            </StateData>
+            </DeprecatedStateData>
           </DetailsCardCell>
 
           <div className={cx(commonContainerStyles.detailsButtons, styles.stakeDetailsButtons)}>
