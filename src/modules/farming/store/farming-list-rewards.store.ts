@@ -82,7 +82,7 @@ export class FarmingListRewardsStore {
         `getUserRewardsLogData, getFarmingItemModelById, id:${id}`
       );
 
-      return (earnBalance && earnBalance.multipliedBy(earnExchangeRate ?? ZERO_AMOUNT)) ?? null;
+      return multipliedIfPossible(earnBalance, earnExchangeRate);
     });
 
     return getSumOfNumbers(userEarnBalancesInUsd);
