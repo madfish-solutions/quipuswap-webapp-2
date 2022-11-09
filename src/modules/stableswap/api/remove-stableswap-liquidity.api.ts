@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { sendBatch } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
-import { AmountToken } from '@shared/types';
+import { AmountToken, Nullable } from '@shared/types';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();

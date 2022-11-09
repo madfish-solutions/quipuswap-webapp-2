@@ -7,6 +7,7 @@ import { AppRootRoutes } from '@app.router';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { toReal } from '@shared/helpers';
 import { useAmplitudeService, useTokenAmountInUsd } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { CoinSide, TokenToPlay } from '../../../coinflip';

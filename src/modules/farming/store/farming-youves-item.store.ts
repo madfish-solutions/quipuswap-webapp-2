@@ -13,7 +13,7 @@ import {
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Standard, Token } from '@shared/types';
+import { Nullable, Standard, Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';

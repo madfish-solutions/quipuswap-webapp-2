@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { getTokenSlug, isExist } from '../helpers';
 

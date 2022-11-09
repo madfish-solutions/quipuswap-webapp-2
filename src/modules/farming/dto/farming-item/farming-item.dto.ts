@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
-import { ActiveStatus } from '@shared/types';
+import type { ActiveStatus, Nullable } from '@shared/types';
 
 import { FarmVersion } from '../../interfaces';
 

@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
 import { isNull, isUndefined } from '@shared/helpers';
-import { Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 
 import { getTokenDecimalsAndPrecision } from '../helpers';
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';

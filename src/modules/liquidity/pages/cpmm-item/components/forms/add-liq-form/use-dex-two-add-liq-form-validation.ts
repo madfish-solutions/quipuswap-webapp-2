@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import { LiquidityItem } from '@modules/liquidity/interfaces';
 import { operationAmountSchema } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 

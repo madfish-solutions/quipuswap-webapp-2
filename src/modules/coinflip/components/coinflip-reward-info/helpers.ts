@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { getTokenSlug, isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { TokenWon } from '../../types';
 

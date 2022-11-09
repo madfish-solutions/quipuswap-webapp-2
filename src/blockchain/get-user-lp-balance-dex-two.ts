@@ -1,7 +1,7 @@
 import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { BigMap, LedgerKey } from '@shared/types';
+import { BigMap, LedgerKey, Nullable } from '@shared/types';
 
 interface StorageDexTwo {
   storage: { ledger: BigMap<LedgerKey, BigNumber> };
