@@ -101,7 +101,7 @@ export const FARMING_COMMON_LIST_API_URL = `${FARMING_API_URL}/v3/all-farms`;
 export const FARMING_ITEM_API_URL_V2 = `${FARMING_API_URL}/v3/multi`;
 export const FARMING_ITEM_API_URL_V3 = `${FARMING_API_URL}/v3/multi-v2`;
 
-export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
+export const FARMING_STATS_API_URL = `${FARMING_API_URL}/v3/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
