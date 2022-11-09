@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { DEFAULT_TOKEN_ID_BN } from '@config/constants';
 import { PoolType } from '@modules/liquidity/interfaces';
+import { Nullable } from '@shared/types';
 
 import { getUserLpBalanceDexTwo } from './get-user-lp-balance-dex-two';
 import { getUserLpBalanceTezToken } from './get-user-lp-balance-tez-token';

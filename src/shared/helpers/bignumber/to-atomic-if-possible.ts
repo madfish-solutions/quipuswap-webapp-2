@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { DECIMALS_BASE, FALLBACK_DECIMALS } from '@config/constants';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 import { isNull } from '../type-checks';
 

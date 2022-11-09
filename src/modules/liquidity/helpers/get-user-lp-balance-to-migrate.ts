@@ -3,6 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { getUserLpBalanceInDex } from '@blockchain';
 import { PoolType } from '@modules/liquidity/interfaces';
 import { isExist, isNull, isUndefined } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { LiquidityItemStore } from '../store';
 

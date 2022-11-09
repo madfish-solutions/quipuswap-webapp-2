@@ -3,6 +3,7 @@ import { memo, useEffect, useRef, useState } from 'react';
 import { isEmptyArray } from 'formik';
 
 import { isExist, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { Iterator, IteratorComponent } from '../iterator';
 
