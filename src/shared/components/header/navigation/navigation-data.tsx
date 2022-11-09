@@ -20,6 +20,7 @@ import {
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
+import { getId } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -197,7 +198,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
 export const DEFAULT_OPENED_MENU: Record<string, boolean> = NAVIGATION_DATA.filter(
   menu => isMenuItem(menu) && menu.opened
 )
-  .map(({ id }) => id)
+  .map(getId)
   .reduce(
     (acc, id) => ({
       ...acc,

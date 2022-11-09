@@ -1,8 +1,8 @@
 import { Typed } from '@shared/decorators';
 
-import { FarmingItemBalancesDto } from '../farming-item';
+import { FarmingListItemBalancesDto } from '../farming-item-v1';
 
 export class FarmingListBalancesDto {
-  @Typed({ isArray: true, type: FarmingItemBalancesDto })
-  balances: Array<FarmingItemBalancesDto>;
+  @Typed({ isArray: true, type: FarmingListItemBalancesDto })
+  balances: Array<FarmingListItemBalancesDto>;
 }

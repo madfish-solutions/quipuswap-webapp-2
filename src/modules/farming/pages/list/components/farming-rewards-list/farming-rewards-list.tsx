@@ -2,15 +2,14 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useFarmingListStore } from '@modules/farming/hooks';
+import { useFarmingListRewardsStore } from '@modules/farming/hooks';
 import { RewardInfo } from '@shared/structures';
 
 import { RewardTokensList } from '../reward-tokens-list';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
-  const farmingListStore = useFarmingListStore();
-  const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = farmingListStore;
+  const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = useFarmingListRewardsStore();
   const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 
