@@ -21,8 +21,6 @@ export const useGetFarmingList = () => {
         await listStore.load();
         await listBalancesStore.load();
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('getFarmingList.error', error);
         showErrorToast(error as Error);
       }
     }

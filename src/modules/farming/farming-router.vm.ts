@@ -21,18 +21,18 @@ export const useFarmingRouterViewModel = () => {
           isNull(rootStore.harvestAndRollStore) ||
           isNull(rootStore.farmingYouvesItemStore)
         ) {
-          await rootStore.createFarmingFilterStore();
-          await rootStore.createFarmingListStatsStore();
-          await rootStore.createFarmingListRewardsStore();
-          await rootStore.createFarmingListStore();
-          await rootStore.createFarmingItemStore();
-          await rootStore.createCoinflipStore();
-          await rootStore.createHarvestAndRollStore();
-          await rootStore.createFarmingYouvesItemStore();
+          await Promise.all([
+            await rootStore.createFarmingFilterStore(),
+            await rootStore.createFarmingListStatsStore(),
+            await rootStore.createFarmingListRewardsStore(),
+            await rootStore.createFarmingListStore(),
+            await rootStore.createFarmingItemStore(),
+            await rootStore.createCoinflipStore(),
+            await rootStore.createHarvestAndRollStore(),
+            await rootStore.createFarmingYouvesItemStore()
+          ]);
         }
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log('page.error', e);
         setError((e as Error).message);
       } finally {
         setIsInitialized(true);
