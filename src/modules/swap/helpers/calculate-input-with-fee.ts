@@ -1,20 +1,28 @@
+import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
+import { Trade } from 'swap-router-sdk';
 
-import { isUndefined } from '@shared/helpers';
-import { DexPair, Undefined } from '@shared/types';
+import { isNull } from '@shared/helpers';
+import { calculateValueWithPercent } from '@shared/helpers/calculate-value-with-percent';
 
-// DexPairType;
+import { mapRouteFee } from '../mapper';
 
-// enum Fee {
-//   DEX_ONE = 0.3,
-//   DEX_TWO = 0.35
-// }
-
-export const calculateInputWithFee = async (route: Undefined<Array<DexPair>>, inputAmount: Undefined<BigNumber>) => {
-  if (isUndefined(route) || isUndefined(inputAmount)) {
+export const calculateInputWithFee = async (
+  tezos: Nullable<TezosToolkit>,
+  route: Nullable<Trade>,
+  inputAmount: Nullable<BigNumber>
+) => {
+  if (isNull(tezos) || isNull(route) || isNull(inputAmount)) {
     return;
   }
 
-  // const stableSwapFee = await Promise.resolve(0.5);
-  // const devFee = await Promise.resolve(0.3);
+  const fees = route.map(async ({ dexType, dexAddress }) => mapRouteFee(tezos, dexType, dexAddress));
+  const preparedFees = (await Promise.all(fees)).flat();
+
+  const calculatedValue = preparedFees.reduce(
+    async (prev, curr) => calculateValueWithPercent(await prev, curr),
+    Promise.resolve(inputAmount)
+  );
+
+  return await calculatedValue;
 };

@@ -78,9 +78,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     touchedFieldsErrors
   } = useSwapSendViewModel(initialAction);
 
-  // eslint-disable-next-line no-console
-  console.log(dexRoute);
-
   return (
     <>
       <TestnetAlert />
