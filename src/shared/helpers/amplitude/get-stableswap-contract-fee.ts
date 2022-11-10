@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { PERCENTAGE_100, STABLESWAP_FEE_PRECISION, ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { Pools, StableswapFactoryContractField, StableswapPoolContractField } from '@shared/types/amplitude';
+import { Pools, StableswapFactoryContractField, StableswapPoolContractField } from '@shared/types';
 
 import { isNull, isUndefined } from '../type-checks';
 

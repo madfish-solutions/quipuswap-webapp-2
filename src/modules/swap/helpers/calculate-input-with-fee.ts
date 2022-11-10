@@ -2,8 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 import { Trade } from 'swap-router-sdk';
 
-import { isNull } from '@shared/helpers';
-import { calculateValueWithPercent } from '@shared/helpers/calculate-value-with-percent';
+import { isNull, calculateValueWithPercent } from '@shared/helpers';
 
 import { mapRouteFee } from '../mapper';
 

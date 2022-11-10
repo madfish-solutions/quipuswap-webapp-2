@@ -12,3 +12,4 @@ export * from './to-percent';
 export * from './get-sum-of-numbers';
 export * from './to-atomic-if-possible';
 export * from './to-real-if-possible';
+export * from './calculate-value-with-percent';
