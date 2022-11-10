@@ -9,12 +9,15 @@ import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
 import { useLiquidityItemStore } from '../../../../hooks';
 import styles from './dex-two-details.module.scss';
+import { useDexTwoPoolCurrentBaker } from './use-dex-two-pool-current-baker';
 
 export const useDexTwoDetailsViewModel = () => {
-  const liquidityItemStore = useLiquidityItemStore();
+  const { item, itemIsLoading } = useLiquidityItemStore();
   const { getTokenExchangeRate } = useTokenExchangeRate();
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-610
+  const { currentBaker, canHaveBaker } = useDexTwoPoolCurrentBaker();
 
-  const pieChartData = liquidityItemStore?.item?.tokensInfo.map(({ atomicTokenTvl, token }) => {
+  const liquidityChartData = item?.tokensInfo.map(({ atomicTokenTvl, token }) => {
     const realTokenValue = toReal(atomicTokenTvl, token.metadata.decimals ?? DEFAULT_DECIMALS);
 
     return {
@@ -24,23 +27,25 @@ export const useDexTwoDetailsViewModel = () => {
     };
   });
 
-  const dexTwoContractAddress = liquidityItemStore.item?.contractAddress;
+  const dexTwoContractAddress = item?.contractAddress;
   const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
 
-  const opportunities = liquidityItemStore?.item?.opportunities?.map(opportunityHelper);
+  const opportunities = item?.opportunities?.map(opportunityHelper);
 
   return {
     detailsViewProps: {
       apr: null,
+      canHaveBaker,
+      currentBaker,
       feesRate: null,
+      isLoading: itemIsLoading,
       weeklyVolume: null,
-      tvlInUsd: liquidityItemStore?.item?.tvlInUsd,
-      totalLpSupply:
-        liquidityItemStore?.item?.totalSupply && toReal(liquidityItemStore?.item?.totalSupply, DEFAULT_DECIMALS),
-      atomicTotalLpSupply: liquidityItemStore?.item?.totalSupply,
+      tvlInUsd: item?.tvlInUsd,
+      totalLpSupply: item?.totalSupply && toReal(item?.totalSupply, DEFAULT_DECIMALS),
+      atomicTotalLpSupply: item?.totalSupply,
       poolContractUrl,
       cardCellClassName: cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical),
-      pieChartData: pieChartData ?? []
+      liquidityChartData: liquidityChartData ?? []
     },
     opportunities: opportunities ?? []
   };

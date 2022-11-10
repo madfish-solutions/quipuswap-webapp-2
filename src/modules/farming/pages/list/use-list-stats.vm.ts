@@ -1,10 +1,10 @@
-import { useFarmingListStore } from '@modules/farming/hooks';
+import { useFarmingListStatsStore } from '@modules/farming/hooks';
 import { FarmingListStatsDTA } from '@tests/farming';
 import { useTranslation } from '@translation';
 
 export const useListStatsViewModel = () => {
   const { t } = useTranslation(['farm']);
-  const { stats: amounts } = useFarmingListStore();
+  const { stats: amounts } = useFarmingListStatsStore();
 
   const stats = [
     {

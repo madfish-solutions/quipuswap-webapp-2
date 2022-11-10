@@ -1,26 +1,27 @@
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND, SECONDS_IN_DAY, NO_TIMELOCK_VALUE, PERCENTAGE_100 } from '@config/constants';
+import { MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@config/constants';
 import { defined, isExist, isNull, toReal } from '@shared/helpers';
-import { Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
-import { UsersInfoValue, RawUsersInfoValue, FarmingContractStorage, UsersInfoKey } from '../interfaces';
+import { FarmingContractStorage, IRawUsersInfoValue, IUsersInfoValue, UsersInfoKey } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
-import { FarmingItemCommonModel, FarmingItemModel } from '../models';
+import { FarmingItemV1Model, FarmingListItemModel } from '../models';
+import { FarmingItemV1WithBalances } from '../pages/list/types';
 
 export interface UserBalances {
   depositBalance: string;
   earnBalance: string;
 }
 
-export interface UsersInfoValueWithId extends UsersInfoValue {
+export interface IFarmingListUsersInfoValueWithId extends IUsersInfoValue {
   id: BigNumber;
 }
 
 const ZERO = 0;
 const ZERO_BN = new BigNumber('0');
 
-export const DEFAULT_RAW_USER_INFO: RawUsersInfoValue = {
+export const DEFAULT_RAW_USER_INFO: IRawUsersInfoValue = {
   last_staked: new Date().toISOString(),
   staked: new BigNumber(ZERO),
   earned: new BigNumber(ZERO),
@@ -45,10 +46,9 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-/** @deprecated */
-export const getUserPendingReward = (
-  userInfo: UsersInfoValue,
-  farmingItemModel: FarmingItemModel,
+export const getUserPendingRewardForFarmingV1 = (
+  userInfo: IUsersInfoValue,
+  farmingItemModel: FarmingItemV1Model,
   timestamp: number = Date.now()
 ) => {
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
@@ -73,11 +73,10 @@ export const getUserPendingReward = (
   return fromRewardPrecision(pending);
 };
 
-export const getUserPendingRewardNew = (
-  userInfo: UsersInfoValue,
-  farmingItemModel: FarmingItemCommonModel,
+export const getUserPendingReward = (
+  userInfo: IUsersInfoValue,
+  farmingItemModel: FarmingListItemModel,
   timestamp: number = Date.now()
-  // eslint-disable-next-line sonarjs/no-identical-functions
 ) => {
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
 
@@ -101,21 +100,10 @@ export const getUserPendingRewardNew = (
   return fromRewardPrecision(pending);
 };
 
-export const getUserPendingRewardWithFee = (
-  userInfo: UsersInfoValue,
-  item: FarmingItemModel,
-  timestamp: number = Date.now()
+export const getBalancesNew = (
+  userInfo: Undefined<IFarmingListUsersInfoValueWithId>,
+  farmingItemModel: FarmingListItemModel
 ) => {
-  const fixedHarvestFee = PERCENTAGE_100.minus(item.harvestFee).dividedBy(PERCENTAGE_100);
-  const pendingRewards = getUserPendingReward(userInfo, item, timestamp);
-
-  return {
-    withoutFee: pendingRewards,
-    withFee: pendingRewards.multipliedBy(fixedHarvestFee)
-  };
-};
-/** @deprecated */
-export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingItemModel: FarmingItemModel) => {
   if (!userInfo) {
     return {
       depositBalance: '0',
@@ -124,23 +112,6 @@ export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, farmingIt
   }
 
   const reward = getUserPendingReward(userInfo, farmingItemModel);
-
-  return {
-    depositBalance: userInfo.staked.toFixed(),
-    earnBalance: reward.toFixed()
-  };
-};
-
-// eslint-disable-next-line sonarjs/no-identical-functions
-export const getBalancesNew = (userInfo: Undefined<UsersInfoValueWithId>, farmingItemModel: FarmingItemCommonModel) => {
-  if (!userInfo) {
-    return {
-      depositBalance: '0',
-      earnBalance: '0'
-    };
-  }
-
-  const reward = getUserPendingRewardNew(userInfo, farmingItemModel);
 
   return {
     depositBalance: userInfo.staked.toFixed(),
@@ -158,7 +129,7 @@ export const getAllFarmUserInfo = async (
   const userInfoKeys = farmsIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
   const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
 
-  const usersInfoValues: Array<UsersInfoValueWithId> = [];
+  const usersInfoValues: Array<IFarmingListUsersInfoValueWithId> = [];
 
   usersInfoValuesMap.forEach((userInfoValue, key) => {
     const value = defined(mapUsersInfoValue(userInfoValue ? userInfoValue : DEFAULT_RAW_USER_INFO));
@@ -170,42 +141,19 @@ export const getAllFarmUserInfo = async (
   return usersInfoValues;
 };
 
-/** @deprecated */
-export const getUserFarmBalances = async (
+export const getUserFarmingBalances = async (
   accountAddress: string,
   storage: FarmingContractStorage,
-  list: Array<FarmingItemModel>
+  list: Array<FarmingListItemModel>
 ) => {
   const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
 
   const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
-    const farm = list.find(item => item.id.toFixed() === index.toString());
-    if (farm) {
-      const balance = getBalances(usersInfoValue, farm);
-
-      acc.set(farm.id.toFixed(), balance);
-    }
-
-    return acc;
-  }, new Map<string, UserBalances>());
-
-  return balances;
-};
-
-export const getUserFarmBalancesNew = async (
-  accountAddress: string,
-  storage: FarmingContractStorage,
-  list: Array<FarmingItemCommonModel>
-  // eslint-disable-next-line sonarjs/no-identical-functions
-) => {
-  const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
-
-  const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
-    const farm = list.find(item => item.id.toFixed() === index.toString());
+    const farm = list.find(item => item.id === index.toString());
     if (farm && farm.old) {
       const balance = getBalancesNew(usersInfoValue, farm);
 
-      acc.set(farm.id.toFixed(), balance);
+      acc.set(farm.id, balance);
     }
 
     return acc;
@@ -214,10 +162,13 @@ export const getUserFarmBalancesNew = async (
   return balances;
 };
 
-export const getUserInfoLastStakedTime = (userInfo: Nullable<UsersInfoValue>) =>
+export const getUserInfoLastStakedTime = (userInfo: Nullable<IUsersInfoValue>) =>
   userInfo ? new Date(userInfo.last_staked).getTime() : null;
 
-export const getEndTimestamp = (farmingItem: Undefined<FarmingItemModel>, lastStakedTime: Nullable<number>) =>
+export const getEndTimestamp = (
+  farmingItem: Optional<FarmingListItemModel | FarmingItemV1WithBalances>,
+  lastStakedTime: Nullable<number>
+) =>
   isExist(lastStakedTime) && isExist(farmingItem) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
 
 export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>

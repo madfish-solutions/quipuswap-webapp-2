@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { getBucketContractApi } from '@modules/liquidity/api';
+import { BlockchainDexTwoLiquidityApi } from '@modules/liquidity/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { TaquitoContract } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
@@ -19,7 +19,7 @@ export const useBucketContract = () => {
         return;
       }
 
-      const bContract = await getBucketContractApi(tezos, item.contractAddress, item.id);
+      const bContract = await BlockchainDexTwoLiquidityApi.getBucketContract(tezos, item.contractAddress, item.id);
 
       setBucketContract(bContract);
     })();
