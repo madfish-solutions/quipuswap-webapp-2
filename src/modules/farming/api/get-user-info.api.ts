@@ -6,17 +6,17 @@ import { getStorageInfo } from '@shared/dapp';
 import { Nullable } from '@shared/types';
 
 import { DEFAULT_RAW_USER_INFO, getAllFarmUserInfo } from '../helpers';
-import { FarmingContractStorageWrapper, RawUsersInfoValue } from '../interfaces';
-import { FarmingItemModel } from '../models';
+import { FarmingContractStorageWrapper, IRawUsersInfoValue } from '../interfaces';
+import { FarmingItemV1Model } from '../models';
 
 export const getUserInfoApi = async (
-  item: FarmingItemModel,
+  item: FarmingItemV1Model,
   accountPkh: string,
   tezos: TezosToolkit
-): Promise<RawUsersInfoValue> => {
+): Promise<IRawUsersInfoValue> => {
   const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS);
   const storage = wrapStorage.storage;
-  const value = await storage.users_info.get([item.id, accountPkh]);
+  const value = await storage.users_info.get([new BigNumber(item.id), accountPkh]);
 
   return value ?? DEFAULT_RAW_USER_INFO;
 };

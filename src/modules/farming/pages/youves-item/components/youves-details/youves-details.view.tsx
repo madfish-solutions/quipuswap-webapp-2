@@ -23,7 +23,7 @@ import { ActiveStatus, Nullable } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { StateData } from '../state-data';
+import { DeprecatedStateData } from '../state-data';
 import { TimespanView } from '../timespan-view';
 import styles from './youves-details.module.scss';
 
@@ -158,9 +158,9 @@ export const YouvesDetailsView: FC<Props> = observer(
               className={CardCellClassName}
               data-test-id="vestingPeriod"
             >
-              <StateData isLoading={isLoading} data={vestingPeriod}>
+              <DeprecatedStateData isLoading={isLoading} data={vestingPeriod}>
                 {value => <TimespanView value={value} />}
-              </StateData>
+              </DeprecatedStateData>
             </DetailsCardCell>
 
             <div className={cx(commonContainerStyles.detailsButtons, styles.stakeDetailsButtons)}>

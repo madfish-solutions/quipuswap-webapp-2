@@ -6,10 +6,10 @@ import { getStorageInfo } from '@shared/dapp';
 
 import { FarmingStorage } from '../interfaces';
 
-export const getUserFarmingDelegate = async (tezos: TezosToolkit, accountPkh: string, id: BigNumber) => {
+export const getUserFarmingDelegate = async (tezos: TezosToolkit, accountPkh: string, id: string) => {
   const {
     storage: { candidates }
   } = await getStorageInfo<FarmingStorage>(tezos, FARMING_CONTRACT_ADDRESS);
 
-  return (await candidates.get<string>([id, accountPkh])) ?? null;
+  return (await candidates.get<string>([new BigNumber(id), accountPkh])) ?? null;
 };

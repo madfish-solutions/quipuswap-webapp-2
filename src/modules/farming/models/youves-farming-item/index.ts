@@ -1,2 +1,2 @@
 export * from './youves-farming-item-response.model';
-export * from './youves-farming-item.model';
+export * from './farming-item-v2-youves.model';
