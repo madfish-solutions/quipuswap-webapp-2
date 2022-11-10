@@ -3,9 +3,7 @@ import BigNumber from 'bignumber.js';
 import { DexTypeEnum } from 'swap-router-sdk';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { getDexTwoDevFee } from '@shared/helpers/amplitude/get-dex-two-dev-fee';
-import { getStableswapContractFee } from '@shared/helpers/amplitude/get-stableswap-contract-fee';
-import { getStableswapDevFee } from '@shared/helpers/amplitude/get-stableswap-dev-fee';
+import { getDexTwoDevFee, getStableswapContractFee, getStableswapDevFee } from '@shared/helpers';
 
 const DEX_ONE_FEE = new BigNumber(0.3);
 const DEX_TWO_FEE = new BigNumber(0.35);
