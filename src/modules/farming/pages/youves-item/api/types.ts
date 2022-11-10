@@ -28,5 +28,5 @@ export interface YouvesFarmStorage {
 export interface YouvesFarmStakes {
   stake: BigNumber;
   disc_factor: BigNumber;
-  age_timestamp: Date;
+  age_timestamp: Date | string;
 }
