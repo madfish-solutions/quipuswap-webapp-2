@@ -14,7 +14,6 @@ export const useTokenBalance = (token: Optional<Token>): Nullable<BigNumber> => 
   useEffect(() => {
     if (token) {
       const subscription = tokensBalancesStore.subscribe(token);
-
       void tokensBalancesStore.loadTokenBalance(token);
 
       return () => {

@@ -12,7 +12,7 @@ import {
 import { toReal, isEmptyArray, toAtomic } from '@shared/helpers';
 import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
+import { BooleansMap, DexPair, Optional, Token } from '@shared/types';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
 import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';
@@ -33,7 +33,7 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
     return [];
   }
 
-  const tokens: BooleanMap = trade.reduce(
+  const tokens: BooleansMap = trade.reduce(
     (
       acc,
       { aTokenSlug: swapRouterSdkATokenSlug, aTokenStandard, bTokenSlug: swapRouterSdkBTokenSlug, bTokenStandard }
@@ -45,7 +45,7 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
 
       return acc;
     },
-    {} as BooleanMap
+    {} as BooleansMap
   );
 
   return Object.keys(tokens);
