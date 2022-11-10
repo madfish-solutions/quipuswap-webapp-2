@@ -11,3 +11,5 @@ export const COOKIES_APPRROVAL_KEY = 'cookieApproval';
 export const TOKENS_KEY = 'tokens';
 export const FAVORITE_TOKENS_KEY = 'favorite';
 export const HIDDEN_TOKENS_KEY = 'hidden';
+export const TOKENS_BALANCES_KEY = 'QS_TOKENS_BALANCES';
+export const TOKENS_EVER_HAD_KEY = 'QS_TOKENS_EVER_HAD';
