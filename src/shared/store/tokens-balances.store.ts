@@ -2,14 +2,26 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { getRandomId, isEmptyArray, isExist, isTokenEqual, saveBigNumber, toReal } from '@shared/helpers';
+import {
+  getRandomId,
+  getTokenSlug,
+  isBigNumberGreaterZero,
+  isEmptyArray,
+  isExist,
+  isTokenEqual,
+  saveBigNumber,
+  toReal
+} from '@shared/helpers';
 
+import { TokensBalancesLSApi } from '../api';
 import { Optional, Token } from '../types';
 import { RootStore } from './root.store';
 
 interface TokenBalance {
   token: Token;
   balance: Nullable<BigNumber>;
+  exchangeRate: Nullable<BigNumber>;
+  dollarEquivalent: Nullable<BigNumber>;
   subscriptions: string[];
 }
 
@@ -27,21 +39,44 @@ export class TokensBalancesStore {
     });
   }
 
+  private getTokenBalance(token: Token) {
+    return this.tokensBalances.find(tb => isTokenEqual(token, tb.token)) ?? null;
+  }
+
   setRealBalance(token: Token, balance: Nullable<BigNumber>) {
-    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+    const tokenBalance = this.getTokenBalance(token);
     if (!tokenBalance) {
       return;
     }
     tokenBalance.balance = balance ? toReal(balance, token) : null;
+    if (isBigNumberGreaterZero(tokenBalance.balance)) {
+      // Save token data to LocalStorage
+      TokensBalancesLSApi.saveTokenUsage(getTokenSlug(token));
+    }
+  }
+
+  setDollarEquivalent(token: Token, exchangeRate: Nullable<BigNumber>, dollarEquivalent: Nullable<BigNumber>) {
+    const tokenBalance = this.getTokenBalance(token);
+    if (!tokenBalance) {
+      return;
+    }
+    tokenBalance.exchangeRate = exchangeRate;
+    tokenBalance.dollarEquivalent = dollarEquivalent;
+    if (isBigNumberGreaterZero(dollarEquivalent)) {
+      // Save token data to LocalStorage
+      TokensBalancesLSApi.setTokenBalance(getTokenSlug(token), dollarEquivalent.toNumber());
+    }
   }
 
   subscribe(token: Token) {
     const subscription = getRandomId();
-    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+    const tokenBalance = this.getTokenBalance(token);
     if (!tokenBalance) {
       this.tokensBalances.push({
         token,
         balance: null,
+        exchangeRate: null,
+        dollarEquivalent: null,
         subscriptions: [subscription]
       });
     } else {
@@ -52,19 +87,16 @@ export class TokensBalancesStore {
   }
 
   unsubscribe(token: Token, subscription: string) {
-    const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+    const tokenBalance = this.getTokenBalance(token);
     if (!tokenBalance) {
       return;
     }
     tokenBalance.subscriptions = tokenBalance.subscriptions.filter(_subscription => subscription !== _subscription);
-    if (isEmptyArray(tokenBalance.subscriptions)) {
-      this.tokensBalances = this.tokensBalances.filter(tb => !isTokenEqual(token, tb.token));
-    }
   }
 
   getBalance(token: Optional<Token>) {
     if (isExist(token)) {
-      const tokenBalance = this.tokensBalances.find(tb => isTokenEqual(token, tb.token));
+      const tokenBalance = this.getTokenBalance(token);
 
       return tokenBalance?.balance;
     }
@@ -90,6 +122,10 @@ export class TokensBalancesStore {
       return null;
     }
 
-    return await Promise.all(this.tokensBalances.map(async ({ token }) => this.loadTokenBalance(token)));
+    return await Promise.all(
+      this.tokensBalances
+        .filter(({ subscriptions }) => !isEmptyArray(subscriptions))
+        .map(async ({ token }) => this.loadTokenBalance(token))
+    );
   }
 }
