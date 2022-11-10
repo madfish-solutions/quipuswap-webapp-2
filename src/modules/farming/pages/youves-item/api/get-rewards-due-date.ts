@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
-import { getLastElement, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
+import { getLastElementFromArray, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
 import { Undefined } from '@shared/types';
 
-import { YouvesFarmStakes, YouvesFarmStorage } from './types';
+import { YouvesFarmStorage } from './types';
 
 const NO_DUE_DATE = 0;
 
@@ -27,7 +27,7 @@ export const getRewardsDueDate = async (
   }
 
   const { max_release_period } = storage;
-  const ageTimestamp = (await storage.stakes.get<YouvesFarmStakes>(getLastElement(ids)))?.age_timestamp ?? undefined;
+  const ageTimestamp = (await storage.stakes.get(getLastElementFromArray(ids)))?.age_timestamp ?? undefined;
 
   if (isUndefined(ageTimestamp)) {
     return NO_DUE_DATE;
