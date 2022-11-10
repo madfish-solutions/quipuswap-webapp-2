@@ -33,9 +33,9 @@ export const useFarmingRewardInfoViewModel = () => {
 
   const handleHarvest = async () => {
     amplitudeService.logEvent('HARVEST_CLICK');
-    await doHarvest(defined(farmingItem));
+    await doHarvest(defined(farmingItem, 'farmingItem'));
 
-    await delayedGetFarmingItem(defined(farmingItem).id);
+    await delayedGetFarmingItem(defined(farmingItem, 'farmingItem').id, defined(farmingItem, 'farmingItem').version);
   };
 
   if (!farmingItem) {

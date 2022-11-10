@@ -1,10 +1,12 @@
 import { FC, ReactNode } from 'react';
 
 import { AppRootRoutes } from '@app.router';
+import { ExternalLinks } from '@config/external-links';
 // It's important to import entities from modules directly from files
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { LabelComponent } from '@shared/components/label-component';
 import {
+  AllBridgeIcon,
   AnalyticsIcon,
   FarmIcon,
   FeedbackIcon,
@@ -18,6 +20,7 @@ import {
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
+import { getId } from '../../../helpers';
 import styles from './navigation.module.scss';
 
 interface LinkInterface {
@@ -98,18 +101,19 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   },
   {
     id: 'Analytics',
-    to: 'https://analytics.quipuswap.com/',
+    to: ExternalLinks.QuipuswapAnalyticsUrl,
     label: i18n.t('common|Analytics'),
     Icon: AnalyticsIcon,
     target: '_blank'
   },
   {
-    id: 'Feedback',
-    to: 'https://madfish.canny.io/quipuswap-feature-requests',
-    label: i18n.t('common|Feedback'),
-    Icon: FeedbackIcon,
+    id: 'Allbridge',
+    to: ExternalLinks.AllbridgeUrl,
+    label: i18n.t('common|Allbridge'),
+    Icon: AllBridgeIcon,
     target: '_blank'
   },
+
   // {
   //   id: 6,
   //   to: '/portfolio',
@@ -135,44 +139,51 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
       },
       {
         id: 'More_About',
-        to: 'https://story.madfish.solutions/category/quipuswap/',
-        label: 'About',
+        to: ExternalLinks.AboutQuipuSwapUrl,
+        label: i18n.t('common|About'),
         target: '_blank'
       },
       {
         id: 'More_Audit',
-        to: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
-        label: 'Audit',
+        to: ExternalLinks.AboutAuditUrl,
+        label: i18n.t('common|Audit'),
         target: '_blank'
       },
       {
         id: 'More_Help',
-        to: 'https://madfish.crunch.help/quipu-swap',
-        label: 'Help',
+        to: ExternalLinks.HelpUrl,
+        label: i18n.t('common|Help'),
+        target: '_blank'
+      },
+      {
+        id: 'Feedback',
+        to: ExternalLinks.FeedbackUrl,
+        label: i18n.t('common|Feedback'),
+        Icon: FeedbackIcon,
         target: '_blank'
       },
       {
         id: 'More_Docs',
-        to: 'https://docs.quipuswap.com/',
-        label: 'Docs',
+        to: ExternalLinks.DocsUrl,
+        label: i18n.t('common|Docs'),
         target: '_blank'
       },
       {
         id: 'More_Blog',
-        to: 'https://story.madfish.solutions/',
-        label: 'Blog',
+        to: ExternalLinks.BlogUrl,
+        label: i18n.t('common|Blog'),
         target: '_blank'
       },
 
       {
         id: 'More_TermsOfService',
         to: AppRootRoutes.TermsOfService,
-        label: 'Terms of Usage'
+        label: i18n.t('common|Terms of Usage')
       },
       {
         id: 'More_PrivacyPolicy',
         to: AppRootRoutes.PrivacyPolicy,
-        label: 'Privacy Policy'
+        label: i18n.t('common|Privacy Policy')
       }
     ]
   }
@@ -181,7 +192,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
 export const DEFAULT_OPENED_MENU: Record<string, boolean> = NAVIGATION_DATA.filter(
   menu => isMenuItem(menu) && menu.opened
 )
-  .map(({ id }) => id)
+  .map(getId)
   .reduce(
     (acc, id) => ({
       ...acc,

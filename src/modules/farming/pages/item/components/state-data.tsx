@@ -16,6 +16,11 @@ interface Props<T> {
   Fallback?: FC<FallbackProps>;
 }
 
+/** @deprecated */
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const StateData = <T extends unknown>({ isLoading, data, children, Fallback = DashPlugFallback }: Props<T>) =>
-  isNull(data) ? <Fallback isLoading={isLoading} /> : children(data);
+export const DeprecatedStateData = <T extends unknown>({
+  isLoading,
+  data,
+  children,
+  Fallback = DashPlugFallback
+}: Props<T>) => (isNull(data) ? <Fallback isLoading={isLoading} /> : children(data));

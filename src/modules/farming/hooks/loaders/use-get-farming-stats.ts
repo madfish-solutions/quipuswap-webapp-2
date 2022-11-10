@@ -5,23 +5,22 @@ import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
 import { useToasts } from '@shared/utils';
 
-import { useFarmingListStore } from '../stores/use-farming-list-store';
+import { useFarmingListStatsStore } from '../stores';
 
 export const useGetFarmingStats = () => {
   const { showErrorToast } = useToasts();
-  const farmingListStore = useFarmingListStore();
+  const { statsStore } = useFarmingListStatsStore();
   const isReady = useReady();
 
   const getFarmingStats = useCallback(async () => {
     if (isReady) {
       try {
-        //TODO
-        await farmingListStore?.statsStore.load();
+        await statsStore.load();
       } catch (error) {
         showErrorToast(error as Error);
       }
     }
-  }, [isReady, showErrorToast, farmingListStore?.statsStore]);
+  }, [isReady, showErrorToast, statsStore]);
 
   const delayedGetFarmingStats = useCallback(async () => {
     await sleep(DELAY_BEFORE_DATA_UPDATE);

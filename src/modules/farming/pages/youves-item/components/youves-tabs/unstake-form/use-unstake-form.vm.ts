@@ -1,5 +1,5 @@
 import { useRootStore } from '@providers/root-store-provider';
-import { isNotDefined, toReal } from '@shared/helpers';
+import { defined, isNotDefined, toReal } from '@shared/helpers';
 import { useAuthStore, useToken } from '@shared/hooks';
 
 import { useFarmingYouvesItemStore } from '../../../../../hooks';
@@ -10,14 +10,15 @@ export const useUnstakeFormViewModel = (): UnstakeFormProps => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
 
-  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance, id } = useFarmingYouvesItemStore();
+  const { item, tokens, farmingAddress, currentStakeId, currentStakeBalance, id, version } =
+    useFarmingYouvesItemStore();
   const stakedToken = useToken(item?.stakedToken ?? null);
 
   const balance =
     currentStakeBalance && stakedToken ? toReal(currentStakeBalance, stakedToken.metadata.decimals) : null;
   const inputAmount = balance ? balance.toFixed() : '';
 
-  const form = useUnstakeFormForming(farmingAddress, id, currentStakeId, balance);
+  const form = useUnstakeFormForming(farmingAddress, id, defined(version, 'version'), currentStakeId, balance);
 
   const disabled = form.disabled || isNotDefined(tezos) || isNotDefined(accountPkh) || !currentStakeBalance;
 

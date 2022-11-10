@@ -7,6 +7,7 @@ import {
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
   PRECISION_FACTOR,
+  PRECISION_FACTOR_STABLESWAP_LP,
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
@@ -17,6 +18,7 @@ import { Standard, Token } from '@shared/types';
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
 import { YouvesStakeDto } from '../dto';
+import { FarmVersion } from '../interfaces';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
 import { YouvesContractBalanceModel } from '../models/youves-contract-balance';
 import { getRewards } from '../pages/youves-item/helpers/get-rewards';
@@ -38,11 +40,12 @@ const DEFAULT_TOKENS: Token[] = [];
 @ModelBuilder()
 export class FarmingYouvesItemStore {
   id = '0';
+  version: Nullable<FarmVersion> = null;
 
   //#region item store region
   @Led({
     default: DEFAULT_ITEM,
-    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id),
+    loader: async self => await BackendYouvesFarmingApi.getYouvesFarmingItem(self.id, self.version),
     model: YouvesFarmingItemResponseModel
   })
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
@@ -127,12 +130,15 @@ export class FarmingYouvesItemStore {
       return;
     }
 
+    const precision = this.version === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
+
     const reward = this.contractBalance.minus(lastRewards);
-    const newDiscFactor = discFactor.plus(reward.multipliedBy(PRECISION_FACTOR).dividedToIntegerBy(staked));
+    // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+    const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(staked));
 
     const stake = getLastElement(this.stakes) as YouvesStakeDto;
 
-    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor);
+    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor, precision);
 
     this.claimableRewards = toReal(claimableReward, rewardToken);
     this.longTermRewards = toReal(fullReward, rewardToken);
@@ -145,6 +151,10 @@ export class FarmingYouvesItemStore {
 
   setFarmingId(id: string) {
     this.id = id;
+  }
+
+  setFarmingVersion(version: FarmVersion) {
+    this.version = version;
   }
 
   /*

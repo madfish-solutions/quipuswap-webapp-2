@@ -2,6 +2,8 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap-ithacanet.whitelist.json';
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
+import { FarmVersion } from '@modules/farming/interfaces';
+import { PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
 import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
@@ -91,11 +93,14 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, GHOSTNET_NETWORK];
 export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
-export const NEW_FARMINGS: Array<{ id: string; old: boolean }> = [
-  { id: '0', old: false },
-  { id: '1', old: false },
-  { id: '2', old: false },
-  { id: '3', old: false }
+export const NEW_FARMINGS: Array<{ id: string; version: FarmVersion }> = [
+  { id: '0', version: FarmVersion.v3 },
+  { id: '0', version: FarmVersion.v2 },
+  { id: '1', version: FarmVersion.v2 },
+  { id: '2', version: FarmVersion.v2 },
+  { id: '3', version: FarmVersion.v2 },
+  { id: '5', version: FarmVersion.v2 },
+  { id: '6', version: FarmVersion.v2 }
 ];
 
 // FarmingItems with Youves
@@ -104,7 +109,15 @@ export const YOUVES_FARMINGS = ['5', '6'];
 export const YOUVES_LINK = 'https://app.youves.com/earn';
 
 // Hot Pools
-export const HOT_POOLS = ['0', '1', '2', '3'];
+export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
+  { id: '6', type: PoolType.STABLESWAP },
+  { id: '7', type: PoolType.DEX_TWO },
+  { id: '8', type: PoolType.DEX_TWO },
+  { id: '0', type: PoolType.DEX_TWO },
+  { id: '1', type: PoolType.DEX_TWO },
+  { id: '2', type: PoolType.DEX_TWO },
+  { id: '3', type: PoolType.DEX_TWO }
+];
 
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;

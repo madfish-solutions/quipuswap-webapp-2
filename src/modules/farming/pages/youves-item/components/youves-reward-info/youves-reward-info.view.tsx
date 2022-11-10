@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
@@ -22,6 +23,7 @@ const modeClass = {
 // TODO: Add tooltip (claimable / long term)
 
 interface Props {
+  isBlocked: boolean;
   claimablePendingRewards: Nullable<BigNumber>;
   longTermPendingRewards: Nullable<BigNumber>;
   claimablePendingRewardsInUsd: Nullable<BigNumber>;
@@ -43,6 +45,7 @@ interface Props {
 
 export const YouvesRewardInfoView: FC<Props> = observer(
   ({
+    isBlocked,
     longTermPendingRewards,
     longTermPendingRewardsInUsd,
     claimablePendingRewards,
@@ -84,6 +87,33 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         disabled={!isHarvestAvailable}
         currency={rewardTokenCurrency}
       >
+        {/* TODO: https://madfish.atlassian.net/browse/QUIPU-636 */}
+        {isBlocked && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: '#000',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.5rem',
+              color: 'rgba(255, 255, 0, 0.8)',
+              paddingLeft: 8
+            }}
+          >
+            <p>
+              Oops. This farm doesn't generate yield. You are welcome to use{' '}
+              <Link to="/farming/v3/0" style={{ textDecoration: 'underline' }}>
+                this one
+              </Link>{' '}
+              🤗
+            </p>
+          </div>
+        )}
         <YouvesStatsItem
           itemName={t('farm|Your Share')}
           loading={farmingLoading}

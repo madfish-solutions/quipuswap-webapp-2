@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-import { BigNumber } from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
 import { YOUVES_FARMINGS } from '@config/config';
@@ -9,9 +8,9 @@ import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farmin
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { DashPlug } from '@shared/components';
 import { getTokensNames, isNull, isUndefined } from '@shared/helpers';
-import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { FarmVersion } from '../../interfaces';
 import styles from './farming-item.page.module.scss';
 
 export const useFarmingItemPageViewModel = () => {
@@ -20,18 +19,18 @@ export const useFarmingItemPageViewModel = () => {
   const dAppReady = useReady();
   const { getFarmingItem } = useGetFarmingItem();
   const accountPkh = useAccountPkh();
-  const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
   const { id: rawStakeId } = useParams();
 
   /*
     Load data
   */
   useEffect(() => {
-    if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
-      return;
-    }
-    void getFarmingItem(new BigNumber(`${Number(rawStakeId)}`), true);
-    prevAccountPkhRef.current = accountPkh;
+    (async () => {
+      if (!dAppReady || isUndefined(rawStakeId)) {
+        return;
+      }
+      await getFarmingItem(rawStakeId, FarmVersion.v1, true);
+    })();
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 
   useEffect(() => {
@@ -63,5 +62,5 @@ export const useFarmingItemPageViewModel = () => {
 
   const isYouves = YOUVES_FARMINGS.includes(`${farmingItem?.id}`);
 
-  return { isLoading, farmingItem, getTitle, isYouves };
+  return { isLoading, farmingItem, title: getTitle(), isYouves };
 };
