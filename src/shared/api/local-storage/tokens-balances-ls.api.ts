@@ -4,7 +4,7 @@ import { BooleansMap, NumbersMap } from '@shared/types';
 import { isExist } from '../../helpers';
 
 export namespace TokensBalancesLSApi {
-  const getTokensBalances = () => {
+  export const getTokensBalances = () => {
     return JSON.parse(localStorage.getItem(TOKENS_BALANCES_KEY) ?? '{}') as NumbersMap;
   };
 
@@ -20,7 +20,7 @@ export namespace TokensBalancesLSApi {
     localStorage.setItem(TOKENS_EVER_HAD_KEY, JSON.stringify(tokens));
   };
 
-  const saveTokenUsage = (tokenSlug: string) => {
+  export const saveTokenUsage = (tokenSlug: string) => {
     const everHad = getTokensEverHad();
     if (!everHad[tokenSlug]) {
       everHad[tokenSlug] = true;
@@ -28,15 +28,16 @@ export namespace TokensBalancesLSApi {
     }
   };
 
-  export const setTokenBalance = (tokenSlug: string, amount: Nullable<number>) => {
+  export const setTokenBalance = (tokenSlug: string, dollarEquivalent: Nullable<number>) => {
     const balances = getTokensBalances();
-    if (amount) {
-      balances[tokenSlug] = amount;
+
+    if (dollarEquivalent) {
+      balances[tokenSlug] = dollarEquivalent;
     } else {
       delete balances[tokenSlug];
     }
     saveTokensBalances(balances);
-    if (isExist(amount)) {
+    if (isExist(dollarEquivalent)) {
       saveTokenUsage(tokenSlug);
     }
   };
