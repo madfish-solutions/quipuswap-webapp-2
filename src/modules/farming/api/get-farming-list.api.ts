@@ -24,38 +24,51 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
 
   const balances = await Promise.all(
     list.map(async item => {
-      const { stakedToken, version, contractAddress, rewardToken } = item;
+      try {
+        const { stakedToken, version, contractAddress, rewardToken } = item;
 
-      const balanceBN = await retry(
-        async () =>
-          await getUserBalance(tezos, accountPkh, stakedToken.contractAddress, stakedToken.type, stakedToken.fa2TokenId)
-      );
-      const myBalance = saveBigNumber(balanceBN, ZERO_AMOUNT_BN);
-
-      let farmingBalances: FarmingBalances;
-
-      if (version === FarmVersion.v1) {
-        farmingBalances = await getUserV1FarmingBalances(accountPkh, v1FarmingStorage, item);
-      } else {
-        const farmRewardTokenBalanceBN = await retry(
+        const balanceBN = await retry(
           async () =>
             await getUserBalance(
               tezos,
-              contractAddress!,
-              rewardToken.contractAddress,
-              rewardToken.type,
-              rewardToken.fa2TokenId
+              accountPkh,
+              stakedToken.contractAddress,
+              stakedToken.type,
+              stakedToken.fa2TokenId
             )
         );
-        const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
-        farmingBalances = await getUserYouvesFarmingBalances(accountPkh, item, farmRewardTokenBalance, tezos);
-      }
+        const myBalance = saveBigNumber(balanceBN, ZERO_AMOUNT_BN);
 
-      return {
-        ...item,
-        ...farmingBalances,
-        myBalance
-      };
+        let farmingBalances: FarmingBalances;
+
+        if (version === FarmVersion.v1) {
+          farmingBalances = await getUserV1FarmingBalances(accountPkh, v1FarmingStorage, item);
+        } else {
+          const farmRewardTokenBalanceBN = await retry(
+            async () =>
+              await getUserBalance(
+                tezos,
+                contractAddress!,
+                rewardToken.contractAddress,
+                rewardToken.type,
+                rewardToken.fa2TokenId
+              )
+          );
+          const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
+          farmingBalances = await getUserYouvesFarmingBalances(accountPkh, item, farmRewardTokenBalance, tezos);
+        }
+
+        return {
+          ...item,
+          ...farmingBalances,
+          myBalance
+        };
+      } catch (e) {
+        return {
+          ...item,
+          error: (e as Error).message
+        };
+      }
     })
   );
 
