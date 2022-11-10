@@ -1,13 +1,25 @@
+import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@config/constants';
-import { defined, isExist, isNull, toReal } from '@shared/helpers';
+import {
+  MS_IN_SECOND,
+  NO_TIMELOCK_VALUE,
+  PRECISION_FACTOR,
+  PRECISION_FACTOR_STABLESWAP_LP,
+  SECONDS_IN_DAY,
+  ZERO_AMOUNT_BN
+} from '@config/constants';
+import { getStorageInfo } from '@shared/dapp';
+import { defined, getLastElementFromArray, isExist, isNull, toReal } from '@shared/helpers';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
-import { FarmingContractStorage, IRawUsersInfoValue, IUsersInfoValue, UsersInfoKey } from '../interfaces';
+import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
+import { FarmingContractStorage, FarmVersion, IRawUsersInfoValue, IUsersInfoValue, UsersInfoKey } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
+import { YouvesFarmStakes, YouvesFarmStorage } from '../pages/youves-item/api/types';
+import { getRewards } from '../pages/youves-item/helpers';
 
 export interface UserBalances {
   depositBalance: string;
@@ -29,6 +41,12 @@ export const DEFAULT_RAW_USER_INFO: IRawUsersInfoValue = {
   prev_earned: new BigNumber(ZERO),
   prev_staked: new BigNumber(ZERO),
   allowances: []
+};
+
+export const DEFAULT_YOUVES_FARM_STAKE = {
+  stake: ZERO_AMOUNT_BN,
+  disc_factor: ZERO_AMOUNT_BN,
+  age_timestamp: new Date()
 };
 
 export const fillIndexArray = (value: number): Array<BigNumber> => {
@@ -119,7 +137,7 @@ export const getBalancesNew = (
   };
 };
 
-export const getAllFarmUserInfo = async (
+export const getV1FarmsUserInfo = async (
   storage: FarmingContractStorage,
   accountAddress: string,
   farmsWithBalanceIds: Nullable<Array<BigNumber>> = null
@@ -141,25 +159,55 @@ export const getAllFarmUserInfo = async (
   return usersInfoValues;
 };
 
-export const getUserFarmingBalances = async (
-  accountAddress: string,
+export const getUserV1FarmingBalances = async (
+  accountPkh: string,
   storage: FarmingContractStorage,
-  list: Array<FarmingListItemModel>
+  farming: FarmingListItemModel
 ) => {
-  const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
+  const [userInfoValue] = await getV1FarmsUserInfo(storage, accountPkh, [new BigNumber(farming.id)]);
 
-  const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
-    const farm = list.find(item => item.id === index.toString());
-    if (farm && farm.old) {
-      const balance = getBalancesNew(usersInfoValue, farm);
+  return getBalancesNew(userInfoValue, farming);
+};
 
-      acc.set(farm.id, balance);
-    }
+export const getYouvesFarmingRewards = (
+  farming: FarmingListItemModel,
+  farmRewardTokenBalance: BigNumber,
+  storage: YouvesFarmStorage,
+  stake: YouvesFarmStakes
+) => {
+  const { last_rewards, disc_factor, total_stake, max_release_period } = storage;
+  const precision = farming.version === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
 
-    return acc;
-  }, new Map<string, UserBalances>());
+  const reward = farmRewardTokenBalance.minus(last_rewards);
+  const newDiscFactor = disc_factor.plus(reward.multipliedBy(precision).dividedToIntegerBy(total_stake));
 
-  return balances;
+  return getRewards(stake, max_release_period, newDiscFactor, precision);
+};
+
+export const getUserYouvesFarmingBalances = async (
+  accountPkh: string,
+  farming: FarmingListItemModel,
+  farmRewardTokenBalance: BigNumber,
+  tezos: TezosToolkit
+) => {
+  const farmAddress = defined(farming.contractAddress);
+  const { stakes } = await BlockchainYouvesFarmingApi.getStakes(farmAddress, accountPkh, tezos);
+  const stake = getLastElementFromArray(stakes) ?? DEFAULT_YOUVES_FARM_STAKE;
+
+  if (stake.stake.isZero()) {
+    return {
+      depositBalance: '0',
+      earnBalance: '0'
+    };
+  }
+
+  const storage = await getStorageInfo<YouvesFarmStorage>(tezos, farmAddress);
+  const { claimableReward } = getYouvesFarmingRewards(farming, farmRewardTokenBalance, storage, stake);
+
+  return {
+    depositBalance: stake.stake.toFixed(),
+    earnBalance: claimableReward.toFixed()
+  };
 };
 
 export const getUserInfoLastStakedTime = (userInfo: Nullable<IUsersInfoValue>) =>

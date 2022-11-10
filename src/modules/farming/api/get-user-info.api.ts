@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 
-import { DEFAULT_RAW_USER_INFO, getAllFarmUserInfo } from '../helpers';
+import { DEFAULT_RAW_USER_INFO, getV1FarmsUserInfo } from '../helpers';
 import { FarmingContractStorageWrapper, IRawUsersInfoValue } from '../interfaces';
 import { FarmingItemV1Model } from '../models';
 
@@ -28,5 +28,5 @@ export const getAllFarmsUserInfoApi = async (
   const wrapStorage = await getStorageInfo<FarmingContractStorageWrapper>(tezos, FARMING_CONTRACT_ADDRESS);
   const storage = wrapStorage.storage;
 
-  return await getAllFarmUserInfo(storage, accountPkh, farmsWithBalancesIds);
+  return await getV1FarmsUserInfo(storage, accountPkh, farmsWithBalancesIds);
 };

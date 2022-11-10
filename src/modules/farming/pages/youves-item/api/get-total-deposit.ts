@@ -7,7 +7,7 @@ import { isNull, isUndefined } from '@shared/helpers';
 import { Undefined } from '@shared/types';
 
 import { getTokenDecimalsAndPrecision } from '../helpers';
-import { YouvesFarmStakes, YouvesFarmStorage } from './types';
+import { YouvesFarmStorage } from './types';
 
 export const getTotalDeposit = async (
   tezos: Nullable<TezosToolkit>,
@@ -24,9 +24,7 @@ export const getTotalDeposit = async (
   );
 
   const ids: Array<BigNumber> = (await stakes_owner_lookup.get(accountPkh)) ?? [];
-  const stakesArrayPromise = ids.map(async (id: BigNumber) => {
-    return stakes.get<YouvesFarmStakes>(Number(id));
-  });
+  const stakesArrayPromise = ids.map(async (id: BigNumber) => await stakes.get(id));
   const userArrayStakes = await Promise.all(stakesArrayPromise);
 
   const { tokenDecimals, tokenPrecision } = await getTokenDecimalsAndPrecision(
