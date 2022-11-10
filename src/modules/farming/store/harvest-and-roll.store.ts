@@ -19,8 +19,8 @@ export class HarvestAndRollStore extends BaseFilterStore {
   rewardsInQuipu: Nullable<BigNumber> = null;
   rewardsQuipuInUsd: Nullable<BigNumber> = null;
 
-  constructor(private rootStore: RootStore) {
-    super();
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
     makeObservable(this, {
       opened: observable,

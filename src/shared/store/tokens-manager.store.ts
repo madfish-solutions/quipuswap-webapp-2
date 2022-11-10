@@ -21,7 +21,6 @@ import { isValidContractAddress } from '@shared/validators';
 
 import { BaseFilterStore } from './base-filter.store';
 import { RootStore } from './root.store';
-import { sortManagedToken } from './utils';
 
 // copy-past find a better way
 const searchToken = async (tezos: TezosToolkit, address: string, tokenId?: number): Promise<Nullable<Token>> => {
@@ -66,22 +65,9 @@ export class TokensManagerStore extends BaseFilterStore {
 
   isSearching = false;
 
-  get tokens() {
-    return this.managedTokens.filter(token => !token.isHidden).sort(sortManagedToken);
-  }
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
-  get filteredTokens() {
-    const tokens = this.search ? this.managedTokens : this.tokens;
-
-    return tokens.filter(token => this.tokenMatchesSearch(token)).sort(sortManagedToken);
-  }
-
-  get filteredManagedTokens() {
-    return this.managedTokens.filter(token => this.tokenMatchesSearch(token)).sort(sortManagedToken);
-  }
-
-  constructor(private rootStore: RootStore) {
-    super();
     makeObservable(this, {
       managedTokens: observable,
       isSearching: observable,
@@ -92,11 +78,18 @@ export class TokensManagerStore extends BaseFilterStore {
       hideOrShowToken: action,
       searchCustomToken: action,
 
-      tokens: computed,
-      filteredTokens: computed
+      tokens: computed
     });
 
     void this.loadTokens();
+  }
+
+  get tokens() {
+    return this.filteredManagedTokens.filter(token => !token.isHidden);
+  }
+
+  get filteredManagedTokens() {
+    return this.managedTokens.filter(token => this.searchToken(token)).sort((a, b) => this.orderTokens(a, b));
   }
 
   private manageTokens() {
@@ -115,8 +108,6 @@ export class TokensManagerStore extends BaseFilterStore {
         token.isHidden = true;
       }
     });
-
-    this.managedTokens.sort(sortManagedToken);
   }
 
   async loadTokens() {

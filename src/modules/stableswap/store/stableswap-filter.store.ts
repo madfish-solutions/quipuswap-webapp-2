@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { BaseFilterStore } from '@shared/store';
+import { BaseFilterStore, RootStore } from '@shared/store';
 
 import { StableswapItemModel } from '../models';
 import { sortStableswapList } from '../stableswap-liquidity/pages/list/helpers';
@@ -10,8 +10,8 @@ export class StableswapFilterStore extends BaseFilterStore {
   whitelistedOnly = false;
   sortField: StableswapSortField = StableswapSortField.ID;
 
-  constructor() {
-    super();
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
     makeObservable(this, {
       whitelistedOnly: observable,
@@ -30,7 +30,7 @@ export class StableswapFilterStore extends BaseFilterStore {
 
     if (this.search) {
       localList = localList.filter(({ tokensInfo }) =>
-        tokensInfo.map(({ token }) => this.tokenMatchesSearch(token)).some(Boolean)
+        tokensInfo.map(({ token }) => this.searchToken(token)).some(Boolean)
       );
     }
 

@@ -2,9 +2,11 @@ import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { DEFAULT_TOKEN_ID, STEP } from '@config/constants';
-import { Nullable, Token } from '@shared/types';
+import { ManagedToken, Nullable, Token } from '@shared/types';
 
 import { includesCaseInsensitive, isEmptyString, isExist, isNull, isZeroTokenId, SortDirection } from '../helpers';
+import { RootStore } from './root.store';
+import { sortByFavorite, sortByName } from './utils';
 
 export class BaseFilterStore {
   get tokenIdValue() {
@@ -19,7 +21,7 @@ export class BaseFilterStore {
   tokenId: Nullable<BigNumber> = null;
   sortDirection: SortDirection = SortDirection.DESC;
 
-  constructor() {
+  constructor(protected rootStore: RootStore) {
     makeObservable(this, {
       search: observable,
       tokenId: observable,
@@ -67,7 +69,8 @@ export class BaseFilterStore {
     this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
   }
 
-  protected tokenMatchesSearch({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {
+  protected searchToken(token: Token, contractOnly?: boolean): boolean {
+    const { metadata, contractAddress, fa2TokenId } = token;
     const isContract = contractAddress === this.search;
 
     const tokenId = this.tokenId?.toNumber();
@@ -83,5 +86,13 @@ export class BaseFilterStore {
     const isSymbol = includesCaseInsensitive(metadata?.symbol, this.search);
 
     return isName || isSymbol || isContract;
+  }
+
+  protected orderTokens(a: ManagedToken, b: ManagedToken) {
+    if (a.isFavorite !== b.isFavorite) {
+      return sortByFavorite(a);
+    }
+
+    return sortByName(a, b);
   }
 }
