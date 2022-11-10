@@ -10,7 +10,16 @@ import {
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
-import { defined, getLastElementFromArray, isExist, isNull, toReal } from '@shared/helpers';
+import {
+  defined,
+  getLastElementFromArray,
+  getNowTimestampInSeconds,
+  isExist,
+  isNull,
+  saveBigNumber,
+  toIntegerSeconds,
+  toReal
+} from '@shared/helpers';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
@@ -19,7 +28,6 @@ import { mapUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
 import { YouvesFarmStakes, YouvesFarmStorage } from '../pages/youves-item/api/types';
-import { getRewards } from '../pages/youves-item/helpers';
 
 export interface UserBalances {
   depositBalance: string;
@@ -30,23 +38,21 @@ export interface IFarmingListUsersInfoValueWithId extends IUsersInfoValue {
   id: BigNumber;
 }
 
-const ZERO = 0;
-const ZERO_BN = new BigNumber('0');
+interface YouvesFarmRewardsStats {
+  lastRewards: string;
+  discFactor: BigNumber;
+  vestingPeriodSeconds: BigNumber;
+  staked: BigNumber;
+}
 
 export const DEFAULT_RAW_USER_INFO: IRawUsersInfoValue = {
   last_staked: new Date().toISOString(),
-  staked: new BigNumber(ZERO),
-  earned: new BigNumber(ZERO),
-  claimed: new BigNumber(ZERO),
-  prev_earned: new BigNumber(ZERO),
-  prev_staked: new BigNumber(ZERO),
+  staked: ZERO_AMOUNT_BN,
+  earned: ZERO_AMOUNT_BN,
+  claimed: ZERO_AMOUNT_BN,
+  prev_earned: ZERO_AMOUNT_BN,
+  prev_staked: ZERO_AMOUNT_BN,
   allowances: []
-};
-
-export const DEFAULT_YOUVES_FARM_STAKE = {
-  stake: ZERO_AMOUNT_BN,
-  disc_factor: ZERO_AMOUNT_BN,
-  age_timestamp: new Date()
 };
 
 export const fillIndexArray = (value: number): Array<BigNumber> => {
@@ -72,16 +78,16 @@ export const getUserPendingRewardForFarmingV1 = (
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
-    return ZERO_BN;
+    return ZERO_AMOUNT_BN;
   }
 
   const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime).getTime());
-  let reward = new BigNumber(
-    Math.floor((timeFrom - new Date(farmingItemModel.udp).getTime()) / MS_IN_SECOND)
-  ).multipliedBy(rewardPerSecond);
+  let reward = new BigNumber(toIntegerSeconds(timeFrom - new Date(farmingItemModel.udp).getTime())).multipliedBy(
+    rewardPerSecond
+  );
 
   if (reward.isNegative()) {
-    reward = ZERO_BN;
+    reward = ZERO_AMOUNT_BN;
   }
 
   const rewardPerShare = farmingItemModel.rewardPerShare.plus(reward.dividedBy(totalStaked));
@@ -99,16 +105,16 @@ export const getUserPendingReward = (
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
-    return ZERO_BN;
+    return ZERO_AMOUNT_BN;
   }
 
   const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime!).getTime());
-  let reward = new BigNumber(
-    Math.floor((timeFrom - new Date(farmingItemModel.udp!).getTime()) / MS_IN_SECOND)
-  ).multipliedBy(defined(rewardPerSecond, 'rewardPerSecond'));
+  let reward = new BigNumber(toIntegerSeconds(timeFrom - new Date(farmingItemModel.udp!).getTime())).multipliedBy(
+    defined(rewardPerSecond, 'rewardPerSecond')
+  );
 
   if (reward.isNegative()) {
-    reward = ZERO_BN;
+    reward = ZERO_AMOUNT_BN;
   }
 
   const rewardPerShare = farmingItemModel.rewardPerShare!.plus(reward.dividedBy(totalStaked));
@@ -118,7 +124,7 @@ export const getUserPendingReward = (
   return fromRewardPrecision(pending);
 };
 
-export const getBalancesNew = (
+export const calculateV1FarmingBalances = (
   userInfo: Undefined<IFarmingListUsersInfoValueWithId>,
   farmingItemModel: FarmingListItemModel
 ) => {
@@ -166,22 +172,38 @@ export const getUserV1FarmingBalances = async (
 ) => {
   const [userInfoValue] = await getV1FarmsUserInfo(storage, accountPkh, [new BigNumber(farming.id)]);
 
-  return getBalancesNew(userInfoValue, farming);
+  return calculateV1FarmingBalances(userInfoValue, farming);
 };
 
-export const getYouvesFarmingRewards = (
-  farming: FarmingListItemModel,
+export const calculateYouvesFarmingRewards = (
+  rewardsStats: YouvesFarmRewardsStats,
+  farmVersion: FarmVersion,
   farmRewardTokenBalance: BigNumber,
-  storage: YouvesFarmStorage,
-  stake: YouvesFarmStakes
+  stake: Optional<YouvesFarmStakes>
 ) => {
-  const { last_rewards, disc_factor, total_stake, max_release_period } = storage;
-  const precision = farming.version === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
+  if (!isExist(stake)) {
+    return {
+      claimableReward: ZERO_AMOUNT_BN,
+      fullReward: ZERO_AMOUNT_BN
+    };
+  }
 
-  const reward = farmRewardTokenBalance.minus(last_rewards);
-  const newDiscFactor = disc_factor.plus(reward.multipliedBy(precision).dividedToIntegerBy(total_stake));
+  const { lastRewards, discFactor, staked: totalStaked, vestingPeriodSeconds } = rewardsStats;
+  const precision = farmVersion === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
+  const { stake: stakeAmount, age_timestamp: ageTimestamp, disc_factor: userDiscFactor } = stake;
 
-  return getRewards(stake, max_release_period, newDiscFactor, precision);
+  const reward = farmRewardTokenBalance.minus(lastRewards);
+  // TODO: https://madfish.atlassian.net/browse/QUIPU-636
+  const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(totalStaked));
+
+  const nowTimestamp = getNowTimestampInSeconds();
+  const ageTimestampInSeconds = toIntegerSeconds(new Date(ageTimestamp));
+
+  const stakeAge = BigNumber.min(nowTimestamp - ageTimestampInSeconds, vestingPeriodSeconds);
+  const fullReward = stakeAmount.times(newDiscFactor.minus(userDiscFactor)).dividedToIntegerBy(precision);
+  const claimableReward = fullReward.times(stakeAge).dividedToIntegerBy(vestingPeriodSeconds);
+
+  return { claimableReward, fullReward };
 };
 
 export const getUserYouvesFarmingBalances = async (
@@ -192,20 +214,23 @@ export const getUserYouvesFarmingBalances = async (
 ) => {
   const farmAddress = defined(farming.contractAddress);
   const { stakes } = await BlockchainYouvesFarmingApi.getStakes(farmAddress, accountPkh, tezos);
-  const stake = getLastElementFromArray(stakes) ?? DEFAULT_YOUVES_FARM_STAKE;
+  const stake = getLastElementFromArray(stakes);
 
-  if (stake.stake.isZero()) {
-    return {
-      depositBalance: '0',
-      earnBalance: '0'
-    };
-  }
-
-  const storage = await getStorageInfo<YouvesFarmStorage>(tezos, farmAddress);
-  const { claimableReward } = getYouvesFarmingRewards(farming, farmRewardTokenBalance, storage, stake);
+  const {
+    last_rewards: lastRewards,
+    disc_factor: discFactor,
+    max_release_period: vestingPeriodSeconds,
+    total_stake: staked
+  } = await getStorageInfo<YouvesFarmStorage>(tezos, farmAddress);
+  const { claimableReward } = calculateYouvesFarmingRewards(
+    { lastRewards: lastRewards.toFixed(), discFactor, vestingPeriodSeconds, staked },
+    farming.version,
+    farmRewardTokenBalance,
+    stake
+  );
 
   return {
-    depositBalance: stake.stake.toFixed(),
+    depositBalance: saveBigNumber(stake?.stake, ZERO_AMOUNT_BN).toFixed(),
     earnBalance: claimableReward.toFixed()
   };
 };
