@@ -3,12 +3,12 @@ import { useEffect } from 'react';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { useFarmingListStore, useHarvestAndRollStore } from '../../../../hooks';
+import { useFarmingListRewardsStore, useHarvestAndRollStore } from '../../../../hooks';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation();
 
-  const farmingListStore = useFarmingListStore();
+  const farmingListRewardsStore = useFarmingListRewardsStore();
   const harvestAndRollStore = useHarvestAndRollStore();
 
   const handleHarvestAll = async () => {
@@ -18,13 +18,13 @@ export const useFarmingRewardsListViewModel = () => {
   };
 
   useEffect(() => {
-    farmingListStore.updatePendingRewards();
-    farmingListStore.makePendingRewardsLiveable();
+    farmingListRewardsStore.updatePendingRewards();
+    farmingListRewardsStore.makePendingRewardsLiveable();
 
     return () => {
-      farmingListStore.clearIntervals();
+      farmingListRewardsStore.clearIntervals();
     };
-  }, [farmingListStore]);
+  }, [farmingListRewardsStore]);
 
   return {
     handleHarvestAll,

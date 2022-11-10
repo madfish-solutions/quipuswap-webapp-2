@@ -1,6 +1,10 @@
+import BigNumber from 'bignumber.js';
+
 import { FIRST_TUPLE_INDEX, SECOND_TUPLE_INDEX } from '@config/constants';
+import { isEmptyArray } from '@shared/helpers';
 
 import { LiquidityItemResponseDto } from '../dto';
+import { PoolType } from '../interfaces';
 
 export class LiquidityItemModel extends LiquidityItemResponseDto {
   constructor(dto: LiquidityItemResponseDto) {
@@ -9,6 +13,13 @@ export class LiquidityItemModel extends LiquidityItemResponseDto {
     for (const key in dto) {
       //@ts-ignore
       this[key] = dto[key];
+    }
+
+    //TODO: fix stableswap maxApr https://madfish.atlassian.net/browse/QUIPU-623
+    if (this.type === PoolType.STABLESWAP && this.item.opportunities && !isEmptyArray(this.item.opportunities)) {
+      this.item.maxApr = this.item.opportunities
+        .reduce((max, { apr }) => BigNumber.max(max, apr), new BigNumber(0))
+        .toNumber();
     }
   }
 

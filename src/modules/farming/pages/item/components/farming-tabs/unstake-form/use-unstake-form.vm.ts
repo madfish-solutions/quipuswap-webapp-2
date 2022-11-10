@@ -39,7 +39,7 @@ export const useUnstakeFormViewModel = () => {
     confirmationPopup(async () => {
       await handleUnstakeSubmit(values, actions);
 
-      await delayedGetFarmingItem(defined(farmingItem).id);
+      await delayedGetFarmingItem(defined(farmingItem, 'farmingItem').id, defined(farmingItem, 'farmingItem').version);
     });
   };
 

@@ -21,6 +21,10 @@ export class LiquidityItemStore {
   })
   readonly itemSore: LoadingErrorData<LiquidityItemModel, { item: null }>;
 
+  get itemIsLoading() {
+    return this.itemSore.isLoading;
+  }
+
   get item() {
     return this.itemSore.model.item;
   }

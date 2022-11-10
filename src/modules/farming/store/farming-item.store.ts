@@ -1,19 +1,20 @@
 import { BigNumber } from 'bignumber.js';
-import { observable, makeObservable, action, computed } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
-import { isExist, isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/constants';
+import { isNull, MakeInterval, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { NullableStringWrapperModel } from '@shared/models';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
-import { getUserPendingReward } from '../helpers';
-import { FarmingItemResponseModel, UsersInfoResponseModel, UserTokenBalanceModel } from '../models';
+import { getUserPendingRewardForFarmingV1 } from '../helpers';
+import { FarmVersion } from '../interfaces';
+import { FarmingItemV1ResponseModel, FarmingItemUsersInfoResponseModel, UserTokenBalanceModel } from '../models';
 import { FarmingFormTabs } from '../pages/item/types'; //TODO
-import { FarmingItemWithBalances } from '../pages/list/types';
+import { FarmingItemV1WithBalances } from '../pages/list/types';
 
 const DEFAULT_INPUT_AMOUNT = 0;
 
@@ -28,16 +29,19 @@ const defaultAvailableBalance = {
 
 @ModelBuilder()
 export class FarmingItemStore {
-  farmingId: Nullable<BigNumber> = null;
+  farmingId: Nullable<string> = null;
+
+  version: Nullable<FarmVersion> = null;
+  /** @deprecated */
   old = true;
 
   //#region item store region
   @Led({
     default: defaultItem,
-    loader: async self => await getFarmingItemApi(self.farmingId, self.old),
-    model: FarmingItemResponseModel
+    loader: async self => await getFarmingItemApi(self.farmingId, self.version, self.old),
+    model: FarmingItemV1ResponseModel
   })
-  readonly itemStore: LoadingErrorData<FarmingItemResponseModel, typeof defaultItem>;
+  readonly itemStore: LoadingErrorData<FarmingItemV1ResponseModel, typeof defaultItem>;
 
   get item() {
     return this.itemStore.model.item;
@@ -61,9 +65,9 @@ export class FarmingItemStore {
   @Led({
     default: { value: null },
     loader: async self => await self.getUserInfo(),
-    model: UsersInfoResponseModel
+    model: FarmingItemUsersInfoResponseModel
   })
-  readonly userInfoStore: LoadingErrorData<UsersInfoResponseModel, { value: null }>;
+  readonly userInfoStore: LoadingErrorData<FarmingItemUsersInfoResponseModel, { value: null }>;
 
   get userInfo() {
     return this.userInfoStore.model.value;
@@ -95,7 +99,7 @@ export class FarmingItemStore {
     FARM_USER_INFO_UPDATE_INTERVAL
   );
 
-  get farmingItem(): Nullable<FarmingItemWithBalances> {
+  get farmingItem(): Nullable<FarmingItemV1WithBalances> {
     const stakeItem = this.item;
     const userInfo = this.userInfo;
 
@@ -130,20 +134,6 @@ export class FarmingItemStore {
     this.clearBalance();
   }
 
-  async getPendingRewardsOnCurrentBlock(): Promise<Nullable<BigNumber>> {
-    const { tezos } = this.rootStore;
-    const userInfo = this.userInfo;
-
-    if (!isExist(tezos) || !isExist(userInfo) || !isExist(this.item)) {
-      return null;
-    }
-
-    const blockTimestamp = (await tezos.rpc.getBlockHeader()).timestamp;
-    const blockTimestampMS = new Date(blockTimestamp).getTime();
-
-    return getUserPendingReward(userInfo, this.item, blockTimestampMS).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
-  }
-
   makePendingRewardsLiveable() {
     this.pendingRewardsInterval.start();
     this.updateUserInfoInterval.start();
@@ -152,7 +142,7 @@ export class FarmingItemStore {
   updatePendingRewards() {
     const userInfo = this.userInfo;
 
-    this.pendingRewards = userInfo && this.item && getUserPendingReward(userInfo, this.item);
+    this.pendingRewards = userInfo && this.item && getUserPendingRewardForFarmingV1(userInfo, this.item);
   }
 
   clearIntervals() {
@@ -176,10 +166,15 @@ export class FarmingItemStore {
     this.setInputAmount(DEFAULT_INPUT_AMOUNT);
   }
 
-  setFarmingId(farmingId: Nullable<BigNumber>) {
+  setFarmingId(farmingId: Nullable<string>) {
     this.farmingId = farmingId;
   }
 
+  setVersion(version: Nullable<FarmVersion>) {
+    this.version = version;
+  }
+
+  /** @deprecated */
   setOld(old: boolean) {
     this.old = old;
   }

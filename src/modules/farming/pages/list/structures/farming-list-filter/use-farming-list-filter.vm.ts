@@ -27,7 +27,7 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
     handleSortDirectionToggle
   } = useBaseFilterStoreConverter(farmingFilterStore);
 
-  const { activeOnly, stakedOnly, sortField } = farmingFilterStore;
+  const { activeOnly, sortField } = farmingFilterStore;
   const { t } = useTranslation(['common', 'farm']);
 
   const handleSortFieldChange = (value: unknown) => {
@@ -59,25 +59,25 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
 
   const sortDirectionRotate = isDirrectOrder(sortDirection);
 
-  const setStakedOnly = (state: boolean) => {
-    return farmingFilterStore.setStakedOnly(state);
-  };
+  // const setStakedOnly = (state: boolean) => {
+  //   return farmingFilterStore.setStakedOnly(state);
+  // };
 
   const setActiveOnly = (state: boolean) => {
     return farmingFilterStore.setActiveOnly(state);
   };
 
   const switcherDataList = [
-    {
-      value: stakedOnly,
-      onClick: setStakedOnly,
-      disabled: isNull(accountPkh),
-      switcherDTI: 'stakedOnlySwitcher',
-      switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
-      translation: t('farm|stakedOnly'),
-      translationClassName: styles.switcherTranslation,
-      className: cx(styles.switcherContainer, styles.switcherStakeOnly)
-    },
+    // {
+    //   value: stakedOnly,
+    //   onClick: setStakedOnly,
+    //   disabled: isNull(accountPkh),
+    //   switcherDTI: 'stakedOnlySwitcher',
+    //   switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
+    //   translation: t('farm|stakedOnly'),
+    //   translationClassName: styles.switcherTranslation,
+    //   className: cx(styles.switcherContainer, styles.switcherStakeOnly)
+    // },
     {
       value: activeOnly,
       onClick: setActiveOnly,
