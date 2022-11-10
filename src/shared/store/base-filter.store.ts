@@ -6,7 +6,7 @@ import { ManagedToken, Nullable, Token } from '@shared/types';
 
 import { includesCaseInsensitive, isEmptyString, isExist, isNull, isZeroTokenId, SortDirection } from '../helpers';
 import { RootStore } from './root.store';
-import { sortByFavorite, sortByName } from './utils';
+import { sortByBalance, sortByFavorite, sortByName } from './utils';
 
 export class BaseFilterStore {
   get tokenIdValue() {
@@ -88,9 +88,21 @@ export class BaseFilterStore {
     return isName || isSymbol || isContract;
   }
 
+  private isSortableByBalance(token: ManagedToken) {
+    return !!this.rootStore.tokensBalancesStore.getTokenBalance(token);
+  }
+
+  private getTokenBalance(token: ManagedToken) {
+    return this.rootStore.tokensBalancesStore.getTokenBalance(token);
+  }
+
   protected orderTokens(a: ManagedToken, b: ManagedToken) {
     if (a.isFavorite !== b.isFavorite) {
       return sortByFavorite(a);
+    }
+
+    if (this.isSortableByBalance(a) || this.isSortableByBalance(b)) {
+      return sortByBalance(this.getTokenBalance(a), this.getTokenBalance(a));
     }
 
     return sortByName(a, b);

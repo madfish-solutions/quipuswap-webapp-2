@@ -14,10 +14,10 @@ import {
 } from '@shared/helpers';
 
 import { TokensBalancesLSApi } from '../api';
-import { Optional, Token } from '../types';
+import { Optional, Token, TokenId } from '../types';
 import { RootStore } from './root.store';
 
-interface TokenBalance {
+export interface TokenBalance {
   token: Token;
   balance: Nullable<BigNumber>;
   exchangeRate: Nullable<BigNumber>;
@@ -39,7 +39,7 @@ export class TokensBalancesStore {
     });
   }
 
-  private getTokenBalance(token: Token) {
+  getTokenBalance(token: TokenId) {
     return this.tokensBalances.find(tb => isTokenEqual(token, tb.token)) ?? null;
   }
 
