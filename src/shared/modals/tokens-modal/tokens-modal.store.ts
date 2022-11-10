@@ -49,7 +49,7 @@ export class TokensModalStore {
   }
 
   get extendTokens(): ExtendTokensModalCellProps[] {
-    return this.rootStore.tokensManagerStore.filteredTokens.map(token => ({
+    return this.rootStore.tokensManagerStore.tokens.map(token => ({
       ...token,
       isChosen: this.isChosenToken(token),
       disabled: this.isDisabledToken(token)

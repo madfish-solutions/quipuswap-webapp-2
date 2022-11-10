@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { isExist } from '@shared/helpers';
-import { BaseFilterStore } from '@shared/store';
+import { BaseFilterStore, RootStore } from '@shared/store';
 import { ActiveStatus } from '@shared/types';
 
 import { sortFarmingList } from '../pages/list/helpers'; //TODO
@@ -13,8 +13,8 @@ export class FarmingFilterStore extends BaseFilterStore {
 
   sortField: FarmingSortField = FarmingSortField.DEFAULT;
 
-  constructor() {
-    super();
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
     makeObservable(this, {
       stakedOnly: observable,
@@ -42,9 +42,9 @@ export class FarmingFilterStore extends BaseFilterStore {
     if (this.search) {
       localList = localList.filter(
         ({ stakedToken, rewardToken, tokens }) =>
-          this.tokenMatchesSearch(stakedToken, true) ||
-          this.tokenMatchesSearch(rewardToken) ||
-          tokens.some(token => this.tokenMatchesSearch(token))
+          this.searchToken(stakedToken, true) ||
+          this.searchToken(rewardToken) ||
+          tokens.some(token => this.searchToken(token))
       );
     }
 

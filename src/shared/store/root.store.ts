@@ -141,7 +141,7 @@ export class RootStore {
   async createLiquidityListFiltersStore() {
     if (isNull(this.liquidityListFiltersStore)) {
       const { LiquidityListFiltersStore } = await import('@modules/liquidity/store/liquidity-list-filters.stores');
-      this.liquidityListFiltersStore = new LiquidityListFiltersStore();
+      this.liquidityListFiltersStore = new LiquidityListFiltersStore(this);
     }
   }
 
@@ -190,21 +190,21 @@ export class RootStore {
   async createStableswapFilterStore() {
     if (isNull(this.stableswapFilterStore)) {
       const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
-      this.stableswapFilterStore = new StableswapFilterStore();
+      this.stableswapFilterStore = new StableswapFilterStore(this);
     }
   }
 
   async createStableDividendsFilterStore() {
     if (isNull(this.stableDividendsFilterStore)) {
       const { StableDividendsFilterStore } = await import('@modules/stableswap/store/stabledividends-filter.store');
-      this.stableDividendsFilterStore = new StableDividendsFilterStore();
+      this.stableDividendsFilterStore = new StableDividendsFilterStore(this);
     }
   }
 
   async createFarmingFilterStore() {
     if (isNull(this.farmingFilterStore)) {
       const { FarmingFilterStore } = await import('@modules/farming/store/farming-filter.store');
-      this.farmingFilterStore = new FarmingFilterStore();
+      this.farmingFilterStore = new FarmingFilterStore(this);
     }
   }
 

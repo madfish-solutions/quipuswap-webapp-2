@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { isExist } from '@shared/helpers';
-import { BaseFilterStore } from '@shared/store';
+import { BaseFilterStore, RootStore } from '@shared/store';
 
 import { StableswapDividendsItemModel } from '../models';
 import { sortStableDividendsList } from '../stabledividends/pages/list/helpers';
@@ -14,8 +14,8 @@ export class StableDividendsFilterStore extends BaseFilterStore {
 
   sortField: StableDividendsSortField = StableDividendsSortField.ID;
 
-  constructor() {
-    super();
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
     makeObservable(this, {
       stakedOnly: observable,
@@ -40,7 +40,7 @@ export class StableDividendsFilterStore extends BaseFilterStore {
 
     if (this.search) {
       localList = localList.filter(({ tokensInfo }) =>
-        tokensInfo.map(({ token }) => this.tokenMatchesSearch(token)).some(Boolean)
+        tokensInfo.map(({ token }) => this.searchToken(token)).some(Boolean)
       );
     }
 

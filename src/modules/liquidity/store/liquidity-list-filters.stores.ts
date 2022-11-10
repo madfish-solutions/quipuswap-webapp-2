@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
-import { BaseFilterStore } from '@shared/store';
+import { BaseFilterStore, RootStore } from '@shared/store';
 import { Token } from '@shared/types';
 
 import {
@@ -36,8 +36,8 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
 
   sortField: LiquiditySortField = LiquiditySortField.TVL;
 
-  constructor() {
-    super();
+  constructor(rootStore: RootStore) {
+    super(rootStore);
 
     makeObservable(this, {
       tokens: observable,
