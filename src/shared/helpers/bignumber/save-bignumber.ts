@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Optional, Undefined } from '@shared/types';
+import { Nullable, Optional, Undefined } from '@shared/types';
 
 import { isEmptyString } from '../strings';
 import { isExist } from '../type-checks';

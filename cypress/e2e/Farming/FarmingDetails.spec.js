@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Form exists', () => {
+describe.skip('Form exists', () => {
   beforeEach(() => {
     cy.visit('/farming');
     cy.get('[data-test-id="acceptCookieButton"]').click();
