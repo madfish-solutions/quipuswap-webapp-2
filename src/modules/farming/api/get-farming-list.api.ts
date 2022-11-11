@@ -20,8 +20,6 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
   ).storage<FarmingContractStorageWrapper>();
 
-  const v1FarmingStorage = wrapStorage.storage;
-
   const balances = await Promise.all(
     list.map(async item => {
       try {
@@ -33,7 +31,8 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
         let farmingBalances: FarmingBalances;
 
         if (version === FarmVersion.v1) {
-          farmingBalances = await getUserV1FarmingBalances(accountPkh, v1FarmingStorage, item);
+          const storage = wrapStorage.storage;
+          farmingBalances = await getUserV1FarmingBalances(accountPkh, storage, item);
         } else {
           const farmRewardTokenBalanceBN = await retry(
             async () => await getUserBalance(tezos, contractAddress!, rewardToken)
