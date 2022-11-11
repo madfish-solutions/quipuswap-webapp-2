@@ -44,10 +44,10 @@ export const useStakeFormForming = (
     const atomicInputAmount = toAtomic(new BigNumber(values.inputAmount), lpTokenDecimals);
 
     confirmationPopup(async () => {
-      actions.setSubmitting(true);
-      executeAsyncSteps(
+      await executeAsyncSteps(
         [
           async () => {
+            actions.setSubmitting(true);
             await doDeposit(defined(contractAddress, 'Contract address'), stakeId, atomicInputAmount);
             actions.resetForm();
             actions.setSubmitting(false);
