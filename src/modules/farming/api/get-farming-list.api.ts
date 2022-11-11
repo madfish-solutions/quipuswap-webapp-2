@@ -1,6 +1,6 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { getUserBalance } from '@blockchain';
+import { getUserTokenBalance } from '@blockchain';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
@@ -25,7 +25,7 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
       try {
         const { stakedToken, version, contractAddress, rewardToken } = item;
 
-        const balanceBN = await retry(async () => await getUserBalance(tezos, accountPkh, stakedToken));
+        const balanceBN = await retry(async () => await getUserTokenBalance(tezos, accountPkh, stakedToken));
         const myBalance = saveBigNumber(balanceBN, ZERO_AMOUNT_BN);
 
         let farmingBalances: FarmingBalances;
@@ -35,7 +35,7 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
           farmingBalances = await getUserV1FarmingBalances(accountPkh, storage, item);
         } else {
           const farmRewardTokenBalanceBN = await retry(
-            async () => await getUserBalance(tezos, contractAddress!, rewardToken)
+            async () => await getUserTokenBalance(tezos, contractAddress!, rewardToken)
           );
           const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
           farmingBalances = await getUserYouvesFarmingBalances(accountPkh, item, farmRewardTokenBalance, tezos);
