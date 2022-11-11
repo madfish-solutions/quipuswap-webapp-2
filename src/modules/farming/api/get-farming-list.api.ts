@@ -27,16 +27,7 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
       try {
         const { stakedToken, version, contractAddress, rewardToken } = item;
 
-        const balanceBN = await retry(
-          async () =>
-            await getUserBalance(
-              tezos,
-              accountPkh,
-              stakedToken.contractAddress,
-              stakedToken.type,
-              stakedToken.fa2TokenId
-            )
-        );
+        const balanceBN = await retry(async () => await getUserBalance(tezos, accountPkh, stakedToken));
         const myBalance = saveBigNumber(balanceBN, ZERO_AMOUNT_BN);
 
         let farmingBalances: FarmingBalances;
@@ -45,14 +36,7 @@ const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: stri
           farmingBalances = await getUserV1FarmingBalances(accountPkh, v1FarmingStorage, item);
         } else {
           const farmRewardTokenBalanceBN = await retry(
-            async () =>
-              await getUserBalance(
-                tezos,
-                contractAddress!,
-                rewardToken.contractAddress,
-                rewardToken.type,
-                rewardToken.fa2TokenId
-              )
+            async () => await getUserBalance(tezos, contractAddress!, rewardToken)
           );
           const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
           farmingBalances = await getUserYouvesFarmingBalances(accountPkh, item, farmRewardTokenBalance, tezos);
