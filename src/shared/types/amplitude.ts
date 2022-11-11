@@ -1,7 +1,7 @@
 import { BigMapAbstraction } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-export interface StableswapDevFee {
+export interface PartialStableswapDevFee {
   storage: {
     dev_store: {
       dev_fee_f: BigNumber;
@@ -9,7 +9,7 @@ export interface StableswapDevFee {
   };
 }
 
-export interface StableswapFactoryContractField {
+export interface PartialStableswapFactoryContractField {
   storage: {
     dev_store: {
       dev_fee_f: BigNumber;
@@ -17,7 +17,7 @@ export interface StableswapFactoryContractField {
   };
 }
 
-export interface StableswapPoolContractField {
+export interface PartialStableswapPoolContractField {
   storage: {
     pools: BigMapAbstraction;
   };
@@ -31,7 +31,7 @@ export interface Pools {
   };
 }
 
-export interface DexTwoFees {
+export interface PartialDexTwoFees {
   storage: {
     fees: {
       auction_fee: BigNumber;
