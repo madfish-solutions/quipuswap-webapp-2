@@ -6,6 +6,13 @@
   position: relative;
 }
 
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
 @include media('>SDesktop') {
   .titleLoader {
     height: 4.573rem;
@@ -34,11 +41,19 @@
   line-height: 1.5;
 }
 .light {
+  .footer {
+    background: $brand-01;
+  }
+
   .delegate {
     @include background-text-color($brand-01);
   }
 }
 .dark {
+  .footer {
+    background: $brand-02;
+  }
+
   .delegate {
     @include background-text-color($brand-02);
   }
