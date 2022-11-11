@@ -11,9 +11,10 @@ import {
 } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
 import {
+  calculateTimeDiffInMs,
+  calculateTimeDiffInSeconds,
   defined,
   getLastElementFromArray,
-  getNowTimestampInSeconds,
   isExist,
   isNull,
   saveBigNumber,
@@ -81,10 +82,10 @@ export const getUserPendingRewardForFarmingV1 = (
     return ZERO_AMOUNT_BN;
   }
 
-  const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime).getTime());
-  let reward = new BigNumber(toIntegerSeconds(timeFrom - new Date(farmingItemModel.udp).getTime())).multipliedBy(
-    rewardPerSecond
-  );
+  const timeTo = Math.min(timestamp, new Date(farmingItemModel.endTime).getTime());
+  let reward = new BigNumber(
+    toIntegerSeconds(calculateTimeDiffInMs(new Date(farmingItemModel.udp), timeTo))
+  ).multipliedBy(rewardPerSecond);
 
   if (reward.isNegative()) {
     reward = ZERO_AMOUNT_BN;
@@ -108,10 +109,10 @@ export const getUserPendingReward = (
     return ZERO_AMOUNT_BN;
   }
 
-  const timeFrom = Math.min(timestamp, new Date(farmingItemModel.endTime!).getTime());
-  let reward = new BigNumber(toIntegerSeconds(timeFrom - new Date(farmingItemModel.udp!).getTime())).multipliedBy(
-    defined(rewardPerSecond, 'rewardPerSecond')
-  );
+  const timeTo = Math.min(timestamp, new Date(farmingItemModel.endTime!).getTime());
+  let reward = new BigNumber(
+    toIntegerSeconds(calculateTimeDiffInMs(new Date(farmingItemModel.udp!), timeTo))
+  ).multipliedBy(defined(rewardPerSecond, 'rewardPerSecond'));
 
   if (reward.isNegative()) {
     reward = ZERO_AMOUNT_BN;
@@ -196,10 +197,7 @@ export const calculateYouvesFarmingRewards = (
   // TODO: https://madfish.atlassian.net/browse/QUIPU-636
   const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(totalStaked));
 
-  const nowTimestamp = getNowTimestampInSeconds();
-  const ageTimestampInSeconds = toIntegerSeconds(new Date(ageTimestamp));
-
-  const stakeAge = BigNumber.min(nowTimestamp - ageTimestampInSeconds, vestingPeriodSeconds);
+  const stakeAge = BigNumber.min(calculateTimeDiffInSeconds(new Date(ageTimestamp), new Date()), vestingPeriodSeconds);
   const fullReward = stakeAmount.times(newDiscFactor.minus(userDiscFactor)).dividedToIntegerBy(precision);
   const claimableReward = fullReward.times(stakeAge).dividedToIntegerBy(vestingPeriodSeconds);
 
