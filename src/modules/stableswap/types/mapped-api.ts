@@ -1,7 +1,7 @@
 import { MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { Opportunity } from './opportunities.interface';
 

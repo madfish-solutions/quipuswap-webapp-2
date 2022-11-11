@@ -1,5 +1,5 @@
 import { SAVED_TOKENS_KEY } from '@config/localstorage';
-import { SupportedNetworks, TokenWithQSNetworkType } from '@shared/types';
+import { Nullable, SupportedNetworks, TokenWithQSNetworkType } from '@shared/types';
 
 interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2TokenId' | 'isWhitelisted'> {
   fa2TokenId?: string;

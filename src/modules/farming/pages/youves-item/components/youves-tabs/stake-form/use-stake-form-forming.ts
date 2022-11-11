@@ -4,7 +4,7 @@ import { FormikHelpers } from 'formik/dist/types';
 import * as yup from 'yup';
 
 import { defined, getFormikError, numberAsString, toAtomic } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore } from '../../../../../hooks';

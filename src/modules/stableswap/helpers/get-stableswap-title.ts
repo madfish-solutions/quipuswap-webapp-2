@@ -1,4 +1,5 @@
 import { extractTokens, getSymbolsString, isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 import { StableswapItemModel } from '../models';

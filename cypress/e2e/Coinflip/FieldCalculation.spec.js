@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Output field calculated', () => {
+describe.skip('Output field calculated', () => {
   beforeEach(() => {
     cy.visit('/coinflip');
     cy.get('[data-test-id="acceptCookieButton"]').click();
