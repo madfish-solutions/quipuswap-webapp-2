@@ -215,5 +215,5 @@ export const PERCENT_75 = 75;
 export const PERCENT_100 = 100;
 
 // Contract fee precision
-export const STABLESWAP_FEE_PRECISION = 10000000000;
+export const STABLESWAP_FEE_PRECISION = 1e10;
 export const DEX_TWO_FEE_PRECISION = 1e18;
