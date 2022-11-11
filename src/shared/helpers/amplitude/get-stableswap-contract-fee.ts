@@ -30,9 +30,7 @@ export const getStableswapContractFee = async (tezos: Nullable<TezosToolkit>, st
   const fee = pools.fee;
   const devFee = stableswapFactoryStorage.dev_store.dev_fee_f;
 
-  const calcualatedFee = Object.values(fee)
-    .reduce((prev, curr) => getSumOfNumbers([prev, curr]), ZERO_AMOUNT_BN)
-    .plus(devFee);
+  const calcualatedFee = getSumOfNumbers(Object.values(fee)).plus(devFee);
 
   return calcualatedFee.dividedBy(STABLESWAP_FEE_PRECISION).multipliedBy(PERCENTAGE_100);
 };
