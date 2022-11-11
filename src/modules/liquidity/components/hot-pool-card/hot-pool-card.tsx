@@ -8,7 +8,7 @@ import { DOLLAR, PERCENT } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, DashboardCard, TokensLogos, TokensSymbols } from '@shared/components';
 import { Confettis } from '@shared/svg';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './hot-pool-card.module.scss';
