@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { getGameResult, Statuses } from '../helpers';

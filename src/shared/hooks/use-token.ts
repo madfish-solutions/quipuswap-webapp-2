@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Token, TokenAddress } from '@shared/types';
+import { Nullable, Token, TokenAddress } from '@shared/types';
 
 import { getTokenMetadata } from '../api';
 import { getTokenAddress, getTokenSlug, isString } from '../helpers';

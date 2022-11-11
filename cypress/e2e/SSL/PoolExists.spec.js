@@ -2,9 +2,8 @@
 
 describe('Specific pool exist', () => {
   beforeEach(() => {
-    cy.visit('/stableswap/liquidity');
+    cy.visit('/stableswap/liquidity/add/0');
     cy.get('[data-test-id="acceptCookieButton"]').click();
-    cy.get('[data-test-id="farming-item-0"]').click();
   });
   it('Should_DisplayLiquidityTitle_When_OpenSpecificPool', () => {
     cy.get('[data-test-id="SSLItemPageTitleAdd"]').should('contain', 'Liquidity KUSD / USDtz / uUSD');

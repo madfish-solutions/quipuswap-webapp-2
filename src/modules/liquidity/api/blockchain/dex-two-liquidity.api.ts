@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { BucketContractStorage, DexTwoContractStorage } from '@modules/liquidity/types';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import { defined } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 // TODO: https://madfish.atlassian.net/browse/QUIPU-613
 export class BlockchainDexTwoLiquidityApi {

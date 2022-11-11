@@ -11,7 +11,7 @@ import {
   toArray,
   defined
 } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { Iterator } from '../iterator';
 import { TokenLogo } from '../token-logo';

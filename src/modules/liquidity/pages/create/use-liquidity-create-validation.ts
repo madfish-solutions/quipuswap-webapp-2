@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
 import { operationAmountSchema } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 

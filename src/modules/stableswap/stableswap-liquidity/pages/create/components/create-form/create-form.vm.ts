@@ -19,7 +19,7 @@ import {
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circular dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { useCreateStableswapPool, usePoolCreationPrice } from '../../../../../hooks';
 import {
