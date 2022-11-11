@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
 import { defined } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { getFarmItemUrl } from '../../../../../helpers';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';

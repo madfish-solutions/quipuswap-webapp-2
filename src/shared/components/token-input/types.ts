@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 export type Tokens = Nullable<Token> | Array<Nullable<Token>>;
 

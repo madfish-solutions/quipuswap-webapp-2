@@ -6,6 +6,7 @@ import { StableswapDividendsItemModel } from '@modules/stableswap/models';
 import { StableswapRoutes } from '@modules/stableswap/stableswap-routes.enum';
 import { StableDividendsFormTabs, StakerInfo } from '@modules/stableswap/types';
 import { extractTokens, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 import { defineWhitelistedItemLabel } from './helpers';

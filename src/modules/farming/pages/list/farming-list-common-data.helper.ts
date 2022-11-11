@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { PERCENT, ZERO_AMOUNT_BN } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 import { getFarmingLabel, getFarmItemUrl } from '../../helpers';

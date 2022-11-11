@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { RootStore } from '@shared/store';
+import { Nullable } from '@shared/types';
 
 export class StableswapItemFormStore {
   shares: Nullable<BigNumber> = null;
