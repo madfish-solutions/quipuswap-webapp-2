@@ -5,7 +5,15 @@ import { DEFAULT_DECIMALS } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoUnstake } from '@modules/farming/hooks/blockchain/use-do-unstake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
-import { bigNumberToString, defined, getFormikError, isExist, numberAsString, toAtomic } from '@shared/helpers';
+import {
+  bigNumberToString,
+  defined,
+  executeAsyncSteps,
+  getFormikError,
+  isExist,
+  numberAsString,
+  toAtomic
+} from '@shared/helpers';
 import { useMount } from '@shared/hooks';
 
 import { UnstakeFormFields, UnstakeFormValues } from './unstake-form.interface';
@@ -40,13 +48,14 @@ export const useUnstakeFormViewModel = () => {
     actions: FormikHelpers<UnstakeFormValues>
   ) => {
     confirmationPopup(async () => {
-      await handleUnstakeSubmit(values, actions);
-
-      if (!isNextStepsRelevant.value) {
-        return;
-      }
-
-      await delayedGetFarmingItem(defined(farmingItem, 'farmingItem').id, defined(farmingItem, 'farmingItem').version);
+      await executeAsyncSteps(
+        [
+          async () => await handleUnstakeSubmit(values, actions),
+          async () =>
+            await delayedGetFarmingItem(defined(farmingItem).id, defined(farmingItem).version, defined(farmingItem).old)
+        ],
+        isNextStepsRelevant
+      );
     });
   };
 

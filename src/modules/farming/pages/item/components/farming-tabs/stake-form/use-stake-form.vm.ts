@@ -8,7 +8,16 @@ import { DEFAULT_DECIMALS } from '@config/constants';
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useDoStake } from '@modules/farming/hooks/blockchain/use-do-stake';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
-import { bigNumberToString, toAtomic, defined, isNull, isExist, getFormikError, numberAsString } from '@shared/helpers';
+import {
+  bigNumberToString,
+  toAtomic,
+  defined,
+  isNull,
+  isExist,
+  getFormikError,
+  numberAsString,
+  executeAsyncSteps
+} from '@shared/helpers';
 import { useMount } from '@shared/hooks';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
 
@@ -45,10 +54,6 @@ export const useStakeFormViewModel = () => {
       // TODO: Move to model
       const atomicInputAmount = toAtomic(defined(inputAmount), token);
 
-      if (!isNextStepsRelevant.value) {
-        return;
-      }
-
       await doStake(defined(farmingItem), atomicInputAmount, token, defined(selectedBaker));
     }
 
@@ -58,9 +63,14 @@ export const useStakeFormViewModel = () => {
 
   const handleStakeSubmitAndUpdateData = async (values: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
     confirmationPopup(async () => {
-      await handleStakeSubmit(values, actions);
-
-      await delayedGetFarmingItem(defined(farmingItem).id, defined(farmingItem).version, defined(farmingItem).old);
+      await executeAsyncSteps(
+        [
+          async () => await handleStakeSubmit(values, actions),
+          async () =>
+            await delayedGetFarmingItem(defined(farmingItem).id, defined(farmingItem).version, defined(farmingItem).old)
+        ],
+        isNextStepsRelevant
+      );
     });
   };
 
