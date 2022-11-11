@@ -1,4 +1,4 @@
-import { Optional } from '@shared/types';
+import { Nullable, Optional } from '@shared/types';
 
 import { CoinSide, TokenToPlay } from '../../stores';
 

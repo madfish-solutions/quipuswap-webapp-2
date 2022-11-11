@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { Nullable } from '@shared/types';
 import { makeNumberAsStringTestFn, numberAsStringSchema } from '@shared/validators';
 
 import { isExist } from './type-checks';

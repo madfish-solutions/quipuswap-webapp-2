@@ -12,7 +12,7 @@ import {
 import { toReal, isEmptyArray, toAtomic } from '@shared/helpers';
 import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { BooleanMap, DexPair, Optional, Token } from '@shared/types';
+import { BooleanMap, DexPair, Nullable, Optional, Token } from '@shared/types';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
 import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';

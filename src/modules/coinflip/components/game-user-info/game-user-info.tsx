@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { TokenWon } from '@modules/coinflip/types';
 import { Table } from '@shared/structures';
+import { Nullable } from '@shared/types';
 
 import { useGameUserInfoViewModel } from './use-game-user-info.vm';
 

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
