@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 import { useAuthStore } from './use-auth-store';
 import { useTokensBalancesStore } from './use-tokens-balances-store';

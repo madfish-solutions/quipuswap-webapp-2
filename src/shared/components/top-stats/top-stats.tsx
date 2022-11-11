@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR } from '@config/constants';
 import { isEqual, isExist } from '@shared/helpers';
-import { Optional } from '@shared/types';
+import { Nullable, Optional } from '@shared/types';
 
 import { StateCurrencyAmount } from '../state-components';
 import { Tooltip } from '../tooltip';

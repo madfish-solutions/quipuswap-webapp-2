@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { defined, executeAsyncSteps } from '@shared/helpers';
 import { useMount } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 
 import { getFarmItemUrl } from '../../../../../helpers';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';

@@ -7,8 +7,7 @@ import { getFarmingLabel, getRealDailyDistribution } from '@modules/farming/help
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
-import { bigNumberToString, getTokenSymbol, getDollarEquivalent, getTimeLockDescription } from '@shared/helpers';
-import { ActiveStatus } from '@shared/types';
+import { bigNumberToString, getDollarEquivalent, getTimeLockDescription, getTokenSymbol } from '@shared/helpers';
 import s from '@styles/CommonContainer.module.scss';
 
 import { canDelegate, makeBaker } from '../../helpers';
@@ -52,7 +51,7 @@ export const useFarmingDetailsViewModel = () => {
       harvestFee: null,
       isLoading,
       isError: false,
-      stakeStatus: ActiveStatus.DISABLED
+      stakeStatus: undefined
     };
   }
 

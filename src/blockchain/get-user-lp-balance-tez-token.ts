@@ -1,7 +1,7 @@
 import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { BigMap } from '@shared/types';
+import { BigMap, Nullable } from '@shared/types';
 
 interface StorageTezToken {
   storage: { ledger: BigMap<string, { balance: BigNumber }> };

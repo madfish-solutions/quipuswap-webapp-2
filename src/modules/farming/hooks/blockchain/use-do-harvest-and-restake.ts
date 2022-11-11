@@ -32,8 +32,6 @@ export const useDoHarvestAndRestake = () => {
 
         await confirmOperation(operation.opHash, { message: t('farm|Harvest successful') });
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('error', error);
         showErrorToast(error as Error);
       }
     },

@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import { defined, executeAsyncSteps, getFormikError, numberAsString, toAtomic } from '@shared/helpers';
 import { useMount } from '@shared/hooks';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
 import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '../../../../../hooks';

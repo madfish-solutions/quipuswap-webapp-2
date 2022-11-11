@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { isNull } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { getCoinflipAssetId } from '../helpers';
 import { GamersStatsRaw } from '../interfaces';

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { useAccountPkh } from '@providers/use-dapp';
-import { Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 export const useRewardInfoViewModel = (

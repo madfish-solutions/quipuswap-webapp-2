@@ -10,13 +10,13 @@ export const stakeTokenApi = async (
   tezos: TezosToolkit,
   token: Token,
   accountPkh: string,
-  farmingId: BigNumber,
+  farmingId: string,
   amount: BigNumber,
   bakerAddress: string
 ) => {
   const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
   const farmingParams = farmingContract.methods
-    .deposit(farmingId, amount, FARMING_REFERRER_CONTRACT, accountPkh, bakerAddress)
+    .deposit(new BigNumber(farmingId), amount, FARMING_REFERRER_CONTRACT, accountPkh, bakerAddress)
     .toTransferParams();
 
   return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, [farmingParams]);

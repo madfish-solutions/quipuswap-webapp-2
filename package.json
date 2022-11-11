@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp-2",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "private": true,
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
@@ -43,7 +43,7 @@
     "craco-alias": "^3.0.1",
     "cross-env": "^7.0.3",
     "crypto-browserify": "^3.12.0",
-    "cypress": "^9.6.1",
+    "cypress": "10.11.0",
     "cypress-plugin-snapshots": "^1.4.4",
     "dotenv": "^16.0.1",
     "final-form": "^4.20.7",
