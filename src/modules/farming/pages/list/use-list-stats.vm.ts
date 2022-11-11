@@ -26,10 +26,11 @@ export const useListStatsViewModel = () => {
       testId: FarmingListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
-      title: t('farm|totalClaimedReward'),
-      tooltip: t('farm|totalClaimedRewardTooltip'),
-      amount: amounts?.totalClaimedReward,
-      testId: FarmingListStatsDTA.TOTAL_CLAIMED_REWARD
+      title: t('farm|maxApr'),
+      tooltip: t('farm|maxAprTooltip'),
+      amount: amounts?.maxApr,
+      testId: FarmingListStatsDTA.MAX_APR,
+      currency: '%'
     }
   ];
 
