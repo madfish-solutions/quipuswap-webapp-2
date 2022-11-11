@@ -27,7 +27,7 @@ export const useListStatsViewModel = () => {
     },
     {
       title: t('farm|maxApr'),
-      tooltip: t('farm|totalClaimedRewardTooltip'),
+      tooltip: t('farm|maxAprTooltip'),
       amount: amounts?.maxApr,
       testId: FarmingListStatsDTA.MAX_APR,
       currency: '%'
