@@ -2,7 +2,7 @@
 
 import { MICRO_WAIT_TIMEOUT } from '../../const';
 
-describe('When changing add tab to remove tab  and vice versa it should be the same selected tokens', () => {
+describe.skip('When changing add tab to remove tab  and vice versa it should be the same selected tokens', () => {
   beforeEach(() => {
     cy.visit('/liquidity');
     cy.get('[data-test-id="acceptCookieButton"]').click();

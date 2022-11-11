@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR } from '@config/constants';
 import { StateCurrencyAmount, Tooltip } from '@shared/components';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './tvl.module.scss';

@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 
 import { getStorageInfo } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { getCoinflipAssetId } from '../helpers';
 import { CoinflipStorage, GeneralStatsInterface } from './types';

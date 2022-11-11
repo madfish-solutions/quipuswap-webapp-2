@@ -9,7 +9,7 @@ import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defined } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
-import { DexPair, SwapTabAction, Undefined } from '@shared/types';
+import { DexPair, Nullable, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { SwapField, SwapFormValues } from '../utils/types';

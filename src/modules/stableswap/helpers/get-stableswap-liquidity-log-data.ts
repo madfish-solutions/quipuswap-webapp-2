@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
 import { getTokenSlug } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { StableswapItemModel } from '../models';
 import { StableswapTokensInfo } from '../types';
