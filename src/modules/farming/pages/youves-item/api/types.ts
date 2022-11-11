@@ -1,5 +1,7 @@
-import { BigMapAbstraction } from '@taquito/taquito';
+import { BigMapAbstraction, MichelsonMap } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
+
+import { address, BigMap, nat } from '@shared/types';
 
 interface TokenInfo {
   token_id: BigNumber;
@@ -7,7 +9,7 @@ interface TokenInfo {
 }
 
 export interface YouvesFarmStorage {
-  administrators: BigMapAbstraction;
+  administrators: MichelsonMap<address, nat>;
   current_rewards: BigNumber;
   deposit_token: TokenInfo;
   deposit_token_is_v2: boolean;
@@ -18,13 +20,13 @@ export interface YouvesFarmStorage {
   operators: BigMapAbstraction;
   reward_token: TokenInfo;
   sender: string;
-  stakes: BigMapAbstraction;
-  stakes_owner_lookup: BigMapAbstraction;
+  stakes: BigMap<nat, YouvesFarmStakes>;
+  stakes_owner_lookup: BigMap<address, nat[]>;
   total_stake: BigNumber;
 }
 
 export interface YouvesFarmStakes {
   stake: BigNumber;
   disc_factor: BigNumber;
-  age_timestamp: Date;
+  age_timestamp: Date | string;
 }

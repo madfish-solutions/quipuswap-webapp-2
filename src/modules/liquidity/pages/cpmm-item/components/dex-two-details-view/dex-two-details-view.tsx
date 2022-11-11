@@ -6,7 +6,7 @@ import { DOLLAR } from '@config/constants';
 import { PieChart, PieChartQs } from '@shared/charts';
 import { Button, CandidateButton, DashPlug, DetailsCardCell, StateCurrencyAmount, StateData } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
-import { LedEntity, Optional, WhitelistedBaker } from '@shared/types';
+import { LedEntity, Nullable, Optional, WhitelistedBaker } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 

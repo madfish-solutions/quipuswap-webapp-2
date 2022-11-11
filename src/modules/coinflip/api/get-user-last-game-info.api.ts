@@ -2,6 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { UserLastGameRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';

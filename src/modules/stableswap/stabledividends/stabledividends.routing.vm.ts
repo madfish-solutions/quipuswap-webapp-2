@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 export const useStableDividendsRouterViewModel = () => {
   const [isInitialazied, setIsInitialazied] = useState(false);

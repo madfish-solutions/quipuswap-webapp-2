@@ -3,7 +3,7 @@ import { DexTypeEnum, Trade, TradeOperation } from 'swap-router-sdk';
 import { UnsupportedDexType } from '@shared/errors/unsupported-dex-type.error';
 import { getTokenIdFromSlug } from '@shared/helpers';
 import { TokensMap } from '@shared/store/tokens.store';
-import { DexPair, DexPairType, Token } from '@shared/types';
+import { DexPair, DexPairType, Nullable, Token } from '@shared/types';
 
 // TODO: add full Stableswap DEXes support
 const mapDexType = (dexType: DexTypeEnum): DexPairType => {

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { getTokenSlug, isExist } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { Categories } from '../interfaces';
 import { LiquidityItemModel } from '../models';

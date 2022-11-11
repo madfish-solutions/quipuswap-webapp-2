@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useReady } from '@providers/use-dapp';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { useCoinflipStore } from './stores';

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
-import { toReal, isExist, multipliedIfPossible } from '@shared/helpers';
-import { realBalanceMap, mapBackendToken } from '@shared/mapping';
+import { isExist, multipliedIfPossible, toReal } from '@shared/helpers';
+import { mapBackendToken, realBalanceMap } from '@shared/mapping';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import {
@@ -9,10 +9,10 @@ import {
   FarmingStats,
   RawFarmingItem,
   RawFarmingStats,
-  RawUsersInfoValue,
-  UsersInfoValue
+  IRawUsersInfoValue,
+  IUsersInfoValue
 } from '../interfaces';
-import { FarmingItemWithBalances } from '../pages/list/types';
+import { FarmingItemV1WithBalances } from '../pages/list/types';
 
 const DEFAULT_MAP_BN_DECIMALS = 0;
 const FEES_PERCENTAGE_PRECISION = 16;
@@ -70,18 +70,18 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalValueLocked: new BigNumber(raw.totalValueLocked),
   totalDailyReward: new BigNumber(raw.totalDailyReward),
   totalPendingReward: new BigNumber(raw.totalPendingReward),
-  totalClaimedReward: new BigNumber(raw.totalClaimedReward)
+  maxApr: new BigNumber(raw.maxApr)
 });
 
-export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<UsersInfoValue> =>
+export const mapUsersInfoValue = (raw: Nullable<IRawUsersInfoValue>): Nullable<IUsersInfoValue> =>
   raw && {
     ...raw,
     last_staked: new Date(raw.last_staked)
   };
 
-export const clearFarmingItem = (farmingItem: FarmingItemWithBalances) => {
+export const clearFarmingItem = (farmingItem: FarmingItemV1WithBalances) => {
   return {
-    id: farmingItem.id.toFixed(),
+    id: farmingItem.id,
     apr: farmingItem.apr?.toFixed(),
     tvlInStakedToken: farmingItem.tvlInStakedToken.toFixed(),
     tvlInUsd: farmingItem.tvlInUsd?.toFixed(),
@@ -91,7 +91,7 @@ export const clearFarmingItem = (farmingItem: FarmingItemWithBalances) => {
   };
 };
 
-export const mapFarmingLog = (farmingItem: FarmingItemWithBalances, balance: BigNumber) => {
+export const mapFarmingLog = (farmingItem: FarmingItemV1WithBalances, balance: BigNumber) => {
   const balanceInUsd = multipliedIfPossible(balance, farmingItem.earnExchangeRate)?.toFixed();
 
   return {
