@@ -1,5 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
+import { Nullable } from '@shared/types';
+
 import { FarmingItemV1Model, FarmingListItemModel, FarmingItemV2YouvesModel } from '../../../models';
 
 interface Balances {

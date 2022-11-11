@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 import { useTokensWithBalances } from './use-tokens-with-balances';
 

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { MS_IN_SECOND } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp';
 import { getLastElement, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
-import { Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 
 import { YouvesFarmStakes, YouvesFarmStorage } from './types';
 

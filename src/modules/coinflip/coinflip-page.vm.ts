@@ -7,6 +7,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useReady } from '@providers/use-dapp';
 import { toReal } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 
 import { useCoinflipGeneralStats, useCoinflipStore, useGamersStats, useGamesUserInfo, useUserLastGame } from './hooks';
 
