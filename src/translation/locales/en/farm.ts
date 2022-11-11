@@ -119,5 +119,7 @@ export const farm = {
   youvesConfirmationUpdateStake:
     'It is a long-term farm. The new deposit will increase the waiting time to {{waitingTime}}. All your entitled rewards will be kept.',
   youvesConfirmationUnstake:
-    'It is a long-term farm. Your claimable rewards will be claimed along with your withdrawal. All further rewards will be lost.'
+    'It is a long-term farm. Your claimable rewards will be claimed along with your withdrawal. All further rewards will be lost.',
+  maxApr: 'Max APR',
+  maxAprTooltip: 'Max APR - the max APR among all farms.'
 } as const;
