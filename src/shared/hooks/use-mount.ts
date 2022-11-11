@@ -1,4 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+
+const createProxy = (checker: () => boolean) =>
+  new Proxy(
+    { value: true },
+    {
+      get(target: { value: boolean }, prop: string) {
+        if (prop === 'value') {
+          return checker();
+        }
+      }
+    }
+  );
 
 export const useMount = () => {
   const location = useRef(window.location.href);
@@ -17,20 +29,7 @@ export const useMount = () => {
     []
   );
 
-  const isNextStepsRelevant = useMemo(
-    () =>
-      new Proxy(
-        { value: true },
-        {
-          get(target: { value: boolean }, prop: string) {
-            if (prop === 'value') {
-              return checkIfLocationChanged();
-            }
-          }
-        }
-      ),
-    [checkIfLocationChanged]
-  );
+  const isNextStepsRelevant = createProxy(checkIfLocationChanged);
 
   return { isNextStepsRelevant };
 };
