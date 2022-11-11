@@ -32,6 +32,8 @@ interface Props {
     button?: ReactNode;
     className?: string;
   };
+  footer?: ReactNode;
+  footerClassName?: string;
   rewardTooltip?: string;
   disabled?: boolean;
   buttonUp?: boolean;
@@ -53,6 +55,8 @@ export const RewardInfo: CFC<Props> = ({
   onButtonClick,
   currency,
   header,
+  footer,
+  footerClassName,
   buttonText,
   disabled,
   claimablePendingRewards,
@@ -79,6 +83,8 @@ export const RewardInfo: CFC<Props> = ({
       className={cx(styles.card, className)}
       contentClassName={styles.p0}
       header={header}
+      footer={footer}
+      footerClassName={footerClassName}
       data-test-id="youvesRewardInfo"
     >
       <div className={wrapContainerClassName}>
