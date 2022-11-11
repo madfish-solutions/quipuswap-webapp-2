@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
+import { Nullable } from '@shared/types';
+
 import styles from './warning-alert.module.scss';
 
 interface Props {

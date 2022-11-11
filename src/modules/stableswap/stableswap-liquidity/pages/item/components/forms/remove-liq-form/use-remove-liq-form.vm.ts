@@ -19,6 +19,7 @@ import {
   calculateShares as calculateLpValue
 } from '@shared/helpers';
 import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import {

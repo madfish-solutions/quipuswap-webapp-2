@@ -3,7 +3,7 @@ import { TOKENS_KEY } from '@config/localstorage';
 import { TEZOS_TOKEN } from '@config/tokens';
 
 import { getTokenSlug, isTezosToken } from '../helpers';
-import { TokenAddress } from '../types';
+import { Nullable, TokenAddress } from '../types';
 
 const DEFAULT_TOKEN_ID = 0;
 

@@ -7,7 +7,7 @@ import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-
 import { useReady } from '@providers/use-dapp';
 import { getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { mapFarmVersion } from '../../helpers';

@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
+import { Nullable } from '@shared/types';
 
 import { DEFAULT_RAW_USER_INFO, getV1FarmsUserInfo } from '../helpers';
 import { FarmingContractStorageWrapper, IRawUsersInfoValue } from '../interfaces';

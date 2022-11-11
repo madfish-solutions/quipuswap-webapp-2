@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { multipliedIfPossible, isNull, calculateShares } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 export const calculateTokensInputs = (
   inputAmount: Nullable<BigNumber>,
