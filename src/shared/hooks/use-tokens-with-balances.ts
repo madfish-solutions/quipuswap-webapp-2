@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { getTokenSlug, isExist, toArray } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 import { useAuthStore } from './use-auth-store';
 import { useTokensBalancesStore } from './use-tokens-balances-store';

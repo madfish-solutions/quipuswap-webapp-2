@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { BaseFilterStore } from '@shared/store';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import {
   filterByBridget,

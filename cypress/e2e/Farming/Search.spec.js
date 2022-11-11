@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Search section', () => {
+describe.skip('Search section', () => {
   beforeEach(() => {
     cy.visit('/farming');
     cy.waitUntil(() => (cy.get('[data-test-id="activeOnlySwitcherTranslation"]')
