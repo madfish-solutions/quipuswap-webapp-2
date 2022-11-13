@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { DEX_TWO_FEE_PRECISION, PERCENTAGE_100, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { PartialDexTwoFees } from '@shared/types';
+import { Nullable, PartialDexTwoFees } from '@shared/types';
 
 import { isNull } from '../type-checks';
 
