@@ -100,7 +100,7 @@ export const getUserPendingReward = (
   return fromRewardPrecision(pending);
 };
 
-export const getBalancesNew = (
+export const getBalances = (
   userInfo: Undefined<IFarmingListUsersInfoValueWithId>,
   farmingItemModel: FarmingListItemModel
 ) => {
@@ -151,7 +151,7 @@ export const getUserFarmingBalances = async (
   const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
     const farm = list.find(item => item.id === index.toString());
     if (farm && farm.old) {
-      const balance = getBalancesNew(usersInfoValue, farm);
+      const balance = getBalances(usersInfoValue, farm);
 
       acc.set(farm.id, balance);
     }

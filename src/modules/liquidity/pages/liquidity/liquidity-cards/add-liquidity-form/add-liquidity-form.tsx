@@ -81,7 +81,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       />
       <Plus className={styles.iconButton} />
       <TokenSelect
-        label="Input"
+        label="Input123"
         balance={fixedBalanceB}
         token={tokenB}
         tokensLoading={tokenBLoading}

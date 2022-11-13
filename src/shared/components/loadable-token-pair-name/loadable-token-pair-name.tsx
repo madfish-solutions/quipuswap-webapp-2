@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { getTokensPairName } from '@shared/helpers';
+import { getSymbolsString } from '@shared/helpers';
 import { Nullable, Optional, TokenPair } from '@shared/types';
 
 import { DashPlug } from '../dash-plug';
@@ -23,5 +23,7 @@ export const LoadableTokenPairName: FC<Props> = ({ tokenPair, isLoading, placeho
     );
   }
 
-  return <>{tokenPair ? getTokensPairName(tokenPair.token1, tokenPair.token2, tokenSymbolSliceAmount) : placeholder}</>;
+  return (
+    <>{tokenPair ? getSymbolsString([tokenPair.token1, tokenPair.token2], tokenSymbolSliceAmount) : placeholder}</>
+  );
 };
