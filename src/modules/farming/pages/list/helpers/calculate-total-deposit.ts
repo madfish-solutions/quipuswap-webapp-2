@@ -5,9 +5,7 @@ import { FarmingListItemWithBalances } from '../types';
 
 export const calculateTotalDeposit = (item: Array<FarmingListItemWithBalances>) =>
   getSumOfNumbers(
-    item
-      .filter(({ depositBalance }) => depositBalance)
-      .map(
-        ({ depositBalance, depositExchangeRate }) => depositBalance?.multipliedBy(depositExchangeRate) ?? ZERO_AMOUNT_BN
-      )
+    item.map(
+      ({ depositBalance, depositExchangeRate }) => depositBalance?.multipliedBy(depositExchangeRate) ?? ZERO_AMOUNT_BN
+    )
   );
