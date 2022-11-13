@@ -29,7 +29,6 @@ export const farmingListCommonDataHelper = (
 
   const shouldShowUserStats =
     !isNull(accountPkh) &&
-    farmingItem.old &&
     (farmingItem.depositBalance?.gt(ZERO_AMOUNT_BN) || farmingItem.earnBalance?.gt(ZERO_AMOUNT_BN));
 
   const itemStats: Array<StateCurrAmount> = [

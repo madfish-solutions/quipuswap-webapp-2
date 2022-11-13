@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { Trade } from 'swap-router-sdk';
 
 import { isNull, calculateValueWithPercent } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { mapRouteFee } from '../mapper';
 
