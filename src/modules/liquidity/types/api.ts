@@ -1,4 +1,4 @@
-import { BigMap, BlockInfoWrap, nat } from '@shared/types';
+import { BigMap, BlockInfoWrap, nat, Nullable } from '@shared/types';
 
 export interface NewLiquidityStatsResponse extends IRawNewLiquidityStats, BlockInfoWrap {}
 

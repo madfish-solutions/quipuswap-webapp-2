@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js';
 
+import { Nullable } from '@shared/types';
+
 export interface BetCoinSide {
   head?: symbol;
   tail?: symbol;

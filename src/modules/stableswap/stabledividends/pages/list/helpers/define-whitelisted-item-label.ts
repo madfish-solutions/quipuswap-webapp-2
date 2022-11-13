@@ -1,6 +1,6 @@
 import { StableswapDividendsItemModel } from '@modules/stableswap/models';
 import { LabelComponentProps } from '@shared/components';
-import { ActiveStatus } from '@shared/types';
+import { ActiveStatus, Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 const WHITELISTED_LABEL = {

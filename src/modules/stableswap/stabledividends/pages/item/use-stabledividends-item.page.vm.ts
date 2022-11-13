@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { extractTokens, getSymbolsString, isUndefined } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { useGetStableDividendsItem, useStableDividendsItemStore } from '../../../hooks';
 

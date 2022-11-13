@@ -70,7 +70,7 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalValueLocked: new BigNumber(raw.totalValueLocked),
   totalDailyReward: new BigNumber(raw.totalDailyReward),
   totalPendingReward: new BigNumber(raw.totalPendingReward),
-  totalClaimedReward: new BigNumber(raw.totalClaimedReward)
+  maxApr: new BigNumber(raw.maxApr)
 });
 
 export const mapUsersInfoValue = (raw: Nullable<IRawUsersInfoValue>): Nullable<IUsersInfoValue> =>

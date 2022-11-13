@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { noop } from 'rxjs';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 import commonStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 

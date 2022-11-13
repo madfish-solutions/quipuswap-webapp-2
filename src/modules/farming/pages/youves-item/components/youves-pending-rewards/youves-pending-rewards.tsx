@@ -8,6 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { StateCurrencyAmount } from '@shared/components';
 import { GobletIcon } from '@shared/svg';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './youves-pending-rewards.module.scss';
