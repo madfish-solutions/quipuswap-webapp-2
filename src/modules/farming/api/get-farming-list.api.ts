@@ -1,54 +1,61 @@
 import { TezosToolkit } from '@taquito/taquito';
-import { BigNumber } from 'bignumber.js';
 
-import { getUserBalance } from '@blockchain';
+import { getUserTokenBalance } from '@blockchain';
+import { ZERO_AMOUNT_BN } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { getUserFarmingBalances } from '../helpers';
-import { FarmingContractStorageWrapper } from '../interfaces';
+import { getUserV1FarmingBalances, getUserYouvesFarmingBalances } from '../helpers';
+import { FarmingContractStorageWrapper, FarmVersion } from '../interfaces';
 import { FarmingListItemModel } from '../models';
 
-interface UserBalances {
-  myBalance: string;
-  depositBalance?: string;
-  earnBalance?: string;
+interface FarmingBalances {
+  depositBalance: string;
+  earnBalance: string;
 }
 
 const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: string, tezos: TezosToolkit) => {
-  const balances: Map<string, UserBalances> = new Map();
   const wrapStorage = await (
     await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
   ).storage<FarmingContractStorageWrapper>();
 
-  const storage = wrapStorage.storage;
-
-  await Promise.all(
+  const balances = await Promise.all(
     list.map(async item => {
-      const { stakedToken } = item;
-      const { contractAddress, type, fa2TokenId } = stakedToken;
+      try {
+        const { stakedToken, version, contractAddress, rewardToken } = item;
 
-      const balanceBN = await retry(
-        async () => await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId)
-      );
+        const balanceBN = await retry(async () => await getUserTokenBalance(tezos, accountPkh, stakedToken));
+        const myBalance = saveBigNumber(balanceBN, ZERO_AMOUNT_BN);
 
-      const balance = saveBigNumber(balanceBN, new BigNumber(0));
+        let farmingBalances: FarmingBalances;
 
-      balances.set(item.id, { myBalance: balance.toFixed() });
+        if (version === FarmVersion.v1) {
+          const storage = wrapStorage.storage;
+          farmingBalances = await getUserV1FarmingBalances(accountPkh, storage, item);
+        } else {
+          const farmRewardTokenBalanceBN = await retry(
+            async () => await getUserTokenBalance(tezos, contractAddress!, rewardToken)
+          );
+          const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
+          farmingBalances = await getUserYouvesFarmingBalances(accountPkh, item, farmRewardTokenBalance, tezos);
+        }
+
+        return {
+          ...item,
+          ...farmingBalances,
+          myBalance
+        };
+      } catch (e) {
+        return {
+          ...item,
+          error: (e as Error).message
+        };
+      }
     })
   );
 
-  const userBalances = await retry(async () => await getUserFarmingBalances(accountPkh, storage, list));
-
-  userBalances.forEach((userBalance, key) => {
-    const balance = balances.get(key) as UserBalances;
-    balances.set(key, { ...balance, ...userBalance });
-  });
-
-  return {
-    balances: list.map(item => ({ ...item, id: item.id, ...balances.get(item.id) }))
-  };
+  return { balances };
 };
 
 export const getFarmingListUserBalances = async (

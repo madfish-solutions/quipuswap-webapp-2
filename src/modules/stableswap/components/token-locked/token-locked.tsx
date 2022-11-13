@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { Nullable } from '@shared/types';
 
 import { useTokenLockedViewModel } from './use-token-locked.vm';
 

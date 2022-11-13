@@ -9,7 +9,7 @@ import { Categories } from '@modules/liquidity/interfaces';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
 import { ArrowDown } from '@shared/svg';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { Card } from '../card';
 import { Iterator } from '../iterator';

@@ -11,7 +11,7 @@ import {
 import { defined, isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 
 import { FarmingListItemWithBalances } from '../pages/list/types';
 
