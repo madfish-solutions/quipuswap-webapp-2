@@ -1,4 +1,3 @@
-export * from './tokens-logos-with-symbols';
 export * from './reward-target';
 export * from './farming-list-skeleton';
 export * from './empty-farming-list';
