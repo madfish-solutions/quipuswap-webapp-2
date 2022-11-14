@@ -71,7 +71,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
   return (
     <>
       <PositionSelect
-        label="Select LP 123"
+        label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
         balance={fixedUnfrozenBalance}

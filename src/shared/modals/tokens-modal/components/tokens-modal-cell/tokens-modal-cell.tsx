@@ -8,7 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount, TokensLogos } from '@shared/components';
 import { Checkbox } from '@shared/elements';
 import { getTokenName, getTokenSymbol, isEqual } from '@shared/helpers';
-import { ManagedToken } from '@shared/types';
+import { ManagedToken, Nullable } from '@shared/types';
 
 import { useTokensModalStore } from '../../use-tokens-modal-store';
 import styles from './tokens-modal-cell.module.scss';

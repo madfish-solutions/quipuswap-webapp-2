@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { Plus } from '@shared/svg';
+import { Nullable } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 

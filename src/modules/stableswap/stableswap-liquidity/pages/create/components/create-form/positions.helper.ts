@@ -1,5 +1,6 @@
 import { PERCENT } from '@config/constants';
 import { isEqual, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 const CARET_POSITION_SHIFT = 1;
 

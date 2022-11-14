@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { PERCENT } from '@config/constants';
 import { getFarmingLabel, getFarmItemUrl } from '@modules/farming/helpers';
 import { getTokenSymbol, isNull } from '@shared/helpers';
-import { ActiveStatus } from '@shared/types';
+import { ActiveStatus, Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 import { isNewFarming } from '../../helpers/is-new-farming';
