@@ -63,7 +63,10 @@ export class FarmingListStore {
   }
 
   get filteredList() {
-    return this.rootStore.farmingFilterStore?.filterAndSort(this.farmingItemsWithBalances);
+    return this.rootStore.farmingFilterStore?.filterAndSort(
+      this.farmingItemsWithBalances,
+      this.rootStore.authStore.accountPkh
+    );
   }
 
   get listBalances(): FarmingListItemWithBalances[] {
