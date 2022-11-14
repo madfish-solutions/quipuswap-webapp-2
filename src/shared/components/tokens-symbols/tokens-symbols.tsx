@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { getSymbolsString } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 type Tokens = Nullable<Token> | Array<Nullable<Token>>;
 

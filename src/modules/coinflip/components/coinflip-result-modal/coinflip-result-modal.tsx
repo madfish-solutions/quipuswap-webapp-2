@@ -11,6 +11,7 @@ import { isNull } from '@shared/helpers';
 import { Modal } from '@shared/modals';
 import { CoinflipFailResultSvg, CoinflipSuccessResultSvg } from '@shared/svg';
 import { TwitterIconButton } from '@shared/svg/twitter-icon-button';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import styles from './coinflip-result-modal.module.scss';

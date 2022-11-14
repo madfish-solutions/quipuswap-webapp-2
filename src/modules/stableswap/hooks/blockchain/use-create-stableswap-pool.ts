@@ -11,6 +11,7 @@ import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/environment';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
