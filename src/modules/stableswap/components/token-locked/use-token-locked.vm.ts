@@ -1,4 +1,5 @@
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 export const useTokenLockedViewModel = (tokenSymbol: Nullable<string>) => {

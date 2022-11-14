@@ -5,7 +5,7 @@ import { withApproveApiForManyTokens } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { isGreaterThanZero } from '@shared/helpers';
-import { AmountToken } from '@shared/types';
+import { AmountToken, Nullable } from '@shared/types';
 
 export const addStableswapLiquidityApi = async (
   tezos: TezosToolkit,

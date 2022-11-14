@@ -9,16 +9,12 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { BlockchainYouvesFarmingApi } from '../../api/blockchain/youves-farming.api';
-import { useGetYouvesFarmingItem } from '../loaders';
-import { useFarmingYouvesItemStore } from '../stores';
 
 export const useDoYouvesFarmingDeposit = () => {
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
-  const { id, version } = useFarmingYouvesItemStore();
 
   const doDeposit = useCallback(
     async (contractAddress: string, stakeId: BigNumber.Value, balance: BigNumber.Value) => {
@@ -39,7 +35,6 @@ export const useDoYouvesFarmingDeposit = () => {
 
         await confirmOperation(operation.opHash, { message: 'Deposit successful' });
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_SUCCESS', logData);
-        await delayedGetFarmingItem(id, defined(version, 'version'));
       } catch (error) {
         showErrorToast(error as Error);
         amplitudeService.logEvent('YOUVES_FARMING_DEPOSIT_FAILED', {
@@ -48,7 +43,7 @@ export const useDoYouvesFarmingDeposit = () => {
         });
       }
     },
-    [accountPkh, tezos, confirmOperation, delayedGetFarmingItem, id, version, showErrorToast]
+    [accountPkh, tezos, confirmOperation, showErrorToast]
   );
 
   return { doDeposit };

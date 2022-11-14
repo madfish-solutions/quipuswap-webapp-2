@@ -15,5 +15,5 @@ export class FarmingListStatsDto implements FarmingStats {
   totalPendingReward: BigNumber;
 
   @Typed()
-  totalClaimedReward: BigNumber;
+  maxApr: BigNumber;
 }

@@ -9,6 +9,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { TokenInfo } from '@shared/elements';
 import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
 import { TokenWon } from '../../types';

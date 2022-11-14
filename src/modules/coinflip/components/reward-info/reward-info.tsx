@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { Button, Card, StateCurrencyAmount } from '@shared/components';
 import { ArrowSign } from '@shared/svg';
-import { Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 
 import { CoinflipStatsItem } from '../coinflip-stats-item';
 import { YourWinningsReward } from '../your-winnigs';
