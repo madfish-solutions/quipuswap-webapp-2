@@ -11,6 +11,7 @@ export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
 export const MS_IN_MINUTES = MS_IN_SECOND * SECONDS_IN_MINUTE;
 export const MINUTES_IN_HOUR = 60;
+export const MS_IN_HOUR = MS_IN_MINUTES * MINUTES_IN_HOUR;
 export const HOURS_IN_DAY = 24;
 export const DAYS_IN_YEAR = 365;
 export const SECONDS_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
