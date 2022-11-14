@@ -19,7 +19,7 @@ import {
 } from '@shared/components';
 import { Tabs as DetailsTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
-import { ActiveStatus } from '@shared/types';
+import { ActiveStatus, Nullable } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 

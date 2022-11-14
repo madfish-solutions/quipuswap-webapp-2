@@ -3,6 +3,7 @@ import { object, string } from 'yup';
 
 import { useCoinflipStore } from '@modules/coinflip/hooks';
 import { isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { getCoinflipValidation } from './get-coinflip.validation';
 import { FormFields } from './use-coinflip-game-form.vm';

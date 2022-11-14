@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { getRealPoolCreationCostApi } from '../api';
 

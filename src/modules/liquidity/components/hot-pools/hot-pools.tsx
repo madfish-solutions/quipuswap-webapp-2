@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { HotPoolCard } from '../hot-pool-card';
 import { HotPoolSlider } from '../hot-pool-slider';
