@@ -2,9 +2,9 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { isExist } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
-import { ActiveStatus } from '@shared/types';
+import { ActiveStatus, Nullable } from '@shared/types';
 
-import { sortFarmingList } from '../pages/list/helpers'; //TODO
+import { sortFarmingList } from '../pages/list/helpers';
 import { FarmingListItemWithBalances, FarmingSortField } from '../pages/list/types';
 
 export class FarmingFilterStore extends BaseFilterStore {
@@ -27,9 +27,10 @@ export class FarmingFilterStore extends BaseFilterStore {
     });
   }
 
-  filterAndSort(list: Array<FarmingListItemWithBalances>) {
+  filterAndSort(list: Array<FarmingListItemWithBalances>, accountPkh: Nullable<string>) {
     let localList = [...list];
-    if (this.stakedOnly) {
+
+    if (this.stakedOnly && isExist(accountPkh)) {
       localList = localList.filter(
         localItem => isExist(localItem.depositBalance) && localItem.depositBalance.isGreaterThan('0')
       );
