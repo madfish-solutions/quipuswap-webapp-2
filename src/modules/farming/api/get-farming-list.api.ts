@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { getUserTokenBalance } from '@blockchain';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { TokenDto } from '@shared/dto';
-import { defined, isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
+import { isEmptyArray, isNull, retry, saveBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { getUserV1FarmingBalances, getUserYouvesFarmingBalances } from '../helpers';
@@ -25,13 +25,7 @@ const getFarmingBalances = async (
       return await getUserV1FarmingBalances(accountPkh, tezos, item);
     case FarmVersion.v2:
     case FarmVersion.v3:
-      return await getUserYouvesFarmingBalances(
-        accountPkh,
-        item,
-        defined(item.contractAddress),
-        item.rewardToken,
-        tezos
-      );
+      return await getUserYouvesFarmingBalances(accountPkh, item, tezos);
     default:
       throw new Error('Unknown farm version');
   }
@@ -62,7 +56,7 @@ const mapBalance = (accountPkh: string, tezos: TezosToolkit) => async (item: Far
   }
 };
 
-const injectBalance = async (list: Array<FarmingListItemModel>, accountPkh: string, tezos: TezosToolkit) => {
+const injectBalances = async (list: Array<FarmingListItemModel>, accountPkh: string, tezos: TezosToolkit) => {
   const balances = await Promise.all(list.map(mapBalance(accountPkh, tezos)));
 
   return { balances };
@@ -77,5 +71,5 @@ export const getFarmingListUserBalances = async (
     return { balances: [] };
   }
 
-  return await injectBalance(farmings, accountPkh, tezos);
+  return await injectBalances(farmings, accountPkh, tezos);
 };

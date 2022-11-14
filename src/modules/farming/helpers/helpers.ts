@@ -12,7 +12,6 @@ import {
 } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { TokenDto } from '@shared/dto';
 import {
   calculateTimeDiffInMs,
   calculateTimeDiffInSeconds,
@@ -223,12 +222,10 @@ export const calculateYouvesFarmingRewards = (
 export const getUserYouvesFarmingBalances = async (
   accountPkh: string,
   farming: FarmingListItemModel,
-  contractAddress: string,
-  rewardToken: TokenDto,
   tezos: TezosToolkit
 ) => {
   const farmRewardTokenBalanceBN = await retry(
-    async () => await getUserTokenBalance(tezos, contractAddress, rewardToken)
+    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken)
   );
   const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
 
