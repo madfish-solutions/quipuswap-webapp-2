@@ -11,6 +11,7 @@ import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
+import { NextRewardsTimer } from '../next-rewards-timer';
 import { RewardInfo } from '../reward-info';
 import { YouvesRewardHeader } from '../youves-reward-header';
 import { YouvesStatsItem } from '../youves-stats-item';
@@ -82,6 +83,8 @@ export const YouvesRewardInfoView: FC<Props> = observer(
           content: <YouvesRewardHeader />,
           className: styles.rewardHeader
         }}
+        footer={<NextRewardsTimer />}
+        footerClassName={styles.footer}
         onButtonClick={handleHarvest}
         buttonText={t('farm|Harvest')}
         rewardTooltip={t('farm|singleFarmRewardTooltip')}
