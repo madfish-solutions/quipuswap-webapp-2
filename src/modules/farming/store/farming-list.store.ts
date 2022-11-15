@@ -62,13 +62,6 @@ export class FarmingListStore {
     return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
   }
 
-  get filteredList() {
-    return this.rootStore.farmingFilterStore?.filterAndSort(
-      this.farmingItemsWithBalances,
-      this.rootStore.authStore.accountPkh
-    );
-  }
-
   get listBalances(): FarmingListItemWithBalances[] {
     const { balances } = this.listBalancesStore.model;
 
