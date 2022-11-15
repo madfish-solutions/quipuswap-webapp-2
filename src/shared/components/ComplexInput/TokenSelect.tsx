@@ -12,7 +12,6 @@ import {
   getTokenSlug,
   getTokenSymbol,
   isExist,
-  prepareTokenLogo,
   getTokenInputAmountCap
 } from '@shared/helpers';
 import { Shevron } from '@shared/svg';
@@ -25,7 +24,7 @@ import { DashPlug } from '../dash-plug';
 import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
+import { TokensLogos } from '../tokens-logo';
 import { TokensModal } from '../tokens-modal';
 import s from './ComplexInput.module.scss';
 
@@ -106,8 +105,6 @@ export const TokenSelect: FC<TokenSelectProps> = ({
 
   const disabled = !isExist(balance) || !isExist(token);
 
-  const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
-  const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
   const tokenSelectSymbol = token ? getTokenSymbol(token) : 'SELECT';
   const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
@@ -172,7 +169,7 @@ export const TokenSelect: FC<TokenSelectProps> = ({
                   textClassName={s.item4Inner}
                   data-test-id="tokenSelectButton"
                 >
-                  <TokensLogosDeprecated firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                  <TokensLogos tokens={token} />
                   <h6 className={cx(s.token)}>{tokenLabel}</h6>
                   {!notSelectable && <Shevron />}
                 </Button>
