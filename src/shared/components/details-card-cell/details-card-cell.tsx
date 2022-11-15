@@ -3,6 +3,7 @@ import { CFC, Nullable } from '@shared/types';
 
 import { CardCell } from '../card-cell';
 import { Tooltip } from '../tooltip';
+import styles from './details-card-cell.module.scss';
 
 interface DetailsCardCellProps {
   cellName: string;
@@ -21,7 +22,9 @@ export const DetailsCardCell: CFC<DetailsCardCellProps> = ({
     <CardCell
       header={
         <>
-          <span data-test-id="cellName">{cellName}</span>
+          <span className={styles.cellName} data-test-id="cellName">
+            {cellName}
+          </span>
           {isExist(tooltipContent) && <Tooltip content={tooltipContent} />}
         </>
       }
