@@ -11,18 +11,16 @@ export const tokenMatchesSearch = (
   tokenIdBn: Nullable<BigNumber>,
   contractOnly?: boolean
 ): boolean => {
+  const tokenId = tokenIdBn?.toNumber();
   const isContract = contractAddress === search;
 
-  const tokenId = tokenIdBn?.toNumber();
-
-  const fa2TokenIdMatches = (isZeroTokenId(tokenId) && isZeroTokenId(fa2TokenId)) || tokenId === fa2TokenId;
-
   if (isExist(tokenId) || contractOnly) {
+    const fa2TokenIdMatches = (isZeroTokenId(tokenId) && isZeroTokenId(fa2TokenId)) || tokenId === fa2TokenId;
+
     return isContract && fa2TokenIdMatches;
   }
 
   const isName = includesCaseInsensitive(metadata?.name, search);
-
   const isSymbol = includesCaseInsensitive(metadata?.symbol, search);
 
   return isName || isSymbol || isContract;

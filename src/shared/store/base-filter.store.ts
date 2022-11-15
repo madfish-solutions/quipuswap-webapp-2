@@ -67,7 +67,7 @@ export class BaseFilterStore {
     this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
   }
 
-  // TODO: move it to a hook
+  // TODO: move to hook
   protected tokenMatchesSearch(token: Token, contractOnly?: boolean): boolean {
     return tokenMatchesSearch(token, this.search, this.tokenId, contractOnly);
   }

@@ -1,7 +1,8 @@
 import { useAuthStore } from '@shared/hooks';
 
-import { filterAndOrderFarmings } from '../helpers';
+import { filterByActiveOnly, filterBySearch, filterByStakedOnly } from '../helpers';
 import { farmingListCommonDataHelper } from '../pages/list/farming-list-common-data.helper';
+import { sortFarming } from '../pages/list/helpers';
 import { useFarmingFilterStore, useFarmingListStore } from './stores';
 
 export const useFilteredFarmingList = () => {
@@ -9,15 +10,12 @@ export const useFilteredFarmingList = () => {
   const { activeOnly, stakedOnly, sortField, sortDirection, search, tokenId } = useFarmingFilterStore();
   const farmingListStore = useFarmingListStore();
 
-  const farmings = filterAndOrderFarmings(farmingListStore.farmingItemsWithBalances, {
-    activeOnly,
-    stakedOnly,
-    sortField,
-    sortDirection,
-    search,
-    tokenId,
-    accountPkh
-  }).map(item => farmingListCommonDataHelper(item, accountPkh));
+  const farmings = farmingListStore.farmingItemsWithBalances
+    .filter(filterByActiveOnly(activeOnly))
+    .filter(filterByStakedOnly(stakedOnly, accountPkh))
+    .filter(filterBySearch(search, tokenId))
+    .sort(sortFarming(sortField, sortDirection))
+    .map(item => farmingListCommonDataHelper(item, accountPkh));
 
   return { farmings };
 };

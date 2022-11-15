@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { SKIP, SWAP } from '@config/constants';
-import { cloneArray, isNull, multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
+import { multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
 
 import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
@@ -78,25 +78,7 @@ const farmingSorts = {
   [FarmingSortField.EARNED]: sortByEarned
 };
 
-const sortFarming = (
-  first: FarmingListItemWithBalances,
-  second: FarmingListItemWithBalances,
-  sortField: FarmingSortField,
-  sortDirection: SortDirection
-) => farmingSorts[sortField](first, second, sortDirection);
-
-export const sortFarmingList = (
-  list: Array<FarmingListItemWithBalances>,
-  sortField: FarmingSortField,
-  sortDirection: SortDirection
-) => {
-  if (isNull(sortField)) {
-    return list;
-  }
-
-  const localList = cloneArray(list);
-
-  localList.sort((first, second) => sortFarming(first, second, sortField, sortDirection));
-
-  return localList;
-};
+export const sortFarming =
+  (sortField: FarmingSortField, sortDirection: SortDirection) =>
+  (first: FarmingListItemWithBalances, second: FarmingListItemWithBalances) =>
+    farmingSorts[sortField](first, second, sortDirection);

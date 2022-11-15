@@ -1,43 +1,26 @@
 import { BigNumber } from 'bignumber.js';
 
-import { isExist, SortDirection, tokenMatchesSearch } from '@shared/helpers';
+import { isExist, tokenMatchesSearch } from '@shared/helpers';
 import { ActiveStatus, Nullable } from '@shared/types';
 
-import { sortFarmingList } from '../pages/list/helpers';
-import { FarmingListItemWithBalances, FarmingSortField } from '../pages/list/types';
+import { FarmingListItemWithBalances } from '../pages/list/types';
 
-interface Params {
-  activeOnly: boolean;
-  stakedOnly: boolean;
-  sortField: FarmingSortField;
-  sortDirection: SortDirection;
-  search: string;
-  tokenId: Nullable<BigNumber>;
-  accountPkh: Nullable<string>;
-}
+export const filterByActiveOnly =
+  (activeOnly: boolean) =>
+  ({ stakeStatus }: FarmingListItemWithBalances) =>
+    activeOnly ? stakeStatus === ActiveStatus.ACTIVE : true;
 
-export const filterAndOrderFarmings = (
-  farmings: FarmingListItemWithBalances[],
-  { activeOnly, stakedOnly, sortField, sortDirection, search, tokenId, accountPkh }: Params
-) => {
-  let list = [...farmings];
+export const filterByStakedOnly =
+  (stakedOnly: boolean, accountPkh: Nullable<string>) => (farming: FarmingListItemWithBalances) =>
+    stakedOnly && isExist(accountPkh)
+      ? isExist(farming.depositBalance) && farming.depositBalance.isGreaterThan('0')
+      : true;
 
-  if (stakedOnly && isExist(accountPkh)) {
-    list = list.filter(localItem => isExist(localItem.depositBalance) && localItem.depositBalance.isGreaterThan('0'));
-  }
-
-  if (activeOnly) {
-    list = list.filter(({ stakeStatus }) => stakeStatus === ActiveStatus.ACTIVE);
-  }
-
-  if (search) {
-    list = list.filter(
-      ({ stakedToken, rewardToken, tokens }) =>
-        tokenMatchesSearch(stakedToken, search, tokenId, true) ||
+export const filterBySearch =
+  (search: string, tokenId: Nullable<BigNumber>) =>
+  ({ stakedToken, rewardToken, tokens }: FarmingListItemWithBalances) =>
+    search
+      ? tokenMatchesSearch(stakedToken, search, tokenId, true) ||
         tokenMatchesSearch(rewardToken, search, tokenId) ||
         tokens.some(token => tokenMatchesSearch(token, search, tokenId))
-    );
-  }
-
-  return sortFarmingList(list, sortField, sortDirection);
-};
+      : true;
