@@ -2,7 +2,7 @@ import cx from 'classnames';
 
 import { useStableDividendsFilterStore } from '@modules/stableswap/hooks';
 import { ListFilterInputViewProps } from '@shared/components';
-import { isDirrectOrder, isNull } from '@shared/helpers';
+import { isDirectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -57,7 +57,7 @@ export const useStableDividendsListFilterViewModel = (): ListFilterInputViewProp
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = isDirrectOrder(sortDirection);
+  const sortDirectionRotate = isDirectOrder(sortDirection);
 
   const setStakedOnly = (state: boolean) => {
     return stableDividendsFilterStore.setStakedOnly(state);

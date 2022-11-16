@@ -5,7 +5,7 @@ import { Props } from 'react-modal';
 
 import { MOCK_LOADING_ARRAY } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { getTokenName, getTokenSlug, getTokenSymbol, isTezosToken, prepareTokenLogo } from '@shared/helpers';
+import { getTokenName, getTokenSlug, getTokenSymbol, isTezosToken } from '@shared/helpers';
 import { Modal } from '@shared/modals';
 import { NotFound } from '@shared/svg';
 import { Token } from '@shared/types';
@@ -74,14 +74,14 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens,
         data={allTokens}
         keyFn={getTokenSlug}
         render={token => {
-          const { metadata, type } = token;
+          const { type } = token;
 
           return (
             <TokenCell
               key={getTokenSlug(token)}
-              tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
               tokenName={getTokenName(token)}
               tokenSymbol={getTokenSymbol(token)}
+              token={token}
               isTezosToken={isTezosToken(token)}
               tokenType={type}
               tabIndex={0}
