@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { DOLLAR } from '@config/constants';
+import { DOLLAR, USD_DECIMALS } from '@config/constants';
 import { useFarmingListRewardsStore } from '@modules/farming/hooks';
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
@@ -44,8 +44,9 @@ export const FarmingRewardsList: FC = observer(() => {
         >
           <StateCurrencyAmount
             amount={totalDepositAmount}
-            labelSize="large"
+            amountDecimals={USD_DECIMALS}
             currency={DOLLAR}
+            labelSize="large"
             isLoading={totalDepositLoading}
             isError={Boolean(totalDepositError)}
             isLeftCurrency

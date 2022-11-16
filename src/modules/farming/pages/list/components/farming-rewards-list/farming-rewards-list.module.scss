@@ -9,8 +9,6 @@
 }
 
 .totalDepositCellName {
-  white-space: nowrap;
-
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
@@ -48,7 +46,6 @@
   .childrenRewardInfo {
     grid-column: 1/2;
     grid-row: 1/4;
-    grid-row-gap: 64px;
   }
 
   .buttonRewardInfo {
