@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
-import { PERCENT, ZERO_AMOUNT_BN } from '@config/constants';
+import { PERCENT } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
-import { getTokenSymbol, isNull } from '@shared/helpers';
+import { getTokenSymbol, isNull, isOptionalGreaterThanZero, multipliedIfPossible } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -28,7 +28,7 @@ export const mapFarmingItemForView =
 
     const shouldShowUserStats =
       !isNull(accountPkh) &&
-      (farmingItem.depositBalance?.gt(ZERO_AMOUNT_BN) || farmingItem.earnBalance?.gt(ZERO_AMOUNT_BN));
+      (isOptionalGreaterThanZero(farmingItem.depositBalance) || isOptionalGreaterThanZero(farmingItem.earnBalance));
 
     const itemStats: Array<StateCurrAmount> = [
       {
@@ -64,9 +64,7 @@ export const mapFarmingItemForView =
             cellName: i18n.t('farm|yourDeposit'),
             amounts: {
               amount: farmingItem.depositBalance,
-              dollarEquivalent: farmingItem.depositBalance?.multipliedBy(
-                farmingItem.depositExchangeRate ?? ZERO_AMOUNT_BN
-              ),
+              dollarEquivalent: multipliedIfPossible(farmingItem.depositBalance, farmingItem.depositExchangeRate),
               currency: getTokenSymbol(farmingItem.stakedToken),
               dollarEquivalentOnly: true
             }
@@ -75,7 +73,7 @@ export const mapFarmingItemForView =
             cellName: i18n.t('farm|yourEarned'),
             amounts: {
               amount: farmingItem.earnBalance,
-              dollarEquivalent: farmingItem.earnBalance?.multipliedBy(farmingItem.earnExchangeRate ?? ZERO_AMOUNT_BN),
+              dollarEquivalent: multipliedIfPossible(farmingItem.earnBalance, farmingItem.earnExchangeRate),
               currency: getTokenSymbol(farmingItem.rewardToken),
               dollarEquivalentOnly: true
             }

@@ -3,7 +3,6 @@ import { ChangeEvent, FC, HTMLProps, useCallback, useContext, useEffect, useMemo
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { Danger } from '@shared/elements';
@@ -12,8 +11,7 @@ import {
   getMessageNotWhitelistedToken,
   getTokenInputAmountCap,
   getTokenSymbol,
-  isExist,
-  prepareTokenLogo
+  isExist
 } from '@shared/helpers';
 import { amountsAreEqual } from '@shared/helpers/comparison';
 import { Shevron } from '@shared/svg';
@@ -24,7 +22,7 @@ import { ComplexError } from '../complex-error';
 import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
+import { TokensLogos } from '../tokens-logo';
 import { TokensModal } from '../tokens-modal';
 import s from './ComplexInput.module.scss';
 
@@ -178,14 +176,7 @@ export const NewTokenSelect: FC<NewTokenSelectProps> = ({
                 textClassName={s.item4Inner}
                 data-test-id="changeToken"
               >
-                <TokensLogosDeprecated
-                  firstTokenIcon={
-                    token
-                      ? prepareTokenLogo(token.metadata?.thumbnailUri)
-                      : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
-                  }
-                  firstTokenSymbol={getTokenSymbol(token ? token : TEZOS_TOKEN)}
-                />
+                <TokensLogos tokens={token ?? null} />
                 <h6 className={cx(s.token)}>{token ? getTokenSymbol(token) : 'SELECT'}</h6>
                 {selectable && <Shevron />}
               </Button>
