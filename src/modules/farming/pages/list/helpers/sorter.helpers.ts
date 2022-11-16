@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
-import { SKIP, SWAP } from '@config/constants';
 import { multipliedIfPossible, sortBigNumber, SortDirection } from '@shared/helpers';
+import { sortStrings } from '@shared/helpers/sort';
 
 import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 
 const sortByDefault =
   (sortDirection: SortDirection) => (first: FarmingListItemWithBalances, second: FarmingListItemWithBalances) => {
     if (first.version !== second.version) {
-      return first.version < second.version ? SWAP : SKIP;
+      return sortStrings(first.version, second.version);
     }
 
     return sortBigNumber(new BigNumber(first.id), new BigNumber(second.id), sortDirection);
