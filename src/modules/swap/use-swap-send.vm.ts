@@ -7,7 +7,7 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
-import { useAccountPkh, useTezos } from '@providers/use-dapp';
+import { useAccountPkh } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
@@ -23,11 +23,9 @@ import { useDexGraph, useOnBlock } from '@shared/hooks';
 import { useAmplitudeService } from '@shared/hooks/use-amplitude-service';
 import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { amplitudeService } from '@shared/services';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { calculateInputWithFee } from './helpers';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -47,7 +45,6 @@ const PRICE_IMPACT_WARNING_THRESHOLD = 10;
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) => {
   const exchangeRates = useNewExchangeRates();
-  const tezos = useTezos();
 
   const amplitude = useAmplitudeService();
 
@@ -74,7 +71,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, dexRoute, trade, exchangeRates);
+  } = useSwapFormik(initialAction, bestTrade, dexRoute, trade, exchangeRates);
   const formik = values;
 
   const navigate = useNavigate();
@@ -270,9 +267,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   }, [resetCalculations, setFieldTouched, setValues]);
 
   const handleSubmit = async () => {
-    const inputWithFee = (await calculateInputWithFee(tezos, bestTrade, inputAmount))?.toNumber();
-    amplitudeService.logEvent('SWAP_SEND', { inputWithFee });
-
     await submitForm();
     resetTokensAmounts();
   };
