@@ -5,6 +5,8 @@ import { Trade, getPairFeeRatio } from 'swap-router-sdk';
 import { isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';
 
+import { calculateInputWithFee } from './calculate-input-with-fee';
+import { getDevFeeRatio } from './get-dev-fee-ratio';
 import { getInputTokenSlug } from './get-input-token-slug';
 
 export const getUserRouteFeesAndSlug = (
@@ -21,7 +23,8 @@ export const getUserRouteFeesAndSlug = (
   return routes.map(route => {
     const tokenSlug = getInputTokenSlug(route);
     const feeRatio = getPairFeeRatio(route);
-    const inputWithFee = _inputAmount.multipliedBy(feeRatio);
+    const devFeeRatio = getDevFeeRatio(route);
+    const inputWithFee = calculateInputWithFee(_inputAmount, feeRatio, devFeeRatio);
     const fee = _inputAmount.minus(inputWithFee);
     _inputAmount = inputWithFee;
 
