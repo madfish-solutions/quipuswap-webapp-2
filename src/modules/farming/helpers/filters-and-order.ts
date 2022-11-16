@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { isExist, tokenMatchesSearch } from '@shared/helpers';
+import { isExist, isOptionalGreaterThanZero, tokenMatchesSearch } from '@shared/helpers';
 import { ActiveStatus, Nullable } from '@shared/types';
 
 import { FarmingListItemWithBalances } from '../pages/list/types';
@@ -12,9 +12,7 @@ export const filterByActiveOnly =
 
 export const filterByStakedOnly =
   (stakedOnly: boolean, accountPkh: Nullable<string>) => (farming: FarmingListItemWithBalances) =>
-    stakedOnly && isExist(accountPkh)
-      ? isExist(farming.depositBalance) && farming.depositBalance.isGreaterThan('0')
-      : true;
+    stakedOnly && isExist(accountPkh) ? isOptionalGreaterThanZero(farming.depositBalance) : true;
 
 export const filterBySearch =
   (search: string, tokenId: Nullable<BigNumber>) =>
