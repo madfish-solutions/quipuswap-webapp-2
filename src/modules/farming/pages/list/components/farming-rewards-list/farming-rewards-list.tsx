@@ -14,8 +14,10 @@ import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
   const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = useFarmingListRewardsStore();
-  const { handleHarvestAll, translation, userTotalDepositInfo } = useFarmingRewardsListViewModel();
+  const { handleHarvestAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =
+    useFarmingRewardsListViewModel();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
+  const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
     <RewardInfo
@@ -33,20 +35,23 @@ export const FarmingRewardsList: FC = observer(() => {
       buttonUp
       details={<RewardTokensList />}
     >
-      <DetailsCardCell
-        className={styles.totalDeposit}
-        cellName={i18n.t('farm|yourTotalDeposit')}
-        data-test-id="yourTotalDeposit"
-      >
-        <StateCurrencyAmount
-          amount={userTotalDepositInfo.totalDepositAmount}
-          labelSize="large"
-          currency={DOLLAR}
-          isLoading={userTotalDepositInfo.totalDepositLoading}
-          isError={Boolean(userTotalDepositInfo.totalDepositError)}
-          isLeftCurrency
-        />
-      </DetailsCardCell>
+      {isUserTotalDepositExist && (
+        <DetailsCardCell
+          className={styles.totalDeposit}
+          cellNameClassName={styles.totalDepositCellName}
+          cellName={i18n.t('farm|yourTotalDeposit')}
+          data-test-id="yourTotalDeposit"
+        >
+          <StateCurrencyAmount
+            amount={totalDepositAmount}
+            labelSize="large"
+            currency={DOLLAR}
+            isLoading={totalDepositLoading}
+            isError={Boolean(totalDepositError)}
+            isLeftCurrency
+          />
+        </DetailsCardCell>
+      )}
     </RewardInfo>
   );
 });
