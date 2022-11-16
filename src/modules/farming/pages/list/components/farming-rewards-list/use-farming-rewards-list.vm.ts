@@ -33,9 +33,13 @@ export const useFarmingRewardsListViewModel = () => {
     totalDepositLoading: listBalancesStore.isLoading,
     totalDepositError: listBalancesStore.error
   };
+  const isUserTotalDepositExist =
+    (!userTotalDepositInfo.totalDepositAmount?.isZero() || userTotalDepositInfo.totalDepositLoading) &&
+    !Boolean(userTotalDepositInfo.totalDepositError);
 
   return {
     userTotalDepositInfo,
+    isUserTotalDepositExist,
     handleHarvestAll,
     translation: {
       harvestAllTranslation: t('farm|harvestAll'),
