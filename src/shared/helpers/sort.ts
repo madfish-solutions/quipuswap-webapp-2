@@ -2,10 +2,10 @@ import { SKIP, SWAP } from '@config/constants';
 
 export const sort = (a: number | string, b: number | string) => {
   if (a < b) {
-    return SKIP;
+    return SWAP;
   }
   if (a > b) {
-    return SWAP;
+    return SKIP;
   }
 
   return SKIP;
