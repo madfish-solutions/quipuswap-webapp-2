@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
-import { getMessageNotWhitelistedTokenPair, getTokenSymbol, prepareTokenLogo } from '@shared/helpers';
+import { getMessageNotWhitelistedTokenPair } from '@shared/helpers';
 import { PositionsModal } from '@shared/modals';
 import { Shevron } from '@shared/svg';
 import { Nullable, Token, TokenPair } from '@shared/types';
@@ -17,7 +17,7 @@ import { LoadableTokenPairName } from '../loadable-token-pair-name';
 import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
-import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
+import { TokensLogos } from '../tokens-logo';
 import s from './ComplexInput.module.scss';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
@@ -158,13 +158,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                 textClassName={s.item4Inner}
                 data-test-id="selectLPButton"
               >
-                <TokensLogosDeprecated
-                  firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                  firstTokenSymbol={getTokenSymbol(token1)}
-                  secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                  secondTokenSymbol={getTokenSymbol(token2)}
-                  loading={isTokensLoading}
-                />
+                <TokensLogos tokens={[token1, token2]} loading={isTokensLoading} />
                 <h6 className={cx(s.token, s.tokensSelect)}>
                   <LoadableTokenPairName
                     tokenPair={tokenPair}
