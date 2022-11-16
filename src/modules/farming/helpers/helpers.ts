@@ -11,7 +11,7 @@ import {
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
-import { getStorageInfo } from '@shared/dapp';
+import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   calculateTimeDiffInMs,
   calculateTimeDiffInSeconds,
@@ -181,9 +181,9 @@ export const getUserV1FarmingBalances = async (
   tezos: TezosToolkit,
   farming: FarmingListItemModel
 ) => {
-  const wrapStorage = await (
-    await tezos.contract.at(FARMING_CONTRACT_ADDRESS)
-  ).storage<FarmingContractStorageWrapper>();
+  const wrapStorage: FarmingContractStorageWrapper = await (
+    await getContract(tezos, FARMING_CONTRACT_ADDRESS)
+  ).storage();
   const storage = wrapStorage.storage;
 
   const [userInfoValue] = await getV1FarmsUserInfo(storage, accountPkh, [new BigNumber(farming.id)]);
