@@ -2,19 +2,30 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { DOLLAR, USD_DECIMALS } from '@config/constants';
 import { useFarmingListRewardsStore } from '@modules/farming/hooks';
+import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
+import { i18n } from '@translation';
 
 import { RewardTokensList } from '../reward-tokens-list';
+import styles from './farming-rewards-list.module.scss';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
   const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = useFarmingListRewardsStore();
-  const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
+  const { handleHarvestAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =
+    useFarmingRewardsListViewModel();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
+  const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
     <RewardInfo
+      containerClassName={styles.containerRewardInfo}
+      userInfoContainerClassName={styles.userInfoContainer}
+      childrenContainerClassName={styles.childrenRewardInfo}
+      buttonContainerClassName={styles.buttonRewardInfo}
+      viewDetailsButtonClassName={styles.viewDetailsButton}
       claimablePendingRewards={claimablePendingRewardsInUsd}
       totalPendingRewards={totalPendingRewardsInUsd}
       onButtonClick={handleHarvestAll}
@@ -23,6 +34,25 @@ export const FarmingRewardsList: FC = observer(() => {
       currency="$"
       buttonUp
       details={<RewardTokensList />}
-    />
+    >
+      {isUserTotalDepositExist && (
+        <DetailsCardCell
+          className={styles.totalDeposit}
+          cellNameClassName={styles.totalDepositCellName}
+          cellName={i18n.t('farm|yourTotalDeposit')}
+          data-test-id="yourTotalDeposit"
+        >
+          <StateCurrencyAmount
+            amount={totalDepositAmount}
+            amountDecimals={USD_DECIMALS}
+            currency={DOLLAR}
+            labelSize="large"
+            isLoading={totalDepositLoading}
+            isError={Boolean(totalDepositError)}
+            isLeftCurrency
+          />
+        </DetailsCardCell>
+      )}
+    </RewardInfo>
   );
 });

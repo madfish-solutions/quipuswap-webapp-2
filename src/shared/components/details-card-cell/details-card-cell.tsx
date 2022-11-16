@@ -1,13 +1,17 @@
+import cx from 'classnames';
+
 import { isExist } from '@shared/helpers';
 import { CFC, Nullable } from '@shared/types';
 
 import { CardCell } from '../card-cell';
 import { Tooltip } from '../tooltip';
+import styles from './details-card-cell.module.scss';
 
 interface DetailsCardCellProps {
   cellName: string;
   tooltipContent?: Nullable<string>;
-  className: string;
+  className?: string;
+  cellNameClassName?: string;
 }
 
 export const DetailsCardCell: CFC<DetailsCardCellProps> = ({
@@ -15,13 +19,16 @@ export const DetailsCardCell: CFC<DetailsCardCellProps> = ({
   cellName,
   tooltipContent,
   className,
+  cellNameClassName,
   ...props
 }) => {
   return (
     <CardCell
       header={
         <>
-          <span data-test-id="cellName">{cellName}</span>
+          <span className={cx(styles.cellName, cellNameClassName)} data-test-id="cellName">
+            {cellName}
+          </span>
           {isExist(tooltipContent) && <Tooltip content={tooltipContent} />}
         </>
       }
