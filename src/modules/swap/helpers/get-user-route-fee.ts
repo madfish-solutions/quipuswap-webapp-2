@@ -5,10 +5,9 @@ import { Trade, getPairFeeRatio } from 'swap-router-sdk';
 import { isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';
 
-import { RouteFeeAndSlug } from '../types';
 import { getInputTokenSlug } from './get-input-token-slug';
 
-export const getUserRouteFees = (
+export const getUserRouteFeesAndSlug = (
   tezos: Nullable<TezosToolkit>,
   routes: Nullable<Trade>,
   inputAmount: Undefined<BigNumber>
@@ -17,19 +16,18 @@ export const getUserRouteFees = (
     return [];
   }
 
-  const userRouteFees: Array<RouteFeeAndSlug> = [];
   let _inputAmount = inputAmount;
 
-  const routeFees = routes.map(route => ({
-    tokenSlug: getInputTokenSlug(route),
-    fee: getPairFeeRatio(route)
-  }));
-
-  routeFees.forEach(({ tokenSlug, fee }) => {
-    const inputWithFee = _inputAmount.multipliedBy(fee);
-    userRouteFees.push({ tokenSlug, fee: _inputAmount.minus(inputWithFee) });
+  return routes.map(route => {
+    const tokenSlug = getInputTokenSlug(route);
+    const feeRatio = getPairFeeRatio(route);
+    const inputWithFee = _inputAmount.multipliedBy(feeRatio);
+    const fee = _inputAmount.minus(inputWithFee);
     _inputAmount = inputWithFee;
-  });
 
-  return userRouteFees;
+    return {
+      tokenSlug,
+      fee
+    };
+  });
 };

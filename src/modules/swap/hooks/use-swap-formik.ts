@@ -20,7 +20,7 @@ import { amplitudeService } from '@shared/services';
 import { DexPair, Nullable, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { getUserRouteFees, getUserRouteFeesInDollars } from '../helpers';
+import { getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
 import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';
 
@@ -58,9 +58,9 @@ export const useSwapFormik = (
 
     const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
 
-    const userRouteFees = getUserRouteFees(tezos, bestTrade, inputAmount);
-    const userRouteFeesInDollars = getUserRouteFeesInDollars(userRouteFees, exchangeRate);
-    const sumOfFeesInDollars = getSumOfNumbers(userRouteFeesInDollars).decimalPlaces(DEFAULT_DECIMALS);
+    const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, bestTrade, inputAmount);
+    const userRouteFeesAndSlugInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRate);
+    const sumOfFeesInDollars = getSumOfNumbers(userRouteFeesAndSlugInDollars).decimalPlaces(DEFAULT_DECIMALS);
 
     const inputTokenSlug = getTokenSlug(inputToken!);
     const outputTokenSlug = getTokenSlug(outputToken!);
