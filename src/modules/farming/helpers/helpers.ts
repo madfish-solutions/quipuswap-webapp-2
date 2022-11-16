@@ -77,34 +77,7 @@ export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntege
 
 export const getUserPendingRewardForFarmingV1 = (
   userInfo: IUsersInfoValue,
-  farmingItemModel: FarmingItemV1Model,
-  timestamp: number = Date.now()
-) => {
-  const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
-
-  if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
-    return ZERO_AMOUNT_BN;
-  }
-
-  const timeTo = Math.min(timestamp, new Date(farmingItemModel.endTime).getTime());
-  let reward = new BigNumber(
-    toIntegerSeconds(calculateTimeDiffInMs(new Date(farmingItemModel.udp), timeTo))
-  ).multipliedBy(rewardPerSecond);
-
-  if (reward.isNegative()) {
-    reward = ZERO_AMOUNT_BN;
-  }
-
-  const rewardPerShare = farmingItemModel.rewardPerShare.plus(reward.dividedBy(totalStaked));
-
-  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
-
-  return fromRewardPrecision(pending);
-};
-
-export const getUserPendingReward = (
-  userInfo: IUsersInfoValue,
-  farmingItemModel: FarmingListItemModel,
+  farmingItemModel: FarmingListItemModel | FarmingItemV1Model,
   timestamp: number = Date.now()
 ) => {
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
@@ -141,8 +114,8 @@ export const calculateV1FarmingBalances = (
     };
   }
 
-  const currentReward = getUserPendingReward(userInfo, farmingItemModel);
-  const fullReward = getUserPendingReward(
+  const currentReward = getUserPendingRewardForFarmingV1(userInfo, farmingItemModel);
+  const fullReward = getUserPendingRewardForFarmingV1(
     userInfo,
     farmingItemModel,
     toMilliseconds(new Date(farmingItemModel.endTime!))
@@ -196,7 +169,8 @@ export const calculateYouvesFarmingRewards = (
   rewardsStats: YouvesFarmRewardsStats,
   farmVersion: FarmVersion,
   farmRewardTokenBalance: BigNumber,
-  stake: Optional<YouvesFarmStakes>
+  stake: Optional<YouvesFarmStakes>,
+  timestampMs = Date.now()
 ) => {
   if (!isExist(stake)) {
     return {
@@ -213,7 +187,10 @@ export const calculateYouvesFarmingRewards = (
   // TODO: https://madfish.atlassian.net/browse/QUIPU-636
   const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(totalStaked));
 
-  const stakeAge = BigNumber.min(calculateTimeDiffInSeconds(new Date(ageTimestamp), new Date()), vestingPeriodSeconds);
+  const stakeAge = BigNumber.min(
+    calculateTimeDiffInSeconds(new Date(ageTimestamp), new Date(timestampMs)),
+    vestingPeriodSeconds
+  );
   const fullReward = stakeAmount.times(newDiscFactor.minus(userDiscFactor)).dividedToIntegerBy(precision);
   const claimableReward = fullReward.times(stakeAge).dividedToIntegerBy(vestingPeriodSeconds);
 
