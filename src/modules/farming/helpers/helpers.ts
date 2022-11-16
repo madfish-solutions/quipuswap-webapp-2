@@ -1,6 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
+import { getUserTokenBalance } from '@blockchain';
 import {
   MS_IN_SECOND,
   NO_TIMELOCK_VALUE,
@@ -9,7 +10,8 @@ import {
   SECONDS_IN_DAY,
   ZERO_AMOUNT_BN
 } from '@config/constants';
-import { getStorageInfo } from '@shared/dapp';
+import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
+import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   calculateTimeDiffInMs,
   calculateTimeDiffInSeconds,
@@ -17,6 +19,7 @@ import {
   getLastElementFromArray,
   isExist,
   isNull,
+  retry,
   saveBigNumber,
   toIntegerSeconds,
   toReal
@@ -24,7 +27,14 @@ import {
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
-import { FarmingContractStorage, FarmVersion, IRawUsersInfoValue, IUsersInfoValue, UsersInfoKey } from '../interfaces';
+import {
+  FarmingContractStorage,
+  FarmingContractStorageWrapper,
+  FarmVersion,
+  IRawUsersInfoValue,
+  IUsersInfoValue,
+  UsersInfoKey
+} from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
@@ -168,9 +178,14 @@ export const getV1FarmsUserInfo = async (
 
 export const getUserV1FarmingBalances = async (
   accountPkh: string,
-  storage: FarmingContractStorage,
+  tezos: TezosToolkit,
   farming: FarmingListItemModel
 ) => {
+  const wrapStorage: FarmingContractStorageWrapper = await (
+    await getContract(tezos, FARMING_CONTRACT_ADDRESS)
+  ).storage();
+  const storage = wrapStorage.storage;
+
   const [userInfoValue] = await getV1FarmsUserInfo(storage, accountPkh, [new BigNumber(farming.id)]);
 
   return calculateV1FarmingBalances(userInfoValue, farming);
@@ -207,9 +222,13 @@ export const calculateYouvesFarmingRewards = (
 export const getUserYouvesFarmingBalances = async (
   accountPkh: string,
   farming: FarmingListItemModel,
-  farmRewardTokenBalance: BigNumber,
   tezos: TezosToolkit
 ) => {
+  const farmRewardTokenBalanceBN = await retry(
+    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken)
+  );
+  const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
+
   const farmAddress = defined(farming.contractAddress);
   const { stakes } = await BlockchainYouvesFarmingApi.getStakes(farmAddress, accountPkh, tezos);
   const stake = getLastElementFromArray(stakes);

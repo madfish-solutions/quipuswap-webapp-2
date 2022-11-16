@@ -2,7 +2,7 @@ import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { ListFilterInputViewProps } from '@shared/components';
-import { isNull, isDirrectOrder } from '@shared/helpers';
+import { isNull, isDirectOrder } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -27,7 +27,7 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
     handleSortDirectionToggle
   } = useBaseFilterStoreConverter(farmingFilterStore);
 
-  const { activeOnly, sortField } = farmingFilterStore;
+  const { activeOnly, stakedOnly, sortField } = farmingFilterStore;
   const { t } = useTranslation(['common', 'farm']);
 
   const handleSortFieldChange = (value: unknown) => {
@@ -57,27 +57,27 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = isDirrectOrder(sortDirection);
+  const sortDirectionRotate = isDirectOrder(sortDirection);
 
-  // const setStakedOnly = (state: boolean) => {
-  //   return farmingFilterStore.setStakedOnly(state);
-  // };
+  const setStakedOnly = (state: boolean) => {
+    return farmingFilterStore.setStakedOnly(state);
+  };
 
   const setActiveOnly = (state: boolean) => {
     return farmingFilterStore.setActiveOnly(state);
   };
 
   const switcherDataList = [
-    // {
-    //   value: stakedOnly,
-    //   onClick: setStakedOnly,
-    //   disabled: isNull(accountPkh),
-    //   switcherDTI: 'stakedOnlySwitcher',
-    //   switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
-    //   translation: t('farm|stakedOnly'),
-    //   translationClassName: styles.switcherTranslation,
-    //   className: cx(styles.switcherContainer, styles.switcherStakeOnly)
-    // },
+    {
+      value: stakedOnly,
+      onClick: setStakedOnly,
+      disabled: isNull(accountPkh),
+      switcherDTI: 'stakedOnlySwitcher',
+      switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
+      translation: t('farm|stakedOnly'),
+      translationClassName: styles.switcherTranslation,
+      className: cx(styles.switcherContainer, styles.switcherStakeOnly)
+    },
     {
       value: activeOnly,
       onClick: setActiveOnly,
