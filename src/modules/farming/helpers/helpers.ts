@@ -2,14 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { getUserTokenBalance } from '@blockchain';
-import {
-  MS_IN_SECOND,
-  NO_TIMELOCK_VALUE,
-  PRECISION_FACTOR,
-  PRECISION_FACTOR_STABLESWAP_LP,
-  SECONDS_IN_DAY,
-  ZERO_AMOUNT_BN
-} from '@config/constants';
+import { PRECISION_FACTOR, PRECISION_FACTOR_STABLESWAP_LP, SECONDS_IN_DAY, ZERO_AMOUNT_BN } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 import {
@@ -22,6 +15,7 @@ import {
   retry,
   saveBigNumber,
   toIntegerSeconds,
+  toMilliseconds,
   toReal
 } from '@shared/helpers';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
@@ -142,15 +136,22 @@ export const calculateV1FarmingBalances = (
   if (!userInfo) {
     return {
       depositBalance: '0',
-      earnBalance: '0'
+      earnBalance: '0',
+      fullRewardBalance: '0'
     };
   }
 
-  const reward = getUserPendingReward(userInfo, farmingItemModel);
+  const currentReward = getUserPendingReward(userInfo, farmingItemModel);
+  const fullReward = getUserPendingReward(
+    userInfo,
+    farmingItemModel,
+    toMilliseconds(new Date(farmingItemModel.endTime!))
+  );
 
   return {
     depositBalance: userInfo.staked.toFixed(),
-    earnBalance: reward.toFixed()
+    earnBalance: currentReward.toFixed(),
+    fullRewardBalance: fullReward.toFixed()
   };
 };
 
@@ -239,7 +240,7 @@ export const getUserYouvesFarmingBalances = async (
     max_release_period: vestingPeriodSeconds,
     total_stake: staked
   } = await getStorageInfo<YouvesFarmStorage>(tezos, farmAddress);
-  const { claimableReward } = calculateYouvesFarmingRewards(
+  const { claimableReward, fullReward } = calculateYouvesFarmingRewards(
     { lastRewards: lastRewards.toFixed(), discFactor, vestingPeriodSeconds, staked },
     farming.version,
     farmRewardTokenBalance,
@@ -248,7 +249,8 @@ export const getUserYouvesFarmingBalances = async (
 
   return {
     depositBalance: saveBigNumber(stake?.stake, ZERO_AMOUNT_BN).toFixed(),
-    earnBalance: claimableReward.toFixed()
+    earnBalance: claimableReward.toFixed(),
+    fullRewardBalance: fullReward.toFixed()
   };
 };
 
@@ -259,10 +261,12 @@ export const getEndTimestamp = (
   farmingItem: Optional<FarmingListItemModel | FarmingItemV1WithBalances>,
   lastStakedTime: Nullable<number>
 ) =>
-  isExist(lastStakedTime) && isExist(farmingItem) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
+  isExist(lastStakedTime) && isExist(farmingItem)
+    ? lastStakedTime + toMilliseconds(Number(farmingItem.timelock))
+    : null;
 
 export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
-  endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
+  endTimestamp ? endTimestamp < Date.now() : false;
 
 export const getRealDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
   toReal(fromRewardPrecision(rewardPerSecond).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken);
