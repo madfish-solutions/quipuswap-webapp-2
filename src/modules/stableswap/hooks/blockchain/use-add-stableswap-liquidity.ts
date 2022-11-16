@@ -13,8 +13,7 @@ import {
   isNull,
   toAtomic,
   extractTokens,
-  getTransactionDeadline,
-  determineTwoAssetsDexPoolTypeAmplitude
+  getTransactionDeadline
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
@@ -61,7 +60,6 @@ export const useAddStableswapLiquidity = () => {
       const { contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
 
       const tokens = extractTokens(tokensInfo);
-      const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
         isNull(amount) || amount.isNaN()
@@ -88,8 +86,7 @@ export const useAddStableswapLiquidity = () => {
           inputAmounts,
           toReal(sharesWithFee, STABLESWAP_LP_DECIMALS),
           liquiditySlippage,
-          item,
-          poolType
+          item
         )
       };
 

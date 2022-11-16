@@ -6,7 +6,6 @@ import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
   decreaseBySlippage,
-  determineTwoAssetsDexPoolTypeAmplitude,
   extractTokens,
   getTransactionDeadline,
   isExist,
@@ -44,7 +43,6 @@ export const useAddLiquidity = () => {
     }
     const itemId = item.id;
     const tokens = extractTokens(item.tokensInfo);
-    const poolType = determineTwoAssetsDexPoolTypeAmplitude(tokens);
 
     const atomicInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
       toAtomic(amount, tokens[index]).integerValue(BigNumber.ROUND_DOWN)
@@ -68,15 +66,12 @@ export const useAddLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = {
-      dexTwoLiquidityAdd: getDexTwoLiquidityLogData(
-        item.tokensInfo,
-        toReal(sharesWithSlippage, LP_TOKEN_DECIMALS),
-        liquiditySlippage,
-        item,
-        poolType
-      )
-    };
+    const logData = getDexTwoLiquidityLogData(
+      item.tokensInfo,
+      toReal(sharesWithSlippage, LP_TOKEN_DECIMALS),
+      liquiditySlippage,
+      item
+    );
 
     try {
       amplitudeService.logEvent('DEX_TWO__LIQUIDITY_ADD', logData);
