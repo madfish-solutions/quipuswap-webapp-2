@@ -2,7 +2,7 @@ import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
 import { ListFilterInputViewProps } from '@shared/components';
-import { isNull, isDirrectOrder } from '@shared/helpers';
+import { isNull, isDirectOrder } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -57,7 +57,7 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = isDirrectOrder(sortDirection);
+  const sortDirectionRotate = isDirectOrder(sortDirection);
 
   const setStakedOnly = (state: boolean) => {
     return farmingFilterStore.setStakedOnly(state);
