@@ -237,8 +237,8 @@ export class FarmingListRewardsStore {
 
     const claimableFarmings = this.getClaimableFarmings(stakedFarmingsWithUniqTokenRewards);
     const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
-    const claimableRewardsWithoutFee = BigNumber.sum(...claimableRewards);
-    const claimableRewardsWithFee = BigNumber.sum(...claimableRewards).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
+    const claimableRewardsWithoutFee = getSumOfNumbers(claimableRewards);
+    const claimableRewardsWithFee = getSumOfNumbers(claimableRewards).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
 
     return { stakedRewardsWithoutFee, claimableRewardsWithFee, claimableRewardsWithoutFee };
   }
@@ -266,7 +266,7 @@ export class FarmingListRewardsStore {
       }
 
       // TODO: calculate pending reward for youves farms
-      return ZERO_AMOUNT_BN;
+      return toAtomicIfPossible(farm.earnBalance ?? null, farm.rewardToken);
     });
   }
 
