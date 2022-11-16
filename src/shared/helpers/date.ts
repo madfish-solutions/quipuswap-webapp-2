@@ -8,6 +8,12 @@ export function toIntegerSeconds(data: number | Date) {
   return Math.floor(ms / MS_IN_SECOND);
 }
 
+export function toMilliseconds(sec: number): number;
+export function toMilliseconds(date: Date): number;
+export function toMilliseconds(data: number | Date) {
+  return data instanceof Date ? data.getTime() : data * MS_IN_SECOND;
+}
+
 export const getNowTimestampInSeconds = () => toIntegerSeconds(Date.now());
 
 /**

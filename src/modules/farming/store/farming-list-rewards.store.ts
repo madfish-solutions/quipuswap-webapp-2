@@ -5,7 +5,6 @@ import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import {
   defined,
-  getId,
   getSumOfNumbers,
   getTokenSlug,
   getUniqArray,
@@ -25,13 +24,13 @@ import { getAllFarmsUserInfoApi } from '../api';
 import {
   getEndTimestamp,
   getIsHarvestAvailable,
-  getRewardsInUsd,
   getUserInfoLastStakedTime,
   getUserPendingReward,
   isStakedFarming
 } from '../helpers';
 import { FarmingItem } from '../interfaces';
 import { FarmingListUserInfoModel, FarmingListUserInfoResponseModel } from '../models';
+import { FarmingListItemWithBalances } from '../pages/list/types';
 
 const ZERO_BN = new BigNumber(ZERO_AMOUNT);
 
@@ -164,16 +163,20 @@ export class FarmingListRewardsStore {
       this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
-      const stakedFarmingsIds = listBalances.filter(isStakedFarming).map(getId);
+      const stakedFarmings = listBalances.filter(isStakedFarming);
+      const claimableFarmings = this.getClimableFarmings(stakedFarmings);
 
-      const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
-      const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
-      const claimableRewardsInUsd = claimableFarmingsIds.map(id => this.prepareRewards(id));
+      const totalRewardsInUsd = stakedFarmings.map(({ fullRewardBalance, earnExchangeRate }) =>
+        multipliedIfPossible(fullRewardBalance, earnExchangeRate)
+      );
+      const claimableRewardsInUsd = claimableFarmings.map(({ earnBalance, earnExchangeRate }) =>
+        multipliedIfPossible(earnBalance, earnExchangeRate)
+      );
 
       this.totalPendingRewardsInUsd = getSumOfNumbers(totalRewardsInUsd);
       this.claimablePendingRewardsInUsd = getSumOfNumbers(claimableRewardsInUsd);
 
-      this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
+      this.tokensRewardList = this.getTokensRewardList(stakedFarmings);
     }
   }
 
@@ -181,17 +184,7 @@ export class FarmingListRewardsStore {
     return this._userInfo.isLoading;
   }
 
-  private prepareRewards(id: string) {
-    const farmingItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-    return getRewardsInUsd(defined(farmingItemModel, 'farmingItemModel'), this.findUserInfo(id));
-  }
-
-  private getTokensRewardList(ids: Array<string>): Array<TokensReward> {
-    const stakedFarmings = ids.map(id =>
-      defined(this.rootStore.farmingListStore?.getFarmingItemModelById(id), `FarmingListStore: 221, id: ${id}`)
-    );
-
+  private getTokensRewardList(stakedFarmings: FarmingListItemWithBalances[]): Array<TokensReward> {
     const uniqTokens = getUniqArray(stakedFarmings, ({ rewardToken }) => getTokenSlug(rewardToken)).map(
       ({ rewardToken, earnExchangeRate }) => ({ rewardToken, earnExchangeRate })
     );
@@ -251,37 +244,26 @@ export class FarmingListRewardsStore {
 
   private extractFarmsWithUniqToken(token: Token) {
     return (
-      this.rootStore.farmingListStore?.listBalances
-        .filter(({ earnBalance, id }) => {
-          const farmItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-          if (!farmItemModel) {
-            return false;
-          }
-          const { rewardToken } = farmItemModel;
-
-          return earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token);
-        })
-        .map(getId) ?? []
+      this.rootStore.farmingListStore?.listBalances.filter(({ earnBalance, rewardToken }) => {
+        return earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token);
+      }) ?? []
     );
   }
 
-  private extractUserPendingReward(ids: Array<string>, timestamp: number) {
-    return ids.map(id => {
-      const userInfo = this.findUserInfo(id);
+  private extractUserPendingReward(farms: FarmingListItemWithBalances[], timestamp: number) {
+    return farms.map(farm => {
+      const userInfo = this.findUserInfo(farm.id);
 
       if (!userInfo) {
         return new BigNumber(ZERO_AMOUNT);
       }
 
-      const farm = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-      return getUserPendingReward(userInfo, defined(farm, 'farm'), timestamp);
+      return getUserPendingReward(userInfo, farm, timestamp);
     });
   }
 
-  private getClimableFarmings(stakedFarmingsIds: Array<string>) {
-    return stakedFarmingsIds.filter(id => {
+  private getClimableFarmings(stakedFarmings: FarmingListItemWithBalances[]) {
+    return stakedFarmings.filter(({ id }) => {
       const farmingItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
       const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItemModel?.id));
       const endTimestamp = getEndTimestamp(farmingItemModel, lastStakedTime);
