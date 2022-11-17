@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
 import { TokensModalHeaderProps } from './components/tokens-modal-header';

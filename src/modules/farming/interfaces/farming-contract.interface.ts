@@ -10,10 +10,10 @@ export interface FarmingContractStorageWrapper {
 export interface FarmingContractStorage {
   farms: BigMap<nat, FarmsValue>;
   referrers: BigMap<address, address>;
-  users_info: BigMap<UsersInfoKey, RawUsersInfoValue>;
+  users_info: BigMap<UsersInfoKey, IRawUsersInfoValue>;
   votes: BigMap<VotesKey, nat>;
   candidates: BigMap<CandidatesKey, key_hash>;
-  banned_bakers: BigMap<key_hash, BannedBakersValue>;
+  banned_bakers: BigMap<key_hash, IBannedBakersValue>;
   token_metadata: BigMap<nat, TokenMetadataValue>;
   qsgov: QsGov;
   qsgov_lp: address;
@@ -80,7 +80,7 @@ export interface TokenMetadataValue {
 
 export type UsersInfoKey = [nat, address];
 
-export interface RawUsersInfoValue {
+export interface IRawUsersInfoValue {
   last_staked: timestamp;
   staked: nat;
   earned: nat;
@@ -90,7 +90,7 @@ export interface RawUsersInfoValue {
   allowances: address[];
 }
 
-export interface UsersInfoValue {
+export interface IUsersInfoValue {
   last_staked: Date;
   staked: BigNumber;
   earned: BigNumber;
@@ -104,7 +104,7 @@ export type VotesKey = [nat, key_hash];
 
 export type CandidatesKey = [nat, address];
 
-export interface BannedBakersValue {
+export interface IBannedBakersValue {
   period: nat;
   start: timestamp;
 }

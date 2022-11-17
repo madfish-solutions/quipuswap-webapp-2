@@ -95,6 +95,7 @@ export const common = {
   dayLetter: 'D',
   hourLetter: 'H',
   minuteLetter: 'M',
+  secondsLetter: 'S',
   Trade: 'Trade',
   Invest: 'Invest',
   Divest: 'Divest',

@@ -1,10 +1,10 @@
-import { useFarmingListStore } from '@modules/farming/hooks';
+import { useFarmingListStatsStore } from '@modules/farming/hooks';
 import { FarmingListStatsDTA } from '@tests/farming';
 import { useTranslation } from '@translation';
 
 export const useListStatsViewModel = () => {
   const { t } = useTranslation(['farm']);
-  const { stats: amounts } = useFarmingListStore();
+  const { stats: amounts } = useFarmingListStatsStore();
 
   const stats = [
     {
@@ -26,10 +26,11 @@ export const useListStatsViewModel = () => {
       testId: FarmingListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
-      title: t('farm|totalClaimedReward'),
-      tooltip: t('farm|totalClaimedRewardTooltip'),
-      amount: amounts?.totalClaimedReward,
-      testId: FarmingListStatsDTA.TOTAL_CLAIMED_REWARD
+      title: t('farm|maxApr'),
+      tooltip: t('farm|maxAprTooltip'),
+      amount: amounts?.maxApr,
+      testId: FarmingListStatsDTA.MAX_APR,
+      currency: '%'
     }
   ];
 

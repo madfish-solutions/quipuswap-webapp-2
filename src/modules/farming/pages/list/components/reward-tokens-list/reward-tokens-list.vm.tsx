@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 
-import { Column, HeaderGroup, MetaBase, Cell } from 'react-table';
+import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 
 import { TokenInfo } from '@shared/elements';
 import { i18n } from '@translation';
 
-import { useFarmingListStore } from '../../../../hooks';
+import { useFarmingListRewardsStore } from '../../../../hooks';
 import { TokenRewardCell } from '../token-reward-cell';
 import styles from './reward-tokens-list.module.scss';
 
@@ -53,7 +53,7 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
   getColumnProps(meta.cell.column.id);
 
 export const useRewardTokensListViewModel = () => {
-  const { tokensRewardList } = useFarmingListStore();
+  const { tokensRewardList } = useFarmingListRewardsStore();
 
   const data: Array<Row> = tokensRewardList.map(({ token, staked, claimable }) => {
     return {

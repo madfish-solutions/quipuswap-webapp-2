@@ -4,13 +4,13 @@ import { getTimeLockDescription, isUndefined } from '@shared/helpers';
 import { i18n } from '@translation';
 
 import { FarmVersion } from '../interfaces';
-import { FarmingItemCommonModel, FarmingItemModel } from '../models';
+import { FarmingListItemModel, FarmingItemV1Model } from '../models';
 
-export const getFarmingLabel = (item: FarmingItemModel | FarmingItemCommonModel): Array<LabelComponentProps> => {
+export const getFarmingLabel = (item: FarmingItemV1Model | FarmingListItemModel): Array<LabelComponentProps> => {
   const { timelock, withdrawalFee } = item;
 
   // TODO: https://madfish.atlassian.net/browse/QUIPU-636
-  if (item.version === FarmVersion.v2 && item.id.toFixed() === '4') {
+  if (item.version === FarmVersion.v2 && item.id === '4') {
     return [
       {
         status: item.stakeStatus,

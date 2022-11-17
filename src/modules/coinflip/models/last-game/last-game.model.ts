@@ -1,3 +1,5 @@
+import { Nullable } from '@shared/types';
+
 import { LastGameDto } from '../../dto';
 import { BetCoinSideModel } from './bet-coin-side.model';
 import { GameStatusModel } from './status.model';

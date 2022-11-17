@@ -4,7 +4,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { DEFAULT_TOKEN_ID, STEP } from '@config/constants';
 import { Nullable, Token } from '@shared/types';
 
-import { includesCaseInsensitive, isEmptyString, isExist, isNull, isZeroTokenId, SortDirection } from '../helpers';
+import { isEmptyString, isNull, SortDirection, tokenMatchesSearch } from '../helpers';
 
 export class BaseFilterStore {
   get tokenIdValue() {
@@ -67,21 +67,8 @@ export class BaseFilterStore {
     this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
   }
 
-  protected tokenMatchesSearch({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {
-    const isContract = contractAddress === this.search;
-
-    const tokenId = this.tokenId?.toNumber();
-
-    const fa2TokenIdMatches = (isZeroTokenId(tokenId) && isZeroTokenId(fa2TokenId)) || tokenId === fa2TokenId;
-
-    if (isExist(tokenId) || contractOnly) {
-      return isContract && fa2TokenIdMatches;
-    }
-
-    const isName = includesCaseInsensitive(metadata?.name, this.search);
-
-    const isSymbol = includesCaseInsensitive(metadata?.symbol, this.search);
-
-    return isName || isSymbol || isContract;
+  // TODO: move to hook
+  protected tokenMatchesSearch(token: Token, contractOnly?: boolean): boolean {
+    return tokenMatchesSearch(token, this.search, this.tokenId, contractOnly);
   }
 }

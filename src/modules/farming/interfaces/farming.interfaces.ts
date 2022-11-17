@@ -9,7 +9,7 @@ export interface RawFarmingStats {
   totalValueLocked: string;
   totalDailyReward: string;
   totalPendingReward: string;
-  totalClaimedReward: string;
+  maxApr: string;
 }
 
 export interface FarmingStatsResponse extends BlockInfoWrap {
@@ -20,7 +20,7 @@ export interface FarmingStats {
   totalValueLocked: BigNumber;
   totalDailyReward: BigNumber;
   totalPendingReward: BigNumber;
-  totalClaimedReward: BigNumber;
+  maxApr: BigNumber;
 }
 
 export interface RawFarmingItem {
@@ -61,10 +61,6 @@ export interface RawFarmingItem {
   myBalance?: string;
   depositBalance?: string;
   earnBalance?: string;
-}
-
-export interface FarmingListResponse extends BlockInfoWrap {
-  list: Array<RawFarmingItem>;
 }
 
 export interface FarmingItemResponse extends BlockInfoWrap {
@@ -114,7 +110,7 @@ export interface FarmingItem extends UserBalances {
 }
 
 export interface FarmItemCommon {
-  id: BigNumber;
+  id: string;
   contractAddress?: string;
 
   stakedToken: Token;
