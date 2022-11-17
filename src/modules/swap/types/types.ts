@@ -1,6 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 
-export interface RouteFeeAndSlug {
+export interface RouteFeesAndSlug extends RouteFees {
   tokenSlug: string;
+}
+
+export interface RouteFees {
   fee: BigNumber;
+  devFee: BigNumber;
 }
