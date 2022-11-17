@@ -10,8 +10,8 @@ import {
   getUniqArray,
   isEmptyArray,
   isExist,
-  isGreaterThanZero,
   isNull,
+  isOptionalGreaterThanZero,
   isTokenEqual,
   MakeInterval,
   multipliedIfPossible,
@@ -247,7 +247,7 @@ export class FarmingListRewardsStore {
   private extractFarmsWithUniqToken(token: Token) {
     return (
       this.rootStore.farmingListStore?.listBalances.filter(({ earnBalance, rewardToken }) => {
-        return isGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token);
+        return isOptionalGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token);
       }) ?? []
     );
   }
