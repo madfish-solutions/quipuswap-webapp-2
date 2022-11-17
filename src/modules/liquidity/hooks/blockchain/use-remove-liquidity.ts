@@ -23,7 +23,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeDexTwoLiquidityApi } from '../../api';
-import { getDexTwoLiquidityLogData } from '../../helpers';
+import { makeLiquidityOperationLogData } from '../../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
@@ -60,12 +60,7 @@ export const useRemoveLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = getDexTwoLiquidityLogData(
-      item.tokensInfo,
-      toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS),
-      liquiditySlippage,
-      item
-    );
+    const logData = makeLiquidityOperationLogData(toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS), liquiditySlippage, item);
 
     try {
       amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE', logData);

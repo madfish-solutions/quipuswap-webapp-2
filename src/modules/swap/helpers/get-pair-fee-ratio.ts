@@ -5,6 +5,9 @@ import { RoutePairWithDirection } from 'swap-router-sdk/dist/interface/route-pai
 import { CONTRACT_DECIMALS_PRECISION, STABLESWAP_PRECISION_FEE } from '@config/constants';
 import { getSumOfNumbers, isEqual } from '@shared/helpers';
 
+// TODO: https://madfish.atlassian.net/browse/QUIPU-699
+// Remove this file, when '@swap-router-sdk' will be ready to import all of code below
+
 type FixedFeeDexTypeEnum = Exclude<DexTypeEnum, DexTypeEnum.QuipuSwapCurveLike | DexTypeEnum.QuipuSwap20>;
 
 const PAIR_FEE_PERCENT_RECORD: Record<FixedFeeDexTypeEnum, number> = {
