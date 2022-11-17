@@ -23,7 +23,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { addDexTwoLiquidityApi } from '../../api';
-import { getDexTwoLiquidityLogData, getValueWithFee } from '../../helpers';
+import { makeLiquidityOperationLogData, getValueWithFee } from '../../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useAddLiquidity = () => {
@@ -66,12 +66,7 @@ export const useAddLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = getDexTwoLiquidityLogData(
-      item.tokensInfo,
-      toReal(sharesWithSlippage, LP_TOKEN_DECIMALS),
-      liquiditySlippage,
-      item
-    );
+    const logData = makeLiquidityOperationLogData(toReal(sharesWithSlippage, LP_TOKEN_DECIMALS), liquiditySlippage, item);
 
     try {
       amplitudeService.logEvent('DEX_TWO__LIQUIDITY_ADD', logData);
