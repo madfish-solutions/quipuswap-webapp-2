@@ -12,6 +12,7 @@ import {
   getLastElementFromArray,
   isExist,
   isNull,
+  isPast,
   retry,
   saveBigNumber,
   toIntegerSeconds,
@@ -242,8 +243,7 @@ export const getEndTimestamp = (
     ? lastStakedTime + toMilliseconds(Number(farmingItem.timelock))
     : null;
 
-export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
-  endTimestamp ? endTimestamp < Date.now() : false;
+export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) => !isNull(endTimestamp) && isPast(endTimestamp);
 
 export const getRealDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
   toReal(fromRewardPrecision(rewardPerSecond).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken);

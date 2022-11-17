@@ -233,11 +233,11 @@ export class FarmingListRewardsStore {
     }
 
     const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
-    const stakedRewards = this.extractUserFullReward(stakedFarmingsWithUniqTokenRewards);
+    const stakedRewards = stakedFarmingsWithUniqTokenRewards.map(this.extractUserFullReward, this);
     const stakedRewardsWithoutFee = getSumOfNumbers(stakedRewards);
 
     const claimableFarmings = this.getClaimableFarmings(stakedFarmingsWithUniqTokenRewards);
-    const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
+    const claimableRewards = claimableFarmings.map(farm => this.extractUserPendingReward(farm, timestamp));
     const claimableRewardsWithoutFee = getSumOfNumbers(claimableRewards);
     const claimableRewardsWithFee = getSumOfNumbers(claimableRewards).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
 
@@ -246,29 +246,26 @@ export class FarmingListRewardsStore {
 
   private extractFarmsWithUniqToken(token: Token) {
     return (
-      this.rootStore.farmingListStore?.listBalances.filter(({ earnBalance, rewardToken }) => {
-        return isOptionalGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token);
-      }) ?? []
+      this.rootStore.farmingListStore?.listBalances.filter(
+        ({ earnBalance, rewardToken }) =>
+          isOptionalGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token)
+      ) ?? []
     );
   }
 
-  private extractUserFullReward(farms: FarmingListItemWithBalances[]) {
-    return farms.map(({ fullRewardBalance, rewardToken }) =>
-      toAtomicIfPossible(fullRewardBalance ?? null, rewardToken)
-    );
+  private extractUserFullReward({ fullRewardBalance, rewardToken }: FarmingListItemWithBalances) {
+    return toAtomicIfPossible(fullRewardBalance ?? null, rewardToken);
   }
 
-  private extractUserPendingReward(farms: FarmingListItemWithBalances[], timestamp: number) {
-    return farms.map(farm => {
-      if (farm.version === FarmVersion.v1) {
-        const userInfo = this.findUserInfo(farm.id);
+  private extractUserPendingReward(farm: FarmingListItemWithBalances, timestamp: number) {
+    if (farm.version === FarmVersion.v1) {
+      const userInfo = this.findUserInfo(farm.id);
 
-        return userInfo ? getUserPendingRewardForFarmingV1(userInfo, farm, timestamp) : ZERO_AMOUNT_BN;
-      }
+      return userInfo ? getUserPendingRewardForFarmingV1(userInfo, farm, timestamp) : ZERO_AMOUNT_BN;
+    }
 
-      // TODO: implement real calculation for Youves farms
-      return toAtomicIfPossible(farm.earnBalance ?? null, farm.rewardToken);
-    });
+    // TODO: implement real calculation for Youves farms
+    return toAtomicIfPossible(farm.earnBalance ?? null, farm.rewardToken);
   }
 
   private getClaimableFarmings(stakedFarmings: FarmingListItemWithBalances[]) {
