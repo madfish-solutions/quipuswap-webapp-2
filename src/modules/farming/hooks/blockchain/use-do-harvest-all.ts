@@ -7,8 +7,7 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getUserRewardsLogData } from '../../helpers';
-import { useFarmingListStore } from '../stores';
+import { useFarmingListRewardsStore } from '../stores';
 import { useStakedOnlyFarmIds } from '../use-staked-only-farm-ids';
 
 export const useDoHarvestAll = () => {
@@ -16,15 +15,15 @@ export const useDoHarvestAll = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const farmingListStore = useFarmingListStore();
+  const farmingListRewardsStore = useFarmingListRewardsStore();
   const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
 
   const doHarvestAll = useCallback(async () => {
     const stakedOnlyFarmIds = getStakedOnlyFarmIds();
     const logData = {
       harvestAll: {
-        farmingIds: stakedOnlyFarmIds.map(id => id.toFixed()),
-        rewardsInUsd: Number(getUserRewardsLogData(farmingListStore, stakedOnlyFarmIds).toFixed())
+        farmingIds: stakedOnlyFarmIds,
+        rewardsInUsd: Number(farmingListRewardsStore.getUserRewardsLogData(stakedOnlyFarmIds).toFixed())
       }
     };
 
@@ -44,7 +43,7 @@ export const useDoHarvestAll = () => {
     }
   }, [
     getStakedOnlyFarmIds,
-    farmingListStore,
+    farmingListRewardsStore,
     rootStore.tezos,
     rootStore.authStore.accountPkh,
     confirmOperation,

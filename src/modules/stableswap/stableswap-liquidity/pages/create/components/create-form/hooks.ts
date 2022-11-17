@@ -15,7 +15,7 @@ import {
   isEmptyString,
   isEmptyArray
 } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { i18n } from '@translation';
 

@@ -24,7 +24,7 @@ export const FarmingRouter: FC = () => {
       isLoading={!isInitialized}
       loaderFallback={<div>Loading...</div>}
       isError={!!error}
-      errorFallback={<div>Error: {JSON.stringify(error)}</div>}
+      errorFallback={<div>Error: {error}</div>}
     >
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />

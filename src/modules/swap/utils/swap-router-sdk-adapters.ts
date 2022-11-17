@@ -11,7 +11,7 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 import { MAX_HOPS_COUNT } from '@config/constants';
 import { WHITELISTED_POOLS } from '@config/whitelisted-pools';
 import { getTokenIdFromSlug, getTokenSlug, isExist, isTezosToken } from '@shared/helpers';
-import { Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 const FALLBACK_TRADE: Trade = [];
 const FALLBACK_TOKEN_ID = 0;

@@ -11,6 +11,7 @@ export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
 export const MS_IN_MINUTES = MS_IN_SECOND * SECONDS_IN_MINUTE;
 export const MINUTES_IN_HOUR = 60;
+export const MS_IN_HOUR = MS_IN_MINUTES * MINUTES_IN_HOUR;
 export const HOURS_IN_DAY = 24;
 export const DAYS_IN_YEAR = 365;
 export const SECONDS_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR * SECONDS_IN_MINUTE;
@@ -85,7 +86,6 @@ export const SKIP = -1;
 
 //#region API
 export const LIST = 'list';
-export const NEW_LIST = 'new-list';
 export const STATS = 'stats';
 export const DEX_TWO_ITEM = 'dex-two-item';
 // TODO: change api address => change farm => dividends (if needed)
@@ -102,8 +102,7 @@ export const FARMING_COMMON_LIST_API_URL = `${FARMING_API_URL}/v3/all-farms`;
 export const FARMING_ITEM_API_URL_V2 = `${FARMING_API_URL}/v3/multi`;
 export const FARMING_ITEM_API_URL_V3 = `${FARMING_API_URL}/v3/multi-v2`;
 
-export const FARMING_NEW_LIST_API_URL = `${FARMING_API_URL}/${NEW_LIST}`;
-export const FARMING_STATS_API_URL = `${FARMING_API_URL}/${STATS}`;
+export const FARMING_STATS_API_URL = `${FARMING_API_URL}/v3/${STATS}`;
 
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;

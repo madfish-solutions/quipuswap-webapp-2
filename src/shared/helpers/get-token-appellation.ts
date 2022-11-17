@@ -1,6 +1,6 @@
 import { EMPTY_STRING, FISRT_INDEX, SLASH } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
-import { Nullable, Optional, RawToken, Token, TokenAddress, TokenMetadata } from '@shared/types';
+import { Nullable, RawToken, Token, TokenAddress, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
 
 import { isEmptyArray, isLastElementIndex, isSingleElement, toArray } from './arrays';
@@ -97,30 +97,6 @@ export const getTokenName = (token: RawOrMappedToken, sliceAmount = TOKEN_LENGTH
   }
 
   return shortize(token.contractAddress);
-};
-
-/**
- * @deprecated Use getSymbolsString() instead of that function
- */
-export const getTokensPairName = (tokenX: RawOrMappedToken, tokenY: RawOrMappedToken, sliceAmount?: number) => {
-  return `${getTokenSymbol(tokenX, sliceAmount)} / ${getTokenSymbol(tokenY, sliceAmount)}`;
-};
-
-/**
- * @deprecated Use getSymbolsString() instead of that function
- */
-export const getTokensOptionalPairName = (
-  inputToken: Optional<RawOrMappedToken>,
-  outputToken: Optional<RawOrMappedToken>
-) => {
-  return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
-};
-
-/**
- * @deprecated Use getSymbolsString() instead of that function
- */
-export const getTokensName = (token: RawOrMappedToken, optionalToken: Optional<RawOrMappedToken>) => {
-  return optionalToken ? `${getTokenSymbol(token)} / ${getTokenSymbol(optionalToken)}` : getTokenSymbol(token);
 };
 
 export const getSymbolsString = (

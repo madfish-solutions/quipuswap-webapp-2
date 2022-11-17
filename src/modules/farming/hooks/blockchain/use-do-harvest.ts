@@ -24,7 +24,7 @@ export const useDoHarvest = () => {
       const exchangeRate = farmingItem.earnExchangeRate ?? ZERO_BN;
       const logData = {
         harvest: {
-          farmingId: farmingItem.id.toFixed(),
+          farmingId: farmingItem.id,
           rewardToken: `${farmingItem.rewardToken.contractAddress}_${farmingItem.rewardToken.fa2TokenId}`,
           rewardsInToken: Number(rewardsInToken.toFixed()),
           rewardsInUsd: Number(rewardsInToken.multipliedBy(exchangeRate).toFixed())

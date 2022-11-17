@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-import BigNumber from 'bignumber.js';
-
 import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
 import { sleep } from '@shared/helpers';
@@ -17,7 +15,7 @@ export const useGetFarmingItem = () => {
   const isReady = useReady();
 
   const getFarmingItem = useCallback(
-    async (farmingId: BigNumber, version: FarmVersion, old = true) => {
+    async (farmingId: string, version: FarmVersion, old = true) => {
       if (isReady) {
         try {
           farmingItemStore.setFarmingId(farmingId);
@@ -39,7 +37,7 @@ export const useGetFarmingItem = () => {
   );
 
   const delayedGetFarmingItem = useCallback(
-    async (farmingId: BigNumber, version: FarmVersion, old = true) => {
+    async (farmingId: string, version: FarmVersion, old = true) => {
       await sleep(DELAY_BEFORE_DATA_UPDATE);
 
       await getFarmingItem(farmingId, version, old);

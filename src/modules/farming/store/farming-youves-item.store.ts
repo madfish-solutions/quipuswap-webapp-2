@@ -6,22 +6,19 @@ import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
   LAST_INDEX,
-  PRECISION_FACTOR,
-  PRECISION_FACTOR_STABLESWAP_LP,
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Standard, Token } from '@shared/types';
+import { Nullable, Standard, Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
-import { YouvesStakeDto } from '../dto';
+import { calculateYouvesFarmingRewards } from '../helpers';
 import { FarmVersion } from '../interfaces';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
 import { YouvesContractBalanceModel } from '../models/youves-contract-balance';
-import { getRewards } from '../pages/youves-item/helpers/get-rewards';
 
 const DEFAULT_REWARDS = {
   claimableReward: null,
@@ -114,34 +111,27 @@ export class FarmingYouvesItemStore {
   }
 
   async updatePendingRewards() {
-    if (!isExist(getLastElement(this.stakes)) || isNull(this.item) || isNull(this.contractBalance)) {
+    if (
+      !isExist(getLastElement(this.stakes)) ||
+      isNull(this.item) ||
+      isNull(this.contractBalance) ||
+      isNull(this.version)
+    ) {
       this.claimableRewards = DEFAULT_REWARDS.claimableReward;
       this.longTermRewards = DEFAULT_REWARDS.longTermReward;
 
       return;
     }
 
-    const { lastRewards, vestingPeriodSeconds, staked, discFactor, rewardToken } = this.item;
+    const { claimableReward, fullReward } = calculateYouvesFarmingRewards(
+      this.item,
+      this.version,
+      this.contractBalance,
+      this.currentStake
+    );
 
-    if (staked.isZero()) {
-      this.claimableRewards = ZERO_AMOUNT_BN;
-      this.longTermRewards = ZERO_AMOUNT_BN;
-
-      return;
-    }
-
-    const precision = this.version === FarmVersion.v3 ? PRECISION_FACTOR_STABLESWAP_LP : PRECISION_FACTOR;
-
-    const reward = this.contractBalance.minus(lastRewards);
-    // TODO: https://madfish.atlassian.net/browse/QUIPU-636
-    const newDiscFactor = discFactor.plus(reward.multipliedBy(precision).dividedToIntegerBy(staked));
-
-    const stake = getLastElement(this.stakes) as YouvesStakeDto;
-
-    const { claimableReward, fullReward } = getRewards(stake, vestingPeriodSeconds, newDiscFactor, precision);
-
-    this.claimableRewards = toReal(claimableReward, rewardToken);
-    this.longTermRewards = toReal(fullReward, rewardToken);
+    this.claimableRewards = toReal(claimableReward, this.item.rewardToken);
+    this.longTermRewards = toReal(fullReward, this.item.rewardToken);
   }
 
   clearIntervals() {
