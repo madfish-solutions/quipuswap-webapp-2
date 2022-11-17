@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
-import { RouteFeeAndSlug } from '../types';
+import { RouteFeesAndSlug } from '../types';
 import { getFeeExchangeRate } from './get-fee-exchange-rate';
 
 export const getUserRouteFeesInDollars = (
-  userRouteFeesAndSlug: Array<RouteFeeAndSlug>,
+  userRouteFeesAndSlug: Array<RouteFeesAndSlug>,
   exchangeRate: Record<string, BigNumber>
 ) =>
-  userRouteFeesAndSlug.map(({ tokenSlug, fee }) => {
+  userRouteFeesAndSlug.map(({ tokenSlug, fee, devFee }) => {
     const feeExchangeRate = getFeeExchangeRate(exchangeRate, tokenSlug);
 
-    return fee.multipliedBy(feeExchangeRate);
+    return { fee: fee.multipliedBy(feeExchangeRate), devFee: devFee.multipliedBy(feeExchangeRate) };
   });

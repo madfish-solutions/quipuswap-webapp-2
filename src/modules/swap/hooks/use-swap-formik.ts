@@ -1,26 +1,22 @@
+/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { DEFAULT_DECIMALS, SECONDS_IN_MINUTE } from '@config/constants';
+import { SECONDS_IN_MINUTE } from '@config/constants';
 import { TOKEN_TO_TOKEN_DEX } from '@config/environment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import {
-  getTokenSlug,
-  getTokenSymbol,
-  getSwapMessage,
-  getDollarEquivalent,
-  defined,
-  getSumOfNumbers
-} from '@shared/helpers';
+import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defined } from '@shared/helpers';
+import { useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { DexPair, Nullable, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
+import { getSumOfFees } from '../helpers/get-sum-of-fees';
 import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';
 
@@ -42,6 +38,7 @@ export const useSwapFormik = (
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const exchangeRate = useNewExchangeRates();
+  const { tokens } = useTokensStore();
 
   const {
     settings: { tradingSlippage, transactionDeadline }
@@ -58,9 +55,11 @@ export const useSwapFormik = (
 
     const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
 
-    const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, bestTrade, inputAmount);
-    const userRouteFeesAndSlugInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRate);
-    const sumOfFeesInDollars = getSumOfNumbers(userRouteFeesAndSlugInDollars).decimalPlaces(DEFAULT_DECIMALS);
+    const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, bestTrade, tokens);
+    const userRouteFeesInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRate);
+    const sumOfUserFees = getSumOfFees(userRouteFeesInDollars);
+
+    const { sumOfFees, sumOfDevFees, sumOfTotalFees } = sumOfUserFees;
 
     const inputTokenSlug = getTokenSlug(inputToken!);
     const outputTokenSlug = getTokenSlug(outputToken!);
@@ -81,7 +80,9 @@ export const useSwapFormik = (
         ttDexAddress: TOKEN_TO_TOKEN_DEX,
         path: dexRoute?.map(dex => dex.id),
         pathLength: dexRoute?.length,
-        sumOfFees: Number(sumOfFeesInDollars)
+        sumOfFees: Number(sumOfFees),
+        sumOfDevFees: Number(sumOfDevFees),
+        sumOfTotalFees: Number(sumOfTotalFees)
       }
     };
 
