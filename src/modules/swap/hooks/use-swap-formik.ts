@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
