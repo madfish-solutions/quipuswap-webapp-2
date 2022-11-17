@@ -60,7 +60,6 @@ export const useAddStableswapLiquidity = () => {
       const { contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
 
       const tokens = extractTokens(tokensInfo);
-
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
         isNull(amount) || amount.isNaN()
           ? new BigNumber('0')
