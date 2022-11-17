@@ -10,6 +10,7 @@ import {
   getUniqArray,
   isEmptyArray,
   isExist,
+  isGreaterThanZero,
   isNull,
   isTokenEqual,
   MakeInterval,
@@ -246,7 +247,7 @@ export class FarmingListRewardsStore {
   private extractFarmsWithUniqToken(token: Token) {
     return (
       this.rootStore.farmingListStore?.listBalances.filter(({ earnBalance, rewardToken }) => {
-        return earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token);
+        return isGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token);
       }) ?? []
     );
   }
@@ -265,7 +266,7 @@ export class FarmingListRewardsStore {
         return userInfo ? getUserPendingRewardForFarmingV1(userInfo, farm, timestamp) : ZERO_AMOUNT_BN;
       }
 
-      // TODO: calculate pending reward for youves farms
+      // TODO: implement real calculation for Youves farms
       return toAtomicIfPossible(farm.earnBalance ?? null, farm.rewardToken);
     });
   }

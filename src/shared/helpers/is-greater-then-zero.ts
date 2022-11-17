@@ -1,6 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Optional } from '../types';
+import { ZERO_AMOUNT } from '@config/constants';
 
-export const isGreaterThanZero = (value: BigNumber) => value.isGreaterThan('0');
+import { Optional } from '../types';
+import { isExist } from './type-checks';
+
+export const isGreaterThanZero = (value: Optional<BigNumber>) =>
+  isExist(value) ? value.isGreaterThan(ZERO_AMOUNT) : false;
 export const isOptionalGreaterThanZero = (value: Optional<BigNumber>) => value && isGreaterThanZero(value);
