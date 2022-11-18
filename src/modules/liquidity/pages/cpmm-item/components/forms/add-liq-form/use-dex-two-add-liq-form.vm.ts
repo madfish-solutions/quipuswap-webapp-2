@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FISRT_INDEX, OPPOSITE_INDEX, ZERO_BAKER_ADDRESS } from '@config/constants';
+import { DEX_TWO_DEFAULT_BAKER_ADDRESS, FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useGetLiquidityItem, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useAddLiquidity, useCreateLiquidityPool } from '@modules/liquidity/hooks/blockchain';
@@ -60,7 +60,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
           return { amount: toAtomic(inputAmounts[index], token), token };
         }),
-        shouldShowBakerInput ? candidate : ZERO_BAKER_ADDRESS
+        shouldShowBakerInput ? candidate : DEX_TWO_DEFAULT_BAKER_ADDRESS
       );
     } else {
       await addLiquidity(inputAmounts, candidate);
