@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { DexTypeEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
+import { AppRootRoutes } from '@app.router';
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { useBalances } from '@providers/balances-provider';
 import { useTokens } from '@providers/dapp-tokens';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -21,11 +23,11 @@ import {
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { useDexGraph, useOnBlock } from '@shared/hooks';
 import { useAmplitudeService } from '@shared/hooks/use-amplitude-service';
-import { useInitialTokensSlugs } from '@shared/hooks/use-initial-tokens-slugs';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useInitialTokensSlugs } from './hooks/use-initial-tokens-slugs';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -86,7 +88,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, formik.action),
     [formik.action]
   );
-  const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
+  const [initialFrom, initialTo] =
+    useInitialTokensSlugs(fromToSlug, getRedirectionUrl, `${AppRootRoutes.Swap}/${NOT_FOUND_ROUTE_NAME}`) ?? [];
 
   const TabsContent = [
     { id: SwapTabAction.SWAP, label: t('swap|Swap') },

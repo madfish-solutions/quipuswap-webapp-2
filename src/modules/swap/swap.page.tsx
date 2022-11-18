@@ -22,9 +22,9 @@ export const SwapPage: FC = () => {
 export const SendPage: FC = () => {
   return (
     <SentryRoutes>
-      <Route path="/" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
+      <Route path="/" element={<SwapSend initialAction={SwapTabAction.SEND} />} />
       <Route path={NOT_FOUND_ROUTE_NAME} element={<PageNotFoundPage />} />
-      <Route path=":fromTo" element={<SwapSend initialAction={'send' as SwapTabAction} />} />
+      <Route path=":fromTo" element={<SwapSend initialAction={SwapTabAction.SEND} />} />
     </SentryRoutes>
   );
 };
