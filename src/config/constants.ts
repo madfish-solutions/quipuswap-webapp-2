@@ -214,3 +214,6 @@ export const PERCENT_25 = 25;
 export const PERCENT_50 = 50;
 export const PERCENT_75 = 75;
 export const PERCENT_100 = 100;
+
+export const NOT_FOUND_ROUTE_NAME = '404';
+export const NOT_FOUND_LETTER_ROUTE_NAME = 'not-found';

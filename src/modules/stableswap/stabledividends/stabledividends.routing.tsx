@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useLocation, Navigate, Route } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { NOT_FOUND_LETTER_ROUTE_NAME } from '@config/constants';
 import { PageNotFoundPage } from '@modules/errors';
 import { StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
@@ -41,7 +42,15 @@ export const StableDividendsRouter: FC = observer(() => {
       <SentryRoutes>
         <Route index element={<StableDividendsListPage />} />
 
+        <Route
+          path={`/${StableDividendsFormTabs.stake}/${NOT_FOUND_LETTER_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route path={`/${StableDividendsFormTabs.stake}/:poolId`} element={<StableDividendsStakeItemPage />} />
+        <Route
+          path={`/${StableDividendsFormTabs.unstake}/${NOT_FOUND_LETTER_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route path={`/${StableDividendsFormTabs.unstake}/:poolId`} element={<StableDividendsUnstakeItemPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />

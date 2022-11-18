@@ -3,6 +3,8 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Route } from 'react-router-dom';
 
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
+import { PageNotFoundPage } from '@modules/errors';
 import { StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
@@ -19,8 +21,11 @@ export const CpmmPageRouter: FC = observer(() => {
   return (
     <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
       <SentryRoutes>
+        <Route path={`${LiquidityTabs.add}/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path={`${LiquidityTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
+        <Route path={`${LiquidityTabs.remove}/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path={`${LiquidityTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />
+        <Route path={`${LiquidityTabs.claim}/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path={`${LiquidityTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
         <Route path={`${LiquidityTabs.create}`} element={<LiquidityCreatePage />} />
       </SentryRoutes>

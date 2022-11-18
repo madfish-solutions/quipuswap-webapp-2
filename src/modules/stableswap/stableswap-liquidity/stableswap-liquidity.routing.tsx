@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { Navigate, Route, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { NOT_FOUND_LETTER_ROUTE_NAME } from '@config/constants';
 import { StateWrapper } from '@shared/components';
 import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@shared/helpers';
 import { SentryRoutes } from '@shared/services';
@@ -44,7 +45,15 @@ export const StableswapLiquidityRouter: FC = observer(() => {
     <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
       <SentryRoutes>
         <Route path={`/${StableswapLiquidityFormTabs.create}`} element={<StableswapLiquidityCreatePage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.add}/${NOT_FOUND_LETTER_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.remove}/${NOT_FOUND_LETTER_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route
           path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
           element={<StableswapLiquidityRemoveItemPage />}

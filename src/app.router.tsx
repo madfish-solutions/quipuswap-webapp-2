@@ -28,7 +28,7 @@ export const AppRouter: FC = () => (
 
     <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingRouter />} />
     <Route path={`${AppRootRoutes.Voting}/*`} element={<VotingPage />} />
-    <Route path={`${AppRootRoutes.Coinflip}/*`} element={<CoinflipPage />} />
+    <Route path={AppRootRoutes.Coinflip} element={<CoinflipPage />} />
 
     <Route path={AppRootRoutes.PrivacyPolicy} element={<PrivacyPolicyPage />} />
     <Route path={AppRootRoutes.TermsOfService} element={<TermsOfServicePage />} />
