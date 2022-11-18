@@ -66,7 +66,11 @@ export const useAddLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = makeLiquidityOperationLogData(toReal(sharesWithSlippage, LP_TOKEN_DECIMALS), liquiditySlippage, item);
+    const logData = makeLiquidityOperationLogData(
+      toReal(sharesWithSlippage, LP_TOKEN_DECIMALS),
+      liquiditySlippage,
+      item
+    );
 
     try {
       amplitudeService.logEvent('DEX_TWO__LIQUIDITY_ADD', logData);
