@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import { Route } from 'react-router-dom';
 
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
+import { PageNotFoundPage } from '@modules/errors';
 import { SentryRoutes } from '@shared/services';
 
 import { VotingProvider } from './helpers/voting.provider';
@@ -16,6 +18,8 @@ export const VotingPage: FC<VotingProps> = ({ className }) => {
     <VotingProvider>
       <SentryRoutes>
         <Route path="/" element={<VotingInner className={className} />} />
+        <Route path={`/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
+        <Route path={`/:method/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path=":method/:fromTo" element={<VotingInner className={className} />} />
       </SentryRoutes>
     </VotingProvider>
