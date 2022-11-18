@@ -198,6 +198,7 @@ export const COLORS = ['#1373E4', '#F9A605', '#2ED33E', '#FF8042'];
 
 // Baker
 export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
+export const DEX_TWO_DEFAULT_BAKER_ADDRESS = 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM';
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;
