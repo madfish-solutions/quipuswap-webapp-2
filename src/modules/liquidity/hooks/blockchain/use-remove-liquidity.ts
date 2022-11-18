@@ -60,7 +60,11 @@ export const useRemoveLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = makeLiquidityOperationLogData(toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS), liquiditySlippage, item);
+    const logData = makeLiquidityOperationLogData(
+      toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS),
+      liquiditySlippage,
+      item
+    );
 
     try {
       amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE', logData);
