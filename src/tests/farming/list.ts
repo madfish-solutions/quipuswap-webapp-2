@@ -2,7 +2,7 @@ export enum FarmingListStatsDTA {
   TOTAL_VALUE_LOCKED = 'totalValueLocked',
   TOTAL_DAILY_REWARD = 'totalDailyReward',
   TOTAL_PENDING_REWARD = 'totalPendingReward',
-  TOTAL_CLAIMED_REWARD = 'totalClaimedReward'
+  MAX_APR = 'maxApr'
 }
 
 export enum FarmingListPandingReward {

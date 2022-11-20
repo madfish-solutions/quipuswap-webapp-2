@@ -16,7 +16,7 @@ import {
 } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import { fa2TokenExists, getTokens, getTokenSlug, isEmptyArray, isNull } from '@shared/helpers';
-import { ManagedToken, Standard, Token, TokenWithQSNetworkType } from '@shared/types';
+import { ManagedToken, Nullable, Standard, Token, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
 import { BaseFilterStore } from './base-filter.store';

@@ -1,16 +1,15 @@
 import { BigNumber } from 'bignumber.js';
 
-import { SWAP, SKIP } from '@config/constants';
+import { SKIP, SWAP } from '@config/constants';
 import { Nullable } from '@shared/types';
 
+import { sort } from '../sort';
 import { isNull } from '../type-checks';
 
 export enum SortDirection {
   ASC = 'ASC',
   DESC = 'DESC'
 }
-
-export const isDirrectOrder = (sortDirection: SortDirection) => sortDirection === SortDirection.ASC;
 
 export const sortBigNumber = (
   first: Nullable<BigNumber>,
@@ -26,11 +25,6 @@ export const sortBigNumber = (
   }
 
   const isFirstBigger = first.isGreaterThan(second);
-  const isSortedAsc = isDirrectOrder(sortDirection);
 
-  if ((isSortedAsc && isFirstBigger) || (!isSortedAsc && !isFirstBigger)) {
-    return SWAP;
-  }
-
-  return SKIP;
+  return sort(isFirstBigger, sortDirection);
 };

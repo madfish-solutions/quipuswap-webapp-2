@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { Trade } from 'swap-router-sdk';
 
-import { DexPair, SwapTabAction, Token, Undefined } from '@shared/types';
+import { DexPair, Nullable, SwapTabAction, Token, Undefined } from '@shared/types';
 
 export enum SwapField {
   INPUT_AMOUNT = 'inputAmount',

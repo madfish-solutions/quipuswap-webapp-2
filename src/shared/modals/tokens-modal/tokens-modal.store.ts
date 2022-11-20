@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { defined, getTokenSlug, isExist, isNull, isTokenEqual, isTokenIncludes } from '@shared/helpers';
 import { RootStore } from '@shared/store';
-import { ManagedToken, Optional, Token } from '@shared/types';
+import { ManagedToken, Nullable, Optional, Token } from '@shared/types';
 
 import { ExtendTokensModalCellProps } from './components';
 import { isTokensQuantityValidation, TokensModalAbort, TokensModalInitialParams, TokensQuantityStatus } from './types';

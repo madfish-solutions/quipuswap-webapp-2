@@ -1,7 +1,7 @@
 import cx from 'classnames';
 
 import { ListFilterInputViewProps } from '@shared/components';
-import { isDirrectOrder } from '@shared/helpers';
+import { isDirectOrder } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -47,7 +47,7 @@ export const useStableswapLiquidityListFilterViewModel = (): ListFilterInputView
     }))
     .find(({ field }) => field === sortField);
 
-  const sortDirectionRotate = isDirrectOrder(sortDirection);
+  const sortDirectionRotate = isDirectOrder(sortDirection);
 
   const setWhitelistedOnly = (state: boolean) => {
     return stableswapFilterStore.setWhitelistedOnly(state);

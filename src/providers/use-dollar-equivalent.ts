@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { useTokensBalancesStore } from '@shared/hooks';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { useTokenExchangeRate } from './use-token-exchange-rate';
 

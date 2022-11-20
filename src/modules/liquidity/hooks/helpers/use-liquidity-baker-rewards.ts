@@ -7,6 +7,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { TaquitoContract } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
 import { useAuthStore, useOnBlock } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 
 import { useLiquidityItemStore } from '../store';
 

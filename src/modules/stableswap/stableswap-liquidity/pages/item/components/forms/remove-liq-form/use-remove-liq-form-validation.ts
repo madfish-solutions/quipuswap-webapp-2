@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { LP_INPUT_KEY, STABLESWAP_LP_DECIMALS } from '@config/constants';
 import { StableswapItemModel } from '@modules/stableswap/models';
 import { operationAmountSchema } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 

@@ -14,7 +14,7 @@ import {
 } from '@shared/helpers';
 
 import { TokensBalancesLSApi } from '../api';
-import { Optional, Token, TokenId } from '../types';
+import { Nullable, Optional, Token, TokenId } from '../types';
 import { RootStore } from './root.store';
 
 export interface TokenBalance {
