@@ -1,5 +1,5 @@
 import { TOKENS_BALANCES_KEY, TOKENS_EVER_HAD_KEY } from '@config/localstorage';
-import { BooleansMap, NumbersMap } from '@shared/types';
+import { BooleansMap, Nullable, NumbersMap } from '@shared/types';
 
 import { isExist } from '../../helpers';
 

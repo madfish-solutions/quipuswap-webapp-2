@@ -4,6 +4,7 @@ import { BlockchainDexTwoLiquidityApi } from '@modules/liquidity/api';
 import { useRootStore } from '@providers/root-store-provider';
 import { TaquitoContract } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { useLiquidityItemStore } from '../store';
 

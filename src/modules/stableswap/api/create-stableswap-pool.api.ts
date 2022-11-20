@@ -6,7 +6,7 @@ import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_TOKEN_ID } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { isTokenFa2, saveBigNumber, toAtomic } from '@shared/helpers';
-import { AmountToken, Token } from '@shared/types';
+import { AmountToken, Nullable, Token } from '@shared/types';
 
 import { TokensValue } from '../types';
 

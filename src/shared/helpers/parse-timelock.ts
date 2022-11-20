@@ -5,9 +5,11 @@ import { i18n } from '@translation';
 
 export const parseTimelock = (timelock: BigNumber.Value, isTimelockInSeconds?: boolean) => {
   let totalMins = new BigNumber(timelock).dividedToIntegerBy(SECONDS_IN_MINUTE);
+  let seconds = new BigNumber(timelock).modulo(SECONDS_IN_MINUTE * MS_IN_SECOND);
 
   if (!isTimelockInSeconds) {
     totalMins = totalMins.dividedToIntegerBy(MS_IN_SECOND);
+    seconds = seconds.dividedToIntegerBy(MS_IN_SECOND);
   }
 
   const minutes = totalMins.modulo(MINUTES_IN_HOUR);
@@ -17,7 +19,8 @@ export const parseTimelock = (timelock: BigNumber.Value, isTimelockInSeconds?: b
   return {
     days: days.toNumber(),
     hours: hours.toNumber(),
-    minutes: minutes.toNumber()
+    minutes: minutes.toNumber(),
+    seconds: seconds.toNumber()
   };
 };
 

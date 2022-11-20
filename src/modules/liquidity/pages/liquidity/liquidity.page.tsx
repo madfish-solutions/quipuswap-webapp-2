@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { QUIPU_TOKEN, TEZOS_TOKEN_SLUG } from '@config/tokens';
 import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
-import { getFullLiquidityUrl, getTokenSlug, getTokensOptionalPairName } from '@shared/helpers';
+import { getFullLiquidityUrl, getSymbolsString, getTokenSlug } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -40,7 +40,7 @@ export const LiquidityPage: FC<LiquidityProps> = ({ className }) => {
     }
   }, [navigate, tabId, tokenAFromUrl, tokenBFromUrl]);
 
-  const getTitle = (token1: Nullable<Token>, token2: Nullable<Token>) => getTokensOptionalPairName(token1, token2);
+  const getTitle = (token1: Nullable<Token>, token2: Nullable<Token>) => getSymbolsString([token1, token2]);
 
   const handleTokensChange = (token1: Nullable<Token>, token2: Nullable<Token>) => {
     setTitle(getTitle(token1, token2));

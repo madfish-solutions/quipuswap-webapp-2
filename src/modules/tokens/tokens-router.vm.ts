@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 export const useTokensRouterViewModel = () => {
   const [isInitialized, setIsInitialized] = useState(false);

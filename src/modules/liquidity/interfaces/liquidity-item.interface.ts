@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { BlockInfo, ActiveStatus, Token } from '@shared/types';
+import { BlockInfo, ActiveStatus, Token, Nullable } from '@shared/types';
 
 import { Categories } from './icon-enum';
 import { LiquidityTokenInfo } from './liquidity-token-info.interface';

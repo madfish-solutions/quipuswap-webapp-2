@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { DexLink } from '@modules/liquidity/helpers';
 import { getTokenPairSlug, isArrayPairTuple } from '@shared/helpers';
-import { Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { getDexTwoLiquidityItemApi } from '../../api/get-dex-two-liquidity-item.api';
 import { PoolLinkExist, PoolLinkNotExist } from './components/dex-two-create-form/dex-two-create-form.types';

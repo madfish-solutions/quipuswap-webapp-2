@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { useAmountInUsd, useAmplitudeService, useTokenBalance } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
 import { getGameResult, Statuses } from '../../helpers';

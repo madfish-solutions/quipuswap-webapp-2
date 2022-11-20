@@ -5,14 +5,14 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Bage } from '@shared/elements';
 import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
-import { CFC, Standard } from '@shared/types';
+import { CFC, Standard, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
+import { TokensLogos } from '../tokens-logo';
 import styles from './ModalCell.module.scss';
 
 interface TokenCellProps {
-  tokenIcon: string | null;
+  token: Token;
   tokenName: string;
   tokenSymbol: string;
   tokenType?: Standard;
@@ -30,7 +30,7 @@ export const TokenCell: CFC<TokenCellProps> = ({
   onClick,
   tabIndex,
   children,
-  tokenIcon,
+  token,
   tokenName,
   tokenType,
   tokenSymbol,
@@ -53,7 +53,7 @@ export const TokenCell: CFC<TokenCellProps> = ({
   return (
     <div tabIndex={tabIndex} onClick={onClick} onKeyUp={handleKeyUp} className={compoundClassName}>
       <div className={styles.splitRow}>
-        <TokensLogosDeprecated firstTokenIcon={tokenIcon} firstTokenSymbol={tokenSymbol} />
+        <TokensLogos tokens={token} />
         <div className={cx(styles.mleft8, styles.tokenBody)}>
           <div className={styles.joinRow} data-test-id={tokenSymbol}>
             <h6 data-test-id="tokenSymbol">{tokenSymbol}</h6>
