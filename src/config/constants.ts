@@ -200,10 +200,11 @@ export const COLORS = ['#1373E4', '#F9A605', '#2ED33E', '#FF8042'];
 export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
 export const EVERSTAKE_BAKER = 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM';
 
-export const DEX_TWO_DEFAULT_BAKER_ADDRESS: Record<SupportedNetworks, string> = {
+export const DEX_TWO_DEFAULT_BAKERS_ADDRESSES: Record<SupportedNetworks, string> = {
   [NetworkType.MAINNET]: EVERSTAKE_BAKER,
   [NetworkType.GHOSTNET]: ZERO_BAKER_ADDRESS
 };
+export const DEX_TWO_DEFAULT_BAKER_ADDRESS = DEX_TWO_DEFAULT_BAKERS_ADDRESSES[NETWORK_ID];
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;
