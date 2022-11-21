@@ -14,9 +14,9 @@ export const useCpmmViewModel = () => {
   useEffect(() => {
     if (isExist(pairSlug)) {
       (async () => {
-        await liquidityListStore?.listStore.load();
         liquidityItemStore.setTokenPairSlug(pairSlug);
-        void liquidityItemStore.itemSore.load();
+        await liquidityListStore?.listStore.load();
+        await liquidityItemStore.itemSore.load();
       })();
     }
 
