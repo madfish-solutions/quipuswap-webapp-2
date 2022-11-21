@@ -14,6 +14,10 @@ import { V3ItemPage } from './v3-item-page';
 export const V3ItemPageRouter: FC = observer(() => {
   const { isLoading, isNotFound, error } = useRouterViewModel();
 
+  if (isNotFound) {
+    return <PageNotFoundPage />;
+  }
+
   return (
     <StateWrapper
       isLoading={isLoading}
@@ -22,13 +26,7 @@ export const V3ItemPageRouter: FC = observer(() => {
       errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
-        {isNotFound ? (
-          <Route path="*" element={<PageNotFoundPage />} />
-        ) : (
-          <>
-            <Route path={`${LiquidityTabs.add}/:address`} element={<V3ItemPage />} />
-          </>
-        )}
+        <Route path={`${LiquidityTabs.add}/:address`} element={<V3ItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );

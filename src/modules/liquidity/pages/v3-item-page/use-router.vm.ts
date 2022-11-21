@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
-
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { isExist } from '@shared/helpers';
 
+import { useContractAddress } from './hooks/use-contract-address';
+
 export const useRouterViewModel = () => {
-  const params = useParams();
-  const address = params['*'];
+  const { tab, address } = useContractAddress();
   const liquidityV3ItemStore = useLiquidityV3ItemStore();
   const { itemSore, itemIsLoading, error, isNotFound } = liquidityV3ItemStore;
 
@@ -25,6 +24,9 @@ export const useRouterViewModel = () => {
 
     return () => itemSore.resetData();
   }, [liquidityV3ItemStore, address, itemSore]);
+
+  // eslint-disable-next-line no-console
+  console.log('params', { tab, address, isNotFound, error });
 
   return {
     isLoading: itemIsLoading,

@@ -1,11 +1,32 @@
-import { LIQUIDITY_DEX_TWO_ITEM_API_URL } from '@config/constants';
+import { TezosToolkit } from '@taquito/taquito';
 
-export const getV3LiquidityItemApi = async (address: string) => {
-  if (!address) {
-    throw Error('address is required');
+import { getStorageInfo } from '@shared/dapp';
+import { TokensValue } from '@shared/types';
+
+export namespace BlockchainLiquidityV3Api {
+  export interface V3PoolStorage {
+    storage: {
+      constants: {
+        ctez_burn_fee_bps: number;
+        dev_fee_bps: number;
+        factory_address: string;
+        fee_bps: number;
+        tick_spacing: number;
+        token_x: TokensValue;
+        token_y: TokensValue;
+      };
+    };
   }
 
-  const response = await fetch(`${LIQUIDITY_DEX_TWO_ITEM_API_URL}/${address}`);
+  export const getPoolContract = async (tezos: TezosToolkit, contractAddress: string) => {
+    if (!contractAddress) {
+      throw Error('contractAddress is required');
+    }
 
-  return await response.json();
-};
+    const storage = await getStorageInfo<V3PoolStorage>(tezos, contractAddress);
+    // eslint-disable-next-line no-console
+    console.log('storage', storage);
+
+    return null;
+  };
+}
