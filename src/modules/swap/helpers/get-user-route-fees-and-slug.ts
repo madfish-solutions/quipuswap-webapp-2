@@ -1,5 +1,5 @@
 import { TezosToolkit } from '@taquito/taquito';
-import { getPairFeeRatio, Trade } from 'swap-router-sdk';
+import { Trade } from 'swap-router-sdk';
 
 import { isNull, toReal } from '@shared/helpers';
 import { TokensMap } from '@shared/store/tokens.store';
@@ -7,6 +7,7 @@ import { Nullable } from '@shared/types';
 
 import { swapRouterSdkTokenSlugToQuipuTokenSlug } from '../utils/swap-router-sdk-adapters';
 import { getDevFeeRatio } from './get-dev-fee-ratio';
+import { getPairFeeRatio } from './get-pair-fee-ratio';
 
 export const getUserRouteFeesAndSlug = (tezos: Nullable<TezosToolkit>, routes: Nullable<Trade>, tokens: TokensMap) => {
   if (isNull(tezos) || isNull(routes)) {
