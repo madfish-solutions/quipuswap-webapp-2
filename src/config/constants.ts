@@ -72,6 +72,7 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
 //#region signs
+export const DASH = '_';
 export const DOLLAR = '$';
 export const PERCENT = '%';
 export const SLASH = '/';
