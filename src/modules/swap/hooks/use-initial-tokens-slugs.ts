@@ -21,9 +21,8 @@ import { isValidTokenSlug } from '@shared/validators';
 
 import { InvalidTokensPairError } from '../errors';
 
-type TokensSlugs = [string, string];
-
-const FALLBACK_TOKENS_SLUGS: TokensSlugs = [getTokenSlug(TEZOS_TOKEN), getTokenSlug(QUIPU_TOKEN)];
+const DEFAULT_FIRST_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
+const DEFAULT_SECOND_TOKEN_SLUG = getTokenSlug(QUIPU_TOKEN);
 
 export const useInitialTokensSlugs = (
   fromToSlug?: string,
@@ -38,10 +37,11 @@ export const useInitialTokensSlugs = (
   const getInitialTokens = useCallback(
     async (_key: string, tokensSlug = '') => {
       if (isEmptyString(tokensSlug)) {
-        return FALLBACK_TOKENS_SLUGS;
+        return [DEFAULT_FIRST_TOKEN_SLUG, DEFAULT_SECOND_TOKEN_SLUG] as const;
       }
 
-      const rawTokensSlugs = tokensSlug.split('-');
+      const [firstTokenSlug, secondTokenSlug = DEFAULT_SECOND_TOKEN_SLUG] = tokensSlug.split('-');
+      const rawTokensSlugs = [firstTokenSlug, secondTokenSlug];
       const tezos = makeBasicToolkit();
 
       if (!isArrayPairTuple(rawTokensSlugs) || rawTokensSlugs.some(slug => isValidTokenSlug(slug) !== true)) {

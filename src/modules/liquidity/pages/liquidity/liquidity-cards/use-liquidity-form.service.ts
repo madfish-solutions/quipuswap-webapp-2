@@ -2,6 +2,8 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { getLiquidityUrl } from '@shared/helpers';
 import { Nullable, Token, TokenPair } from '@shared/types';
@@ -15,13 +17,16 @@ const handleSearchPromise = async (
   searchPromise: Promise<Nullable<Token>>,
   setToken: Dispatch<SetStateAction<Nullable<Token>>>,
   tokenDirtyRef: MutableRefObject<boolean>,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  redirectToNotFoundPage: () => void
 ) => {
   try {
     setLoading(true);
     const token = await searchPromise;
     if (token && !tokenDirtyRef.current) {
       setToken(token);
+    } else if (!tokenDirtyRef.current) {
+      redirectToNotFoundPage();
     }
   } catch (e) {
     // eslint-disable-next-line no-console
@@ -65,6 +70,8 @@ export const useLiquidityFormService = ({
       return;
     }
 
+    const redirectToNotFoundPage = () => navigate(`${AppRootRoutes.Liquidity}/${tab.id}/${NOT_FOUND_ROUTE_NAME}`);
+
     const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(url);
 
     const validTokenA = findToken(contractTokenA, idTokenA, tokens);
@@ -75,7 +82,8 @@ export const useLiquidityFormService = ({
         searchCustomTokens(contractTokenA, Number(idTokenA), true),
         setTokenA,
         tokenADirtyRef,
-        setTokenALoading
+        setTokenALoading,
+        redirectToNotFoundPage
       );
     }
 
@@ -87,12 +95,13 @@ export const useLiquidityFormService = ({
         searchCustomTokens(contractTokenB, Number(idTokenB), true),
         setTokenB,
         tokenBDirtyRef,
-        setTokenBLoading
+        setTokenBLoading,
+        redirectToNotFoundPage
       );
     }
     handleUpdateTitle(validTokenA, validTokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, url, tokens, searchCustomTokens]);
+  }, [loading, url, tokens, searchCustomTokens, navigate, tab.id]);
 
   const changeRoute = async (_tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
     const liqUrl = getLiquidityUrl(_tabId || tab.id, _tokenA, _tokenB);
