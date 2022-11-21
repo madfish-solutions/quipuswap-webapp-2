@@ -2,9 +2,11 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { DEX_TWO_DEFAULT_BAKER_ADDRESS, FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
+import { NETWORK_ID } from '@config/environment';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useGetLiquidityItem, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useAddLiquidity, useCreateLiquidityPool } from '@modules/liquidity/hooks/blockchain';
+import { useBakers } from '@providers/dapp-bakers';
 import {
   calculateOutputWithToken,
   calculateShares,
@@ -23,7 +25,7 @@ import {
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { getTokenAndFieldData, getFormikInitialValues, getUserBalances } from '../helpers';
+import { getTokenAndFieldData, getFormikInitialValues, getUserBalances, getEverstakeBaker } from '../helpers';
 import { Input, LiquidityFormValues } from '../interface';
 import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
@@ -35,6 +37,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
   const { createNewLiquidityPool } = useCreateLiquidityPool();
   const poolIsEmpty = item.totalSupply.isZero();
   const { delayedGetLiquidityItem } = useGetLiquidityItem();
+  const { data: bakers } = useBakers();
 
   const tokensInfo = item.tokensInfo.map(tokenInfo =>
     isTezosToken(tokenInfo.token) ? { ...tokenInfo, token: TEZOS_TOKEN } : tokenInfo
@@ -60,7 +63,7 @@ export const useDexTwoAddLiqFormViewModel = () => {
 
           return { amount: toAtomic(inputAmounts[index], token), token };
         }),
-        shouldShowBakerInput ? candidate : DEX_TWO_DEFAULT_BAKER_ADDRESS
+        shouldShowBakerInput ? candidate : DEX_TWO_DEFAULT_BAKER_ADDRESS[NETWORK_ID]
       );
     } else {
       await addLiquidity(inputAmounts, candidate);
@@ -153,7 +156,8 @@ export const useDexTwoAddLiqFormViewModel = () => {
     value: formik.values[Input.THIRD_INPUT],
     error: formik.errors[Input.THIRD_INPUT],
     handleChange: onBakerChange,
-    shouldShowBakerInput
+    shouldShowBakerInput,
+    defaultBaker: getEverstakeBaker(bakers)
   };
   const warningMessage = poolIsEmpty ? t('liquidity|emptyPoolWarning') : null;
 
