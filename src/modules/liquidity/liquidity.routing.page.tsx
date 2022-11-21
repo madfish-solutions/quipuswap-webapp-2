@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { StateWrapper } from '@shared/components';
+import { LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../errors';
@@ -15,7 +15,7 @@ export const LiquidityPageRouter: FC = () => {
   const { isInitialized } = useLiquidityRouterViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<LoaderFallback />}>
       <SentryRoutes>
         <Route path={LiquidityRoutes.root} element={<LiquidityListPage />} />
 

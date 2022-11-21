@@ -72,3 +72,4 @@ export * from './advertising';
 export * from './tokens-filter';
 export * from './virtual-list';
 export * from './error-fallback';
+export * from './loader-fallback';

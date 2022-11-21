@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Route } from 'react-router-dom';
 
-import { ErrorFallback, StateWrapper } from '@shared/components';
+import { ErrorFallback, LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../../../errors';
@@ -17,7 +17,7 @@ export const V3ItemPageRouter: FC = observer(() => {
   return (
     <StateWrapper
       isLoading={!isInitialized}
-      loaderFallback={<>Loading...</>}
+      loaderFallback={<LoaderFallback />}
       isError={!!error}
       errorFallback={<ErrorFallback error={error} />}
     >
