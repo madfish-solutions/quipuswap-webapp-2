@@ -5,9 +5,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRootRoutes } from '@app.router';
 import { NOT_FOUND_ROUTE_NAME, SLASH } from '@config/constants';
 import { useCpmmPairSlug, useLiquidityItemStore } from '@modules/liquidity/hooks';
-import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
-import { getPenultimateElement, isExist } from '@shared/helpers';
+import { LiquidityRoutes, LiquidityTabs } from '@modules/liquidity/liquidity-routes.enum';
+import { isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
+
+const TAB_NAME_INDEX = 3;
 
 export const useCpmmViewModel = () => {
   const { t } = useTranslation();
@@ -15,7 +17,7 @@ export const useCpmmViewModel = () => {
   const liquidityItemStore = useLiquidityItemStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const action = getPenultimateElement(location.pathname.split(SLASH));
+  const tabName = location.pathname.split(SLASH)[TAB_NAME_INDEX];
 
   useEffect(() => {
     if (isExist(pairSlug)) {
@@ -27,10 +29,10 @@ export const useCpmmViewModel = () => {
   }, [liquidityItemStore, pairSlug]);
 
   useEffect(() => {
-    if (!isExist(pairSlug) || liquidityItemStore.itemApiError) {
-      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.cpmm}/${action}/${NOT_FOUND_ROUTE_NAME}`);
+    if ((!isExist(pairSlug) || liquidityItemStore.itemApiError) && tabName !== LiquidityTabs.create) {
+      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.cpmm}/${tabName}/${NOT_FOUND_ROUTE_NAME}`);
     }
-  }, [pairSlug, liquidityItemStore.itemApiError, navigate, action]);
+  }, [pairSlug, liquidityItemStore.itemApiError, navigate, tabName]);
 
   return {
     t,
