@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
-import { NOT_FOUND_ROUTE_NAME, SLASH } from '@config/constants';
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { useCpmmPairSlug, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { LiquidityRoutes, LiquidityTabs } from '@modules/liquidity/liquidity-routes.enum';
-import { isExist } from '@shared/helpers';
+import { getRouterParts, isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-const TAB_NAME_INDEX = 3;
+const TAB_NAME_INDEX = 2;
 
 export const useCpmmViewModel = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ export const useCpmmViewModel = () => {
   const liquidityItemStore = useLiquidityItemStore();
   const navigate = useNavigate();
   const location = useLocation();
-  const tabName = location.pathname.split(SLASH)[TAB_NAME_INDEX];
+  const tabName = getRouterParts(location.pathname)[TAB_NAME_INDEX];
 
   useEffect(() => {
     if (isExist(pairSlug)) {

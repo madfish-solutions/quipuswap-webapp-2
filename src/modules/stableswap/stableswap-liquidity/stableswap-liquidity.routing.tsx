@@ -25,18 +25,18 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   const { isInitialazied, error } = useStableswapLiquidityRouterViewModel();
 
   const routerParts = getRouterParts(pathname);
-  const lastTab = getLastElement(routerParts);
+  const lastRoutePart = getLastElement(routerParts);
 
   const isAddOrRemoveInUrl = isSomeInArray(routerParts, [
     StableswapLiquidityFormTabs.add,
     StableswapLiquidityFormTabs.remove
   ]);
 
-  if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
+  if (!isUndefined(lastRoutePart) && parseInt(lastRoutePart) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastTab}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastRoutePart}`}
       />
     );
   }
@@ -59,7 +59,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
           element={<StableswapLiquidityRemoveItemPage />}
         />
 
-        <Route path={'/'} element={<StableswapLiquidityListPage />} />
+        <Route index element={<StableswapLiquidityListPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>
