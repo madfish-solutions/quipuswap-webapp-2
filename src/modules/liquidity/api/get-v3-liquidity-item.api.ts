@@ -27,6 +27,6 @@ export namespace BlockchainLiquidityV3Api {
     // eslint-disable-next-line no-console
     console.log('storage', storage);
 
-    return null;
+    return storage;
   };
 }

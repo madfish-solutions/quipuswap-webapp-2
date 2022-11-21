@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { defined, isNotFoundError } from '@shared/helpers';
+import { defined } from '@shared/helpers';
 import { Fled } from '@shared/model-builder/fled';
 import { RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
@@ -14,7 +14,10 @@ export class LiquidityV3ItemStore {
   //#region dex two liquidity item store
   readonly itemSore = new Fled(
     async () =>
-      await BlockchainLiquidityV3Api.getPoolContract(defined(this.rootStore.tezos), defined(this.address, 'address')),
+      await BlockchainLiquidityV3Api.getPoolContract(
+        defined(this.rootStore.tezos, 'tezos'),
+        defined(this.address, 'address')
+      ),
     a => a
   );
 
@@ -25,12 +28,6 @@ export class LiquidityV3ItemStore {
   get item() {
     return this.itemSore.model;
   }
-
-  get isNotFound() {
-    return (
-      !this.address || (!this.item && !this.itemIsLoading && !this.error) || (this.error && isNotFoundError(this.error))
-    );
-  }
   //#endregion dex two liquidity item store
 
   constructor(private rootStore: RootStore) {
@@ -39,7 +36,6 @@ export class LiquidityV3ItemStore {
       error: observable,
       item: computed,
       contractAddress: computed,
-      isNotFound: computed,
       itemModel: computed,
       setAddress: action,
       setError: action

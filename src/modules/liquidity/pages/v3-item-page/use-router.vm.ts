@@ -1,36 +1,34 @@
 import { useEffect } from 'react';
 
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
-import { isExist } from '@shared/helpers';
+import { useRootStore } from '@providers/root-store-provider';
+import { isExist, isNotFoundError } from '@shared/helpers';
 
 import { useContractAddress } from './hooks/use-contract-address';
 
 export const useRouterViewModel = () => {
-  const { tab, address } = useContractAddress();
-  const liquidityV3ItemStore = useLiquidityV3ItemStore();
-  const { itemSore, itemIsLoading, error, isNotFound } = liquidityV3ItemStore;
+  const { tezos } = useRootStore();
+  const { address } = useContractAddress();
+  const store = useLiquidityV3ItemStore();
 
   useEffect(() => {
-    if (isExist(address)) {
-      liquidityV3ItemStore.setAddress(address);
+    if (isExist(address) && tezos) {
+      store.setAddress(address);
       (async () => {
         try {
-          await itemSore.load();
+          await store.itemSore.load();
         } catch (_error) {
-          liquidityV3ItemStore.setError(_error as Error);
+          store.setError(_error as Error);
         }
       })();
     }
 
-    return () => itemSore.resetData();
-  }, [liquidityV3ItemStore, address, itemSore]);
-
-  // eslint-disable-next-line no-console
-  console.log('params', { tab, address, isNotFound, error });
+    return () => store.itemSore.resetData();
+  }, [store, address, tezos]);
 
   return {
-    isLoading: itemIsLoading,
-    isNotFound,
-    error
+    isLoading: store.itemIsLoading,
+    isNotFound: store.error && isNotFoundError(store.error),
+    error: store.error
   };
 };
