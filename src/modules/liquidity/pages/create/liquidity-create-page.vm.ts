@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { FormikErrors, FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { SINGLE_TOKEN_VALUE, DEX_TWO_DEFAULT_BAKER_ADDRESS } from '@config/constants';
+import { NETWORK_ID } from '@config/environment';
 import {
   canDelegate,
   getInputsAmountFormFormikValues,
@@ -51,7 +52,9 @@ export const useLiquidityCreatePageViewModel = () => {
 
       const valuesBN = getInputsAmountFormFormikValues(values);
 
-      const candidate = shouldShowBakerInput ? values[LiquidityCreateInput.BAKER_INPUT] : DEX_TWO_DEFAULT_BAKER_ADDRESS;
+      const candidate = shouldShowBakerInput
+        ? values[LiquidityCreateInput.BAKER_INPUT]
+        : DEX_TWO_DEFAULT_BAKER_ADDRESS[NETWORK_ID];
       const tokensAndAmount = getTokensAndAmounts(valuesBN, chosenTokensSingleModal).sort((a, b) =>
         sortTokens(a.token, b.token)
       );

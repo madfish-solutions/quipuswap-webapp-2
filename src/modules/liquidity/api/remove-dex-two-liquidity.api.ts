@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE, DEX_TWO_DEFAULT_BAKER_ADDRESS } from '@config/constants';
-import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
+import { DEX_TWO_CONTRACT_ADDRESS, NETWORK_ID } from '@config/environment';
 import { AmountToken } from '@shared/types';
 
 export const removeDexTwoLiquidityApi = async (
@@ -16,7 +16,7 @@ export const removeDexTwoLiquidityApi = async (
   itemId: BigNumber
 ) => {
   if (!candidate) {
-    candidate = DEX_TWO_DEFAULT_BAKER_ADDRESS;
+    candidate = DEX_TWO_DEFAULT_BAKER_ADDRESS[NETWORK_ID];
   }
 
   const dexTwoContract = await tezos.wallet.at(DEX_TWO_CONTRACT_ADDRESS);

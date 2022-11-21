@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Plus } from '@shared/svg';
-import { Nullable } from '@shared/types';
+import { Nullable, WhitelistedBaker } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -15,6 +15,7 @@ import styles from './dex-two-add-liq-form-view.module.scss';
 
 interface BakerProps extends ComplexBakerProps {
   shouldShowBakerInput: boolean;
+  defaultBaker?: Nullable<WhitelistedBaker>;
 }
 
 interface Props {
@@ -38,7 +39,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const { value, error, handleChange, shouldShowBakerInput } = bakerData;
+  const { value, error, handleChange, shouldShowBakerInput, defaultBaker } = bakerData;
 
   return (
     <>
@@ -51,6 +52,7 @@ export const DexTwoAddLiqFormView: FC<Props> = ({
             handleChange={handleChange}
             label={t('common|Baker')}
             className={stylesCommonContainer.mt24}
+            defaultBaker={defaultBaker}
           />
         )}
         <WarningAlert className={stylesCommonContainer.mt16} message={warningMessage} />
