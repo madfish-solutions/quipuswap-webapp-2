@@ -28,6 +28,10 @@ export class LiquidityV3ItemStore {
   get item() {
     return this.itemSore.model.item;
   }
+
+  get isNotFound() {
+    return !this.address || (!this.item && !this.itemIsLoading && !this.error);
+  }
   //#endregion dex two liquidity item store
 
   constructor(private rootStore: RootStore) {
@@ -36,6 +40,7 @@ export class LiquidityV3ItemStore {
       error: observable,
       item: computed,
       contractAddress: computed,
+      isNotFound: computed,
       id: computed,
       itemModel: computed,
       setAddress: action,

@@ -12,17 +12,17 @@ import { useRouterViewModel } from './use-router.vm';
 import { V3ItemPage } from './v3-item-page';
 
 export const V3ItemPageRouter: FC = observer(() => {
-  const { isInitialized, is404, error } = useRouterViewModel();
+  const { isLoading, isNotFound, error } = useRouterViewModel();
 
   return (
     <StateWrapper
-      isLoading={!isInitialized}
+      isLoading={isLoading}
       loaderFallback={<LoaderFallback />}
       isError={!!error}
       errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
-        {is404 ? (
+        {isNotFound ? (
           <Route path="*" element={<PageNotFoundPage />} />
         ) : (
           <>
