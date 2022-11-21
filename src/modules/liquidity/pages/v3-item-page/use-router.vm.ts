@@ -9,7 +9,7 @@ export const useRouterViewModel = () => {
   const params = useParams();
   const address = params['*'];
   const liquidityV3ItemStore = useLiquidityV3ItemStore();
-  const { itemSore, itemIsLoading, item, error } = liquidityV3ItemStore;
+  const { itemSore, itemIsLoading, error, isNotFound } = liquidityV3ItemStore;
 
   useEffect(() => {
     if (isExist(address)) {
@@ -27,8 +27,8 @@ export const useRouterViewModel = () => {
   }, [liquidityV3ItemStore, address, itemSore]);
 
   return {
-    isInitialized: itemIsLoading,
-    is404: !address || (!item && !itemIsLoading),
+    isLoading: itemIsLoading,
+    isNotFound,
     error
   };
 };
