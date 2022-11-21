@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 
-import { Params, useNavigate, useParams } from 'react-router-dom';
+import { Params, useParams } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { isExist } from '@shared/helpers';
 import { isValidAddress } from '@shared/validators';
@@ -43,15 +42,14 @@ const getCpmmPairSlug = (params: Readonly<Params<string>>) => {
 
 export const useCpmmPairSlug = () => {
   const params = useParams();
-  const navigate = useNavigate();
 
   const pairSlug = useMemo(() => {
     try {
       return getCpmmPairSlug(params);
     } catch {
-      navigate(AppRootRoutes.Liquidity);
+      return undefined;
     }
-  }, [navigate, params]);
+  }, [params]);
 
   return { pairSlug };
 };
