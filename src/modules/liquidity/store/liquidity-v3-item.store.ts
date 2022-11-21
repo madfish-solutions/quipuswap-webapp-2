@@ -1,36 +1,35 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { defined } from '@shared/helpers';
-import { Led, ModelBuilder } from '@shared/model-builder';
-import { LoadingErrorData, RootStore } from '@shared/store';
+import { defined, isNotFoundError } from '@shared/helpers';
+import { Fled } from '@shared/model-builder/fled';
+import { RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
-import { getV3LiquidityItemApi } from '../api';
-import { LiquidityItemModel } from '../models';
+import { BlockchainLiquidityV3Api } from '../api';
 
-@ModelBuilder()
 export class LiquidityV3ItemStore {
   address: Nullable<string> = null;
   error: Nullable<Error> = null;
 
   //#region dex two liquidity item store
-  @Led({
-    default: { item: null },
-    loader: async (self: LiquidityV3ItemStore) => await getV3LiquidityItemApi(defined(self.address, 'address')),
-    model: LiquidityItemModel
-  })
-  readonly itemSore: LoadingErrorData<LiquidityItemModel, { item: null }>;
+  readonly itemSore = new Fled(
+    async () =>
+      await BlockchainLiquidityV3Api.getPoolContract(defined(this.rootStore.tezos), defined(this.address, 'address')),
+    a => a
+  );
 
   get itemIsLoading() {
     return this.itemSore.isLoading;
   }
 
   get item() {
-    return this.itemSore.model.item;
+    return this.itemSore.model;
   }
 
   get isNotFound() {
-    return !this.address || (!this.item && !this.itemIsLoading && !this.error);
+    return (
+      !this.address || (!this.item && !this.itemIsLoading && !this.error) || (this.error && isNotFoundError(this.error))
+    );
   }
   //#endregion dex two liquidity item store
 
@@ -41,7 +40,6 @@ export class LiquidityV3ItemStore {
       item: computed,
       contractAddress: computed,
       isNotFound: computed,
-      id: computed,
       itemModel: computed,
       setAddress: action,
       setError: action
@@ -62,9 +60,5 @@ export class LiquidityV3ItemStore {
 
   get contractAddress() {
     return this.address;
-  }
-
-  get id() {
-    return this.item?.id || null;
   }
 }
