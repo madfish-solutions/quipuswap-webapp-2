@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
-import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { getTokenPairSlug } from '@shared/helpers';
 import { useRouterPair } from '@shared/hooks/use-router-pair';
@@ -27,10 +25,6 @@ export const TabsContent = [
   }
 ];
 
-const isVotingTabId = (id: string): id is VotingTabs => {
-  return TabsContent.some(tab => tab.id === id);
-};
-
 export const useVotingRouter = (token1: Token, token2: Token) => {
   const params = useParams();
   const navigate = useNavigate();
@@ -38,7 +32,7 @@ export const useVotingRouter = (token1: Token, token2: Token) => {
 
   const [urlLoaded, setUrlLoaded] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);
-  const [votingTab, setVotingTab] = useState<VotingTabs>(isVotingTabId(method) ? method : VotingTabs.vote);
+  const [votingTab, setVotingTab] = useState<VotingTabs>(method as VotingTabs);
 
   const { from, to } = useRouterPair({
     page: `${VOTING}/${method}`,
@@ -57,12 +51,6 @@ export const useVotingRouter = (token1: Token, token2: Token) => {
   );
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === votingTab)!, [votingTab]);
-
-  useEffect(() => {
-    if (!isVotingTabId(method)) {
-      navigate(`${AppRootRoutes.Voting}/${NOT_FOUND_ROUTE_NAME}`);
-    }
-  }, [method, navigate]);
 
   return {
     urlLoaded,

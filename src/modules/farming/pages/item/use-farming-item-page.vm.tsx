@@ -52,6 +52,7 @@ export const useFarmingItemPageViewModel = () => {
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   useEffect(() => {
+    // TODO: https://madfish.atlassian.net/browse/QUIPU-701
     if (itemApiError) {
       redirectToNotFoundPage();
     }

@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Card, Tabs } from '@shared/components';
+import { Card, LoaderFallback, Tabs } from '@shared/components';
 import styles from '@styles/CommonContainer.module.scss';
 
 import { YouvesFormTabs } from '../../types';
@@ -29,7 +29,9 @@ export const YouvesFormTabsCard: FC = observer(() => {
       contentClassName={styles.content}
       data-test-id="youvesFromTabsCard"
     >
-      {isStakeForm ? <StakeForm /> : canShowUnstakeForm && <UnstakeForm />}
+      {isStakeForm && <StakeForm />}
+      {canShowUnstakeForm && !isStakeForm && <UnstakeForm />}
+      {!canShowUnstakeForm && !isStakeForm && <LoaderFallback />}
     </Card>
   );
 });

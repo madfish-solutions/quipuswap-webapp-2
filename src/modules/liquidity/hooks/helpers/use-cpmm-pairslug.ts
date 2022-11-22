@@ -47,7 +47,7 @@ export const useCpmmPairSlug = () => {
     try {
       return getCpmmPairSlug(params);
     } catch {
-      return undefined;
+      return null;
     }
   }, [params]);
 
