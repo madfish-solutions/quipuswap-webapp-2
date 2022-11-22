@@ -22,10 +22,6 @@ export namespace BlockchainLiquidityV3Api {
       throw Error('contractAddress is required');
     }
 
-    const storage = await getStorageInfo<V3PoolStorage>(tezos, contractAddress);
-    // eslint-disable-next-line no-console
-    console.log('storage', storage);
-
-    return storage;
+    return await getStorageInfo<V3PoolStorage>(tezos, contractAddress);
   };
 }

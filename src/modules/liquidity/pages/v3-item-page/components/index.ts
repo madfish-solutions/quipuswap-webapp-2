@@ -1,1 +1,1 @@
-export * from './page-title-container'
+export * from './page-title-container';
