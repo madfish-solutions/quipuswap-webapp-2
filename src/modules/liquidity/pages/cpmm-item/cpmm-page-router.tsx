@@ -28,6 +28,7 @@ export const CpmmPageRouter: FC = observer(() => {
         <Route path={`${LiquidityTabs.claim}/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path={`${LiquidityTabs.claim}/:pairSlug`} element={<CpmmDexTwoClaimRewards title={title} />} />
         <Route path={`${LiquidityTabs.create}`} element={<LiquidityCreatePage />} />
+        <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
