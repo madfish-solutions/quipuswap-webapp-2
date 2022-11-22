@@ -144,6 +144,7 @@ export const useSwapCalculations = () => {
   };
 
   return {
+    bestTrade,
     dexRoute,
     onInputAmountChange,
     onOutputAmountChange,

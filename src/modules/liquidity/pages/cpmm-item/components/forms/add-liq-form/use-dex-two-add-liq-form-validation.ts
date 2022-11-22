@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
 import { LiquidityItem } from '@modules/liquidity/interfaces';
 import { operationAmountSchema } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -41,7 +42,8 @@ export const useDexTwoAddLiqValidation = (
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
 
-    const bakerSchema = shouldShowBakerInput ? yup.string().required('Baker is required') : yup.string();
+    const bakerSchema =
+      shouldShowBakerInput && !IS_NETWORK_MAINNET ? yup.string().required('Baker is required') : yup.string();
 
     return yup.object().shape({
       ...shape,
