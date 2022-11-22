@@ -11,7 +11,7 @@ import { UnstakeForm } from './unstake-form';
 import { useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
 export const YouvesFormTabsCard: FC = observer(() => {
-  const { currentTab, setCurrentTab, isStakeForm, tabs } = useFarmingFormTabsCardViewModel();
+  const { canShowUnstakeForm, currentTab, setCurrentTab, isStakeForm, tabs } = useFarmingFormTabsCardViewModel();
 
   return (
     <Card
@@ -29,7 +29,7 @@ export const YouvesFormTabsCard: FC = observer(() => {
       contentClassName={styles.content}
       data-test-id="youvesFromTabsCard"
     >
-      {isStakeForm ? <StakeForm /> : <UnstakeForm />}
+      {isStakeForm ? <StakeForm /> : canShowUnstakeForm && <UnstakeForm />}
     </Card>
   );
 });

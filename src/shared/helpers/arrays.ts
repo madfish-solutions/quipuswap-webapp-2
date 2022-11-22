@@ -44,3 +44,5 @@ export const isSomeInArray = <T>(list: Array<T>, items: Array<T>): boolean => li
 export const isArrayPairTuple = <T>(array: Array<T>): array is [T, T] => {
   return array.length === 2;
 };
+
+export const excludeLastElement = <T>(array: T[]) => array.slice(0, -1);

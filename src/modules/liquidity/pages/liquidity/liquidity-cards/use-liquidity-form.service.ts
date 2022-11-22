@@ -2,10 +2,8 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
-import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
-import { getLiquidityUrl } from '@shared/helpers';
+import { getLiquidityUrl, useRedirectToNotFoundDigitsRoute } from '@shared/helpers';
 import { Nullable, Token, TokenPair } from '@shared/types';
 
 import { LiquidityTabs } from '../../../liquidity-routes.enum';
@@ -46,6 +44,7 @@ export const useLiquidityFormService = ({
 
   const { data: tokens, loading } = useTokens();
   const searchCustomTokens = useSearchCustomTokens();
+  const redirectToNotFoundPage = useRedirectToNotFoundDigitsRoute();
 
   const url = location.pathname;
   const { tabId } = parseUrl(url);
@@ -69,8 +68,6 @@ export const useLiquidityFormService = ({
     if (loading) {
       return;
     }
-
-    const redirectToNotFoundPage = () => navigate(`${AppRootRoutes.Liquidity}/${tab.id}/${NOT_FOUND_ROUTE_NAME}`);
 
     const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(url);
 
@@ -101,7 +98,7 @@ export const useLiquidityFormService = ({
     }
     handleUpdateTitle(validTokenA, validTokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, url, tokens, searchCustomTokens, navigate, tab.id]);
+  }, [loading, url, tokens, searchCustomTokens, redirectToNotFoundPage]);
 
   const changeRoute = async (_tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
     const liqUrl = getLiquidityUrl(_tabId || tab.id, _tokenA, _tokenB);
