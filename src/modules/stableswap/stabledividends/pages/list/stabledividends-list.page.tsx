@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { Iterator, ListItemCard, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, ListItemCard, LoaderFallback, PageTitle, StateWrapper, TestnetAlert } from '@shared/components';
 
 import { StableDividendsListFilter, StableDividendsStats, StableDividendsRewardInfo } from './components';
 import styles from './stabledividends-list.page.module.scss';
@@ -18,7 +18,7 @@ export const StableDividendsListPage: FC = observer(() => {
       <StableDividendsStats />
       <StableDividendsRewardInfo />
       <StableDividendsListFilter />
-      <StateWrapper loaderFallback={<></>}>
+      <StateWrapper loaderFallback={<LoaderFallback />}>
         <Iterator
           render={ListItemCard}
           data={data}

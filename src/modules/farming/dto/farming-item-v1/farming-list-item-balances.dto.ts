@@ -19,5 +19,8 @@ export class FarmingListItemBalancesDto {
   earnBalance?: BigNumber;
 
   @Typed({ optional: true })
+  fullRewardBalance?: BigNumber;
+
+  @Typed({ optional: true })
   error?: string;
 }

@@ -72,8 +72,10 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
 //#region signs
+export const DASH = '_';
 export const DOLLAR = '$';
 export const PERCENT = '%';
+export const STAR = '*';
 export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
@@ -198,6 +200,13 @@ export const COLORS = ['#1373E4', '#F9A605', '#2ED33E', '#FF8042'];
 
 // Baker
 export const ZERO_BAKER_ADDRESS = 'tz1burnburnburnburnburnburnburjAYjjX';
+export const EVERSTAKE_BAKER = 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM';
+
+export const DEX_TWO_DEFAULT_BAKERS_ADDRESSES: Record<SupportedNetworks, string> = {
+  [NetworkType.MAINNET]: EVERSTAKE_BAKER,
+  [NetworkType.GHOSTNET]: ZERO_BAKER_ADDRESS
+};
+export const DEX_TWO_DEFAULT_BAKER_ADDRESS = DEX_TWO_DEFAULT_BAKERS_ADDRESSES[NETWORK_ID];
 
 // Choose token
 export const SINGLE_TOKEN_VALUE = 1;

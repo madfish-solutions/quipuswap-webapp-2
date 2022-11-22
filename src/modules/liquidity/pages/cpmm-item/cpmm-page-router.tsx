@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 
 import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { PageNotFoundPage } from '@modules/errors';
-import { StateWrapper } from '@shared/components';
+import { LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { LiquidityTabs } from '../../liquidity-routes.enum';
@@ -19,7 +19,7 @@ export const CpmmPageRouter: FC = observer(() => {
   const { isInitialized, title } = useCpmmViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<LoaderFallback />}>
       <SentryRoutes>
         <Route path={`${LiquidityTabs.add}/${NOT_FOUND_ROUTE_NAME}`} element={<PageNotFoundPage />} />
         <Route path={`${LiquidityTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />

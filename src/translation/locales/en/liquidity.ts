@@ -65,15 +65,19 @@ export const liquidity = {
   here: 'here',
   emptyPoolWarning:
     'Note: you provide liquidity to the empty pool and initialise its exchange rates. Make sure the value of both assets is provided 50/50.',
-  tooltipStableSwap: 'Stable',
-  tooltipBridge: 'Bridge',
-  tooltipQuipu: 'QuipuSwap',
-  tooltipTezotopia: 'Tezotopia',
-  tooltipBTC: 'BTC-based',
+  tooltipStableSwap: 'Pools with Stablecoins: uUSD, kUSD, USDT and tokens pegged to USD and EURO value.',
+  tooltipBridge:
+    'Pools with Bridged tokens. I.e. assets that were bridged from other chains by Plenty, Allbridge or other bridges.',
+  tooltipQuipu:
+    'Pools with QUIPU tokens. QUIPU token is used in QuipuSwap AMM governance and as a means of payment for additional QuipuSwap services.',
+  tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
+  tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
+  induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
+  openNewPositionButton: 'Create new position',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
