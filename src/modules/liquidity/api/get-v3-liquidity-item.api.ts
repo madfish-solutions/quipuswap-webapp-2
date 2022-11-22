@@ -17,7 +17,7 @@ export namespace BlockchainLiquidityV3Api {
     };
   }
 
-  export const getPoolContract = async (tezos: TezosToolkit, contractAddress: string) => {
+  export const getPoolStorage = async (tezos: TezosToolkit, contractAddress: string) => {
     if (!contractAddress) {
       throw Error('contractAddress is required');
     }

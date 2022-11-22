@@ -12,10 +12,9 @@ export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
 
   //#region dex two liquidity item store
-  // TODO: Avoid using new construction :)
   readonly itemSore = new Fled(
     async () =>
-      await BlockchainLiquidityV3Api.getPoolContract(
+      await BlockchainLiquidityV3Api.getPoolStorage(
         defined(this.rootStore.tezos, 'tezos'),
         defined(this.address, 'address')
       ),

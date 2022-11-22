@@ -74,6 +74,7 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#region signs
 export const DOLLAR = '$';
 export const PERCENT = '%';
+export const STAR = '*';
 export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
