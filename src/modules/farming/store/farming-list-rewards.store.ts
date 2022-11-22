@@ -1,20 +1,21 @@
 import { BigNumber } from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT } from '@config/constants';
+import { FARM_REWARD_UPDATE_INTERVAL, ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import {
   defined,
-  getId,
   getSumOfNumbers,
   getTokenSlug,
   getUniqArray,
   isEmptyArray,
   isExist,
   isNull,
+  isOptionalGreaterThanZero,
   isTokenEqual,
   MakeInterval,
   multipliedIfPossible,
+  toAtomicIfPossible,
   toReal
 } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
@@ -25,15 +26,13 @@ import { getAllFarmsUserInfoApi } from '../api';
 import {
   getEndTimestamp,
   getIsHarvestAvailable,
-  getRewardsInUsd,
   getUserInfoLastStakedTime,
-  getUserPendingReward,
+  getUserPendingRewardForFarmingV1,
   isStakedFarming
 } from '../helpers';
-import { FarmingItem } from '../interfaces';
+import { FarmingItem, FarmVersion } from '../interfaces';
 import { FarmingListUserInfoModel, FarmingListUserInfoResponseModel } from '../models';
-
-const ZERO_BN = new BigNumber(ZERO_AMOUNT);
+import { FarmingListItemWithBalances } from '../pages/list/types';
 
 interface RewardAmount {
   amount: BigNumber;
@@ -46,9 +45,9 @@ interface TokensReward {
 }
 
 const DEFAULT_REWARDS = {
-  stakedRewardsWithoutFee: new BigNumber(ZERO_AMOUNT),
-  claimableRewardsWithFee: new BigNumber(ZERO_AMOUNT),
-  claimableRewardsWithoutFee: new BigNumber(ZERO_AMOUNT)
+  stakedRewardsWithoutFee: ZERO_AMOUNT_BN,
+  claimableRewardsWithFee: ZERO_AMOUNT_BN,
+  claimableRewardsWithoutFee: ZERO_AMOUNT_BN
 };
 
 const defaultUserInfo = {
@@ -164,16 +163,20 @@ export class FarmingListRewardsStore {
       this.claimablePendingRewardsInUsd = null;
       this.tokensRewardList = [];
     } else {
-      const stakedFarmingsIds = listBalances.filter(isStakedFarming).map(getId);
+      const stakedFarmings = listBalances.filter(isStakedFarming);
+      const claimableFarmings = this.getClaimableFarmings(stakedFarmings);
 
-      const claimableFarmingsIds = this.getClimableFarmings(stakedFarmingsIds);
-      const totalRewardsInUsd = stakedFarmingsIds.map(id => this.prepareRewards(id));
-      const claimableRewardsInUsd = claimableFarmingsIds.map(id => this.prepareRewards(id));
+      const totalRewardsInUsd = stakedFarmings.map(({ fullRewardBalance, earnExchangeRate }) =>
+        multipliedIfPossible(fullRewardBalance, earnExchangeRate)
+      );
+      const claimableRewardsInUsd = claimableFarmings.map(({ earnBalance, earnExchangeRate }) =>
+        multipliedIfPossible(earnBalance, earnExchangeRate)
+      );
 
       this.totalPendingRewardsInUsd = getSumOfNumbers(totalRewardsInUsd);
       this.claimablePendingRewardsInUsd = getSumOfNumbers(claimableRewardsInUsd);
 
-      this.tokensRewardList = this.getTokensRewardList(stakedFarmingsIds);
+      this.tokensRewardList = this.getTokensRewardList(stakedFarmings);
     }
   }
 
@@ -181,17 +184,7 @@ export class FarmingListRewardsStore {
     return this._userInfo.isLoading;
   }
 
-  private prepareRewards(id: string) {
-    const farmingItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-    return getRewardsInUsd(defined(farmingItemModel, 'farmingItemModel'), this.findUserInfo(id));
-  }
-
-  private getTokensRewardList(ids: Array<string>): Array<TokensReward> {
-    const stakedFarmings = ids.map(id =>
-      defined(this.rootStore.farmingListStore?.getFarmingItemModelById(id), `FarmingListStore: 221, id: ${id}`)
-    );
-
+  private getTokensRewardList(stakedFarmings: FarmingListItemWithBalances[]): Array<TokensReward> {
     const uniqTokens = getUniqArray(stakedFarmings, ({ rewardToken }) => getTokenSlug(rewardToken)).map(
       ({ rewardToken, earnExchangeRate }) => ({ rewardToken, earnExchangeRate })
     );
@@ -205,7 +198,9 @@ export class FarmingListRewardsStore {
       Date.now()
     );
 
-    const correctClaimableRewardsWithoutFee = claimableRewardsWithoutFee.isNaN() ? ZERO_BN : claimableRewardsWithoutFee;
+    const correctClaimableRewardsWithoutFee = claimableRewardsWithoutFee.isNaN()
+      ? ZERO_AMOUNT_BN
+      : claimableRewardsWithoutFee;
 
     const realClaimableAmount = toReal(correctClaimableRewardsWithoutFee, rewardToken);
     const claimableDollarEquivalent = multipliedIfPossible(realClaimableAmount, earnExchangeRate);
@@ -238,50 +233,43 @@ export class FarmingListRewardsStore {
     }
 
     const stakedFarmingsWithUniqTokenRewards = this.extractFarmsWithUniqToken(token);
-    const stakedRewards = this.extractUserPendingReward(stakedFarmingsWithUniqTokenRewards, timestamp);
-    const stakedRewardsWithoutFee = BigNumber.sum(...stakedRewards);
+    const stakedRewards = stakedFarmingsWithUniqTokenRewards.map(this.extractUserFullReward, this);
+    const stakedRewardsWithoutFee = getSumOfNumbers(stakedRewards);
 
-    const claimableFarmings = this.getClimableFarmings(stakedFarmingsWithUniqTokenRewards);
-    const claimableRewards = this.extractUserPendingReward(claimableFarmings, timestamp);
-    const claimableRewardsWithoutFee = BigNumber.sum(...claimableRewards);
-    const claimableRewardsWithFee = BigNumber.sum(...claimableRewards).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
+    const claimableFarmings = this.getClaimableFarmings(stakedFarmingsWithUniqTokenRewards);
+    const claimableRewards = claimableFarmings.map(farm => this.extractUserPendingReward(farm, timestamp));
+    const claimableRewardsWithoutFee = getSumOfNumbers(claimableRewards);
+    const claimableRewardsWithFee = getSumOfNumbers(claimableRewards).decimalPlaces(ZERO_AMOUNT, BigNumber.ROUND_DOWN);
 
     return { stakedRewardsWithoutFee, claimableRewardsWithFee, claimableRewardsWithoutFee };
   }
 
   private extractFarmsWithUniqToken(token: Token) {
     return (
-      this.rootStore.farmingListStore?.listBalances
-        .filter(({ earnBalance, id }) => {
-          const farmItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-          if (!farmItemModel) {
-            return false;
-          }
-          const { rewardToken } = farmItemModel;
-
-          return earnBalance?.gt(ZERO_AMOUNT) && rewardToken && isTokenEqual(rewardToken, token);
-        })
-        .map(getId) ?? []
+      this.rootStore.farmingListStore?.listBalances.filter(
+        ({ earnBalance, rewardToken }) =>
+          isOptionalGreaterThanZero(earnBalance) && rewardToken && isTokenEqual(rewardToken, token)
+      ) ?? []
     );
   }
 
-  private extractUserPendingReward(ids: Array<string>, timestamp: number) {
-    return ids.map(id => {
-      const userInfo = this.findUserInfo(id);
-
-      if (!userInfo) {
-        return new BigNumber(ZERO_AMOUNT);
-      }
-
-      const farm = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
-
-      return getUserPendingReward(userInfo, defined(farm, 'farm'), timestamp);
-    });
+  private extractUserFullReward({ fullRewardBalance, rewardToken }: FarmingListItemWithBalances) {
+    return toAtomicIfPossible(fullRewardBalance ?? null, rewardToken);
   }
 
-  private getClimableFarmings(stakedFarmingsIds: Array<string>) {
-    return stakedFarmingsIds.filter(id => {
+  private extractUserPendingReward(farm: FarmingListItemWithBalances, timestamp: number) {
+    if (farm.version === FarmVersion.v1) {
+      const userInfo = this.findUserInfo(farm.id);
+
+      return userInfo ? getUserPendingRewardForFarmingV1(userInfo, farm, timestamp) : ZERO_AMOUNT_BN;
+    }
+
+    // TODO: implement real calculation for Youves farms
+    return toAtomicIfPossible(farm.earnBalance ?? null, farm.rewardToken);
+  }
+
+  private getClaimableFarmings(stakedFarmings: FarmingListItemWithBalances[]) {
+    return stakedFarmings.filter(({ id }) => {
       const farmingItemModel = this.rootStore.farmingListStore?.getFarmingItemModelById(id);
       const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItemModel?.id));
       const endTimestamp = getEndTimestamp(farmingItemModel, lastStakedTime);

@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { FormikValues } from 'formik';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FISRT_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
 import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -13,14 +12,18 @@ import {
   isNull,
   isTezosToken,
   sortTokens,
-  toAtomic
+  toAtomic,
+  toReal
 } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { tokensAndAmountsMapper } from '@shared/mapping';
+import { amplitudeService } from '@shared/services';
+import { Nullable } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { removeDexTwoLiquidityApi } from '../../api';
+import { makeLiquidityOperationLogData } from '../../helpers';
 import { useLiquidityItemStore } from '../store';
 
 export const useRemoveLiquidity = () => {
@@ -34,7 +37,7 @@ export const useRemoveLiquidity = () => {
   const accountPkh = useAccountPkh();
   const { item } = useLiquidityItemStore();
 
-  const removeLiquidity = async (inputAmounts: FormikValues, shares: BigNumber) => {
+  const removeLiquidity = async (inputAmounts: Array<Nullable<BigNumber>>, shares: BigNumber) => {
     if (isNull(tezos) || !isExist(item) || isNull(accountPkh) || !inputAmounts.every(isExist)) {
       return;
     }
@@ -57,7 +60,14 @@ export const useRemoveLiquidity = () => {
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
+    const logData = makeLiquidityOperationLogData(
+      toReal(atomicLpTokenBalance, LP_TOKEN_DECIMALS),
+      liquiditySlippage,
+      item
+    );
+
     try {
+      amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE', logData);
       const operation = await removeDexTwoLiquidityApi(
         tezos,
         atomicLpTokenBalance,
@@ -68,8 +78,10 @@ export const useRemoveLiquidity = () => {
         itemId
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
+      amplitudeService.logEvent('DEX_TWO_LIQUIDITY_REMOVE_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
+      amplitudeService.logEvent('DEX_TWO__LIQUIDITY_REMOVE_FAILED', { ...logData, error });
     }
   };
 

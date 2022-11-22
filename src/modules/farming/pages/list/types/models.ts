@@ -8,6 +8,7 @@ interface Balances {
   myBalance?: Nullable<BigNumber>;
   depositBalance?: Nullable<BigNumber>;
   earnBalance?: Nullable<BigNumber>;
+  fullRewardBalance?: Nullable<BigNumber>;
 }
 
 export type FarmingItemModel = FarmingItemV1Model | FarmingItemV2YouvesModel;

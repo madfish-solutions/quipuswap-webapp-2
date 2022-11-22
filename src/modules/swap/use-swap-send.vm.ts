@@ -49,6 +49,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const amplitude = useAmplitudeService();
 
   const {
+    bestTrade,
     dexRoute,
     inputAmount,
     onInputAmountChange,
@@ -70,7 +71,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, dexRoute, trade, exchangeRates);
+  } = useSwapFormik(initialAction, bestTrade, dexRoute, trade, exchangeRates);
   const formik = values;
 
   const navigate = useNavigate();
