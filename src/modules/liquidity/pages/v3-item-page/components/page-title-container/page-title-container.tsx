@@ -2,10 +2,11 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { SLASH } from '@config/constants';
 import { PageTitle } from '@shared/components';
 import { getTokenSymbol } from '@shared/helpers';
 import { useToken } from '@shared/hooks';
-import { mapTokenAddress } from '@shared/mapping/map-token-address';
+import { mapTokenAddress } from '@shared/mapping';
 import { useTranslation } from '@translation';
 
 import { useLiquidityV3ItemStore } from '../../../../hooks';
@@ -18,8 +19,8 @@ export const PageTitleContainer: FC = observer(() => {
 
   const title =
     tokenX && tokenY
-      ? `${t('liquidity|Liquidity')} ${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`
-      : 'Loading...';
+      ? `${t('liquidity|Liquidity')} ${getTokenSymbol(tokenX)} ${SLASH} ${getTokenSymbol(tokenY)}`
+      : t('common|loading');
 
   return <PageTitle data-test-id="v3LiqTitle">{title}</PageTitle>;
 });
