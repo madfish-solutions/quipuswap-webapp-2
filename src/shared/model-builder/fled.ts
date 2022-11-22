@@ -3,6 +3,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { isExist } from '../helpers';
 import { Nullable } from '../types';
 
+// TODO: Remove it
 export class Fled<RawT, T> {
   rawData: Nullable<RawT> = null;
   isLoading = false;

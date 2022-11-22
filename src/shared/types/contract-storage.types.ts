@@ -22,15 +22,15 @@ export interface BigMap<Key extends BigMapKeyType, Value> {
   toString(): string;
 }
 
-interface TezToken {
+export interface TezToken {
   tez: never;
 }
 
-interface FA12Token {
+export interface FA12Token {
   fa12: address;
 }
 
-interface FA2Token {
+export interface FA2Token {
   fa2: {
     token_address: address;
     token_id: nat;
