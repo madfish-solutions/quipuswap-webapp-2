@@ -1,1 +1,1 @@
-export * from './voting.page';
+export * from './voting.routing';

@@ -10,8 +10,5 @@ export const makeNotFoundPageUrl = (location: Location) => {
     .slice(FISRT_INDEX, FARM_ID_INDEX)
     .concat(NOT_FOUND_LETTERS_ROUTE_NAME);
 
-  // eslint-disable-next-line no-console
-  console.log('fuflo1', SLASH.concat(pathnameParts.join(SLASH)));
-
   return SLASH.concat(pathnameParts.join(SLASH));
 };
