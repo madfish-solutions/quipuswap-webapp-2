@@ -36,7 +36,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastRoutePart}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
       />
     );
   }
