@@ -15,9 +15,11 @@ export const useLiquidityRouterViewModel = () => {
       if (isNull(rootStore.liquidityListFiltersStore)) {
         await rootStore.createLiquidityListFiltersStore();
       }
-
       if (isNull(rootStore.liquidityItemStore)) {
         await rootStore.createLiquidityItemStore();
+      }
+      if (isNull(rootStore.liquidityV3ItemStore)) {
+        await rootStore.createLiquidityV3ItemStore();
       }
       setIsInitialized(true);
     })();

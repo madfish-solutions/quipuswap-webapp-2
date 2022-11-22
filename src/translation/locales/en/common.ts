@@ -66,6 +66,7 @@ export const common = {
   'Page Not Found': 'Page Not Found',
   Success: 'Success',
   Loading: 'Loading',
+  loading: 'Loading...',
   'You entered not a valid address': 'You entered not a valid address',
   'You entered not a valid QP address': 'You entered not a valid QP address',
   'This field is required': 'This field is required',
