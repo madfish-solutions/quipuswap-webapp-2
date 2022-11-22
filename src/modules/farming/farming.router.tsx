@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { StateWrapper } from '@shared/components';
+import { ErrorFallback, LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { useFarmingRouterViewModel } from './farming-router.vm';
@@ -22,9 +22,9 @@ export const FarmingRouter: FC = () => {
   return (
     <StateWrapper
       isLoading={!isInitialized}
-      loaderFallback={<div>Loading...</div>}
+      loaderFallback={<LoaderFallback />}
       isError={!!error}
-      errorFallback={<div>Error: {error}</div>}
+      errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
         <Route path="/" element={<FarmsListPage />} />

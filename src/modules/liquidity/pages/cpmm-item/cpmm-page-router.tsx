@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Route } from 'react-router-dom';
 
-import { StateWrapper } from '@shared/components';
+import { LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
 import { LiquidityTabs } from '../../liquidity-routes.enum';
@@ -17,7 +17,7 @@ export const CpmmPageRouter: FC = observer(() => {
   const { isInitialized, title } = useCpmmViewModel();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<>Loading...</>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<LoaderFallback />}>
       <SentryRoutes>
         <Route path={`${LiquidityTabs.add}/:pairSlug`} element={<DexTwoAddLiq />} />
         <Route path={`${LiquidityTabs.remove}/:pairSlug`} element={<DexTwoRemoveLiq />} />

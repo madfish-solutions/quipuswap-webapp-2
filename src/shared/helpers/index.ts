@@ -67,3 +67,5 @@ export * from './execute-async-steps';
 export * from './id';
 export * from './sort';
 export * from './token-matches-search';
+export * from './fp';
+export * from './tokens-value';
