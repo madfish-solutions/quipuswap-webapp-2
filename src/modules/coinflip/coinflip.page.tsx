@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { PageTitle, StateWrapper, StickyBlock, TestnetAlert } from '@shared/components';
+import { LoaderFallback, PageTitle, StateWrapper, StickyBlock, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { useCoinflipPageViewModel } from './coinflip-page.vm';
@@ -20,7 +20,7 @@ export const CoinflipPage: FC = observer(() => {
   const { t } = useTranslation();
 
   return (
-    <StateWrapper isLoading={!isInitialized} loaderFallback={<div>loading...</div>}>
+    <StateWrapper isLoading={!isInitialized} loaderFallback={<LoaderFallback />}>
       <TestnetAlert />
       <PageTitle data-test-id="coinflipPageTitle">{t('coinflip|Game')}</PageTitle>
       <CoinflipResultModal result={result} wonAmount={wonAmount} currency={currency} />

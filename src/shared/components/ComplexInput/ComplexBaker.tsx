@@ -20,6 +20,7 @@ export interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   id?: string;
   handleChange?: (baker: WhitelistedBaker) => void;
+  defaultBaker?: Nullable<WhitelistedBaker>;
 }
 
 const modeClass = {
@@ -29,17 +30,26 @@ const modeClass = {
 
 const DEFAULT_BUTTON_LABEL = 'Choose Baker';
 
-export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, error, handleChange, value, ...props }) => {
+export const ComplexBaker: FC<ComplexBakerProps> = ({
+  className,
+  label,
+  id,
+  error,
+  handleChange,
+  value,
+  defaultBaker = null,
+  ...props
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
-  const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(null);
+  const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(defaultBaker);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!isExist(value) || (typeof value === 'string' && isEmptyString(value))) {
-      setBaker(null);
+      setBaker(baker);
     }
-  }, [value]);
+  }, [baker, value]);
 
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
   const buttonText = getWhitelistedBakerName(baker) ?? DEFAULT_BUTTON_LABEL;

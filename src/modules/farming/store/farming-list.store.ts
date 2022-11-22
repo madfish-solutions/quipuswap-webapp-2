@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { computed, makeObservable, observable } from 'mobx';
 
 import { getFarmingListCommonApi, getFarmingListUserBalances } from '@modules/farming/api';
@@ -8,7 +7,7 @@ import {
   FarmingListItemModel,
   FarmingListResponseModel
 } from '@modules/farming/models';
-import { defined, isEmptyArray, saveBigNumber, toReal } from '@shared/helpers';
+import { defined, isEmptyArray, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Undefined } from '@shared/types';
@@ -71,25 +70,18 @@ export class FarmingListStore {
         farmingItemModel: this.getFarmingItemModelById(balance.id, balance.contractAddress)
       }))
       .map(({ balance, farmingItemModel }) => {
-        const myBalance =
-          farmingItemModel && balance.myBalance
-            ? toReal(saveBigNumber(balance.myBalance, new BigNumber('0')), farmingItemModel.stakedToken)
-            : null;
-        const depositBalance =
-          farmingItemModel && balance.depositBalance
-            ? toReal(saveBigNumber(balance.depositBalance, new BigNumber('0')), farmingItemModel.stakedToken)
-            : null;
-        const earnBalance =
-          farmingItemModel && balance.earnBalance
-            ? toReal(saveBigNumber(balance.earnBalance, new BigNumber('0')), farmingItemModel.rewardToken)
-            : null;
+        const myBalance = toRealIfPossible(balance.myBalance, farmingItemModel?.stakedToken);
+        const depositBalance = toRealIfPossible(balance.depositBalance, farmingItemModel?.stakedToken);
+        const earnBalance = toRealIfPossible(balance.earnBalance, farmingItemModel?.rewardToken);
+        const fullRewardBalance = toRealIfPossible(balance.fullRewardBalance, farmingItemModel?.rewardToken);
 
         return {
           ...balance,
           ...defined(farmingItemModel, balance.id),
           myBalance,
           depositBalance,
-          earnBalance
+          earnBalance,
+          fullRewardBalance
         };
       });
   }

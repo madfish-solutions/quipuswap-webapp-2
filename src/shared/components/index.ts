@@ -71,3 +71,5 @@ export * from './dex-two-remove-liq-form-view';
 export * from './advertising';
 export * from './tokens-filter';
 export * from './virtual-list';
+export * from './error-fallback';
+export * from './loader-fallback';
