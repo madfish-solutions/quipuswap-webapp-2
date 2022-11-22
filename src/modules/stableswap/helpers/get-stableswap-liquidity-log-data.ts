@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
+import { PoolType } from '@modules/liquidity/interfaces';
 import { getTokenSlug } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
@@ -32,6 +33,7 @@ export const getStableswapLiquidityLogData = (
     tvlUsd: tokensInfo
       .reduce((sum, tokenInfo) => sum.plus(tokenInfo.reservesInUsd), new BigNumber(ZERO_AMOUNT))
       .toNumber(),
-    totalLpSupply: item.totalLpSupply.toNumber()
+    totalLpSupply: item.totalLpSupply.toNumber(),
+    poolType: PoolType.STABLESWAP
   };
 };
