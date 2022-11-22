@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { useLiquidityItemStore } from '@modules/liquidity/hooks';
-import { PageTitle, StickyBlock } from '@shared/components';
+import { LoaderFallback, PageTitle, StickyBlock } from '@shared/components';
 
 import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoAddLiqForm, DexTwoDetails, MigrateLiquidityCard } from './components';
@@ -16,7 +16,7 @@ export const DexTwoAddLiq: FC = observer(() => {
   const liquidityItemStore = useLiquidityItemStore();
 
   if (!liquidityItemStore.item) {
-    return null;
+    return <LoaderFallback />;
   }
 
   return (
