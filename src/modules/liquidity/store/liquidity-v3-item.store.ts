@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { defined } from '@shared/helpers';
+import { defined, t } from '@shared/helpers';
 import { Fled } from '@shared/model-builder/fled';
 import { RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
@@ -12,13 +12,14 @@ export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
 
   //#region dex two liquidity item store
+  // TODO: Avoid using new construction :)
   readonly itemSore = new Fled(
     async () =>
       await BlockchainLiquidityV3Api.getPoolContract(
         defined(this.rootStore.tezos, 'tezos'),
         defined(this.address, 'address')
       ),
-    a => a
+    t
   );
 
   get itemIsLoading() {

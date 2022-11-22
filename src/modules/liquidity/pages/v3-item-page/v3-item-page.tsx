@@ -1,16 +1,19 @@
 import { FC } from 'react';
 
-import { PageTitle, StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
+import { observer } from 'mobx-react-lite';
 
-export const V3ItemPage: FC = () => {
-  const { t } = useTranslation();
+import { PageTitle, StickyBlock } from '@shared/components';
+
+import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
+
+export const V3ItemPage: FC = observer(() => {
+  const { title } = useV3ItemPageViewModel();
 
   return (
     <>
-      <PageTitle data-test-id="v3LiqTitle">{t('common|Add')}</PageTitle>
+      <PageTitle data-test-id="v3LiqTitle">{title}</PageTitle>
 
       <StickyBlock>body</StickyBlock>
     </>
   );
-};
+});

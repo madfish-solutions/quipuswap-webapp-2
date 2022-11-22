@@ -1,20 +1,19 @@
 import { TezosToolkit } from '@taquito/taquito';
+import { BigNumber } from 'bignumber.js';
 
 import { getStorageInfo } from '@shared/dapp';
 import { TokensValue } from '@shared/types';
 
 export namespace BlockchainLiquidityV3Api {
   export interface V3PoolStorage {
-    storage: {
-      constants: {
-        ctez_burn_fee_bps: number;
-        dev_fee_bps: number;
-        factory_address: string;
-        fee_bps: number;
-        tick_spacing: number;
-        token_x: TokensValue;
-        token_y: TokensValue;
-      };
+    constants: {
+      ctez_burn_fee_bps: BigNumber;
+      dev_fee_bps: BigNumber;
+      factory_address: BigNumber;
+      fee_bps: BigNumber;
+      tick_spacing: BigNumber;
+      token_x: TokensValue;
+      token_y: TokensValue;
     };
   }
 
