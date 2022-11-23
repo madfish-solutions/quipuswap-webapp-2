@@ -72,13 +72,15 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
 //#region signs
-export const DASH = '_';
+export const DASH = '-';
+export const UNDERSCORE = '_';
 export const DOLLAR = '$';
 export const PERCENT = '%';
 export const STAR = '*';
 export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
+export const COMMA = ',';
 //#endregion
 
 //#region sort

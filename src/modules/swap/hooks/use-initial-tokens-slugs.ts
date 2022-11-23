@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { AppRootRoutes } from '@app.router';
+import { COMMA, DASH, EMPTY_STRING } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { useAddCustomToken, useSearchCustomTokens, useTokens } from '@providers/dapp-tokens';
 import { makeBasicToolkit } from '@providers/use-dapp';
@@ -13,7 +14,8 @@ import {
   getTokenSlug,
   isEmptyString,
   isArrayPairTuple,
-  isTokenEqual
+  isTokenEqual,
+  isTezosToken
 } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
 import { Standard } from '@shared/types';
@@ -35,7 +37,7 @@ export const useInitialTokensSlugs = (
   const addCustomToken = useAddCustomToken();
 
   const getInitialTokens = useCallback(
-    async (_key: string, tokensSlug = '') => {
+    async (_key: string, tokensSlug = EMPTY_STRING) => {
       if (isEmptyString(tokensSlug)) {
         return [DEFAULT_FIRST_TOKEN_SLUG, DEFAULT_SECOND_TOKEN_SLUG] as const;
       }
@@ -75,7 +77,7 @@ export const useInitialTokensSlugs = (
     [tokens]
   );
 
-  const tokensKey = tokens.map(token => getTokenSlug(token)).join(',');
+  const tokensKey = tokens.map(token => getTokenSlug(token)).join(COMMA);
   const { data: initialTokensSlugs, error: initialTokensError } = useSWR(
     ['initial-tokens', fromToSlug, tokensKey],
     getInitialTokens
@@ -92,14 +94,14 @@ export const useInitialTokensSlugs = (
       return;
     }
 
-    const newTokensSlug = initialTokensSlugs.join('-');
+    const newTokensSlug = initialTokensSlugs.join(DASH);
     if (getRedirectionUrl && fromToSlug !== newTokensSlug) {
       navigate(getRedirectionUrl(...initialTokensSlugs));
     }
     initialTokensSlugs.forEach(tokenSlug => {
-      const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();
-      const tokenIsKnown = isTez || tokens.some(token => getTokenSlug(token) === tokenSlug);
-      const { contractAddress, fa2TokenId } = getTokenIdFromSlug(tokenSlug);
+      const tokenId = getTokenIdFromSlug(tokenSlug);
+      const tokenIsKnown = isTezosToken(tokenId) || tokens.some(token => isTokenEqual(token, tokenId));
+      const { contractAddress, fa2TokenId } = tokenId;
       if (!tokenIsKnown) {
         searchCustomTokens(contractAddress, fa2TokenId).then(customToken => {
           if (customToken) {
