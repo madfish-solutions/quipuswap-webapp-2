@@ -2,7 +2,16 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
-import { isNull, localSearchToken, TokenWithRequiredNetwork, localSearchSortSymbol } from '@shared/helpers';
+import { DEFAULT_TOKEN_ID } from '@config/constants';
+import {
+  getFirstElement,
+  getTokenAddress,
+  isEmptyArray,
+  isNull,
+  localSearchToken,
+  TokenWithRequiredNetwork,
+  localSearchSortSymbol
+} from '@shared/helpers';
 import { isTokenEqual } from '@shared/helpers/tokens/is-token-equal';
 import { Nullable, QSNetwork, Token, TokenPair } from '@shared/types';
 
@@ -34,25 +43,22 @@ export const handleSearchToken = async ({
   setUrlLoaded,
   setTokenPair,
   searchCustomToken
-}: // eslint-disable-next-line sonarjs/cognitive-complexity
-SearchTokenType) => {
+}: SearchTokenType) => {
   setInitialLoad(true);
   setUrlLoaded(false);
-  const searchPart = async (str: string | string[]): Promise<Nullable<Token>> => {
-    const strStr = Array.isArray(str) ? str[0] : str;
-    const inputValue = strStr.split('_')[0];
-    const inputToken = strStr.split('_')[1] ?? 0;
+  const searchToken = async (tokenSlug: string): Promise<Nullable<Token>> => {
+    const { contractAddress: inputValue, fa2TokenId: inputToken = DEFAULT_TOKEN_ID } = getTokenAddress(tokenSlug);
     const isTokens = tokens
-      .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
+      .sort((a, b) => localSearchSortSymbol(b, a, inputValue, String(inputToken)))
       .filter(token => localSearchToken(token as TokenWithRequiredNetwork, network, inputValue, +inputToken));
-    if (isTokens.length === 0) {
+    if (isEmptyArray(isTokens)) {
       return searchCustomToken(inputValue, +inputToken, true);
     }
 
-    return isTokens[0];
+    return getFirstElement(isTokens);
   };
-  const tokenFrom = fixTokenFrom ?? (await searchPart(from));
-  const tokenTo = await searchPart(to);
+  const tokenFrom = fixTokenFrom ?? (await searchToken(from));
+  const tokenTo = await searchToken(to);
   setUrlLoaded(true);
 
   if (isNull(tokenFrom) || isNull(tokenTo)) {
