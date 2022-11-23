@@ -42,7 +42,7 @@ export const useInitialTokensSlugs = (
         return [DEFAULT_FIRST_TOKEN_SLUG, DEFAULT_SECOND_TOKEN_SLUG] as const;
       }
 
-      const [firstTokenSlug, secondTokenSlug = DEFAULT_SECOND_TOKEN_SLUG] = tokensSlug.split('-');
+      const [firstTokenSlug, secondTokenSlug = DEFAULT_SECOND_TOKEN_SLUG] = tokensSlug.split(DASH);
       const rawTokensSlugs = [firstTokenSlug, secondTokenSlug];
       const tezos = makeBasicToolkit();
 
