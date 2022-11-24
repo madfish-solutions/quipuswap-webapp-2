@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { defined, t } from '@shared/helpers';
@@ -8,16 +9,12 @@ import { Nullable } from '@shared/types';
 import { BlockchainLiquidityV3Api } from '../api';
 
 export class LiquidityV3ItemStore {
-  address: Nullable<string> = null;
   error: Nullable<Error> = null;
+  id: Nullable<BigNumber> = null;
 
-  //#region dex two liquidity item store
+  //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
-    async () =>
-      await BlockchainLiquidityV3Api.getPoolStorage(
-        defined(this.rootStore.tezos, 'tezos'),
-        defined(this.address, 'address')
-      ),
+    async () => await BlockchainLiquidityV3Api.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
     t
   );
 
@@ -28,22 +25,21 @@ export class LiquidityV3ItemStore {
   get item() {
     return this.itemSore.model;
   }
-  //#endregion dex two liquidity item store
+  //#endregion Quipuswap V3 liquidity item store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       itemSore: observable,
       error: observable,
       item: computed,
-      contractAddress: computed,
       itemModel: computed,
-      setAddress: action,
+      setId: action,
       setError: action
     });
   }
 
-  setAddress(address: string) {
-    this.address = address;
+  setId(id: BigNumber) {
+    this.id = id;
   }
 
   setError(error: Error) {
@@ -52,9 +48,5 @@ export class LiquidityV3ItemStore {
 
   get itemModel() {
     return this.itemSore.model;
-  }
-
-  get contractAddress() {
-    return this.address;
   }
 }

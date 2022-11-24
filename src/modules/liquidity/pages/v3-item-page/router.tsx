@@ -8,6 +8,7 @@ import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../../../errors';
 import { LiquidityTabs } from '../../liquidity-routes.enum';
+import { V3PositionsPage } from '../v3-positions-page';
 import { useRouterViewModel } from './use-router.vm';
 import { V3ItemPage } from './v3-item-page';
 
@@ -26,7 +27,8 @@ export const V3ItemPageRouter: FC = observer(() => {
       errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
-        <Route path={`${LiquidityTabs.add}/:address`} element={<V3ItemPage />} />
+        <Route path={`/:id`} element={<V3PositionsPage />} />
+        <Route path={`${LiquidityTabs.add}/:id`} element={<V3ItemPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
