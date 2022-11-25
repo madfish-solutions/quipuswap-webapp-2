@@ -1,23 +1,26 @@
 import { FC } from 'react';
 
-import { Route } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
-import { SentryRoutes } from '@shared/services';
+import { AppRootRoutes } from '@app.router';
+import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
+import { isInArray } from '@shared/helpers';
 
 import { VotingProvider } from './helpers/voting.provider';
+import { VotingTabs } from './tabs.enum';
 import { VotingInner } from './voting-inner';
 
-interface VotingProps {
-  className?: string;
-}
+export const VotingPage: FC = () => {
+  const params = useParams();
+  const method = params.method ?? VotingTabs.vote;
 
-export const VotingPage: FC<VotingProps> = ({ className }) => {
-  return (
-    <VotingProvider>
-      <SentryRoutes>
-        <Route path="/" element={<VotingInner className={className} />} />
-        <Route path=":method/:fromTo" element={<VotingInner className={className} />} />
-      </SentryRoutes>
-    </VotingProvider>
-  );
+  if (isInArray(method, Object.values(VotingTabs))) {
+    return (
+      <VotingProvider>
+        <VotingInner />
+      </VotingProvider>
+    );
+  }
+
+  return <Navigate replace to={`${AppRootRoutes.Voting}/${NOT_FOUND_ROUTE_NAME}`} />;
 };

@@ -3,14 +3,14 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useReady } from '@providers/use-dapp';
-import { useToasts } from '@shared/utils';
+import { useRedirectToNotFoundLettersRoute } from '@shared/helpers';
 
 import { useStableDividendsItemStore } from '../store';
 
 export const useGetStableDividendsItem = () => {
-  const { showErrorToast } = useToasts();
   const stableDividendsItemStore = useStableDividendsItemStore();
   const isReady = useReady();
+  const redirectToNotFoundPage = useRedirectToNotFoundLettersRoute();
 
   const getStableDividendsItem = useCallback(
     async (poolId: BigNumber) => {
@@ -23,10 +23,10 @@ export const useGetStableDividendsItem = () => {
         await stableDividendsItemStore.itemStore.load();
         await stableDividendsItemStore.stakerInfoStore.load();
       } catch (error) {
-        showErrorToast(error as Error);
+        redirectToNotFoundPage();
       }
     },
-    [isReady, showErrorToast, stableDividendsItemStore]
+    [isReady, stableDividendsItemStore, redirectToNotFoundPage]
   );
 
   return { getStableDividendsItem };
