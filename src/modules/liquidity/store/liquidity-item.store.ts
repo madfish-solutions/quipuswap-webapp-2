@@ -28,6 +28,10 @@ export class LiquidityItemStore {
   get item() {
     return this.itemSore.model.item;
   }
+
+  get itemApiError() {
+    return this.itemSore.error;
+  }
   //#endregion dex two liquidity item store
 
   get pageTitle() {
