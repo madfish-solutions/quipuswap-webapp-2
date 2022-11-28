@@ -17,6 +17,8 @@ export namespace BlockchainLiquidityV3Api {
       token_x: TokensValue;
       token_y: TokensValue;
     };
+    sqrt_price: nat;
+    liquidity: nat;
   }
 
   interface V3FactoryStorage {

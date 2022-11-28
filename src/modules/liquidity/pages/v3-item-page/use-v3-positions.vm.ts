@@ -22,12 +22,13 @@ import {
 import { fractionToPercentage } from '@shared/helpers/percentage';
 import { useTokenExchangeRate } from '@shared/hooks';
 
-// TODO: replace mock values with those from item store
-const MOCK_LIQUIDITY_AMOUNT = 10000;
-const MOCK_TOKEN_X_AMOUNT = new BigNumber('1e18');
-const MOCK_TOKEN_Y_AMOUNT = new BigNumber('1e6');
-const MOCK_PRICE_SQUARE = new BigNumber('1208925819614629174706176');
-const MOCK_FEE_FRACTION = new BigNumber('5e-4');
+import { convertToRealPrice } from './helpers';
+
+const FEE_PRECISION = 10000;
+
+// TODO: replace mock values
+const MOCK_TOKEN_X_AMOUNT = new BigNumber('6004');
+const MOCK_TOKEN_Y_AMOUNT = new BigNumber('202000');
 
 export const useV3PositionsViewModel = () => {
   const { id } = useParams();
@@ -52,10 +53,10 @@ export const useV3PositionsViewModel = () => {
   const tokenYExchangeRate =
     IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
 
-  const tokenPriceDecimals = getTokenDecimals(tokenX) - getTokenDecimals(tokenY);
+  const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
   const currentPrice = useMemo(
-    () => toReal(MOCK_PRICE_SQUARE.squareRoot().integerValue(), tokenPriceDecimals),
-    [tokenPriceDecimals]
+    () => item && toReal(convertToRealPrice(item?.storage.sqrt_price), tokenPriceDecimals),
+    [tokenPriceDecimals, item]
   );
 
   const positions = useMemo(() => {
@@ -64,24 +65,18 @@ export const useV3PositionsViewModel = () => {
     }
 
     return rawPositions.map(position => {
-      const tokenXDeposit = toReal(
-        position.liqAmount.times(MOCK_TOKEN_X_AMOUNT).dividedToIntegerBy(MOCK_LIQUIDITY_AMOUNT),
-        tokenX
-      );
-      const tokenYDeposit = toReal(
-        position.liqAmount.times(MOCK_TOKEN_Y_AMOUNT).dividedToIntegerBy(MOCK_LIQUIDITY_AMOUNT),
-        tokenY
-      );
-      const tokenXFees = toReal(position.tokenXFees, tokenX);
-      const tokenYFees = toReal(position.tokenYFees, tokenY);
-      const minRange = toReal(position.minRange, tokenPriceDecimals);
-      const maxRange = toReal(position.maxRange, tokenPriceDecimals);
+      const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
+      const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
+      const tokenXFees = toReal(new BigNumber('1'), tokenX);
+      const tokenYFees = toReal(new BigNumber('1'), tokenY);
+      const minRange = toReal(convertToRealPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
+      const maxRange = toReal(convertToRealPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
 
       return {
         tokens: [tokenX, tokenY],
         minRange,
         maxRange,
-        isInRange: currentPrice.gte(minRange) && currentPrice.lte(maxRange),
+        isInRange: currentPrice!.gte(minRange) && currentPrice!.lte(maxRange),
         depositUsd: getSumOfNumbers([
           multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
           multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
@@ -102,12 +97,15 @@ export const useV3PositionsViewModel = () => {
       ]),
     [tokenX, tokenXExchangeRate, tokenY, tokenYExchangeRate]
   );
+  const feeRatePercentage = item && fractionToPercentage(item.storage.constants.fee_bps.dividedBy(FEE_PRECISION));
 
   return {
     currentPrice,
     isLoading,
     positions,
     tvlInUsd,
-    feeRatePercentage: fractionToPercentage(MOCK_FEE_FRACTION)
+    tokenX,
+    tokenY,
+    feeRatePercentage
   };
 };
