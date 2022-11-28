@@ -7,6 +7,8 @@ import { OpenNewPosition, PageTitleContainer } from './components';
 
 export const V3ItemPage: FC = () => {
   const { t } = useTranslation();
+  // eslint-disable-next-line no-console
+  console.log('V3ItemPage');
 
   return (
     <>
