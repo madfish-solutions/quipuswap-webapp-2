@@ -78,6 +78,7 @@ export const liquidity = {
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
   induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
   createPosition: 'Create new position',
+  positions: 'Positions',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

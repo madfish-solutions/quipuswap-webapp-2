@@ -17,7 +17,7 @@ export const V3PositionsPage: FC = observer(() => {
 
   return (
     <>
-      <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|createPosition')} />
+      <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|positions')} />
 
       <StickyBlock>TODO: add a list of positions</StickyBlock>
     </>
