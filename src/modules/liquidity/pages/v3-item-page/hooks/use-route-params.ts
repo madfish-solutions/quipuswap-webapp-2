@@ -3,23 +3,22 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { EMPTY_STRING, STAR } from '@config/constants';
-import { isNull } from '@shared/helpers';
+import { getFirstElement, getRouterParts } from '@shared/helpers';
 
-const LIQUIDITY_ACTION_PATH_REGEX = /([a-z-]+)\/([^/]+)/;
+const POSITIONS_LIST_PATHNAME_LENGTH = 1;
 
 export const useRouteParams = () => {
   const params = useParams();
   const data = params[STAR] ?? EMPTY_STRING;
 
   return useMemo(() => {
-    const liquidityActionParseResult = LIQUIDITY_ACTION_PATH_REGEX.exec(data);
+    const routerParts = getRouterParts(data);
 
-    if (isNull(liquidityActionParseResult)) {
-      return { tab: null, id: data };
+    if (routerParts.length === POSITIONS_LIST_PATHNAME_LENGTH) {
+      return { tab: null, id: getFirstElement(routerParts) };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, tab, id] = liquidityActionParseResult;
+    const [tab, id] = routerParts;
 
     return { tab, id };
   }, [data]);
