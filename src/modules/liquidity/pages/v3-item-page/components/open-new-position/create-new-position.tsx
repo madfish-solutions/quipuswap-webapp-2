@@ -1,8 +1,8 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
+import { useLocation } from 'react-router-dom';
 
-import { AppRootRoutes } from '@app.router';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card } from '@shared/components';
 import { useTranslation } from '@translation';
@@ -18,15 +18,13 @@ const modeClass = {
 export const OpenNewPosition: FC = () => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { pathname } = useLocation();
 
   return (
     <Card contentClassName={styles.content} className={cx(modeClass[colorThemeMode], styles.root)}>
       <p className={styles.text}>{t('liquidity|induceToOpenNewPosition')}</p>
-      <Button
-        className={styles.button}
-        href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${LiquidityRoutes.create}`}
-      >
-        {t('liquidity|openNewPositionButton')}
+      <Button className={styles.button} href={`${pathname}${LiquidityRoutes.create}`}>
+        {t('liquidity|createPosition')}
       </Button>
     </Card>
   );
