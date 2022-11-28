@@ -7,7 +7,8 @@ import { ErrorFallback, LoaderFallback, StateWrapper } from '@shared/components'
 import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../../../errors';
-import { LiquidityTabs } from '../../liquidity-routes.enum';
+import { LiquidityRoutes, LiquidityTabs } from '../../liquidity-routes.enum';
+import { CreateNewPositionPage } from './create-new-position.page';
 import { useRouterViewModel } from './use-router.vm';
 import { V3ItemPage } from './v3-item-page';
 
@@ -27,6 +28,7 @@ export const V3ItemPageRouter: FC = observer(() => {
     >
       <SentryRoutes>
         <Route path={`${LiquidityTabs.add}/:address`} element={<V3ItemPage />} />
+        <Route path={`${LiquidityTabs.add}/:address${LiquidityRoutes.create}`} element={<CreateNewPositionPage />} />
       </SentryRoutes>
     </StateWrapper>
   );
