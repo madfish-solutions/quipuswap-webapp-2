@@ -8,12 +8,16 @@ import { useTranslation } from '@translation';
 
 import { useLiquidityV3ItemTokens } from '../../../../hooks';
 
-export const PageTitleContainer: FC = observer(() => {
+interface Props {
+  dataTestId: string;
+  titleText: string;
+}
+
+export const PageTitleContainer: FC<Props> = observer(({ dataTestId, titleText }) => {
   const { t } = useTranslation();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const title =
-    tokenX && tokenY ? `${t('liquidity|Liquidity')} ${getTokensNames([tokenX, tokenY])}` : t('common|loading');
+  const title = tokenX && tokenY ? `${titleText} ${getTokensNames([tokenX, tokenY])}` : t('common|loading');
 
-  return <PageTitle data-test-id="v3LiqTitle">{title}</PageTitle>;
+  return <PageTitle data-test-id={dataTestId}>{title}</PageTitle>;
 });
