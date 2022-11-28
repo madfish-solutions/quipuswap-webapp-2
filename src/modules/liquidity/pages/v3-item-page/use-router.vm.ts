@@ -14,12 +14,18 @@ export const useRouterViewModel = () => {
   const store = useLiquidityV3ItemStore();
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('useEffect', id);
     if (isExist(id) && tezos) {
       store.setId(new BigNumber(id));
+      // eslint-disable-next-line no-console
+      console.log('loading', id);
       (async () => {
         try {
           await store.itemSore.load();
         } catch (_error) {
+          // eslint-disable-next-line no-console
+          console.error(_error, id);
           store.setError(_error as Error);
         }
       })();
