@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
@@ -18,6 +19,10 @@ export const V3ItemPageRouter: FC = observer(() => {
   if (isNotFound) {
     return <PageNotFoundPage />;
   }
+
+  console.log('V3ItemPageRouter');
+  console.log(error);
+  console.log(isLoading);
 
   return (
     <StateWrapper
