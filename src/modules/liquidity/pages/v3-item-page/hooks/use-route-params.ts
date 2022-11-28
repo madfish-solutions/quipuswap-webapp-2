@@ -2,20 +2,24 @@ import { useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { SLASH, STAR } from '@config/constants';
+import { EMPTY_STRING, STAR } from '@config/constants';
+import { isNull } from '@shared/helpers';
 
-const POSITIONS_LIST_PATH_REGEX = /^[0-9]+$/;
+const LIQUIDITY_ACTION_PATH_REGEX = /([a-z-]+)\/([^/]+)/;
 
 export const useRouteParams = () => {
   const params = useParams();
-  const data = params[STAR] || '';
+  const data = params[STAR] ?? EMPTY_STRING;
 
   return useMemo(() => {
-    if (POSITIONS_LIST_PATH_REGEX.test(data)) {
+    const liquidityActionParseResult = LIQUIDITY_ACTION_PATH_REGEX.exec(data);
+
+    if (isNull(liquidityActionParseResult)) {
       return { tab: null, id: data };
     }
 
-    const [tab, id] = data.split(SLASH);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, tab, id] = liquidityActionParseResult;
 
     return { tab, id };
   }, [data]);

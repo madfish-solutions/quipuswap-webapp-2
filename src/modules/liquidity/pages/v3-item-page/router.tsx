@@ -8,9 +8,9 @@ import { SentryRoutes } from '@shared/services';
 
 import { PageNotFoundPage } from '../../../errors';
 import { LiquidityTabs } from '../../liquidity-routes.enum';
-import { V3PositionsPage } from '../v3-positions-page';
 import { useRouterViewModel } from './use-router.vm';
 import { V3ItemPage } from './v3-item-page';
+import { V3PositionsPage } from './v3-positions-page';
 
 export const V3ItemPageRouter: FC = observer(() => {
   const { isLoading, isNotFound, error } = useRouterViewModel();

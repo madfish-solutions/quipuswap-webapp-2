@@ -6,6 +6,7 @@ import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
 import { LiquidityV3PositionsResponseModel } from '../models';
+import { mockPositions } from '../pages/v3-item-page/mock-positions.constants';
 
 const defaultPositionsResponse = { value: null };
 
@@ -43,35 +44,6 @@ export class LiquidityV3PositionsStore {
   }
 
   async getPositions() {
-    /* eslint-disable @typescript-eslint/no-magic-numbers */
-    return {
-      value: [
-        {
-          id: new BigNumber(0),
-          minRange: new BigNumber(1.09e12),
-          maxRange: new BigNumber(1.11e12),
-          liqAmount: new BigNumber(686),
-          tokenXFees: new BigNumber(1e18),
-          tokenYFees: new BigNumber(986667)
-        },
-        {
-          id: new BigNumber(1),
-          minRange: new BigNumber(1.07e12),
-          maxRange: new BigNumber(1.09e12),
-          liqAmount: new BigNumber(686),
-          tokenXFees: new BigNumber(1e18),
-          tokenYFees: new BigNumber(986667)
-        },
-        {
-          id: new BigNumber(2),
-          minRange: new BigNumber(1.11e12),
-          maxRange: new BigNumber(1.13e12),
-          liqAmount: new BigNumber(686),
-          tokenXFees: new BigNumber(1e18),
-          tokenYFees: new BigNumber(986667)
-        }
-      ]
-    };
-    /* eslint-enable */
+    return { value: mockPositions };
   }
 }
