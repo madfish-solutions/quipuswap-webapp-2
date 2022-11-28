@@ -65,6 +65,7 @@ export const useV3PositionsViewModel = () => {
     }
 
     return rawPositions.map(position => {
+      // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
       const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
       const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
       const tokenXFees = toReal(new BigNumber('1'), tokenX);
@@ -73,7 +74,7 @@ export const useV3PositionsViewModel = () => {
       const maxRange = toReal(convertToRealPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
 
       return {
-        tokens: [tokenX, tokenY],
+        tokens: [tokenY, tokenX],
         minRange,
         maxRange,
         isInRange: currentPrice!.gte(minRange) && currentPrice!.lte(maxRange),
@@ -81,10 +82,14 @@ export const useV3PositionsViewModel = () => {
           multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
           multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
         ]),
+        tokenXDeposit,
+        tokenYDeposit,
         collectedFeesUsd: getSumOfNumbers([
           multipliedIfPossible(tokenXFees, tokenXExchangeRate),
           multipliedIfPossible(tokenYFees, tokenYExchangeRate)
-        ])
+        ]),
+        tokenXFees,
+        tokenYFees
       };
     });
   }, [item, rawPositions, tokenX, tokenY, tokenPriceDecimals, tokenXExchangeRate, tokenYExchangeRate, currentPrice]);
