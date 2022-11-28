@@ -1,5 +1,6 @@
 import { TEZOS_TOKEN } from '@config/tokens';
-import { Button, Card, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
+import { Button, Card, ConnectWalletOrDoSomething, Iterator, TokenInput } from '@shared/components';
+import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -13,6 +14,25 @@ const isSubmitting = false;
 export const CommonForm = () => {
   const { t } = useTranslation();
 
+  const data = [
+    {
+      tokens: TEZOS_TOKEN,
+      value: '0',
+      onInputChange: function (value: string): void {
+        throw new Error();
+      },
+      label: t('common|Input')
+    },
+    {
+      tokens: TEZOS_TOKEN,
+      value: '0',
+      onInputChange: function (value: string): void {
+        throw new Error();
+      },
+      label: t('common|Input')
+    }
+  ];
+
   return (
     <Card
       contentClassName={styles.container}
@@ -20,32 +40,17 @@ export const CommonForm = () => {
     >
       <h3>{t('common|Create')}</h3>
       <RangeInput
-        minPrice={0}
-        maxPrice={0}
-        minPriceChange={function (value: number): void {
-          throw new Error();
-        }}
-        maxPriceChange={function (value: number): void {
-          throw new Error();
-        }}
         tokens={[TEZOS_TOKEN, TEZOS_TOKEN]}
-      />
-      <TokenInput
-        value={null}
-        label={''}
-        onInputChange={function (value: string): void {
+        minPrice={'0'}
+        maxPrice={'0'}
+        minPriceChange={function (value: string): void {
           throw new Error();
         }}
-        tokens={TEZOS_TOKEN}
-      />
-      <TokenInput
-        value={null}
-        label={''}
-        onInputChange={function (value: string): void {
+        maxPriceChange={function (value: string): void {
           throw new Error();
         }}
-        tokens={TEZOS_TOKEN}
       />
+      <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button
