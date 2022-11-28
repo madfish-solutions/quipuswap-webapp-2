@@ -1,4 +1,5 @@
 import { useTranslation } from '@translation';
+
 import { PageTitleContainer } from './components';
 
 export const CreateNewPositionPage = () => {
