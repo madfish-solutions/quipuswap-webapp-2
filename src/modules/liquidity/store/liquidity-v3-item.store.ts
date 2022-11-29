@@ -13,7 +13,7 @@ import { Nullable, Standard } from '@shared/types';
 import { BlockchainLiquidityV3Api } from '../api';
 import { LiquidityContractTokenBalancesModel } from '../models';
 
-const DEFAULT_CONTRACT_TOKENS_BALANCE = { token_x_balance: ZERO_AMOUNT_BN, token_y_balance: ZERO_AMOUNT_BN };
+const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXbalance: ZERO_AMOUNT_BN, tokenYbalance: ZERO_AMOUNT_BN };
 
 @ModelBuilder()
 export class LiquidityV3ItemStore {
@@ -93,7 +93,7 @@ export class LiquidityV3ItemStore {
     const tokenXInfo = mapTokenAddress(this.item.storage.constants.token_x);
     const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_x);
 
-    const token_x_balance = await getUserBalance(
+    const tokenXbalance = await getUserBalance(
       tezos,
       this.item.contractAddress,
       tokenXInfo.contractAddress,
@@ -101,7 +101,7 @@ export class LiquidityV3ItemStore {
       tokenXInfo.fa2TokenId
     );
 
-    const token_y_balance = await getUserBalance(
+    const tokenYbalance = await getUserBalance(
       tezos,
       this.item.contractAddress,
       tokenYInfo.contractAddress,
@@ -110,8 +110,8 @@ export class LiquidityV3ItemStore {
     );
 
     return {
-      token_x_balance,
-      token_y_balance
+      tokenXbalance,
+      tokenYbalance
     };
   }
 }
