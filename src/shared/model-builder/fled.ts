@@ -20,6 +20,7 @@ export class Fled<RawT, T> {
       startLoading: action,
       finishLoading: action,
       setError: action,
+      setRaw: action,
       resetData: action,
 
       isReady: computed

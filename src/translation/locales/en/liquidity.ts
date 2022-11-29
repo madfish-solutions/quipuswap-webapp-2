@@ -80,6 +80,8 @@ export const liquidity = {
   openNewPositionButton: 'Create new position',
   currentPrice: 'Current price',
   feeRate: 'Fee rate',
+  createPosition: 'Create new position',
+  positions: 'Positions',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

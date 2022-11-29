@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserBalance } from '@blockchain';
@@ -14,12 +15,11 @@ import { LiquidityContractTokenBalancesModel } from '../models/liquidity-contrac
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { token_x_balance: ZERO_AMOUNT_BN, token_y_balance: ZERO_AMOUNT_BN };
 
-@ModelBuilder()
 export class LiquidityV3ItemStore {
-  address: Nullable<string> = null;
   error: Nullable<Error> = null;
-
-  //#region stakes store
+  id: Nullable<BigNumber> = null;
+  
+  //#region Quipuswap V3 contract balance store
   @Led({
     default: DEFAULT_CONTRACT_TOKENS_BALANCE,
     loader: async self => await self.getPoolTokenBalances(),
@@ -34,13 +34,11 @@ export class LiquidityV3ItemStore {
     return this.contractBalanceStore.model;
   }
 
-  //#region dex two liquidity item store
+  //#region Quipuswap V3 contract balance store
+
+  //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
-    async () =>
-      await BlockchainLiquidityV3Api.getPoolStorage(
-        defined(this.rootStore.tezos, 'tezos'),
-        defined(this.address, 'address')
-      ),
+    async () => await BlockchainLiquidityV3Api.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
     t
   );
 
@@ -51,22 +49,21 @@ export class LiquidityV3ItemStore {
   get item() {
     return this.itemSore.model;
   }
-  //#endregion dex two liquidity item store
+  //#endregion Quipuswap V3 liquidity item store
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       itemSore: observable,
       error: observable,
       item: computed,
-      contractAddress: computed,
       itemModel: computed,
-      setAddress: action,
+      setId: action,
       setError: action
     });
   }
 
-  setAddress(address: string) {
-    this.address = address;
+  setId(id: BigNumber) {
+    this.id = id;
   }
 
   setError(error: Error) {
@@ -76,11 +73,7 @@ export class LiquidityV3ItemStore {
   get itemModel() {
     return this.itemSore.model;
   }
-
-  get contractAddress() {
-    return this.address;
-  }
-
+  
   async getPoolTokenBalances() {
     const { tezos } = this.rootStore;
 

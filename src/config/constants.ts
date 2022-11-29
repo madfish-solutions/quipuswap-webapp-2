@@ -72,13 +72,15 @@ export const DEFAULT_SEARCH_VALUE = '';
 //#endregion
 
 //#region signs
-export const DASH = '_';
+export const DASH = '-';
+export const UNDERSCORE = '_';
 export const DOLLAR = '$';
 export const PERCENT = '%';
 export const STAR = '*';
 export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
+export const COMMA = ',';
 //#endregion
 
 //#region sort
@@ -223,3 +225,6 @@ export const PERCENT_25 = 25;
 export const PERCENT_50 = 50;
 export const PERCENT_75 = 75;
 export const PERCENT_100 = 100;
+
+export const NOT_FOUND_ROUTE_NAME = '404';
+export const NOT_FOUND_LETTERS_ROUTE_NAME = 'not-found';
