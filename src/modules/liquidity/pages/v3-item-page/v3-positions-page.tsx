@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { PageTitleContainer } from './components';
+import { OpenNewPosition, PageTitleContainer } from './components';
 import { useV3PositionsViewModel } from './use-v3-positions.vm';
 
 export const V3PositionsPage: FC = observer(() => {
@@ -18,6 +18,7 @@ export const V3PositionsPage: FC = observer(() => {
   return (
     <>
       <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|positions')} />
+      <OpenNewPosition />
 
       <StickyBlock>TODO: add a list of positions</StickyBlock>
     </>
