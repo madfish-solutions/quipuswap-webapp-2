@@ -23,8 +23,7 @@ export const useLiquidityV3PoolStats = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const tokenXBalance = contractBalance.tokenXbalance;
-  const tokenYBalance = contractBalance.tokenYbalance;
+  const { tokenXBalance, tokenYBalance } = contractBalance;
 
   const tokenXExchangeRate =
     IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE_BN;

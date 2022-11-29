@@ -13,14 +13,14 @@ import { Nullable, Standard } from '@shared/types';
 import { BlockchainLiquidityV3Api } from '../api';
 import { LiquidityContractTokenBalancesModel } from '../models';
 
-const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXbalance: ZERO_AMOUNT_BN, tokenYbalance: ZERO_AMOUNT_BN };
+const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
 
 @ModelBuilder()
 export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
   id: Nullable<BigNumber> = null;
 
-  //# Quipuswap V3 pool balance store
+  //# Quipuswap V3 pool tokens balance store
   @Led({
     default: DEFAULT_CONTRACT_TOKENS_BALANCE,
     loader: async self => await self.getPoolTokenBalances(),
@@ -35,7 +35,7 @@ export class LiquidityV3ItemStore {
     return this.contractBalanceStore.model;
   }
 
-  //# Quipuswap V3 pool balance store
+  //# Quipuswap V3 pool tokens balance store
 
   //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
@@ -93,7 +93,7 @@ export class LiquidityV3ItemStore {
     const tokenXInfo = mapTokenAddress(this.item.storage.constants.token_x);
     const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_x);
 
-    const tokenXbalance = await getUserBalance(
+    const tokenXBalance = await getUserBalance(
       tezos,
       this.item.contractAddress,
       tokenXInfo.contractAddress,
@@ -101,7 +101,7 @@ export class LiquidityV3ItemStore {
       tokenXInfo.fa2TokenId
     );
 
-    const tokenYbalance = await getUserBalance(
+    const tokenYBalance = await getUserBalance(
       tezos,
       this.item.contractAddress,
       tokenYInfo.contractAddress,
@@ -110,8 +110,8 @@ export class LiquidityV3ItemStore {
     );
 
     return {
-      tokenXbalance,
-      tokenYbalance
+      tokenXBalance,
+      tokenYBalance
     };
   }
 }

@@ -4,8 +4,8 @@ import { Typed } from '@shared/decorators';
 
 export class LiquidityContractTokenBalancesDto {
   @Typed()
-  tokenXbalance: BigNumber;
+  tokenXBalance: BigNumber;
 
   @Typed()
-  tokenYbalance: BigNumber;
+  tokenYBalance: BigNumber;
 }
