@@ -3,8 +3,9 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { DOLLAR, PERCENT, PERCENT_100, TESTNET_EXCHANGE_RATE, ZERO_AMOUNT_BN } from '@config/constants';
-import { isExist } from '@shared/helpers';
+import { DOLLAR, PERCENT, TESTNET_EXCHANGE_RATE } from '@config/constants';
+import { getSymbolsString, isExist } from '@shared/helpers';
+import { fractionToPercentage } from '@shared/helpers/percentage';
 import { useTokenExchangeRate } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -22,8 +23,8 @@ export const useLiquidityV3PoolStats = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const tokenXBalance = contractBalance.token_x_balance;
-  const tokenYBalance = contractBalance.token_y_balance;
+  const tokenXBalance = contractBalance.tokenXbalance;
+  const tokenYBalance = contractBalance.tokenYbalance;
 
   const tokenXExchangeRate =
     IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE_BN;
@@ -31,8 +32,10 @@ export const useLiquidityV3PoolStats = () => {
     IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE_BN;
 
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
-  const currentPrice = isExist(sqrtPrice) ? convertToRealPrice(sqrtPrice) : ZERO_AMOUNT_BN;
-  const preparedFeeBps = feeBps?.dividedBy(FEE_BPS_PRECISION).multipliedBy(PERCENT_100);
+  const currentPrice = isExist(sqrtPrice) ? convertToRealPrice(sqrtPrice) : null;
+  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BPS_PRECISION)) : null;
+
+  const tokensSymbols = getSymbolsString([tokenX, tokenY]);
 
   const stats = useMemo(
     () => [
@@ -46,16 +49,16 @@ export const useLiquidityV3PoolStats = () => {
         title: t('liquidity|currentPrice'),
         amount: currentPrice,
         tooltip: t('liquidity|currentPriceTooltip'),
-        currency: PERCENT
+        currency: tokensSymbols
       },
       {
         title: t('liquidity|feeRate'),
-        amount: preparedFeeBps,
+        amount: feeBpsPercentage,
         tooltip: t('liquidity|feeRateTooltip'),
         currency: PERCENT
       }
     ],
-    [currentPrice, poolTvl, preparedFeeBps, t]
+    [currentPrice, feeBpsPercentage, poolTvl, t, tokensSymbols]
   );
 
   return { stats };
