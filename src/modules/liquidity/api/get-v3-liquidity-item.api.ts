@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 import { defined } from '@shared/helpers';
-import { address, BigMap, nat, TokensValue } from '@shared/types';
+import { address, BigMap, int, nat, TokensValue } from '@shared/types';
 
 export namespace BlockchainLiquidityV3Api {
   export interface V3PoolStorage {
@@ -19,6 +19,7 @@ export namespace BlockchainLiquidityV3Api {
     };
     sqrt_price: nat;
     liquidity: nat;
+    cur_tick_index: int;
   }
 
   interface V3FactoryStorage {

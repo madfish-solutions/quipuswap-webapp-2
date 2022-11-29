@@ -22,7 +22,7 @@ import {
 import { fractionToPercentage } from '@shared/helpers/percentage';
 import { useTokenExchangeRate } from '@shared/hooks';
 
-import { convertToRealPrice } from './helpers';
+import { calculateDeposit, convertToRealPrice } from './helpers';
 
 const FEE_PRECISION = 10000;
 
@@ -65,15 +65,17 @@ export const useV3PositionsViewModel = () => {
     }
 
     return rawPositions.map(position => {
+      const { x: tokenXDepositAtomic, y: tokenYDepositAtomic } = calculateDeposit(position, item.storage);
+      const tokenXDeposit = toReal(tokenXDepositAtomic, tokenX);
+      const tokenYDeposit = toReal(tokenYDepositAtomic, tokenY);
       // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
-      const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
-      const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
       const tokenXFees = toReal(new BigNumber('1'), tokenX);
       const tokenYFees = toReal(new BigNumber('1'), tokenY);
       const minRange = toReal(convertToRealPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
       const maxRange = toReal(convertToRealPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
 
       return {
+        id: position.id,
         tokens: [tokenY, tokenX],
         minRange,
         maxRange,
