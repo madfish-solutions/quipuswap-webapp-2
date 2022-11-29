@@ -11,6 +11,7 @@ import { LiquidityRoutes, LiquidityTabs } from '../../liquidity-routes.enum';
 import { CreateNewPositionPage } from './create-new-position.page';
 import { useRouterViewModel } from './use-router.vm';
 import { V3ItemPage } from './v3-item-page';
+import { V3PositionsPage } from './v3-positions-page';
 
 export const V3ItemPageRouter: FC = observer(() => {
   const { isLoading, isNotFound, error } = useRouterViewModel();
@@ -27,8 +28,9 @@ export const V3ItemPageRouter: FC = observer(() => {
       errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
-        <Route path={`${LiquidityTabs.add}/:address`} element={<V3ItemPage />} />
-        <Route path={`${LiquidityTabs.add}/:address${LiquidityRoutes.create}`} element={<CreateNewPositionPage />} />
+        <Route path={`/:id`} element={<V3PositionsPage />} />
+        <Route path={`${LiquidityTabs.add}/:id`} element={<V3ItemPage />} />
+        <Route path={`${LiquidityTabs.add}/:id${LiquidityRoutes.create}`} element={<CreateNewPositionPage />} />
       </SentryRoutes>
     </StateWrapper>
   );

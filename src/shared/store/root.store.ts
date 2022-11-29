@@ -15,7 +15,8 @@ import {
   LiquidityListStore as ILiquidityListStore,
   LiquidityItemStore as ILiquidityItemStore,
   LiquidityListFiltersStore as ILiquidityListFiltersStore,
-  LiquidityV3ItemStore as ILiquidityV3ItemStore
+  LiquidityV3ItemStore as ILiquidityV3ItemStore,
+  LiquidityV3PositionsStore as ILiquidityV3PositionsStore
 } from '@modules/liquidity';
 import {
   StableswapFilterStore as IStableswapFilterStore,
@@ -66,6 +67,7 @@ export class RootStore {
   liquidityListStore: Nullable<ILiquidityListStore> = null;
   liquidityItemStore: Nullable<ILiquidityItemStore> = null;
   liquidityV3ItemStore: Nullable<ILiquidityV3ItemStore> = null;
+  liquidityV3PositionsStore: Nullable<ILiquidityV3PositionsStore> = null;
   liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
   coinflipStore: Nullable<ICoinflipStore> = null;
@@ -124,6 +126,7 @@ export class RootStore {
       createLiquidityListStore: action,
       createLiquidityItemStore: action,
       createLiquidityV3ItemStore: action,
+      createLiquidityV3PositionsStore: action,
       createLiquidityListFiltersStore: action
     });
   }
@@ -157,6 +160,13 @@ export class RootStore {
     if (isNull(this.liquidityV3ItemStore)) {
       const { LiquidityV3ItemStore } = await import('@modules/liquidity/store/liquidity-v3-item.store');
       this.liquidityV3ItemStore = new LiquidityV3ItemStore(this);
+    }
+  }
+
+  async createLiquidityV3PositionsStore() {
+    if (isNull(this.liquidityV3PositionsStore)) {
+      const { LiquidityV3PositionsStore } = await import('@modules/liquidity/store/liquidity-v3-positions.store');
+      this.liquidityV3PositionsStore = new LiquidityV3PositionsStore(this);
     }
   }
 

@@ -1,19 +1,21 @@
 import { useEffect } from 'react';
 
+import BigNumber from 'bignumber.js';
+
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { isExist, isNotFoundError } from '@shared/helpers';
 
-import { useContractAddress } from './hooks/use-contract-address';
+import { useRouteParams } from './hooks/use-route-params';
 
 export const useRouterViewModel = () => {
   const { tezos } = useRootStore();
-  const { address } = useContractAddress();
+  const { id } = useRouteParams();
   const store = useLiquidityV3ItemStore();
 
   useEffect(() => {
-    if (isExist(address) && tezos) {
-      store.setAddress(address);
+    if (isExist(id) && tezos) {
+      store.setId(new BigNumber(id));
       (async () => {
         try {
           await store.itemSore.load();
@@ -24,7 +26,7 @@ export const useRouterViewModel = () => {
     }
 
     return () => store.itemSore.resetData();
-  }, [store, address, tezos]);
+  }, [store, id, tezos]);
 
   return {
     isLoading: store.itemIsLoading,
