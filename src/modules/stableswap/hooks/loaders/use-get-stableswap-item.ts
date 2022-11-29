@@ -3,14 +3,14 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useReady } from '@providers/use-dapp';
-import { useToasts } from '@shared/utils';
+import { useRedirectToNotFoundLettersRoute } from '@shared/helpers';
 
 import { useStableswapItemStore } from '../store';
 
 export const useGetStableswapItem = () => {
-  const { showErrorToast } = useToasts();
   const stableswapItemStore = useStableswapItemStore();
   const isReady = useReady();
+  const redirectToNotFoundPage = useRedirectToNotFoundLettersRoute();
 
   const getStableswapItem = useCallback(
     async (poolId: BigNumber) => {
@@ -22,10 +22,10 @@ export const useGetStableswapItem = () => {
         stableswapItemStore.setPoolId(poolId);
         await stableswapItemStore.itemStore.load();
       } catch (error) {
-        showErrorToast(error as Error);
+        redirectToNotFoundPage();
       }
     },
-    [isReady, showErrorToast, stableswapItemStore]
+    [isReady, stableswapItemStore, redirectToNotFoundPage]
   );
 
   return { getStableswapItem };

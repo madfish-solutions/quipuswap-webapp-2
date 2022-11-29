@@ -54,6 +54,10 @@ export class FarmingYouvesItemStore {
   get farmingAddress() {
     return this.item?.contractAddress ?? null;
   }
+
+  get itemApiError() {
+    return this.itemStore.error;
+  }
   //#endregion item store region
 
   //#region stakes store

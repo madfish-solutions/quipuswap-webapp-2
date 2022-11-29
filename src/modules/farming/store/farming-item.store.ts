@@ -46,6 +46,10 @@ export class FarmingItemStore {
   get item() {
     return this.itemStore.model.item;
   }
+
+  get itemApiError() {
+    return this.itemStore.error;
+  }
   //#endregion item store region
 
   //#region available balance store
