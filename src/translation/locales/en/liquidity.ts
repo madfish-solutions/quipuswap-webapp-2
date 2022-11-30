@@ -83,6 +83,9 @@ export const liquidity = {
   currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
   feeRate: 'Fee rate',
   feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions',
+  Token: 'Token',
+  Deposit: 'Deposit',
+  Fee: 'Fee',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

@@ -1,0 +1,24 @@
+@import "@styles/breakpoints";
+@import "@styles/variables";
+
+.mb48 {
+  margin-bottom: 48px;
+}
+
+.mb24 {
+  margin-bottom: 24px;
+}
+
+.list {
+  display: grid;
+  row-gap: 32px;
+}
+
+.listWrapper {
+  display: grid;
+  place-items: center;
+}
+
+.listSkeleton {
+  height: 220px;
+}
