@@ -1,10 +1,9 @@
 import { useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 import { useParams } from 'react-router-dom';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import {
   useLiquidityV3ItemStore,
   useLiquidityV3ItemTokens,
@@ -14,12 +13,20 @@ import {
   CURRENT_PRICE_STAT_INDEX,
   useLiquidityV3PoolStats
 } from '@modules/liquidity/hooks/helpers/use-liquidity-v3-pool-stats';
-import { defined, isExist, isNull } from '@shared/helpers';
-import { useTokenExchangeRate } from '@shared/hooks';
+import { ColorModes } from '@providers/color-theme-context';
+import { defined, isNull } from '@shared/helpers';
+import { useTokenExchangeRate, useUiStore } from '@shared/hooks';
 
 import { mapPosition } from './helpers';
+import styles from './v3-positions-page.module.scss';
+
+const rangeLabelClasses = {
+  [ColorModes.Light]: cx(styles.light, styles.rangeLabel),
+  [ColorModes.Dark]: cx(styles.dark, styles.rangeLabel)
+};
 
 export const useV3PositionsViewModel = () => {
+  const { colorThemeMode } = useUiStore();
   const { id } = useParams();
   const v3ItemStore = useLiquidityV3ItemStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
@@ -39,11 +46,6 @@ export const useV3PositionsViewModel = () => {
     v3ItemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
   const error = v3ItemStore.error ?? v3PositionsStore.positionsStore.error;
 
-  const tokenXExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
-  const tokenYExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
-
   const currentPrice = stats[CURRENT_PRICE_STAT_INDEX].amount;
 
   const positions = useMemo(() => {
@@ -51,8 +53,13 @@ export const useV3PositionsViewModel = () => {
       return [];
     }
 
-    return rawPositions.map(mapPosition(tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, id));
-  }, [item, rawPositions, tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, id]);
+    return rawPositions.map(
+      mapPosition(tokenX, tokenY, currentPrice, getTokenExchangeRate, id, {
+        className: rangeLabelClasses[colorThemeMode],
+        inRangeClassName: styles.inRangeLabel
+      })
+    );
+  }, [item, rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, id, colorThemeMode]);
 
   return { isLoading, positions, stats, error };
 };

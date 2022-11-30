@@ -1,6 +1,9 @@
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
 import { AppRootRoutes } from '@app.router';
+import { IS_NETWORK_MAINNET } from '@config/config';
+import { TESTNET_EXCHANGE_RATE, ZERO_AMOUNT_BN } from '@config/constants';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { LiquidityV3Position } from '@modules/liquidity/types';
 import {
@@ -9,31 +12,55 @@ import {
   getTokensNames,
   isExist,
   multipliedIfPossible,
+  toAtomic,
   toReal
 } from '@shared/helpers';
 import { ActiveStatus, Optional, Token } from '@shared/types';
 
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 
+const MOCK_NON_ZERO_TOKEN_X_REAL_DEPOSIT = new BigNumber('0.15');
+const MOCK_NON_ZERO_TOKEN_Y_REAL_DEPOSIT = new BigNumber('0.3');
+const MOCK_TOKEN_X_REAL_FEES = new BigNumber('0.01');
+const MOCK_TOKEN_Y_REAL_FEES = new BigNumber('0.02');
+
+interface RangeLabelClasses {
+  className: string;
+  inRangeClassName: string;
+}
+
 export const mapPosition = (
   tokenX: Token,
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
-  tokenXExchangeRate: Optional<BigNumber.Value>,
-  tokenYExchangeRate: Optional<BigNumber.Value>,
-  poolId: Optional<string>
+  getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
+  poolId: Optional<string>,
+  rangeLabelClasses: RangeLabelClasses
 ) => {
+  const { className: rangeLabelClassName, inRangeClassName } = rangeLabelClasses;
+  const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
+  const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
   const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
   const tokensNames = getTokensNames([tokenY, tokenX]);
 
   return (position: LiquidityV3Position) => {
-    // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
-    const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
-    const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
-    const tokenXFees = toReal(new BigNumber('1'), tokenX);
-    const tokenYFees = toReal(new BigNumber('1'), tokenY);
     const minRange = toReal(convertToAtomicPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
     const maxRange = toReal(convertToAtomicPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
+
+    // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
+    const mockTokenXAtomicDeposit = toAtomic(
+      isExist(currentRealPrice) && currentRealPrice.gt(maxRange) ? ZERO_AMOUNT_BN : MOCK_NON_ZERO_TOKEN_X_REAL_DEPOSIT,
+      tokenX
+    );
+    const mockTokenYAtomicDeposit = toAtomic(
+      isExist(currentRealPrice) && currentRealPrice.lt(minRange) ? ZERO_AMOUNT_BN : MOCK_NON_ZERO_TOKEN_Y_REAL_DEPOSIT,
+      tokenY
+    );
+    const tokenXDeposit = toReal(mockTokenXAtomicDeposit, tokenX);
+    const tokenYDeposit = toReal(mockTokenYAtomicDeposit, tokenY);
+    const tokenXFees = MOCK_TOKEN_X_REAL_FEES;
+    const tokenYFees = MOCK_TOKEN_Y_REAL_FEES;
+
     const depositUsd = getSumOfNumbers([
       multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
       multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
@@ -51,15 +78,14 @@ export const mapPosition = (
       isNew: false,
       labels: [
         {
+          contentClassName: cx(rangeLabelClassName, isInRange && inRangeClassName),
           status: ActiveStatus.ACTIVE,
-          label: isInRange ? 'In range' : 'Out of range'
+          label: isInRange ? 'In range' : 'Not active'
         }
       ],
       itemStats: [
         {
           cellName: 'Min. price',
-          cellNameClassName: '',
-          cardCellClassName: '',
           amounts: {
             amount: minRange,
             dollarEquivalent: null,
@@ -70,8 +96,6 @@ export const mapPosition = (
         },
         {
           cellName: 'Max. price',
-          cellNameClassName: '',
-          cardCellClassName: '',
           amounts: {
             amount: maxRange,
             dollarEquivalent: null,
@@ -82,8 +106,6 @@ export const mapPosition = (
         },
         {
           cellName: 'Deposit',
-          cellNameClassName: '',
-          cardCellClassName: '',
           amounts: {
             amount: depositUsd,
             dollarEquivalent: depositUsd,
@@ -95,8 +117,6 @@ export const mapPosition = (
         },
         {
           cellName: 'Collected fees',
-          cellNameClassName: '',
-          cardCellClassName: '',
           amounts: {
             amount: collectedFeesUsd,
             dollarEquivalent: collectedFeesUsd,

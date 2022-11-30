@@ -2,6 +2,8 @@ import { ReactNode, useMemo } from 'react';
 
 import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
+import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { TokenInfo } from '@shared/elements';
 import { isTokenEqual, multipliedIfPossible } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
@@ -84,7 +86,7 @@ export const useFeeTokensListViewModel = () => {
     }, []);
 
     return feesByTokens.map(({ token, deposit, fee }) => {
-      const exchangeRate = getTokenExchangeRate(token);
+      const exchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(token) : TESTNET_EXCHANGE_RATE;
       const depositDollarEquivalent = multipliedIfPossible(deposit, exchangeRate);
       const feeDollarEquivalent = multipliedIfPossible(fee, exchangeRate);
 
