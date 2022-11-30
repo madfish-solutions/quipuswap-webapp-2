@@ -21,3 +21,20 @@ export interface BigMap<Key extends BigMapKeyType, Value> {
   toJSON(): string;
   toString(): string;
 }
+
+export interface TezToken {
+  tez: never;
+}
+
+export interface FA12Token {
+  fa12: address;
+}
+
+export interface FA2Token {
+  fa2: {
+    token_address: address;
+    token_id: nat;
+  };
+}
+
+export type TokensValue = TezToken | FA12Token | FA2Token;
