@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
+import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { FarmingListSkeleton } from '@modules/farming/pages/list/components';
-import { Iterator, ListItemCard, ListStats, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, ListItemCard, ListStats, Skeleton, StateWrapper, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { EmptyPositionsList, OpenNewPosition, PageTitleContainer, PositionsFeesList } from './components';
@@ -19,11 +19,14 @@ export const V3PositionsPage: FC = observer(() => {
       <TestnetAlert />
       <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|positions')} />
       <ListStats stats={stats} slidesToShow={3} />
-      <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton className={styles.mb48} />}>
+      <StateWrapper
+        isLoading={isLoading}
+        loaderFallback={<Skeleton className={cx(styles.positionFeesSkeleton, styles.mb48)} />}
+      >
         <PositionsFeesList />
       </StateWrapper>
       <OpenNewPosition />
-      <StateWrapper isLoading={isLoading} loaderFallback={<FarmingListSkeleton />}>
+      <StateWrapper isLoading={isLoading} loaderFallback={<Skeleton className={styles.listSkeleton} />}>
         <Iterator
           data={positions}
           render={ListItemCard}
