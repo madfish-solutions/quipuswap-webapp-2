@@ -76,6 +76,13 @@ export const liquidity = {
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
+  induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
+  createPosition: 'Create new position',
+  positions: 'Positions',
+  currentPrice: 'Current price',
+  currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
+  feeRate: 'Fee rate',
+  feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

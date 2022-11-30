@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
+import { useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { i18n } from '@translation';
 
 import { LiquidityRoutes, LiquidityTabs } from '../../liquidity-routes.enum';
@@ -10,6 +11,7 @@ import { LiquidityRoutes, LiquidityTabs } from '../../liquidity-routes.enum';
 export const useLiquidityFormTabsCardViewModel = () => {
   const navigate = useNavigate();
   const { pairSlug } = useParams();
+  const itemStore = useLiquidityItemStore();
 
   const _TabsContent = useMemo(() => {
     const isTez = pairSlug?.split('-').some(item => item === 'tez');
@@ -45,7 +47,7 @@ export const useLiquidityFormTabsCardViewModel = () => {
   );
 
   return {
-    isLoading: false, // TODO store initialize, when itemStore will be ready
+    isLoading: itemStore.itemIsLoading,
     changeTabHandle,
     TabsContent: _TabsContent
   };

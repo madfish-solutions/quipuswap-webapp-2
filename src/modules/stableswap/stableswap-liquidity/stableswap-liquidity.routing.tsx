@@ -4,7 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { Navigate, Route, useLocation } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
-import { StateWrapper } from '@shared/components';
+import { NOT_FOUND_LETTERS_ROUTE_NAME } from '@config/constants';
+import { LoaderFallback, StateWrapper } from '@shared/components';
 import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@shared/helpers';
 import { SentryRoutes } from '@shared/services';
 
@@ -24,33 +25,41 @@ export const StableswapLiquidityRouter: FC = observer(() => {
   const { isInitialazied, error } = useStableswapLiquidityRouterViewModel();
 
   const routerParts = getRouterParts(pathname);
-  const lastTab = getLastElement(routerParts);
+  const lastRoutePart = getLastElement(routerParts);
 
   const isAddOrRemoveInUrl = isSomeInArray(routerParts, [
     StableswapLiquidityFormTabs.add,
     StableswapLiquidityFormTabs.remove
   ]);
 
-  if (!isUndefined(lastTab) && parseInt(lastTab) && !isAddOrRemoveInUrl) {
+  if (!isUndefined(lastRoutePart) && parseInt(lastRoutePart) && !isAddOrRemoveInUrl) {
     return (
       <Navigate
         replace
-        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${lastTab}`}
+        to={`${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
       />
     );
   }
 
   return (
-    <StateWrapper isLoading={!isInitialazied} loaderFallback={<>Loading...</>} isError={!!error}>
+    <StateWrapper isLoading={!isInitialazied} loaderFallback={<LoaderFallback />} isError={!!error}>
       <SentryRoutes>
         <Route path={`/${StableswapLiquidityFormTabs.create}`} element={<StableswapLiquidityCreatePage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.add}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.remove}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
+          element={<PageNotFoundPage />}
+        />
         <Route
           path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
           element={<StableswapLiquidityRemoveItemPage />}
         />
 
-        <Route path={'/'} element={<StableswapLiquidityListPage />} />
+        <Route index element={<StableswapLiquidityListPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>

@@ -10,7 +10,15 @@ import { useVotingRouter } from '@modules/voting/hooks';
 import { VotingTabs } from '@modules/voting/tabs.enum';
 import { useTokens, useSearchCustomTokens } from '@providers/dapp-tokens';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@shared/helpers';
+import {
+  defined,
+  handleSearchToken,
+  isEmptyArray,
+  isExist,
+  isNull,
+  isTokenEqual,
+  useRedirectToNotFoundDigitsRoute
+} from '@shared/helpers';
 import { isEqualTokenPairs } from '@shared/helpers/token-pair';
 import { useOnBlock } from '@shared/hooks';
 import { useExchangeRates } from '@shared/hooks/use-exchange-rate';
@@ -47,6 +55,7 @@ const useVotingService = () => {
   const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
   const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, QUIPU_TOKEN]);
   const tokensRef = useRef<[Token, Token]>([token1, token2]);
+  const redirectToNotFoundPage = useRedirectToNotFoundDigitsRoute();
 
   const {
     urlLoaded,
@@ -131,9 +140,25 @@ const useVotingService = () => {
         setTokens,
         setTokenPair,
         searchCustomToken
+      }).catch(e => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+
+        redirectToNotFoundPage();
       });
     }
-  }, [from, to, initialLoad, tokens, exchangeRates, tezos, setInitialLoad, setUrlLoaded, searchCustomToken]);
+  }, [
+    from,
+    to,
+    initialLoad,
+    tokens,
+    exchangeRates,
+    tezos,
+    setInitialLoad,
+    setUrlLoaded,
+    searchCustomToken,
+    redirectToNotFoundPage
+  ]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {

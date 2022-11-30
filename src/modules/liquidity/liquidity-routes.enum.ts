@@ -1,6 +1,7 @@
 export enum LiquidityRoutes {
   root = '/',
   cpmm = '/cpmm',
+  v3 = '/v3',
   create = '/create'
 }
 

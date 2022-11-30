@@ -1,9 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { TEZOS_TOKEN } from '@config/tokens';
-import { Standard, TokenId } from '@shared/types';
-
-import { TokensValue } from './stableswap.contract.types';
+import { Standard, TokenId, TokensValue } from '@shared/types';
 
 export enum StableswapLiquidityFormTabs {
   add = 'add',

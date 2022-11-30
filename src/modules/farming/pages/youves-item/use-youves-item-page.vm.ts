@@ -5,12 +5,12 @@ import { useParams } from 'react-router-dom';
 import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
 import { useReady } from '@providers/use-dapp';
-import { getTokensNames, isEmptyArray, isNull, isUndefined } from '@shared/helpers';
+import { getTokensNames, isEmptyArray, isNull, isUndefined, useRedirectionCallback } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { mapFarmVersion } from '../../helpers';
+import { makeNotFoundPageUrl, mapFarmVersion } from '../../helpers';
 
 const DEFAULT_TOKENS: Token[] = [];
 
@@ -21,10 +21,11 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
   const { id, version } = useParams();
+  const redirectToNotFoundPage = useRedirectionCallback(makeNotFoundPageUrl);
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
-  const { item } = farmingYouvesItemStore;
+  const { item, itemApiError } = farmingYouvesItemStore;
   const tokens = item?.tokens ?? DEFAULT_TOKENS;
 
   /*
@@ -38,6 +39,12 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
     void getFarmingItem(id, mapFarmVersion(version));
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, id, version, accountPkh]);
+
+  useEffect(() => {
+    if (itemApiError) {
+      redirectToNotFoundPage();
+    }
+  }, [itemApiError, redirectToNotFoundPage]);
 
   /*
     Liveable Rewards.
