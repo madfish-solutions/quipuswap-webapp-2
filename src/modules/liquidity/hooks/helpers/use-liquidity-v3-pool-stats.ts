@@ -16,7 +16,6 @@ import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 const TESTNET_EXCHANGE_RATE_BN = new BigNumber(TESTNET_EXCHANGE_RATE);
 const FEE_BPS_PRECISION = 1e4;
-export const CURRENT_PRICE_STAT_INDEX = 1;
 
 export const useLiquidityV3PoolStats = () => {
   const { t } = useTranslation();
@@ -63,5 +62,5 @@ export const useLiquidityV3PoolStats = () => {
     [currentPrice, feeBpsPercentage, poolTvl, t, tokensSymbols]
   );
 
-  return { stats };
+  return { stats, poolTvl, currentPrice, feeBpsPercentage };
 };

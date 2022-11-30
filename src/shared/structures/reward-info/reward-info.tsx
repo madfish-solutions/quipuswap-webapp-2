@@ -34,6 +34,7 @@ interface Props {
   disabled?: boolean;
   buttonUp?: boolean;
   details?: ReactNode;
+  rewardsLabel?: string;
 }
 
 const ZERO_REWARDS = 0;
@@ -56,7 +57,8 @@ export const RewardInfo: CFC<Props> = ({
   totalPendingRewards,
   buttonUp,
   details,
-  children
+  children,
+  rewardsLabel
 }) => {
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
   const { detailsButtonTransaction } = transaction;
@@ -95,6 +97,7 @@ export const RewardInfo: CFC<Props> = ({
           dollarEquivalent={dollarEquivalent}
           amountDecimals={amountDecimals}
           currency={currency}
+          rewardsLabel={rewardsLabel}
         />
         <div className={wrapUserInfoContainerClassName}>
           {children && <div className={wrapChildrenContainerClassName}>{children}</div>}

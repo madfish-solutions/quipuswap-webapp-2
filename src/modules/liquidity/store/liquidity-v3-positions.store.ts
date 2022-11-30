@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { isExist } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
@@ -44,6 +45,10 @@ export class LiquidityV3PositionsStore {
   }
 
   async getPositions() {
-    return { value: mockPositions };
+    if (isExist(this.rootStore.authStore.accountPkh)) {
+      return { value: mockPositions };
+    }
+
+    return { value: [] };
   }
 }

@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
-import { i18n } from '@translation';
 
 import { FeeTokensList } from '../fee-tokens-list';
 import styles from './positions-fees-list.module.scss';
@@ -14,7 +13,8 @@ import { usePositionsFeesListViewModel } from './use-positions-fees-list.vm';
 export const PositionsFeesList: FC = observer(() => {
   const { claimablePendingRewardsInUsd, handleClaimAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =
     usePositionsFeesListViewModel();
-  const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
+  const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
+    translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
@@ -31,13 +31,14 @@ export const PositionsFeesList: FC = observer(() => {
       currency="$"
       buttonUp
       details={<FeeTokensList />}
+      rewardsLabel={totalFeesTranslation}
     >
       {isUserTotalDepositExist && (
         <DetailsCardCell
           className={styles.totalDeposit}
           cellNameClassName={styles.totalDepositCellName}
-          cellName={i18n.t('farm|yourTotalDeposit')}
-          data-test-id="yourTotalDeposit"
+          cellName={totalDepositTranslation}
+          data-test-id="totalDeposit"
         >
           <StateCurrencyAmount
             amount={totalDepositAmount}

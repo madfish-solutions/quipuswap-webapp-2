@@ -85,7 +85,19 @@ export const liquidity = {
   feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions',
   Token: 'Token',
   Deposit: 'Deposit',
+  depositTooltip: 'Deposit',
   Fee: 'Fee',
+  noPositionsText: 'Here can be your positions.',
+  totalFees: 'Total fees',
+  totalDeposit: 'Total deposit',
+  inRange: 'In range',
+  notActive: 'Not active',
+  minPrice: 'Min. price',
+  minPriceTooltip: 'Minimal price',
+  maxPrice: 'Max. price',
+  maxPriceTooltip: 'Maximal price',
+  collectedFees: 'Collected fees',
+  collectedFeesTooltip: 'CollectedFees',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
