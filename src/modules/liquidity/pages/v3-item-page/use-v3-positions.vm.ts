@@ -11,24 +11,13 @@ import {
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
 import {
-  defined,
-  getSumOfNumbers,
-  getTokenDecimals,
-  isExist,
-  isNull,
-  multipliedIfPossible,
-  toReal
-} from '@shared/helpers';
-import { fractionToPercentage } from '@shared/helpers/percentage';
+  CURRENT_PRICE_STAT_INDEX,
+  useLiquidityV3PoolStats
+} from '@modules/liquidity/hooks/helpers/use-liquidity-v3-pool-stats';
+import { defined, isExist, isNull } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 
-import { convertToRealPrice } from './helpers';
-
-const FEE_PRECISION = 10000;
-
-// TODO: replace mock values
-const MOCK_TOKEN_X_AMOUNT = new BigNumber('6004');
-const MOCK_TOKEN_Y_AMOUNT = new BigNumber('202000');
+import { mapPosition } from './helpers';
 
 export const useV3PositionsViewModel = () => {
   const { id } = useParams();
@@ -36,6 +25,7 @@ export const useV3PositionsViewModel = () => {
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { getTokenExchangeRate } = useTokenExchangeRate();
+  const { stats } = useLiquidityV3PoolStats();
 
   const item = v3ItemStore.item;
   const rawPositions = v3PositionsStore.positions;
@@ -47,70 +37,22 @@ export const useV3PositionsViewModel = () => {
 
   const isLoading =
     v3ItemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
+  const error = v3ItemStore.error ?? v3PositionsStore.positionsStore.error;
 
   const tokenXExchangeRate =
     IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
   const tokenYExchangeRate =
     IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
 
-  const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
-  const currentPrice = useMemo(
-    () => item && toReal(convertToRealPrice(item?.storage.sqrt_price), tokenPriceDecimals),
-    [tokenPriceDecimals, item]
-  );
+  const currentPrice = stats[CURRENT_PRICE_STAT_INDEX].amount;
 
   const positions = useMemo(() => {
     if (isNull(item) || isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {
       return [];
     }
 
-    return rawPositions.map(position => {
-      // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
-      const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
-      const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
-      const tokenXFees = toReal(new BigNumber('1'), tokenX);
-      const tokenYFees = toReal(new BigNumber('1'), tokenY);
-      const minRange = toReal(convertToRealPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
-      const maxRange = toReal(convertToRealPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
+    return rawPositions.map(mapPosition(tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, id));
+  }, [item, rawPositions, tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, id]);
 
-      return {
-        tokens: [tokenY, tokenX],
-        minRange,
-        maxRange,
-        isInRange: currentPrice!.gte(minRange) && currentPrice!.lte(maxRange),
-        depositUsd: getSumOfNumbers([
-          multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
-          multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
-        ]),
-        tokenXDeposit,
-        tokenYDeposit,
-        collectedFeesUsd: getSumOfNumbers([
-          multipliedIfPossible(tokenXFees, tokenXExchangeRate),
-          multipliedIfPossible(tokenYFees, tokenYExchangeRate)
-        ]),
-        tokenXFees,
-        tokenYFees
-      };
-    });
-  }, [item, rawPositions, tokenX, tokenY, tokenPriceDecimals, tokenXExchangeRate, tokenYExchangeRate, currentPrice]);
-
-  const tvlInUsd = useMemo(
-    () =>
-      getSumOfNumbers([
-        multipliedIfPossible(toReal(MOCK_TOKEN_X_AMOUNT, tokenX), tokenXExchangeRate),
-        multipliedIfPossible(toReal(MOCK_TOKEN_Y_AMOUNT, tokenY), tokenYExchangeRate)
-      ]),
-    [tokenX, tokenXExchangeRate, tokenY, tokenYExchangeRate]
-  );
-  const feeRatePercentage = item && fractionToPercentage(item.storage.constants.fee_bps.dividedBy(FEE_PRECISION));
-
-  return {
-    currentPrice,
-    isLoading,
-    positions,
-    tvlInUsd,
-    tokenX,
-    tokenY,
-    feeRatePercentage
-  };
+  return { isLoading, positions, stats, error };
 };
