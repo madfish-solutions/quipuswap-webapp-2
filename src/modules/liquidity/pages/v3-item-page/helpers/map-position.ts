@@ -16,6 +16,7 @@ import {
   toReal
 } from '@shared/helpers';
 import { ActiveStatus, Optional, Token } from '@shared/types';
+import { i18n } from '@translation';
 
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 
@@ -80,32 +81,32 @@ export const mapPosition = (
         {
           contentClassName: cx(rangeLabelClassName, isInRange && inRangeClassName),
           status: ActiveStatus.ACTIVE,
-          label: isInRange ? 'In range' : 'Not active'
+          label: isInRange ? i18n.t('liquidity|inRange') : i18n.t('liquidity|notActive')
         }
       ],
       itemStats: [
         {
-          cellName: 'Min. price',
+          cellName: i18n.t('liquidity|minPrice'),
           amounts: {
             amount: minRange,
             dollarEquivalent: null,
             currency: tokensNames
           },
           DTI: 'minPrice',
-          tooltip: 'Minimal price'
+          tooltip: i18n.t('liquidity|minPriceTooltip')
         },
         {
-          cellName: 'Max. price',
+          cellName: i18n.t('liquidity|maxPrice'),
           amounts: {
             amount: maxRange,
             dollarEquivalent: null,
             currency: tokensNames
           },
           DTI: 'maxPrice',
-          tooltip: 'Maximal price'
+          tooltip: i18n.t('liquidity|maxPriceTooltip')
         },
         {
-          cellName: 'Deposit',
+          cellName: i18n.t('liquidity|Deposit'),
           amounts: {
             amount: depositUsd,
             dollarEquivalent: depositUsd,
@@ -113,10 +114,10 @@ export const mapPosition = (
             dollarEquivalentOnly: true
           },
           DTI: 'deposit',
-          tooltip: 'Deposit'
+          tooltip: i18n.t('liquidity|depositTooltip')
         },
         {
-          cellName: 'Collected fees',
+          cellName: i18n.t('liquidity|collectedFees'),
           amounts: {
             amount: collectedFeesUsd,
             dollarEquivalent: collectedFeesUsd,
@@ -124,7 +125,7 @@ export const mapPosition = (
             dollarEquivalentOnly: true
           },
           DTI: 'collectedFees',
-          tooltip: 'Collected fees'
+          tooltip: i18n.t('liquidity|collectedFeesTooltip')
         }
       ],
       itemDTI: `liquidity-item-v3-${position.id.toFixed()}`,

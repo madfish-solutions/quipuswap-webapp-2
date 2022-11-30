@@ -8,9 +8,7 @@ export const usePositionsFeesListViewModel = () => {
   const { t } = useTranslation();
   const { positions, isLoading, error } = useV3PositionsViewModel();
 
-  const handleClaimAll = async () => {
-    amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
-  };
+  const handleClaimAll = () => amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
 
   const userTotalDepositInfo = {
     totalDepositAmount: getSumOfNumbers(positions.map(position => position.depositUsd)),
@@ -28,7 +26,9 @@ export const usePositionsFeesListViewModel = () => {
     handleClaimAll,
     translation: {
       harvestAllTranslation: t('farm|harvestAll'),
-      rewardsTooltipTranslation: t('farm|rewardsTooltip')
+      rewardsTooltipTranslation: t('farm|rewardsTooltip'),
+      totalFeesTranslation: t('liquidity|totalFees'),
+      totalDepositTranslation: t('liquidity|totalDeposit')
     },
     claimablePendingRewardsInUsd
   };

@@ -5,7 +5,7 @@ import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { TokenInfo } from '@shared/elements';
-import { isTokenEqual, multipliedIfPossible } from '@shared/helpers';
+import { isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
@@ -70,7 +70,8 @@ export const useFeeTokensListViewModel = () => {
           { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees }
         ];
       })
-      .flat();
+      .flat()
+      .filter(({ fee }) => isGreaterThanZero(fee));
 
     const feesByTokens = feesAddends.reduce<typeof feesAddends>((acc, { token: currentToken, deposit, fee }) => {
       const existentTokenSum = acc.find(({ token }) => isTokenEqual(token, currentToken));

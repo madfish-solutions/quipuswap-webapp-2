@@ -9,10 +9,7 @@ import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
-import {
-  CURRENT_PRICE_STAT_INDEX,
-  useLiquidityV3PoolStats
-} from '@modules/liquidity/hooks/helpers/use-liquidity-v3-pool-stats';
+import { useLiquidityV3PoolStats } from '@modules/liquidity/hooks/helpers/use-liquidity-v3-pool-stats';
 import { ColorModes } from '@providers/color-theme-context';
 import { defined, isNull } from '@shared/helpers';
 import { useTokenExchangeRate, useUiStore } from '@shared/hooks';
@@ -32,7 +29,7 @@ export const useV3PositionsViewModel = () => {
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { getTokenExchangeRate } = useTokenExchangeRate();
-  const { stats } = useLiquidityV3PoolStats();
+  const { stats, currentPrice } = useLiquidityV3PoolStats();
 
   const item = v3ItemStore.item;
   const rawPositions = v3PositionsStore.positions;
@@ -45,8 +42,6 @@ export const useV3PositionsViewModel = () => {
   const isLoading =
     v3ItemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
   const error = v3ItemStore.error ?? v3PositionsStore.positionsStore.error;
-
-  const currentPrice = stats[CURRENT_PRICE_STAT_INDEX].amount;
 
   const positions = useMemo(() => {
     if (isNull(item) || isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {
