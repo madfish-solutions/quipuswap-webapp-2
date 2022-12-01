@@ -28,7 +28,7 @@ export const TokenSwitcher: FC<Props> = ({ tokensSymbols, className }) => {
       {tokensSymbols.map((tokenSymbol, index) => (
         <Button
           onClick={() => store.setActiveTokenId(index)}
-          className={cx(styles.button, modeClass[colorThemeMode])}
+          className={styles.button}
           theme={isEqual(index, store.activeTokenId) ? 'primary' : 'tertiary'}
         >
           {tokenSymbol}
