@@ -6,6 +6,7 @@ export type address = string;
 export type timestamp = string;
 export type key_hash = string;
 export type nat = BigNumber;
+export type int = BigNumber;
 export type bytes = string;
 export type LedgerKey = [string, BigNumber];
 
