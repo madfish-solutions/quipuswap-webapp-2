@@ -1,13 +1,12 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { observer } from 'mobx-react-lite';
 
-import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { isEqual } from '@shared/helpers';
 
+import { useLiquidityV3ItemStore } from '../../../../../liquidity/hooks';
 import styles from './token-switcher.module.scss';
 
 const modeClass = {
@@ -20,7 +19,7 @@ interface Props {
   className?: string;
 }
 
-export const TokenSwitcher: FC<Props> = observer(({ tokensSymbols, className }) => {
+export const TokenSwitcher: FC<Props> = ({ tokensSymbols, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const store = useLiquidityV3ItemStore();
 
@@ -37,4 +36,4 @@ export const TokenSwitcher: FC<Props> = observer(({ tokensSymbols, className }) 
       ))}
     </div>
   );
-});
+};
