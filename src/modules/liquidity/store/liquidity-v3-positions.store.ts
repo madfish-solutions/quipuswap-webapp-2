@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { isNull } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable } from '@shared/types';
 
+import { BlockchainLiquidityV3Api } from '../api';
 import { LiquidityV3PositionsResponseModel } from '../models';
-import { mockPositions } from '../pages/v3-item-page/mock-positions.constants';
 
 const defaultPositionsResponse = { value: null };
 
@@ -44,6 +45,13 @@ export class LiquidityV3PositionsStore {
   }
 
   async getPositions() {
-    return { value: mockPositions };
+    const { tezos } = this.rootStore;
+    const { accountPkh } = this.rootStore.authStore;
+
+    if (isNull(tezos) || isNull(accountPkh) || isNull(this.poolId)) {
+      return { value: [] };
+    }
+
+    return { value: await BlockchainLiquidityV3Api.getPositions(tezos, accountPkh, this.poolId) };
   }
 }
