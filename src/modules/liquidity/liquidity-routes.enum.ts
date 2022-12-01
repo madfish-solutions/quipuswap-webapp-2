@@ -2,7 +2,8 @@ export enum LiquidityRoutes {
   root = '/',
   cpmm = '/cpmm',
   v3 = '/v3',
-  create = '/create'
+  create = '/create',
+  positions = '/positions'
 }
 
 export enum LiquidityTabs {

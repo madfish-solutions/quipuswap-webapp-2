@@ -73,7 +73,9 @@ export const mapPosition = (
     const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
 
     return {
-      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId}/position/${position.id.toFixed()}`,
+      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId}${
+        LiquidityRoutes.positions
+      }/${position.id.toFixed()}`,
       inputToken: [tokenX, tokenY],
       status: null,
       isNew: false,
