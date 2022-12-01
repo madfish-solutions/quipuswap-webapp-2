@@ -9,7 +9,7 @@ import { getTokenSlug } from './tokens';
 import { isExist } from './type-checks';
 
 type isAddress = boolean;
-type RawOrMappedToken = RawToken | Token;
+export type RawOrMappedToken = RawToken | Token;
 
 enum MetadataTokenField {
   name = 'name',

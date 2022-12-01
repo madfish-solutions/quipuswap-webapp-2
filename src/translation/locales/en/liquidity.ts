@@ -31,6 +31,7 @@ export const liquidity = {
   TVL: 'TVL',
   tvl: 'Total Value Locked',
   tvlTooltip: 'Total amount of assets locked in pool.',
+  tvlV3PoolTooltip: 'The value of funds locked in this liquidity pool by all users and unclaimed fees.',
   tvlTooltipStats: 'Total amount of assets locked across all pools.',
   APR: 'APR',
   aprUpTo: 'APR up to',
@@ -79,10 +80,13 @@ export const liquidity = {
   induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
   createPosition: 'Create new position',
   positions: 'Positions',
+  weeklyVolumeV3PoolTooltip: 'The weekly trading volume for a selected liquidity pool.',
   currentPrice: 'Current price',
   currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
   feeRate: 'Fee rate',
   feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions',
+  tokenReserves: '{{tokenSymbol}} reserves',
+  tokenReservesTooltip: 'The amount of added base assets in a selected liquidity pool.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { ListStats, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { OpenNewPosition, PageTitleContainer } from './components';
+import { OpenNewPosition, PageTitleContainer, PoolDetails } from './components';
 import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
 
 export const V3ItemPage: FC = observer(() => {
@@ -18,7 +18,9 @@ export const V3ItemPage: FC = observer(() => {
       <ListStats stats={stats} slidesToShow={3} />
       <OpenNewPosition />
 
-      <StickyBlock>body</StickyBlock>
+      <StickyBlock>
+        <PoolDetails />
+      </StickyBlock>
     </>
   );
 });
