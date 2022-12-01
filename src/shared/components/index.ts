@@ -13,6 +13,7 @@ export * from './contract-hash-with-copy';
 export * from './dash-plug';
 export * from './transaction-deadline';
 export * from './details-card-cell';
+export * from './details-card-cell-with-component';
 export * from './donation-button';
 export * from './header';
 export * from './input';
