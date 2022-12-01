@@ -5,11 +5,11 @@ import cx from 'classnames';
 import { useParams } from 'react-router-dom';
 
 import {
+  useLiquidityV3CurrentPrice,
   useLiquidityV3ItemStore,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
-import { useLiquidityV3PoolStats } from '@modules/liquidity/hooks/helpers/use-liquidity-v3-pool-stats';
 import { ColorModes } from '@providers/color-theme-context';
 import { defined, isNull } from '@shared/helpers';
 import { useTokenExchangeRate, useUiStore } from '@shared/hooks';
@@ -29,7 +29,7 @@ export const useV3PositionsViewModel = () => {
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { getTokenExchangeRate } = useTokenExchangeRate();
-  const { stats, currentPrice } = useLiquidityV3PoolStats();
+  const currentPrice = useLiquidityV3CurrentPrice();
 
   const item = v3ItemStore.item;
   const rawPositions = v3PositionsStore.positions;
@@ -56,5 +56,5 @@ export const useV3PositionsViewModel = () => {
     );
   }, [item, rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, id, colorThemeMode]);
 
-  return { isLoading, positions, stats, error };
+  return { isLoading, positions, error };
 };

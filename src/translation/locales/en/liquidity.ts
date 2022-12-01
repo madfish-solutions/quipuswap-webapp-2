@@ -78,7 +78,6 @@ export const liquidity = {
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
   induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
   createPosition: 'Create new position',
-  positions: 'Positions',
   currentPrice: 'Current price',
   currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
   feeRate: 'Fee rate',

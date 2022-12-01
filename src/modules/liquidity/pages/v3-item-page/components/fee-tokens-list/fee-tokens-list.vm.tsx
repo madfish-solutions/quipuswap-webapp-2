@@ -60,7 +60,7 @@ export const useFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positions } = useV3PositionsViewModel();
 
-  const data: Row[] = useMemo(() => {
+  const rows: Row[] = useMemo(() => {
     const feesAddends = positions
       .map(({ inputToken, tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees }) => {
         const [tokenX, tokenY] = inputToken;
@@ -100,7 +100,7 @@ export const useFeeTokensListViewModel = () => {
   }, [positions, getTokenExchangeRate]);
 
   return {
-    data,
+    rows,
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,
