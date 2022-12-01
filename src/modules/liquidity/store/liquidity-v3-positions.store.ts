@@ -45,10 +45,8 @@ export class LiquidityV3PositionsStore {
   }
 
   async getPositions() {
-    if (isExist(this.rootStore.authStore.accountPkh)) {
-      return { value: mockPositions };
-    }
+    const value = isExist(this.rootStore.authStore.accountPkh) ? mockPositions : [];
 
-    return { value: [] };
+    return { value };
   }
 }
