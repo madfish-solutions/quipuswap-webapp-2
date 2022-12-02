@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FIRST_INDEX } from '@config/constants';
 import { extractTokens, isEqual } from '@shared/helpers';
 import { Token } from '@shared/types';
 
@@ -18,7 +18,7 @@ export const getTokenAndFieldData = (tokensInfo: Array<DexTwoLiqTokensInfo>, ind
   const decimals = token.metadata.decimals;
   const atomicTokenTvl = tokensInfo[index].atomicTokenTvl;
 
-  const inputField = isEqual(index, FISRT_INDEX) ? Input.FIRST_LIQ_INPUT : Input.SECOND_LIQ_INPUT;
+  const inputField = isEqual(index, FIRST_INDEX) ? Input.FIRST_LIQ_INPUT : Input.SECOND_LIQ_INPUT;
 
   return { token, decimals, atomicTokenTvl, inputField };
 };

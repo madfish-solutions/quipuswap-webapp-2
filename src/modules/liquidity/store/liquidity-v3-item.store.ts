@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserBalance } from '@blockchain';
-import { DEFAULT_TOKEN_ID, ZERO_AMOUNT_BN } from '@config/constants';
+import { FIRST_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
 import { defined, isNull, isTokenAddressFa2, t } from '@shared/helpers';
 import { mapTokenAddress } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
@@ -18,7 +18,7 @@ const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYB
 export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
   id: Nullable<BigNumber> = null;
-  activeTokenIndex = DEFAULT_TOKEN_ID;
+  activeTokenIndex = FIRST_INDEX;
 
   //# Quipuswap V3 pool tokens balance store
   @Led({

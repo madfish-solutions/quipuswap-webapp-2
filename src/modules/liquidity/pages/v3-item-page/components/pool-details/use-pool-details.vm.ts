@@ -25,7 +25,7 @@ export const usePoolDetailsViewModel = () => {
 
   const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
 
-  const handleTokenActiveIndex = (index: number) => store.setActiveTokenIndex(index);
+  const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
@@ -38,6 +38,6 @@ export const usePoolDetailsViewModel = () => {
     tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
     tokenYAmount: tokenYBalance,
     tokenActiveIndex: store.activeTokenIndex,
-    handleTokenActiveIndex
+    handleButtonClick
   };
 };

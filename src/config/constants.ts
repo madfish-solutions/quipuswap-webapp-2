@@ -60,7 +60,7 @@ export const LP_INPUT_KEY = 'lp-input';
 //#endregion
 
 //#region arrays
-export const FISRT_INDEX = 0;
+export const FIRST_INDEX = 0;
 export const OPPOSITE_INDEX = 1;
 export const LAST_INDEX = -1;
 //#endregion

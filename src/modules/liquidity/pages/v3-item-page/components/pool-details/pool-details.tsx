@@ -31,7 +31,7 @@ export const PoolDetails: FC = observer(() => {
     tokenYSymbol,
     tokenYAmount,
     tokenActiveIndex,
-    handleTokenActiveIndex
+    handleButtonClick
   } = usePoolDetailsViewModel();
 
   return (
@@ -49,7 +49,7 @@ export const PoolDetails: FC = observer(() => {
           <AssetSwitcher
             labels={[tokenXSymbol, tokenYSymbol]}
             activeIndex={tokenActiveIndex}
-            handleActiveIndex={handleTokenActiveIndex}
+            handleActiveIndex={handleButtonClick}
             className={styles.tokenSwitcher}
           />
         }
