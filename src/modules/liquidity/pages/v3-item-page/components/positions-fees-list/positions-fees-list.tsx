@@ -13,8 +13,7 @@ import { usePositionsFeesListViewModel } from './use-positions-fees-list.vm';
 export const PositionsFeesList: FC = observer(() => {
   const { claimablePendingRewardsInUsd, handleClaimAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =
     usePositionsFeesListViewModel();
-  const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
-    translation;
+  const { claimFeeTranslation, totalFeesTranslation, totalDepositTranslation } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
@@ -26,8 +25,7 @@ export const PositionsFeesList: FC = observer(() => {
       viewDetailsButtonClassName={styles.viewDetailsButton}
       claimablePendingRewards={claimablePendingRewardsInUsd}
       onButtonClick={handleClaimAll}
-      rewardTooltip={rewardsTooltipTranslation}
-      buttonText={harvestAllTranslation}
+      buttonText={claimFeeTranslation}
       currency="$"
       buttonUp
       details={<FeeTokensList />}
