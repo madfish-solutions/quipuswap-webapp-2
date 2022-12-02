@@ -9,7 +9,7 @@ import {
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
-import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
+import { getLastElement, isExist, isNull, isUndefined, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Standard, Token } from '@shared/types';
@@ -35,6 +35,9 @@ const DEFAULT_ITEM = {
 const DEFAULT_CONTRACT_BALANCE = { balance: null };
 
 const DEFAULT_TOKENS: Token[] = [];
+
+const NEW_STAKE = 0;
+const FALLBACK_STAKE_ID = new BigNumber(NEW_STAKE);
 
 @ModelBuilder()
 export class FarmingYouvesItemStore {
@@ -70,14 +73,14 @@ export class FarmingYouvesItemStore {
 
   //#region stakes store
   @Led({
-    default: { stakes: [] },
+    default: { stakes: null },
     loader: async self => await self.getStakes(),
     model: YouvesStakesResponseModel
   })
   readonly stakesStore: LoadingErrorData<YouvesStakesResponseModel, { stakes: YouvesStakeModel[] }>;
 
-  get stakes(): YouvesStakeModel[] {
-    return this.stakesStore.model.stakes ?? [];
+  get stakes(): YouvesStakeModel[] | null {
+    return this.stakesStore.model.stakes;
   }
   //#endregion stakes store
 
@@ -124,6 +127,7 @@ export class FarmingYouvesItemStore {
 
   async updatePendingRewards() {
     if (
+      isNull(this.stakes) ||
       !isExist(getLastElement(this.stakes)) ||
       isNull(this.item) ||
       isNull(this.contractBalance) ||
@@ -166,7 +170,7 @@ export class FarmingYouvesItemStore {
     const { tezos, authStore } = this.rootStore;
 
     if (isNull(tezos) || isNull(authStore.accountPkh) || !isExist(this.itemStore.model.item?.contractAddress)) {
-      return { stakes: [] };
+      return { stakes: null };
     }
 
     return await BlockchainYouvesFarmingApi.getStakes(
@@ -202,7 +206,7 @@ export class FarmingYouvesItemStore {
   }
 
   get currentStake() {
-    return this.stakes.at(LAST_INDEX) ?? null;
+    return this.stakes?.at(LAST_INDEX) ?? null;
   }
 
   get currentStakeBalance() {
@@ -210,10 +214,17 @@ export class FarmingYouvesItemStore {
   }
 
   get currentStakeId() {
-    const NEW_STAKE = 0;
-    const FALLBACK_STAKE_ID = new BigNumber(NEW_STAKE);
+    if (isNull(this.stakes)) {
+      return null;
+    }
 
-    return this.currentStake?.id ?? FALLBACK_STAKE_ID;
+    const currentStake = this.stakes.at(LAST_INDEX);
+
+    if (isUndefined(currentStake)) {
+      return FALLBACK_STAKE_ID;
+    }
+
+    return currentStake.id;
   }
 
   get tokens() {
