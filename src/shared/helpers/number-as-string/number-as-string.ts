@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_STRING, FISRT_INDEX } from '@config/constants';
+import { EMPTY_STRING, FIRST_INDEX } from '@config/constants';
 
 import { saveBigNumber } from '../bignumber';
 import { prepareNumberAsString } from '../prepare-number-as-string';
@@ -37,7 +37,7 @@ const fixValue = (value: string, decimals: number) => {
 
   const lastChar = getLastChar(preparedValue);
   const [integer, decimals_] = preparedValue.split('.');
-  const decimalsPart = decimals_?.slice(FISRT_INDEX, decimals) ?? '';
+  const decimalsPart = decimals_?.slice(FIRST_INDEX, decimals) ?? '';
 
   const dec = decimalsPart && saveBigNumber(decimalsPart, new BigNumber(0)).isZero();
 
@@ -46,7 +46,7 @@ const fixValue = (value: string, decimals: number) => {
     cleanValue = `${integer}${lastChar}`;
   } else if (dec) {
     const innerDecimalsPart =
-      decimalsPart.length !== decimals ? decimalsPart : `${decimalsPart.slice(FISRT_INDEX, decimals - ONE_CHAR)}1`;
+      decimalsPart.length !== decimals ? decimalsPart : `${decimalsPart.slice(FIRST_INDEX, decimals - ONE_CHAR)}1`;
     cleanValue = `${integer}.${innerDecimalsPart}`;
     fixedValue = new BigNumber(cleanValue);
   } else {

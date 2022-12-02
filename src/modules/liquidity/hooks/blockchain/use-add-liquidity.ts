@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { FISRT_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
+import { FIRST_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
 import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -52,12 +52,12 @@ export const useAddLiquidity = () => {
       sortTokens(a.token, b.token)
     );
 
-    if (isTezosToken(tokensAndAmounts[FISRT_INDEX].token)) {
+    if (isTezosToken(tokensAndAmounts[FIRST_INDEX].token)) {
       tokensAndAmounts.reverse();
     }
 
-    const shares = atomicInputAmounts[FISRT_INDEX].multipliedBy(item.totalSupply)
-      .dividedBy(item.tokensInfo[FISRT_INDEX].atomicTokenTvl)
+    const shares = atomicInputAmounts[FIRST_INDEX].multipliedBy(item.totalSupply)
+      .dividedBy(item.tokensInfo[FIRST_INDEX].atomicTokenTvl)
       .decimalPlaces(LP_TOKEN.metadata.decimals);
 
     const sharesWithFee = getValueWithFee(shares, item.feesRate).integerValue(BigNumber.ROUND_DOWN);

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FIRST_INDEX } from '@config/constants';
 import { DEX_TWO_CONTRACT_ADDRESS } from '@config/environment';
 import { useGetLiquidityItem, useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { useRemoveLiquidity } from '@modules/liquidity/hooks/blockchain';
@@ -85,7 +85,7 @@ export const useDexTwoRemoveLiqFormViewModel = () => {
   };
 
   const data = item.tokensInfo.map((_, index) => {
-    const inputSlug = isEqual(index, FISRT_INDEX) ? Input.FIRST_LIQ_INPUT : Input.SECOND_LIQ_INPUT;
+    const inputSlug = isEqual(index, FIRST_INDEX) ? Input.FIRST_LIQ_INPUT : Input.SECOND_LIQ_INPUT;
     const value = formik.values[inputSlug];
     const error = formik.errors[inputSlug];
     const token = item.tokensInfo[index].token;
