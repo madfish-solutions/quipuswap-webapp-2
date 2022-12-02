@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { DOLLAR, PERCENT, FEE_BPS_PRECISION, TESTNET_EXCHANGE_RATE_BN } from '@config/constants';
+import { DOLLAR, PERCENT, FEE_BASE_POINTS_PRECISION } from '@config/constants';
 import { isExist } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 import { useTokenExchangeRate } from '@shared/hooks';
@@ -20,16 +19,14 @@ export const useLiquidityV3PoolStats = () => {
 
   const { tokenXBalance, tokenYBalance } = contractBalance;
 
-  const tokenXExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE_BN;
-  const tokenYExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE_BN;
+  const tokenXExchangeRate = getTokenExchangeRate(tokenX);
+  const tokenYExchangeRate = getTokenExchangeRate(tokenY);
 
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
   const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenId) : null;
-  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BPS_PRECISION)) : null;
+  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
-  const symbolsString = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
+  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
 
   const stats = useMemo(
     () => [
@@ -43,7 +40,7 @@ export const useLiquidityV3PoolStats = () => {
         title: t('liquidity|currentPrice'),
         amount: currentPrice,
         tooltip: t('liquidity|currentPriceTooltip'),
-        currency: symbolsString
+        currency: tokensSymbols
       },
       {
         title: t('liquidity|feeRate'),
@@ -52,7 +49,7 @@ export const useLiquidityV3PoolStats = () => {
         currency: PERCENT
       }
     ],
-    [currentPrice, feeBpsPercentage, poolTvl, symbolsString, t]
+    [currentPrice, feeBpsPercentage, poolTvl, tokensSymbols, t]
   );
 
   return { stats };

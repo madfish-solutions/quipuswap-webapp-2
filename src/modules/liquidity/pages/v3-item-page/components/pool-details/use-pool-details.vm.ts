@@ -1,5 +1,4 @@
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { EMPTY_STRING, FEE_BPS_PRECISION, SLASH, TESTNET_EXCHANGE_RATE_BN } from '@config/constants';
+import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { isExist } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
@@ -16,34 +15,27 @@ export const usePoolDetailsViewModel = () => {
 
   const { tokenXBalance, tokenYBalance } = contractBalance;
 
-  const tokenXExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE_BN;
-  const tokenYExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE_BN;
+  const tokenXExchangeRate = getTokenExchangeRate(tokenX);
+  const tokenYExchangeRate = getTokenExchangeRate(tokenY);
 
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
 
-  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BPS_PRECISION)) : null;
+  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
   const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenId) : null;
 
-  const symbolsString = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
-
-  const tokenXReservesInfo = {
-    tokenSymbol: tokenX?.metadata.symbol ?? EMPTY_STRING,
-    tokenAmount: tokenXBalance
-  };
-  const tokenYReservesInfo = {
-    tokenSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
-    tokenAmount: tokenYBalance
-  };
+  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
 
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
     tvl: poolTvl,
     feeBps: feeBpsPercentage,
     currentPrice,
-    symbolsString,
-    tokenXReservesInfo,
-    tokenYReservesInfo
+    tokensSymbols,
+    tokenXSymbol: tokenX?.metadata.symbol ?? EMPTY_STRING,
+    tokenXAmount: tokenXBalance,
+    tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
+    tokenYAmount: tokenYBalance,
+    tokenActiveId: store.activeTokenId,
+    handleTokenActiveId: store.setActiveTokenId
   };
 };
