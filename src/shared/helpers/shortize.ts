@@ -1,4 +1,4 @@
-import { FISRT_INDEX } from '@config/constants';
+import { FIRST_INDEX } from '@config/constants';
 
 const LEFT_LENGTH = 7;
 const RIGHT_LENGTH = 4;
@@ -10,5 +10,5 @@ export const shortize = (str: string, length?: number) => {
   const wrapLeftLenght = length ?? LEFT_LENGTH;
   const wrapRightLenght = length ?? RIGHT_LENGTH;
 
-  return `${str.slice(FISRT_INDEX, wrapLeftLenght)}...${str.slice(-wrapRightLenght)}`;
+  return `${str.slice(FIRST_INDEX, wrapLeftLenght)}...${str.slice(-wrapRightLenght)}`;
 };

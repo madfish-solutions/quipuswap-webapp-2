@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import cx from 'classnames';
 import ReactSlider from 'react-slick';
 
-import { FISRT_INDEX } from '@config/constants';
+import { FIRST_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { CFC } from '@shared/types';
 
@@ -75,10 +75,10 @@ export const HotPoolSlider: CFC<Props> = ({ poolsCount, className, children }) =
 
   if (poolsCount < MAX_SLIDES_TO_SHOW) {
     SliderSettings.slidesToShow = poolsCount;
-    SliderSettings.responsive[FISRT_INDEX].settings.slidesToShow = poolsCount;
+    SliderSettings.responsive[FIRST_INDEX].settings.slidesToShow = poolsCount;
   } else {
     SliderSettings.slidesToShow = MAX_SLIDES_TO_SHOW;
-    SliderSettings.responsive[FISRT_INDEX].settings.slidesToShow = MAX_SLIDES_TO_SHOW;
+    SliderSettings.responsive[FIRST_INDEX].settings.slidesToShow = MAX_SLIDES_TO_SHOW;
   }
 
   return (
