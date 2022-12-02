@@ -1,19 +1,17 @@
-import BigNumber from 'bignumber.js';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { computed, makeObservable } from 'mobx';
 
 import { isNull } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Nullable } from '@shared/types';
 
 import { BlockchainLiquidityV3Api } from '../api';
 import { LiquidityV3PositionsResponseModel } from '../models';
 
 const defaultPositionsResponse = { value: null };
+const emptyPositionsListResponse = { value: [] };
 
 @ModelBuilder()
 export class LiquidityV3PositionsStore {
-  poolId: Nullable<BigNumber>;
   //#region Quipuswap V3 pool positions
   @Led({
     default: defaultPositionsResponse,
@@ -31,17 +29,16 @@ export class LiquidityV3PositionsStore {
   }
   //#endregion Quipuswap V3 pool positions
 
+  get poolId() {
+    return this.rootStore.liquidityV3ItemStore?.id ?? null;
+  }
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      poolId: observable,
-      setPoolId: action,
+      poolId: computed,
       positionsAreLoading: computed,
       positions: computed
     });
-  }
-
-  setPoolId(id: BigNumber) {
-    this.poolId = id;
   }
 
   async getPositions() {
@@ -49,7 +46,7 @@ export class LiquidityV3PositionsStore {
     const { accountPkh } = this.rootStore.authStore;
 
     if (isNull(tezos) || isNull(accountPkh) || isNull(this.poolId)) {
-      return { value: [] };
+      return emptyPositionsListResponse;
     }
 
     return { value: await BlockchainLiquidityV3Api.getPositions(tezos, accountPkh, this.poolId) };
