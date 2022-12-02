@@ -16,18 +16,18 @@ const modeClass = {
 interface Props {
   labels: Array<string>;
   activeIndex: number;
-  handleActiveIndex: (index: number) => void;
+  handleButtonClick: (index: number) => void;
   className?: string;
 }
 
-export const AssetSwitcher: FC<Props> = ({ labels, activeIndex, handleActiveIndex, className }) => {
+export const AssetSwitcher: FC<Props> = ({ labels, activeIndex, handleButtonClick, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
       {labels.map((label, index) => (
         <Button
-          onClick={() => handleActiveIndex(index)}
+          onClick={() => handleButtonClick(index)}
           className={styles.button}
           theme={isEqual(index, activeIndex) ? 'primary' : 'tertiary'}
         >
