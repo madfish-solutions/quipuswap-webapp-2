@@ -129,16 +129,16 @@
 
   .labelsContainer {
     position: relative;
+  }
 
-    &::after {
-      content: '';
-      position: absolute;
-      top: 6px;
-      right: -8px;
-      display: block;
-      height: 16px;
-      width: 1px;
-      background-color: $text-02;
-    }
+  * + .labelsContainer::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: -8px;
+    display: block;
+    height: 16px;
+    width: 1px;
+    background-color: $text-02;
   }
 }
