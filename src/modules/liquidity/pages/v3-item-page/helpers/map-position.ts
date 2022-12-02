@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { AppRootRoutes } from '@app.router';
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE, ZERO_AMOUNT_BN } from '@config/constants';
-import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
+import { LiquidityRoutes, LiquiditySubroutes } from '@modules/liquidity/liquidity-routes.enum';
 import { LiquidityV3Position } from '@modules/liquidity/types';
 import {
   getSumOfNumbers,
@@ -73,8 +73,8 @@ export const mapPosition = (
     const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
 
     return {
-      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId}${
-        LiquidityRoutes.positions
+      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId}/${
+        LiquiditySubroutes.positions
       }/${position.id.toFixed()}`,
       inputToken: [tokenX, tokenY],
       status: null,
