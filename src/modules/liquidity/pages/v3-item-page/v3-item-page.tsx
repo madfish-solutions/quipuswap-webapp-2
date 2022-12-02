@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { LiquidityV3PoolStats, OpenNewPosition, PageTitleContainer } from './components';
+import { OpenNewPosition, PageTitleContainer, PoolDetails, LiquidityV3PoolStats } from './components';
 import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
 
 export const V3ItemPage: FC = observer(() => {
@@ -18,7 +18,9 @@ export const V3ItemPage: FC = observer(() => {
       <LiquidityV3PoolStats />
       <OpenNewPosition />
 
-      <StickyBlock>body</StickyBlock>
+      <StickyBlock>
+        <PoolDetails />
+      </StickyBlock>
     </>
   );
 });
