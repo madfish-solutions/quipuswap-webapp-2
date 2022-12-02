@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { FISRT_INDEX, OPPOSITE_INDEX } from '@config/constants';
+import { FIRST_INDEX, OPPOSITE_INDEX } from '@config/constants';
 import { LiquidityItem } from '@modules/liquidity/interfaces';
 import {
   calculateOutputWithToken,
@@ -58,7 +58,7 @@ export const useCalculateValues = () => {
       decimals: firstTokenDecimals,
       atomicTokenTvl: firstTokenAtomicTokenTvl,
       inputField: firstTokenInputField
-    } = getTokenAndFieldData(item.tokensInfo, FISRT_INDEX);
+    } = getTokenAndFieldData(item.tokensInfo, FIRST_INDEX);
 
     const {
       token: secondToken,
