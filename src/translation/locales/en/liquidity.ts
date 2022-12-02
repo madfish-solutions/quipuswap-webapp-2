@@ -97,6 +97,7 @@ export const liquidity = {
   maxPriceTooltip: 'Maximal price',
   collectedFees: 'Collected fees',
   collectedFeesTooltip: 'CollectedFees',
+  claimFee: 'Claim fee',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

@@ -56,5 +56,5 @@ export const useV3PositionsViewModel = () => {
     );
   }, [item, rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, id, colorThemeMode]);
 
-  return { isLoading, positions, error };
+  return { isLoading, positions, error, contractAddress: item?.contractAddress };
 };
