@@ -8,6 +8,7 @@ import {
   LAST_INDEX,
   ZERO_AMOUNT_BN
 } from '@config/constants';
+import { DexLink } from '@modules/liquidity/helpers';
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -15,6 +16,7 @@ import { Nullable, Standard, Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
+import { V3PoolType } from '../dto';
 import { calculateYouvesFarmingRewards } from '../helpers';
 import { FarmVersion } from '../interfaces';
 import { YouvesFarmingItemResponseModel, YouvesStakeModel, YouvesStakesResponseModel } from '../models';
@@ -49,6 +51,12 @@ export class FarmingYouvesItemStore {
 
   get item() {
     return this.itemStore.model.item;
+  }
+
+  get investHref() {
+    return this.item?.type === V3PoolType.DEX_TWO
+      ? DexLink.getCpmmPoolLink(this.tokens as [Token, Token])
+      : DexLink.getStableswapPoolLink(new BigNumber(this.item?.stableswapPoolId ?? 0));
   }
 
   get farmingAddress() {

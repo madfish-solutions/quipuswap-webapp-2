@@ -1,26 +1,47 @@
 import { FC } from 'react';
 
+import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { StickyBlock } from '@shared/components';
+import { Iterator, ListItemCard, Skeleton, StateWrapper, TestnetAlert } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { OpenNewPosition, PageTitleContainer } from './components';
+import {
+  EmptyPositionsList,
+  LiquidityV3PoolStats,
+  OpenNewPosition,
+  PageTitleContainer,
+  PositionsFeesList
+} from './components';
 import { useV3PositionsViewModel } from './use-v3-positions.vm';
+import styles from './v3-positions-page.module.scss';
 
 export const V3PositionsPage: FC = observer(() => {
-  const viewModel = useV3PositionsViewModel();
+  const { isLoading, positions } = useV3PositionsViewModel();
   const { t } = useTranslation();
-
-  // eslint-disable-next-line
-  console.log(JSON.stringify(viewModel, undefined, 2));
 
   return (
     <>
-      <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|positions')} />
+      <TestnetAlert />
+      <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|Liquidity')} />
+      <LiquidityV3PoolStats />
+      <StateWrapper
+        isLoading={isLoading}
+        loaderFallback={<Skeleton className={cx(styles.positionFeesSkeleton, styles.mb48)} />}
+      >
+        <PositionsFeesList />
+      </StateWrapper>
       <OpenNewPosition />
-
-      <StickyBlock>TODO: add a list of positions</StickyBlock>
+      <StateWrapper isLoading={isLoading} loaderFallback={<Skeleton className={styles.listSkeleton} />}>
+        <Iterator
+          data={positions}
+          render={ListItemCard}
+          fallback={<EmptyPositionsList />}
+          isGrouped
+          wrapperClassName={styles.list}
+          DTI="v3PositionsList"
+        />
+      </StateWrapper>
     </>
   );
 });

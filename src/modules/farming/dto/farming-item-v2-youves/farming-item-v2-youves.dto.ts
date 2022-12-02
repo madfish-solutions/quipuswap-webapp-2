@@ -4,6 +4,11 @@ import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 import type { Nullable } from '@shared/types';
 
+export enum V3PoolType {
+  STABLESWAP = 'STABLESWAP',
+  DEX_TWO = 'DEX_TWO'
+}
+
 export class FarmingItemV2YouvesDto {
   @Typed()
   id: string;
@@ -58,4 +63,10 @@ export class FarmingItemV2YouvesDto {
 
   @Typed()
   tvlInStakedToken: BigNumber;
+
+  @Typed({ optional: true, isEnum: true })
+  type?: V3PoolType;
+
+  @Typed({ optional: true })
+  stableswapPoolId?: number;
 }
