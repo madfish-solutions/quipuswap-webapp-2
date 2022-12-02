@@ -4,7 +4,7 @@ import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { defined, getLastElementFromArray, getSymbolsString } from '@shared/helpers';
+import { defined, getSymbolsString, isNull } from '@shared/helpers';
 import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
@@ -19,7 +19,7 @@ export const useYouvesRewardInfoViewModel = () => {
   const accountPkh = useAccountPkh();
   const { delayedGetFarmingItem } = useGetYouvesFarmingItem();
   const youvesFarmingItemStore = useFarmingYouvesItemStore();
-  const { item: youvesFarmingItem, id, version } = youvesFarmingItemStore;
+  const { item: youvesFarmingItem, id, version, currentStakeId } = youvesFarmingItemStore;
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const rewardToken = useToken(youvesFarmingItem?.rewardToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
@@ -39,6 +39,9 @@ export const useYouvesRewardInfoViewModel = () => {
   } = useYouvesFarmingItemRewards();
 
   const handleHarvest = async () => {
+    if (isNull(currentStakeId)) {
+      throw Error('Current stake id is not found');
+    }
     // TODO: add real balances, which are important for analytics
     const farmingItemWithBalances = {
       ...youvesFarmingItem!,
@@ -46,7 +49,7 @@ export const useYouvesRewardInfoViewModel = () => {
       earnBalance
     };
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
-    await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
+    await doHarvest(farmingItemWithBalances, currentStakeId);
 
     await delayedGetFarmingItem(id, defined(version, 'version'));
   };

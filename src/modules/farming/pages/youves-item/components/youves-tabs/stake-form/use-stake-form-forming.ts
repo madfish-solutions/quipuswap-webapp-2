@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 import * as yup from 'yup';
 
-import { defined, executeAsyncSteps, getFormikError, numberAsString, toAtomic } from '@shared/helpers';
+import { defined, executeAsyncSteps, getFormikError, isNull, numberAsString, toAtomic } from '@shared/helpers';
 import { useMount } from '@shared/hooks';
 import { Nullable, Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
@@ -26,7 +26,7 @@ const getValidationSchema = (userBalance: Optional<BigNumber>) =>
 
 export const useStakeFormForming = (
   contractAddress: Nullable<string>,
-  stakeId: BigNumber,
+  stakeId: Nullable<BigNumber>,
   lpFullToken: Nullable<Token>,
   userLpTokenBalance: Optional<BigNumber>,
   getConfirmationMessageParams: (amountToStake: BigNumber) => ConfirmationMessageParams
@@ -47,6 +47,9 @@ export const useStakeFormForming = (
       await executeAsyncSteps(
         [
           async () => {
+            if (isNull(stakeId)) {
+              throw new Error('Current Stake ID is not ready');
+            }
             actions.setSubmitting(true);
             await doDeposit(defined(contractAddress, 'Contract address'), stakeId, atomicInputAmount);
             actions.resetForm();

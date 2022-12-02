@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
-import { defined, executeAsyncSteps } from '@shared/helpers';
+import { isNull, defined, executeAsyncSteps } from '@shared/helpers';
 import { useMount } from '@shared/hooks';
 import { Nullable } from '@shared/types';
 
@@ -17,7 +17,7 @@ export const useUnstakeFormForming = (
   contractAddress: Nullable<string>,
   id: string,
   version: FarmVersion,
-  stakeId: BigNumber,
+  stakeId: Nullable<BigNumber>,
   balance: Nullable<BigNumber>
 ) => {
   const confirmationPopup = useYouvesUnstakeConfirmationPopup();
@@ -33,6 +33,9 @@ export const useUnstakeFormForming = (
       await executeAsyncSteps(
         [
           async () => {
+            if (isNull(stakeId)) {
+              throw new Error('Current Stake ID is not ready');
+            }
             setIsSubmitting(true);
             await doWithdraw(defined(contractAddress, 'Contract address'), stakeId, defined(balance, 'Balance'));
             setIsSubmitting(false);
