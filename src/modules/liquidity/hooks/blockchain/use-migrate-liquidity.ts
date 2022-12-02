@@ -5,9 +5,10 @@ import { BigNumber } from 'bignumber.js';
 import { migrateLiquidity } from '@blockchain';
 import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useRootStore } from '@providers/root-store-provider';
-import { isExist, isNull } from '@shared/helpers';
-import { useAuthStore } from '@shared/hooks';
+import { getTokensNames, isExist, isNull, multipliedIfPossible, toReal } from '@shared/helpers';
+import { useAuthStore, useTokenExchangeRate } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
+import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
@@ -24,6 +25,7 @@ export const useMigrateLiquidity = () => {
   const { accountPkh } = useAuthStore();
   const itemStore = useLiquidityItemStore();
   const confirmOperation = useConfirmOperation();
+  const { getTokenExchangeRate } = useTokenExchangeRate();
   const { showErrorToast } = useToasts();
   const { t } = useTranslation();
   const {
@@ -95,7 +97,20 @@ export const useMigrateLiquidity = () => {
 
     const [aToken, bToken] = tokens;
 
+    const amountA = toReal(amounts.amountA, aToken);
+    const amountB = toReal(amounts.amountB, bToken);
+    const logData = {
+      fromVersion: 'v1',
+      toVersion: 'v2',
+      poolName: getTokensNames(tokens),
+      amountA: amountA.toNumber(),
+      amountB: amountB.toNumber(),
+      amountAUsd: multipliedIfPossible(amountA, getTokenExchangeRate(aToken))?.toNumber(),
+      amountBUsd: multipliedIfPossible(amountB, getTokenExchangeRate(bToken))?.toNumber()
+    };
+
     try {
+      amplitudeService.logEvent('MIGRATE', logData);
       const operation = await migrateLiquidity(
         tezos,
         accountPkh,
@@ -118,7 +133,12 @@ export const useMigrateLiquidity = () => {
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|assetsMigrated') });
       await getMigrationParams();
+      amplitudeService.logEvent('MIGRATE_SUCCESS', logData);
     } catch (error) {
+      amplitudeService.logEvent('MIGRATE_ERROR', {
+        ...logData,
+        error
+      });
       showErrorToast(error as Error);
     } finally {
       setIsSubmitting(false);
