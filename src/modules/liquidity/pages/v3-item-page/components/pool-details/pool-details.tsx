@@ -3,22 +3,36 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
-import { Button, Card, DetailsCardCell, DetailsCardCellWithComponent, StateCurrencyAmount } from '@shared/components';
+import {
+  Button,
+  Card,
+  DetailsCardCell,
+  DetailsCardCellWithComponent,
+  StateCurrencyAmount,
+  TwoAssetSwitcher
+} from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { TokenSwitcher } from '../token-switcher';
 import styles from './pool-details.module.scss';
 import { usePoolDetailsViewModel } from './use-pool-details.vm';
 
 export const PoolDetails: FC = observer(() => {
   const { t } = useTranslation();
-  const { poolContractUrl, tvl, feeBps, currentPrice, symbolsString, tokenXReservesInfo, tokenYReservesInfo } =
-    usePoolDetailsViewModel();
-
-  const { tokenSymbol: tokenXSymbol, tokenAmount: tokenXAmount } = tokenXReservesInfo;
-  const { tokenSymbol: tokenYSymbol, tokenAmount: tokenYAmount } = tokenYReservesInfo;
+  const {
+    poolContractUrl,
+    tvl,
+    feeBps,
+    currentPrice,
+    tokensSymbols,
+    tokenXSymbol,
+    tokenXAmount,
+    tokenYSymbol,
+    tokenYAmount,
+    tokenActiveId,
+    handleTokenActiveId
+  } = usePoolDetailsViewModel();
 
   return (
     <Card header={{ content: t('liquidity|poolDetails') }} contentClassName={styles.contentClassName}>
@@ -31,9 +45,16 @@ export const PoolDetails: FC = observer(() => {
       <DetailsCardCellWithComponent
         cellName={t('liquidity|currentPrice')}
         tooltipContent={t('liquidity|currentPriceTooltip')}
-        component={<TokenSwitcher tokensSymbols={[tokenXSymbol, tokenYSymbol]} className={styles.tokenSwitcher} />}
+        component={
+          <TwoAssetSwitcher
+            tokensSymbols={[tokenXSymbol, tokenYSymbol]}
+            activeId={tokenActiveId}
+            handleActiveId={handleTokenActiveId}
+            className={styles.tokenSwitcher}
+          />
+        }
       >
-        <StateCurrencyAmount amount={currentPrice} currency={symbolsString} />
+        <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
       </DetailsCardCellWithComponent>
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />

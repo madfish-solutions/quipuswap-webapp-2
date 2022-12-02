@@ -6,8 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { isEqual } from '@shared/helpers';
 
-import { useLiquidityV3ItemStore } from '../../../../../liquidity/hooks';
-import styles from './token-switcher.module.scss';
+import styles from './two-asset-switcher.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -16,20 +15,21 @@ const modeClass = {
 
 interface Props {
   tokensSymbols: Array<string>;
+  activeId: number;
+  handleActiveId: (index: number) => void;
   className?: string;
 }
 
-export const TwoAssetSwitcher: FC<Props> = ({ tokensSymbols, className }) => {
+export const TwoAssetSwitcher: FC<Props> = ({ tokensSymbols, activeId, handleActiveId, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const store = useLiquidityV3ItemStore();
 
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
       {tokensSymbols.map((tokenSymbol, index) => (
         <Button
-          onClick={() => store.setActiveTokenId(index)}
+          onClick={() => handleActiveId(index)}
           className={styles.button}
-          theme={isEqual(index, store.activeTokenId) ? 'primary' : 'tertiary'}
+          theme={isEqual(index, activeId) ? 'primary' : 'tertiary'}
         >
           {tokenSymbol}
         </Button>

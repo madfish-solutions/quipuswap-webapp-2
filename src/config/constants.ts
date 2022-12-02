@@ -180,7 +180,7 @@ export const PRECISION_PERCENT = 1e2;
 export const STABLESWAP_PRECISION_FEE = 1e10;
 export const PRECISION_FACTOR = 1e12;
 export const PRECISION_FACTOR_STABLESWAP_LP = 1e24;
-export const FEE_BPS_PRECISION = 1e4;
+export const FEE_BASE_POINTS_PRECISION = 1e4;
 
 //#region default stableswap fee
 export const CONTRACT_DECIMALS_PRECISION_POWER = 18; // 1e18
@@ -230,6 +230,3 @@ export const PERCENT_100 = 100;
 
 export const NOT_FOUND_ROUTE_NAME = '404';
 export const NOT_FOUND_LETTERS_ROUTE_NAME = 'not-found';
-
-// TOKEN ID
-export const FIRST_TOKEN_ID = 0;
