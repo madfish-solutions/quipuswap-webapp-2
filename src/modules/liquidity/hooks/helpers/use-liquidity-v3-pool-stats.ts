@@ -14,7 +14,7 @@ import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 export const useLiquidityV3PoolStats = () => {
   const { t } = useTranslation();
   const store = useLiquidityV3ItemStore();
-  const { contractBalance, feeBps, sqrtPrice } = useLiquidityV3ItemStore();
+  const { contractBalance, feeBps } = useLiquidityV3ItemStore();
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentPrice();
@@ -25,7 +25,7 @@ export const useLiquidityV3PoolStats = () => {
   const tokenYExchangeRate = getTokenExchangeRate(tokenY);
 
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
-  const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenIndex) : null;
+  const _currentPrice = isExist(currentPrice) ? getCurrentPrice(currentPrice, store.activeTokenIndex) : null;
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
   const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
@@ -40,7 +40,7 @@ export const useLiquidityV3PoolStats = () => {
       },
       {
         title: t('liquidity|currentPrice'),
-        amount: currentPrice,
+        amount: _currentPrice,
         tooltip: t('liquidity|currentPriceTooltip'),
         currency: tokensSymbols
       },
@@ -51,7 +51,7 @@ export const useLiquidityV3PoolStats = () => {
         currency: PERCENT
       }
     ],
-    [currentPrice, feeBpsPercentage, poolTvl, tokensSymbols, t]
+    [t, poolTvl, _currentPrice, tokensSymbols, feeBpsPercentage]
   );
 
   return { stats };
