@@ -10,6 +10,7 @@ import styles from './label-component.module.scss';
 
 export interface LabelComponentProps {
   className?: string;
+  contentClassName?: string;
   status: ActiveStatus;
   label?: string | [string, string];
   filled?: boolean;
@@ -41,12 +42,23 @@ const OrLabel: FC<{ label: string | [string, string] }> = ({ label }) => {
   }
 };
 
-export const LabelComponent: FC<LabelComponentProps> = ({ className, status, label, filled, DTI, ...props }) => {
+export const LabelComponent: FC<LabelComponentProps> = ({
+  className,
+  contentClassName,
+  status,
+  label,
+  filled,
+  DTI,
+  ...props
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode], statusClass[status], className)} {...props}>
-      <span className={cx(styles.status, filled ? styles.filled : styles.bordered)} data-test-id={DTI}>
+      <span
+        className={cx(styles.status, filled ? styles.filled : styles.bordered, contentClassName)}
+        data-test-id={DTI}
+      >
         {label ? <OrLabel label={label} /> : status}
       </span>
     </div>
