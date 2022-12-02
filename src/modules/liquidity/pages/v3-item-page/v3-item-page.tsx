@@ -2,20 +2,20 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { ListStats, StickyBlock } from '@shared/components';
+import { StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { OpenNewPosition, PageTitleContainer } from './components';
+import { LiquidityV3PoolStats, OpenNewPosition, PageTitleContainer } from './components';
 import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
 
 export const V3ItemPage: FC = observer(() => {
   const { t } = useTranslation();
-  const { stats } = useV3ItemPageViewModel();
+  useV3ItemPageViewModel();
 
   return (
     <>
       <PageTitleContainer dataTestId="v3LiqTitle" titleText={t('liquidity|Liquidity')} />
-      <ListStats stats={stats} slidesToShow={3} />
+      <LiquidityV3PoolStats />
       <OpenNewPosition />
 
       <StickyBlock>body</StickyBlock>
