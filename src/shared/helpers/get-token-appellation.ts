@@ -1,4 +1,4 @@
-import { EMPTY_STRING, FISRT_INDEX, SLASH } from '@config/constants';
+import { EMPTY_STRING, FIRST_INDEX, SLASH } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { Nullable, RawToken, Token, TokenAddress, TokenMetadata } from '@shared/types';
 import { isValidTokenSlug } from '@shared/validators';
@@ -110,7 +110,7 @@ export const getSymbolsString = (
   }
 
   if (isSingleElement(clearTokens)) {
-    return getTokenSymbol(clearTokens[FISRT_INDEX], sliceAmount);
+    return getTokenSymbol(clearTokens[FIRST_INDEX], sliceAmount);
   }
 
   return clearTokens.reduce(
