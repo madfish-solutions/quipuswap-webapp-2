@@ -18,7 +18,7 @@ const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYB
 export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
   id: Nullable<BigNumber> = null;
-  activeTokenId = DEFAULT_TOKEN_ID;
+  activeTokenIndex = DEFAULT_TOKEN_ID;
 
   //# Quipuswap V3 pool tokens balance store
   @Led({
@@ -56,7 +56,7 @@ export class LiquidityV3ItemStore {
     makeObservable(this, {
       itemSore: observable,
       error: observable,
-      activeTokenId: observable,
+      activeTokenIndex: observable,
       item: computed,
       itemModel: computed,
       feeBps: computed,
@@ -64,7 +64,7 @@ export class LiquidityV3ItemStore {
       contractAddress: computed,
       setId: action,
       setError: action,
-      setActiveTokenId: action
+      setActiveTokenIndex: action
     });
   }
 
@@ -76,8 +76,8 @@ export class LiquidityV3ItemStore {
     this.error = error;
   }
 
-  setActiveTokenId(tokenId: number) {
-    this.activeTokenId = tokenId;
+  setActiveTokenIndex(tokenIndex: number) {
+    this.activeTokenIndex = tokenIndex;
   }
 
   get itemModel() {

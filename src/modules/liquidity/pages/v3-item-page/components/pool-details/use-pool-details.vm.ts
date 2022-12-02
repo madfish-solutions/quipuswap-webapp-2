@@ -21,9 +21,11 @@ export const usePoolDetailsViewModel = () => {
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
 
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
-  const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenId) : null;
+  const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenIndex) : null;
 
-  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
+  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
+
+  const handleTokenActiveIndex = (index: number) => store.setActiveTokenIndex(index);
 
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
@@ -35,7 +37,7 @@ export const usePoolDetailsViewModel = () => {
     tokenXAmount: tokenXBalance,
     tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
     tokenYAmount: tokenYBalance,
-    tokenActiveId: store.activeTokenId,
-    handleTokenActiveId: store.setActiveTokenId
+    tokenActiveIndex: store.activeTokenIndex,
+    handleTokenActiveIndex
   };
 };
