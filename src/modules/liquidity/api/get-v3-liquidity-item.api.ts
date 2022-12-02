@@ -64,8 +64,8 @@ export namespace BlockchainLiquidityV3Api {
   };
 
   export const getPositions = async (tezos: TezosToolkit, accountPkh: string, poolId: BigNumber) => {
-    const { contractAddress } = await getPool(tezos, poolId);
-    const { new_position_id, positions, ticks } = await getStorageInfo<V3PoolStorage>(tezos, contractAddress);
+    const { storage: contractStorage } = await getPool(tezos, poolId);
+    const { new_position_id, positions, ticks } = contractStorage;
     const allPositionsMap = await positions.getMultipleValues(fillIndexArray(new_position_id.toNumber()));
     const userPositions = [...allPositionsMap.entries()]
       .filter(([, value]) => isExist(value) && isEqual(value.owner, accountPkh))

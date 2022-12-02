@@ -2,23 +2,23 @@ import { getSumOfNumbers } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { useV3PositionsViewModel } from '../../use-v3-positions.vm';
+import { usePositionsStats } from '../../hooks/use-positions-stats';
 
 export const usePositionsFeesListViewModel = () => {
   const { t } = useTranslation();
-  const { positions, isLoading, error } = useV3PositionsViewModel();
+  const { stats: positionsStats, loading, error } = usePositionsStats();
 
   const handleClaimAll = () => amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
 
   const userTotalDepositInfo = {
-    totalDepositAmount: getSumOfNumbers(positions.map(position => position.depositUsd)),
-    totalDepositLoading: isLoading,
+    totalDepositAmount: getSumOfNumbers(positionsStats.map(({ depositUsd }) => depositUsd)),
+    totalDepositLoading: loading,
     totalDepositError: error
   };
   const isUserTotalDepositExist =
     (!userTotalDepositInfo.totalDepositAmount.isZero() || userTotalDepositInfo.totalDepositLoading) &&
     !Boolean(userTotalDepositInfo.totalDepositError);
-  const claimablePendingRewardsInUsd = getSumOfNumbers(positions.map(position => position.collectedFeesUsd));
+  const claimablePendingRewardsInUsd = getSumOfNumbers(positionsStats.map(({ collectedFeesUsd }) => collectedFeesUsd));
 
   return {
     userTotalDepositInfo,
