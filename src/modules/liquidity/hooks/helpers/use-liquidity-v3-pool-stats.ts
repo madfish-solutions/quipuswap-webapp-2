@@ -23,10 +23,10 @@ export const useLiquidityV3PoolStats = () => {
   const tokenYExchangeRate = getTokenExchangeRate(tokenY);
 
   const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
-  const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenId) : null;
+  const currentPrice = isExist(sqrtPrice) ? getCurrentPrice(sqrtPrice, store.activeTokenIndex) : null;
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
-  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenId);
+  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
 
   const stats = useMemo(
     () => [

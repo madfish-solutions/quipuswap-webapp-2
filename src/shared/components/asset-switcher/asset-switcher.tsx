@@ -6,7 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { isEqual } from '@shared/helpers';
 
-import styles from './two-asset-switcher.module.scss';
+import styles from './asset-switcher.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -14,24 +14,24 @@ const modeClass = {
 };
 
 interface Props {
-  tokensSymbols: Array<string>;
-  activeId: number;
-  handleActiveId: (index: number) => void;
+  labels: Array<string>;
+  activeIndex: number;
+  handleActiveIndex: (index: number) => void;
   className?: string;
 }
 
-export const TwoAssetSwitcher: FC<Props> = ({ tokensSymbols, activeId, handleActiveId, className }) => {
+export const AssetSwitcher: FC<Props> = ({ labels, activeIndex, handleActiveIndex, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
-      {tokensSymbols.map((tokenSymbol, index) => (
+      {labels.map((label, index) => (
         <Button
-          onClick={() => handleActiveId(index)}
+          onClick={() => handleActiveIndex(index)}
           className={styles.button}
-          theme={isEqual(index, activeId) ? 'primary' : 'tertiary'}
+          theme={isEqual(index, activeIndex) ? 'primary' : 'tertiary'}
         >
-          {tokenSymbol}
+          {label}
         </Button>
       ))}
     </div>

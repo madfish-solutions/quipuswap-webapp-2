@@ -9,7 +9,7 @@ import {
   DetailsCardCell,
   DetailsCardCellWithComponent,
   StateCurrencyAmount,
-  TwoAssetSwitcher
+  AssetSwitcher
 } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
@@ -30,8 +30,8 @@ export const PoolDetails: FC = observer(() => {
     tokenXAmount,
     tokenYSymbol,
     tokenYAmount,
-    tokenActiveId,
-    handleTokenActiveId
+    tokenActiveIndex,
+    handleTokenActiveIndex
   } = usePoolDetailsViewModel();
 
   return (
@@ -46,10 +46,10 @@ export const PoolDetails: FC = observer(() => {
         cellName={t('liquidity|currentPrice')}
         tooltipContent={t('liquidity|currentPriceTooltip')}
         component={
-          <TwoAssetSwitcher
-            tokensSymbols={[tokenXSymbol, tokenYSymbol]}
-            activeId={tokenActiveId}
-            handleActiveId={handleTokenActiveId}
+          <AssetSwitcher
+            labels={[tokenXSymbol, tokenYSymbol]}
+            activeIndex={tokenActiveIndex}
+            handleActiveIndex={handleTokenActiveIndex}
             className={styles.tokenSwitcher}
           />
         }

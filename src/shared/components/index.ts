@@ -74,4 +74,4 @@ export * from './tokens-filter';
 export * from './virtual-list';
 export * from './error-fallback';
 export * from './loader-fallback';
-export * from './two-asset-swticher';
+export * from './asset-switcher';
