@@ -2,12 +2,13 @@ import { useEffect, useMemo } from 'react';
 
 import cx from 'classnames';
 
-import { useLiquidityV3PositionsStore } from '@modules/liquidity/hooks';
+import { useLiquidityV3ItemTokens, useLiquidityV3PositionsStore } from '@modules/liquidity/hooks';
 import { ColorModes } from '@providers/color-theme-context';
+import { isExist } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
 
-import { mapPositionStats } from './helpers/map-position-stats';
-import { usePositionsStats } from './hooks/use-positions-stats';
+import { mapPositionViewModel } from './helpers/map-position-view-model';
+import { usePositionsWithStats } from './hooks/use-positions-with-stats';
 import styles from './v3-positions-page.module.scss';
 
 const rangeLabelClasses = {
@@ -18,24 +19,32 @@ const rangeLabelClasses = {
 export const useV3PositionsViewModel = () => {
   const { colorThemeMode } = useUiStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
+  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const id = v3PositionsStore.poolId?.toFixed();
+  const poolId = v3PositionsStore.poolId;
 
   useEffect(() => {
     void v3PositionsStore.positionsStore.load();
-  }, [v3PositionsStore, id]);
+  }, [v3PositionsStore, poolId]);
 
-  const { stats, loading: isLoading, error } = usePositionsStats();
-  const positions = useMemo(
-    () =>
-      stats.map(
-        mapPositionStats({
+  const { positionsWithStats, loading: isLoading, error } = usePositionsWithStats();
+  const positionsViewModel = useMemo(() => {
+    if (!isExist(poolId) || !isExist(tokenX) || !isExist(tokenY)) {
+      return [];
+    }
+
+    return positionsWithStats.map(
+      mapPositionViewModel(
+        {
           className: rangeLabelClasses[colorThemeMode],
           inRangeClassName: styles.inRangeLabel
-        })
-      ),
-    [colorThemeMode, stats]
-  );
+        },
+        tokenX,
+        tokenY,
+        poolId
+      )
+    );
+  }, [colorThemeMode, positionsWithStats, tokenX, tokenY, poolId]);
 
-  return { isLoading, positions, error };
+  return { isLoading, positionsViewModel, error };
 };

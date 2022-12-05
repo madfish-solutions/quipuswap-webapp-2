@@ -13,12 +13,11 @@ const MOCK_NON_ZERO_TOKEN_Y_REAL_DEPOSIT = new BigNumber('0.3');
 const MOCK_TOKEN_X_REAL_FEES = new BigNumber('0.01');
 const MOCK_TOKEN_Y_REAL_FEES = new BigNumber('0.02');
 
-export const mapPosition = (
+export const mapPositionWithStats = (
   tokenX: Token,
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
-  getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
-  poolId: Optional<string>
+  getTokenExchangeRate: (token: Token) => Optional<BigNumber>
 ) => {
   const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
   const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
@@ -53,19 +52,18 @@ export const mapPosition = (
     const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
 
     return {
-      collectedFeesUsd,
-      depositUsd,
-      minRange,
-      maxRange,
-      isInRange,
-      tokenX,
-      tokenY,
-      tokenXDeposit,
-      tokenYDeposit,
-      tokenXFees,
-      tokenYFees,
-      poolId,
-      id: position.id
+      ...position,
+      stats: {
+        collectedFeesUsd,
+        depositUsd,
+        minRange,
+        maxRange,
+        isInRange,
+        tokenXDeposit,
+        tokenYDeposit,
+        tokenXFees,
+        tokenYFees
+      }
     };
   };
 };

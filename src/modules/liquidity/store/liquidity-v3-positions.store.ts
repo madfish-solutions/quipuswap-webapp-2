@@ -49,6 +49,6 @@ export class LiquidityV3PositionsStore {
       return emptyPositionsListResponse;
     }
 
-    return { value: await BlockchainLiquidityV3Api.getPositions(tezos, accountPkh, this.poolId) };
+    return { value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(tezos, accountPkh, this.poolId) };
   }
 }
