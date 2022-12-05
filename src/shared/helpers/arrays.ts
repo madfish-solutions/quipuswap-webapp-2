@@ -1,4 +1,4 @@
-import { FISRT_INDEX } from '@config/constants';
+import { FIRST_INDEX } from '@config/constants';
 
 import { Nullable } from '../types';
 
@@ -29,9 +29,9 @@ export const isSingleElement = (array: Nullable<unknown[]>) => (array ? array.le
 export const lastElementIndex = <T>(array: T[]) => array.length - 1;
 
 export const isLastElementIndex = (index: number, array: unknown[]) => index === lastElementIndex(array);
-export const isFirstElementIndex = (index: number) => index === FISRT_INDEX;
+export const isFirstElementIndex = (index: number) => index === FIRST_INDEX;
 
-export const getFirstElement = <T>(array: T[]): T => array[FISRT_INDEX];
+export const getFirstElement = <T>(array: T[]): T => array[FIRST_INDEX];
 export const getPenultimateElement = <T>(array: T[]): T => array[array.length - 2];
 export const getLastElementFromArray = <T>(array: T[]): T => array[array.length - 1];
 
