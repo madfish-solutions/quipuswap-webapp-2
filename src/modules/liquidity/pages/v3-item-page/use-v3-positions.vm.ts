@@ -1,20 +1,13 @@
 import { useEffect, useMemo } from 'react';
 
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useParams } from 'react-router-dom';
 
-import {
-  useLiquidityV3CurrentPrice,
-  useLiquidityV3ItemStore,
-  useLiquidityV3ItemTokens,
-  useLiquidityV3PositionsStore
-} from '@modules/liquidity/hooks';
+import { useLiquidityV3PositionsStore } from '@modules/liquidity/hooks';
 import { ColorModes } from '@providers/color-theme-context';
-import { defined, isNull } from '@shared/helpers';
-import { useTokenExchangeRate, useUiStore } from '@shared/hooks';
+import { useUiStore } from '@shared/hooks';
 
-import { mapPosition } from './helpers';
+import { mapPositionStats } from './helpers/map-position-stats';
+import { usePositionsStats } from './hooks/use-positions-stats';
 import styles from './v3-positions-page.module.scss';
 
 const rangeLabelClasses = {
@@ -24,45 +17,25 @@ const rangeLabelClasses = {
 
 export const useV3PositionsViewModel = () => {
   const { colorThemeMode } = useUiStore();
-  const { id } = useParams();
-  const v3ItemStore = useLiquidityV3ItemStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const { getTokenExchangeRate } = useTokenExchangeRate();
-  const currentPrice = useLiquidityV3CurrentPrice();
 
-  const item = v3ItemStore.item;
-  const rawPositions = v3PositionsStore.positions;
+  const id = v3PositionsStore.poolId?.toFixed();
 
   useEffect(() => {
-    v3PositionsStore.setPoolId(new BigNumber(defined(id, 'id')));
     void v3PositionsStore.positionsStore.load();
   }, [v3PositionsStore, id]);
 
-  const isLoading =
-    v3ItemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
-  const error = v3ItemStore.error ?? v3PositionsStore.positionsStore.error;
-
-  const positions = useMemo(() => {
-    if (isNull(item) || isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {
-      return [];
-    }
-
-    return rawPositions.map(
-      mapPosition(
-        tokenX,
-        tokenY,
-        currentPrice,
-        getTokenExchangeRate,
-        id,
-        {
+  const { stats, loading: isLoading, error } = usePositionsStats();
+  const positions = useMemo(
+    () =>
+      stats.map(
+        mapPositionStats({
           className: rangeLabelClasses[colorThemeMode],
           inRangeClassName: styles.inRangeLabel
-        },
-        item.storage
-      )
-    );
-  }, [item, rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, id, colorThemeMode]);
+        })
+      ),
+    [colorThemeMode, stats]
+  );
 
   return { isLoading, positions, error };
 };

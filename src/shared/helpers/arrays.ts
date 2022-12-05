@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { FIRST_INDEX } from '@config/constants';
 
 import { Nullable } from '../types';
@@ -46,3 +48,12 @@ export const isArrayPairTuple = <T>(array: Array<T>): array is [T, T] => {
 };
 
 export const excludeLastElement = <T>(array: T[]) => array.slice(0, -1);
+
+export const fillIndexArray = (value: number) => {
+  const indexArray = [];
+  for (let i = 0; i < value; i++) {
+    indexArray[i] = new BigNumber(i);
+  }
+
+  return indexArray;
+};
