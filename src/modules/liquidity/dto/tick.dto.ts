@@ -32,6 +32,9 @@ export class TickDto {
   @Typed()
   sqrt_price: BigNumber;
 
+  @Typed({ type: FeeGrowthDto })
+  fee_growth: FeeGrowthDto;
+
   @Typed()
   tick_cumulative_outside: BigNumber;
 }

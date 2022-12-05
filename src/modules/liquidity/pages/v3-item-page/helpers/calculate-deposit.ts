@@ -2,12 +2,12 @@ import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
-import { LiquidityV3PositionModel } from '@modules/liquidity/models';
+import { LiquidityV3Position } from '@modules/liquidity/types';
 
 import { X80_FORMAT_PRECISION } from './constants';
 
 export const calculateDeposit = (
-  position: LiquidityV3PositionModel,
+  position: LiquidityV3Position,
   poolStorage: BlockchainLiquidityV3Api.V3PoolStorage
 ) => {
   const srpU = position.upper_tick.sqrt_price;

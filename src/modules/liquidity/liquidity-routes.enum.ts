@@ -5,6 +5,10 @@ export enum LiquidityRoutes {
   create = '/create'
 }
 
+export enum LiquiditySubroutes {
+  positions = 'positions'
+}
+
 export enum LiquidityTabs {
   add = 'add',
   remove = 'remove',
