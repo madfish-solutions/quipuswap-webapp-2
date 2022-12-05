@@ -1,26 +1,34 @@
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { AppRootRoutes } from '@app.router';
 import { LiquidityRoutes, LiquiditySubroutes } from '@modules/liquidity/liquidity-routes.enum';
+import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
 import { getTokensNames } from '@shared/helpers';
-import { ActiveStatus } from '@shared/types';
+import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
-
-import { mapPosition } from './map-position';
 
 interface RangeLabelClasses {
   className: string;
   inRangeClassName: string;
 }
 
-export const mapPositionStats = (rangeLabelClasses: RangeLabelClasses) => {
-  return (stats: ReturnType<ReturnType<typeof mapPosition>>) => {
-    const { collectedFeesUsd, depositUsd, minRange, maxRange, isInRange, tokenX, tokenY, id, poolId } = stats;
+export const mapPositionViewModel = (
+  rangeLabelClasses: RangeLabelClasses,
+  tokenX: Token,
+  tokenY: Token,
+  poolId: BigNumber
+) => {
+  return (positionWithStats: LiquidityV3PositionWithStats) => {
+    const { stats, id } = positionWithStats;
+    const { collectedFeesUsd, depositUsd, minRange, maxRange, isInRange } = stats;
     const { className: rangeLabelClassName, inRangeClassName } = rangeLabelClasses;
     const tokensNames = getTokensNames([tokenY, tokenX]);
 
     return {
-      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId}/${LiquiditySubroutes.positions}/${id.toFixed()}`,
+      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId.toFixed()}/${
+        LiquiditySubroutes.positions
+      }/${id.toFixed()}`,
       inputToken: [tokenX, tokenY],
       status: null,
       isNew: false,

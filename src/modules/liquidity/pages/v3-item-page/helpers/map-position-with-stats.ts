@@ -11,12 +11,11 @@ import { calculateDeposit } from './calculate-deposit';
 import { calculateFees } from './calculate-fees';
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 
-export const mapPosition = (
+export const mapPositionWithStats = (
   tokenX: Token,
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
   getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
-  poolId: Optional<string>,
   storage: BlockchainLiquidityV3Api.V3PoolStorage
 ) => {
   const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
@@ -45,19 +44,18 @@ export const mapPosition = (
     const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
 
     return {
-      collectedFeesUsd,
-      depositUsd,
-      minRange,
-      maxRange,
-      isInRange,
-      tokenX,
-      tokenY,
-      tokenXDeposit,
-      tokenYDeposit,
-      tokenXFees,
-      tokenYFees,
-      poolId,
-      id: position.id
+      ...position,
+      stats: {
+        collectedFeesUsd,
+        depositUsd,
+        minRange,
+        maxRange,
+        isInRange,
+        tokenXDeposit,
+        tokenYDeposit,
+        tokenXFees,
+        tokenYFees
+      }
     };
   };
 };
