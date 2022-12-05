@@ -29,8 +29,8 @@ const ticks = [
     n_positions: new BigNumber(2),
     next: new BigNumber(1),
     prev: new BigNumber(-1048575),
-    seconds_outside: new BigNumber(1669625530),
-    seconds_per_liquidity_outside: new BigNumber(0),
+    seconds_outside: new BigNumber(28435),
+    seconds_per_liquidity_outside: new BigNumber('3659782944600756487450418904128883034392509'),
     sqrt_price: new BigNumber('1208925819614629174706176'),
     tick_cumulative_outside: new BigNumber(0)
   },

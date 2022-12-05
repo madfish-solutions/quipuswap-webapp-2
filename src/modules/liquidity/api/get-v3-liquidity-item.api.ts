@@ -6,6 +6,8 @@ import { getStorageInfo } from '@shared/dapp';
 import { defined } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue } from '@shared/types';
 
+import { FeeGrowth } from '../types';
+
 export namespace BlockchainLiquidityV3Api {
   export interface V3PoolStorage {
     constants: {
@@ -20,6 +22,7 @@ export namespace BlockchainLiquidityV3Api {
     sqrt_price: nat;
     liquidity: nat;
     cur_tick_index: int;
+    fee_growth: FeeGrowth;
   }
 
   interface V3FactoryStorage {

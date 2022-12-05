@@ -25,6 +25,7 @@ interface Props {
   amountDecimals?: number;
   currency: string;
   className?: string;
+  rewardsLabel?: string;
 }
 
 export const PendingRewards: FC<Props> = ({
@@ -33,7 +34,8 @@ export const PendingRewards: FC<Props> = ({
   amountDecimals = USD_DECIMALS,
   claimablePendingRewards,
   totalPendingRewards,
-  className
+  className,
+  rewardsLabel
 }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
@@ -53,7 +55,7 @@ export const PendingRewards: FC<Props> = ({
                 </span>
               ) : (
                 <span className={styles.title} data-test-id="farmingYourFullRewards">
-                  {t('farm|Your Full Rewards')}
+                  {rewardsLabel ?? t('farm|Your Full Rewards')}
                 </span>
               )}
             </div>

@@ -10,3 +10,6 @@ export * from './dex-link.namespace';
 export * from './sorter.helpers';
 export * from './filter.helpers';
 export * from './make-liquidity-operation-log-data';
+export * from './calculate-v3-item-tvl';
+export * from './get-current-price';
+export * from './get-symbols-string-by-active-token';

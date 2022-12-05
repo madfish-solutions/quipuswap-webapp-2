@@ -94,13 +94,8 @@ export const HIDE_ANALYTICS = true;
 
 // FarmingItems with the "NEW" label
 export const NEW_FARMINGS: Array<{ id: string; version: FarmVersion }> = [
-  { id: '0', version: FarmVersion.v3 },
-  { id: '0', version: FarmVersion.v2 },
-  { id: '1', version: FarmVersion.v2 },
-  { id: '2', version: FarmVersion.v2 },
-  { id: '3', version: FarmVersion.v2 },
-  { id: '5', version: FarmVersion.v2 },
-  { id: '6', version: FarmVersion.v2 }
+  { id: '1', version: FarmVersion.v3 },
+  { id: '2', version: FarmVersion.v3 }
 ];
 
 // FarmingItems with Youves
