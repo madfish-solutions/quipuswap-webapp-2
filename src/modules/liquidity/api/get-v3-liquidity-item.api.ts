@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 import { bigNumberToString, defined, fillIndexArray, getUniqArray, isEqual, isExist } from '@shared/helpers';
-import { address, BigMap, int, nat, TokensValue } from '@shared/types';
+import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
 export namespace BlockchainLiquidityV3Api {
   interface FeeGrowth {
@@ -33,6 +33,8 @@ export namespace BlockchainLiquidityV3Api {
     liquidity: int;
   }
 
+  type V3PoolPositionWithId = WithId<V3PoolPosition, nat>;
+
   export interface V3PoolStorage {
     constants: {
       ctez_burn_fee_bps: nat;
@@ -48,6 +50,12 @@ export namespace BlockchainLiquidityV3Api {
     new_position_id: nat;
     positions: BigMap<nat, V3PoolPosition>;
     ticks: BigMap<int, V3PoolTick>;
+  }
+
+  export interface PositionWithTicks extends Omit<V3PoolPosition, 'lower_tick_index' | 'upper_tick_index'> {
+    lower_tick: WithId<V3PoolTick, int>;
+    upper_tick: WithId<V3PoolTick, int>;
+    id: nat;
   }
 
   interface V3FactoryStorage {
@@ -81,7 +89,7 @@ export namespace BlockchainLiquidityV3Api {
       }));
   };
 
-  const filterUserPositions = (allPositions: V3PoolPosition[], accountPkh: string) =>
+  const filterUserPositions = (allPositions: V3PoolPositionWithId[], accountPkh: string) =>
     allPositions.filter(position => isEqual(position.owner, accountPkh));
 
   const getPositionsTicksMap = async (contractStorage: V3PoolStorage, positions: V3PoolPosition[]) => {
@@ -93,7 +101,11 @@ export namespace BlockchainLiquidityV3Api {
     return await contractStorage.ticks.getMultipleValues(ticksIds);
   };
 
-  export const getUserPositionsWithTicks = async (tezos: TezosToolkit, accountPkh: string, poolId: BigNumber) => {
+  export const getUserPositionsWithTicks = async (
+    tezos: TezosToolkit,
+    accountPkh: string,
+    poolId: BigNumber
+  ): Promise<PositionWithTicks[]> => {
     const { storage: contractStorage } = await getPool(tezos, poolId);
     const allPositions = await getAllPositions(contractStorage);
     const userPositions = filterUserPositions(allPositions, accountPkh);
