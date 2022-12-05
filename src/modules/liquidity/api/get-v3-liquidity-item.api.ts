@@ -1,10 +1,11 @@
+import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
 import { bigNumberToString, defined, fillIndexArray, getUniqArray, isEqual, isExist } from '@shared/helpers';
-import { address, BigMap, int, nat, TokensValue } from '@shared/types';
+import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
 import { FeeGrowth } from '../types';
 
@@ -29,6 +30,8 @@ export namespace BlockchainLiquidityV3Api {
     liquidity: int;
   }
 
+  type V3PoolPositionWithId = WithId<V3PoolPosition, nat>;
+
   export interface V3PoolStorage {
     constants: {
       ctez_burn_fee_bps: nat;
@@ -48,6 +51,12 @@ export namespace BlockchainLiquidityV3Api {
     ticks: BigMap<int, V3PoolTick>;
   }
 
+  export interface PositionWithTicks extends Omit<V3PoolPosition, 'lower_tick_index' | 'upper_tick_index'> {
+    lower_tick: WithId<V3PoolTick, int>;
+    upper_tick: WithId<V3PoolTick, int>;
+    id: nat;
+  }
+
   interface V3FactoryStorage {
     pools: BigMap<nat, address>;
   }
@@ -62,24 +71,48 @@ export namespace BlockchainLiquidityV3Api {
     };
   };
 
-  export const getPositions = async (tezos: TezosToolkit, accountPkh: string, poolId: BigNumber) => {
-    const { storage: contractStorage } = await getPool(tezos, poolId);
-    const { new_position_id, positions, ticks } = contractStorage;
-    const allPositionsMap = await positions.getMultipleValues(fillIndexArray(new_position_id.toNumber()));
-    const userPositions = [...allPositionsMap.entries()]
-      .filter(([, value]) => isExist(value) && isEqual(value.owner, accountPkh))
+  const getAllPositions = async (contractStorage: V3PoolStorage) => {
+    const { positions, new_position_id } = contractStorage;
+
+    const positionsMap = await positions.getMultipleValues(fillIndexArray(new_position_id.toNumber()));
+
+    return [...positionsMap.entries()]
+      .filter((entry): entry is [MichelsonMapKey, V3PoolPosition] => {
+        const [, value] = entry;
+
+        return isExist(value);
+      })
       .map(([id, position]) => ({
-        ...position!,
+        ...position,
         id: id as BigNumber
       }));
+  };
+
+  const filterUserPositions = (allPositions: V3PoolPositionWithId[], accountPkh: string) =>
+    allPositions.filter(position => isEqual(position.owner, accountPkh));
+
+  const getPositionsTicksMap = async (contractStorage: V3PoolStorage, positions: V3PoolPosition[]) => {
     const ticksIds = getUniqArray(
-      userPositions.map(({ lower_tick_index, upper_tick_index }) => [lower_tick_index, upper_tick_index]).flat(),
+      positions.map(({ lower_tick_index, upper_tick_index }) => [lower_tick_index, upper_tick_index]).flat(),
       bigNumberToString
     );
-    const ticksMap = await ticks.getMultipleValues(ticksIds);
 
-    return userPositions.map(({ lower_tick_index, upper_tick_index, ...rest }) => ({
-      ...rest,
+    return await contractStorage.ticks.getMultipleValues(ticksIds);
+  };
+
+  export const getUserPositionsWithTicks = async (
+    tezos: TezosToolkit,
+    accountPkh: string,
+    poolId: BigNumber
+  ): Promise<PositionWithTicks[]> => {
+    const { storage: contractStorage } = await getPool(tezos, poolId);
+    const allPositions = await getAllPositions(contractStorage);
+    const userPositions = filterUserPositions(allPositions, accountPkh);
+
+    const ticksMap = await getPositionsTicksMap(contractStorage, userPositions);
+
+    return userPositions.map(({ lower_tick_index, upper_tick_index, ...userPosition }) => ({
+      ...userPosition,
       lower_tick: {
         ...defined(ticksMap.get(lower_tick_index), `tick ${lower_tick_index.toFixed()}`),
         id: lower_tick_index
