@@ -3,12 +3,32 @@ import BigNumber from 'bignumber.js';
 
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { defined } from '@shared/helpers';
+import { bigNumberToString, defined, fillIndexArray, getUniqArray, isEqual, isExist } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue } from '@shared/types';
 
 import { FeeGrowth } from '../types';
 
 export namespace BlockchainLiquidityV3Api {
+  export interface V3PoolTick {
+    fee_growth_outside: FeeGrowth;
+    liqudity_net: int;
+    n_positions: nat;
+    next: int;
+    prev: int;
+    seconds_outside: nat;
+    seconds_per_liquidity_outside: nat;
+    sqrt_price: nat;
+    tick_cumulative_outside: nat;
+  }
+
+  export interface V3PoolPosition {
+    fee_growth_inside_last: FeeGrowth;
+    lower_tick_index: int;
+    upper_tick_index: int;
+    owner: string;
+    liquidity: int;
+  }
+
   export interface V3PoolStorage {
     constants: {
       ctez_burn_fee_bps: nat;
@@ -23,6 +43,9 @@ export namespace BlockchainLiquidityV3Api {
     liquidity: nat;
     cur_tick_index: int;
     fee_growth: FeeGrowth;
+    new_position_id: nat;
+    positions: BigMap<nat, V3PoolPosition>;
+    ticks: BigMap<int, V3PoolTick>;
   }
 
   interface V3FactoryStorage {
@@ -37,5 +60,34 @@ export namespace BlockchainLiquidityV3Api {
       contractAddress,
       storage: await getStorageInfo<V3PoolStorage>(tezos, contractAddress)
     };
+  };
+
+  export const getPositions = async (tezos: TezosToolkit, accountPkh: string, poolId: BigNumber) => {
+    const { storage: contractStorage } = await getPool(tezos, poolId);
+    const { new_position_id, positions, ticks } = contractStorage;
+    const allPositionsMap = await positions.getMultipleValues(fillIndexArray(new_position_id.toNumber()));
+    const userPositions = [...allPositionsMap.entries()]
+      .filter(([, value]) => isExist(value) && isEqual(value.owner, accountPkh))
+      .map(([id, position]) => ({
+        ...position!,
+        id: id as BigNumber
+      }));
+    const ticksIds = getUniqArray(
+      userPositions.map(({ lower_tick_index, upper_tick_index }) => [lower_tick_index, upper_tick_index]).flat(),
+      bigNumberToString
+    );
+    const ticksMap = await ticks.getMultipleValues(ticksIds);
+
+    return userPositions.map(({ lower_tick_index, upper_tick_index, ...rest }) => ({
+      ...rest,
+      lower_tick: {
+        ...defined(ticksMap.get(lower_tick_index), `tick ${lower_tick_index.toFixed()}`),
+        id: lower_tick_index
+      },
+      upper_tick: {
+        ...defined(ticksMap.get(upper_tick_index), `tick ${upper_tick_index.toFixed()}`),
+        id: upper_tick_index
+      }
+    }));
   };
 }

@@ -9,7 +9,7 @@ import { isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/h
 import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
-import { useV3PositionsViewModel } from '../../use-v3-positions.vm';
+import { usePositionsStats } from '../../hooks/use-positions-stats';
 import { TokenFeeCell } from '../token-fee-cell';
 import styles from './fee-tokens-list.module.scss';
 
@@ -58,18 +58,14 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
 
 export const useFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
-  const { positions } = useV3PositionsViewModel();
+  const { stats: positionsStats } = usePositionsStats();
 
   const rows: Row[] = useMemo(() => {
-    const feesAddends = positions
-      .map(({ inputToken, tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees }) => {
-        const [tokenX, tokenY] = inputToken;
-
-        return [
-          { token: tokenX, deposit: tokenXDeposit, fee: tokenXFees },
-          { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees }
-        ];
-      })
+    const feesAddends = positionsStats
+      .map(({ tokenX, tokenY, tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees }) => [
+        { token: tokenX, deposit: tokenXDeposit, fee: tokenXFees },
+        { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees }
+      ])
       .flat()
       .filter(({ fee }) => isGreaterThanZero(fee));
 
@@ -97,7 +93,7 @@ export const useFeeTokensListViewModel = () => {
         [Columns.FEE]: <TokenFeeCell amount={fee} dollarEquivalent={feeDollarEquivalent} />
       };
     });
-  }, [positions, getTokenExchangeRate]);
+  }, [positionsStats, getTokenExchangeRate]);
 
   return {
     rows,
