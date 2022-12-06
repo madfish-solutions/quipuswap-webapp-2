@@ -1,7 +1,6 @@
-import BigNumber from 'bignumber.js';
-
 import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
 import { LiquidityV3Position, LiquidityV3Tick } from '@modules/liquidity/types';
+import { shiftRightLogical } from '@shared/helpers';
 
 function calculateFeeGrowthInside(
   poolStorage: BlockchainLiquidityV3Api.V3PoolStorage,
@@ -27,19 +26,19 @@ function calculateFeeGrowthInside(
   };
 }
 
-const SHIFT_BY_128_BITS_DIVISOR = new BigNumber(2).pow(128);
+const FEES_CALCULATION_SHIFT_BITS = 128;
 
 export function calculateFees(poolStorage: BlockchainLiquidityV3Api.V3PoolStorage, position: LiquidityV3Position) {
   const feeGrowthInside = calculateFeeGrowthInside(poolStorage, position.lower_tick, position.upper_tick);
 
   return {
-    x: feeGrowthInside.x
-      .minus(position.fee_growth_inside_last.x)
-      .multipliedBy(position.liquidity)
-      .dividedToIntegerBy(SHIFT_BY_128_BITS_DIVISOR),
-    y: feeGrowthInside.y
-      .minus(position.fee_growth_inside_last.y)
-      .multipliedBy(position.liquidity)
-      .dividedToIntegerBy(SHIFT_BY_128_BITS_DIVISOR)
+    x: shiftRightLogical(
+      feeGrowthInside.x.minus(position.fee_growth_inside_last.x).multipliedBy(position.liquidity),
+      FEES_CALCULATION_SHIFT_BITS
+    ),
+    y: shiftRightLogical(
+      feeGrowthInside.y.minus(position.fee_growth_inside_last.y).multipliedBy(position.liquidity),
+      FEES_CALCULATION_SHIFT_BITS
+    )
   };
 }

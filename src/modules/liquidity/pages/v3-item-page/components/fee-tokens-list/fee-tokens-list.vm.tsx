@@ -69,8 +69,6 @@ export const useFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  // eslint-disable-next-line no-console
-  console.log('useFeeTokensListViewModel');
 
   const rows: Row[] = useMemo(() => {
     if (!isExist(tokenX) || !isExist(tokenY)) {
