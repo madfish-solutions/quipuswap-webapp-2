@@ -39,8 +39,15 @@ export function makeBasicToolkit(clientOrUrl?: RpcClientInterface | string) {
 }
 
 const BLOCK_POLLING_INTERVAL = 5000;
+const MAX_BLOCK_REQUEST_TIME = 7500;
 const DISCONNECTION_TIMEOUT = MS_IN_MINUTES;
 const RPC_URLS_INDEX_INCREMENT = 1;
+
+class BlockRequestTimeExceedError extends Error {
+  constructor() {
+    super(`Block request exceeded time of ${MAX_BLOCK_REQUEST_TIME} ms`);
+  }
+}
 
 // TODO: reduce cognitive complexity
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -321,17 +328,27 @@ function useDApp() {
 
     const blockPollingInterval = setInterval(async () => {
       try {
+        const requestStartTime = Date.now();
         const blockHash = await tezos.rpc.getBlockHash();
-        lastBlockFetchSuccessTimestampRef.current = Date.now();
+        const requestEndTime = Date.now();
+        lastBlockFetchSuccessTimestampRef.current = requestEndTime;
+        if (requestEndTime - requestStartTime > MAX_BLOCK_REQUEST_TIME) {
+          throw new BlockRequestTimeExceedError();
+        }
+
         if (blockHash !== blockHashRef.current) {
           blockHashRef.current = blockHash;
           blockSubscriptions.current.forEach(cb => cb(blockHash));
         }
       } catch (e) {
-        const now = Date.now();
-        const lastBlockFetchSuccessTimestamp = lastBlockFetchSuccessTimestampRef.current;
-        if (now - lastBlockFetchSuccessTimestamp > DISCONNECTION_TIMEOUT) {
+        if (e instanceof BlockRequestTimeExceedError) {
           setShouldReconnect(true);
+        } else {
+          const now = Date.now();
+          const lastBlockFetchSuccessTimestamp = lastBlockFetchSuccessTimestampRef.current;
+          if (now - lastBlockFetchSuccessTimestamp > DISCONNECTION_TIMEOUT) {
+            setShouldReconnect(true);
+          }
         }
         // eslint-disable-next-line no-console
         console.error(e);
