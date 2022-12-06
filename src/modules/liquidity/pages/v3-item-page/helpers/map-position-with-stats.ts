@@ -41,7 +41,7 @@ export const mapPositionWithStats = (
       multipliedIfPossible(tokenXFees, tokenXExchangeRate),
       multipliedIfPossible(tokenYFees, tokenYExchangeRate)
     ]);
-    const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
+    const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lt(maxRange);
 
     return {
       ...position,
