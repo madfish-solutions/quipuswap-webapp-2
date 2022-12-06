@@ -43,9 +43,9 @@ const MAX_BLOCK_REQUEST_TIME = 7500;
 const DISCONNECTION_TIMEOUT = MS_IN_MINUTES;
 const RPC_URLS_INDEX_INCREMENT = 1;
 
-class BlockRequestTimeoutError extends Error {
+class BlockRequestTimeExceedError extends Error {
   constructor() {
-    super(`Block request timed out after ${MAX_BLOCK_REQUEST_TIME} ms`);
+    super(`Block request exceeded time of ${MAX_BLOCK_REQUEST_TIME} ms`);
   }
 }
 
@@ -333,7 +333,7 @@ function useDApp() {
         const requestEndTime = Date.now();
         lastBlockFetchSuccessTimestampRef.current = requestEndTime;
         if (requestEndTime - requestStartTime > MAX_BLOCK_REQUEST_TIME) {
-          throw new BlockRequestTimeoutError();
+          throw new BlockRequestTimeExceedError();
         }
 
         if (blockHash !== blockHashRef.current) {
@@ -341,7 +341,7 @@ function useDApp() {
           blockSubscriptions.current.forEach(cb => cb(blockHash));
         }
       } catch (e) {
-        if (e instanceof BlockRequestTimeoutError) {
+        if (e instanceof BlockRequestTimeExceedError) {
           setShouldReconnect(true);
         } else {
           const now = Date.now();
