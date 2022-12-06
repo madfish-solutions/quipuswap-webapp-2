@@ -1,24 +1,25 @@
-import { getSumOfNumbers } from '@shared/helpers';
+import BigNumber from 'bignumber.js';
+
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
+import { useV3ItemPageViewModel } from '../../use-v3-item-page.vm';
 
-export const usePositionsFeesListViewModel = () => {
+export const usePositionFeesListViewModel = () => {
   const { t } = useTranslation();
-  const { positionsWithStats, loading, error } = usePositionsWithStats();
+  const { isLoading, error } = useV3ItemPageViewModel();
 
   const handleClaimAll = () => amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
 
   const userTotalDepositInfo = {
-    totalDepositAmount: getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.depositUsd)),
-    totalDepositLoading: loading,
+    totalDepositAmount: new BigNumber(1),
+    totalDepositLoading: isLoading,
     totalDepositError: error
   };
   const isUserTotalDepositExist =
     (!userTotalDepositInfo.totalDepositAmount.isZero() || userTotalDepositInfo.totalDepositLoading) &&
     !Boolean(userTotalDepositInfo.totalDepositError);
-  const claimablePendingRewardsInUsd = getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.collectedFeesUsd));
+  const claimablePendingRewardsInUsd = new BigNumber(1);
 
   return {
     userTotalDepositInfo,
