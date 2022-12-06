@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
@@ -10,8 +8,8 @@ export const calculateDeposit = (
   position: LiquidityV3Position,
   poolStorage: BlockchainLiquidityV3Api.V3PoolStorage
 ) => {
-  const srpU = position.upper_tick.sqrt_price;
-  const srpL = position.lower_tick.sqrt_price;
+  const upperSqrtPrice = position.upper_tick.sqrt_price;
+  const lowerSqrtPrice = position.lower_tick.sqrt_price;
   const currentTickIndex = poolStorage.cur_tick_index;
   const lowerTickIndex = position.lower_tick.id;
   const upperTickIndex = position.upper_tick.id;
@@ -19,9 +17,8 @@ export const calculateDeposit = (
   if (currentTickIndex.lt(position.lower_tick.id)) {
     return {
       x: position.liquidity
-        .times(srpU.minus(srpL).times(X80_FORMAT_PRECISION))
-        .div(srpL.times(srpU))
-        .integerValue(BigNumber.ROUND_FLOOR),
+        .times(upperSqrtPrice.minus(lowerSqrtPrice).times(X80_FORMAT_PRECISION))
+        .dividedToIntegerBy(lowerSqrtPrice.times(upperSqrtPrice)),
       y: ZERO_AMOUNT_BN
     };
   }
@@ -29,18 +26,14 @@ export const calculateDeposit = (
   if (lowerTickIndex.isLessThanOrEqualTo(currentTickIndex) && currentTickIndex.lt(upperTickIndex)) {
     return {
       x: position.liquidity
-        .times(srpU.minus(poolStorage.sqrt_price).times(X80_FORMAT_PRECISION))
-        .div(poolStorage.sqrt_price.times(srpU))
-        .integerValue(BigNumber.ROUND_FLOOR),
-      y: position.liquidity
-        .times(poolStorage.sqrt_price.minus(srpL))
-        .div(X80_FORMAT_PRECISION)
-        .integerValue(BigNumber.ROUND_FLOOR)
+        .times(upperSqrtPrice.minus(poolStorage.sqrt_price).times(X80_FORMAT_PRECISION))
+        .dividedToIntegerBy(poolStorage.sqrt_price.times(upperSqrtPrice)),
+      y: position.liquidity.times(poolStorage.sqrt_price.minus(lowerSqrtPrice)).dividedToIntegerBy(X80_FORMAT_PRECISION)
     };
   }
 
   return {
     x: ZERO_AMOUNT_BN,
-    y: position.liquidity.times(srpU.minus(srpL)).div(X80_FORMAT_PRECISION).integerValue(BigNumber.ROUND_FLOOR)
+    y: position.liquidity.times(upperSqrtPrice.minus(lowerSqrtPrice)).dividedToIntegerBy(X80_FORMAT_PRECISION)
   };
 };
