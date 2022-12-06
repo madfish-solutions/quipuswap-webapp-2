@@ -4,12 +4,13 @@ import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE } from '@config/constants';
+import { useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
 import { TokenInfo } from '@shared/elements';
-import { isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/helpers';
+import { isExist, isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
-import { useV3PositionsViewModel } from '../../use-v3-positions.vm';
+import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { TokenFeeCell } from '../token-fee-cell';
 import styles from './fee-tokens-list.module.scss';
 
@@ -58,12 +59,17 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
 
 export const useFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
-  const { positions } = useV3PositionsViewModel();
+  const { positionsWithStats } = usePositionsWithStats();
+  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   const rows: Row[] = useMemo(() => {
-    const feesAddends = positions
-      .map(({ inputToken, tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees }) => {
-        const [tokenX, tokenY] = inputToken;
+    if (!isExist(tokenX) || !isExist(tokenY)) {
+      return [];
+    }
+
+    const feesAddends = positionsWithStats
+      .map(({ stats }) => {
+        const { tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees } = stats;
 
         return [
           { token: tokenX, deposit: tokenXDeposit, fee: tokenXFees },
@@ -97,7 +103,7 @@ export const useFeeTokensListViewModel = () => {
         [Columns.FEE]: <TokenFeeCell amount={fee} dollarEquivalent={feeDollarEquivalent} />
       };
     });
-  }, [positions, getTokenExchangeRate]);
+  }, [positionsWithStats, getTokenExchangeRate, tokenX, tokenY]);
 
   return {
     rows,
