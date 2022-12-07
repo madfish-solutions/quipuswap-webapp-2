@@ -1,4 +1,6 @@
-import { FISRT_INDEX } from '@config/constants';
+import BigNumber from 'bignumber.js';
+
+import { FIRST_INDEX } from '@config/constants';
 
 import { Nullable } from '../types';
 
@@ -29,9 +31,9 @@ export const isSingleElement = (array: Nullable<unknown[]>) => (array ? array.le
 export const lastElementIndex = <T>(array: T[]) => array.length - 1;
 
 export const isLastElementIndex = (index: number, array: unknown[]) => index === lastElementIndex(array);
-export const isFirstElementIndex = (index: number) => index === FISRT_INDEX;
+export const isFirstElementIndex = (index: number) => index === FIRST_INDEX;
 
-export const getFirstElement = <T>(array: T[]): T => array[FISRT_INDEX];
+export const getFirstElement = <T>(array: T[]): T => array[FIRST_INDEX];
 export const getPenultimateElement = <T>(array: T[]): T => array[array.length - 2];
 export const getLastElementFromArray = <T>(array: T[]): T => array[array.length - 1];
 
@@ -46,3 +48,12 @@ export const isArrayPairTuple = <T>(array: Array<T>): array is [T, T] => {
 };
 
 export const excludeLastElement = <T>(array: T[]) => array.slice(0, -1);
+
+export const fillIndexArray = (value: number) => {
+  const indexArray = [];
+  for (let i = 0; i < value; i++) {
+    indexArray[i] = new BigNumber(i);
+  }
+
+  return indexArray;
+};

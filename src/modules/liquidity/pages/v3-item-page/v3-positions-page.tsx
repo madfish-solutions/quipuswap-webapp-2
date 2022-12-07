@@ -17,7 +17,7 @@ import { useV3PositionsViewModel } from './use-v3-positions.vm';
 import styles from './v3-positions-page.module.scss';
 
 export const V3PositionsPage: FC = observer(() => {
-  const { isLoading, positions } = useV3PositionsViewModel();
+  const { isLoading, positionsViewModel } = useV3PositionsViewModel();
   const { t } = useTranslation();
 
   return (
@@ -34,7 +34,7 @@ export const V3PositionsPage: FC = observer(() => {
       <OpenNewPosition />
       <StateWrapper isLoading={isLoading} loaderFallback={<Skeleton className={styles.listSkeleton} />}>
         <Iterator
-          data={positions}
+          data={positionsViewModel}
           render={ListItemCard}
           fallback={<EmptyPositionsList />}
           isGrouped

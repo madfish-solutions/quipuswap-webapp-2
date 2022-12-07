@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { getUserBalance } from '@blockchain';
+import { getUserTokenBalance } from '@blockchain';
 import {
   FARM_REWARD_UPDATE_INTERVAL,
   FARM_USER_INFO_UPDATE_INTERVAL,
@@ -12,7 +12,7 @@ import { DexLink } from '@modules/liquidity/helpers';
 import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
-import { Nullable, Standard, Token } from '@shared/types';
+import { Nullable, Token } from '@shared/types';
 
 import { BackendYouvesFarmingApi } from '../api/backend/youves-farming.api';
 import { BlockchainYouvesFarmingApi } from '../api/blockchain/youves-farming.api';
@@ -187,14 +187,7 @@ export class FarmingYouvesItemStore {
     const item = this.itemStore.model.item;
     const { rewardToken } = item;
 
-    const balance =
-      (await getUserBalance(
-        tezos,
-        this.farmingAddress,
-        rewardToken.contractAddress,
-        Standard.Fa2,
-        rewardToken.fa2TokenId
-      )) ?? ZERO_AMOUNT_BN;
+    const balance = (await getUserTokenBalance(tezos, this.farmingAddress, rewardToken)) ?? ZERO_AMOUNT_BN;
 
     return {
       balance
