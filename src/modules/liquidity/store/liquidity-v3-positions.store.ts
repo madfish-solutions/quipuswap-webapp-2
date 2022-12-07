@@ -50,11 +50,7 @@ export class LiquidityV3PositionsStore {
     }
 
     return {
-      value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(
-        tezos,
-        'tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg',
-        this.poolId
-      )
+      value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(tezos, accountPkh, this.poolId)
     };
   }
 }
