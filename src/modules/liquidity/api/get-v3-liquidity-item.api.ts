@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { bigNumberToString, defined, fillIndexArray, getUniqArray, isEqual, isExist } from '@shared/helpers';
+import { bigNumberToString, defined, getUniqArray, isExist } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
 export namespace BlockchainLiquidityV3Api {
@@ -49,6 +49,7 @@ export namespace BlockchainLiquidityV3Api {
     liquidity: nat;
     new_position_id: nat;
     positions: BigMap<nat, V3PoolPosition>;
+    position_ids: BigMap<address, nat[]>;
     ticks: BigMap<int, V3PoolTick>;
   }
 
@@ -72,10 +73,16 @@ export namespace BlockchainLiquidityV3Api {
     };
   };
 
-  const getAllPositions = async (contractStorage: V3PoolStorage) => {
-    const { positions, new_position_id } = contractStorage;
+  const getUserPositionsIds = async (contractStorage: V3PoolStorage, accountPkh: string) => {
+    const { position_ids } = contractStorage;
 
-    const positionsMap = await positions.getMultipleValues(fillIndexArray(new_position_id.toNumber()));
+    return (await position_ids.get(accountPkh)) ?? [];
+  };
+
+  const getPositions = async (contractStorage: V3PoolStorage, ids: BigNumber[]): Promise<V3PoolPositionWithId[]> => {
+    const { positions } = contractStorage;
+
+    const positionsMap = await positions.getMultipleValues(ids);
 
     return [...positionsMap.entries()]
       .filter((entry): entry is [MichelsonMapKey, V3PoolPosition] => {
@@ -88,9 +95,6 @@ export namespace BlockchainLiquidityV3Api {
         id: id as BigNumber
       }));
   };
-
-  const filterUserPositions = (allPositions: V3PoolPositionWithId[], accountPkh: string) =>
-    allPositions.filter(position => isEqual(position.owner, accountPkh));
 
   const getPositionsTicksMap = async (contractStorage: V3PoolStorage, positions: V3PoolPosition[]) => {
     const ticksIds = getUniqArray(
@@ -107,8 +111,8 @@ export namespace BlockchainLiquidityV3Api {
     poolId: BigNumber
   ): Promise<PositionWithTicks[]> => {
     const { storage: contractStorage } = await getPool(tezos, poolId);
-    const allPositions = await getAllPositions(contractStorage);
-    const userPositions = filterUserPositions(allPositions, accountPkh);
+    const userPositionsIds = await getUserPositionsIds(contractStorage, accountPkh);
+    const userPositions = await getPositions(contractStorage, userPositionsIds);
 
     const ticksMap = await getPositionsTicksMap(contractStorage, userPositions);
 
