@@ -1,23 +1,22 @@
 import BigNumber from 'bignumber.js';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE, ZERO_AMOUNT_BN } from '@config/constants';
+import { TESTNET_EXCHANGE_RATE } from '@config/constants';
+import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-import { getSumOfNumbers, getTokenDecimals, isExist, multipliedIfPossible, toAtomic, toReal } from '@shared/helpers';
+import { getSumOfNumbers, getTokenDecimals, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
+import { calculateDeposit } from './calculate-deposit';
+import { calculateFees } from './calculate-fees';
 import { convertToAtomicPrice } from './convert-to-atomic-price';
-
-const MOCK_NON_ZERO_TOKEN_X_REAL_DEPOSIT = new BigNumber('0.15');
-const MOCK_NON_ZERO_TOKEN_Y_REAL_DEPOSIT = new BigNumber('0.3');
-const MOCK_TOKEN_X_REAL_FEES = new BigNumber('0.01');
-const MOCK_TOKEN_Y_REAL_FEES = new BigNumber('0.02');
 
 export const mapPositionWithStats = (
   tokenX: Token,
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
-  getTokenExchangeRate: (token: Token) => Optional<BigNumber>
+  getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
+  storage: V3LiquidityPoolApi.V3PoolStorage
 ) => {
   const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
   const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
@@ -27,19 +26,12 @@ export const mapPositionWithStats = (
     const minRange = toReal(convertToAtomicPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
     const maxRange = toReal(convertToAtomicPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
 
-    // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
-    const mockTokenXAtomicDeposit = toAtomic(
-      isExist(currentRealPrice) && currentRealPrice.gt(maxRange) ? ZERO_AMOUNT_BN : MOCK_NON_ZERO_TOKEN_X_REAL_DEPOSIT,
-      tokenX
-    );
-    const mockTokenYAtomicDeposit = toAtomic(
-      isExist(currentRealPrice) && currentRealPrice.lt(minRange) ? ZERO_AMOUNT_BN : MOCK_NON_ZERO_TOKEN_Y_REAL_DEPOSIT,
-      tokenY
-    );
-    const tokenXDeposit = toReal(mockTokenXAtomicDeposit, tokenX);
-    const tokenYDeposit = toReal(mockTokenYAtomicDeposit, tokenY);
-    const tokenXFees = MOCK_TOKEN_X_REAL_FEES;
-    const tokenYFees = MOCK_TOKEN_Y_REAL_FEES;
+    const { x: tokenXAtomicDeposit, y: tokenYAtomicDeposit } = calculateDeposit(position, storage);
+    const { x: tokenXAtomicFees, y: tokenYAtomicFees } = calculateFees(storage, position);
+    const tokenXDeposit = toReal(tokenXAtomicDeposit, tokenX);
+    const tokenYDeposit = toReal(tokenYAtomicDeposit, tokenY);
+    const tokenXFees = toReal(tokenXAtomicFees, tokenX);
+    const tokenYFees = toReal(tokenYAtomicFees, tokenY);
 
     const depositUsd = getSumOfNumbers([
       multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
@@ -49,7 +41,7 @@ export const mapPositionWithStats = (
       multipliedIfPossible(tokenXFees, tokenXExchangeRate),
       multipliedIfPossible(tokenYFees, tokenYExchangeRate)
     ]);
-    const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lte(maxRange);
+    const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lt(maxRange);
 
     return {
       ...position,

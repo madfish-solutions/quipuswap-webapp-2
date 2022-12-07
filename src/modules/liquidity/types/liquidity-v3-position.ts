@@ -5,7 +5,7 @@ export interface FeeGrowth {
   y: BigNumber;
 }
 
-export interface Tick {
+export interface LiquidityV3Tick {
   id: BigNumber;
   fee_growth_outside: FeeGrowth;
   liqudity_net: BigNumber;
@@ -15,14 +15,15 @@ export interface Tick {
   seconds_outside: BigNumber;
   seconds_per_liquidity_outside: BigNumber;
   sqrt_price: BigNumber;
+  fee_growth: FeeGrowth;
   tick_cumulative_outside: BigNumber;
 }
 
 export interface LiquidityV3Position {
   id: BigNumber;
   fee_growth_inside_last: FeeGrowth;
-  lower_tick: Tick;
-  upper_tick: Tick;
+  lower_tick: LiquidityV3Tick;
+  upper_tick: LiquidityV3Tick;
   owner: string;
   liquidity: BigNumber;
 }
