@@ -7,9 +7,9 @@ import { getStorageInfo } from '@shared/dapp';
 import { bigNumberToString, defined, fillIndexArray, getUniqArray, isEqual, isExist } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
-import { FeeGrowth } from '../types';
+import { FeeGrowth } from '../../types';
 
-export namespace BlockchainLiquidityV3Api {
+export namespace V3LiquidityPoolApi {
   export interface V3PoolTick {
     fee_growth_outside: FeeGrowth;
     liqudity_net: int;
