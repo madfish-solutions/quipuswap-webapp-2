@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
@@ -8,7 +8,6 @@ import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { Nullable } from '@shared/types';
 
-import { FeeTokensList } from '../fee-tokens-list';
 import styles from './fees-list.module.scss';
 
 interface TotalDepositInfo {
@@ -23,10 +22,11 @@ interface Props {
   userTotalDepositInfo: TotalDepositInfo;
   isUserTotalDepositExist: boolean;
   translation: Record<string, string>;
+  details: ReactNode;
 }
 
 export const FeesList: FC<Props> = observer(
-  ({ claimablePendingRewards, onButtonClick, userTotalDepositInfo, isUserTotalDepositExist, translation }) => {
+  ({ claimablePendingRewards, onButtonClick, userTotalDepositInfo, isUserTotalDepositExist, translation, details }) => {
     const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
       translation;
     const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
@@ -44,7 +44,7 @@ export const FeesList: FC<Props> = observer(
         buttonText={harvestAllTranslation}
         currency="$"
         buttonUp
-        details={<FeeTokensList />}
+        details={details}
         rewardsLabel={totalFeesTranslation}
       >
         {isUserTotalDepositExist && (

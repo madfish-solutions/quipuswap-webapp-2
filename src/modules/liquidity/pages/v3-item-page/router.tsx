@@ -28,9 +28,12 @@ export const V3ItemPageRouter: FC = observer(() => {
       errorFallback={<ErrorFallback error={error} />}
     >
       <SentryRoutes>
-        <Route path={`/:id`} element={<V3PositionsPage />} />
-        <Route path={`${LiquidityTabs.add}/:id`} element={<V3ItemPage />} />
-        <Route path={`${LiquidityTabs.add}/:id${LiquidityRoutes.create}`} element={<CreateNewPositionPage />} />
+        <Route path={`/:poolId`} element={<V3PositionsPage />} />
+        <Route path={`/:poolId/${LiquidityTabs.add}/:positionId`} element={<V3ItemPage />} />
+        <Route
+          path={`/:poolId/${LiquidityTabs.add}/:positionId${LiquidityRoutes.create}`}
+          element={<CreateNewPositionPage />}
+        />
       </SentryRoutes>
     </StateWrapper>
   );
