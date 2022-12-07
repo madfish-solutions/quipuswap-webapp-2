@@ -1,4 +1,4 @@
-import { convertToAtomicPrice } from '@modules/liquidity/pages/v3-item-page/helpers';
+import { convertToAtomicPrice } from '@modules/liquidity/pages/v3-item-page/helpers/convert-to-atomic-price';
 import { getTokenDecimals, isExist, toReal } from '@shared/helpers';
 
 import { useLiquidityV3ItemStore } from '../store';

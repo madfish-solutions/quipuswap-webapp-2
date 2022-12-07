@@ -26,3 +26,19 @@ export interface LiquidityV3Position {
   owner: string;
   liquidity: BigNumber;
 }
+
+export interface LiquidityV3PositionStats {
+  collectedFeesUsd: BigNumber;
+  depositUsd: BigNumber;
+  minRange: BigNumber;
+  maxRange: BigNumber;
+  isInRange: boolean;
+  tokenXDeposit: BigNumber;
+  tokenYDeposit: BigNumber;
+  tokenXFees: BigNumber;
+  tokenYFees: BigNumber;
+}
+
+export interface LiquidityV3PositionWithStats extends LiquidityV3Position {
+  stats: LiquidityV3PositionStats;
+}

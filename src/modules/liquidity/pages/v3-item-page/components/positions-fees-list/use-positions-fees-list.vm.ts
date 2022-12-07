@@ -1,4 +1,5 @@
 import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
+import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, getSumOfNumbers, isGreaterThanZero } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
@@ -7,31 +8,34 @@ import { amplitudeService } from '@shared/services';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { useV3PositionsViewModel } from '../../use-v3-positions.vm';
+import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 
 export const usePositionsFeesListViewModel = () => {
   const { t } = useTranslation();
-  const { contractAddress, positions, isLoading, error } = useV3PositionsViewModel();
   const { showErrorToast } = useToasts();
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
+  const v3ItemStore = useLiquidityV3ItemStore();
   const {
     settings: { transactionDeadline }
   } = useSettingsStore();
+  const { positionsWithStats, loading, error } = usePositionsWithStats();
 
-  const positionsIdsWithFees = positions
-    .filter(({ collectedFeesUsd }) => isGreaterThanZero(collectedFeesUsd))
+  const contractAddress = v3ItemStore.item?.contractAddress;
+
+  const positionsIdsWithFees = positionsWithStats
+    .filter(({ stats }) => isGreaterThanZero(stats.collectedFeesUsd))
     .map(({ id }) => id);
 
   const userTotalDepositInfo = {
-    totalDepositAmount: getSumOfNumbers(positions.map(position => position.depositUsd)),
-    totalDepositLoading: isLoading,
+    totalDepositAmount: getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.depositUsd)),
+    totalDepositLoading: loading,
     totalDepositError: error
   };
   const isUserTotalDepositExist =
     (!userTotalDepositInfo.totalDepositAmount.isZero() || userTotalDepositInfo.totalDepositLoading) &&
     !Boolean(userTotalDepositInfo.totalDepositError);
-  const claimablePendingRewardsInUsd = getSumOfNumbers(positions.map(position => position.collectedFeesUsd));
+  const claimablePendingRewardsInUsd = getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.collectedFeesUsd));
 
   const handleClaimAll = async () => {
     const logData = {
