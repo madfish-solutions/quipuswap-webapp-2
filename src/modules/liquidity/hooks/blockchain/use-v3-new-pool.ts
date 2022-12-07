@@ -7,6 +7,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3Positions } from '../../api/blockchain/v3-liquidity-pool-positions';
+import { useLiquidityV3ItemTokens } from '../helpers';
 import { useLiquidityV3ItemStore } from '../store';
 
 export const useV3NewPool = () => {
@@ -19,6 +20,7 @@ export const useV3NewPool = () => {
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const liquidityV3PoolStore = useLiquidityV3ItemStore();
+  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   // eslint-disable-next-line no-console
   console.log(liquidityV3PoolStore.item);
@@ -27,7 +29,8 @@ export const useV3NewPool = () => {
     const logData = {
       liquiditySlippage,
       transactionDeadline,
-      item: liquidityV3PoolStore.item
+      item: liquidityV3PoolStore.item,
+      contractAddress: liquidityV3PoolStore.contractAddress
     };
 
     try {
@@ -35,7 +38,9 @@ export const useV3NewPool = () => {
       const operation = await V3Positions.doNewPositionTransaction(
         defined(tezos, 'tezos'),
         defined(accountPkh, 'accountPkh'),
-        defined(liquidityV3PoolStore.contractAddress, 'contractAddress')
+        defined(liquidityV3PoolStore.contractAddress, 'contractAddress'),
+        defined(tokenX, 'tokenX'),
+        defined(tokenY, 'tokenY')
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
       amplitudeService.logEvent('DEX_V3_NEW_POOL_SUCCESS', logData);
