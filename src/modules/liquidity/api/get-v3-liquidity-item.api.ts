@@ -84,7 +84,7 @@ export namespace BlockchainLiquidityV3Api {
 
     const positionsMap = await positions.getMultipleValues(ids);
 
-    return [...positionsMap.entries()]
+    return Array.from(positionsMap.entries())
       .filter((entry): entry is [MichelsonMapKey, V3PoolPosition] => {
         const [, value] = entry;
 
