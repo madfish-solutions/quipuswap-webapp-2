@@ -10,7 +10,7 @@ import { Fled } from '@shared/model-builder/fled';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Standard } from '@shared/types';
 
-import { BlockchainLiquidityV3Api } from '../api';
+import { V3LiquidityPoolApi } from '../api';
 import { LiquidityContractTokenBalancesModel } from '../models';
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
@@ -39,7 +39,7 @@ export class LiquidityV3ItemStore {
 
   //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
-    async () => await BlockchainLiquidityV3Api.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
+    async () => await V3LiquidityPoolApi.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
     t
   );
 
