@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE } from '@config/constants';
-import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
+import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
 import { getSumOfNumbers, getTokenDecimals, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
@@ -16,7 +16,7 @@ export const mapPositionWithStats = (
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
   getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
-  storage: BlockchainLiquidityV3Api.V3PoolStorage
+  storage: V3LiquidityPoolApi.V3PoolStorage
 ) => {
   const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
   const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;

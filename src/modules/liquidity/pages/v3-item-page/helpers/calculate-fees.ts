@@ -1,12 +1,12 @@
-import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
+import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position, LiquidityV3Tick } from '@modules/liquidity/types';
 import { shiftRightLogical } from '@shared/helpers';
 
-function calculateFeeGrowthInside(
-  poolStorage: BlockchainLiquidityV3Api.V3PoolStorage,
+const calculateFeeGrowthInside = (
+  poolStorage: V3LiquidityPoolApi.V3PoolStorage,
   lowerTick: LiquidityV3Tick,
   upperTick: LiquidityV3Tick
-) {
+) => {
   const feeAbove = poolStorage.cur_tick_index.gte(upperTick.id)
     ? {
         x: poolStorage.fee_growth.x.minus(upperTick.fee_growth_outside.x),
@@ -24,11 +24,11 @@ function calculateFeeGrowthInside(
     x: poolStorage.fee_growth.x.minus(feeAbove.x).minus(feeBelow.x),
     y: poolStorage.fee_growth.y.minus(feeAbove.y).minus(feeBelow.y)
   };
-}
+};
 
 const FEES_CALCULATION_SHIFT_BITS = 128;
 
-export function calculateFees(poolStorage: BlockchainLiquidityV3Api.V3PoolStorage, position: LiquidityV3Position) {
+export function calculateFees(poolStorage: V3LiquidityPoolApi.V3PoolStorage, position: LiquidityV3Position) {
   const feeGrowthInside = calculateFeeGrowthInside(poolStorage, position.lower_tick, position.upper_tick);
 
   return {
