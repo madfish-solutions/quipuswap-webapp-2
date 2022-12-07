@@ -7,12 +7,9 @@ import { getStorageInfo } from '@shared/dapp';
 import { bigNumberToString, defined, getUniqArray, isExist } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
-export namespace BlockchainLiquidityV3Api {
-  interface FeeGrowth {
-    x: int;
-    y: int;
-  }
+import { FeeGrowth } from '../../types';
 
+export namespace V3LiquidityPoolApi {
   export interface V3PoolTick {
     fee_growth_outside: FeeGrowth;
     liqudity_net: int;
@@ -47,6 +44,8 @@ export namespace BlockchainLiquidityV3Api {
     };
     sqrt_price: nat;
     liquidity: nat;
+    cur_tick_index: int;
+    fee_growth: FeeGrowth;
     new_position_id: nat;
     positions: BigMap<nat, V3PoolPosition>;
     position_ids: BigMap<address, nat[]>;
