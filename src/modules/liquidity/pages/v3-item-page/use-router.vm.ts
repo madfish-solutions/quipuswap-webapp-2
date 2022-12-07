@@ -10,12 +10,15 @@ import { useRouteParams } from './hooks/use-route-params';
 
 export const useRouterViewModel = () => {
   const { tezos } = useRootStore();
-  const { id } = useRouteParams();
+  const { poolId, positionId } = useRouteParams();
   const store = useLiquidityV3ItemStore();
 
   useEffect(() => {
-    if (isExist(id) && tezos) {
-      store.setId(new BigNumber(id));
+    if (isExist(poolId) && tezos) {
+      if (isExist(positionId)) {
+        store.setPositionId(Number(positionId));
+      }
+      store.setPoolId(new BigNumber(poolId));
       (async () => {
         try {
           await store.itemSore.load();
@@ -26,7 +29,7 @@ export const useRouterViewModel = () => {
     }
 
     return () => store.itemSore.resetData();
-  }, [store, id, tezos]);
+  }, [store, poolId, positionId, tezos]);
 
   return {
     isLoading: store.itemIsLoading,

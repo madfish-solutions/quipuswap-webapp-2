@@ -12,7 +12,7 @@ import { i18n } from '@translation';
 
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { TokenFeeCell } from '../token-fee-cell';
-import styles from './fee-tokens-list.module.scss';
+import styles from './positions-fee-tokens-list.module.scss';
 
 enum Columns {
   TOKEN = 'TOKEN',
@@ -57,12 +57,12 @@ const getCustomHeaderProps = (_: unknown, meta: MetaBase<Row> & { column: Header
 const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
   getColumnProps(meta.cell.column.id);
 
-export const useFeeTokensListViewModel = () => {
+export const usePositionsFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const rows: Row[] = useMemo(() => {
+  const data: Row[] = useMemo(() => {
     if (!isExist(tokenX) || !isExist(tokenY)) {
       return [];
     }
@@ -106,7 +106,7 @@ export const useFeeTokensListViewModel = () => {
   }, [positionsWithStats, getTokenExchangeRate, tokenX, tokenY]);
 
   return {
-    rows,
+    data,
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,

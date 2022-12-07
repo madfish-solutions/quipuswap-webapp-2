@@ -15,11 +15,11 @@ export const useRouteParams = () => {
     const routerParts = getRouterParts(data);
 
     if (routerParts.length === POSITIONS_LIST_PATHNAME_LENGTH) {
-      return { tab: null, id: getFirstElement(routerParts) };
+      return { tab: null, poolId: getFirstElement(routerParts), positionId: null };
     }
 
-    const [tab, id] = routerParts;
+    const [poolId, tab, positionId] = routerParts;
 
-    return { tab, id };
+    return { tab, poolId, positionId };
   }, [data]);
 };
