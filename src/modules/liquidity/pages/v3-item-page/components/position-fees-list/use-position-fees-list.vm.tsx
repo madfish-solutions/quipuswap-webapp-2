@@ -1,5 +1,4 @@
-import BigNumber from 'bignumber.js';
-
+import { ZERO_AMOUNT_BN } from '@config/constants';
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { isExist } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -17,9 +16,9 @@ export const usePositionFeesListViewModel = () => {
 
   const userTotalDepositInfo = {
     totalDepositAmount:
-      isExist(positionId) && isExist(positionsWithStats[Number(positionId)]?.stats)
-        ? positionsWithStats[Number(positionId)].stats.depositUsd
-        : new BigNumber(0),
+      isExist(positionId) && isExist(positionsWithStats[positionId]?.stats)
+        ? positionsWithStats[positionId].stats.depositUsd
+        : ZERO_AMOUNT_BN,
     totalDepositLoading: loading,
     totalDepositError: error
   };
@@ -27,9 +26,9 @@ export const usePositionFeesListViewModel = () => {
     (!userTotalDepositInfo.totalDepositAmount.isZero() || userTotalDepositInfo.totalDepositLoading) &&
     !Boolean(userTotalDepositInfo.totalDepositError);
   const claimablePendingRewardsInUsd =
-    isExist(positionId) && isExist(positionsWithStats[Number(positionId)]?.stats)
+    isExist(positionId) && isExist(positionsWithStats[positionId]?.stats)
       ? positionsWithStats[positionId].stats.collectedFeesUsd
-      : new BigNumber(0);
+      : ZERO_AMOUNT_BN;
 
   return {
     userTotalDepositInfo,
