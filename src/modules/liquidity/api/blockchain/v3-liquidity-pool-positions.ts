@@ -35,11 +35,11 @@ export namespace V3Positions {
     const tokensAmount: AmountToken[] = [
       {
         token: tokenX,
-        amount: new BigNumber(0)
+        amount: new BigNumber(0) // maximum_tokens_contributed X
       },
       {
         token: tokenY,
-        amount: new BigNumber(0)
+        amount: new BigNumber(0) // maximum_tokens_contributed Y
       }
     ];
 
