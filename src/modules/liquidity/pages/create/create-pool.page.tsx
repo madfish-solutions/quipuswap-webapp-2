@@ -13,9 +13,10 @@ import styles from './create-pool.module.scss';
 import { useCreatePoolViewModel } from './use-create-pool.vm';
 
 export const CreatePoolPage: FC = observer(() => {
-  const { translations, createRegularPoolIcon, createStablePoolIcon } = useCreatePoolViewModel();
+  const { translations, createHighEfficiencyPoolIcon, createRegularPoolIcon, createStablePoolIcon } =
+    useCreatePoolViewModel();
 
-  const { createPool, stablePool, regularPool, back } = translations;
+  const { createPool, highEfficiencyPool, stablePool, regularPool, back } = translations;
 
   return (
     <>
@@ -40,6 +41,16 @@ export const CreatePoolPage: FC = observer(() => {
           )
         }}
       >
+        <div className={styles.poolWrapper}>
+          <img className={styles.img} src={createHighEfficiencyPoolIcon} alt="Create high efficiency pool icon" />
+          <h2 className={styles.subtitle}>{highEfficiencyPool}</h2>
+          <Button
+            className={styles.button}
+            href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${LiquidityRoutes.create}`}
+          >
+            {createPool}
+          </Button>
+        </div>
         <div className={styles.poolWrapper}>
           <img className={styles.img} src={createRegularPoolIcon} alt="Create regular pool icon" />
           <h2 className={styles.subtitle}>{regularPool}</h2>
