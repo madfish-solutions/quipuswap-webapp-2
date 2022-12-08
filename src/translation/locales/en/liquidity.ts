@@ -103,6 +103,7 @@ export const liquidity = {
   collectedFees: 'Collected fees',
   collectedFeesTooltip: 'CollectedFees',
   claimFee: 'Claim fee',
+  claimingSuccessful: 'Claiming successful',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
