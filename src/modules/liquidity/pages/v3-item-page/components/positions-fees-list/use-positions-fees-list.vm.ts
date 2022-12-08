@@ -1,4 +1,4 @@
-import { BlockchainLiquidityV3Api } from '@modules/liquidity/api';
+import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, getSumOfNumbers, isGreaterThanZero } from '@shared/helpers';
@@ -45,7 +45,7 @@ export const usePositionsFeesListViewModel = () => {
     };
     try {
       amplitudeService.logEvent('CLAIM_V3_FEES_CLICK', logData);
-      await BlockchainLiquidityV3Api.claimFees(
+      await V3LiquidityPoolApi.claimFees(
         defined(tezos, 'tezos'),
         defined(contractAddress, 'contractAddress'),
         positionsIdsWithFees,
