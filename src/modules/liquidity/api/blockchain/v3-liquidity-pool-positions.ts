@@ -6,19 +6,27 @@ import { REFERRAL_CODE } from '@config/config';
 import { decreaseBySlippage, getTransactionDeadline } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
 
-import { calculateTickIndex } from '../../helpers';
+import { calculateLiquidity, calculateTickIndex, calculateTickPrice } from '../../helpers';
 
 export namespace V3Positions {
+  export const getCurrentTickIndex = () => {};
+
   export const doNewPositionTransaction = async (
     tezos: TezosToolkit,
     accountPkh: string,
     contractAddress: string,
+
     tokenX: Token,
     tokenY: Token,
+
     transactionDeadline: BigNumber,
     liquiditySlippage: BigNumber,
+
+    currentTickIndex: BigNumber,
+
     minPrice: BigNumber,
     maxPrice: BigNumber,
+
     xTokenAmount: BigNumber,
     yTokenAmount: BigNumber
   ) => {
@@ -26,11 +34,20 @@ export namespace V3Positions {
 
     const lowerTickIndex = calculateTickIndex(minPrice);
     const upperTickIndex = calculateTickIndex(maxPrice);
+    const currentTickPrice = calculateTickPrice(currentTickIndex);
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    // TODO: Calculate by formula
-    const liquidity = new BigNumber('0');
+    const liquidity = calculateLiquidity(
+      currentTickIndex,
+      lowerTickIndex,
+      upperTickIndex,
+      currentTickPrice,
+      minPrice,
+      maxPrice,
+      xTokenAmount,
+      yTokenAmount
+    );
     const liquidityWithSlippage = decreaseBySlippage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     // TODO https://better-call.dev/ghostnet/KT1Sy7BKFpAMypwHN25qmDiLbv4CZqAMH3g4/interact/set_position
