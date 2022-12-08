@@ -30,11 +30,19 @@ export const useV3NewPool = () => {
     xTokenAmount: BigNumber,
     yTokenAmount: BigNumber
   ) => {
-    if (!tezos || !accountPkh || !liquidityV3PoolStore.contractAddress || !tokenX || !tokenY) {
+    if (
+      !tezos ||
+      !accountPkh ||
+      !liquidityV3PoolStore.item ||
+      !liquidityV3PoolStore.contractAddress ||
+      !tokenX ||
+      !tokenY
+    ) {
       return (
         defined(tezos, 'tezos'),
         defined(accountPkh, 'accountPkh'),
-        defined(liquidityV3PoolStore.contractAddress, 'contractAddress'),
+        defined(liquidityV3PoolStore.item, 'liquidityV3PoolStore.item'),
+        defined(liquidityV3PoolStore.contractAddress, 'liquidityV3PoolStore.contractAddress'),
         defined(tokenX, 'tokenX'),
         defined(tokenY, 'tokenY')
       );
@@ -60,6 +68,7 @@ export const useV3NewPool = () => {
         tokenY,
         transactionDeadline,
         liquiditySlippage,
+        liquidityV3PoolStore.item.storage.cur_tick_index,
         minPrice,
         maxPrice,
         xTokenAmount,
