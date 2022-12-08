@@ -1,5 +1,5 @@
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
+import { useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { isExist } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
@@ -10,7 +10,7 @@ import { PositionFeeTokensList } from '../position-fee-tokens-list';
 export const usePositionFeesListViewModel = () => {
   const { t } = useTranslation();
   const { positionsWithStats, loading, error } = usePositionsWithStats();
-  const { positionId } = useLiquidityV3ItemStore();
+  const { positionId } = useLiquidityV3PositionStore();
 
   const handleClaimAll = () => amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
 

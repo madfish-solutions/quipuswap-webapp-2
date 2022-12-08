@@ -30,7 +30,7 @@ export class LiquidityV3PositionsStore {
   //#endregion Quipuswap V3 pool positions
 
   get poolId() {
-    return this.rootStore.liquidityV3ItemStore?.poolId ?? null;
+    return this.rootStore.liquidityV3PoolStore?.poolId ?? null;
   }
 
   constructor(private rootStore: RootStore) {
@@ -50,7 +50,11 @@ export class LiquidityV3PositionsStore {
     }
 
     return {
-      value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(tezos, accountPkh, this.poolId)
+      value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(
+        tezos,
+        'tz1LSMu9PugfVyfX2ynNU9y4eVvSACJKP7sg',
+        this.poolId
+      )
     };
   }
 }

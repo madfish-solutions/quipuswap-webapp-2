@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import {
   useLiquidityV3CurrentPrice,
-  useLiquidityV3ItemStore,
+  useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
@@ -14,14 +14,14 @@ import { mapPositionWithStats } from '../helpers';
 export const usePositionsWithStats = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const currentPrice = useLiquidityV3CurrentPrice();
-  const itemStore = useLiquidityV3ItemStore();
+  const poolStore = useLiquidityV3PoolStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   const rawPositions = v3PositionsStore.positions;
 
-  const loading = itemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
-  const error = itemStore.error ?? v3PositionsStore.positionsStore.error;
+  const loading = poolStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
+  const error = poolStore.error ?? v3PositionsStore.positionsStore.error;
 
   const positionsWithStats = useMemo(() => {
     if (isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {

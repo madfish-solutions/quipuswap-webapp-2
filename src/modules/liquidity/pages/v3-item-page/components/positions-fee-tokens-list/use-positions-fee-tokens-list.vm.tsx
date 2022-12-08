@@ -62,7 +62,7 @@ export const usePositionsFeeTokensListViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const data: Row[] = useMemo(() => {
+  const rows: Row[] = useMemo(() => {
     if (!isExist(tokenX) || !isExist(tokenY)) {
       return [];
     }
@@ -106,7 +106,7 @@ export const usePositionsFeeTokensListViewModel = () => {
   }, [positionsWithStats, getTokenExchangeRate, tokenX, tokenY]);
 
   return {
-    data,
+    data: rows,
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,

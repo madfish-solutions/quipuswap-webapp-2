@@ -1,7 +1,6 @@
 import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
-import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
@@ -25,47 +24,52 @@ interface Props {
   details: ReactNode;
 }
 
-export const FeesList: FC<Props> = observer(
-  ({ claimablePendingRewards, onButtonClick, userTotalDepositInfo, isUserTotalDepositExist, translation, details }) => {
-    const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
-      translation;
-    const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
+export const FeesList: FC<Props> = ({
+  claimablePendingRewards,
+  onButtonClick,
+  userTotalDepositInfo,
+  isUserTotalDepositExist,
+  translation,
+  details
+}) => {
+  const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
+    translation;
+  const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
-    return (
-      <RewardInfo
-        containerClassName={styles.containerFeeInfo}
-        userInfoContainerClassName={styles.userInfoContainer}
-        childrenContainerClassName={styles.childrenFeeInfo}
-        buttonContainerClassName={styles.buttonFeeInfo}
-        viewDetailsButtonClassName={styles.viewDetailsButton}
-        claimablePendingRewards={claimablePendingRewards}
-        onButtonClick={onButtonClick}
-        rewardTooltip={rewardsTooltipTranslation}
-        buttonText={harvestAllTranslation}
-        currency="$"
-        buttonUp
-        details={details}
-        rewardsLabel={totalFeesTranslation}
-      >
-        {isUserTotalDepositExist && (
-          <DetailsCardCell
-            className={styles.totalDeposit}
-            cellNameClassName={styles.totalDepositCellName}
-            cellName={totalDepositTranslation}
-            data-test-id="totalDeposit"
-          >
-            <StateCurrencyAmount
-              amount={totalDepositAmount}
-              amountDecimals={USD_DECIMALS}
-              currency={DOLLAR}
-              labelSize="large"
-              isLoading={totalDepositLoading}
-              isError={Boolean(totalDepositError)}
-              isLeftCurrency
-            />
-          </DetailsCardCell>
-        )}
-      </RewardInfo>
-    );
-  }
-);
+  return (
+    <RewardInfo
+      containerClassName={styles.containerFeeInfo}
+      userInfoContainerClassName={styles.userInfoContainer}
+      childrenContainerClassName={styles.childrenFeeInfo}
+      buttonContainerClassName={styles.buttonFeeInfo}
+      viewDetailsButtonClassName={styles.viewDetailsButton}
+      claimablePendingRewards={claimablePendingRewards}
+      onButtonClick={onButtonClick}
+      rewardTooltip={rewardsTooltipTranslation}
+      buttonText={harvestAllTranslation}
+      currency="$"
+      buttonUp
+      details={details}
+      rewardsLabel={totalFeesTranslation}
+    >
+      {isUserTotalDepositExist && (
+        <DetailsCardCell
+          className={styles.totalDeposit}
+          cellNameClassName={styles.totalDepositCellName}
+          cellName={totalDepositTranslation}
+          data-test-id="totalDeposit"
+        >
+          <StateCurrencyAmount
+            amount={totalDepositAmount}
+            amountDecimals={USD_DECIMALS}
+            currency={DOLLAR}
+            labelSize="large"
+            isLoading={totalDepositLoading}
+            isError={Boolean(totalDepositError)}
+            isLeftCurrency
+          />
+        </DetailsCardCell>
+      )}
+    </RewardInfo>
+  );
+};
