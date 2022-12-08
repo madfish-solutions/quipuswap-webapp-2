@@ -15,10 +15,9 @@ import { LiquidityContractTokenBalancesModel } from '../models';
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
 @ModelBuilder()
-export class LiquidityV3ItemStore {
+export class LiquidityV3PoolStore {
   error: Nullable<Error> = null;
   poolId: Nullable<BigNumber> = null;
-  positionId: Nullable<number> = null;
   activeTokenIndex = FIRST_INDEX;
 
   //# Quipuswap V3 pool tokens balance store
@@ -72,10 +71,6 @@ export class LiquidityV3ItemStore {
 
   setPoolId(id: BigNumber) {
     this.poolId = id;
-  }
-
-  setPositionId(id: number) {
-    this.positionId = id;
   }
 
   setError(error: Error) {

@@ -2,7 +2,7 @@ import { ReactNode, useMemo } from 'react';
 
 import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 
-import { useLiquidityV3ItemStore, useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
+import { useLiquidityV3ItemTokens, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { TokenInfo } from '@shared/elements';
 import { isExist, multipliedIfPossible, isNull } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
@@ -59,9 +59,9 @@ export const usePositionFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const { positionId } = useLiquidityV3ItemStore();
+  const { positionId } = useLiquidityV3PositionStore();
 
-  const data: Row[] = useMemo(() => {
+  const rows: Row[] = useMemo(() => {
     if (!isExist(tokenX) || !isExist(tokenY) || isNull(positionId)) {
       return [];
     }
@@ -95,7 +95,7 @@ export const usePositionFeeTokensListViewModel = () => {
   }, [tokenX, tokenY, positionId, positionsWithStats, getTokenExchangeRate]);
 
   return {
-    data,
+    data: rows,
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,

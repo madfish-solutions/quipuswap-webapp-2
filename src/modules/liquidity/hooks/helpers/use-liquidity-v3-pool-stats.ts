@@ -7,14 +7,14 @@ import { useTokenExchangeRate } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../liquidity/helpers';
-import { useLiquidityV3ItemStore } from '../store';
+import { useLiquidityV3PoolStore } from '../store';
 import { useLiquidityV3CurrentPrice } from './use-liquidity-v3-current-price';
 import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 export const useLiquidityV3PoolStats = () => {
   const { t } = useTranslation();
-  const store = useLiquidityV3ItemStore();
-  const { contractBalance, feeBps } = useLiquidityV3ItemStore();
+  const store = useLiquidityV3PoolStore();
+  const { contractBalance, feeBps } = useLiquidityV3PoolStore();
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentPrice();
