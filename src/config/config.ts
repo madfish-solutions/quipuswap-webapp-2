@@ -117,3 +117,5 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+export const REFERRAL_CODE = '1'; // 1 for QuipuSwap interface, 2 for Temple router
