@@ -1,3 +1,5 @@
+import CreateHighEfficiencyPoolDark from '@images/create-efficient-pool-dark.png';
+import CreateHighEfficiencyPoolLight from '@images/create-efficient-pool-light.png';
 import CreateRegularPoolDark from '@images/create-regular-pool-dark.png';
 import CreateRegularPoolLight from '@images/create-regular-pool-light.png';
 import CreateStablePoolDark from '@images/create-stable-pool-dark.png';
@@ -10,6 +12,9 @@ export const useCreatePoolViewModel = () => {
   const uiStore = useUiStore();
   const { t } = useTranslation();
 
+  const createHighEfficiencyPoolIcon =
+    uiStore.colorThemeMode === ColorModes.Dark ? CreateHighEfficiencyPoolDark : CreateHighEfficiencyPoolLight;
+
   const createRegularPoolIcon =
     uiStore.colorThemeMode === ColorModes.Dark ? CreateRegularPoolDark : CreateRegularPoolLight;
 
@@ -18,6 +23,7 @@ export const useCreatePoolViewModel = () => {
 
   const translations = {
     createPool: t('liquidity|createPool'),
+    highEfficiencyPool: t('liquidity|highEfficiencyPool'),
     regularPool: t('liquidity|regularPool'),
     stablePool: t('liquidity|stablePool'),
     back: t('liquidity|back')
@@ -25,6 +31,7 @@ export const useCreatePoolViewModel = () => {
 
   return {
     translations,
+    createHighEfficiencyPoolIcon,
     createRegularPoolIcon,
     createStablePoolIcon
   };
