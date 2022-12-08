@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from 'react';
 
-import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
+import { Cell, Column, HeaderGroup, MetaBase, Row as TableRow } from 'react-table';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE } from '@config/constants';
@@ -43,9 +43,9 @@ const rewardTokensColumns: Column<Row>[] = [
 
 const getColumnProps = (id: string) => {
   if (id === Columns.TOKEN) {
-    return { className: styles.token };
+    return { className: styles.token, key: id };
   } else {
-    return { className: styles.amount };
+    return { className: styles.amount, key: id };
   }
 };
 
@@ -56,6 +56,14 @@ const getCustomHeaderProps = (_: unknown, meta: MetaBase<Row> & { column: Header
 
 const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> }) =>
   getColumnProps(meta.cell.column.id);
+
+const getCustomHeaderGroupProps = (_: unknown, meta: MetaBase<Row> & { column: HeaderGroup<Row> }) => ({
+  key: meta.userProps.name
+});
+
+const getCustomRowProps = (_: unknown, meta: MetaBase<Row> & { row: TableRow<Row> }) => ({
+  key: meta.row.index
+});
 
 export const useFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
@@ -76,21 +84,22 @@ export const useFeeTokensListViewModel = () => {
           { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees }
         ];
       })
-      .flat()
+      .flat();
+
+    const feesByTokens = feesAddends
+      .reduce<typeof feesAddends>((acc, { token: currentToken, deposit, fee }) => {
+        const existentTokenSum = acc.find(({ token }) => isTokenEqual(token, currentToken));
+
+        if (existentTokenSum) {
+          existentTokenSum.deposit = existentTokenSum.deposit.plus(deposit);
+          existentTokenSum.fee = existentTokenSum.fee.plus(fee);
+        } else {
+          acc.push({ token: currentToken, deposit, fee });
+        }
+
+        return acc;
+      }, [])
       .filter(({ fee }) => isGreaterThanZero(fee));
-
-    const feesByTokens = feesAddends.reduce<typeof feesAddends>((acc, { token: currentToken, deposit, fee }) => {
-      const existentTokenSum = acc.find(({ token }) => isTokenEqual(token, currentToken));
-
-      if (existentTokenSum) {
-        existentTokenSum.deposit = existentTokenSum.deposit.plus(deposit);
-        existentTokenSum.fee = existentTokenSum.fee.plus(fee);
-      } else {
-        acc.push({ token: currentToken, deposit, fee });
-      }
-
-      return acc;
-    }, []);
 
     return feesByTokens.map(({ token, deposit, fee }) => {
       const exchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(token) : TESTNET_EXCHANGE_RATE;
@@ -110,6 +119,8 @@ export const useFeeTokensListViewModel = () => {
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,
-    getCustomCellProps
+    getCustomHeaderGroupProps,
+    getCustomCellProps,
+    getCustomRowProps
   };
 };
