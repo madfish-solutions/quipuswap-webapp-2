@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { defined } from '@shared/helpers';
@@ -22,25 +24,46 @@ export const useV3NewPool = () => {
   const liquidityV3PoolStore = useLiquidityV3ItemStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  // eslint-disable-next-line no-console
-  console.log(liquidityV3PoolStore.item);
-
-  const createNewV3Pool = async () => {
-    const logData = {
-      liquiditySlippage,
-      transactionDeadline,
-      item: liquidityV3PoolStore.item,
-      contractAddress: liquidityV3PoolStore.contractAddress
-    };
-
-    try {
-      amplitudeService.logEvent('DEX_V3_NEW_POOL', logData);
-      const operation = await V3Positions.doNewPositionTransaction(
+  const createNewV3Pool = async (
+    minPrice: BigNumber,
+    maxPrice: BigNumber,
+    xTokenAmount: BigNumber,
+    yTokenAmount: BigNumber
+  ) => {
+    if (!tezos || !accountPkh || !liquidityV3PoolStore.contractAddress || !tokenX || !tokenY) {
+      return (
         defined(tezos, 'tezos'),
         defined(accountPkh, 'accountPkh'),
         defined(liquidityV3PoolStore.contractAddress, 'contractAddress'),
         defined(tokenX, 'tokenX'),
         defined(tokenY, 'tokenY')
+      );
+    }
+    const logData = {
+      liquiditySlippage,
+      transactionDeadline,
+      item: liquidityV3PoolStore.item,
+      contractAddress: liquidityV3PoolStore.contractAddress,
+      minPrice: minPrice.toFixed(),
+      maxPrice: maxPrice.toFixed(),
+      xTokenAmount: xTokenAmount.toFixed(),
+      yTokenAmount: yTokenAmount.toFixed()
+    };
+
+    try {
+      amplitudeService.logEvent('DEX_V3_NEW_POOL', logData);
+      const operation = await V3Positions.doNewPositionTransaction(
+        tezos,
+        accountPkh,
+        liquidityV3PoolStore.contractAddress,
+        tokenX,
+        tokenY,
+        transactionDeadline,
+        liquiditySlippage,
+        minPrice,
+        maxPrice,
+        xTokenAmount,
+        yTokenAmount
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
       amplitudeService.logEvent('DEX_V3_NEW_POOL_SUCCESS', logData);

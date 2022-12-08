@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useLocation } from 'react-router-dom';
@@ -27,7 +28,7 @@ export const OpenNewPosition: FC = observer(() => {
   const createPositionHandler = () => {
     // eslint-disable-next-line no-console
     console.log('click', `${pathname}${LiquidityRoutes.create}`);
-    void createNewV3Pool();
+    void createNewV3Pool(new BigNumber('123'), new BigNumber('234'), new BigNumber('10'), new BigNumber('20'));
   };
 
   return (
