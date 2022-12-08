@@ -5,12 +5,12 @@ import { useToasts } from '@shared/utils';
 
 import { useLiquidityV3ItemStore } from '../store';
 
-export const useGetLiquidityV3Item = () => {
+export const useGetLiquidityV3ItemBalances = () => {
   const { showErrorToast } = useToasts();
   const liquidityV3ItemStore = useLiquidityV3ItemStore();
   const isReady = useReady();
 
-  const getLiquidityV3Item = useCallback(async () => {
+  const getLiquidityV3ItemBalances = useCallback(async () => {
     if (!isReady) {
       return;
     }
@@ -22,5 +22,5 @@ export const useGetLiquidityV3Item = () => {
     }
   }, [isReady, liquidityV3ItemStore.contractBalanceStore, showErrorToast]);
 
-  return { getLiquidityV3Item };
+  return { getLiquidityV3ItemBalances };
 };
