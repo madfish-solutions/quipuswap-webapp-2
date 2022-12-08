@@ -4,7 +4,7 @@ import { isNull } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 
-import { BlockchainLiquidityV3Api } from '../api';
+import { V3LiquidityPoolApi } from '../api';
 import { LiquidityV3PositionsResponseModel } from '../models';
 
 const defaultPositionsResponse = { value: null };
@@ -49,6 +49,6 @@ export class LiquidityV3PositionsStore {
       return emptyPositionsListResponse;
     }
 
-    return { value: await BlockchainLiquidityV3Api.getUserPositionsWithTicks(tezos, accountPkh, this.poolId) };
+    return { value: await V3LiquidityPoolApi.getUserPositionsWithTicks(tezos, accountPkh, this.poolId) };
   }
 }
