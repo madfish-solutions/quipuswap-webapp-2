@@ -19,17 +19,18 @@ export const usePositionsWithStats = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   const rawPositions = v3PositionsStore.positions;
+  const item = poolStore.item;
 
   const loading = poolStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
   const error = poolStore.error ?? v3PositionsStore.positionsStore.error;
 
   const positionsWithStats = useMemo(() => {
-    if (isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {
+    if (isNull(rawPositions) || isNull(tokenX) || isNull(tokenY) || isNull(item)) {
       return [];
     }
 
-    return rawPositions.map(mapPositionWithStats(tokenX, tokenY, currentPrice, getTokenExchangeRate));
-  }, [rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate]);
+    return rawPositions.map(mapPositionWithStats(tokenX, tokenY, currentPrice, getTokenExchangeRate, item.storage));
+  }, [rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, item]);
 
   return { positionsWithStats, loading, error };
 };
