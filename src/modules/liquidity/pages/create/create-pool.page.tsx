@@ -14,6 +14,7 @@ import { useCreatePoolViewModel } from './use-create-pool.vm';
 
 export const CreatePoolPage: FC = observer(() => {
   const {
+    cardContentClassName,
     translations,
     createHighEfficiencyPoolIcon,
     createRegularPoolIcon,
@@ -30,7 +31,7 @@ export const CreatePoolPage: FC = observer(() => {
       <PageTitle>{createPool}</PageTitle>
 
       <Card
-        contentClassName={styles.cardContent}
+        contentClassName={cardContentClassName}
         header={{
           content: (
             <div className={styles.headerContent}>

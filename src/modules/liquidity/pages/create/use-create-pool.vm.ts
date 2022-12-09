@@ -1,3 +1,5 @@
+import cx from 'classnames';
+
 import CreateHighEfficiencyPoolDark from '@images/create-efficient-pool-dark.png';
 import CreateHighEfficiencyPoolLight from '@images/create-efficient-pool-light.png';
 import CreateRegularPoolDark from '@images/create-regular-pool-dark.png';
@@ -8,6 +10,13 @@ import { ColorModes } from '@providers/color-theme-context';
 import { isDev, isEqual } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
+
+import styles from './create-pool.module.scss';
+
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
 
 export const useCreatePoolViewModel = () => {
   const uiStore = useUiStore();
@@ -33,6 +42,7 @@ export const useCreatePoolViewModel = () => {
   const shouldShowCreateHighEfficiencyPool = isDev();
 
   return {
+    cardContentClassName: cx(modeClass[uiStore.colorThemeMode], styles.cardContent),
     translations,
     createHighEfficiencyPoolIcon,
     createRegularPoolIcon,
