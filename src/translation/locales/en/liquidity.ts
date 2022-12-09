@@ -46,6 +46,7 @@ export const liquidity = {
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',
   createPool: 'Create Pool',
+  highEfficiencyPool: 'High capital efficiency for 2 assets',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
   back: 'Back',
