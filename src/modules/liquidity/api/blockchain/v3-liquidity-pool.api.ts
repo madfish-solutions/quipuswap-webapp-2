@@ -3,15 +3,13 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
-import { ZERO_AMOUNT_BN } from '@config/constants';
+import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import { bigNumberToString, defined, getUniqArray, isExist, getTransactionDeadline } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
 import { FeeGrowth } from '../../types';
-
-const QUIPUSWAP_REFERRAL_CODE = 1;
 
 export namespace V3LiquidityPoolApi {
   export interface V3PoolTick {
