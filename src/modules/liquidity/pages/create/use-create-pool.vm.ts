@@ -5,6 +5,7 @@ import CreateRegularPoolLight from '@images/create-regular-pool-light.png';
 import CreateStablePoolDark from '@images/create-stable-pool-dark.png';
 import CreateStablePoolLight from '@images/create-stable-pool-light.png';
 import { ColorModes } from '@providers/color-theme-context';
+import { isDev } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -29,10 +30,13 @@ export const useCreatePoolViewModel = () => {
     back: t('liquidity|back')
   };
 
+  const shouldShowCreateHighEfficiencyPool = isDev();
+
   return {
     translations,
     createHighEfficiencyPoolIcon,
     createRegularPoolIcon,
-    createStablePoolIcon
+    createStablePoolIcon,
+    shouldShowCreateHighEfficiencyPool
   };
 };
