@@ -25,7 +25,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-basis: 50%;
+  flex: 1;
 }
 
 .img {
@@ -48,20 +48,37 @@
 }
 
 @include media('<tablet') {
-  .cardContent::before {
-    content: "";
-    position: absolute;
-    display: block;
-    height: 1px;
-    width: 100%;
-    left: 0;
-    top: 50%;
-    background-color: $text-01;
-    transform: translateY(-8px);
+  .poolWrapper {
+    position: relative;
+    margin-bottom: 64px;
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      height: 1px;
+      width: calc(100% + 48px);
+      left: -24px;
+      bottom: -24px;
+    }
   }
 
-  .poolWrapper:first-child {
-    margin-bottom: 64px;
+  .poolWrapper:last-child {
+    margin-bottom: 0;
+    &::after {
+      display: none;
+    }
+  }
+
+  .dark {
+    .poolWrapper::after {
+      background-color: $text-01;
+    }
+  }
+
+  .light {
+    .poolWrapper::after {
+      background-color: $ui-03;
+    }
   }
 }
 
