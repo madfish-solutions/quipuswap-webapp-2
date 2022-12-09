@@ -5,22 +5,22 @@ import CreateRegularPoolLight from '@images/create-regular-pool-light.png';
 import CreateStablePoolDark from '@images/create-stable-pool-dark.png';
 import CreateStablePoolLight from '@images/create-stable-pool-light.png';
 import { ColorModes } from '@providers/color-theme-context';
-import { isDev } from '@shared/helpers';
+import { isDev, isEqual } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 export const useCreatePoolViewModel = () => {
   const uiStore = useUiStore();
   const { t } = useTranslation();
+  const shouldUseDarkIcons = isEqual(uiStore.colorThemeMode, ColorModes.Dark);
 
-  const createHighEfficiencyPoolIcon =
-    uiStore.colorThemeMode === ColorModes.Dark ? CreateHighEfficiencyPoolDark : CreateHighEfficiencyPoolLight;
+  const createHighEfficiencyPoolIcon = shouldUseDarkIcons
+    ? CreateHighEfficiencyPoolDark
+    : CreateHighEfficiencyPoolLight;
 
-  const createRegularPoolIcon =
-    uiStore.colorThemeMode === ColorModes.Dark ? CreateRegularPoolDark : CreateRegularPoolLight;
+  const createRegularPoolIcon = shouldUseDarkIcons ? CreateRegularPoolDark : CreateRegularPoolLight;
 
-  const createStablePoolIcon =
-    uiStore.colorThemeMode === ColorModes.Dark ? CreateStablePoolDark : CreateStablePoolLight;
+  const createStablePoolIcon = shouldUseDarkIcons ? CreateStablePoolDark : CreateStablePoolLight;
 
   const translations = {
     createPool: t('liquidity|createPool'),
