@@ -6,15 +6,15 @@ import { FarmVersion } from '@modules/farming/interfaces';
 import { PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
+import { NETWORK_ID, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
 export const QUIPUSWAP_URL = `https://${QUIPUSWAP_DOMAIN_NAME}`;
 
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
-
-export const TZKT_API_DELEGATE_URL = 'https://api.tzkt.io/v1/delegates';
+export const TZKT_API_DELEGATE_URL = `${TZKT_API}/delegates`;
+export const TZKT_API_CONTRACTS_URL = `${TZKT_API}/contracts`;
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';

@@ -9,8 +9,6 @@ import { AmountToken, Token } from '@shared/types';
 import { calculateLiquidity, calculateTickIndex, calculateTickPrice } from '../../helpers';
 
 export namespace V3Positions {
-  export const getCurrentTickIndex = () => {};
-
   export const doNewPositionTransaction = async (
     tezos: TezosToolkit,
     accountPkh: string,
@@ -28,7 +26,9 @@ export namespace V3Positions {
     maxPrice: BigNumber,
 
     xTokenAmount: BigNumber,
-    yTokenAmount: BigNumber
+    yTokenAmount: BigNumber,
+
+    ticks: number[]
   ) => {
     const contract = await tezos.wallet.at(contractAddress);
 
