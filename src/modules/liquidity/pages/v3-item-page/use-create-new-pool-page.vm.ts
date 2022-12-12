@@ -23,7 +23,7 @@ const MOCK_TOKEN_X = {
     categories: ['stablecoin']
   },
   isWhitelisted: false,
-  contractAddress: 'KT1Q1qqJAzzxzGzQB6RmxnAKgxttf7Hntceg'
+  contractAddress: 'KT18uv7PtGedfudtG7QwFTrDBRjdLe5qj2my'
 };
 const MOCK_TOKEN_Y: Token = {
   type: Standard.Fa2,
