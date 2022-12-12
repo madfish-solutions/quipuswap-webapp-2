@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
 import { REFERRAL_CODE } from '@config/config';
-import { decreaseBySlippage, getTransactionDeadline } from '@shared/helpers';
+import { decreaseBySlippage, findLeftElement, getTransactionDeadline } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
 
 import { calculateLiquidity, calculateTickIndex, calculateTickPrice } from '../../helpers';
@@ -49,6 +49,36 @@ export namespace V3Positions {
       yTokenAmount
     );
     const liquidityWithSlippage = decreaseBySlippage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+
+    const lowerTickWitness = new BigNumber(findLeftElement(ticks, lowerTickIndex.toNumber()));
+    const upperTickWitness = new BigNumber(findLeftElement(ticks, upperTickIndex.toNumber()));
+
+    // eslint-disable-next-line no-console
+    console.log('ticks', ticks);
+
+    // eslint-disable-next-line no-console
+    console.log('params', {
+      lowerTickIndex: lowerTickIndex.toFixed(),
+      upperTickIndex: upperTickIndex.toFixed(),
+
+      currentTickIndex: currentTickIndex.toFixed(),
+
+      // TODO: Get all ticks from the contract (left numbers from tick_index (both))
+      lowerTickWitness: lowerTickWitness.toFixed(), // lower_tick_witness
+      upperTickWitness: upperTickWitness.toFixed(), // upper_tick_witness
+
+      liquidityWithSlippage,
+
+      deadline,
+
+      xTokenAmount: xTokenAmount.toFixed(), // maximum_tokens_contributed X
+      yTokenAmount: yTokenAmount.toFixed(), // maximum_tokens_contributed Y
+
+      REFERRAL_CODE
+    });
+    if (ticks) {
+      return;
+    }
 
     // TODO https://better-call.dev/ghostnet/KT1Sy7BKFpAMypwHN25qmDiLbv4CZqAMH3g4/interact/set_position
     const operationParams = contract.methods
