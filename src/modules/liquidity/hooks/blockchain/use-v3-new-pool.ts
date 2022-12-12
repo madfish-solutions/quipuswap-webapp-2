@@ -62,9 +62,6 @@ export const useV3NewPool = () => {
     try {
       amplitudeService.logEvent('DEX_V3_NEW_POOL', logData);
       const ticks = await getLiquidityTicks(liquidityV3PoolStore.contractAddress);
-      if (ticks) {
-        return;
-      }
       const operation = await V3Positions.doNewPositionTransaction(
         tezos,
         accountPkh,
@@ -80,6 +77,9 @@ export const useV3NewPool = () => {
         yTokenAmount,
         ticks
       );
+      if (!operation) {
+        return;
+      }
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
       amplitudeService.logEvent('DEX_V3_NEW_POOL_SUCCESS', logData);
     } catch (error) {

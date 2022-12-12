@@ -57,3 +57,10 @@ export const fillIndexArray = (value: number) => {
 
   return indexArray;
 };
+
+export const findLeftElement = <T>(sortedList: T[], element: T): T => {
+  const peakIndex = sortedList.findIndex(item => item >= element);
+  const index = peakIndex === -1 ? sortedList.length - 1 : peakIndex ? peakIndex - 1 : 0;
+
+  return sortedList[index];
+};
