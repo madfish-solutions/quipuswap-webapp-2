@@ -2,9 +2,11 @@ import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { sendBatch } from '@blockchain';
+import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
-import { getStorageInfo } from '@shared/dapp';
-import { bigNumberToString, defined, getUniqArray, isExist } from '@shared/helpers';
+import { getContract, getStorageInfo } from '@shared/dapp';
+import { bigNumberToString, defined, getUniqArray, isExist, getTransactionDeadline } from '@shared/helpers';
 import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
 
 import { FeeGrowth } from '../../types';
@@ -70,6 +72,35 @@ export namespace V3LiquidityPoolApi {
       contractAddress,
       storage: await getStorageInfo<V3PoolStorage>(tezos, contractAddress)
     };
+  };
+
+  export const claimFees = async (
+    tezos: TezosToolkit,
+    contractAddress: string,
+    positionsIds: BigNumber[],
+    accountPkh: string,
+    transactionDuration: BigNumber
+  ) => {
+    const contract = await getContract(tezos, contractAddress);
+    const transactionDeadline = await getTransactionDeadline(tezos, transactionDuration);
+
+    return await sendBatch(
+      tezos,
+      positionsIds.map(id =>
+        contract.methods
+          .update_position(
+            id,
+            ZERO_AMOUNT_BN,
+            accountPkh,
+            accountPkh,
+            transactionDeadline,
+            ZERO_AMOUNT_BN,
+            ZERO_AMOUNT_BN,
+            QUIPUSWAP_REFERRAL_CODE
+          )
+          .toTransferParams()
+      )
+    );
   };
 
   const getUserPositionsIds = async (contractStorage: V3PoolStorage, accountPkh: string) => {
