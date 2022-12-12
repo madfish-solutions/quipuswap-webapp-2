@@ -5,3 +5,5 @@ export const isEmptyString = (str: string) => str.length === ZERO_LENGTH || str 
 export const getLastChar = (str: string) => str[str.length - 1];
 
 export const isString = <T>(str: string | T): str is string => typeof str === 'string';
+
+export const toHexString = (data: unknown) => Buffer.from(String(data)).toString('hex');

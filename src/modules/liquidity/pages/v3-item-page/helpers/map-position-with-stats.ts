@@ -4,11 +4,12 @@ import { IS_NETWORK_MAINNET } from '@config/config';
 import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-import { getSumOfNumbers, getTokenDecimals, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
+import { getSumOfNumbers, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { calculateDeposit } from './calculate-deposit';
 import { calculateFees } from './calculate-fees';
+import { calculateTokenPriceDecimals } from './calculate-token-price-decimals';
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 
 export const mapPositionWithStats = (
@@ -20,7 +21,7 @@ export const mapPositionWithStats = (
 ) => {
   const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
   const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
-  const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
+  const tokenPriceDecimals = calculateTokenPriceDecimals(tokenX, tokenY);
 
   return (position: LiquidityV3Position) => {
     const minRange = toReal(convertToAtomicPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
