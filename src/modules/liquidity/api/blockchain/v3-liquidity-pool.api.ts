@@ -1,11 +1,20 @@
-import { MichelsonMapKey } from '@taquito/michelson-encoder';
+import { MichelsonMap, MichelsonMapKey } from '@taquito/michelson-encoder';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getStorageInfo } from '@shared/dapp';
-import { bigNumberToString, defined, getUniqArray, isExist } from '@shared/helpers';
-import { address, BigMap, int, nat, TokensValue, WithId } from '@shared/types';
+import {
+  bigNumberToString,
+  defined,
+  getSymbolsString,
+  getUniqArray,
+  getWalletContract,
+  isExist,
+  toHexString
+} from '@shared/helpers';
+import { mapTokensValue } from '@shared/mapping/map-token-value';
+import { address, BigMap, int, nat, Token, TokensValue, WithId } from '@shared/types';
 
 import { FeeGrowth } from '../../types';
 
@@ -126,5 +135,35 @@ export namespace V3LiquidityPoolApi {
         id: upper_tick_index
       }
     }));
+  };
+
+  const DEFAULT_TICK_SPACING = 1;
+
+  export const createPool = async (
+    tezos: TezosToolkit,
+    tokenX: Token,
+    tokenY: Token,
+    currentTickIndex: int,
+    feeBps: nat
+  ) => {
+    const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
+    const symbol = getSymbolsString([tokenX, tokenY]);
+    const metadata = new MichelsonMap({ prim: 'map', args: [{ prim: 'string' }, { prim: 'bytes' }] });
+    metadata.set('description', toHexString('Yet another Quipuswap V3 pool'));
+    metadata.set('name', toHexString(symbol));
+    metadata.set('shouldPreferSymbol', toHexString(true));
+    metadata.set('symbol', toHexString(symbol));
+    metadata.set('thumbnailUri', toHexString('https://i.imgur.com/1J8Hr3B.png'));
+
+    return factoryContract.methodsObject
+      .deploy_pool({
+        cur_tick_index: currentTickIndex,
+        token_x: mapTokensValue(tokenX),
+        token_y: mapTokensValue(tokenY),
+        fee_bps: feeBps,
+        tick_spacing: DEFAULT_TICK_SPACING,
+        metadata
+      })
+      .send();
   };
 }
