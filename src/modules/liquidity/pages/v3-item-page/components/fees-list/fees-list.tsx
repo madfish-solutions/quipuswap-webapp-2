@@ -22,6 +22,7 @@ interface Props {
   isUserTotalDepositExist: boolean;
   translation: Record<string, string>;
   details: ReactNode;
+  claimIsDisabled?: boolean;
 }
 
 export const FeesList: FC<Props> = ({
@@ -30,7 +31,8 @@ export const FeesList: FC<Props> = ({
   userTotalDepositInfo,
   isUserTotalDepositExist,
   translation,
-  details
+  details,
+  claimIsDisabled = false
 }) => {
   const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
     translation;
@@ -50,6 +52,7 @@ export const FeesList: FC<Props> = ({
       currency="$"
       buttonUp
       details={details}
+      disabled={claimIsDisabled}
       rewardsLabel={totalFeesTranslation}
     >
       {isUserTotalDepositExist && (
