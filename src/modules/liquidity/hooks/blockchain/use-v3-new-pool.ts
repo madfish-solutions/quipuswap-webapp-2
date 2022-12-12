@@ -9,6 +9,7 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3Positions } from '../../api/blockchain/v3-liquidity-pool-positions';
+import { getLiquidityTicks } from '../../api/v3-liquidity-ticks';
 import { useLiquidityV3ItemTokens } from '../helpers';
 import { useLiquidityV3ItemStore } from '../store';
 
@@ -60,6 +61,10 @@ export const useV3NewPool = () => {
 
     try {
       amplitudeService.logEvent('DEX_V3_NEW_POOL', logData);
+      const ticks = await getLiquidityTicks(liquidityV3PoolStore.contractAddress);
+      if (ticks) {
+        return;
+      }
       const operation = await V3Positions.doNewPositionTransaction(
         tezos,
         accountPkh,
@@ -72,7 +77,8 @@ export const useV3NewPool = () => {
         minPrice,
         maxPrice,
         xTokenAmount,
-        yTokenAmount
+        yTokenAmount,
+        ticks
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
       amplitudeService.logEvent('DEX_V3_NEW_POOL_SUCCESS', logData);
