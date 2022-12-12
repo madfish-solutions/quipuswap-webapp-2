@@ -17,7 +17,7 @@ export const useRouterViewModel = () => {
   useEffect(() => {
     if (isExist(poolId) && tezos) {
       if (isExist(positionId)) {
-        positionStore.setPositionId(Number(positionId));
+        positionStore.setPositionId(new BigNumber(positionId));
       }
       poolStore.setPoolId(new BigNumber(poolId));
       (async () => {

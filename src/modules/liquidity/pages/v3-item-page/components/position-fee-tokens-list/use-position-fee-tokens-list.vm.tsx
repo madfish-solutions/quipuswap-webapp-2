@@ -2,12 +2,14 @@ import { ReactNode, useMemo } from 'react';
 
 import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 
-import { useLiquidityV3ItemTokens, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
+import { useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { TokenInfo } from '@shared/elements';
-import { isExist, multipliedIfPossible, isNull } from '@shared/helpers';
+import { multipliedIfPossible, isNull } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
+import { getUserPosition } from '../../helpers';
+import { useUserInfoRows } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { TokenFeeCell } from '../token-fee-cell';
 import styles from './position-fee-tokens-list.module.scss';
@@ -58,28 +60,16 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
 export const usePositionFeeTokensListViewModel = () => {
   const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { positionId } = useLiquidityV3PositionStore();
+  const { getUserInfoRows } = useUserInfoRows();
+  const userPosition = getUserPosition(positionsWithStats, positionId);
 
   const rows: Row[] = useMemo(() => {
-    if (!isExist(tokenX) || !isExist(tokenY) || isNull(positionId)) {
+    if (isNull(positionId)) {
       return [];
     }
 
-    const { tokenXDeposit, tokenYDeposit, tokenXFees, tokenYFees } = positionsWithStats[positionId].stats;
-
-    const userDepositWithFees = [
-      {
-        token: tokenX,
-        deposit: tokenXDeposit,
-        fee: tokenXFees
-      },
-      {
-        token: tokenY,
-        deposit: tokenYDeposit,
-        fee: tokenYFees
-      }
-    ];
+    const userDepositWithFees = getUserInfoRows(userPosition);
 
     return userDepositWithFees.map(({ token, deposit, fee }) => {
       const exchangeRate = getTokenExchangeRate(token);
@@ -92,7 +82,7 @@ export const usePositionFeeTokensListViewModel = () => {
         [Columns.FEE]: <TokenFeeCell amount={fee} dollarEquivalent={feeDollarEquivalent} />
       };
     });
-  }, [tokenX, tokenY, positionId, positionsWithStats, getTokenExchangeRate]);
+  }, [getTokenExchangeRate, getUserInfoRows, positionId, userPosition]);
 
   return {
     data: rows,
