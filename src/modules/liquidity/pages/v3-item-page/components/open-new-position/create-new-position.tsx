@@ -9,7 +9,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { useV3NewPool } from '../../../../hooks';
+import { useV3NewPosition } from '../../../../hooks';
 import { LiquidityRoutes } from '../../../../liquidity-routes.enum';
 import styles from './create-new-position.module.scss';
 
@@ -22,7 +22,7 @@ export const OpenNewPosition: FC = observer(() => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { pathname } = useLocation();
-  const { createNewV3Pool } = useV3NewPool();
+  const { createNewV3Pool } = useV3NewPosition();
 
   // TODO:  href={`${pathname}${LiquidityRoutes.create}`}
   const createPositionHandler = () => {

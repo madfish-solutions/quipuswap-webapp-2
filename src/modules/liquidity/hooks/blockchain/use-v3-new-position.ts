@@ -13,7 +13,7 @@ import { getLiquidityTicks } from '../../api/v3-liquidity-ticks';
 import { useLiquidityV3ItemTokens } from '../helpers';
 import { useLiquidityV3ItemStore } from '../store';
 
-export const useV3NewPool = () => {
+export const useV3NewPosition = () => {
   const { tezos } = useRootStore();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -60,7 +60,7 @@ export const useV3NewPool = () => {
     };
 
     try {
-      amplitudeService.logEvent('DEX_V3_NEW_POOL', logData);
+      amplitudeService.logEvent('DEX_V3_NEW_POSITION', logData);
       const ticks = await getLiquidityTicks(liquidityV3PoolStore.contractAddress);
       const operation = await V3Positions.doNewPositionTransaction(
         tezos,
@@ -81,10 +81,10 @@ export const useV3NewPool = () => {
         return;
       }
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
-      amplitudeService.logEvent('DEX_V3_NEW_POOL_SUCCESS', logData);
+      amplitudeService.logEvent('DEX_V3_NEW_POSITION_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
-      amplitudeService.logEvent('DEX_V3_NEW_POOL_FAILED', { ...logData, error });
+      amplitudeService.logEvent('DEX_V3_NEW_POSITION_FAILED', { ...logData, error });
     }
   };
 
