@@ -46,6 +46,7 @@ export const liquidity = {
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',
   createPool: 'Create Pool',
+  highEfficiencyPool: 'High capital efficiency for 2 assets',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
   back: 'Back',
@@ -103,6 +104,8 @@ export const liquidity = {
   maxPriceTooltip: 'Maximal price',
   collectedFees: 'Collected fees',
   collectedFeesTooltip: 'CollectedFees',
+  claimFee: 'Claim fee',
+  claimingSuccessful: 'Claiming successful',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
