@@ -8,7 +8,7 @@ import { multipliedIfPossible, isNull } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
-import { getUserPosition } from '../../helpers';
+import { findUserPosition } from '../../helpers';
 import { useUserInfoRows } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { TokenFeeCell } from '../token-fee-cell';
@@ -62,7 +62,8 @@ export const usePositionFeeTokensListViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { getUserInfoRows } = useUserInfoRows();
-  const userPosition = getUserPosition(positionsWithStats, positionId);
+
+  const userPosition = findUserPosition(positionsWithStats, positionId);
 
   const rows: Row[] = useMemo(() => {
     if (isNull(positionId)) {

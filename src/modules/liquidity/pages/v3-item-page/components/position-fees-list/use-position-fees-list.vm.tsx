@@ -3,7 +3,7 @@ import { useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { getUserPosition } from '../../helpers';
+import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { PositionFeeTokensList } from '../position-fee-tokens-list';
 
@@ -12,7 +12,7 @@ export const usePositionFeesListViewModel = () => {
   const { positionsWithStats, loading, error } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
 
-  const userPosition = getUserPosition(positionsWithStats, positionId);
+  const userPosition = findUserPosition(positionsWithStats, positionId);
 
   const handleClaimAll = () => amplitudeService.logEvent('CLAIM_ALL_FEES_CLICK');
 
