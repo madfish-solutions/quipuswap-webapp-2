@@ -6,6 +6,7 @@ import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { isExist, isNotFoundError, onlyDigits } from '@shared/helpers';
 
+import { InvalidPoolIdError } from './helpers';
 import { useRouteParams } from './hooks/use-route-params';
 
 export const useRouterViewModel = () => {
@@ -15,13 +16,8 @@ export const useRouterViewModel = () => {
 
   useEffect(() => {
     if (isExist(id) && onlyDigits(id) !== id) {
-      store.setError(new Error('Pool id is invalid'));
-
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {};
-    }
-
-    if (isExist(id) && tezos) {
+      store.setError(new InvalidPoolIdError(id));
+    } else if (isExist(id) && tezos) {
       store.setId(new BigNumber(id));
       (async () => {
         try {
