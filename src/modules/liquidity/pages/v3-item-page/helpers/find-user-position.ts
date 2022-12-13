@@ -1,14 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
 import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
-import { isNull } from '@shared/helpers';
+import { isEmptyArray, isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-export const getUserPosition = (
-  positionsWithStats: Nullable<Array<LiquidityV3PositionWithStats>>,
-  positionId: Nullable<BigNumber>
+export const findUserPosition = (
+  positionsWithStats: Array<LiquidityV3PositionWithStats>,
+  positionId: Nullable<BigNumber.Value>
 ) => {
-  if (isNull(positionsWithStats) || isNull(positionId)) {
+  if (isEmptyArray(positionsWithStats) || isNull(positionId)) {
     return null;
   }
 

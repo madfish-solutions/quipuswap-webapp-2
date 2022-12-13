@@ -47,7 +47,7 @@ export const PoolDetails: FC = observer(() => {
         tooltipContent={t('liquidity|currentPriceTooltip')}
         component={
           <AssetSwitcher
-            labels={[tokenXSymbol, tokenYSymbol]}
+            labels={[tokenYSymbol, tokenXSymbol]}
             activeIndex={tokenActiveIndex}
             handleButtonClick={handleButtonClick}
             className={styles.tokenSwitcher}

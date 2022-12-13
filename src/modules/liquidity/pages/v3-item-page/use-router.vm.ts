@@ -4,15 +4,20 @@ import BigNumber from 'bignumber.js';
 
 import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { isExist, isNotFoundError } from '@shared/helpers';
+import { isEmptyArray, isExist, isNotFoundError, isNull } from '@shared/helpers';
 
+import { findUserPosition } from './helpers';
+import { usePositionsWithStats } from './hooks/use-positions-with-stats';
 import { useRouteParams } from './hooks/use-route-params';
-
 export const useRouterViewModel = () => {
   const { tezos } = useRootStore();
   const { poolId, positionId } = useRouteParams();
   const poolStore = useLiquidityV3PoolStore();
   const positionStore = useLiquidityV3PositionStore();
+  const { positionsWithStats } = usePositionsWithStats();
+
+  const userPositionExist = Boolean(findUserPosition(positionsWithStats, positionId));
+  const isPageExist = isNull(positionId) || isEmptyArray(positionsWithStats) ? false : !userPositionExist;
 
   useEffect(() => {
     if (isExist(poolId) && tezos) {
@@ -34,7 +39,7 @@ export const useRouterViewModel = () => {
 
   return {
     isLoading: poolStore.itemIsLoading,
-    isNotFound: poolStore.error && isNotFoundError(poolStore.error),
+    isNotFound: isPageExist || (poolStore.error && isNotFoundError(poolStore.error)),
     error: poolStore.error
   };
 };
