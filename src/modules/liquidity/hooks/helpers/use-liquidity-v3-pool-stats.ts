@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { DOLLAR, PERCENT, FEE_BASE_POINTS_PRECISION } from '@config/constants';
-import { isExist } from '@shared/helpers';
+import { isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 import { useTranslation } from '@translation';
 
@@ -21,7 +21,12 @@ export const useLiquidityV3PoolStats = () => {
 
   const { tokenXBalance, tokenYBalance } = contractBalance;
 
-  const poolTvl = calculateV3ItemTvl(tokenXBalance, tokenYBalance, tokenXExchangeRate, tokenYExchangeRate);
+  const poolTvl = calculateV3ItemTvl(
+    toReal(tokenXBalance, tokenX),
+    toReal(tokenYBalance, tokenY),
+    tokenXExchangeRate,
+    tokenYExchangeRate
+  );
   const _currentPrice = isExist(currentPrice) ? getCurrentPrice(currentPrice, store.activeTokenIndex) : null;
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
