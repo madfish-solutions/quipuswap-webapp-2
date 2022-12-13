@@ -2,15 +2,12 @@ import { ReactNode, useMemo } from 'react';
 
 import { Cell, Column, HeaderGroup, MetaBase, Row as TableRow } from 'react-table';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
 import { TokenInfo } from '@shared/elements';
 import { isExist, isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/helpers';
-import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
-import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
+import { usePositionsWithStats, useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { TokenFeeCell } from '../token-fee-cell';
 import styles from './fee-tokens-list.module.scss';
 
@@ -66,9 +63,9 @@ const getCustomRowProps = (_: unknown, meta: MetaBase<Row> & { row: TableRow<Row
 });
 
 export const useFeeTokensListViewModel = () => {
-  const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
 
   const rows: Row[] = useMemo(() => {
     if (!isExist(tokenX) || !isExist(tokenY)) {
@@ -80,39 +77,50 @@ export const useFeeTokensListViewModel = () => {
         const { tokenXDeposit, tokenXFees, tokenYDeposit, tokenYFees } = stats;
 
         return [
-          { token: tokenX, deposit: tokenXDeposit, fee: tokenXFees },
-          { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees }
+          { token: tokenX, deposit: tokenXDeposit, fee: tokenXFees, exchangeRate: tokenXExchangeRate },
+          { token: tokenY, deposit: tokenYDeposit, fee: tokenYFees, exchangeRate: tokenYExchangeRate }
         ];
       })
       .flat();
 
     const feesByTokens = feesAddends
-      .reduce<typeof feesAddends>((acc, { token: currentToken, deposit, fee }) => {
+      .reduce<typeof feesAddends>((acc, { token: currentToken, deposit, fee, exchangeRate }) => {
         const existentTokenSum = acc.find(({ token }) => isTokenEqual(token, currentToken));
 
         if (existentTokenSum) {
           existentTokenSum.deposit = existentTokenSum.deposit.plus(deposit);
           existentTokenSum.fee = existentTokenSum.fee.plus(fee);
         } else {
-          acc.push({ token: currentToken, deposit, fee });
+          acc.push({ token: currentToken, deposit, fee, exchangeRate });
         }
 
         return acc;
       }, [])
       .filter(({ fee }) => isGreaterThanZero(fee));
 
-    return feesByTokens.map(({ token, deposit, fee }) => {
-      const exchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(token) : TESTNET_EXCHANGE_RATE;
+    return feesByTokens.map(({ token, deposit, fee, exchangeRate }) => {
       const depositDollarEquivalent = multipliedIfPossible(deposit, exchangeRate);
       const feeDollarEquivalent = multipliedIfPossible(fee, exchangeRate);
 
       return {
         [Columns.TOKEN]: <TokenInfo token={token} />,
-        [Columns.DEPOSIT]: <TokenFeeCell amount={deposit} dollarEquivalent={depositDollarEquivalent} />,
-        [Columns.FEE]: <TokenFeeCell amount={fee} dollarEquivalent={feeDollarEquivalent} />
+        [Columns.DEPOSIT]: (
+          <TokenFeeCell
+            amount={deposit}
+            dollarEquivalent={depositDollarEquivalent}
+            isExchangeRatesError={isExchangeRatesError}
+          />
+        ),
+        [Columns.FEE]: (
+          <TokenFeeCell
+            amount={fee}
+            dollarEquivalent={feeDollarEquivalent}
+            isExchangeRatesError={isExchangeRatesError}
+          />
+        )
       };
     });
-  }, [positionsWithStats, getTokenExchangeRate, tokenX, tokenY]);
+  }, [positionsWithStats, tokenX, tokenXExchangeRate, tokenY, tokenYExchangeRate, isExchangeRatesError]);
 
   return {
     rows,
