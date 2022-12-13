@@ -25,7 +25,7 @@ export const useV3NewPosition = () => {
   const liquidityV3PoolStore = useLiquidityV3ItemStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const createNewV3Pool = async (
+  const createNewV3Position = async (
     minPrice: BigNumber,
     maxPrice: BigNumber,
     xTokenAmount: BigNumber,
@@ -88,5 +88,5 @@ export const useV3NewPosition = () => {
     }
   };
 
-  return { createNewV3Pool };
+  return { createNewV3Position };
 };

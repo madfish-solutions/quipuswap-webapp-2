@@ -22,13 +22,13 @@ export const OpenNewPosition: FC = observer(() => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { pathname } = useLocation();
-  const { createNewV3Pool } = useV3NewPosition();
+  const { createNewV3Position } = useV3NewPosition();
 
   // TODO:  href={`${pathname}${LiquidityRoutes.create}`}
   const createPositionHandler = () => {
     // eslint-disable-next-line no-console
     console.log('click', `${pathname}${LiquidityRoutes.create}`);
-    void createNewV3Pool(new BigNumber('123'), new BigNumber('234'), new BigNumber('10'), new BigNumber('20'));
+    void createNewV3Position(new BigNumber('123'), new BigNumber('234'), new BigNumber('10'), new BigNumber('20'));
   };
 
   return (
