@@ -80,6 +80,7 @@ export const liquidity = {
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
   induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
   createPosition: 'Create new position',
+  newPool: 'New pool',
   positions: 'Positions',
   weeklyVolumeV3PoolTooltip: 'The weekly trading volume for a selected liquidity pool.',
   currentPrice: 'Current price',
