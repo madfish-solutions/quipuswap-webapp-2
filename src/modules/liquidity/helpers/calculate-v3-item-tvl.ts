@@ -11,4 +11,4 @@ export const calculateV3ItemTvl = (
 ) =>
   isExist(tokenXExchangeRate) && isExist(tokenYExchangeRate)
     ? tokenXBalance.multipliedBy(tokenXExchangeRate).plus(tokenYBalance.multipliedBy(tokenYExchangeRate))
-    : undefined;
+    : null;
