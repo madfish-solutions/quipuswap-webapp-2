@@ -17,7 +17,7 @@ export const useRouterViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
 
   const userPositionExist = Boolean(findUserPosition(positionsWithStats, positionId));
-  const isPageExist = isNull(positionId) || isEmptyArray(positionsWithStats) ? false : !userPositionExist;
+  const userPositionNotFound = !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist;
 
   useEffect(() => {
     if (isExist(poolId) && tezos) {
@@ -39,7 +39,7 @@ export const useRouterViewModel = () => {
 
   return {
     isLoading: poolStore.itemIsLoading,
-    isNotFound: isPageExist || (poolStore.error && isNotFoundError(poolStore.error)),
+    isNotFound: userPositionNotFound || (poolStore.error && isNotFoundError(poolStore.error)),
     error: poolStore.error
   };
 };
