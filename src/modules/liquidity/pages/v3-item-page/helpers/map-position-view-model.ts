@@ -17,7 +17,8 @@ export const mapPositionViewModel = (
   rangeLabelClasses: RangeLabelClasses,
   tokenX: Token,
   tokenY: Token,
-  poolId: BigNumber
+  poolId: BigNumber,
+  isExchangeRatesError: boolean
 ) => {
   return (positionWithStats: LiquidityV3PositionWithStats) => {
     const { stats, id } = positionWithStats;
@@ -66,7 +67,8 @@ export const mapPositionViewModel = (
             amount: depositUsd,
             dollarEquivalent: depositUsd,
             currency: tokensNames,
-            dollarEquivalentOnly: true
+            dollarEquivalentOnly: true,
+            isError: isExchangeRatesError
           },
           DTI: 'deposit',
           tooltip: i18n.t('liquidity|depositTooltip')
@@ -77,7 +79,8 @@ export const mapPositionViewModel = (
             amount: collectedFeesUsd,
             dollarEquivalent: collectedFeesUsd,
             currency: tokensNames,
-            dollarEquivalentOnly: true
+            dollarEquivalentOnly: true,
+            isError: isExchangeRatesError
           },
           DTI: 'collectedFees',
           tooltip: i18n.t('liquidity|collectedFeesTooltip')

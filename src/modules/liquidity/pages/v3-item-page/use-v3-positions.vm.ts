@@ -6,8 +6,10 @@ import { useLiquidityV3ItemTokens, useLiquidityV3PositionsStore } from '@modules
 import { ColorModes } from '@providers/color-theme-context';
 import { isExist } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
+import { useTranslation } from '@translation';
 
 import { mapPositionViewModel } from './helpers/map-position-view-model';
+import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
 import { usePositionsWithStats } from './hooks/use-positions-with-stats';
 import styles from './v3-positions-page.module.scss';
 
@@ -17,11 +19,15 @@ const rangeLabelClasses = {
 };
 
 export const useV3PositionsViewModel = () => {
+  const { t } = useTranslation();
   const { colorThemeMode } = useUiStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
 
   const poolId = v3PositionsStore.poolId;
+
+  const warningAlertMessage = isExchangeRatesError ? t('liquidity|v3ExchangeRatesError') : null;
 
   useEffect(() => {
     void v3PositionsStore.positionsStore.load();
@@ -41,10 +47,11 @@ export const useV3PositionsViewModel = () => {
         },
         tokenX,
         tokenY,
-        poolId
+        poolId,
+        isExchangeRatesError
       )
     );
-  }, [colorThemeMode, positionsWithStats, tokenX, tokenY, poolId]);
+  }, [colorThemeMode, positionsWithStats, tokenX, tokenY, poolId, isExchangeRatesError]);
 
-  return { isLoading, positionsViewModel, error };
+  return { isLoading, positionsViewModel, error, warningAlertMessage };
 };
