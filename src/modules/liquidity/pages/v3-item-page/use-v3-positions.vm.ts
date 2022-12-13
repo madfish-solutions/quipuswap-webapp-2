@@ -2,8 +2,13 @@ import { useEffect, useMemo } from 'react';
 
 import cx from 'classnames';
 
-import { useLiquidityV3ItemTokens, useLiquidityV3PositionsStore } from '@modules/liquidity/hooks';
+import {
+  useGetLiquidityV3ItemWithPositions,
+  useLiquidityV3ItemTokens,
+  useLiquidityV3PositionsStore
+} from '@modules/liquidity/hooks';
 import { ColorModes } from '@providers/color-theme-context';
+import { useRootStore } from '@providers/root-store-provider';
 import { isExist } from '@shared/helpers';
 import { useUiStore } from '@shared/hooks';
 
@@ -20,12 +25,16 @@ export const useV3PositionsViewModel = () => {
   const { colorThemeMode } = useUiStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { tezos } = useRootStore();
+  const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
 
   const poolId = v3PositionsStore.poolId;
 
   useEffect(() => {
-    void v3PositionsStore.positionsStore.load();
-  }, [v3PositionsStore, poolId]);
+    if (isExist(tezos) && isExist(poolId)) {
+      void getLiquidityV3ItemWithPositions();
+    }
+  }, [getLiquidityV3ItemWithPositions, poolId, tezos]);
 
   const { positionsWithStats, loading: isLoading, error } = usePositionsWithStats();
   const positionsViewModel = useMemo(() => {
