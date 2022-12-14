@@ -26,8 +26,6 @@ export const useRouterViewModel = () => {
       if (isExist(positionId)) {
         positionStore.setPositionId(new BigNumber(positionId));
       }
-      // eslint-disable-next-line no-console
-      console.log('setted');
       poolStore.setPoolId(new BigNumber(id));
       (async () => {
         try {
