@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserBalance } from '@blockchain';
-import { ZERO_AMOUNT_BN } from '@config/constants';
+import { FIRST_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
 import { defined, isNull, isTokenAddressFa2, t } from '@shared/helpers';
 import { mapTokenAddress } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
@@ -10,15 +10,15 @@ import { Fled } from '@shared/model-builder/fled';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Standard } from '@shared/types';
 
-import { BlockchainLiquidityV3Api } from '../api';
+import { V3LiquidityPoolApi } from '../api';
 import { LiquidityContractTokenBalancesModel } from '../models';
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
-
 @ModelBuilder()
 export class LiquidityV3ItemStore {
   error: Nullable<Error> = null;
   id: Nullable<BigNumber> = null;
+  activeTokenIndex = FIRST_INDEX;
 
   //# Quipuswap V3 pool tokens balance store
   @Led({
@@ -39,7 +39,7 @@ export class LiquidityV3ItemStore {
 
   //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
-    async () => await BlockchainLiquidityV3Api.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
+    async () => await V3LiquidityPoolApi.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
     t
   );
 
@@ -56,10 +56,15 @@ export class LiquidityV3ItemStore {
     makeObservable(this, {
       itemSore: observable,
       error: observable,
+      activeTokenIndex: observable,
       item: computed,
       itemModel: computed,
+      feeBps: computed,
+      sqrtPrice: computed,
+      contractAddress: computed,
       setId: action,
-      setError: action
+      setError: action,
+      setActiveTokenIndex: action
     });
   }
 
@@ -69,6 +74,10 @@ export class LiquidityV3ItemStore {
 
   setError(error: Error) {
     this.error = error;
+  }
+
+  setActiveTokenIndex(tokenIndex: number) {
+    this.activeTokenIndex = tokenIndex;
   }
 
   get itemModel() {
@@ -83,6 +92,10 @@ export class LiquidityV3ItemStore {
     return this.itemSore.rawData?.storage.sqrt_price;
   }
 
+  get contractAddress() {
+    return this.item?.contractAddress;
+  }
+
   async getPoolTokenBalances() {
     const { tezos } = this.rootStore;
 
@@ -91,7 +104,7 @@ export class LiquidityV3ItemStore {
     }
 
     const tokenXInfo = mapTokenAddress(this.item.storage.constants.token_x);
-    const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_x);
+    const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_y);
 
     const tokenXBalance = await getUserBalance(
       tezos,

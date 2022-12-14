@@ -1,0 +1,60 @@
+@import "@styles/breakpoints";
+
+.totalDeposit {
+  display: flex;
+  flex-direction: column;
+
+  height: 132px;
+  justify-content: flex-start;
+}
+
+.totalDepositCellName {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.statsValueText {
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+
+.containerFeeInfo {
+  column-gap: 40px;
+}
+
+.childrenFeeInfo {
+  align-items: center;
+  min-width: fit-content;
+  order: 1;
+  height: 40px;
+}
+
+.buttonFeeInfo {
+  flex-direction: column-reverse;
+}
+
+@include media(">tablet") {
+  .userInfoContainer {
+    flex: 1;
+    display: grid;
+    justify-items: flex-end;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 64px;
+  }
+
+  .childrenFeeInfo {
+    grid-column: 1/2;
+    grid-row: 1/4;
+  }
+
+  .buttonFeeInfo {
+    grid-row: 1/2;
+    grid-column: 2/3;
+  }
+
+  .viewDetailsButton {
+    grid-row: 3;
+    grid-column: 2/3;
+  }
+}

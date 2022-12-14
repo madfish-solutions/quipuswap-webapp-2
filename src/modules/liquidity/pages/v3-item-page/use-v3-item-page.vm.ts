@@ -1,16 +1,11 @@
 import { useEffect } from 'react';
 
-import { useLiquidityV3PoolStats } from '@modules/liquidity/hooks';
-
-import { useGetLiquidityV3Item } from '../../../liquidity/hooks/loaders/use-get-liquidity-v3-item';
+import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 
 export const useV3ItemPageViewModel = () => {
-  const { getLiquidityV3Item } = useGetLiquidityV3Item();
-  const { stats } = useLiquidityV3PoolStats();
+  const { getLiquidityV3ItemBalances } = useGetLiquidityV3ItemBalances();
 
   useEffect(() => {
-    void getLiquidityV3Item();
-  }, [getLiquidityV3Item]);
-
-  return { stats };
+    void getLiquidityV3ItemBalances();
+  }, [getLiquidityV3ItemBalances]);
 };

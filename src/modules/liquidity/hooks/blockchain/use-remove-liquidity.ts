@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { FISRT_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
+import { FIRST_INDEX, LP_TOKEN_DECIMALS } from '@config/constants';
 import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/helpers/mock-lp-token';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
@@ -52,7 +52,7 @@ export const useRemoveLiquidity = () => {
       sortTokens(a.token, b.token)
     );
 
-    if (isTezosToken(tokensAndAmounts[FISRT_INDEX].token)) {
+    if (isTezosToken(tokensAndAmounts[FIRST_INDEX].token)) {
       tokensAndAmounts.reverse();
     }
 
