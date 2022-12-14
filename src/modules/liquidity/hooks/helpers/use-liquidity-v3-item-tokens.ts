@@ -8,5 +8,8 @@ export const useLiquidityV3ItemTokens = () => {
   const tokenX = useToken(item ? mapTokenAddress(item.storage.constants.token_x) : null);
   const tokenY = useToken(item ? mapTokenAddress(item.storage.constants.token_y) : null);
 
+  // eslint-disable-next-line no-console
+  console.log(item);
+
   return { tokenX, tokenY };
 };

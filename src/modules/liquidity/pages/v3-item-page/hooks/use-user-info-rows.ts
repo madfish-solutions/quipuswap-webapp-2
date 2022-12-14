@@ -3,8 +3,11 @@ import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import { useLiquidityV3ItemTokensExchangeRates } from './use-liquidity-v3-item-tokens-exchange-rates';
+
 export const useUserInfoRows = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
 
   const getUserInfoRows = (userPosition: Nullable<LiquidityV3PositionWithStats>) => {
     if (isNull(userPosition) || isNull(tokenX) || isNull(tokenY)) {
@@ -20,12 +23,16 @@ export const useUserInfoRows = () => {
       {
         token: tokenX,
         deposit: tokenXDeposit,
-        fee: tokenXFees
+        fee: tokenXFees,
+        exchangeRate: tokenXExchangeRate,
+        isExchangeRatesError: isExchangeRatesError
       },
       {
         token: tokenY,
         deposit: tokenYDeposit,
-        fee: tokenYFees
+        fee: tokenYFees,
+        exchangeRate: tokenYExchangeRate,
+        isExchangeRatesError: isExchangeRatesError
       }
     ];
   };

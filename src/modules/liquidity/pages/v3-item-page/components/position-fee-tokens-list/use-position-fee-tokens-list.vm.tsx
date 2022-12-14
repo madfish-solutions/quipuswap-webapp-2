@@ -5,7 +5,6 @@ import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 import { useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { TokenInfo } from '@shared/elements';
 import { multipliedIfPossible, isNull } from '@shared/helpers';
-import { useTokenExchangeRate } from '@shared/hooks';
 import { i18n } from '@translation';
 
 import { findUserPosition } from '../../helpers';
@@ -58,7 +57,6 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
   getColumnProps(meta.cell.column.id);
 
 export const usePositionFeeTokensListViewModel = () => {
-  const { getTokenExchangeRate } = useTokenExchangeRate();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { getUserInfoRows } = useUserInfoRows();
@@ -72,18 +70,29 @@ export const usePositionFeeTokensListViewModel = () => {
 
     const userDepositWithFees = getUserInfoRows(userPosition);
 
-    return userDepositWithFees.map(({ token, deposit, fee }) => {
-      const exchangeRate = getTokenExchangeRate(token);
+    return userDepositWithFees.map(({ token, deposit, fee, exchangeRate, isExchangeRatesError }) => {
       const depositDollarEquivalent = multipliedIfPossible(deposit, exchangeRate);
       const feeDollarEquivalent = multipliedIfPossible(fee, exchangeRate);
 
       return {
         [Columns.TOKEN]: <TokenInfo token={token} />,
-        [Columns.DEPOSIT]: <TokenFeeCell amount={deposit} dollarEquivalent={depositDollarEquivalent} />,
-        [Columns.FEE]: <TokenFeeCell amount={fee} dollarEquivalent={feeDollarEquivalent} />
+        [Columns.DEPOSIT]: (
+          <TokenFeeCell
+            amount={deposit}
+            dollarEquivalent={depositDollarEquivalent}
+            isExchangeRatesError={isExchangeRatesError}
+          />
+        ),
+        [Columns.FEE]: (
+          <TokenFeeCell
+            amount={fee}
+            dollarEquivalent={feeDollarEquivalent}
+            isExchangeRatesError={isExchangeRatesError}
+          />
+        )
       };
     });
-  }, [getTokenExchangeRate, getUserInfoRows, positionId, userPosition]);
+  }, [getUserInfoRows, positionId, userPosition]);
 
   return {
     data: rows,

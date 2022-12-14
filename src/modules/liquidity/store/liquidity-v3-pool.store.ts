@@ -104,7 +104,7 @@ export class LiquidityV3PoolStore {
     }
 
     const tokenXInfo = mapTokenAddress(this.item.storage.constants.token_x);
-    const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_x);
+    const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_y);
 
     const tokenXBalance = await getUserBalance(
       tezos,

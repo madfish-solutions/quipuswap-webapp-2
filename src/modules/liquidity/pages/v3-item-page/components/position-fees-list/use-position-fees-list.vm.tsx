@@ -4,6 +4,7 @@ import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../helpers';
+import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { PositionFeeTokensList } from '../position-fee-tokens-list';
 
@@ -11,6 +12,7 @@ export const usePositionFeesListViewModel = () => {
   const { t } = useTranslation();
   const { positionsWithStats, loading, error } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
+  const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
 
   const userPosition = findUserPosition(positionsWithStats, positionId);
 
@@ -37,6 +39,7 @@ export const usePositionFeesListViewModel = () => {
       totalDepositTranslation: t('liquidity|totalDeposit')
     },
     claimablePendingRewards: claimablePendingRewardsInUsd,
-    details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionFeeTokensList />
+    details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionFeeTokensList />,
+    isRewardsError: isExchangeRatesError
   };
 };

@@ -1,13 +1,16 @@
+import { useMemo } from 'react';
+
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { useGetLiquidityV3ItemWithPositions, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { defined, getSumOfNumbers, isEmptyArray, isGreaterThanZero } from '@shared/helpers';
+import { defined, getSumOfNumbers, isEmptyArray, isGreaterThanZero, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { PositionsFeeTokensList } from '../positions-fee-tokens-list';
 
@@ -20,32 +23,37 @@ export const usePositionsFeesListViewModel = () => {
   const {
     settings: { transactionDeadline }
   } = useSettingsStore();
-  const { positionsWithStats, loading, error } = usePositionsWithStats();
+  const { positionsWithStats, loading, error: positionsError } = usePositionsWithStats();
   const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
+  const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const confirmOperation = useConfirmOperation();
 
   const contractAddress = v3PoolStore.item?.contractAddress;
 
   const positionsIdsWithFees = positionsWithStats
-    .filter(({ stats }) => isGreaterThanZero(stats.collectedFeesUsd))
+    .filter(({ stats }) => isGreaterThanZero(stats.tokenXFees) || isGreaterThanZero(stats.tokenYFees))
     .map(({ id }) => id);
   const claimIsDisabled = isEmptyArray(positionsIdsWithFees);
 
   const userTotalDepositInfo = {
     totalDepositAmount: getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.depositUsd)),
     totalDepositLoading: loading,
-    totalDepositError: error
+    totalDepositError: isExchangeRatesError ? t('liquidity|v3ExchangeRatesError') : positionsError
   };
   const isUserTotalDepositExist =
     (!userTotalDepositInfo.totalDepositAmount.isZero() || userTotalDepositInfo.totalDepositLoading) &&
     !Boolean(userTotalDepositInfo.totalDepositError);
-  const claimablePendingRewardsInUsd = getSumOfNumbers(positionsWithStats.map(({ stats }) => stats.collectedFeesUsd));
+  const claimablePendingRewardsInUsd = useMemo(() => {
+    const addends = positionsWithStats.map(({ stats }) => stats.collectedFeesUsd);
+
+    return addends.every(isNull) ? null : getSumOfNumbers(addends);
+  }, [positionsWithStats]);
 
   const handleClaimAll = async () => {
     const logData = {
       contractAddress,
       positionsIds: positionsIdsWithFees.map(id => id.toNumber()),
-      rewardsInUsd: claimablePendingRewardsInUsd.toNumber()
+      rewardsInUsd: claimablePendingRewardsInUsd?.toNumber()
     };
     try {
       amplitudeService.logEvent('CLAIM_V3_FEES_CLICK', logData);
@@ -77,6 +85,7 @@ export const usePositionsFeesListViewModel = () => {
     },
     claimablePendingRewards: claimablePendingRewardsInUsd,
     details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionsFeeTokensList />,
-    claimIsDisabled
+    claimIsDisabled,
+    isRewardsError: isExchangeRatesError
   };
 };
