@@ -24,6 +24,7 @@ interface Props {
   dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
+  isError?: boolean;
   className?: string;
   rewardsLabel?: string;
 }
@@ -35,6 +36,7 @@ export const PendingRewards: FC<Props> = ({
   claimablePendingRewards,
   totalPendingRewards,
   className,
+  isError,
   rewardsLabel
 }) => {
   const accountPkh = useAccountPkh();
@@ -65,6 +67,7 @@ export const PendingRewards: FC<Props> = ({
                 amount={claimablePendingRewards}
                 currency={currency}
                 dollarEquivalent={dollarEquivalent}
+                isError={isError}
                 amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 data-test-id="yourClaimableReward"
@@ -76,6 +79,7 @@ export const PendingRewards: FC<Props> = ({
                     className={styles.amount}
                     amount={totalPendingRewards}
                     currency={currency}
+                    isError={isError}
                     dollarEquivalent={dollarEquivalent}
                     amountDecimals={amountDecimals}
                     isLeftCurrency={currency === '$'}

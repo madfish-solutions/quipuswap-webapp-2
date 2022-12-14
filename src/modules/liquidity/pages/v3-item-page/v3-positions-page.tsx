@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { Iterator, ListItemCard, Skeleton, StateWrapper, TestnetAlert } from '@shared/components';
+import { WarningAlert } from '@shared/components/warning-alert';
 import { useTranslation } from '@translation';
 
 import {
@@ -17,13 +18,14 @@ import { useV3PositionsViewModel } from './use-v3-positions.vm';
 import styles from './v3-positions-page.module.scss';
 
 export const V3PositionsPage: FC = observer(() => {
-  const { isLoading, positionsViewModel } = useV3PositionsViewModel();
+  const { isLoading, positionsViewModel, warningAlertMessage } = useV3PositionsViewModel();
   const { t } = useTranslation();
 
   return (
     <>
       <TestnetAlert />
       <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|Liquidity')} />
+      <WarningAlert message={warningAlertMessage} className={styles.warningAlert} />
       <LiquidityV3PoolStats />
       <StateWrapper
         isLoading={isLoading}
