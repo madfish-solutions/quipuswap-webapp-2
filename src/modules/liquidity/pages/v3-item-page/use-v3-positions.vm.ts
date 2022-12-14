@@ -1,116 +1,66 @@
 import { useEffect, useMemo } from 'react';
 
-import BigNumber from 'bignumber.js';
-import { useParams } from 'react-router-dom';
+import cx from 'classnames';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import {
-  useLiquidityV3ItemStore,
+  useGetLiquidityV3ItemWithPositions,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
-import {
-  defined,
-  getSumOfNumbers,
-  getTokenDecimals,
-  isExist,
-  isNull,
-  multipliedIfPossible,
-  toReal
-} from '@shared/helpers';
-import { fractionToPercentage } from '@shared/helpers/percentage';
-import { useTokenExchangeRate } from '@shared/hooks';
+import { ColorModes } from '@providers/color-theme-context';
+import { useRootStore } from '@providers/root-store-provider';
+import { isExist } from '@shared/helpers';
+import { useUiStore } from '@shared/hooks';
+import { useTranslation } from '@translation';
 
-import { convertToRealPrice } from './helpers';
+import { mapPositionViewModel } from './helpers/map-position-view-model';
+import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
+import { usePositionsWithStats } from './hooks/use-positions-with-stats';
+import styles from './v3-positions-page.module.scss';
 
-const FEE_PRECISION = 10000;
-
-// TODO: replace mock values
-const MOCK_TOKEN_X_AMOUNT = new BigNumber('6004');
-const MOCK_TOKEN_Y_AMOUNT = new BigNumber('202000');
+const rangeLabelClasses = {
+  [ColorModes.Light]: cx(styles.light, styles.rangeLabel),
+  [ColorModes.Dark]: cx(styles.dark, styles.rangeLabel)
+};
 
 export const useV3PositionsViewModel = () => {
-  const { id } = useParams();
-  const v3ItemStore = useLiquidityV3ItemStore();
+  const { t } = useTranslation();
+  const { colorThemeMode } = useUiStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const { getTokenExchangeRate } = useTokenExchangeRate();
+  const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
+  const { tezos } = useRootStore();
+  const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
 
-  const item = v3ItemStore.item;
-  const rawPositions = v3PositionsStore.positions;
+  const poolId = v3PositionsStore.poolId;
+
+  const warningAlertMessage = isExchangeRatesError ? t('liquidity|v3ExchangeRatesError') : null;
 
   useEffect(() => {
-    v3PositionsStore.setPoolId(new BigNumber(defined(id, 'id')));
-    void v3PositionsStore.positionsStore.load();
-  }, [v3PositionsStore, id]);
+    if (isExist(tezos) && isExist(poolId)) {
+      void getLiquidityV3ItemWithPositions();
+    }
+  }, [getLiquidityV3ItemWithPositions, poolId, tezos]);
 
-  const isLoading =
-    v3ItemStore.itemIsLoading || v3PositionsStore.positionsAreLoading || isNull(tokenX) || isNull(tokenY);
-
-  const tokenXExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenX) ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
-  const tokenYExchangeRate =
-    IS_NETWORK_MAINNET && isExist(tokenY) ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
-
-  const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
-  const currentPrice = useMemo(
-    () => item && toReal(convertToRealPrice(item?.storage.sqrt_price), tokenPriceDecimals),
-    [tokenPriceDecimals, item]
-  );
-
-  const positions = useMemo(() => {
-    if (isNull(item) || isNull(rawPositions) || isNull(tokenX) || isNull(tokenY)) {
+  const { positionsWithStats, loading: isLoading, error } = usePositionsWithStats();
+  const positionsViewModel = useMemo(() => {
+    if (!isExist(poolId) || !isExist(tokenX) || !isExist(tokenY)) {
       return [];
     }
 
-    return rawPositions.map(position => {
-      // TODO (not a tech debt): https://madfish.atlassian.net/browse/QUIPU-712
-      const tokenXDeposit = toReal(new BigNumber('1000'), tokenX);
-      const tokenYDeposit = toReal(new BigNumber('1000'), tokenY);
-      const tokenXFees = toReal(new BigNumber('1'), tokenX);
-      const tokenYFees = toReal(new BigNumber('1'), tokenY);
-      const minRange = toReal(convertToRealPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
-      const maxRange = toReal(convertToRealPrice(position.upper_tick.sqrt_price), tokenPriceDecimals);
+    return positionsWithStats.map(
+      mapPositionViewModel(
+        {
+          className: rangeLabelClasses[colorThemeMode],
+          inRangeClassName: styles.inRangeLabel
+        },
+        tokenX,
+        tokenY,
+        poolId,
+        isExchangeRatesError
+      )
+    );
+  }, [colorThemeMode, positionsWithStats, tokenX, tokenY, poolId, isExchangeRatesError]);
 
-      return {
-        tokens: [tokenY, tokenX],
-        minRange,
-        maxRange,
-        isInRange: currentPrice!.gte(minRange) && currentPrice!.lte(maxRange),
-        depositUsd: getSumOfNumbers([
-          multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
-          multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
-        ]),
-        tokenXDeposit,
-        tokenYDeposit,
-        collectedFeesUsd: getSumOfNumbers([
-          multipliedIfPossible(tokenXFees, tokenXExchangeRate),
-          multipliedIfPossible(tokenYFees, tokenYExchangeRate)
-        ]),
-        tokenXFees,
-        tokenYFees
-      };
-    });
-  }, [item, rawPositions, tokenX, tokenY, tokenPriceDecimals, tokenXExchangeRate, tokenYExchangeRate, currentPrice]);
-
-  const tvlInUsd = useMemo(
-    () =>
-      getSumOfNumbers([
-        multipliedIfPossible(toReal(MOCK_TOKEN_X_AMOUNT, tokenX), tokenXExchangeRate),
-        multipliedIfPossible(toReal(MOCK_TOKEN_Y_AMOUNT, tokenY), tokenYExchangeRate)
-      ]),
-    [tokenX, tokenXExchangeRate, tokenY, tokenYExchangeRate]
-  );
-  const feeRatePercentage = item && fractionToPercentage(item.storage.constants.fee_bps.dividedBy(FEE_PRECISION));
-
-  return {
-    currentPrice,
-    isLoading,
-    positions,
-    tvlInUsd,
-    tokenX,
-    tokenY,
-    feeRatePercentage
-  };
+  return { isLoading, positionsViewModel, error, warningAlertMessage };
 };

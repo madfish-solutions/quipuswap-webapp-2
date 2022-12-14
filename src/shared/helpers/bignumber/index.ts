@@ -3,6 +3,7 @@ export * from './string-to-big-number';
 export * from './multiplied-if-possible';
 export * from './to-real';
 export * from './to-atomic';
+export * from './shift-right-logical';
 export * from './sort-bignumber';
 export * from './to-fixed';
 export * from './place-decimals';

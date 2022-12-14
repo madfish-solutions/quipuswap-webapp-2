@@ -1,0 +1,93 @@
+@import "@styles/breakpoints";
+@import "@styles/variables";
+
+.mb48 {
+  margin-bottom: 48px;
+}
+
+.warningAlert {
+  margin-bottom: 24px;
+}
+
+.list {
+  display: grid;
+  row-gap: 32px;
+}
+
+.rangeLabel {
+  padding-right: 32px;
+  position: relative;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.14;
+
+  &.dark {
+    color: $text-inverse;
+  }
+  &.light {
+    color: $text-01;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    border: 4px solid $red;
+  }
+  &.inRangeLabel::after {
+    background-color: #2ED33E;
+    border: none;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.positionFeesSkeleton {
+  width: 100%;
+  height: 372px;
+}
+
+@include media('>=tablet') {
+  .positionFeesSkeleton {
+    height: 328px;
+  }
+}
+
+@include media('>=Ltablet') {
+  .positionFeesSkeleton {
+    height: 180px;
+  }
+}
+
+.listSkeleton {
+  width: 100%;
+  height: 378px;
+}
+
+@include media('>phone') {
+  .listSkeleton {
+    height: 298px;
+  }
+}
+
+@include media('>Lphone') {
+  .listSkeleton {
+    height: 218px;
+  }
+}
+
+@include media('>Ltablet') {
+  .listSkeleton {
+    height: 164px;
+  }
+}
+
+@include media('>SDesktop') {
+  .warningAlert {
+    margin-bottom: 32px;
+  }
+}

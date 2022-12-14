@@ -4,8 +4,9 @@ import BigNumber from 'bignumber.js';
 
 import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { isExist, isNotFoundError } from '@shared/helpers';
+import { isExist, isNotFoundError, onlyDigits } from '@shared/helpers';
 
+import { InvalidPoolIdError } from './helpers';
 import { useRouteParams } from './hooks/use-route-params';
 
 export const useRouterViewModel = () => {
@@ -14,7 +15,9 @@ export const useRouterViewModel = () => {
   const store = useLiquidityV3ItemStore();
 
   useEffect(() => {
-    if (isExist(id) && tezos) {
+    if (isExist(id) && onlyDigits(id) !== id) {
+      store.setError(new InvalidPoolIdError(id));
+    } else if (isExist(id) && tezos) {
       store.setId(new BigNumber(id));
       (async () => {
         try {

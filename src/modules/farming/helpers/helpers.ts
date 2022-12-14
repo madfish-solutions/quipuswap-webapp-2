@@ -9,6 +9,7 @@ import {
   calculateTimeDiffInMs,
   calculateTimeDiffInSeconds,
   defined,
+  fillIndexArray,
   getLastElementFromArray,
   isExist,
   isNull,
@@ -59,15 +60,6 @@ export const DEFAULT_RAW_USER_INFO: IRawUsersInfoValue = {
   prev_earned: ZERO_AMOUNT_BN,
   prev_staked: ZERO_AMOUNT_BN,
   allowances: []
-};
-
-export const fillIndexArray = (value: number): Array<BigNumber> => {
-  const indexArray = [];
-  for (let i = 0; i < value; i++) {
-    indexArray[i] = new BigNumber(i);
-  }
-
-  return indexArray;
 };
 
 const NOTHING_STAKED_VALUE = 0;
