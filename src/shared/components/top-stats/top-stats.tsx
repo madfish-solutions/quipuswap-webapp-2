@@ -15,9 +15,10 @@ interface TopStatsProps {
   amount: Optional<BigNumber>;
   tooltip: string;
   currency?: Nullable<string>;
+  isError?: boolean;
 }
 
-export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, currency = DOLLAR }) => {
+export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, isError, currency = DOLLAR }) => {
   const isDollar = isEqual(currency, DOLLAR);
   const loading = !isExist(amount);
 
@@ -30,6 +31,7 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, currency =
       <StateCurrencyAmount
         className={styles.currencyAmount}
         currency={currency}
+        isError={isError}
         isLoading={loading}
         amount={amount || null}
         isLeftCurrency={isDollar}

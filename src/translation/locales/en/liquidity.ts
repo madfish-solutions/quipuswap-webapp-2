@@ -80,6 +80,7 @@ export const liquidity = {
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
   induceToOpenNewPosition: 'Have a new range in mind? Open new position!',
   createPosition: 'Create new position',
+  newPool: 'New pool',
   positions: 'Positions',
   weeklyVolumeV3PoolTooltip: 'The weekly trading volume for a selected liquidity pool.',
   currentPrice: 'Current price',
@@ -105,6 +106,8 @@ export const liquidity = {
   collectedFeesTooltip: 'CollectedFees',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
+  v3ExchangeRatesError:
+    "Oops… It seems we don’t know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

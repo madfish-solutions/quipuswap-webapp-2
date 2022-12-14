@@ -17,7 +17,8 @@ export const PositionsFeesList: FC = observer(() => {
     translation,
     userTotalDepositInfo,
     isUserTotalDepositExist,
-    claimIsDisabled
+    claimIsDisabled,
+    isRewardsError
   } = usePositionsFeesListViewModel();
   const { rewardsTooltipTranslation, claimFeeTranslation, totalFeesTranslation, totalDepositTranslation } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
@@ -34,6 +35,7 @@ export const PositionsFeesList: FC = observer(() => {
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={claimFeeTranslation}
       disabled={claimIsDisabled}
+      isError={isRewardsError}
       currency="$"
       buttonUp
       details={<FeeTokensList />}
