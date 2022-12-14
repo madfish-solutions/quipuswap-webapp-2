@@ -31,7 +31,7 @@ export const usePositionFeesListViewModel = () => {
     isUserTotalDepositExist,
     onButtonClick: handleClaimAll,
     translation: {
-      harvestAllTranslation: t('farm|harvestAll'),
+      claimFeeTranslation: t('liquidity|claimFee'),
       rewardsTooltipTranslation: t('farm|rewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
       totalDepositTranslation: t('liquidity|totalDeposit')

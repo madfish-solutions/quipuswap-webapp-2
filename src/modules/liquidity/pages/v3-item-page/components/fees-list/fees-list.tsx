@@ -34,8 +34,7 @@ export const FeesList: FC<Props> = ({
   details,
   claimIsDisabled = false
 }) => {
-  const { rewardsTooltipTranslation, harvestAllTranslation, totalFeesTranslation, totalDepositTranslation } =
-    translation;
+  const { rewardsTooltipTranslation, claimFeeTranslation, totalFeesTranslation, totalDepositTranslation } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
@@ -48,7 +47,7 @@ export const FeesList: FC<Props> = ({
       claimablePendingRewards={claimablePendingRewards}
       onButtonClick={onButtonClick}
       rewardTooltip={rewardsTooltipTranslation}
-      buttonText={harvestAllTranslation}
+      buttonText={claimFeeTranslation}
       currency="$"
       buttonUp
       details={details}
