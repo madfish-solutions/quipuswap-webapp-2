@@ -34,15 +34,10 @@ export const useV3PositionsViewModel = () => {
 
   const poolId = v3PositionsStore.poolId;
 
-  // eslint-disable-next-line no-console
-  console.log('222', poolId);
-
   const warningAlertMessage = isExchangeRatesError ? t('liquidity|v3ExchangeRatesError') : null;
 
   useEffect(() => {
     if (isExist(tezos) && isExist(poolId)) {
-      // eslint-disable-next-line no-console
-      console.log('here', tezos, poolId);
       void getLiquidityV3ItemWithPositions();
     }
   }, [getLiquidityV3ItemWithPositions, poolId, tezos]);
