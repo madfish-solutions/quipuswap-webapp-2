@@ -17,9 +17,6 @@ export const PageTitleContainer: FC<Props> = observer(({ dataTestId, titleText }
   const { t } = useTranslation();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  // eslint-disable-next-line no-console
-  console.log(tokenX, tokenY);
-
   const title = tokenX && tokenY ? `${titleText} ${getTokensNames([tokenX, tokenY])}` : t('common|loading');
 
   return <PageTitle data-test-id={dataTestId}>{title}</PageTitle>;
