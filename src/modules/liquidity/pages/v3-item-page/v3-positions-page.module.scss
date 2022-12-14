@@ -5,6 +5,10 @@
   margin-bottom: 48px;
 }
 
+.warningAlert {
+  margin-bottom: 24px;
+}
+
 .list {
   display: grid;
   row-gap: 32px;
@@ -79,5 +83,11 @@
 @include media('>Ltablet') {
   .listSkeleton {
     height: 164px;
+  }
+}
+
+@include media('>SDesktop') {
+  .warningAlert {
+    margin-bottom: 32px;
   }
 }
