@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js';
 
+import { Nullable } from '@shared/types';
+
 export interface FeeGrowth {
   x: BigNumber;
   y: BigNumber;
@@ -29,8 +31,8 @@ export interface LiquidityV3Position {
 }
 
 export interface LiquidityV3PositionStats {
-  collectedFeesUsd: BigNumber;
-  depositUsd: BigNumber;
+  collectedFeesUsd: Nullable<BigNumber>;
+  depositUsd: Nullable<BigNumber>;
   minRange: BigNumber;
   maxRange: BigNumber;
   isInRange: boolean;
