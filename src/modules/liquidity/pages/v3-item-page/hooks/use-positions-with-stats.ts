@@ -7,16 +7,16 @@ import {
   useLiquidityV3PositionsStore
 } from '@modules/liquidity/hooks';
 import { isNull } from '@shared/helpers';
-import { useTokenExchangeRate } from '@shared/hooks';
 
 import { mapPositionWithStats } from '../helpers';
+import { useLiquidityV3ItemTokensExchangeRates } from './use-liquidity-v3-item-tokens-exchange-rates';
 
 export const usePositionsWithStats = () => {
-  const { getTokenExchangeRate } = useTokenExchangeRate();
   const currentPrice = useLiquidityV3CurrentPrice();
   const poolStore = useLiquidityV3PoolStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
 
   const rawPositions = v3PositionsStore.positions;
   const item = poolStore.item;
@@ -29,8 +29,10 @@ export const usePositionsWithStats = () => {
       return [];
     }
 
-    return rawPositions.map(mapPositionWithStats(tokenX, tokenY, currentPrice, getTokenExchangeRate, item.storage));
-  }, [rawPositions, tokenX, tokenY, currentPrice, getTokenExchangeRate, item]);
+    return rawPositions.map(
+      mapPositionWithStats(tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, item.storage)
+    );
+  }, [rawPositions, tokenX, tokenY, currentPrice, tokenXExchangeRate, tokenYExchangeRate, item]);
 
   return { positionsWithStats, loading, error };
 };

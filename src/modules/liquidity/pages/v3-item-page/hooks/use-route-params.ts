@@ -1,25 +1,26 @@
 import { useMemo } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 
-import { EMPTY_STRING, STAR } from '@config/constants';
-import { getFirstElement, getRouterParts } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 
-const POSITIONS_LIST_PATHNAME_LENGTH = 1;
+import {
+  CREATE_POOL_RELATIVE_PATH,
+  CREATE_POSITION_RELATIVE_PATH,
+  FULL_PATH_PREFIX,
+  POSITIONS_RELATIVE_PATH,
+  POSITION_RELATIVE_PATH
+} from '../constants';
 
 export const useRouteParams = () => {
-  const params = useParams();
-  const data = params[STAR] ?? EMPTY_STRING;
+  const createPoolMatch = useMatch(`${FULL_PATH_PREFIX}${CREATE_POOL_RELATIVE_PATH}`);
+  const positionsListMatch = useMatch(`${FULL_PATH_PREFIX}${POSITIONS_RELATIVE_PATH}`);
+  const positionMatch = useMatch(`${FULL_PATH_PREFIX}${POSITION_RELATIVE_PATH}`);
+  const createPositionMatch = useMatch(`${FULL_PATH_PREFIX}${CREATE_POSITION_RELATIVE_PATH}`);
 
   return useMemo(() => {
-    const routerParts = getRouterParts(data);
+    const allMatches = [createPoolMatch, positionsListMatch, positionMatch, createPositionMatch];
 
-    if (routerParts.length === POSITIONS_LIST_PATHNAME_LENGTH) {
-      return { tab: null, poolId: getFirstElement(routerParts), positionId: null };
-    }
-
-    const [poolId, tab, positionId] = routerParts;
-
-    return { tab, poolId, positionId };
-  }, [data]);
+    return allMatches.find(isExist)?.params ?? {};
+  }, [createPoolMatch, positionsListMatch, positionMatch, createPositionMatch]);
 };
