@@ -6,14 +6,14 @@ import { OpenNewPositionForm, PageTitleContainer, PoolDetails, PositionFormCard 
 import { useCreateNewPositionPageViewModel } from './use-create-new-position-page.vm';
 
 export const CreateNewPositionPage = observer(() => {
-  const { titleText, ...formProps } = useCreateNewPositionPageViewModel();
+  const { titleText, backHref, ...formProps } = useCreateNewPositionPageViewModel();
 
   return (
     <>
       <TestnetAlert />
       <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={titleText} />
       <StickyBlock>
-        <PositionFormCard>
+        <PositionFormCard backHref={backHref}>
           <OpenNewPositionForm {...formProps} />
         </PositionFormCard>
         <PoolDetails />
