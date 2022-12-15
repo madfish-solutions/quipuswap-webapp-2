@@ -4,3 +4,5 @@ export * from './open-new-position';
 export * from './pool-details';
 export * from './positions-fees-list';
 export * from './liquidity-v3-pool-stats';
+export * from './open-new-position-form';
+export * from './position-form-card';

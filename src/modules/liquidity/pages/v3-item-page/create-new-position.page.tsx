@@ -1,9 +1,23 @@
-import { useTranslation } from '@translation';
+import { observer } from 'mobx-react-lite';
 
-import { PageTitleContainer } from './components';
+import { StickyBlock, TestnetAlert } from '@shared/components';
 
-export const CreateNewPositionPage = () => {
-  const { t } = useTranslation();
+import { OpenNewPositionForm, PageTitleContainer, PoolDetails, PositionFormCard } from './components';
+import { useCreateNewPositionPageViewModel } from './use-create-new-position-page.vm';
 
-  return <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={t('liquidity|createPosition')} />;
-};
+export const CreateNewPositionPage = observer(() => {
+  const { titleText, ...formProps } = useCreateNewPositionPageViewModel();
+
+  return (
+    <>
+      <TestnetAlert />
+      <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={titleText} />
+      <StickyBlock>
+        <PositionFormCard>
+          <OpenNewPositionForm {...formProps} />
+        </PositionFormCard>
+        <PoolDetails />
+      </StickyBlock>
+    </>
+  );
+});
