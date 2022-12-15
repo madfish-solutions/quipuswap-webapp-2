@@ -79,6 +79,7 @@ export const useCreateNewPositionPageViewModel = () => {
         dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
         tokens: token,
         disabled: false,
+        hiddenNotWhitelistedMessage: true,
         onInputChange: handleInputChange(inputSlug, decimals)
       };
     });
@@ -97,7 +98,10 @@ export const useCreateNewPositionPageViewModel = () => {
       disabled: false,
       onInputChange: handleInputChange(inputSlug, PRICE_RANGE_DECIMALS),
       hiddenBalance: true,
-      hiddenPercentSelector: true
+      hiddenPercentSelector: true,
+      hiddenNotWhitelistedMessage: true,
+      fullWidth: false,
+      tokenLogoWidth: 32
     }));
   }, [formik.errors, formik.values, handleInputChange, t, tokensList]);
 

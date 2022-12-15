@@ -109,7 +109,8 @@ export const liquidity = {
   v3ExchangeRatesError:
     "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
   createFullRangePosition: 'Create a full range position',
-  fullRangePositionTooltip: 'Create a position with price range from zero to infinity.',
+  fullRangePositionTooltip:
+    'If this option is selected, your liquidity is used for swaps at any price. It makes you position always earn fee but capital efficiency significantly decreases.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;

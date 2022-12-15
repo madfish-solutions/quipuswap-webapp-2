@@ -12,6 +12,7 @@ export const useTokenInputViewModel = ({
   hiddenBalance,
   readOnly,
   hiddenPercentSelector,
+  hiddenNotWhitelistedMessage,
   onInputChange
 }: TokenInputViewModelProps) => {
   const { accountPkh } = useAuthStore();
@@ -30,7 +31,10 @@ export const useTokenInputViewModel = ({
     inputRef?.current?.focus();
   };
 
-  const notWhitelistedMessage = useMemo(() => getMessageNotWhitelistedTokenPair(tokens), [tokens]);
+  const notWhitelistedMessage = useMemo(
+    () => (hiddenNotWhitelistedMessage ? null : getMessageNotWhitelistedTokenPair(tokens)),
+    [tokens, hiddenNotWhitelistedMessage]
+  );
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     onInputChange(event.target.value);
