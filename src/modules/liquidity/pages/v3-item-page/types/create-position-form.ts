@@ -1,6 +1,6 @@
 export enum CreatePositionInput {
-  MIN_PRICE = 'create-position-price-input-0',
-  MAX_PRICE = 'create-position-price-input-1',
+  MIN_PRICE = 'min-price',
+  MAX_PRICE = 'max-price',
   FULL_RANGE_POSITION = 'full-range-position',
   FIRST_AMOUNT_INPUT = 'create-position-input-0',
   SECOND_AMOUNT_INPUT = 'create-position-input-1'

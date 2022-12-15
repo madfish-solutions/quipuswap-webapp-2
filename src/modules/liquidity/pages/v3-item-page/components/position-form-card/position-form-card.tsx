@@ -5,10 +5,14 @@ import CommonContainerStyles from '@styles/CommonContainer.module.scss';
 
 import styles from './position-form-card.module.scss';
 
-export const PositionFormCard: CFC = ({ children }) => (
+interface PositionFormCardProps {
+  backHref: string;
+}
+
+export const PositionFormCard: CFC<PositionFormCardProps> = ({ children, backHref }) => (
   <Card
     subheader={{
-      content: <FormHeader className={styles.formHeader} />,
+      content: <FormHeader className={styles.formHeader} href={backHref} />,
       className: CommonContainerStyles.header
     }}
     contentClassName={CommonContainerStyles.content}
