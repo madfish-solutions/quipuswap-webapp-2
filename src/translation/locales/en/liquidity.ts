@@ -107,7 +107,9 @@ export const liquidity = {
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
   v3ExchangeRatesError:
-    "Oops… It seems we don’t know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+    "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+  createFullRangePosition: 'Create a full range position',
+  fullRangePositionTooltip: 'Create a position with price range from zero to infinity.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
