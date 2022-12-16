@@ -5,6 +5,11 @@
   padding: 24px;
 }
 
+.statusCardCell {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .tokenSwitcher {
   margin-left: 8px;
 }
