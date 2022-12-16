@@ -26,4 +26,7 @@ export namespace DexLink {
       StableswapLiquidityFormTabs.add
     }/${id.toFixed()}`;
   };
+
+  export const getLiquidityV3PositionLink = (poolId: BigNumber, positionId: BigNumber) =>
+    `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId.toFixed()}/${LiquidityTabs.add}/${positionId.toFixed()}`;
 }

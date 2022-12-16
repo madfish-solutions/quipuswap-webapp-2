@@ -4,21 +4,21 @@ import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
 import {
-  AssetSwitcher,
   Button,
   Card,
   DetailsCardCell,
   DetailsCardCellWithComponent,
-  StateCurrencyAmount
+  StateCurrencyAmount,
+  AssetSwitcher
 } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from './pool-details.module.scss';
-import { usePoolDetailsViewModel } from './use-pool-details.vm';
+import styles from './position-details.module.scss';
+import { usePositionDetailsViewModel } from './use-position-details.vm';
 
-export const PoolDetails: FC = observer(() => {
+export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -32,10 +32,10 @@ export const PoolDetails: FC = observer(() => {
     tokenYAmount,
     tokenActiveIndex,
     handleButtonClick
-  } = usePoolDetailsViewModel();
+  } = usePositionDetailsViewModel();
 
   return (
-    <Card header={{ content: t('liquidity|poolDetails') }} contentClassName={styles.contentClassName}>
+    <Card header={{ content: t('liquidity|positionDetails') }} contentClassName={styles.contentClassName}>
       <DetailsCardCell cellName={t('liquidity|TVL')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
         <StateCurrencyAmount amount={tvl} currency={DOLLAR} />
       </DetailsCardCell>

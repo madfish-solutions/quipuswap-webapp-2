@@ -9,7 +9,7 @@ import {
   useTable
 } from 'react-table';
 
-interface TableProps<T extends object> {
+export interface TableProps<T extends object> {
   data: T[];
   columns: Column<T>[];
   getCustomTableProps?: TablePropGetter<T>;

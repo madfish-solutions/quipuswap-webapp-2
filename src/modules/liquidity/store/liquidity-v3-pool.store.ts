@@ -15,9 +15,9 @@ import { LiquidityContractTokenBalancesModel } from '../models';
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
 @ModelBuilder()
-export class LiquidityV3ItemStore {
+export class LiquidityV3PoolStore {
   error: Nullable<Error> = null;
-  id: Nullable<BigNumber> = null;
+  poolId: Nullable<BigNumber> = null;
   activeTokenIndex = FIRST_INDEX;
 
   //# Quipuswap V3 pool tokens balance store
@@ -39,7 +39,7 @@ export class LiquidityV3ItemStore {
 
   //#region Quipuswap V3 liquidity item store
   readonly itemSore = new Fled(
-    async () => await V3LiquidityPoolApi.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.id, 'id')),
+    async () => await V3LiquidityPoolApi.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.poolId, 'id')),
     t
   );
 
@@ -62,14 +62,14 @@ export class LiquidityV3ItemStore {
       feeBps: computed,
       sqrtPrice: computed,
       contractAddress: computed,
-      setId: action,
+      setPoolId: action,
       setError: action,
       setActiveTokenIndex: action
     });
   }
 
-  setId(id: BigNumber) {
-    this.id = id;
+  setPoolId(id: BigNumber) {
+    this.poolId = id;
   }
 
   setError(error: Error) {

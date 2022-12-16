@@ -1,19 +1,19 @@
 import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
-import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '@modules/liquidity/helpers';
-import {
-  useLiquidityV3CurrentPrice,
-  useLiquidityV3ItemTokens,
-  useLiquidityV3PoolStore
-} from '@modules/liquidity/hooks';
 import { isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
+import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../../liquidity/helpers';
+import {
+  useLiquidityV3CurrentPrice,
+  useLiquidityV3PoolStore,
+  useLiquidityV3ItemTokens
+} from '../../../../../liquidity/hooks';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 
-export const usePoolDetailsViewModel = () => {
+export const usePositionDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractAddress, contractBalance, feeBps } = store;
+  const { contractAddress, contractBalance, feeBps } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const currentPrice = useLiquidityV3CurrentPrice();
