@@ -1,5 +1,6 @@
+import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
 import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
-import { TZKT_EXPLORER_URL } from '@config/environment';
+import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
 import { getSymbolsString, isExist } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
@@ -50,6 +51,7 @@ export const usePositionDetailsViewModel = () => {
     minPrice,
     maxPrice,
     priceRangeSymbols,
-    isInRange
+    isInRange,
+    categories: LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)]
   };
 };
