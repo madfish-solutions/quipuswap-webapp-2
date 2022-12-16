@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
+import { LiquidityLabels } from '@modules/liquidity/components';
 import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
@@ -45,6 +46,9 @@ export const PositionDetailsCreate: FC = observer(() => {
       }}
       contentClassName={styles.contentClassName}
     >
+      <DetailsCardCell cellName={t('liquidity|tags')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
+        <LiquidityLabels categories={[]} />
+      </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|TVL')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
         <StateCurrencyAmount amount={tvl} currency={DOLLAR} />
       </DetailsCardCell>
