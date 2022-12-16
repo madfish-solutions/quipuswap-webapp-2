@@ -104,6 +104,7 @@ export const liquidity = {
   maxPriceTooltip: 'Maximal price',
   collectedFees: 'Collected fees',
   collectedFeesTooltip: 'CollectedFees',
+  position: 'Position',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
   v3ExchangeRatesError:

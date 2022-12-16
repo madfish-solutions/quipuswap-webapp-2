@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
-import { useGetLiquidityV3ItemWithPositions, useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
+import { useGetLiquidityV3ItemWithPositions, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined, getSumOfNumbers, isEmptyArray, isGreaterThanZero, isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
@@ -12,13 +12,14 @@ import { useTranslation } from '@translation';
 
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
+import { PositionsFeeTokensList } from '../positions-fee-tokens-list';
 
 export const usePositionsFeesListViewModel = () => {
   const { t } = useTranslation();
   const { showErrorToast } = useToasts();
   const { tezos } = useRootStore();
   const { accountPkh } = useAuthStore();
-  const v3ItemStore = useLiquidityV3ItemStore();
+  const v3PoolStore = useLiquidityV3PoolStore();
   const {
     settings: { transactionDeadline }
   } = useSettingsStore();
@@ -27,7 +28,7 @@ export const usePositionsFeesListViewModel = () => {
   const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const confirmOperation = useConfirmOperation();
 
-  const contractAddress = v3ItemStore.item?.contractAddress;
+  const contractAddress = v3PoolStore.item?.contractAddress;
 
   const positionsIdsWithFees = positionsWithStats
     .filter(({ stats }) => isGreaterThanZero(stats.tokenXFees) || isGreaterThanZero(stats.tokenYFees))
@@ -75,14 +76,15 @@ export const usePositionsFeesListViewModel = () => {
   return {
     userTotalDepositInfo,
     isUserTotalDepositExist,
-    handleClaimAll,
+    onButtonClick: handleClaimAll,
     translation: {
       claimFeeTranslation: t('liquidity|claimFee'),
       rewardsTooltipTranslation: t('farm|rewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
       totalDepositTranslation: t('liquidity|totalDeposit')
     },
-    claimablePendingRewardsInUsd,
+    claimablePendingRewards: claimablePendingRewardsInUsd,
+    details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionsFeeTokensList />,
     claimIsDisabled,
     isRewardsError: isExchangeRatesError
   };

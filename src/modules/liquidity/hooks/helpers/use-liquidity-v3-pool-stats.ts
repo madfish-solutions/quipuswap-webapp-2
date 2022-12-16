@@ -7,14 +7,14 @@ import { useTranslation } from '@translation';
 
 import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../liquidity/helpers';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../../liquidity/pages/v3-item-page/hooks';
-import { useLiquidityV3ItemStore } from '../store';
+import { useLiquidityV3PoolStore } from '../store';
 import { useLiquidityV3CurrentPrice } from './use-liquidity-v3-current-price';
 import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 export const useLiquidityV3PoolStats = () => {
   const { t } = useTranslation();
-  const store = useLiquidityV3ItemStore();
-  const { contractBalance, feeBps } = useLiquidityV3ItemStore();
+  const store = useLiquidityV3PoolStore();
+  const { contractBalance, feeBps } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentPrice();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
@@ -30,7 +30,7 @@ export const useLiquidityV3PoolStats = () => {
   const _currentPrice = isExist(currentPrice) ? getCurrentPrice(currentPrice, store.activeTokenIndex) : null;
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
-  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
+  const tokensSymbols = getSymbolsStringByActiveToken([tokenY, tokenX], store.activeTokenIndex);
 
   const stats = useMemo(
     () => [

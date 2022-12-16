@@ -6,14 +6,14 @@ import { fractionToPercentage } from '@shared/helpers/percentage';
 import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../../liquidity/helpers';
 import {
   useLiquidityV3CurrentPrice,
-  useLiquidityV3ItemStore,
+  useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens
 } from '../../../../../liquidity/hooks';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 
-export const usePoolDetailsViewModel = () => {
-  const store = useLiquidityV3ItemStore();
-  const { contractAddress, contractBalance, feeBps } = useLiquidityV3ItemStore();
+export const usePositionDetailsViewModel = () => {
+  const store = useLiquidityV3PoolStore();
+  const { contractAddress, contractBalance, feeBps } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const currentPrice = useLiquidityV3CurrentPrice();
