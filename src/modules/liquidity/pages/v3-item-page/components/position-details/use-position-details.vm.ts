@@ -1,4 +1,4 @@
-import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH, ZERO_AMOUNT_BN } from '@config/constants';
+import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getSymbolsString, isExist } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
@@ -10,7 +10,7 @@ import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionStore
 } from '../../../../hooks';
-import { convertToAtomicPrice, findUserPosition } from '../../helpers';
+import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks';
 
 export const usePositionDetailsViewModel = () => {
@@ -23,6 +23,9 @@ export const usePositionDetailsViewModel = () => {
 
   const position = findUserPosition(positionsWithStats, positionId);
 
+  const minPrice = position?.stats.minRange;
+  const maxPrice = position?.stats.maxRange;
+
   const isInRange = position?.stats.isInRange ?? false;
 
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
@@ -32,8 +35,6 @@ export const usePositionDetailsViewModel = () => {
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
-  const minPrice = convertToAtomicPrice(position?.lower_tick.sqrt_price ?? ZERO_AMOUNT_BN);
-  const maxPrice = convertToAtomicPrice(position?.upper_tick.sqrt_price ?? ZERO_AMOUNT_BN);
   const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
 
   return {
