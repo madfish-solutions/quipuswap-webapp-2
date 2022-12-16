@@ -15,10 +15,10 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from './pool-details.module.scss';
-import { usePoolDetailsViewModel } from './use-pool-details.vm';
+import styles from './position-details.module.scss';
+import { usePositionDetailsViewModel } from './use-position-details.vm';
 
-export const PoolDetails: FC = observer(() => {
+export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -32,7 +32,7 @@ export const PoolDetails: FC = observer(() => {
     tokenYAmount,
     tokenActiveIndex,
     handleButtonClick
-  } = usePoolDetailsViewModel();
+  } = usePositionDetailsViewModel();
 
   return (
     <Card header={{ content: t('liquidity|poolDetails') }} contentClassName={styles.contentClassName}>
@@ -47,7 +47,7 @@ export const PoolDetails: FC = observer(() => {
         tooltipContent={t('liquidity|currentPriceTooltip')}
         component={
           <AssetSwitcher
-            labels={[tokenXSymbol, tokenYSymbol]}
+            labels={[tokenYSymbol, tokenXSymbol]}
             activeIndex={tokenActiveIndex}
             handleButtonClick={handleButtonClick}
             className={styles.tokenSwitcher}

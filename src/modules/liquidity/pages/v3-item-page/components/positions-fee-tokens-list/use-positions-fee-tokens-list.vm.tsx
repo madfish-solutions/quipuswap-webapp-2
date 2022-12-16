@@ -9,7 +9,7 @@ import { i18n } from '@translation';
 
 import { usePositionsWithStats, useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { TokenFeeCell } from '../token-fee-cell';
-import styles from './fee-tokens-list.module.scss';
+import styles from './positions-fee-tokens-list.module.scss';
 
 enum Columns {
   TOKEN = 'TOKEN',
@@ -62,7 +62,7 @@ const getCustomRowProps = (_: unknown, meta: MetaBase<Row> & { row: TableRow<Row
   key: meta.row.index
 });
 
-export const useFeeTokensListViewModel = () => {
+export const usePositionsFeeTokensListViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
@@ -123,7 +123,7 @@ export const useFeeTokensListViewModel = () => {
   }, [positionsWithStats, tokenX, tokenXExchangeRate, tokenY, tokenYExchangeRate, isExchangeRatesError]);
 
   return {
-    rows,
+    data: rows,
     columns: rewardTokensColumns,
     getCustomTableProps,
     getCustomHeaderProps,

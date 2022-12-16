@@ -30,7 +30,7 @@ export class LiquidityV3PositionsStore {
   //#endregion Quipuswap V3 pool positions
 
   get poolId() {
-    return this.rootStore.liquidityV3ItemStore?.id ?? null;
+    return this.rootStore.liquidityV3PoolStore?.poolId ?? null;
   }
 
   constructor(private rootStore: RootStore) {

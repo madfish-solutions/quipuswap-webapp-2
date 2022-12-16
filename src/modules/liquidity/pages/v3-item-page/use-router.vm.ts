@@ -2,38 +2,47 @@ import { useEffect } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { useLiquidityV3ItemStore } from '@modules/liquidity/hooks';
+import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { isExist, isNotFoundError, onlyDigits } from '@shared/helpers';
+import { isEmptyArray, isExist, isNotFoundError, isNull, onlyDigits } from '@shared/helpers';
 
-import { InvalidPoolIdError } from './helpers';
+import { findUserPosition, InvalidPoolIdError } from './helpers';
+import { usePositionsWithStats } from './hooks/use-positions-with-stats';
 import { useRouteParams } from './hooks/use-route-params';
-
 export const useRouterViewModel = () => {
   const { tezos } = useRootStore();
-  const { id } = useRouteParams();
-  const store = useLiquidityV3ItemStore();
+  const { id, positionId } = useRouteParams();
+  const poolStore = useLiquidityV3PoolStore();
+  const positionStore = useLiquidityV3PositionStore();
+  const { positionsWithStats } = usePositionsWithStats();
+
+  const userPositionExist = Boolean(findUserPosition(positionsWithStats, positionId ?? null));
+  const userPositionNotFound =
+    !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist && positionId;
 
   useEffect(() => {
     if (isExist(id) && onlyDigits(id) !== id) {
-      store.setError(new InvalidPoolIdError(id));
+      poolStore.setError(new InvalidPoolIdError(id));
     } else if (isExist(id) && tezos) {
-      store.setId(new BigNumber(id));
+      if (isExist(positionId)) {
+        positionStore.setPositionId(new BigNumber(positionId));
+      }
+      poolStore.setPoolId(new BigNumber(id));
       (async () => {
         try {
-          await store.itemSore.load();
+          await poolStore.itemSore.load();
         } catch (_error) {
-          store.setError(_error as Error);
+          poolStore.setError(_error as Error);
         }
       })();
     }
 
-    return () => store.itemSore.resetData();
-  }, [store, id, tezos]);
+    return () => poolStore.itemSore.resetData();
+  }, [poolStore, id, positionId, tezos, positionStore]);
 
   return {
-    isLoading: store.itemIsLoading,
-    isNotFound: store.error && isNotFoundError(store.error),
-    error: store.error
+    isLoading: poolStore.itemIsLoading,
+    isNotFound: userPositionNotFound || (poolStore.error && isNotFoundError(poolStore.error)),
+    error: poolStore.error
   };
 };
