@@ -1,16 +1,10 @@
-import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
 import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
-import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
 import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../helpers';
-import {
-  useLiquidityV3CurrentPrice,
-  useLiquidityV3PoolStore,
-  useLiquidityV3ItemTokens,
-  useLiquidityV3PositionStore
-} from '../../../../hooks';
+import { useLiquidityV3CurrentPrice, useLiquidityV3PoolStore, useLiquidityV3ItemTokens } from '../../../../hooks';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 
 export const usePositionDetailsCreateViewModel = () => {
@@ -19,7 +13,6 @@ export const usePositionDetailsCreateViewModel = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const currentPrice = useLiquidityV3CurrentPrice();
-  const { positionId } = useLiquidityV3PositionStore();
 
   const { tokenXBalance, tokenYBalance } = contractBalance;
   const tokenXAmount = toReal(tokenXBalance, tokenX);
@@ -45,7 +38,6 @@ export const usePositionDetailsCreateViewModel = () => {
     tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
     tokenYAmount,
     tokenActiveIndex: store.activeTokenIndex,
-    handleButtonClick,
-    categories: LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(positionId)]
+    handleButtonClick
   };
 };
