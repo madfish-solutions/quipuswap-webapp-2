@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { useLiquidityV3ItemStore, useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
+import { useLiquidityV3ItemTokens, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
 import { getTokenDecimals, isExist, multipliedIfPossible, numberAsString } from '@shared/helpers';
@@ -27,7 +27,7 @@ export const useCreateNewPositionPageViewModel = () => {
   const tokensList = useMemo(() => (isExist(tokenX) && isExist(tokenY) ? [tokenX, tokenY] : null), [tokenX, tokenY]);
   const tokensWithBalances = useTokensWithBalances(tokensList);
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
-  const itemStore = useLiquidityV3ItemStore();
+  const poolStore = useLiquidityV3PoolStore();
 
   useEffect(() => {
     if (dAppReady) {
@@ -105,7 +105,7 @@ export const useCreateNewPositionPageViewModel = () => {
     }));
   }, [formik.errors, formik.values, handleInputChange, t, tokensList]);
 
-  const backHref = `${FULL_PATH_PREFIX}/${itemStore.id?.toFixed()}`;
+  const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
 
   return {
     disabled: true,
