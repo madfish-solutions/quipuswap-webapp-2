@@ -48,7 +48,11 @@ export const PositionDetails: FC = observer(() => {
       }}
       contentClassName={styles.contentClassName}
     >
-      <DetailsCardCell cellName={t('liquidity|status')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
+      <DetailsCardCell
+        cellName={t('liquidity|status')}
+        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        className={styles.statusCardCell}
+      >
         <PositionStatus isInRange={isInRange} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|id')} tooltipContent={t('liquidity|weeklyVolumeV3PoolTooltip')}>
@@ -60,10 +64,10 @@ export const PositionDetails: FC = observer(() => {
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={'min price'} tooltipContent={t('liquidity|tokenReservesTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
         <StateCurrencyAmount amount={minPrice} currency={priceRangeSymbols} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={'max price'} tooltipContent={t('liquidity|tokenReservesTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
         <StateCurrencyAmount amount={maxPrice} currency={priceRangeSymbols} />
       </DetailsCardCell>
       <div className={commonContainerStyles.detailsButtons}>
