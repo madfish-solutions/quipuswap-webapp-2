@@ -2,7 +2,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
-import { REFERRAL_CODE } from '@config/config';
+import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
+import { getContract } from '@shared/dapp';
 import { decreaseBySlippage, findLeftElement, getTransactionDeadline } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
 
@@ -30,7 +31,7 @@ export namespace V3Positions {
 
     ticks: number[]
   ) => {
-    const contract = await tezos.wallet.at(contractAddress);
+    const contract = await getContract(tezos, contractAddress);
 
     const lowerTickIndex = calculateTickIndex(minPrice);
     const upperTickIndex = calculateTickIndex(maxPrice);
@@ -70,7 +71,7 @@ export namespace V3Positions {
         xTokenAmount, // maximum_tokens_contributed X
         yTokenAmount, // maximum_tokens_contributed Y
 
-        REFERRAL_CODE
+        QUIPUSWAP_REFERRAL_CODE
       )
       .toTransferParams({});
 

@@ -66,7 +66,7 @@ export class BlockchainYouvesFarmingApi {
   }
 
   static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
-    const contract = await tezos.wallet.at(contractAddress);
+    const contract = await getContract(tezos, contractAddress);
 
     return await contract.methods.claim(new BigNumber(stakeId)).send();
   }
