@@ -17,7 +17,8 @@ export const useRouterViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
 
   const userPositionExist = Boolean(findUserPosition(positionsWithStats, positionId ?? null));
-  const userPositionNotFound = !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist;
+  const userPositionNotFound =
+    !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist && positionId;
 
   useEffect(() => {
     if (isExist(id) && onlyDigits(id) !== id) {
