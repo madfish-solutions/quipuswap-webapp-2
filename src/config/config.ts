@@ -117,3 +117,11 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+const MAINNET_LIQUIDITY_V3_POOL_TAGS: Array<string> = [];
+const TESTNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<string>> = [['Stable'], [], ['Quipu'], []];
+
+export const LIQUIDITY_V3_POOL_TAGS = {
+  [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
+  [NetworkType.GHOSTNET]: TESTNET_LIQUIDITY_V3_POOL_TAGS
+};
