@@ -1,1 +1,1 @@
-export * from './pool-details';
+export * from './position-details';

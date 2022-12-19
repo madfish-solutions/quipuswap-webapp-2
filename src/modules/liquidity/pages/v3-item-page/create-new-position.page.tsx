@@ -1,17 +1,23 @@
-import { StickyBlock } from '@shared/components';
-import { useTranslation } from '@translation';
+import { observer } from 'mobx-react-lite';
 
-import { PageTitleContainer, PoolDetailsCreate } from './components';
+import { StickyBlock, TestnetAlert } from '@shared/components';
 
-export const CreateNewPositionPage = () => {
-  const { t } = useTranslation();
+import { OpenNewPositionForm, PageTitleContainer, PoolDetailsCreate, PositionFormCard } from './components';
+import { useCreateNewPositionPageViewModel } from './use-create-new-position-page.vm';
+
+export const CreateNewPositionPage = observer(() => {
+  const { titleText, backHref, ...formProps } = useCreateNewPositionPageViewModel();
 
   return (
     <>
-      <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={t('liquidity|createPosition')} />
+      <TestnetAlert />
+      <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={titleText} />
       <StickyBlock>
+        <PositionFormCard backHref={backHref}>
+          <OpenNewPositionForm {...formProps} />
+        </PositionFormCard>
         <PoolDetailsCreate />
       </StickyBlock>
     </>
   );
-};
+});

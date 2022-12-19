@@ -107,8 +107,13 @@ export const liquidity = {
   position: 'Position',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
+  // V3
   v3ExchangeRatesError:
-    "Oops… It seems we don’t know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+    "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+  createFullRangePosition: 'Create a full range position',
+  fullRangePositionTooltip:
+    'If this option is selected, your liquidity is used for swaps at any price. It makes you position always earn fee but capital efficiency significantly decreases.',
+  positionDetails: 'Position details',
   status: 'Status',
   id: 'ID',
   tags: 'Tags',

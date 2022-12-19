@@ -10,10 +10,10 @@ import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { PositionStatus } from '../position-status';
-import styles from './pool-details.module.scss';
-import { usePoolDetailsViewModel } from './use-pool-details.vm';
+import styles from './position-details.module.scss';
+import { usePositionDetailsViewModel } from './use-position-details.vm';
 
-export const PoolDetails: FC = observer(() => {
+export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -30,14 +30,14 @@ export const PoolDetails: FC = observer(() => {
     priceRangeSymbols,
     isInRange,
     categories
-  } = usePoolDetailsViewModel();
+  } = usePositionDetailsViewModel();
 
   return (
     <Card
       header={{
         content: (
           <div className={styles.cardHeader}>
-            {t('liquidity|poolDetails')}
+            {t('liquidity|positionDetails')}
             <AssetSwitcher
               labels={[tokenYSymbol, tokenXSymbol]}
               activeIndex={tokenActiveIndex}

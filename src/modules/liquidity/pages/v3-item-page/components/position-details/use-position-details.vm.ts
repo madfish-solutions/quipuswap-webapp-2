@@ -1,26 +1,26 @@
 import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
-import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
+import { SLASH } from '@config/constants';
 import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
-import { getSymbolsString, isExist } from '@shared/helpers';
-import { fractionToPercentage } from '@shared/helpers/percentage';
+import { getSymbolsString } from '@shared/helpers';
 
-import { getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../helpers';
 import {
-  useLiquidityV3CurrentPrice,
   useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens,
-  useLiquidityV3PositionStore
+  useLiquidityV3PositionStore,
+  useLiquidityV3PoolStats,
+  useLiquidityV3ItemTokensSymbols
 } from '../../../../hooks';
 import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks';
 
-export const usePoolDetailsViewModel = () => {
+export const usePositionDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
   const { positionId } = useLiquidityV3PositionStore();
-  const { contractAddress, feeBps } = useLiquidityV3PoolStore();
+  const { contractAddress } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const currentPrice = useLiquidityV3CurrentPrice();
+  const { tokenXSymbol, tokenYSymbol } = useLiquidityV3ItemTokensSymbols();
   const { positionsWithStats } = usePositionsWithStats();
+  const { currentPrice, feeBpsPercentage, tokensSymbols } = useLiquidityV3PoolStats();
 
   const position = findUserPosition(positionsWithStats, positionId);
 
@@ -28,11 +28,6 @@ export const usePoolDetailsViewModel = () => {
   const maxPrice = position?.stats.maxRange;
 
   const isInRange = position?.stats.isInRange ?? false;
-
-  const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
-  const _currentPrice = isExist(currentPrice) ? getCurrentPrice(currentPrice, store.activeTokenIndex) : null;
-
-  const tokensSymbols = getSymbolsStringByActiveToken([tokenX, tokenY], store.activeTokenIndex);
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
@@ -44,10 +39,10 @@ export const usePoolDetailsViewModel = () => {
     id: positionId,
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
     feeBps: feeBpsPercentage,
-    currentPrice: _currentPrice,
+    currentPrice,
     tokensSymbols,
-    tokenXSymbol: tokenX?.metadata.symbol ?? EMPTY_STRING,
-    tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
+    tokenXSymbol,
+    tokenYSymbol,
     tokenActiveIndex: store.activeTokenIndex,
     handleButtonClick,
     minPrice,
