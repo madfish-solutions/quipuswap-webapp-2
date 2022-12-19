@@ -50,13 +50,17 @@ export const PoolDetails: FC = observer(() => {
       }}
       contentClassName={styles.contentClassName}
     >
-      <DetailsCardCell cellName={t('liquidity|tags')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
+      <DetailsCardCell
+        cellName={t('liquidity|tags')}
+        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        className={styles.deviantBehavior}
+      >
         <LiquidityLabels categories={categories} colored={true} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('liquidity|status')}
         tooltipContent={t('liquidity|tvlV3PoolTooltip')}
-        className={styles.statusCardCell}
+        className={styles.deviantBehavior}
       >
         <PositionStatus isInRange={isInRange} />
       </DetailsCardCell>
