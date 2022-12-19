@@ -1,4 +1,4 @@
-import { EMPTY_STRING, SLASH } from '@config/constants';
+import { SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getSymbolsString } from '@shared/helpers';
 
@@ -6,7 +6,8 @@ import {
   useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionStore,
-  useLiquidityV3PoolStats
+  useLiquidityV3PoolStats,
+  useLiquidityV3ItemTokensSymbols
 } from '../../../../hooks';
 import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks';
@@ -16,6 +17,7 @@ export const usePositionDetailsViewModel = () => {
   const { positionId } = useLiquidityV3PositionStore();
   const { contractAddress } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const { tokenXSymbol, tokenYSymbol } = useLiquidityV3ItemTokensSymbols();
   const { positionsWithStats } = usePositionsWithStats();
   const { currentPrice, feeBpsPercentage, tokensSymbols } = useLiquidityV3PoolStats();
 
@@ -36,8 +38,8 @@ export const usePositionDetailsViewModel = () => {
     feeBps: feeBpsPercentage,
     currentPrice,
     tokensSymbols,
-    tokenXSymbol: tokenX?.metadata.symbol ?? EMPTY_STRING,
-    tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
+    tokenXSymbol,
+    tokenYSymbol,
     tokenActiveIndex: store.activeTokenIndex,
     handleButtonClick,
     minPrice,
