@@ -3,10 +3,23 @@ import { useCallback, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { useLiquidityV3ItemTokens, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
+import { EMPTY_STRING } from '@config/constants';
+import {
+  useLiquidityV3CurrentPrice,
+  useLiquidityV3ItemTokens,
+  useLiquidityV3PoolStore
+} from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
-import { getTokenDecimals, isExist, multipliedIfPossible, numberAsString } from '@shared/helpers';
+import {
+  decreaseByPercentage,
+  getTokenDecimals,
+  increaseByPercentage,
+  isExist,
+  isNull,
+  multipliedIfPossible,
+  numberAsString
+} from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -18,6 +31,8 @@ import { CreatePositionAmountInput, CreatePositionInput, CreatePositionPriceInpu
 
 const MIN_TICK_SQRT_PRICE = 1;
 const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces();
+const LOWER_PRICE_DELTA_PERCENTAGE = 50;
+const UPPER_PRICE_DELTA_PERCENTAGE = 50;
 
 export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
@@ -28,6 +43,22 @@ export const useCreateNewPositionPageViewModel = () => {
   const tokensWithBalances = useTokensWithBalances(tokensList);
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const poolStore = useLiquidityV3PoolStore();
+  const currentPrice = useLiquidityV3CurrentPrice();
+
+  const initialMinPrice = useMemo(
+    () =>
+      isNull(currentPrice)
+        ? EMPTY_STRING
+        : decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE)).toFixed(),
+    [currentPrice]
+  );
+  const initialMaxPrice = useMemo(
+    () =>
+      isNull(currentPrice)
+        ? EMPTY_STRING
+        : increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE)).toFixed(),
+    [currentPrice]
+  );
 
   useEffect(() => {
     if (dAppReady) {
@@ -42,8 +73,8 @@ export const useCreateNewPositionPageViewModel = () => {
 
   const formik = useFormik({
     initialValues: {
-      [CreatePositionInput.MIN_PRICE]: '',
-      [CreatePositionInput.MAX_PRICE]: '',
+      [CreatePositionInput.MIN_PRICE]: initialMinPrice,
+      [CreatePositionInput.MAX_PRICE]: initialMaxPrice,
       [CreatePositionInput.FULL_RANGE_POSITION]: false,
       [CreatePositionInput.FIRST_AMOUNT_INPUT]: '',
       [CreatePositionInput.SECOND_AMOUNT_INPUT]: ''
