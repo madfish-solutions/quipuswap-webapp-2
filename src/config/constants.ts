@@ -81,6 +81,7 @@ export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
 export const COMMA = ',';
+export const INFINITY_SIGN = '∞';
 //#endregion
 
 //#region sort
