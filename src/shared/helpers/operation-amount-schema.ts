@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { Nullable } from '@shared/types';
 import { makeNumberAsStringTestFn, numberAsStringSchema } from '@shared/validators';
+import { i18n } from '@translation';
 
 import { isExist } from './type-checks';
 
@@ -17,10 +18,14 @@ export const operationAmountSchema = (
     ? numberAsStringSchema(
         { value: ZERO, isInclusive: isZeroInclusive },
         { value, isInclusive: true },
-        isZeroInclusive ? 'The value should be non-negative.' : 'The value should be greater than zero.',
-        `Max available value is ${value.toNumber()}`
+        isZeroInclusive ? i18n.t('common|valueShouldBeNonNegative') : i18n.t('common|valueShouldBePositive'),
+        i18n.t('common|maxAvailableValueError', { value: value.toFixed() })
       )
-    : numberAsStringSchema();
+    : numberAsStringSchema(
+        { value: ZERO, isInclusive: isZeroInclusive },
+        null,
+        isZeroInclusive ? i18n.t('common|valueShouldBeNonNegative') : i18n.t('common|valueShouldBePositive')
+      );
 
   if (isExist(maxDecimals) && isExist(decimalsOverflowError)) {
     return baseSchema.test(

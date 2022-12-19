@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
@@ -13,6 +13,7 @@ import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
 import {
   decreaseByPercentage,
+  getFormikError,
   getTokenDecimals,
   increaseByPercentage,
   isExist,
@@ -26,8 +27,13 @@ import { useTranslation } from '@translation';
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
 import { convertToAtomicPrice, getCreatePositionAmountInputSlugByIndex } from './helpers';
-import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
-import { CreatePositionAmountInput, CreatePositionInput, CreatePositionPriceInput } from './types/create-position-form';
+import { useCreateNewPositionFormValidationSchema, useLiquidityV3ItemTokensExchangeRates } from './hooks';
+import {
+  CreatePositionAmountInput,
+  CreatePositionInput,
+  CreatePositionPriceInput,
+  isAmountInput
+} from './types/create-position-form';
 
 const MIN_TICK_SQRT_PRICE = 1;
 const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces();
@@ -44,6 +50,8 @@ export const useCreateNewPositionPageViewModel = () => {
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const poolStore = useLiquidityV3PoolStore();
   const currentPrice = useLiquidityV3CurrentPrice();
+  const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
+  const lastEditedAmountFieldRef = useRef<CreatePositionAmountInput | null>(null);
 
   const initialMinPrice = useMemo(
     () =>
@@ -76,15 +84,19 @@ export const useCreateNewPositionPageViewModel = () => {
       [CreatePositionInput.MIN_PRICE]: initialMinPrice,
       [CreatePositionInput.MAX_PRICE]: initialMaxPrice,
       [CreatePositionInput.FULL_RANGE_POSITION]: false,
-      [CreatePositionInput.FIRST_AMOUNT_INPUT]: '',
-      [CreatePositionInput.SECOND_AMOUNT_INPUT]: ''
+      [CreatePositionInput.FIRST_AMOUNT_INPUT]: EMPTY_STRING,
+      [CreatePositionInput.SECOND_AMOUNT_INPUT]: EMPTY_STRING
     },
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
+    validationSchema
   });
 
   const handleInputChange = useCallback(
     (inputSlug: CreatePositionAmountInput | CreatePositionPriceInput, inputDecimals: number) => (value: string) => {
       const { realValue } = numberAsString(value, inputDecimals);
+      if (isAmountInput(inputSlug)) {
+        lastEditedAmountFieldRef.current = inputSlug;
+      }
       formik.setFieldValue(inputSlug, realValue);
     },
     [formik]
@@ -105,7 +117,7 @@ export const useCreateNewPositionPageViewModel = () => {
         value: formik.values[inputSlug],
         balance,
         label: t('common|Input'),
-        error: formik.errors[inputSlug],
+        error: getFormikError(formik, inputSlug),
         decimals,
         dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
         tokens: token,
@@ -114,7 +126,7 @@ export const useCreateNewPositionPageViewModel = () => {
         onInputChange: handleInputChange(inputSlug, decimals)
       };
     });
-  }, [formik.errors, formik.values, t, tokenXExchangeRate, tokensWithBalances, tokenYExchangeRate, handleInputChange]);
+  }, [formik, t, tokenXExchangeRate, tokensWithBalances, tokenYExchangeRate, handleInputChange]);
 
   const rangeInputsProps = useMemo<TokenInputProps[]>(() => {
     const rangeInputsSlugs = [CreatePositionInput.MIN_PRICE, CreatePositionInput.MAX_PRICE] as const;
@@ -123,9 +135,9 @@ export const useCreateNewPositionPageViewModel = () => {
     return rangeInputsSlugs.map((inputSlug, index) => ({
       value: formik.values[inputSlug],
       label: rangeInputsLabels[index],
-      error: formik.errors[inputSlug],
+      error: getFormikError(formik, inputSlug),
       decimals: PRICE_RANGE_DECIMALS,
-      tokens: tokensList,
+      tokens: tokensList && [...tokensList].reverse(),
       disabled: false,
       onInputChange: handleInputChange(inputSlug, PRICE_RANGE_DECIMALS),
       hiddenBalance: true,
@@ -134,12 +146,12 @@ export const useCreateNewPositionPageViewModel = () => {
       fullWidth: false,
       tokenLogoWidth: 32
     }));
-  }, [formik.errors, formik.values, handleInputChange, t, tokensList]);
+  }, [formik, handleInputChange, t, tokensList]);
 
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
 
   return {
-    disabled: true,
+    disabled: false,
     loading: false,
     onSubmit: formik.handleSubmit,
     isFullRangePosition: formik.values[CreatePositionInput.FULL_RANGE_POSITION],

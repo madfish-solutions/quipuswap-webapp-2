@@ -11,6 +11,9 @@ export type CreatePositionAmountInput =
   | CreatePositionInput.SECOND_AMOUNT_INPUT;
 export type CreatePositionPriceInput = CreatePositionInput.MIN_PRICE | CreatePositionInput.MAX_PRICE;
 
+export const isAmountInput = (inputSlug: CreatePositionInput): inputSlug is CreatePositionAmountInput =>
+  inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT || inputSlug === CreatePositionInput.SECOND_AMOUNT_INPUT;
+
 export interface CreatePositionFormValues {
   [CreatePositionInput.MIN_PRICE]: string;
   [CreatePositionInput.MAX_PRICE]: string;

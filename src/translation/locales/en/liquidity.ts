@@ -116,6 +116,9 @@ export const liquidity = {
   positionDetails: 'Position details',
   status: 'Status',
   id: 'ID',
+  priceCannotBeNegative: 'Price cannot be negative',
+  minPriceLteMaxPrice: 'Minimal price should be not greater than maximal price',
+  maxPriceShouldBePositive: 'Maximal price should be positive',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
