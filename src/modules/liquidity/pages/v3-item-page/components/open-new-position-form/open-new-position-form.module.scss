@@ -1,0 +1,50 @@
+@import '@styles/variables';
+@import '@styles/breakpoints';
+
+.svg {
+  display: block;
+  margin: 8px auto;
+}
+
+.switcherContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  flex: 1;
+  span {
+    color: $text-03;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.tooltip {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+.switcherRow {
+  padding-bottom: 24px;
+  display: inline-flex;
+  column-gap: 4px;
+}
+
+.switcherTranslation {
+  min-width: max-content;
+}
+
+@include media(">tablet") {
+  .rangeInputsGroup {
+    display: flex;
+    column-gap: 16px;
+    > * {
+      flex: 1;
+    }
+  }
+  .switcherRow {
+    padding-bottom: 40px;
+  }
+}
