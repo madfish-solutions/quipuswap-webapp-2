@@ -109,6 +109,8 @@ export const liquidity = {
   claimingSuccessful: 'Claiming successful',
   v3ExchangeRatesError:
     "Oops… It seems we don’t know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+  status: 'Status',
+  id: 'ID',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
