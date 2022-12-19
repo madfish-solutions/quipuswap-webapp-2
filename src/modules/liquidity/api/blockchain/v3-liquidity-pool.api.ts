@@ -74,30 +74,6 @@ export namespace V3LiquidityPoolApi {
     };
   };
 
-  export const claimFee = async (
-    tezos: TezosToolkit,
-    contractAddress: string,
-    positionsId: BigNumber,
-    accountPkh: string,
-    transactionDuration: BigNumber
-  ) => {
-    const contract = await tezos.wallet.at(contractAddress);
-    const transactionDeadline = await getTransactionDeadline(tezos, transactionDuration);
-
-    return contract.methods
-      .update_position(
-        positionsId,
-        ZERO_AMOUNT_BN,
-        accountPkh,
-        accountPkh,
-        transactionDeadline,
-        ZERO_AMOUNT_BN,
-        ZERO_AMOUNT_BN,
-        QUIPUSWAP_REFERRAL_CODE
-      )
-      .send();
-  };
-
   export const claimFees = async (
     tezos: TezosToolkit,
     contractAddress: string,
