@@ -13,7 +13,7 @@ import {
 import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks';
 
-export const usePoolDetailsViewModel = () => {
+export const usePositionDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
   const { positionId } = useLiquidityV3PositionStore();
   const { contractAddress, feeBps } = useLiquidityV3PoolStore();
