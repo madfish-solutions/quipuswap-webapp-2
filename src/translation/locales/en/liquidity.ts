@@ -114,6 +114,8 @@ export const liquidity = {
   fullRangePositionTooltip:
     'If this option is selected, your liquidity is used for swaps at any price. It makes you position always earn fee but capital efficiency significantly decreases.',
   positionDetails: 'Position details',
+  status: 'Status',
+  id: 'ID',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
