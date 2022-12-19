@@ -5,12 +5,12 @@ import { PERCENTAGE_100 } from '@config/constants';
 const BASE_BN = new BigNumber('1');
 
 /**
- * Increase value by slippage percentage
+ * Increase value by specified percentage
  * @param amount
- * @param slippagePercentage
+ * @param percentage
  */
-export const increaseBySlippage = (amount: BigNumber, slippagePercentage: BigNumber) => {
-  const fixedSlippage = BASE_BN.plus(slippagePercentage.dividedBy(PERCENTAGE_100));
+export const increaseByPercentage = (amount: BigNumber, percentage: BigNumber) => {
+  const fixedSlippage = BASE_BN.plus(percentage.dividedBy(PERCENTAGE_100));
 
   return amount.multipliedBy(fixedSlippage);
 };
