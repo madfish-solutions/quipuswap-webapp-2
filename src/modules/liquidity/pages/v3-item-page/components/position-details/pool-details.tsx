@@ -9,10 +9,10 @@ import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
 import { PositionStatus } from '../position-status';
-import styles from './position-details.module.scss';
-import { usePositionDetailsViewModel } from './use-position-details.vm';
+import styles from './pool-details.module.scss';
+import { usePoolDetailsViewModel } from './use-pool-details.vm';
 
-export const PositionDetails: FC = observer(() => {
+export const PoolDetails: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -28,7 +28,7 @@ export const PositionDetails: FC = observer(() => {
     maxPrice,
     priceRangeSymbols,
     isInRange
-  } = usePositionDetailsViewModel();
+  } = usePoolDetailsViewModel();
 
   return (
     <Card

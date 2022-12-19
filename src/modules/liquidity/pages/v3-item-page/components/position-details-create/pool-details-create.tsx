@@ -8,10 +8,10 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from './position-details-create.module.scss';
-import { usePositionDetailsCreateViewModel } from './use-position-details-create.vm';
+import styles from './pool-details-create.module.scss';
+import { usePoolDetailsCreateViewModel } from './use-pool-details-create.vm';
 
-export const PositionDetailsCreate: FC = observer(() => {
+export const PoolDetailsCreate: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -25,7 +25,7 @@ export const PositionDetailsCreate: FC = observer(() => {
     tokenYAmount,
     tokenActiveIndex,
     handleButtonClick
-  } = usePositionDetailsCreateViewModel();
+  } = usePoolDetailsCreateViewModel();
 
   return (
     <Card
