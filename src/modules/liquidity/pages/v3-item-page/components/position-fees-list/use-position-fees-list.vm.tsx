@@ -52,10 +52,10 @@ export const usePositionFeesListViewModel = () => {
     };
     try {
       amplitudeService.logEvent('CLAIM_V3_FEE_CLICK', logData);
-      const operation = await V3LiquidityPoolApi.claimFee(
+      const operation = await V3LiquidityPoolApi.claimFees(
         defined(tezos, 'tezos'),
         defined(contractAddress, 'contractAddress'),
-        defined(positionId, 'positionId'),
+        [defined(positionId, 'positionId')],
         defined(accountPkh, 'accountPkh'),
         transactionDeadline
       );
