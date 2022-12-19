@@ -5,6 +5,8 @@ import { useTranslation } from '@translation';
 
 import { useLiquidityV3PoolStats } from './use-liquidity-v3-pool-stats';
 
+const MAX_SLIDES_TO_SHOW = 4;
+
 export const useLiquidityV3PoolStatsViewModel = () => {
   const { t } = useTranslation();
   const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage } =
@@ -35,5 +37,5 @@ export const useLiquidityV3PoolStatsViewModel = () => {
     [t, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage, isExchangeRatesError]
   );
 
-  return { stats };
+  return { stats, slidesToShow: Math.min(stats.length, MAX_SLIDES_TO_SHOW) };
 };
