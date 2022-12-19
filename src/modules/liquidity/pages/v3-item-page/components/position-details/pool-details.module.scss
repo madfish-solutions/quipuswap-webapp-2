@@ -1,0 +1,25 @@
+.contentClassName {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding: 24px;
+}
+
+.statusCardCell {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tokenSwitcher {
+  margin-left: 8px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header > :nth-child(1) {
+  width: 100%;
+}

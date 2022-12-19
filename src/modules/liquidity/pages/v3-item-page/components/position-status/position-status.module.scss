@@ -1,0 +1,39 @@
+@import '@styles/variables';
+
+.root {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  background-color: transparent;
+  border: 4px solid $red;
+}
+
+.inRange {
+  background-color: $green;
+  border: none;
+}
+
+.statusText {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.light {
+  &.statusText {
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.statusText {
+    color: $text-inverse;
+  }
+}
