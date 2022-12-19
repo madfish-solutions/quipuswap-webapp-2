@@ -1,11 +1,12 @@
 import { EMPTY_STRING, SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
-import { useLiquidityV3ItemTokens, useLiquidityV3PoolStats, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { toReal } from '@shared/helpers';
 
-export const usePoolDetailsViewModel = () => {
+import { useLiquidityV3PoolStore, useLiquidityV3ItemTokens, useLiquidityV3PoolStats } from '../../../../hooks';
+
+export const usePoolDetailsCreateViewModel = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractAddress, contractBalance } = store;
+  const { contractAddress, contractBalance } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { poolTvl, currentPrice, tokensSymbols, feeBpsPercentage } = useLiquidityV3PoolStats();
 

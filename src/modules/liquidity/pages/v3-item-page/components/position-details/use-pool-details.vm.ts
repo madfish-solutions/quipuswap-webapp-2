@@ -1,28 +1,32 @@
 import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
-import { isExist, toReal } from '@shared/helpers';
+import { getSymbolsString, isExist } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
-import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../../liquidity/helpers';
+import { getCurrentPrice, getSymbolsStringByActiveToken } from '../../../../helpers';
 import {
   useLiquidityV3CurrentPrice,
   useLiquidityV3PoolStore,
-  useLiquidityV3ItemTokens
-} from '../../../../../liquidity/hooks';
-import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
+  useLiquidityV3ItemTokens,
+  useLiquidityV3PositionStore
+} from '../../../../hooks';
+import { findUserPosition } from '../../helpers';
+import { usePositionsWithStats } from '../../hooks';
 
-export const usePositionDetailsViewModel = () => {
+export const usePoolDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractAddress, contractBalance, feeBps } = useLiquidityV3PoolStore();
+  const { positionId } = useLiquidityV3PositionStore();
+  const { contractAddress, feeBps } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const currentPrice = useLiquidityV3CurrentPrice();
+  const { positionsWithStats } = usePositionsWithStats();
 
-  const { tokenXBalance, tokenYBalance } = contractBalance;
-  const tokenXAmount = toReal(tokenXBalance, tokenX);
-  const tokenYAmount = toReal(tokenYBalance, tokenY);
+  const position = findUserPosition(positionsWithStats, positionId);
 
-  const poolTvl = calculateV3ItemTvl(tokenXAmount, tokenYAmount, tokenXExchangeRate, tokenYExchangeRate);
+  const minPrice = position?.stats.minRange;
+  const maxPrice = position?.stats.maxRange;
+
+  const isInRange = position?.stats.isInRange ?? false;
 
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
   const _currentPrice = isExist(currentPrice) ? getCurrentPrice(currentPrice, store.activeTokenIndex) : null;
@@ -31,17 +35,21 @@ export const usePositionDetailsViewModel = () => {
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
+  const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
+
   return {
+    id: positionId,
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
-    tvl: poolTvl,
     feeBps: feeBpsPercentage,
     currentPrice: _currentPrice,
     tokensSymbols,
     tokenXSymbol: tokenX?.metadata.symbol ?? EMPTY_STRING,
-    tokenXAmount,
     tokenYSymbol: tokenY?.metadata.symbol ?? EMPTY_STRING,
-    tokenYAmount,
     tokenActiveIndex: store.activeTokenIndex,
-    handleButtonClick
+    handleButtonClick,
+    minPrice,
+    maxPrice,
+    priceRangeSymbols,
+    isInRange
   };
 };

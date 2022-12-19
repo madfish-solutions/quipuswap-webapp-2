@@ -3,22 +3,15 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
-import {
-  Button,
-  Card,
-  DetailsCardCell,
-  DetailsCardCellWithComponent,
-  StateCurrencyAmount,
-  AssetSwitcher
-} from '@shared/components';
+import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from './position-details.module.scss';
-import { usePositionDetailsViewModel } from './use-position-details.vm';
+import styles from './pool-details-create.module.scss';
+import { usePoolDetailsCreateViewModel } from './use-pool-details-create.vm';
 
-export const PositionDetails: FC = observer(() => {
+export const PoolDetailsCreate: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
@@ -32,30 +25,35 @@ export const PositionDetails: FC = observer(() => {
     tokenYAmount,
     tokenActiveIndex,
     handleButtonClick
-  } = usePositionDetailsViewModel();
+  } = usePoolDetailsCreateViewModel();
 
   return (
-    <Card header={{ content: t('liquidity|positionDetails') }} contentClassName={styles.contentClassName}>
+    <Card
+      header={{
+        content: (
+          <div className={styles.cardHeader}>
+            {t('liquidity|poolDetails')}
+            <AssetSwitcher
+              labels={[tokenYSymbol, tokenXSymbol]}
+              activeIndex={tokenActiveIndex}
+              handleButtonClick={handleButtonClick}
+              className={styles.tokenSwitcher}
+            />
+          </div>
+        ),
+        className: styles.header
+      }}
+      contentClassName={styles.contentClassName}
+    >
       <DetailsCardCell cellName={t('liquidity|TVL')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
         <StateCurrencyAmount amount={tvl} currency={DOLLAR} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|volume')} tooltipContent={t('liquidity|weeklyVolumeV3PoolTooltip')}>
         <StateCurrencyAmount amount={1} />
       </DetailsCardCell>
-      <DetailsCardCellWithComponent
-        cellName={t('liquidity|currentPrice')}
-        tooltipContent={t('liquidity|currentPriceTooltip')}
-        component={
-          <AssetSwitcher
-            labels={[tokenYSymbol, tokenXSymbol]}
-            activeIndex={tokenActiveIndex}
-            handleButtonClick={handleButtonClick}
-            className={styles.tokenSwitcher}
-          />
-        }
-      >
+      <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
         <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
-      </DetailsCardCellWithComponent>
+      </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
