@@ -7,7 +7,8 @@ import { useLiquidityV3PoolStats } from './use-liquidity-v3-pool-stats';
 
 export const useLiquidityV3PoolStatsViewModel = () => {
   const { t } = useTranslation();
-  const { isExchangeRatesError, poolTvl, currentPrice, tokensSymbols, feeBpsPercentage } = useLiquidityV3PoolStats();
+  const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage } =
+    useLiquidityV3PoolStats();
 
   const stats = useMemo(
     () => [
@@ -20,9 +21,9 @@ export const useLiquidityV3PoolStatsViewModel = () => {
       },
       {
         title: t('liquidity|currentPrice'),
-        amount: currentPrice,
+        amount: tokenYToXCurrentPrice,
         tooltip: t('liquidity|currentPriceTooltip'),
-        currency: tokensSymbols
+        currency: tokenYToXTokensSymbols
       },
       {
         title: t('liquidity|feeRate'),
@@ -31,7 +32,7 @@ export const useLiquidityV3PoolStatsViewModel = () => {
         currency: PERCENT
       }
     ],
-    [t, poolTvl, currentPrice, tokensSymbols, feeBpsPercentage, isExchangeRatesError]
+    [t, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage, isExchangeRatesError]
   );
 
   return { stats };

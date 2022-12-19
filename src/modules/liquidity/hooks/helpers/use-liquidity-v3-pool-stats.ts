@@ -1,7 +1,7 @@
 import { FEE_BASE_POINTS_PRECISION } from '@config/constants';
 import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } from '@modules/liquidity/helpers';
 import { useLiquidityV3ItemTokensExchangeRates } from '@modules/liquidity/pages/v3-item-page/hooks';
-import { isExist, toReal } from '@shared/helpers';
+import { getSymbolsString, isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
 import { useLiquidityV3PoolStore } from '../store';
@@ -27,12 +27,15 @@ export const useLiquidityV3PoolStats = () => {
   const feeBpsPercentage = isExist(feeBps) ? fractionToPercentage(feeBps.dividedBy(FEE_BASE_POINTS_PRECISION)) : null;
 
   const tokensSymbols = getSymbolsStringByActiveToken([tokenY, tokenX], store.activeTokenIndex);
+  const tokenYToXTokensSymbols = getSymbolsString([tokenY, tokenX]);
 
   return {
     isExchangeRatesError,
     poolTvl,
     currentPrice: activeTokenCurrentPrice,
     feeBpsPercentage,
-    tokensSymbols
+    tokensSymbols,
+    tokenYToXCurrentPrice: currentPrice,
+    tokenYToXTokensSymbols
   };
 };
