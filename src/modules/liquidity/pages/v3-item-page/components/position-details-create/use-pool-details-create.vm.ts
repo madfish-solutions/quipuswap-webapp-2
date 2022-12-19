@@ -28,6 +28,8 @@ export const usePoolDetailsCreateViewModel = () => {
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
+  const categories = LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)];
+
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
     tvl: poolTvl,
@@ -40,6 +42,6 @@ export const usePoolDetailsCreateViewModel = () => {
     tokenYAmount,
     tokenActiveIndex: store.activeTokenIndex,
     handleButtonClick,
-    categories: LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)]
+    categories
   };
 };

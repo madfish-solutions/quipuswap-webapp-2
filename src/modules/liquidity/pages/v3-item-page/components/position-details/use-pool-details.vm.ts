@@ -38,6 +38,8 @@ export const usePoolDetailsViewModel = () => {
 
   const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
 
+  const categories = LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)];
+
   return {
     id: positionId,
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
@@ -52,6 +54,6 @@ export const usePoolDetailsViewModel = () => {
     maxPrice,
     priceRangeSymbols,
     isInRange,
-    categories: LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)]
+    categories
   };
 };
