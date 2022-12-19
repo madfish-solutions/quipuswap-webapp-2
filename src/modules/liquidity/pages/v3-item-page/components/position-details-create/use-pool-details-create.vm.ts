@@ -7,7 +7,7 @@ import { calculateV3ItemTvl, getCurrentPrice, getSymbolsStringByActiveToken } fr
 import { useLiquidityV3CurrentPrice, useLiquidityV3PoolStore, useLiquidityV3ItemTokens } from '../../../../hooks';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 
-export const usePositionDetailsCreateViewModel = () => {
+export const usePoolDetailsCreateViewModel = () => {
   const store = useLiquidityV3PoolStore();
   const { contractAddress, contractBalance, feeBps } = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();

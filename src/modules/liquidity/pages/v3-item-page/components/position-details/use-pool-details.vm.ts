@@ -14,7 +14,7 @@ import {
 import { findUserPosition } from '../../helpers';
 import { usePositionsWithStats } from '../../hooks';
 
-export const usePositionDetailsViewModel = () => {
+export const usePoolDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
   const { positionId } = useLiquidityV3PositionStore();
   const { contractAddress, feeBps } = useLiquidityV3PoolStore();

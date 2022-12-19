@@ -2,35 +2,30 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { PERCENT } from '@config/constants';
-import { LiquidityLabels } from '@modules/liquidity/components';
+import { DOLLAR, PERCENT } from '@config/constants';
 import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { PositionStatus } from '../position-status';
-import styles from './position-details.module.scss';
-import { usePositionDetailsViewModel } from './use-position-details.vm';
+import styles from './pool-details-create.module.scss';
+import { usePoolDetailsCreateViewModel } from './use-pool-details-create.vm';
 
-export const PositionDetails: FC = observer(() => {
+export const PoolDetailsCreate: FC = observer(() => {
   const { t } = useTranslation();
   const {
     poolContractUrl,
-    id,
+    tvl,
     feeBps,
     currentPrice,
     tokensSymbols,
     tokenXSymbol,
+    tokenXAmount,
     tokenYSymbol,
+    tokenYAmount,
     tokenActiveIndex,
-    handleButtonClick,
-    minPrice,
-    maxPrice,
-    priceRangeSymbols,
-    isInRange,
-    categories
-  } = usePositionDetailsViewModel();
+    handleButtonClick
+  } = usePoolDetailsCreateViewModel();
 
   return (
     <Card
@@ -50,18 +45,11 @@ export const PositionDetails: FC = observer(() => {
       }}
       contentClassName={styles.contentClassName}
     >
-      <DetailsCardCell cellName={t('liquidity|tags')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
-        <LiquidityLabels categories={categories} colored={true} />
+      <DetailsCardCell cellName={t('liquidity|TVL')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
+        <StateCurrencyAmount amount={tvl} currency={DOLLAR} />
       </DetailsCardCell>
-      <DetailsCardCell
-        cellName={t('liquidity|status')}
-        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
-        className={styles.statusCardCell}
-      >
-        <PositionStatus isInRange={isInRange} />
-      </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|id')} tooltipContent={t('liquidity|weeklyVolumeV3PoolTooltip')}>
-        <StateCurrencyAmount amount={id} />
+      <DetailsCardCell cellName={t('liquidity|volume')} tooltipContent={t('liquidity|weeklyVolumeV3PoolTooltip')}>
+        <StateCurrencyAmount amount={1} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
         <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
@@ -69,11 +57,17 @@ export const PositionDetails: FC = observer(() => {
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
-        <StateCurrencyAmount amount={minPrice} currency={priceRangeSymbols} />
+      <DetailsCardCell
+        cellName={t('liquidity|tokenReserves', { tokenSymbol: tokenXSymbol })}
+        tooltipContent={t('liquidity|tokenReservesTooltip')}
+      >
+        <StateCurrencyAmount amount={tokenXAmount} currency={tokenXSymbol} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
-        <StateCurrencyAmount amount={maxPrice} currency={priceRangeSymbols} />
+      <DetailsCardCell
+        cellName={t('liquidity|tokenReserves', { tokenSymbol: tokenYSymbol })}
+        tooltipContent={t('liquidity|tokenReservesTooltip')}
+      >
+        <StateCurrencyAmount amount={tokenYAmount} currency={tokenYSymbol} />
       </DetailsCardCell>
       <div className={commonContainerStyles.detailsButtons}>
         <Button
