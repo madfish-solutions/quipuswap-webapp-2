@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { Skeleton, StateWrapper, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { PageTitleContainer, PoolDetails, PositionFeesList } from './components';
+import { PageTitleContainer, PositionDetails, PositionFeesList } from './components';
 import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
 import styles from './v3-item-page.module.scss';
 
@@ -24,7 +24,7 @@ export const V3ItemPage: FC = observer(() => {
         <PositionFeesList />
       </StateWrapper>
       <StickyBlock>
-        <PoolDetails />
+        <PositionDetails />
       </StickyBlock>
     </>
   );
