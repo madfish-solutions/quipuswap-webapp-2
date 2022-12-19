@@ -6,7 +6,7 @@ import { useLiquidityV3PoolStatsViewModel } from '@modules/liquidity/hooks';
 import { ListStats } from '@shared/components';
 
 export const LiquidityV3PoolStats: FC = observer(() => {
-  const { stats } = useLiquidityV3PoolStatsViewModel();
+  const { stats, slidesToShow } = useLiquidityV3PoolStatsViewModel();
 
-  return <ListStats stats={stats} slidesToShow={3} />;
+  return <ListStats stats={stats} slidesToShow={slidesToShow} />;
 });
