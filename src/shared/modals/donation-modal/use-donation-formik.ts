@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { object as objectSchema } from 'yup';
 
 import { DONATION_ADDRESS } from '@config/config';
-import { TEZ_TRANSFER_AMOUNT_CAP } from '@config/constants';
+import { TEZ_TRANSFER_AMOUNT_CAP, ZERO_AMOUNT } from '@config/constants';
 import { TEZOS_TOKEN_DECIMALS, TEZOS_TOKEN_SLUG, TEZOS_TOKEN_SYMBOL } from '@config/tokens';
 import { useBalances } from '@providers/balances-provider';
 import { useTezos } from '@providers/use-dapp';
@@ -55,7 +55,7 @@ export const useDonationFormik = () => {
           tokenSymbol: TEZOS_TOKEN_SYMBOL,
           decimalPlaces: TEZOS_TOKEN_DECIMALS
         }),
-      makeNumberAsStringTestFn(value => value.decimalPlaces() <= TEZOS_TOKEN_DECIMALS)
+      makeNumberAsStringTestFn(value => (value.decimalPlaces() ?? ZERO_AMOUNT) <= TEZOS_TOKEN_DECIMALS)
     )
     .required(t(REQUIRE_FIELD_MESSAGE));
 
