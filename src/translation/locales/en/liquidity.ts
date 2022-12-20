@@ -116,6 +116,7 @@ export const liquidity = {
   positionDetails: 'Position details',
   status: 'Status',
   id: 'ID',
+  tags: 'Tags',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
