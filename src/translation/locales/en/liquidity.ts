@@ -75,6 +75,7 @@ export const liquidity = {
   tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
   tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
+  tooltipV3: 'CHANGE ME!',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
