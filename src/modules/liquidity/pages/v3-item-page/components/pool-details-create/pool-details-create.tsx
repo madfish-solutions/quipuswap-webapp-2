@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
+import { LiquidityLabels } from '@modules/liquidity/components';
 import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
@@ -24,7 +25,8 @@ export const PoolDetailsCreate: FC = observer(() => {
     tokenYSymbol,
     tokenYAmount,
     tokenActiveIndex,
-    handleButtonClick
+    handleButtonClick,
+    categories
   } = usePoolDetailsCreateViewModel();
 
   return (
@@ -45,6 +47,13 @@ export const PoolDetailsCreate: FC = observer(() => {
       }}
       contentClassName={styles.contentClassName}
     >
+      <DetailsCardCell
+        cellName={t('liquidity|tags')}
+        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        className={styles.deviantBehavior}
+      >
+        <LiquidityLabels categories={categories} colored={true} />
+      </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|TVL')} tooltipContent={t('liquidity|tvlV3PoolTooltip')}>
         <StateCurrencyAmount amount={tvl} currency={DOLLAR} />
       </DetailsCardCell>

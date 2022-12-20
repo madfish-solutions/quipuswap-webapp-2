@@ -1,5 +1,6 @@
+import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
 import { SLASH } from '@config/constants';
-import { TZKT_EXPLORER_URL } from '@config/environment';
+import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
 import { getSymbolsString } from '@shared/helpers';
 
 import {
@@ -32,6 +33,8 @@ export const usePositionDetailsViewModel = () => {
 
   const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
 
+  const categories = LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)];
+
   return {
     id: positionId,
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
@@ -45,6 +48,7 @@ export const usePositionDetailsViewModel = () => {
     minPrice,
     maxPrice,
     priceRangeSymbols,
-    isInRange
+    isInRange,
+    categories
   };
 };
