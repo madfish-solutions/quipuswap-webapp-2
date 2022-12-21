@@ -14,7 +14,7 @@ import { useYouvesFarmingItemRewards } from './use-youves-rewards';
 
 export const useYouvesRewardInfoViewModel = () => {
   // TODO: remove useState using store
-  const [rewadsDueDate, setRewardsDueDate] = useState(ZERO_AMOUNT);
+  const [rewardsDueDate, setRewardsDueDate] = useState(ZERO_AMOUNT);
   const { tezos } = useRootStore();
   const { doHarvest } = useDoYouvesHarvest();
   const accountPkh = useAccountPkh();
@@ -59,7 +59,7 @@ export const useYouvesRewardInfoViewModel = () => {
         ],
         isNextStepsRelevant
       );
-    });
+    }, rewardsDueDate);
   };
 
   const getUserStakeInfo = useCallback(async () => {
@@ -100,6 +100,6 @@ export const useYouvesRewardInfoViewModel = () => {
     userTotalDeposit,
     rewardTokenCurrency,
     userTotalDepositDollarEquivalent,
-    rewadsDueDate
+    rewardsDueDate
   };
 };
