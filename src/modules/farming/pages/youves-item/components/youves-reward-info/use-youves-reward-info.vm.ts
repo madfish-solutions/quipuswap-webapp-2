@@ -4,11 +4,12 @@ import { ZERO_AMOUNT, ZERO_AMOUNT_BN } from '@config/constants';
 import { useDoYouvesHarvest, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '@modules/farming/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { defined, getLastElementFromArray, getSymbolsString } from '@shared/helpers';
-import { useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
+import { defined, executeAsyncSteps, getLastElementFromArray, getSymbolsString } from '@shared/helpers';
+import { useMount, useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
 import { getRewardsDueDate } from '../../api';
+import { useYouvesHarvestConfirmationPopup } from './use-youves-harvest-confirmation-popup';
 import { useYouvesFarmingItemRewards } from './use-youves-rewards';
 
 export const useYouvesRewardInfoViewModel = () => {
@@ -23,6 +24,9 @@ export const useYouvesRewardInfoViewModel = () => {
   const stakedToken = useToken(youvesFarmingItem?.stakedToken ?? null);
   const rewardToken = useToken(youvesFarmingItem?.rewardToken ?? null);
   const earnBalance = useTokenBalance(stakedToken);
+
+  const confirmationPopup = useYouvesHarvestConfirmationPopup();
+  const { isNextStepsRelevant } = useMount();
 
   const symbolsString = getSymbolsString(youvesFarmingItem?.tokens ?? null);
   const rewardTokenCurrency = getSymbolsString(rewardToken ?? null);
@@ -46,9 +50,16 @@ export const useYouvesRewardInfoViewModel = () => {
       earnBalance
     };
     amplitudeService.logEvent('YOUVES_HARVEST_CLICK');
-    await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id);
-
-    await delayedGetFarmingItem(id, defined(version, 'version'));
+    confirmationPopup(async () => {
+      await executeAsyncSteps(
+        [
+          async () =>
+            await doHarvest(farmingItemWithBalances, getLastElementFromArray(youvesFarmingItemStore.stakes).id),
+          async () => await delayedGetFarmingItem(id, defined(version, 'version'))
+        ],
+        isNextStepsRelevant
+      );
+    });
   };
 
   const getUserStakeInfo = useCallback(async () => {
