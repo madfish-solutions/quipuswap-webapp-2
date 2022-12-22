@@ -38,8 +38,8 @@ export const useCalculateInputAmountValue = () => {
         tokenGiven === tokenY ? toAtomic(realInputAmount, tokenY) : new BigNumber(Infinity)
       );
 
-      const calculationFunction = tokenToCalculate === tokenX ? calculateXTokenAmount : calculateYTokenAmount;
-      const tokenToCalculateAtomicAmount = calculationFunction(
+      const calculateTokenAmount = tokenToCalculate === tokenX ? calculateXTokenAmount : calculateYTokenAmount;
+      const tokenToCalculateAtomicAmount = calculateTokenAmount(
         currentTick,
         lowerTick,
         upperTick,
