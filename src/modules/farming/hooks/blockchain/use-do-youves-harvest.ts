@@ -40,7 +40,7 @@ export const useDoYouvesHarvest = () => {
           stakeId
         );
 
-        await confirmOperation(operation.hash, { message: 'Harvest successful' });
+        await confirmOperation(operation.opHash, { message: 'Harvest successful' });
         amplitudeService.logEvent('YOUVES_HARVEST_SUCCESS', logData);
       } catch (error) {
         showErrorToast(error as Error);
