@@ -17,7 +17,7 @@ import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
 import { CreatePositionAmountInput, CreatePositionInput, CreatePositionPriceInput } from './types/create-position-form';
 
 const MIN_TICK_SQRT_PRICE = 1;
-const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces();
+const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces()!;
 
 export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
