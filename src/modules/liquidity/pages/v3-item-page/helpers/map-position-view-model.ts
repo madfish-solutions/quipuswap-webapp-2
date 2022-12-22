@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { AppRootRoutes } from '@app.router';
-import { LiquidityRoutes, LiquiditySubroutes } from '@modules/liquidity/liquidity-routes.enum';
+import { DexLink } from '@modules/liquidity/helpers';
 import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
 import { getTokensNames } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
@@ -27,9 +26,7 @@ export const mapPositionViewModel = (
     const tokensNames = getTokensNames([tokenY, tokenX]);
 
     return {
-      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId.toFixed()}/${
-        LiquiditySubroutes.positions
-      }/${id.toFixed()}`,
+      href: DexLink.getLiquidityV3PositionLink(poolId, id),
       inputToken: [tokenX, tokenY],
       status: null,
       isNew: false,

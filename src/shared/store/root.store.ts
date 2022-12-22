@@ -15,7 +15,8 @@ import {
   LiquidityListStore as ILiquidityListStore,
   LiquidityItemStore as ILiquidityItemStore,
   LiquidityListFiltersStore as ILiquidityListFiltersStore,
-  LiquidityV3ItemStore as ILiquidityV3ItemStore,
+  LiquidityV3PoolStore as ILiquidityV3PoolStore,
+  LiquidityV3PositionStore as ILiquidityV3PositionStore,
   LiquidityV3PositionsStore as ILiquidityV3PositionsStore
 } from '@modules/liquidity';
 import {
@@ -66,7 +67,8 @@ export class RootStore {
 
   liquidityListStore: Nullable<ILiquidityListStore> = null;
   liquidityItemStore: Nullable<ILiquidityItemStore> = null;
-  liquidityV3ItemStore: Nullable<ILiquidityV3ItemStore> = null;
+  liquidityV3PoolStore: Nullable<ILiquidityV3PoolStore> = null;
+  liquidityV3PositionStore: Nullable<ILiquidityV3PositionStore> = null;
   liquidityV3PositionsStore: Nullable<ILiquidityV3PositionsStore> = null;
   liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
 
@@ -125,7 +127,8 @@ export class RootStore {
 
       createLiquidityListStore: action,
       createLiquidityItemStore: action,
-      createLiquidityV3ItemStore: action,
+      createLiquidityV3PoolStore: action,
+      createLiquidityV3PositionStore: action,
       createLiquidityV3PositionsStore: action,
       createLiquidityListFiltersStore: action
     });
@@ -156,10 +159,17 @@ export class RootStore {
     }
   }
 
-  async createLiquidityV3ItemStore() {
-    if (isNull(this.liquidityV3ItemStore)) {
-      const { LiquidityV3ItemStore } = await import('@modules/liquidity/store/liquidity-v3-item.store');
-      this.liquidityV3ItemStore = new LiquidityV3ItemStore(this);
+  async createLiquidityV3PoolStore() {
+    if (isNull(this.liquidityV3PoolStore)) {
+      const { LiquidityV3PoolStore } = await import('@modules/liquidity/store/liquidity-v3-pool.store');
+      this.liquidityV3PoolStore = new LiquidityV3PoolStore(this);
+    }
+  }
+
+  async createLiquidityV3PositionStore() {
+    if (isNull(this.liquidityV3PositionStore)) {
+      const { LiquidityV3PositionStore } = await import('@modules/liquidity/store/liquidity-v3-position.store');
+      this.liquidityV3PositionStore = new LiquidityV3PositionStore();
     }
   }
 

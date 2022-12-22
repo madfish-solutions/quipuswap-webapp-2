@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { ZERO_AMOUNT } from '@config/constants';
 import { Nullable } from '@shared/types';
 import { makeNumberAsStringTestFn, numberAsStringSchema } from '@shared/validators';
 
@@ -26,7 +27,7 @@ export const operationAmountSchema = (
     return baseSchema.test(
       'input-decimals-amount',
       () => decimalsOverflowError,
-      makeNumberAsStringTestFn(_value => _value.decimalPlaces() <= maxDecimals)
+      makeNumberAsStringTestFn(_value => (_value.decimalPlaces() ?? ZERO_AMOUNT) <= maxDecimals)
     );
   }
 
