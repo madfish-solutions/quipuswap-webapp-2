@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 
 import { EMPTY_STRING } from '@config/constants';
 import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
-import { toAtomic } from '@shared/helpers';
+import { stringToBigNumber, toAtomic } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
 import { calculateLiquidity, calculateTick } from '../../helpers';
@@ -33,8 +33,8 @@ export const useCreatePositionFormik = (
       const x = toAtomic(realTokenXAmount, tokenX);
       const realTokenYAmount = new BigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT]);
       const y = toAtomic(realTokenYAmount, tokenY);
-      const realMaxPrice = new BigNumber(values[CreatePositionInput.MAX_PRICE]);
-      const realMinPrice = new BigNumber(values[CreatePositionInput.MIN_PRICE]);
+      const realMaxPrice = stringToBigNumber(values[CreatePositionInput.MAX_PRICE]);
+      const realMinPrice = stringToBigNumber(values[CreatePositionInput.MIN_PRICE]);
       const lowerTick = calculateTick(toAtomic(realMinPrice, priceDecimals), tickSpacing);
       const upperTick = calculateTick(toAtomic(realMaxPrice, priceDecimals), tickSpacing);
       const liquidity = calculateLiquidity(
