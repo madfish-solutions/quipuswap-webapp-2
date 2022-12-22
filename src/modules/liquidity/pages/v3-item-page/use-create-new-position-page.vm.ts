@@ -34,6 +34,7 @@ import {
 } from './helpers';
 import {
   useCreateNewPositionFormValidationSchema,
+  useCurrentTick,
   useLiquidityV3ItemTokensExchangeRates,
   useOnAmountInputChange,
   useOnPriceRangeChange,
@@ -101,7 +102,8 @@ export const useCreateNewPositionPageViewModel = () => {
     onSubmit: handleSubmit,
     validationSchema
   });
-  const { currentTick, upperTick, lowerTick } = usePositionTicks(formik as unknown as ReturnType<typeof useFormik>);
+  const { upperTick, lowerTick } = usePositionTicks(formik as unknown as ReturnType<typeof useFormik>);
+  const currentTick = useCurrentTick();
   const { onAmountInputChange, lastEditedAmountFieldRef } = useOnAmountInputChange(
     formik as unknown as ReturnType<typeof useFormik>
   );

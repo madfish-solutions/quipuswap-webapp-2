@@ -13,16 +13,18 @@ import {
   CreatePositionFormValues,
   CreatePositionInput
 } from '../../types/create-position-form';
-import { useCalculateInputAmountValues } from './use-calculate-input-amount-values';
-import { usePositionTicks } from './use-position-ticks';
+import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
+import { useCurrentTick } from './use-current-tick';
+import { useTickSpacing } from './use-tick-spacing';
 
 export const useOnPriceRangeChange = (
   formik: ReturnType<typeof useFormik>,
   lastEditedAmountFieldRef: MutableRefObject<CreatePositionAmountInput | null>
 ) => {
-  const { calculateFirstInputValue, calculateSecondInputValue } = useCalculateInputAmountValues();
+  const calculateInputAmountValue = useCalculateInputAmountValue();
   const priceDecimals = useV3PoolPriceDecimals();
-  const { currentTick, tickSpacing } = usePositionTicks(formik);
+  const currentTick = useCurrentTick();
+  const tickSpacing = useTickSpacing();
 
   return useCallback(
     (rawMinPrice: string, rawMaxPrice: string) => {
@@ -58,7 +60,8 @@ export const useOnPriceRangeChange = (
         lastEditedAmountFieldRef.current === CreatePositionInput.FIRST_AMOUNT_INPUT &&
         shouldAddTokenX(currentTick.index, upperTick.index)
       ) {
-        newValues[CreatePositionInput.SECOND_AMOUNT_INPUT] = calculateSecondInputValue(
+        newValues[CreatePositionInput.SECOND_AMOUNT_INPUT] = calculateInputAmountValue(
+          CreatePositionInput.FIRST_AMOUNT_INPUT,
           currentTick,
           upperTick,
           lowerTick,
@@ -68,7 +71,8 @@ export const useOnPriceRangeChange = (
         lastEditedAmountFieldRef.current === CreatePositionInput.SECOND_AMOUNT_INPUT &&
         shouldAddTokenY(currentTick.index, lowerTick.index)
       ) {
-        newValues[CreatePositionInput.FIRST_AMOUNT_INPUT] = calculateFirstInputValue(
+        newValues[CreatePositionInput.FIRST_AMOUNT_INPUT] = calculateInputAmountValue(
+          CreatePositionInput.SECOND_AMOUNT_INPUT,
           currentTick,
           upperTick,
           lowerTick,
@@ -83,14 +87,6 @@ export const useOnPriceRangeChange = (
         ...newValues
       }));
     },
-    [
-      formik,
-      priceDecimals,
-      tickSpacing,
-      currentTick,
-      lastEditedAmountFieldRef,
-      calculateSecondInputValue,
-      calculateFirstInputValue
-    ]
+    [formik, priceDecimals, tickSpacing, currentTick, lastEditedAmountFieldRef, calculateInputAmountValue]
   );
 };
