@@ -1,5 +1,6 @@
+import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
 import { SLASH } from '@config/constants';
-import { TZKT_EXPLORER_URL } from '@config/environment';
+import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
 import { toReal } from '@shared/helpers';
 
 import {
@@ -22,6 +23,8 @@ export const usePoolDetailsCreateViewModel = () => {
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
 
+  const categories = LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)];
+
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
     tvl: poolTvl,
@@ -33,6 +36,7 @@ export const usePoolDetailsCreateViewModel = () => {
     tokenYSymbol,
     tokenYAmount,
     tokenActiveIndex: store.activeTokenIndex,
-    handleButtonClick
+    handleButtonClick,
+    categories
   };
 };
