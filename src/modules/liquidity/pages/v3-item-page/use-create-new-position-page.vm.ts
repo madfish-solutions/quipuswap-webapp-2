@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
+import { ZERO_AMOUNT } from '@config/constants';
 import { useLiquidityV3ItemTokens, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
@@ -17,7 +18,7 @@ import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
 import { CreatePositionAmountInput, CreatePositionInput, CreatePositionPriceInput } from './types/create-position-form';
 
 const MIN_TICK_SQRT_PRICE = 1;
-const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces();
+const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces() ?? ZERO_AMOUNT;
 
 export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
