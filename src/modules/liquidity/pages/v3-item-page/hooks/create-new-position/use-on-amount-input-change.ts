@@ -10,13 +10,15 @@ import {
   CreatePositionFormValues,
   CreatePositionInput
 } from '../../types/create-position-form';
-import { useCalculateInputAmountValues } from './use-calculate-input-amount-values';
+import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
+import { useCurrentTick } from './use-current-tick';
 import { usePositionTicks } from './use-position-ticks';
 
 export const useOnAmountInputChange = (formik: ReturnType<typeof useFormik>) => {
   const lastEditedAmountFieldRef = useRef<CreatePositionAmountInput | null>(null);
-  const { calculateFirstInputValue, calculateSecondInputValue } = useCalculateInputAmountValues();
-  const { lowerTick, upperTick, currentTick } = usePositionTicks(formik);
+  const calculateInputAmountValue = useCalculateInputAmountValue();
+  const { lowerTick, upperTick } = usePositionTicks(formik);
+  const currentTick = useCurrentTick();
 
   const onAmountInputChange = useCallback(
     (inputSlug: CreatePositionAmountInput, realValue: string) => {
@@ -28,15 +30,13 @@ export const useOnAmountInputChange = (formik: ReturnType<typeof useFormik>) => 
       const maxPrice = new BigNumber(formik.values[CreatePositionInput.MAX_PRICE]);
       const canUpdateAnotherAmount =
         isExist(lowerTick) && isExist(upperTick) && isExist(currentTick) && minPrice.isLessThanOrEqualTo(maxPrice);
-      if (inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT && canUpdateAnotherAmount) {
-        newValues[CreatePositionInput.SECOND_AMOUNT_INPUT] = calculateSecondInputValue(
-          currentTick,
-          upperTick,
-          lowerTick,
-          newAmount
-        );
-      } else if (canUpdateAnotherAmount) {
-        newValues[CreatePositionInput.FIRST_AMOUNT_INPUT] = calculateFirstInputValue(
+      if (canUpdateAnotherAmount) {
+        const inputSlugToUpdate =
+          inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT
+            ? CreatePositionInput.SECOND_AMOUNT_INPUT
+            : CreatePositionInput.FIRST_AMOUNT_INPUT;
+        newValues[inputSlugToUpdate] = calculateInputAmountValue(
+          inputSlug,
           currentTick,
           upperTick,
           lowerTick,
@@ -49,7 +49,7 @@ export const useOnAmountInputChange = (formik: ReturnType<typeof useFormik>) => 
         ...newValues
       }));
     },
-    [formik, lowerTick, upperTick, currentTick, calculateSecondInputValue, calculateFirstInputValue]
+    [formik, lowerTick, upperTick, currentTick, calculateInputAmountValue]
   );
 
   return { lastEditedAmountFieldRef, onAmountInputChange };

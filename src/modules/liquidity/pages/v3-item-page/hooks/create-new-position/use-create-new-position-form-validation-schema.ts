@@ -3,27 +3,26 @@ import { useMemo } from 'react';
 import { object as objectSchema, bool as boolSchema, mixed } from 'yup';
 
 import { EMPTY_STRING, ZERO_AMOUNT_BN } from '@config/constants';
-import { useLiquidityV3CurrentPrice, useLiquidityV3PoolStore, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { getTokenDecimals, isNull, operationAmountSchema, stringToBigNumber, toAtomic } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 import { numberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { calculateTickIndex } from '../../helpers';
+import { calculateTickIndex, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
 import { CreatePositionInput } from '../../types/create-position-form';
+import { useCurrentTick } from './use-current-tick';
+import { useTickSpacing } from './use-tick-spacing';
 
 export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: BalanceToken[]) => {
-  const poolStore = useLiquidityV3PoolStore();
   const [tokenXWithBalance, tokenYWithBalance] = tokensWithBalances;
-  const currentPrice = useLiquidityV3CurrentPrice();
   const { t } = useTranslation();
   const priceDecimals = useV3PoolPriceDecimals();
+  const currentTick = useCurrentTick();
+  const tickSpacing = useTickSpacing();
 
   return useMemo(() => {
     const requiredFieldMessage = t('common|This field is required');
-    const tickSpacing = poolStore.item?.storage.constants.tick_spacing.toNumber();
-    const currentPriceTickIndex =
-      currentPrice && calculateTickIndex(toAtomic(currentPrice, priceDecimals), tickSpacing);
 
     return objectSchema().shape({
       [CreatePositionInput.MIN_PRICE]: mixed().when(CreatePositionInput.MAX_PRICE, (rawMaxPrice = EMPTY_STRING) => {
@@ -54,13 +53,13 @@ export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: Bal
         CreatePositionInput.MAX_PRICE,
         (rawMaxPrice = EMPTY_STRING) => {
           const maxPrice = stringToBigNumber(rawMaxPrice);
-          const maxPriceTickIndex = maxPrice.isNaN()
+          const upperTickIndex = maxPrice.isNaN()
             ? null
             : calculateTickIndex(toAtomic(maxPrice, priceDecimals), tickSpacing);
 
           return operationAmountSchema(
             tokenXWithBalance?.balance ?? null,
-            isNull(currentPriceTickIndex) || isNull(maxPriceTickIndex) || currentPriceTickIndex.gte(maxPriceTickIndex),
+            isNull(currentTick) || isNull(upperTickIndex) || !shouldAddTokenX(currentTick.index, upperTickIndex),
             getTokenDecimals(tokenXWithBalance?.token)
           ).required(requiredFieldMessage);
         }
@@ -69,26 +68,26 @@ export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: Bal
         CreatePositionInput.MIN_PRICE,
         (rawMinPrice = EMPTY_STRING) => {
           const minPrice = stringToBigNumber(rawMinPrice);
-          const minPriceTickIndex = minPrice.isNaN()
+          const lowerTickIndex = minPrice.isNaN()
             ? null
             : calculateTickIndex(toAtomic(minPrice, priceDecimals), tickSpacing);
 
           return operationAmountSchema(
             tokenYWithBalance?.balance ?? null,
-            isNull(currentPriceTickIndex) || isNull(minPriceTickIndex) || currentPriceTickIndex.lt(minPriceTickIndex),
+            isNull(currentTick) || isNull(lowerTickIndex) || !shouldAddTokenY(currentTick.index, lowerTickIndex),
             getTokenDecimals(tokenYWithBalance?.token)
           ).required(requiredFieldMessage);
         }
       )
     });
   }, [
-    currentPrice,
     t,
+    priceDecimals,
+    tickSpacing,
     tokenXWithBalance?.balance,
     tokenXWithBalance?.token,
+    currentTick,
     tokenYWithBalance?.balance,
-    tokenYWithBalance?.token,
-    poolStore,
-    priceDecimals
+    tokenYWithBalance?.token
   ]);
 };
