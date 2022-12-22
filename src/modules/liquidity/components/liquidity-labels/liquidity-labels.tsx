@@ -16,15 +16,16 @@ const Component: Record<Categories, FC> = {
 
 interface Props {
   categories: Array<Categories>;
+  colored?: boolean;
 }
 
-export const LiquidityLabels: FC<Props> = ({ categories }) => {
+export const LiquidityLabels: FC<Props> = ({ categories, colored }) => {
   const icons = categories.map(category => Component[category]);
 
   return (
     <div className={styles.root}>
-      {icons.map((Label, index) => (
-        <div key={`icon-${index}`}>{!isNull(Label) ? <Label /> : null}</div>
+      {icons.map((Label: FC<Pick<Props, 'colored'>>, index) => (
+        <div key={`icon-${index}`}>{!isNull(Label) ? <Label colored={colored} /> : null}</div>
       ))}
     </div>
   );
