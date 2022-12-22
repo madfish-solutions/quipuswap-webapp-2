@@ -11,7 +11,7 @@ import { useTranslation } from '@translation';
 import { V3Positions } from '../../api/blockchain/v3-liquidity-pool-positions';
 import { getLiquidityTicks } from '../../api/v3-liquidity-ticks';
 import { useLiquidityV3ItemTokens } from '../helpers';
-import { useLiquidityV3ItemStore } from '../store';
+import { useLiquidityV3PoolStore } from '../store';
 
 export const useV3NewPosition = () => {
   const { tezos } = useRootStore();
@@ -22,7 +22,7 @@ export const useV3NewPosition = () => {
     settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
-  const liquidityV3PoolStore = useLiquidityV3ItemStore();
+  const liquidityV3PoolStore = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   const createNewV3Position = async (
