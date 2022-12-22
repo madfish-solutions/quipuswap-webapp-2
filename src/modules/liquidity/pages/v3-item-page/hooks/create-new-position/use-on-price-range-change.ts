@@ -1,10 +1,10 @@
 import { MutableRefObject, useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
 
 import { EMPTY_STRING } from '@config/constants';
 import { useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { CreatePositionFormik } from '@modules/liquidity/types';
 import { isExist, stringToBigNumber, toAtomic } from '@shared/helpers';
 
 import { calculateTicks, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
@@ -18,7 +18,7 @@ import { useCurrentTick } from './use-current-tick';
 import { useTickSpacing } from './use-tick-spacing';
 
 export const useOnPriceRangeChange = (
-  formik: ReturnType<typeof useFormik>,
+  formik: CreatePositionFormik,
   lastEditedAmountFieldRef: MutableRefObject<CreatePositionAmountInput | null>
 ) => {
   const calculateInputAmountValue = useCalculateInputAmountValue();

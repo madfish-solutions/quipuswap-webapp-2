@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
 
+import { CreatePositionFormik } from '@modules/liquidity/types';
 import { isExist } from '@shared/helpers';
 
 import {
@@ -14,7 +14,7 @@ import { useCalculateInputAmountValue } from './use-calculate-input-amount-value
 import { useCurrentTick } from './use-current-tick';
 import { usePositionTicks } from './use-position-ticks';
 
-export const useOnAmountInputChange = (formik: ReturnType<typeof useFormik>) => {
+export const useOnAmountInputChange = (formik: CreatePositionFormik) => {
   const lastEditedAmountFieldRef = useRef<CreatePositionAmountInput | null>(null);
   const calculateInputAmountValue = useCalculateInputAmountValue();
   const { lowerTick, upperTick } = usePositionTicks(formik);

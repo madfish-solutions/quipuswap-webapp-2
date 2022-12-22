@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
 
 import { useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { CreatePositionFormik } from '@modules/liquidity/types';
 import { toAtomic } from '@shared/helpers';
 
 import { calculateTicks } from '../../helpers';
 import { CreatePositionInput } from '../../types/create-position-form';
 import { useTickSpacing } from './use-tick-spacing';
 
-export const usePositionTicks = (formik: ReturnType<typeof useFormik>) => {
+export const usePositionTicks = (formik: CreatePositionFormik) => {
   const priceDecimals = useV3PoolPriceDecimals();
   const tickSpacing = useTickSpacing();
 
