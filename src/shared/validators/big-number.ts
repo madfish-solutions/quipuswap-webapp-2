@@ -1,16 +1,14 @@
 import { BigNumber } from 'bignumber.js';
-import { object, SchemaOf } from 'yup';
+import { mixed, SchemaOf } from 'yup';
 
 import { Optional } from '@shared/types';
 import { i18n } from '@translation';
 
-const basicBigNumberSchema: SchemaOf<BigNumber> = object()
-  .shape({})
-  .test(
-    'value-type',
-    () => 'Must be a number',
-    value => !value || value instanceof BigNumber
-  ) as SchemaOf<BigNumber>;
+const basicBigNumberSchema: SchemaOf<BigNumber> = mixed().test(
+  'value-type',
+  () => 'Must be a number',
+  value => !value || value instanceof BigNumber
+) as SchemaOf<BigNumber>;
 
 export const bigNumberSchema = (min?: Optional<BigNumber.Value>, max?: Optional<BigNumber.Value>, message?: string) => {
   const schema = basicBigNumberSchema.clone();
