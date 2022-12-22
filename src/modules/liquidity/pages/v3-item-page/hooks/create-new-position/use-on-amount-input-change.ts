@@ -3,7 +3,7 @@ import { useCallback, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { CreatePositionFormik } from '@modules/liquidity/types';
-import { isExist } from '@shared/helpers';
+import { isExist, stringToBigNumber } from '@shared/helpers';
 
 import {
   CreatePositionAmountInput,
@@ -26,8 +26,8 @@ export const useOnAmountInputChange = (formik: CreatePositionFormik) => {
         [inputSlug]: realValue
       };
       const newAmount = new BigNumber(realValue);
-      const minPrice = new BigNumber(formik.values[CreatePositionInput.MIN_PRICE]);
-      const maxPrice = new BigNumber(formik.values[CreatePositionInput.MAX_PRICE]);
+      const minPrice = stringToBigNumber(formik.values[CreatePositionInput.MIN_PRICE]);
+      const maxPrice = stringToBigNumber(formik.values[CreatePositionInput.MAX_PRICE]);
       const canUpdateAnotherAmount =
         isExist(lowerTick) && isExist(upperTick) && isExist(currentTick) && minPrice.isLessThanOrEqualTo(maxPrice);
       if (canUpdateAnotherAmount) {
