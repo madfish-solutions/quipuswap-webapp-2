@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApi } from '@blockchain';
 import { getContract, getStorageInfo } from '@shared/dapp';
+import { getWalletContract } from '@shared/helpers';
 import { Standard, TokenIdFa2 } from '@shared/types';
 
 interface IFarmingStorage {
@@ -66,7 +67,7 @@ export class BlockchainYouvesFarmingApi {
   }
 
   static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
-    const contract = await getContract(tezos, contractAddress);
+    const contract = await getWalletContract(tezos.wallet, contractAddress);
 
     return await contract.methods.claim(new BigNumber(stakeId)).send();
   }
