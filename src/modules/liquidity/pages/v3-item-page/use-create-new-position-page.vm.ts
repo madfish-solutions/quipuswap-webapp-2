@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
 
 import { EMPTY_STRING, INFINITY_SIGN, ZERO_AMOUNT } from '@config/constants';
 import {
@@ -33,7 +32,7 @@ import {
   shouldAddTokenY
 } from './helpers';
 import {
-  useCreateNewPositionFormValidationSchema,
+  useCreatePositionFormik,
   useCurrentTick,
   useLiquidityV3ItemTokensExchangeRates,
   useOnAmountInputChange,
@@ -63,7 +62,7 @@ export const useCreateNewPositionPageViewModel = () => {
   const { tokenXExchangeRate, tokenYExchangeRate } = useLiquidityV3ItemTokensExchangeRates();
   const poolStore = useLiquidityV3PoolStore();
   const currentPrice = useLiquidityV3CurrentPrice();
-  const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
+  const currentTick = useCurrentTick();
 
   const initialMinPrice = useMemo(
     () =>
@@ -86,35 +85,11 @@ export const useCreateNewPositionPageViewModel = () => {
     }
   }, [dAppReady, getLiquidityV3ItemBalances]);
 
-  const handleSubmit = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('TODO: handle submit');
-  }, []);
-
-  const formik = useFormik({
-    initialValues: {
-      [CreatePositionInput.MIN_PRICE]: initialMinPrice,
-      [CreatePositionInput.MAX_PRICE]: initialMaxPrice,
-      [CreatePositionInput.FULL_RANGE_POSITION]: false,
-      [CreatePositionInput.FIRST_AMOUNT_INPUT]: EMPTY_STRING,
-      [CreatePositionInput.SECOND_AMOUNT_INPUT]: EMPTY_STRING
-    },
-    onSubmit: handleSubmit,
-    validationSchema
-  });
-  const { upperTick, lowerTick } = usePositionTicks(formik as unknown as ReturnType<typeof useFormik>);
-  const currentTick = useCurrentTick();
-  const { onAmountInputChange, lastEditedAmountFieldRef } = useOnAmountInputChange(
-    formik as unknown as ReturnType<typeof useFormik>
-  );
-  const onPriceRangeInputChange = useOnPriceRangeInputChange(
-    formik as unknown as ReturnType<typeof useFormik>,
-    lastEditedAmountFieldRef
-  );
-  const onPriceRangeChange = useOnPriceRangeChange(
-    formik as unknown as ReturnType<typeof useFormik>,
-    lastEditedAmountFieldRef
-  );
+  const formik = useCreatePositionFormik(initialMinPrice, initialMaxPrice, tokensWithBalances);
+  const { upperTick, lowerTick } = usePositionTicks(formik);
+  const { onAmountInputChange, lastEditedAmountFieldRef } = useOnAmountInputChange(formik);
+  const onPriceRangeInputChange = useOnPriceRangeInputChange(formik, lastEditedAmountFieldRef);
+  const onPriceRangeChange = useOnPriceRangeChange(formik, lastEditedAmountFieldRef);
 
   const handleInputChange = useCallback(
     (inputSlug: CreatePositionAmountInput | CreatePositionPriceInput, inputDecimals: number) => (value: string) => {

@@ -1,4 +1,4 @@
-export * from './use-create-new-position-form-validation-schema';
+export * from './use-create-position-formik';
 export * from './use-current-tick';
 export * from './use-on-amount-input-change';
 export * from './use-on-price-range-change';
