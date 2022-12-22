@@ -162,7 +162,7 @@ export const useCreateNewPositionPageViewModel = () => {
       error: getFormikError(formik, inputSlug),
       decimals: PRICE_RANGE_DECIMALS,
       tokens: tokensList && [...tokensList].reverse(),
-      disabled: false,
+      disabled: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
       onInputChange: handleInputChange(inputSlug, PRICE_RANGE_DECIMALS),
       hiddenBalance: true,
       hiddenPercentSelector: true,
