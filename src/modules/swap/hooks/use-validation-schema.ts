@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
+import { ZERO_AMOUNT } from '@config/constants';
 import { useBalances } from '@providers/balances-provider';
 import { toReal, getTokenSlug, isTezosToken } from '@shared/helpers';
 import { SwapTabAction, Token } from '@shared/types';
@@ -65,7 +66,7 @@ export const useValidationSchema = () => {
                 tokenSymbol: inputTokenSymbol,
                 decimalPlaces: inputTokenDecimals
               }),
-            value => !(value instanceof BigNumber) || value.decimalPlaces() <= inputTokenDecimals
+            value => !(value instanceof BigNumber) || (value.decimalPlaces() ?? ZERO_AMOUNT) <= inputTokenDecimals
           )
           .nullable()
           .required(t(REQUIRE_FIELD_MESSAGE));
@@ -89,7 +90,7 @@ export const useValidationSchema = () => {
                 tokenSymbol: outputTokenSymbol,
                 decimalPlaces: outputTokenDecimals
               }),
-            value => !(value instanceof BigNumber) || value.decimalPlaces() <= outputTokenDecimals
+            value => !(value instanceof BigNumber) || (value.decimalPlaces() ?? ZERO_AMOUNT) <= outputTokenDecimals
           )
           .nullable()
           .required(t(REQUIRE_FIELD_MESSAGE));
