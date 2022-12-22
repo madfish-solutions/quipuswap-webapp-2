@@ -34,7 +34,7 @@ interface Props {
   longTermRewardsLoading: boolean;
   shouldShowCountdown: boolean;
   shouldShowCountdownValue: boolean;
-  rewadsDueDate: number;
+  rewardsDueDate: number;
   farmingLoading: boolean;
   rewardTokenDecimals: number;
   handleHarvest: () => void;
@@ -56,7 +56,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
     longTermRewardsLoading,
     shouldShowCountdown,
     shouldShowCountdownValue,
-    rewadsDueDate,
+    rewardsDueDate,
     farmingLoading,
     rewardTokenDecimals,
     handleHarvest,
@@ -140,7 +140,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
             tooltipContent={t('farm|vestingPeriodIndsInTooltip')}
             data-test-id="lockPeriodEndsIn"
           >
-            <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={rewadsDueDate} />
+            <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={rewardsDueDate} />
           </YouvesStatsItem>
         )}
       </RewardInfo>
