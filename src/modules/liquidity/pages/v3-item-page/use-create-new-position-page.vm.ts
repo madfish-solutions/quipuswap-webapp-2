@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { EMPTY_STRING } from '@config/constants';
+import { EMPTY_STRING, INFINITY_SIGN, ZERO_AMOUNT } from '@config/constants';
 import {
   useLiquidityV3CurrentPrice,
   useLiquidityV3ItemTokens,
@@ -26,8 +26,20 @@ import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
-import { convertToAtomicPrice, getCreatePositionAmountInputSlugByIndex } from './helpers';
-import { useCreateNewPositionFormValidationSchema, useLiquidityV3ItemTokensExchangeRates } from './hooks';
+import {
+  convertToAtomicPrice,
+  getCreatePositionAmountInputSlugByIndex,
+  shouldAddTokenX,
+  shouldAddTokenY
+} from './helpers';
+import {
+  useCreateNewPositionFormValidationSchema,
+  useLiquidityV3ItemTokensExchangeRates,
+  useOnAmountInputChange,
+  useOnPriceRangeChange,
+  useOnPriceRangeInputChange,
+  usePositionTicks
+} from './hooks';
 import {
   CreatePositionAmountInput,
   CreatePositionInput,
@@ -51,7 +63,6 @@ export const useCreateNewPositionPageViewModel = () => {
   const poolStore = useLiquidityV3PoolStore();
   const currentPrice = useLiquidityV3CurrentPrice();
   const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
-  const lastEditedAmountFieldRef = useRef<CreatePositionAmountInput | null>(null);
 
   const initialMinPrice = useMemo(
     () =>
@@ -74,10 +85,10 @@ export const useCreateNewPositionPageViewModel = () => {
     }
   }, [dAppReady, getLiquidityV3ItemBalances]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     // eslint-disable-next-line no-console
     console.log('TODO: handle submit');
-  };
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -90,20 +101,43 @@ export const useCreateNewPositionPageViewModel = () => {
     onSubmit: handleSubmit,
     validationSchema
   });
+  const { currentTick, upperTick, lowerTick } = usePositionTicks(formik as unknown as ReturnType<typeof useFormik>);
+  const { onAmountInputChange, lastEditedAmountFieldRef } = useOnAmountInputChange(
+    formik as unknown as ReturnType<typeof useFormik>
+  );
+  const onPriceRangeInputChange = useOnPriceRangeInputChange(
+    formik as unknown as ReturnType<typeof useFormik>,
+    lastEditedAmountFieldRef
+  );
+  const onPriceRangeChange = useOnPriceRangeChange(
+    formik as unknown as ReturnType<typeof useFormik>,
+    lastEditedAmountFieldRef
+  );
 
   const handleInputChange = useCallback(
     (inputSlug: CreatePositionAmountInput | CreatePositionPriceInput, inputDecimals: number) => (value: string) => {
       const { realValue } = numberAsString(value, inputDecimals);
       if (isAmountInput(inputSlug)) {
-        lastEditedAmountFieldRef.current = inputSlug;
+        onAmountInputChange(inputSlug, realValue);
+      } else {
+        onPriceRangeInputChange(inputSlug, realValue);
       }
-      formik.setFieldValue(inputSlug, realValue);
     },
-    [formik]
+    [onAmountInputChange, onPriceRangeInputChange]
   );
 
-  const onFullRangeSwitcherClick = async (newState: boolean) =>
-    formik.setFieldValue(CreatePositionInput.FULL_RANGE_POSITION, newState);
+  const onFullRangeSwitcherClick = useCallback(
+    (newState: boolean) => {
+      formik.setFieldValue(CreatePositionInput.FULL_RANGE_POSITION, newState).then(() => {
+        if (newState) {
+          onPriceRangeChange(ZERO_AMOUNT.toString(), `+${INFINITY_SIGN}`);
+        } else {
+          onPriceRangeChange(initialMinPrice, initialMaxPrice);
+        }
+      });
+    },
+    [formik, initialMaxPrice, initialMinPrice, onPriceRangeChange]
+  );
 
   const amountInputsProps = useMemo<TokenInputProps[]>(() => {
     const exchangeRates = [tokenXExchangeRate, tokenYExchangeRate];
@@ -116,17 +150,30 @@ export const useCreateNewPositionPageViewModel = () => {
       return {
         value: formik.values[inputSlug],
         balance,
+        disabled:
+          inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT
+            ? isExist(currentTick) && isExist(upperTick) && !shouldAddTokenX(currentTick.index, upperTick.index)
+            : isExist(currentTick) && isExist(lowerTick) && !shouldAddTokenY(currentTick.index, lowerTick.index),
         label: t('common|Input'),
         error: getFormikError(formik, inputSlug),
         decimals,
         dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
         tokens: token,
-        disabled: false,
         hiddenNotWhitelistedMessage: true,
         onInputChange: handleInputChange(inputSlug, decimals)
       };
     });
-  }, [formik, t, tokenXExchangeRate, tokensWithBalances, tokenYExchangeRate, handleInputChange]);
+  }, [
+    tokenXExchangeRate,
+    tokenYExchangeRate,
+    tokensWithBalances,
+    formik,
+    currentTick,
+    upperTick,
+    lowerTick,
+    t,
+    handleInputChange
+  ]);
 
   const rangeInputsProps = useMemo<TokenInputProps[]>(() => {
     const rangeInputsSlugs = [CreatePositionInput.MIN_PRICE, CreatePositionInput.MAX_PRICE] as const;
