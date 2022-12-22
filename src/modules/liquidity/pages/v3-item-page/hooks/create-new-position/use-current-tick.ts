@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { useLiquidityV3CurrentPrice } from '@modules/liquidity/hooks';
+import { useLiquidityV3CurrentPrice, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { toAtomicIfPossible } from '@shared/helpers';
 
 import { calculateTickIndex } from '../../helpers';
 import { useTickSpacing } from './use-tick-spacing';
@@ -8,13 +9,16 @@ import { useTickSpacing } from './use-tick-spacing';
 export const useCurrentTick = () => {
   const currentPrice = useLiquidityV3CurrentPrice();
   const tickSpacing = useTickSpacing();
+  const priceDecimals = useV3PoolPriceDecimals();
 
-  return useMemo(
-    () =>
-      currentPrice && {
-        price: currentPrice,
-        index: calculateTickIndex(currentPrice, tickSpacing)
-      },
-    [currentPrice, tickSpacing]
-  );
+  return useMemo(() => {
+    const currentAtomicPrice = toAtomicIfPossible(currentPrice, priceDecimals);
+
+    return (
+      currentAtomicPrice && {
+        price: currentAtomicPrice,
+        index: calculateTickIndex(currentAtomicPrice, tickSpacing)
+      }
+    );
+  }, [currentPrice, priceDecimals, tickSpacing]);
 };

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
 import { EMPTY_STRING } from '@config/constants';
-import { useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
+import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { toAtomic } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
@@ -22,6 +22,7 @@ export const useCreatePositionFormik = (
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const tickSpacing = useTickSpacing();
   const currentTick = useCurrentTick();
+  const priceDecimals = useV3PoolPriceDecimals();
 
   const handleSubmit = useCallback(
     (values: CreatePositionFormValues) => {
@@ -32,10 +33,10 @@ export const useCreatePositionFormik = (
       const x = toAtomic(realTokenXAmount, tokenX);
       const realTokenYAmount = new BigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT]);
       const y = toAtomic(realTokenYAmount, tokenY);
-      const maxPrice = new BigNumber(values[CreatePositionInput.MAX_PRICE]);
-      const minPrice = new BigNumber(values[CreatePositionInput.MIN_PRICE]);
-      const lowerTick = calculateTick(minPrice, tickSpacing);
-      const upperTick = calculateTick(maxPrice, tickSpacing);
+      const realMaxPrice = new BigNumber(values[CreatePositionInput.MAX_PRICE]);
+      const realMinPrice = new BigNumber(values[CreatePositionInput.MIN_PRICE]);
+      const lowerTick = calculateTick(toAtomic(realMinPrice, priceDecimals), tickSpacing);
+      const upperTick = calculateTick(toAtomic(realMaxPrice, priceDecimals), tickSpacing);
       const liquidity = calculateLiquidity(
         currentTick!.index,
         lowerTick.index,
@@ -51,7 +52,7 @@ export const useCreatePositionFormik = (
 liquidity=${liquidity.toFixed()}, upper_tick_index=${upperTick.index.toFixed()}, \
 lower_tick_index=${lowerTick.index.toFixed()}`);
     },
-    [currentTick, tickSpacing, tokenX, tokenY]
+    [currentTick, priceDecimals, tickSpacing, tokenX, tokenY]
   );
   const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
 
