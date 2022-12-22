@@ -41,10 +41,13 @@ export const TokenInput: FC<TokenInputProps> = observer(
     disabled,
     hiddenPercentSelector,
     hiddenBalance,
+    hiddenNotWhitelistedMessage,
     readOnly,
     balanceText,
     decimals,
     tokenInputDTI,
+    fullWidth = true,
+    tokenLogoWidth,
     onInputChange,
     onSelectorClick
   }) => {
@@ -70,6 +73,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
       readOnly,
       hiddenPercentSelector,
       hiddenBalance,
+      hiddenNotWhitelistedMessage,
       onInputChange
     });
     const compoundClassName = cx(
@@ -94,7 +98,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
           {label}
         </label>
         <div className={styles.background}>
-          <div className={styles.shape}>
+          <div className={cx(styles.shape, { [styles.fullWidth]: fullWidth })}>
             <div className={cx(styles.dollarEquivalent, styles.label2)}>
               {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
             </div>
@@ -132,8 +136,8 @@ export const TokenInput: FC<TokenInputProps> = observer(
               >
                 {tokens ? (
                   <>
+                    <TokensLogos width={tokenLogoWidth} tokens={tokens} />
                     <TokensSymbols tokens={tokens} />
-                    <TokensLogos tokens={tokens} />
                   </>
                 ) : (
                   'SELECT'

@@ -1,29 +1,19 @@
-import { observer } from 'mobx-react-lite';
+import { Table, TableProps } from '@shared/structures';
 
-import { Table } from '@shared/structures';
-
-import { useFeeTokensListViewModel } from './fee-tokens-list.vm';
-
-export const FeeTokensList = observer(() => {
-  const {
-    rows,
-    columns,
-    getCustomTableProps,
-    getCustomHeaderProps,
-    getCustomHeaderGroupProps,
-    getCustomCellProps,
-    getCustomRowProps
-  } = useFeeTokensListViewModel();
-
+export const FeeTokensList = <T extends object>({
+  data,
+  columns,
+  getCustomTableProps,
+  getCustomHeaderProps,
+  getCustomCellProps
+}: TableProps<T>) => {
   return (
     <Table
       getCustomTableProps={getCustomTableProps}
       getCustomHeaderProps={getCustomHeaderProps}
       getCustomCellProps={getCustomCellProps}
-      getCustomHeaderGroupProps={getCustomHeaderGroupProps}
-      getCustomRowProps={getCustomRowProps}
-      data={rows}
+      data={data}
       columns={columns}
     />
   );
-});
+};
