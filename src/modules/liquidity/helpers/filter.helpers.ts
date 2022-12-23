@@ -18,6 +18,7 @@ export const filterByTezotopia = (showTezotopia: boolean) => filterByCategory(sh
 export const filterByBTC = (showBTC: boolean) => filterByCategory(showBTC, Categories.BTC);
 // TODO Tezotopia -> DexTwo
 export const filterByDexTwo = (showDexTwo: boolean) => filterByCategory(showDexTwo, Categories.Tezotopia);
+export const filterByV3 = (showDexTwo: boolean) => filterByCategory(showDexTwo, Categories.V3);
 
 export const filterByDust =
   (showDust: boolean, dustThreshold: BigNumber) =>

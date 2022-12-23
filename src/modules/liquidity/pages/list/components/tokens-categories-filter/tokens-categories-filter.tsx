@@ -10,7 +10,8 @@ import {
   DexTwoCategoryIcon,
   QuipuCategory,
   StableCategory,
-  TezotopiaCategory
+  TezotopiaCategory,
+  V3Category
 } from '@shared/svg/categories';
 
 import styles from './tokens-categories-filter.module.scss';
@@ -28,12 +29,14 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
     showTezotopia,
     showBTC,
     showDexTwo,
+    showV3,
     toggleShowStable,
     toggleShowBridged,
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
     toggleShowDexTwo,
+    toggleShowV3,
     translation
   } = useTokensCategoriesFilter();
 
@@ -74,6 +77,13 @@ export const TokensCategoriesFilter: FC<Props> = observer(({ className }) => {
         <div>
           <Button theme="quaternary" onClick={toggleShowBTC}>
             <BtcCategory colored={showBTC} />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip content={translation.tooltipV3}>
+        <div>
+          <Button theme="quaternary" onClick={toggleShowV3}>
+            <V3Category colored={showV3} />
           </Button>
         </div>
       </Tooltip>
