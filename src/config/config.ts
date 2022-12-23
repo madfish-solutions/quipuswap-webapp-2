@@ -3,7 +3,7 @@ import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswa
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { FarmVersion } from '@modules/farming/interfaces';
-import { PoolType } from '@modules/liquidity/interfaces';
+import { Categories, PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
 import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
@@ -106,6 +106,7 @@ export const YOUVES_LINK = 'https://app.youves.com/earn';
 // Hot Pools
 export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
   { id: '6', type: PoolType.STABLESWAP },
+  { id: '1', type: PoolType.UNISWAP },
   { id: '7', type: PoolType.DEX_TWO },
   { id: '8', type: PoolType.DEX_TWO },
   { id: '0', type: PoolType.DEX_TWO },
@@ -117,3 +118,11 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+const MAINNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<Categories>> = [];
+const TESTNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<Categories>> = [[Categories.Stable], [], [Categories.QuipuSwap], []];
+
+export const LIQUIDITY_V3_POOL_TAGS = {
+  [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
+  [NetworkType.GHOSTNET]: TESTNET_LIQUIDITY_V3_POOL_TAGS
+};

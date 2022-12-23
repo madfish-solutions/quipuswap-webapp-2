@@ -8,17 +8,20 @@ export interface TokenInputViewModelProps {
   tokens?: Tokens;
   readOnly?: boolean;
   disabled?: boolean;
+  hiddenNotWhitelistedMessage?: boolean;
   hiddenPercentSelector?: boolean;
   hiddenBalance?: boolean;
   onInputChange: (value: string) => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
+  fullWidth?: boolean;
   value: Nullable<string>;
   balance?: Optional<BigNumber.Value>;
   balanceText?: string;
   id?: string;
   className?: string;
+  tokenLogoWidth?: number;
   label: string;
   error?: string;
   decimals?: number;
