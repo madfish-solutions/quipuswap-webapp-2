@@ -3,7 +3,8 @@ export enum Categories {
   BTC = 'BTC-based',
   QuipuSwap = 'QuipuSwap',
   Bridge = 'Bridge',
-  Tezotopia = 'Tezotopia'
+  Tezotopia = 'Tezotopia',
   // TODO
-  // DexTwo = 'DexTwo'
+  // DexTwo = 'DexTwo',
+  V3 = 'V3'
 }

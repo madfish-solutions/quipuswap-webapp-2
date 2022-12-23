@@ -75,6 +75,7 @@ export const liquidity = {
   tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
   tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
+  tooltipV3: 'CHANGE ME!',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
@@ -104,10 +105,19 @@ export const liquidity = {
   maxPriceTooltip: 'Maximal price',
   collectedFees: 'Collected fees',
   collectedFeesTooltip: 'CollectedFees',
+  position: 'Position',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
+  // V3
   v3ExchangeRatesError:
-    "Oops… It seems we don’t know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+    "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
+  createFullRangePosition: 'Create a full range position',
+  fullRangePositionTooltip:
+    'If this option is selected, your liquidity is used for swaps at any price. It makes you position always earn fee but capital efficiency significantly decreases.',
+  positionDetails: 'Position details',
+  status: 'Status',
+  id: 'ID',
+  tags: 'Tags',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
 } as const;
