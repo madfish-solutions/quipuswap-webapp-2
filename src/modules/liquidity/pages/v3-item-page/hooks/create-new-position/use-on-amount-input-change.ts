@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { CreatePositionFormik } from '@modules/liquidity/types';
 import { isExist, stringToBigNumber } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import {
   CreatePositionAmountInput,
@@ -15,7 +16,7 @@ import { useCurrentTick } from './use-current-tick';
 import { usePositionTicks } from './use-position-ticks';
 
 export const useOnAmountInputChange = (formik: CreatePositionFormik) => {
-  const lastEditedAmountFieldRef = useRef<CreatePositionAmountInput | null>(null);
+  const lastEditedAmountFieldRef = useRef<Nullable<CreatePositionAmountInput>>(null);
   const calculateInputAmountValue = useCalculateInputAmountValue();
   const { lowerTick, upperTick } = usePositionTicks(formik);
   const currentTick = useCurrentTick();

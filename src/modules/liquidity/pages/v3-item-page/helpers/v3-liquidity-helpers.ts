@@ -11,17 +11,26 @@ export interface Tick {
   price: BigNumber;
 }
 
-export const calculateTickIndex = (price: BigNumber, tickSpacing = DEFAULT_TICK_SPACING): BigNumber => {
+export const calculateTickIndex = (price: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
   const defaultTickSpacingIndex = clamp(
-    new BigNumber(Math.floor(getBaseLog(TICK_BASE, price.toNumber()))),
+    new BigNumber(getBaseLog(TICK_BASE, price.toNumber())).integerValue(BigNumber.ROUND_FLOOR),
     MIN_TICK_INDEX,
     MAX_TICK_INDEX
   );
 
-  return defaultTickSpacingIndex.dividedBy(tickSpacing).integerValue(BigNumber.ROUND_FLOOR).multipliedBy(tickSpacing);
+  const nearestLowerIndex = defaultTickSpacingIndex
+    .dividedBy(tickSpacing)
+    .integerValue(BigNumber.ROUND_FLOOR)
+    .multipliedBy(tickSpacing);
+
+  return nearestLowerIndex.isLessThan(MIN_TICK_INDEX) ? nearestLowerIndex.plus(tickSpacing) : nearestLowerIndex;
 };
 
-export const calculateTickPrice = (index: BigNumber): BigNumber => new BigNumber(Math.pow(TICK_BASE, index.toNumber()));
+// TODO: remove this hack for price input autofill
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+const KLUDGE_PRICE_MULTIPLIER = 1.000000000001;
+export const calculateTickPrice = (index: BigNumber): BigNumber =>
+  new BigNumber(Math.pow(TICK_BASE, index.toNumber())).multipliedBy(KLUDGE_PRICE_MULTIPLIER);
 
 export const calculateUpperLiquidity = (
   lowerTickPrice: BigNumber,

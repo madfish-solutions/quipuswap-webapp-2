@@ -12,6 +12,8 @@ export interface TokenInputViewModelProps {
   hiddenPercentSelector?: boolean;
   hiddenBalance?: boolean;
   onInputChange: (value: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
