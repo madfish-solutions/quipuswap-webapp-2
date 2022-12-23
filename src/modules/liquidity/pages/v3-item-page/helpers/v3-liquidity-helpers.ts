@@ -18,7 +18,12 @@ export const calculateTickIndex = (price: BigNumber, tickSpacing = DEFAULT_TICK_
     MAX_TICK_INDEX
   );
 
-  return defaultTickSpacingIndex.dividedBy(tickSpacing).integerValue(BigNumber.ROUND_FLOOR).multipliedBy(tickSpacing);
+  const floorTickIndex = defaultTickSpacingIndex
+    .dividedBy(tickSpacing)
+    .integerValue(BigNumber.ROUND_FLOOR)
+    .multipliedBy(tickSpacing);
+
+  return floorTickIndex.lt(MIN_TICK_INDEX) ? floorTickIndex.plus(tickSpacing) : floorTickIndex;
 };
 
 export const calculateTickPrice = (index: BigNumber): BigNumber => new BigNumber(Math.pow(TICK_BASE, index.toNumber()));
