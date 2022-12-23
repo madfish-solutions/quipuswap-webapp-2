@@ -8,7 +8,7 @@ import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '@modules/liqui
 import { stringToBigNumber, toAtomic } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
-import { calculateLiquidity, calculateTick } from '../../helpers';
+import { calculateLiquidity, calculateTicks } from '../../helpers';
 import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
 import { useCreateNewPositionFormValidationSchema } from './use-create-new-position-form-validation-schema';
 import { useCurrentTick } from './use-current-tick';
@@ -35,22 +35,26 @@ export const useCreatePositionFormik = (
       const y = toAtomic(realTokenYAmount, tokenY);
       const realMaxPrice = stringToBigNumber(values[CreatePositionInput.MAX_PRICE]);
       const realMinPrice = stringToBigNumber(values[CreatePositionInput.MIN_PRICE]);
-      const lowerTick = calculateTick(toAtomic(realMinPrice, priceDecimals), tickSpacing);
-      const upperTick = calculateTick(toAtomic(realMaxPrice, priceDecimals), tickSpacing);
+      const { lowerTick, upperTick } = calculateTicks(
+        toAtomic(realMinPrice, priceDecimals),
+        toAtomic(realMaxPrice, priceDecimals),
+        tickSpacing
+      );
+
       const liquidity = calculateLiquidity(
         currentTick!.index,
-        lowerTick.index,
-        upperTick.index,
+        lowerTick!.index,
+        upperTick!.index,
         currentTick!.price,
-        lowerTick.price,
-        upperTick.price,
+        lowerTick!.price,
+        upperTick!.price,
         x,
         y
       );
       // eslint-disable-next-line no-console
       console.log(`Partial transaction parameters: x=${x.toFixed()}, y=${y.toFixed()}, \
-liquidity=${liquidity.toFixed()}, upper_tick_index=${upperTick.index.toFixed()}, \
-lower_tick_index=${lowerTick.index.toFixed()}`);
+liquidity=${liquidity.toFixed()}, upper_tick_index=${upperTick!.index.toFixed()}, \
+lower_tick_index=${lowerTick!.index.toFixed()}`);
     },
     [currentTick, priceDecimals, tickSpacing, tokenX, tokenY]
   );
