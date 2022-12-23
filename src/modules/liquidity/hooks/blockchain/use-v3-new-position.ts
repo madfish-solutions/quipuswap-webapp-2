@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { useCurrentTick, useTickSpacing } from '@modules/liquidity/pages/v3-item-page/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import { defined } from '@shared/helpers';
@@ -9,7 +10,6 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3Positions } from '../../api/blockchain/v3-liquidity-pool-positions';
-import { getLiquidityTicks } from '../../api/v3-liquidity-ticks';
 import { useLiquidityV3ItemTokens } from '../helpers';
 import { useLiquidityV3PoolStore } from '../store';
 
@@ -24,6 +24,8 @@ export const useV3NewPosition = () => {
   const accountPkh = useAccountPkh();
   const liquidityV3PoolStore = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const currentTick = useCurrentTick();
+  const tickSpacing = useTickSpacing();
 
   const createNewV3Position = async (
     minPrice: BigNumber,
@@ -61,21 +63,20 @@ export const useV3NewPosition = () => {
 
     try {
       amplitudeService.logEvent('DEX_V3_NEW_POSITION', logData);
-      const ticks = await getLiquidityTicks(liquidityV3PoolStore.contractAddress);
       const operation = await V3Positions.doNewPositionTransaction(
         tezos,
         accountPkh,
         liquidityV3PoolStore.contractAddress,
+        tickSpacing,
         tokenX,
         tokenY,
         transactionDeadline,
         liquiditySlippage,
-        liquidityV3PoolStore.item.storage.cur_tick_index,
+        currentTick!.index,
         minPrice,
         maxPrice,
         xTokenAmount,
-        yTokenAmount,
-        ticks
+        yTokenAmount
       );
       if (!operation) {
         return;
