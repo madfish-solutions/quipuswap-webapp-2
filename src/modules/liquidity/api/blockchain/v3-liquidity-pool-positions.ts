@@ -3,11 +3,14 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
+import {
+  calculateLiquidity,
+  calculateTickIndex,
+  calculateTickPrice
+} from '@modules/liquidity/pages/v3-item-page/helpers';
 import { getContract } from '@shared/dapp';
-import { decreaseBySlippage, findLeftElement, getTransactionDeadline } from '@shared/helpers';
+import { decreaseByPercentage, findLeftElement, getTransactionDeadline } from '@shared/helpers';
 import { AmountToken, Token } from '@shared/types';
-
-import { calculateLiquidity, calculateTickIndex, calculateTickPrice } from '../../helpers';
 
 export namespace V3Positions {
   export const doNewPositionTransaction = async (
@@ -49,7 +52,7 @@ export namespace V3Positions {
       xTokenAmount,
       yTokenAmount
     );
-    const liquidityWithSlippage = decreaseBySlippage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+    const liquidityWithSlippage = decreaseByPercentage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const lowerTickWitness = new BigNumber(findLeftElement(ticks, lowerTickIndex.toNumber()));
     const upperTickWitness = new BigNumber(findLeftElement(ticks, upperTickIndex.toNumber()));
