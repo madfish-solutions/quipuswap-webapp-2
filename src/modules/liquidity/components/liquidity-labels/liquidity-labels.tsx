@@ -1,7 +1,14 @@
 import { FC } from 'react';
 
 import { isNull } from '@shared/helpers';
-import { StableCategory, BtcCategory, QuipuCategory, BridgeCategory, TezotopiaCategory } from '@shared/svg/categories';
+import {
+  StableCategory,
+  BtcCategory,
+  QuipuCategory,
+  BridgeCategory,
+  TezotopiaCategory,
+  V3Category
+} from '@shared/svg/categories';
 
 import { Categories } from '../../interfaces';
 import styles from './liquidity-labels.module.scss';
@@ -11,7 +18,8 @@ const Component: Record<Categories, FC> = {
   [Categories.BTC]: BtcCategory,
   [Categories.QuipuSwap]: QuipuCategory,
   [Categories.Bridge]: BridgeCategory,
-  [Categories.Tezotopia]: TezotopiaCategory
+  [Categories.Tezotopia]: TezotopiaCategory,
+  [Categories.V3]: V3Category
 };
 
 interface Props {
