@@ -20,6 +20,8 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
       return DexLink.getOldLiquidityPoolLink([aToken, bToken]);
     case PoolType.STABLESWAP:
       return DexLink.getStableswapPoolLink(id);
+    case PoolType.UNISWAP:
+      return DexLink.getLiquidityV3PoolLink(id);
     default:
       return `${AppRootRoutes.Liquidity}`;
   }
