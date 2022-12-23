@@ -13,4 +13,4 @@ export * from './make-liquidity-operation-log-data';
 export * from './calculate-v3-item-tvl';
 export * from './get-current-price';
 export * from './get-symbols-string-by-active-token';
-export * from './v3-liquidity-helpers';
+export * from './calculate-v3-pool-price-decimals';

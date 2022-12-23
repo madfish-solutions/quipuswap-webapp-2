@@ -5,7 +5,7 @@ import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/he
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
-  decreaseBySlippage,
+  decreaseByPercentage,
   extractTokens,
   getTransactionDeadline,
   isExist,
@@ -62,7 +62,9 @@ export const useAddLiquidity = () => {
 
     const sharesWithFee = getValueWithFee(shares, item.feesRate).integerValue(BigNumber.ROUND_DOWN);
 
-    const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+    const sharesWithSlippage = decreaseByPercentage(sharesWithFee, liquiditySlippage).integerValue(
+      BigNumber.ROUND_DOWN
+    );
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
