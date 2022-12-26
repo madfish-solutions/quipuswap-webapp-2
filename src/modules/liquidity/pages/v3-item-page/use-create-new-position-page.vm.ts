@@ -70,20 +70,26 @@ export const useCreateNewPositionPageViewModel = () => {
   const tickSpacing = useTickSpacing();
   const priceDecimals = useV3PoolPriceDecimals();
 
-  const initialMinPrice = useMemo(
-    () =>
-      isNull(currentPrice)
-        ? EMPTY_STRING
-        : decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE)).toFixed(),
-    [currentPrice]
-  );
-  const initialMaxPrice = useMemo(
-    () =>
-      isNull(currentPrice)
-        ? EMPTY_STRING
-        : increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE)).toFixed(),
-    [currentPrice]
-  );
+  const initialMinPrice = useMemo(() => {
+    if (isNull(currentPrice)) {
+      return EMPTY_STRING;
+    }
+
+    const basicPrice = decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE));
+    const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
+
+    return toReal(tick.price, priceDecimals).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing]);
+  const initialMaxPrice = useMemo(() => {
+    if (isNull(currentPrice)) {
+      return EMPTY_STRING;
+    }
+
+    const basicPrice = increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE));
+    const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
+
+    return toReal(tick.price, priceDecimals).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing]);
 
   useEffect(() => {
     if (dAppReady) {
@@ -99,14 +105,20 @@ export const useCreateNewPositionPageViewModel = () => {
 
   const handleRangeInputBlur = useCallback(
     (inputSlug: CreatePositionPriceInput) => () => {
-      const realValue = new BigNumber(numberAsString(formik.values[inputSlug], PRICE_RANGE_DECIMALS).realValue);
-      const tick = calculateTick(toAtomic(realValue, priceDecimals), tickSpacing);
+      const inputValue = formik.values[inputSlug];
+
+      if (!isExist(inputValue)) {
+        return;
+      }
+
+      const realValue = new BigNumber(numberAsString(inputValue, PRICE_RANGE_DECIMALS).realValue);
+      const tick = realValue.isNaN() ? null : calculateTick(toAtomic(realValue, priceDecimals), tickSpacing);
 
       if (!formik.values[CreatePositionInput.FULL_RANGE_POSITION] && isExist(tick)) {
-        formik.setFieldValue(inputSlug, toReal(tick.price, priceDecimals));
+        onPriceRangeInputChange(inputSlug, toReal(tick.price, priceDecimals).toFixed());
       }
     },
-    [formik, priceDecimals, tickSpacing]
+    [formik.values, onPriceRangeInputChange, priceDecimals, tickSpacing]
   );
 
   const handleInputChange = useCallback(

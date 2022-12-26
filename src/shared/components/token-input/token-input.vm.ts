@@ -14,8 +14,7 @@ export const useTokenInputViewModel = ({
   hiddenPercentSelector,
   hiddenNotWhitelistedMessage,
   onInputChange,
-  onBlur,
-  onFocus
+  onBlur
 }: TokenInputViewModelProps) => {
   const { accountPkh } = useAuthStore();
   const [isFocused, setIsFocused] = useState(false);
@@ -23,7 +22,6 @@ export const useTokenInputViewModel = ({
 
   const handleInputFocus = () => {
     setIsFocused(true);
-    onFocus?.();
   };
 
   const handleInputBlur = () => {
