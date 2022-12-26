@@ -122,5 +122,7 @@ export const farm = {
     'It is a long-term farm. Your claimable rewards will be claimed along with your withdrawal. All further rewards will be lost.',
   maxApr: 'Max APR',
   maxAprTooltip: 'Max APR - the max APR among all farms.',
-  yourTotalDeposit: 'Your Total Deposit:'
+  yourTotalDeposit: 'Your Total Deposit:',
+  youvesConfirmationHarvestMessage:
+    'Your claimable rewards will be claimed and sent to you. But your full rewards will be totally lost and redistributed among other participants.'
 } as const;

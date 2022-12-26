@@ -6,7 +6,7 @@ export const useTokensCategoriesFilter = () => {
   const { t } = useTranslation();
   const liquidityListFiltersStore = useLiquidityListFiltersStore();
 
-  const { showStable, showBridged, showQuipu, showTezotopia, showBTC, showDexTwo } = liquidityListFiltersStore;
+  const { showStable, showBridged, showQuipu, showTezotopia, showBTC, showDexTwo, showV3 } = liquidityListFiltersStore;
 
   const toggleShowStable = () => {
     return liquidityListFiltersStore.setShowStable(!showStable);
@@ -26,6 +26,9 @@ export const useTokensCategoriesFilter = () => {
   const toggleShowDexTwo = () => {
     return liquidityListFiltersStore.setShowDexTwo(!showDexTwo);
   };
+  const toggleShowV3 = () => {
+    return liquidityListFiltersStore.setShowV3(!showV3);
+  };
 
   const translation = {
     investedOnly: t('liquidity|investedOnly'),
@@ -34,7 +37,8 @@ export const useTokensCategoriesFilter = () => {
     tooltipQuipu: t('liquidity|tooltipQuipu'),
     tooltipTezotopia: t('liquidity|tooltipTezotopia'),
     tooltipBTC: t('liquidity|tooltipBTC'),
-    tooltipDexTwo: t('liquidity|tooltipDexTwo')
+    tooltipDexTwo: t('liquidity|tooltipDexTwo'),
+    tooltipV3: t('liquidity|tooltipV3')
   };
 
   return {
@@ -44,12 +48,14 @@ export const useTokensCategoriesFilter = () => {
     showTezotopia,
     showBTC,
     showDexTwo,
+    showV3,
     toggleShowStable,
     toggleShowBridged,
     toggleShowQuipu,
     toggleShowTezotopia,
     toggleShowBTC,
     toggleShowDexTwo,
+    toggleShowV3,
     translation
   };
 };

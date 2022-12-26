@@ -2476,10 +2476,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
   integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
 
-"@quipuswap/sdk@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-3.0.2.tgz#d1230892eccf7e7a07c074afe3c32c5c8914dfc9"
-  integrity sha512-oRZIHt1uI/O+RFG80B+SnMUwc9PuMQHTFUzMef0tSltpqeJoXkn56GiNyVBU9FLphY6fw7iiWxpMRk+e26/uBA==
+"@quipuswap/sdk@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-3.0.3.tgz#8b62745f9a3fbc7c6ab4154977a1f56dd5c7d06f"
+  integrity sha512-KMa7mzB/gxr9Ua8Zy1t7IcAQNjhjTbFs9YZlrWqXQmdgCu7ao3UYhh6a8+SZlf6H2OaRL2a27XCqaw4GMkvmnA==
   dependencies:
     bignumber.js "^9.1.0"
 
