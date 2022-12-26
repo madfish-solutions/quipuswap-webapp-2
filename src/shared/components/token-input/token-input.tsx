@@ -49,7 +49,8 @@ export const TokenInput: FC<TokenInputProps> = observer(
     fullWidth = true,
     tokenLogoWidth,
     onInputChange,
-    onSelectorClick
+    onSelectorClick,
+    onBlur
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const {
@@ -74,7 +75,8 @@ export const TokenInput: FC<TokenInputProps> = observer(
       hiddenPercentSelector,
       hiddenBalance,
       hiddenNotWhitelistedMessage,
-      onInputChange
+      onInputChange,
+      onBlur
     });
     const compoundClassName = cx(
       { [styles.focused]: isFocused, [styles.error]: !!error, [styles.readOnly]: !isFormReady },
