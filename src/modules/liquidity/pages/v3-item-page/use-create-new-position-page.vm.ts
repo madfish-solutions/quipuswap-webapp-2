@@ -53,7 +53,7 @@ import {
 } from './types/create-position-form';
 
 const MIN_TICK_SQRT_PRICE = 1;
-const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces()!;
+const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces() ?? ZERO_AMOUNT;
 const LOWER_PRICE_DELTA_PERCENTAGE = 50;
 const UPPER_PRICE_DELTA_PERCENTAGE = 50;
 
