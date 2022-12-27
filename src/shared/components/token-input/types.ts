@@ -29,4 +29,5 @@ export interface TokenInputProps extends TokenInputViewModelProps {
   dollarEquivalent?: Optional<BigNumber.Value>;
   tokenInputDTI?: string;
   onSelectorClick?: () => void;
+  hiddenUnderline?: boolean;
 }

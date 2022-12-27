@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 
 import { EMPTY_STRING } from '@config/constants';
 import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
@@ -25,7 +25,8 @@ export const useCreatePositionFormik = (
   const priceDecimals = useV3PoolPriceDecimals();
 
   const handleSubmit = useCallback(
-    (values: CreatePositionFormValues) => {
+    (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
+      actions.setSubmitting(true);
       // eslint-disable-next-line no-console
       console.log('TODO: send a transaction');
       // TODO: remove calculations and console output below as soon as transaction sending is implemented
@@ -55,6 +56,7 @@ export const useCreatePositionFormik = (
       console.log(`Partial transaction parameters: x=${x.toFixed()}, y=${y.toFixed()}, \
 liquidity=${liquidity.toFixed()}, upper_tick_index=${upperTick!.index.toFixed()}, \
 lower_tick_index=${lowerTick!.index.toFixed()}`);
+      actions.setSubmitting(false);
     },
     [currentTick, priceDecimals, tickSpacing, tokenX, tokenY]
   );
