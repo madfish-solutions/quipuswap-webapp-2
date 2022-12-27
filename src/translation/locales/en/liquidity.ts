@@ -119,5 +119,12 @@ export const liquidity = {
   id: 'ID',
   tags: 'Tags',
   // Chart
-  defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'
+  defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.',
+  initialPrice: 'Initial price',
+  //fee rates,
+  feeRates: 'Fee rates',
+  feeRates001: '0.01% (Suitable for very stable pairs)',
+  feeRates005: '0.05% (Suitable for stable pairs)',
+  feeRates03: '0.3% (Suitable for volatile pairs)',
+  feeRates1: '1% (Suitable for exotic pairs)'
 } as const;
