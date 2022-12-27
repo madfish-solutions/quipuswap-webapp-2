@@ -199,10 +199,11 @@ export const useCreateNewPositionPageViewModel = () => {
   }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList]);
 
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
+  const disabled = !formik.isValid || formik.isSubmitting;
 
   return {
-    disabled: false,
-    loading: false,
+    disabled,
+    loading: formik.isSubmitting,
     onSubmit: formik.handleSubmit,
     isFullRangePosition: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
     onFullRangeSwitcherClick,
