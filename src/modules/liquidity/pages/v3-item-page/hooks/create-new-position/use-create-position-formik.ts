@@ -1,8 +1,8 @@
 import { FormikHelpers, useFormik } from 'formik';
 
 import { EMPTY_STRING } from '@config/constants';
-import { useLiquidityV3ItemTokens, useV3NewPosition, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
-import { stringToBigNumber, toAtomic } from '@shared/helpers';
+import { useLiquidityV3PoolStore, useV3NewPosition } from '@modules/liquidity/hooks';
+import { stringToBigNumber } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
 import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
@@ -13,19 +13,21 @@ export const useCreatePositionFormik = (
   initialMaxPrice: string,
   tokensWithBalances: BalanceToken[]
 ) => {
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const priceDecimals = useV3PoolPriceDecimals();
   const { createNewV3Position } = useV3NewPosition();
+  const poolStore = useLiquidityV3PoolStore();
 
   const handleSubmit = async (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
     actions.setSubmitting(true);
     await createNewV3Position(
-      toAtomic(stringToBigNumber(values[CreatePositionInput.MIN_PRICE]), priceDecimals),
-      toAtomic(stringToBigNumber(values[CreatePositionInput.MAX_PRICE]), priceDecimals),
-      toAtomic(stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]), tokenX),
-      toAtomic(stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT]), tokenY)
+      stringToBigNumber(values[CreatePositionInput.MIN_PRICE]),
+      stringToBigNumber(values[CreatePositionInput.MAX_PRICE]),
+      stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]),
+      stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT])
     );
     actions.setSubmitting(false);
+    actions.resetForm();
+    void poolStore.itemSore.load();
+    void poolStore.contractBalanceStore.load();
   };
   const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
 

@@ -3,14 +3,14 @@ import { BigNumber } from 'bignumber.js';
 import { useCurrentTick, useTickSpacing } from '@modules/liquidity/pages/v3-item-page/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { defined } from '@shared/helpers';
+import { defined, toAtomic } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3Positions } from '../../api/blockchain/v3-liquidity-pool-positions';
-import { useLiquidityV3ItemTokens } from '../helpers';
+import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '../helpers';
 import { useLiquidityV3PoolStore } from '../store';
 
 export const useV3NewPosition = () => {
@@ -25,6 +25,7 @@ export const useV3NewPosition = () => {
   const liquidityV3PoolStore = useLiquidityV3PoolStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentTick = useCurrentTick();
+  const priceDecimals = useV3PoolPriceDecimals();
   const tickSpacing = useTickSpacing();
 
   const createNewV3Position = async (
@@ -73,10 +74,10 @@ export const useV3NewPosition = () => {
         transactionDeadline,
         liquiditySlippage,
         currentTick!.index,
-        minPrice,
-        maxPrice,
-        xTokenAmount,
-        yTokenAmount
+        toAtomic(minPrice, priceDecimals),
+        toAtomic(maxPrice, priceDecimals),
+        toAtomic(xTokenAmount, tokenX),
+        toAtomic(yTokenAmount, tokenY)
       );
       if (!operation) {
         return;
