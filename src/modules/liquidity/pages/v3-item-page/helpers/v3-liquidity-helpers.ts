@@ -1,32 +1,25 @@
 import { BigNumber } from 'bignumber.js';
+import { sqrtPriceForTick, liquidityDeltaToTokensDelta } from 'quipuswap-v3-sdk/dist/helpers/math';
+import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
 
-import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX, MIN_TICK_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
-import { clamp, getBaseLog } from '@shared/helpers';
+import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX } from '@config/constants';
 
-const TICK_BASE_POWER = 0.0001;
-const TICK_BASE = Math.E ** TICK_BASE_POWER;
+import { convertToAtomicPrice } from './convert-to-atomic-price';
+import { convertToSqrtPrice } from './convert-to-sqrt-price';
+import { tickForSqrtPrice } from './tick-for-sqrt-price';
 
 export interface Tick {
   index: BigNumber;
   price: BigNumber;
 }
 
-export const calculateTickIndex = (price: BigNumber, tickSpacing = DEFAULT_TICK_SPACING): BigNumber => {
-  const defaultTickSpacingIndex = clamp(
-    new BigNumber(Math.floor(getBaseLog(TICK_BASE, price.toNumber()))),
-    MIN_TICK_INDEX,
-    MAX_TICK_INDEX
-  );
-
-  const floorTickIndex = defaultTickSpacingIndex
-    .dividedBy(tickSpacing)
-    .integerValue(BigNumber.ROUND_FLOOR)
-    .multipliedBy(tickSpacing);
-
-  return floorTickIndex.lt(MIN_TICK_INDEX) ? floorTickIndex.plus(tickSpacing) : floorTickIndex;
+export const calculateTickIndex = (atomicPrice: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
+  return atomicPrice.isFinite()
+    ? tickForSqrtPrice(new Nat(convertToSqrtPrice(atomicPrice)), tickSpacing).toBignumber()
+    : new BigNumber(MAX_TICK_INDEX);
 };
 
-export const calculateTickPrice = (index: BigNumber): BigNumber => new BigNumber(Math.pow(TICK_BASE, index.toNumber()));
+export const calculateTickPrice = (index: BigNumber) => convertToAtomicPrice(sqrtPriceForTick(new Int(index)));
 
 export const calculateUpperLiquidity = (
   lowerTickPrice: BigNumber,
@@ -37,18 +30,12 @@ export const calculateUpperLiquidity = (
     .multipliedBy(lowerTickPrice.sqrt())
     .multipliedBy(upperTickPrice.sqrt())
     .dividedToIntegerBy(upperTickPrice.sqrt().minus(lowerTickPrice.sqrt()));
-const calculateUpperXTokenAmount = (lowerTickPrice: BigNumber, upperTickPrice: BigNumber, liquidity: BigNumber) =>
-  liquidity
-    .multipliedBy(upperTickPrice.sqrt().minus(lowerTickPrice.sqrt()))
-    .dividedToIntegerBy(lowerTickPrice.sqrt().times(upperTickPrice.sqrt()));
 
 export const calculateLowerLiquidity = (
   lowerTickPrice: BigNumber,
   upperTickPrice: BigNumber,
   yTokenAmount: BigNumber
 ) => yTokenAmount.dividedToIntegerBy(upperTickPrice.sqrt().minus(lowerTickPrice.sqrt()));
-const calculateLowerYTokenAmount = (lowerTickPrice: BigNumber, upperTickPrice: BigNumber, liquidity: BigNumber) =>
-  liquidity.multipliedBy(upperTickPrice.sqrt().minus(lowerTickPrice.sqrt()));
 
 const calculateMiddleLiquidity = (
   currentTickPrice: BigNumber,
@@ -87,28 +74,23 @@ export const calculateLiquidity = (
 export const shouldAddTokenX = (currentTickIndex: BigNumber, upperTickIndex: BigNumber) =>
   currentTickIndex.isLessThan(upperTickIndex);
 
-export const calculateXTokenAmount = (currentTick: Tick, lowerTick: Tick, upperTick: Tick, liquidity: BigNumber) => {
-  if (currentTick.index.isLessThan(lowerTick.index)) {
-    return calculateUpperXTokenAmount(lowerTick.price, upperTick.price, liquidity);
-  }
+const calculateTokensAmount = (currentTick: Tick, lowerTick: Tick, upperTick: Tick, liquidity: BigNumber) =>
+  liquidityDeltaToTokensDelta(
+    new Int(liquidity),
+    new Int(lowerTick.index),
+    new Int(upperTick.index),
+    new Int(currentTick.index),
+    new Nat(convertToSqrtPrice(currentTick.price))
+  );
 
-  return shouldAddTokenX(currentTick.index, upperTick.index)
-    ? calculateUpperXTokenAmount(currentTick.price, upperTick.price, liquidity)
-    : ZERO_AMOUNT_BN;
-};
+export const calculateXTokenAmount = (currentTick: Tick, lowerTick: Tick, upperTick: Tick, liquidity: BigNumber) =>
+  calculateTokensAmount(currentTick, lowerTick, upperTick, liquidity).x.toBignumber();
 
 export const shouldAddTokenY = (currentTickIndex: BigNumber, lowerTickIndex: BigNumber) =>
   currentTickIndex.isGreaterThanOrEqualTo(lowerTickIndex);
 
-export const calculateYTokenAmount = (currentTick: Tick, lowerTick: Tick, upperTick: Tick, liquidity: BigNumber) => {
-  if (upperTick.index.isLessThanOrEqualTo(currentTick.index)) {
-    return calculateLowerYTokenAmount(lowerTick.price, upperTick.price, liquidity);
-  }
-
-  return shouldAddTokenY(currentTick.index, lowerTick.index)
-    ? calculateLowerYTokenAmount(lowerTick.price, currentTick.price, liquidity)
-    : ZERO_AMOUNT_BN;
-};
+export const calculateYTokenAmount = (currentTick: Tick, lowerTick: Tick, upperTick: Tick, liquidity: BigNumber) =>
+  calculateTokensAmount(currentTick, lowerTick, upperTick, liquidity).y.toBignumber();
 
 export const calculateTick = (tickPrice: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
   const tickIndex = calculateTickIndex(tickPrice, tickSpacing);

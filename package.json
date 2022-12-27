@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp-2",
-  "version": "3.2.12",
+  "version": "3.3.1",
   "private": true,
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
@@ -24,7 +24,7 @@
     "@airgap/beacon-sdk": "^3.3.0",
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
-    "@quipuswap/sdk": "^3.0.2",
+    "@quipuswap/sdk": "^3.0.3",
     "@quipuswap/tokens-whitelist": "^1.1.9",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
@@ -58,6 +58,7 @@
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "quipuswap-v3-sdk": "^0.0.2",
     "react": "^18.1.0",
     "react-countdown-hook": "^1.1.1",
     "react-dom": "^18.1.0",
