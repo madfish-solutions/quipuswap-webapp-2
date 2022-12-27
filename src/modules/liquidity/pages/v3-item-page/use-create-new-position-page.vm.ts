@@ -6,7 +6,8 @@ import { EMPTY_STRING, INFINITY_SIGN, ZERO_AMOUNT } from '@config/constants';
 import {
   useLiquidityV3CurrentPrice,
   useLiquidityV3ItemTokens,
-  useLiquidityV3PoolStore
+  useLiquidityV3PoolStore,
+  useV3PoolPriceDecimals
 } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
@@ -18,19 +19,17 @@ import {
   isExist,
   isNull,
   multipliedIfPossible,
-  numberAsString
+  numberAsString,
+  toAtomic,
+  toReal
 } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
-import {
-  convertToAtomicPrice,
-  getCreatePositionAmountInputSlugByIndex,
-  shouldAddTokenX,
-  shouldAddTokenY
-} from './helpers';
+import { calculateTick, getCreatePositionAmountInputSlugByIndex, shouldAddTokenX, shouldAddTokenY } from './helpers';
+import { X80_FORMAT_PRECISION_POWER } from './helpers/constants';
 import {
   useCreatePositionFormik,
   useCurrentTick,
@@ -38,7 +37,8 @@ import {
   useOnAmountInputChange,
   useOnPriceRangeChange,
   useOnPriceRangeInputChange,
-  usePositionTicks
+  usePositionTicks,
+  useTickSpacing
 } from './hooks';
 import {
   CreatePositionAmountInput,
@@ -47,8 +47,7 @@ import {
   isAmountInput
 } from './types/create-position-form';
 
-const MIN_TICK_SQRT_PRICE = 1;
-const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces() ?? ZERO_AMOUNT;
+const PRICE_RANGE_DECIMALS = X80_FORMAT_PRECISION_POWER * 2;
 const LOWER_PRICE_DELTA_PERCENTAGE = 50;
 const UPPER_PRICE_DELTA_PERCENTAGE = 50;
 
@@ -63,21 +62,29 @@ export const useCreateNewPositionPageViewModel = () => {
   const poolStore = useLiquidityV3PoolStore();
   const currentPrice = useLiquidityV3CurrentPrice();
   const currentTick = useCurrentTick();
+  const tickSpacing = useTickSpacing();
+  const priceDecimals = useV3PoolPriceDecimals();
 
-  const initialMinPrice = useMemo(
-    () =>
-      isNull(currentPrice)
-        ? EMPTY_STRING
-        : decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE)).toFixed(),
-    [currentPrice]
-  );
-  const initialMaxPrice = useMemo(
-    () =>
-      isNull(currentPrice)
-        ? EMPTY_STRING
-        : increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE)).toFixed(),
-    [currentPrice]
-  );
+  const initialMinPrice = useMemo(() => {
+    if (isNull(currentPrice)) {
+      return EMPTY_STRING;
+    }
+
+    const basicPrice = decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE));
+    const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
+
+    return toReal(tick.price, priceDecimals).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing]);
+  const initialMaxPrice = useMemo(() => {
+    if (isNull(currentPrice)) {
+      return EMPTY_STRING;
+    }
+
+    const basicPrice = increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE));
+    const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
+
+    return toReal(tick.price, priceDecimals).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing]);
 
   useEffect(() => {
     if (dAppReady) {
@@ -90,6 +97,24 @@ export const useCreateNewPositionPageViewModel = () => {
   const { onAmountInputChange, lastEditedAmountFieldRef } = useOnAmountInputChange(formik);
   const onPriceRangeInputChange = useOnPriceRangeInputChange(formik, lastEditedAmountFieldRef);
   const onPriceRangeChange = useOnPriceRangeChange(formik, lastEditedAmountFieldRef);
+
+  const handleRangeInputBlur = useCallback(
+    (inputSlug: CreatePositionPriceInput) => () => {
+      const inputValue = formik.values[inputSlug];
+
+      if (!isExist(inputValue)) {
+        return;
+      }
+
+      const realValue = new BigNumber(numberAsString(inputValue, PRICE_RANGE_DECIMALS).realValue);
+      const tick = realValue.isNaN() ? null : calculateTick(toAtomic(realValue, priceDecimals), tickSpacing);
+
+      if (!formik.values[CreatePositionInput.FULL_RANGE_POSITION] && isExist(tick)) {
+        onPriceRangeInputChange(inputSlug, toReal(tick.price, priceDecimals).toFixed());
+      }
+    },
+    [formik.values, onPriceRangeInputChange, priceDecimals, tickSpacing]
+  );
 
   const handleInputChange = useCallback(
     (inputSlug: CreatePositionAmountInput | CreatePositionPriceInput, inputDecimals: number) => (value: string) => {
@@ -168,9 +193,10 @@ export const useCreateNewPositionPageViewModel = () => {
       hiddenPercentSelector: true,
       hiddenNotWhitelistedMessage: true,
       fullWidth: false,
-      tokenLogoWidth: 32
+      tokenLogoWidth: 32,
+      onBlur: handleRangeInputBlur(inputSlug)
     }));
-  }, [formik, handleInputChange, t, tokensList]);
+  }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList]);
 
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
   const disabled = !formik.isValid || formik.isSubmitting;

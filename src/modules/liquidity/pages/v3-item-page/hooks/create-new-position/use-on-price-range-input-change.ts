@@ -2,6 +2,7 @@ import { MutableRefObject, useCallback } from 'react';
 
 import { EMPTY_STRING } from '@config/constants';
 import { CreatePositionFormik } from '@modules/liquidity/types';
+import { Nullable } from '@shared/types';
 
 import {
   CreatePositionAmountInput,
@@ -12,7 +13,7 @@ import { useOnPriceRangeChange } from './use-on-price-range-change';
 
 export const useOnPriceRangeInputChange = (
   formik: CreatePositionFormik,
-  lastEditedAmountFieldRef: MutableRefObject<CreatePositionAmountInput | null>
+  lastEditedAmountFieldRef: MutableRefObject<Nullable<CreatePositionAmountInput>>
 ) => {
   const onPriceRangeChange = useOnPriceRangeChange(formik, lastEditedAmountFieldRef);
 
