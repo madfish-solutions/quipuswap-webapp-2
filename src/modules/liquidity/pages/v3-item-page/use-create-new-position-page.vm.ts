@@ -28,13 +28,8 @@ import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
-import {
-  calculateTick,
-  convertToAtomicPrice,
-  getCreatePositionAmountInputSlugByIndex,
-  shouldAddTokenX,
-  shouldAddTokenY
-} from './helpers';
+import { calculateTick, getCreatePositionAmountInputSlugByIndex, shouldAddTokenX, shouldAddTokenY } from './helpers';
+import { X80_FORMAT_PRECISION_POWER } from './helpers/constants';
 import {
   useCreatePositionFormik,
   useCurrentTick,
@@ -52,10 +47,10 @@ import {
   isAmountInput
 } from './types/create-position-form';
 
-const MIN_TICK_SQRT_PRICE = 1;
-const PRICE_RANGE_DECIMALS = convertToAtomicPrice(new BigNumber(MIN_TICK_SQRT_PRICE)).decimalPlaces() ?? ZERO_AMOUNT;
+const PRICE_RANGE_DECIMALS = X80_FORMAT_PRECISION_POWER * 2;
 const LOWER_PRICE_DELTA_PERCENTAGE = 50;
 const UPPER_PRICE_DELTA_PERCENTAGE = 50;
+
 export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
