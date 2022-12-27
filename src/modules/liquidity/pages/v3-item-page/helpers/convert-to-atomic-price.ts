@@ -1,9 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-import { X80_FORMAT_PRECISION } from './constants';
+import { X80_FORMAT_PRECISION, X80_FORMAT_PRECISION_POWER } from './constants';
 
 export const convertToAtomicPrice = (sqrtPrice: BigNumber) => {
-  const decimalShiftAmount = X80_FORMAT_PRECISION.precision();
+  const defaultDecimalPlaces = BigNumber.config().DECIMAL_PLACES;
+  BigNumber.config({ DECIMAL_PLACES: X80_FORMAT_PRECISION_POWER });
+  const price = new BigNumber(sqrtPrice).div(X80_FORMAT_PRECISION).pow(2);
+  BigNumber.config({ DECIMAL_PLACES: defaultDecimalPlaces });
 
-  return sqrtPrice.shiftedBy(decimalShiftAmount).div(X80_FORMAT_PRECISION).shiftedBy(-decimalShiftAmount).pow(2);
+  return price;
 };
