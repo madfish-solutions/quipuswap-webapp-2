@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
-import { MIN_TICK_INDEX, MIN_TICK_WITNESS_INDEX, QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
+import { MIN_TICK_INDEX, QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { calculateLiquidity, calculateTick, calculateTickPrice } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { Tzkt } from '@shared/api';
 import { getContract } from '@shared/dapp';
@@ -20,13 +20,10 @@ interface ILiquidityTickRaw {
 
 export namespace V3Positions {
   export const getTickWitnessIndex = async (contractAddress: string, tickIndex: BigNumber) => {
-    if (tickIndex.eq(MIN_TICK_INDEX)) {
-      return MIN_TICK_WITNESS_INDEX;
-    }
-
     const rawTicks = await Tzkt.getContractBigmapKeys<ILiquidityTickRaw>(contractAddress, 'ticks', {
       'key.lt': tickIndex.toNumber(),
-      'value.next.ge': tickIndex.toNumber()
+      'value.next.ge': tickIndex.toNumber(),
+      active: true
     });
 
     return new BigNumber(getFirstElement(rawTicks)?.key ?? MIN_TICK_INDEX);

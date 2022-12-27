@@ -10,8 +10,6 @@ export namespace Tzkt {
     queryParams?: Record<string, unknown>
   ): Promise<Array<T>> => {
     const queryString = isUndefined(queryParams) ? '' : `?${stringifyQueryParams(queryParams)}`;
-    // eslint-disable-next-line no-console
-    console.log(`${TZKT_API_CONTRACTS_URL}/${contractAddress}/bigmaps/${bigmap}/keys${queryString}`);
 
     return fetch(`${TZKT_API_CONTRACTS_URL}/${contractAddress}/bigmaps/${bigmap}/keys${queryString}`).then(async res =>
       res.json()
