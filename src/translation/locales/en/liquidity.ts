@@ -107,6 +107,7 @@ export const liquidity = {
   position: 'Position',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
+  valueShouldBeLessThen100: 'Value should be less than 100!',
   // V3
   v3ExchangeRatesError:
     "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
