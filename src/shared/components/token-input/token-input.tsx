@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { DOLLAR } from '@config/constants';
+import { DOLLAR, NON_INTERACTIVE_ELEMENT_TAB_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
 import { isNull } from '@shared/helpers';
@@ -42,6 +42,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
     hiddenPercentSelector,
     hiddenBalance,
     hiddenNotWhitelistedMessage,
+    hiddenUnderline,
     readOnly,
     balanceText,
     decimals,
@@ -79,7 +80,12 @@ export const TokenInput: FC<TokenInputProps> = observer(
       onBlur
     });
     const compoundClassName = cx(
-      { [styles.focused]: isFocused, [styles.error]: !!error, [styles.readOnly]: !isFormReady },
+      {
+        [styles.focused]: isFocused,
+        [styles.error]: !!error,
+        [styles.readOnly]: !isFormReady,
+        [styles.underlined]: !hiddenUnderline
+      },
       themeClass[colorThemeMode],
       className
     );
@@ -92,7 +98,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
         onClick={focusInput}
         onKeyPress={focusInput}
         role="button"
-        tabIndex={0}
+        tabIndex={readOnly ? NON_INTERACTIVE_ELEMENT_TAB_INDEX : 0}
         data-test-id={tokenInputDTI}
       >
         <TokensModal />
