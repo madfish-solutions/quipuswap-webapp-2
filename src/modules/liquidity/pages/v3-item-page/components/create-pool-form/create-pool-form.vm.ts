@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
+
+import { FormikHelpers, useFormik } from 'formik';
+import * as yup from 'yup';
 
 import { TokenSelectProps } from '@shared/components/token-select';
+import { getFormikError, isExist, operationAmountSchema } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -8,6 +12,12 @@ import { i18n, useTranslation } from '@translation';
 import styles from './create-pool-form.module.scss';
 
 const FEE_RATE_FIELD_NAME = 'feeRate';
+
+interface CreatePoolValues {
+  [FEE_RATE_FIELD_NAME]: number;
+  initialPrice: string;
+  tokens: Array<Token>;
+}
 
 export const feeRateRadioButtonOptions = [
   {
@@ -43,47 +53,75 @@ const standardTokenSelectProps = {
   blackListedTokens: []
 };
 
-const useV3CreateFormRadioButton = () => {
-  const [value, setValue] = useState(feeRateRadioButtonOptions[0].value);
+const validationSchema = yup.object().shape({
+  [FEE_RATE_FIELD_NAME]: yup.number().required(),
+  initialPrice: operationAmountSchema(null, true, 6, 'The value should be less than 6 decimals.'),
+  tokens: yup
+    .array()
+    .length(2)
+    .test('tokens', 'You should select 2 tokens', (tokens?: Array<Token>) => {
+      if (!isExist(tokens)) {
+        return false;
+      }
 
-  const radioButtonParams = {
-    onChange: (option: string) => setValue(Number(option)),
-    value,
-    values: feeRateRadioButtonOptions
-  };
+      const [firstToken, secondToken] = tokens;
 
-  return { radioButtonParams };
+      return isExist(firstToken) && isExist(secondToken);
+    })
+});
+
+const initialValues: CreatePoolValues = {
+  [FEE_RATE_FIELD_NAME]: feeRateRadioButtonOptions[0].value,
+  initialPrice: '',
+  tokens: []
 };
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
-  const { radioButtonParams } = useV3CreateFormRadioButton();
 
-  const [token0, setToken0] = useState<Token>();
-  const [token1, setToken1] = useState<Token>();
+  const handleSubmit = useCallback(async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
+    // eslint-disable-next-line no-console
+    console.log(values, actions);
+  }, []);
 
-  const [initialPriceValue, setInitialPrice] = useState<string>('');
+  const formik = useFormik({
+    validationSchema,
+    initialValues,
+    onSubmit: handleSubmit
+  });
+
+  const radioButtonParams = {
+    onChange: (value: number) => {
+      formik.setFieldValue(FEE_RATE_FIELD_NAME, Number(value));
+    },
+    value: formik.values[FEE_RATE_FIELD_NAME],
+    values: feeRateRadioButtonOptions
+  };
 
   const setInitialPriceValue = (value: string) => {
-    setInitialPrice(value);
+    formik.setFieldValue('initialPrice', value);
   };
 
   const tokensSelectData: Array<TokenSelectProps> = [
     {
       ...standardTokenSelectProps,
-      token: token0,
+      token: formik.values.tokens[0],
       onTokenChange(token) {
-        setToken0(token);
+        formik.setFieldValue('tokens', [token, formik.values.tokens[1]]);
       },
-      blackListedTokens: token1 ? [token1] : []
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      error: !formik.values.tokens[0] ? getFormikError(formik as any, 'tokens') : undefined,
+      blackListedTokens: formik.values.tokens[1] ? [formik.values.tokens[1]] : []
     },
     {
       ...standardTokenSelectProps,
-      token: token1,
+      token: formik.values.tokens[1],
       onTokenChange(token) {
-        setToken1(token);
+        formik.setFieldValue('tokens', [formik.values.tokens[0], token]);
       },
-      blackListedTokens: token0 ? [token0] : []
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      error: !formik.values.tokens[1] ? getFormikError(formik as any, 'tokens') : undefined,
+      blackListedTokens: formik.values.tokens[0] ? [formik.values.tokens[0]] : []
     }
   ];
 
@@ -94,20 +132,19 @@ export const useCreatePoolFormViewModel = () => {
     create: t('common|Create')
   };
 
-  const tokens = token0 && token1 ? [token0, token1] : null;
+  const tokens = formik.values.tokens;
 
   return {
     translation,
-    token0,
-    setToken0,
-    token1,
-    setToken1,
     radioButtonParams,
     tokensSelectData,
     tokens,
     disabled: !tokens,
     isSubmitting: false,
-    initialPriceValue,
-    setInitialPriceValue
+    initialPriceValue: formik.values.initialPrice,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    initialPriceError: getFormikError(formik as any, 'initialPrice'),
+    setInitialPriceValue,
+    onSubmit: formik.handleSubmit
   };
 };

@@ -15,14 +15,16 @@ export const CreatePoolForm = () => {
     disabled,
     isSubmitting,
     initialPriceValue,
-    setInitialPriceValue
+    initialPriceError,
+    setInitialPriceValue,
+    onSubmit
   } = useCreatePoolFormViewModel();
 
   const { create, initialPrice, feeRates } = translation;
 
   return (
     <Card contentClassName={styles.content}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <div>
           <Iterator render={TokenSelect} data={tokensSelectData} separator={<Plus className={styles.svg} />} />
         </div>
@@ -33,6 +35,7 @@ export const CreatePoolForm = () => {
           hiddenPercentSelector
           hiddenBalance
           tokens={tokens}
+          error={initialPriceError}
           onInputChange={setInitialPriceValue}
         />
 
