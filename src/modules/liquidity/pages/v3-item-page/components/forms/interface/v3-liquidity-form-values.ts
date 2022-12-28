@@ -9,13 +9,13 @@ export interface V3AddFormValues {
 }
 
 export enum V3RemoveTokenInput {
-  firstTokenInput = 'tokenInput-0',
-  secondTokenInput = 'tokenInput-1',
-  thirdTokenInput = 'tokenInput-2'
+  lpTokenInput = 'lpTokenInput',
+  tokenXInput = 'tokenXInput',
+  tokenYInput = 'tokenYInput'
 }
 
 export interface V3RemoveFormValues {
-  [V3RemoveTokenInput.firstTokenInput]: string;
-  [V3RemoveTokenInput.secondTokenInput]: string;
-  [V3RemoveTokenInput.thirdTokenInput]: string;
+  [V3RemoveTokenInput.lpTokenInput]: string;
+  [V3RemoveTokenInput.tokenXInput]: string;
+  [V3RemoveTokenInput.tokenYInput]: string;
 }
