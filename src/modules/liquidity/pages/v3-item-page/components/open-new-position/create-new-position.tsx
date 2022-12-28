@@ -1,7 +1,6 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { observer } from 'mobx-react-lite';
 import { useLocation } from 'react-router-dom';
 
 import { SLASH } from '@config/constants';
@@ -18,7 +17,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const OpenNewPosition: FC = observer(() => {
+export const OpenNewPosition: FC = () => {
   const { t } = useTranslation();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { pathname } = useLocation();
@@ -33,4 +32,4 @@ export const OpenNewPosition: FC = observer(() => {
       </Button>
     </Card>
   );
-});
+};
