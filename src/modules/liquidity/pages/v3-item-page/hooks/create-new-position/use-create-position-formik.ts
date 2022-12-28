@@ -18,16 +18,18 @@ export const useCreatePositionFormik = (
 
   const handleSubmit = async (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
     actions.setSubmitting(true);
-    await createNewV3Position(
-      stringToBigNumber(values[CreatePositionInput.MIN_PRICE]),
-      stringToBigNumber(values[CreatePositionInput.MAX_PRICE]),
-      stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]),
-      stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT])
-    );
-    actions.setSubmitting(false);
-    actions.resetForm();
-    void poolStore.itemSore.load();
-    void poolStore.contractBalanceStore.load();
+    try {
+      await createNewV3Position(
+        stringToBigNumber(values[CreatePositionInput.MIN_PRICE]),
+        stringToBigNumber(values[CreatePositionInput.MAX_PRICE]),
+        stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]),
+        stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT])
+      );
+      actions.setSubmitting(false);
+      actions.resetForm();
+      void poolStore.itemSore.load();
+      void poolStore.contractBalanceStore.load();
+    } catch {}
   };
   const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
 

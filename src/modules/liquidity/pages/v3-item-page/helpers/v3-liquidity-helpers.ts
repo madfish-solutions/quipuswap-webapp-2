@@ -2,7 +2,9 @@ import { BigNumber } from 'bignumber.js';
 import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 'quipuswap-v3-sdk/dist/helpers/math';
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
 
-import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX } from '@config/constants';
+import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
+import { integerChordMethod, isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 import { convertToSqrtPrice } from './convert-to-sqrt-price';
@@ -10,6 +12,11 @@ import { convertToSqrtPrice } from './convert-to-sqrt-price';
 export interface Tick {
   index: BigNumber;
   price: BigNumber;
+}
+
+interface TokensDelta {
+  x: Nullable<BigNumber>;
+  y: Nullable<BigNumber>;
 }
 
 export const calculateTickIndex = (atomicPrice: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
@@ -49,6 +56,10 @@ const calculateMiddleLiquidity = (
   return BigNumber.min(liquidityLower, liquidityUpper);
 };
 
+const deltaIsLessOrEqual = (a: TokensDelta, b: TokensDelta) =>
+  (!isExist(a.x) || !isExist(b.x) || a.x.lte(b.x)) && (!isExist(a.y) || !isExist(b.y) || a.y.lte(b.y));
+
+const LIQUIDITY_EPSILON = 1;
 export const calculateLiquidity = (
   currentTickIndex: BigNumber,
   lowerTickIndex: BigNumber,
@@ -56,18 +67,86 @@ export const calculateLiquidity = (
   currentTickPrice: BigNumber,
   lowerTickPrice: BigNumber,
   upperTickPrice: BigNumber,
-  xTokenAmount: BigNumber,
-  yTokenAmount: BigNumber
+  xTokenAmount: Nullable<BigNumber>,
+  yTokenAmount: Nullable<BigNumber>
 ) => {
+  let analyticalEstimation: BigNumber;
+  const xTokenAmountWithFallback = xTokenAmount ?? new BigNumber(Infinity);
+  const yTokenAmountWithFallback = yTokenAmount ?? new BigNumber(Infinity);
   if (currentTickIndex.isLessThan(lowerTickIndex)) {
-    return calculateUpperLiquidity(lowerTickPrice, upperTickPrice, xTokenAmount);
+    analyticalEstimation = calculateUpperLiquidity(lowerTickPrice, upperTickPrice, xTokenAmountWithFallback);
+  } else if (currentTickIndex.isGreaterThanOrEqualTo(upperTickIndex)) {
+    analyticalEstimation = calculateLowerLiquidity(lowerTickPrice, upperTickPrice, yTokenAmountWithFallback);
+  } else {
+    analyticalEstimation = calculateMiddleLiquidity(
+      currentTickPrice,
+      lowerTickPrice,
+      upperTickPrice,
+      xTokenAmountWithFallback,
+      yTokenAmountWithFallback
+    );
+  }
+  const currentSqrtPrice = new Nat(convertToSqrtPrice(currentTickPrice));
+  const calculateTokensDelta = (liquidity: BigNumber) =>
+    liquidityDeltaToTokensDelta(
+      new Int(liquidity),
+      new Int(lowerTickIndex),
+      new Int(upperTickIndex),
+      new Int(currentTickIndex),
+      currentSqrtPrice
+    );
+
+  const analyticalEstimationDelta = calculateTokensDelta(analyticalEstimation);
+  const analyticalPlusOneEstimationDelta = calculateTokensDelta(analyticalEstimation.plus(LIQUIDITY_EPSILON));
+  const expectedTokensDelta = {
+    x: xTokenAmount,
+    y: yTokenAmount
+  };
+
+  if (
+    deltaIsLessOrEqual(analyticalEstimationDelta, expectedTokensDelta) &&
+    !deltaIsLessOrEqual(analyticalPlusOneEstimationDelta, expectedTokensDelta)
+  ) {
+    // eslint-disable-next-line no-console
+    console.log('estimation is correct', analyticalEstimation.toFixed());
+
+    return analyticalEstimation;
   }
 
-  if (currentTickIndex.isGreaterThanOrEqualTo(upperTickIndex)) {
-    return calculateLowerLiquidity(lowerTickPrice, upperTickPrice, yTokenAmount);
-  }
+  const lowerEstimation = deltaIsLessOrEqual(analyticalEstimationDelta, expectedTokensDelta)
+    ? analyticalEstimation
+    : ZERO_AMOUNT_BN;
+  const upperEstimation = deltaIsLessOrEqual(analyticalEstimationDelta, expectedTokensDelta)
+    ? analyticalEstimation
+        .multipliedBy(
+          BigNumber.max(
+            isExist(expectedTokensDelta.x)
+              ? expectedTokensDelta.x.dividedBy(analyticalEstimationDelta.x)
+              : ZERO_AMOUNT_BN,
+            isExist(expectedTokensDelta.y)
+              ? expectedTokensDelta.y.dividedBy(analyticalEstimationDelta.y)
+              : ZERO_AMOUNT_BN
+          ).plus(1)
+        )
+        .integerValue(BigNumber.ROUND_CEIL)
+    : analyticalEstimation;
 
-  return calculateMiddleLiquidity(currentTickPrice, lowerTickPrice, upperTickPrice, xTokenAmount, yTokenAmount);
+  const estimationByTokenX = isExist(expectedTokensDelta.x)
+    ? integerChordMethod(
+        liquidity => calculateTokensDelta(liquidity).x.minus(expectedTokensDelta.x!),
+        lowerEstimation,
+        upperEstimation
+      )
+    : Infinity;
+  const estimationByTokenY = isExist(expectedTokensDelta.y)
+    ? integerChordMethod(
+        liquidity => calculateTokensDelta(liquidity).y.minus(expectedTokensDelta.y!),
+        lowerEstimation,
+        upperEstimation
+      )
+    : Infinity;
+
+  return BigNumber.min(estimationByTokenX, estimationByTokenY);
 };
 
 export const shouldAddTokenX = (currentTickIndex: BigNumber, upperTickIndex: BigNumber) =>
