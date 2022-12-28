@@ -173,6 +173,8 @@ export const DEFAULT_TICK_SPACING = 1;
 export const MIN_TICK_INDEX = -1048575;
 export const MAX_TICK_INDEX = 1048575;
 export const MIN_TICK_WITNESS_INDEX = -1048576;
+
+export const NON_INTERACTIVE_ELEMENT_TAB_INDEX = -1;
 //#endregion
 
 // error constant

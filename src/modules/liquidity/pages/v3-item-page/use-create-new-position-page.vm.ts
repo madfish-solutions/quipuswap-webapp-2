@@ -148,20 +148,23 @@ export const useCreateNewPositionPageViewModel = () => {
       const inputSlug = getCreatePositionAmountInputSlugByIndex(index);
       const decimals = getTokenDecimals(token);
       const dollarEquivalent = multipliedIfPossible(formik.values[inputSlug], exchangeRates[index]);
+      const canCalculateAmount = isExist(currentTick) && isExist(upperTick) && isExist(lowerTick);
+      const readOnly =
+        inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT
+          ? canCalculateAmount && !shouldAddTokenX(currentTick.index, upperTick.index)
+          : canCalculateAmount && !shouldAddTokenY(currentTick.index, lowerTick.index);
 
       return {
         value: formik.values[inputSlug],
         balance,
-        disabled:
-          inputSlug === CreatePositionInput.FIRST_AMOUNT_INPUT
-            ? isExist(currentTick) && isExist(upperTick) && !shouldAddTokenX(currentTick.index, upperTick.index)
-            : isExist(currentTick) && isExist(lowerTick) && !shouldAddTokenY(currentTick.index, lowerTick.index),
+        readOnly,
         label: t('common|Input'),
-        error: getFormikError(formik, inputSlug),
+        error: readOnly ? undefined : getFormikError(formik, inputSlug),
         decimals,
         dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
         tokens: token,
         hiddenNotWhitelistedMessage: true,
+        hiddenUnderline: true,
         onInputChange: handleInputChange(inputSlug, decimals)
       };
     });
@@ -184,24 +187,27 @@ export const useCreateNewPositionPageViewModel = () => {
     return rangeInputsSlugs.map((inputSlug, index) => ({
       value: formik.values[inputSlug],
       label: rangeInputsLabels[index],
-      error: getFormikError(formik, inputSlug),
       decimals: PRICE_RANGE_DECIMALS,
       tokens: tokensList && [...tokensList].reverse(),
-      disabled: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
+      readOnly: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
       onInputChange: handleInputChange(inputSlug, PRICE_RANGE_DECIMALS),
       hiddenBalance: true,
       hiddenPercentSelector: true,
       hiddenNotWhitelistedMessage: true,
       fullWidth: false,
       tokenLogoWidth: 32,
+      hiddenUnderline: true,
       onBlur: handleRangeInputBlur(inputSlug)
     }));
   }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList]);
 
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
-  const disabled = !formik.isValid || formik.isSubmitting;
+  const bottomError =
+    getFormikError(formik, CreatePositionInput.MIN_PRICE) ?? getFormikError(formik, CreatePositionInput.MAX_PRICE);
+  const disabled = formik.isSubmitting || isExist(bottomError);
 
   return {
+    bottomError,
     disabled,
     loading: formik.isSubmitting,
     onSubmit: formik.handleSubmit,

@@ -1,12 +1,11 @@
 import { BigNumber } from 'bignumber.js';
-import { sqrtPriceForTick, liquidityDeltaToTokensDelta } from 'quipuswap-v3-sdk/dist/helpers/math';
+import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 'quipuswap-v3-sdk/dist/helpers/math';
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
 
 import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX } from '@config/constants';
 
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 import { convertToSqrtPrice } from './convert-to-sqrt-price';
-import { tickForSqrtPrice } from './tick-for-sqrt-price';
 
 export interface Tick {
   index: BigNumber;
@@ -15,7 +14,7 @@ export interface Tick {
 
 export const calculateTickIndex = (atomicPrice: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
   return atomicPrice.isFinite()
-    ? tickForSqrtPrice(new Nat(convertToSqrtPrice(atomicPrice)), tickSpacing).toBignumber()
+    ? tickForSqrtPrice(new Nat(convertToSqrtPrice(atomicPrice)), new Nat(tickSpacing)).toBignumber()
     : new BigNumber(MAX_TICK_INDEX);
 };
 
