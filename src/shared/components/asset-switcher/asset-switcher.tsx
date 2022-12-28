@@ -27,6 +27,7 @@ export const AssetSwitcher: FC<Props> = ({ labels, activeIndex, handleButtonClic
     <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
       {labels.map((label, index) => (
         <Button
+          key={label}
           onClick={() => handleButtonClick(index)}
           className={styles.button}
           theme={isEqual(index, activeIndex) ? 'primary' : 'tertiary'}

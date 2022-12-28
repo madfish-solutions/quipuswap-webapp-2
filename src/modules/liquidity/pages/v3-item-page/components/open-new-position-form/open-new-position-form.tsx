@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import {
+  AlarmMessage,
   Button,
   ConnectWalletOrDoSomething,
   Iterator,
@@ -9,7 +10,9 @@ import {
   TokenInputProps,
   Tooltip
 } from '@shared/components';
+import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
+import { Optional } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -17,6 +20,7 @@ import styles from './open-new-position-form.module.scss';
 
 interface OpenNewPositionFormProps {
   amountInputsProps: TokenInputProps[];
+  bottomError: Optional<string>;
   rangeInputsProps: TokenInputProps[];
   onSubmit: () => void;
   disabled: boolean;
@@ -27,6 +31,7 @@ interface OpenNewPositionFormProps {
 
 export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
   amountInputsProps,
+  bottomError,
   rangeInputsProps,
   onSubmit,
   disabled,
@@ -56,6 +61,8 @@ export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
       </div>
 
       <Iterator render={TokenInput} data={amountInputsProps} separator={<Plus className={styles.svg} />} />
+
+      {isExist(bottomError) && <AlarmMessage message={bottomError} className={stylesCommonContainer.mt24} />}
 
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
