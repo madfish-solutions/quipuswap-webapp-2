@@ -74,13 +74,11 @@ export namespace V3Positions {
       await V3Positions.getTickWitnessIndex(contractAddress, upperTick.index)
     ]);
 
-    // TODO https://better-call.dev/ghostnet/KT1Sy7BKFpAMypwHN25qmDiLbv4CZqAMH3g4/interact/set_position
     const operationParams = contract.methods
       .set_position(
         lowerTick.index,
         upperTick.index,
 
-        // TODO: Get all ticks from the contract (left numbers from tick_index (both))
         lowerTickWitness, // lower_tick_witness
         upperTickWitness, // upper_tick_witness
 
