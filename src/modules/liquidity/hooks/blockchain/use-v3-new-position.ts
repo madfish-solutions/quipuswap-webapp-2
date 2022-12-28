@@ -87,6 +87,7 @@ export const useV3NewPosition = () => {
     } catch (error) {
       showErrorToast(error as Error);
       amplitudeService.logEvent('DEX_V3_NEW_POSITION_FAILED', { ...logData, error });
+      throw error;
     }
   };
 
