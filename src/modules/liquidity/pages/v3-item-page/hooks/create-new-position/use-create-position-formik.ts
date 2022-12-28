@@ -1,8 +1,8 @@
 import { FormikHelpers, useFormik } from 'formik';
 
-import { EMPTY_STRING } from '@config/constants';
+import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING } from '@config/constants';
 import { useLiquidityV3PoolStore, useV3NewPosition } from '@modules/liquidity/hooks';
-import { stringToBigNumber } from '@shared/helpers';
+import { sleep, stringToBigNumber } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
 import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
@@ -27,6 +27,7 @@ export const useCreatePositionFormik = (
       );
       actions.setSubmitting(false);
       actions.resetForm();
+      await sleep(DELAY_BEFORE_DATA_UPDATE);
       void poolStore.itemSore.load();
       void poolStore.contractBalanceStore.load();
     } catch {}
