@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { string as stringSchema, StringSchema } from 'yup';
 
-import { formatBalance, prepareNumberAsString } from '@shared/helpers';
+import { formatBalance, prepareNumberAsString, stringToBigNumber } from '@shared/helpers';
 import { Optional } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -17,7 +17,7 @@ interface ValidatedRangeBoundary extends RangeBoundary {
 }
 
 export const makeNumberAsStringTestFn = (testFn: (value: BigNumber) => boolean) => {
-  return (value: Optional<string>) => typeof value !== 'string' || testFn(new BigNumber(value));
+  return (value: Optional<string>) => typeof value !== 'string' || testFn(stringToBigNumber(value));
 };
 
 export const makeLowerBoundaryTestFn = (boundary: ValidatedRangeBoundary) =>

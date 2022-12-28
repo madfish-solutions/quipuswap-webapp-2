@@ -75,6 +75,7 @@ export const liquidity = {
   tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
   tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
+  tooltipV3: 'CHANGE ME!',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
@@ -117,6 +118,9 @@ export const liquidity = {
   positionDetails: 'Position details',
   status: 'Status',
   id: 'ID',
+  priceCannotBeNegative: 'Price cannot be negative.',
+  minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower of equal to max price.',
+  maxPriceShouldBePositive: 'Maximal price should be positive.',
   tags: 'Tags',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.'

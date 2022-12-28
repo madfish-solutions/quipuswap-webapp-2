@@ -2,6 +2,8 @@ import BigNumber from 'bignumber.js';
 
 import { Nullable } from '@shared/types';
 
+import { useCreatePositionFormik } from '../pages/v3-item-page/hooks';
+
 export interface FeeGrowth {
   x: BigNumber;
   y: BigNumber;
@@ -45,3 +47,5 @@ export interface LiquidityV3PositionStats {
 export interface LiquidityV3PositionWithStats extends LiquidityV3Position {
   stats: LiquidityV3PositionStats;
 }
+
+export type CreatePositionFormik = ReturnType<typeof useCreatePositionFormik>;

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@config/constants';
 import { batchOperations } from '@shared/dapp';
-import { getBlockchainTimestamp, increaseBySlippage, toAtomic } from '@shared/helpers';
+import { getBlockchainTimestamp, increaseByPercentage, toAtomic } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers';
@@ -37,10 +37,10 @@ export const addLiquidityTokenToToken = async (
   const shares = atomicTokenAInputAmount.multipliedBy(totalSupply).dividedToIntegerBy(tokenAPool);
   const bTokemAtom = shares.multipliedBy(tokenBPool).dividedBy(totalSupply).integerValue(BigNumber.ROUND_UP);
 
-  const withSlippageA = increaseBySlippage(atomicTokenAInputAmount, slippagePercentage).integerValue(
+  const withSlippageA = increaseByPercentage(atomicTokenAInputAmount, slippagePercentage).integerValue(
     BigNumber.ROUND_DOWN
   );
-  const withSlippageB = increaseBySlippage(bTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = increaseByPercentage(bTokemAtom, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(
