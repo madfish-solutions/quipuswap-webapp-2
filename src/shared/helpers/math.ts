@@ -16,14 +16,12 @@ const INTEGER_CHORD_METHOD_EPSILON = 1;
 export const integerChordMethod = (f: (x: BigNumber) => BigNumber, x0: BigNumber, x1: BigNumber): BigNumber => {
   const y0 = f(x0);
   const y1 = f(x1);
-  // eslint-disable-next-line no-console
-  console.log('integerChordMethod', x0.toFixed(), x1.toFixed(), y0.toFixed(), y1.toFixed());
 
-  if (y1.eq(y0)) {
+  if (y1.isZero()) {
     return x1;
   }
 
-  if (x1.minus(x0).lte(INTEGER_CHORD_METHOD_EPSILON)) {
+  if (x1.minus(x0).lte(INTEGER_CHORD_METHOD_EPSILON) || y0.isZero()) {
     return x0;
   }
 

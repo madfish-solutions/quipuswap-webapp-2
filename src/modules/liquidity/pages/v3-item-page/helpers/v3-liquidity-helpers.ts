@@ -59,7 +59,6 @@ const calculateMiddleLiquidity = (
 const deltaIsLessOrEqual = (a: TokensDelta, b: TokensDelta) =>
   (!isExist(a.x) || !isExist(b.x) || a.x.lte(b.x)) && (!isExist(a.y) || !isExist(b.y) || a.y.lte(b.y));
 
-const LIQUIDITY_EPSILON = 1;
 export const calculateLiquidity = (
   currentTickIndex: BigNumber,
   lowerTickIndex: BigNumber,
@@ -97,21 +96,10 @@ export const calculateLiquidity = (
     );
 
   const analyticalEstimationDelta = calculateTokensDelta(analyticalEstimation);
-  const analyticalPlusOneEstimationDelta = calculateTokensDelta(analyticalEstimation.plus(LIQUIDITY_EPSILON));
   const expectedTokensDelta = {
     x: xTokenAmount,
     y: yTokenAmount
   };
-
-  if (
-    deltaIsLessOrEqual(analyticalEstimationDelta, expectedTokensDelta) &&
-    !deltaIsLessOrEqual(analyticalPlusOneEstimationDelta, expectedTokensDelta)
-  ) {
-    // eslint-disable-next-line no-console
-    console.log('estimation is correct', analyticalEstimation.toFixed());
-
-    return analyticalEstimation;
-  }
 
   const lowerEstimation = deltaIsLessOrEqual(analyticalEstimationDelta, expectedTokensDelta)
     ? analyticalEstimation
@@ -120,10 +108,10 @@ export const calculateLiquidity = (
     ? analyticalEstimation
         .multipliedBy(
           BigNumber.max(
-            isExist(expectedTokensDelta.x)
+            isExist(expectedTokensDelta.x) && !analyticalEstimationDelta.x.isZero()
               ? expectedTokensDelta.x.dividedBy(analyticalEstimationDelta.x)
               : ZERO_AMOUNT_BN,
-            isExist(expectedTokensDelta.y)
+            isExist(expectedTokensDelta.y) && !analyticalEstimationDelta.y.isZero()
               ? expectedTokensDelta.y.dividedBy(analyticalEstimationDelta.y)
               : ZERO_AMOUNT_BN
           ).plus(1)
