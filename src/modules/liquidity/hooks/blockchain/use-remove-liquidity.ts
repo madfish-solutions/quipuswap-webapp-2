@@ -5,7 +5,7 @@ import { LP_TOKEN } from '@modules/liquidity/pages/cpmm-item/components/forms/he
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
-  decreaseBySlippage,
+  decreaseByPercentage,
   extractTokens,
   getTransactionDeadline,
   isExist,
@@ -45,7 +45,9 @@ export const useRemoveLiquidity = () => {
     const tokens = extractTokens(item.tokensInfo);
 
     const atomicAndDecresedInputAmounts = inputAmounts.map((amount: BigNumber, index: number) =>
-      decreaseBySlippage(toAtomic(amount, tokens[index]), liquiditySlippage).minus(1).integerValue(BigNumber.ROUND_DOWN)
+      decreaseByPercentage(toAtomic(amount, tokens[index]), liquiditySlippage)
+        .minus(1)
+        .integerValue(BigNumber.ROUND_DOWN)
     );
 
     const tokensAndAmounts = tokensAndAmountsMapper(tokens, atomicAndDecresedInputAmounts).sort((a, b) =>
