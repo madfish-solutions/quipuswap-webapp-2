@@ -81,6 +81,7 @@ export const SLASH = '/';
 export const EPPROXIMATILY_SIGN = '~';
 export const EPPROXIMATILY_EQUAL_SIGN = '≈';
 export const COMMA = ',';
+export const INFINITY_SIGN = '∞';
 //#endregion
 
 //#region sort
@@ -167,6 +168,12 @@ export const DEFAULT_STABLESWAP_POOL_ID = 0;
 export const STABLESWAP_DIVIDENDS_ACCUM_PRECISION = 10_000_000_000;
 
 export const FARMING_FEES_PERCENTAGE_PRECISION = 16;
+
+export const DEFAULT_TICK_SPACING = 1;
+export const MIN_TICK_INDEX = -1048575;
+export const MAX_TICK_INDEX = 1048575;
+
+export const NON_INTERACTIVE_ELEMENT_TAB_INDEX = -1;
 //#endregion
 
 // error constant
