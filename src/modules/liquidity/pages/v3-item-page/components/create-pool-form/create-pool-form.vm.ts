@@ -17,8 +17,6 @@ enum eCreatePoolValues {
   tokens = 'tokens'
 }
 
-const FEE_RATE_FIELD_NAME = 'feeRate';
-
 interface CreatePoolValues {
   [eCreatePoolValues.feeRate]: number;
   [eCreatePoolValues.initialPrice]: string;
@@ -27,22 +25,22 @@ interface CreatePoolValues {
 
 export const feeRateRadioButtonOptions = [
   {
-    radioName: FEE_RATE_FIELD_NAME,
+    radioName: eCreatePoolValues.feeRate,
     value: 0.01,
     label: i18n.t('liquidity|feeRates001')
   },
   {
-    radioName: FEE_RATE_FIELD_NAME,
+    radioName: eCreatePoolValues.feeRate,
     value: 0.05,
     label: i18n.t('liquidity|feeRates005')
   },
   {
-    radioName: FEE_RATE_FIELD_NAME,
+    radioName: eCreatePoolValues.feeRate,
     value: 0.3,
     label: i18n.t('liquidity|feeRates03')
   },
   {
-    radioName: FEE_RATE_FIELD_NAME,
+    radioName: eCreatePoolValues.feeRate,
     value: 1,
     label: i18n.t('liquidity|feeRates1')
   }
