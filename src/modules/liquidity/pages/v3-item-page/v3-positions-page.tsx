@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { Iterator, ListItemCard, Skeleton, StateWrapper, TestnetAlert } from '@shared/components';
+import { Iterator, Skeleton, StateWrapper, TestnetAlert } from '@shared/components';
 import { WarningAlert } from '@shared/components/warning-alert';
 import { useTranslation } from '@translation';
 
@@ -12,7 +12,8 @@ import {
   LiquidityV3PoolStats,
   OpenNewPosition,
   PageTitleContainer,
-  PositionsFeesList
+  PositionsFeesList,
+  PositionsListItemCard
 } from './components';
 import { useV3PositionsViewModel } from './use-v3-positions.vm';
 import styles from './v3-positions-page.module.scss';
@@ -37,7 +38,7 @@ export const V3PositionsPage: FC = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<Skeleton className={styles.listSkeleton} />}>
         <Iterator
           data={positionsViewModel}
-          render={ListItemCard}
+          render={PositionsListItemCard}
           fallback={<EmptyPositionsList />}
           isGrouped
           wrapperClassName={styles.list}
