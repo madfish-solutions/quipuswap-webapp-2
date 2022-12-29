@@ -3,18 +3,18 @@ import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswa
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { FarmVersion } from '@modules/farming/interfaces';
-import { PoolType } from '@modules/liquidity/interfaces';
+import { Categories, PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID, TEMPLEWALLET_API_URL } from './environment';
+import { NETWORK_ID, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
 export const QUIPUSWAP_URL = `https://${QUIPUSWAP_DOMAIN_NAME}`;
 
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
-
-export const TZKT_API_DELEGATE_URL = 'https://api.tzkt.io/v1/delegates';
+export const TZKT_API_DELEGATE_URL = `${TZKT_API}/delegates`;
+export const TZKT_API_CONTRACTS_URL = `${TZKT_API}/contracts`;
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
@@ -106,6 +106,7 @@ export const YOUVES_LINK = 'https://app.youves.com/earn';
 // Hot Pools
 export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
   { id: '6', type: PoolType.STABLESWAP },
+  { id: '1', type: PoolType.UNISWAP },
   { id: '7', type: PoolType.DEX_TWO },
   { id: '8', type: PoolType.DEX_TWO },
   { id: '0', type: PoolType.DEX_TWO },
@@ -117,3 +118,14 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
+
+const MAINNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {};
+const TESTNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {
+  0: [Categories.Stable, Categories.V3],
+  2: [Categories.Stable, Categories.QuipuSwap, Categories.V3]
+};
+
+export const LIQUIDITY_V3_POOL_TAGS = {
+  [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
+  [NetworkType.GHOSTNET]: TESTNET_LIQUIDITY_V3_POOL_TAGS
+};

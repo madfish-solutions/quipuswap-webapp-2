@@ -1,0 +1,22 @@
+@import '@styles/breakpoints';
+
+.mb48 {
+  margin-bottom: 48px;
+}
+
+.positionFeesSkeleton {
+  width: 100%;
+  height: 372px;
+}
+
+@include media('>=tablet') {
+  .positionFeesSkeleton {
+    height: 328px;
+  }
+}
+
+@include media('>=Ltablet') {
+  .positionFeesSkeleton {
+    height: 180px;
+  }
+}

@@ -1,27 +1,25 @@
 import BigNumber from 'bignumber.js';
 
-import { IS_NETWORK_MAINNET } from '@config/config';
-import { TESTNET_EXCHANGE_RATE } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
+import { calculateV3PoolPriceDecimals } from '@modules/liquidity/helpers';
 import { LiquidityV3Position } from '@modules/liquidity/types';
 import { getSumOfNumbers, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { calculateDeposit } from './calculate-deposit';
 import { calculateFees } from './calculate-fees';
-import { calculateTokenPriceDecimals } from './calculate-token-price-decimals';
 import { convertToAtomicPrice } from './convert-to-atomic-price';
 
 export const mapPositionWithStats = (
   tokenX: Token,
   tokenY: Token,
   currentRealPrice: Optional<BigNumber>,
-  getTokenExchangeRate: (token: Token) => Optional<BigNumber>,
+  tokenXExchangeRate: Optional<BigNumber>,
+  tokenYExchangeRate: Optional<BigNumber>,
   storage: V3LiquidityPoolApi.V3PoolStorage
 ) => {
-  const tokenXExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenX) : TESTNET_EXCHANGE_RATE;
-  const tokenYExchangeRate = IS_NETWORK_MAINNET ? getTokenExchangeRate(tokenY) : TESTNET_EXCHANGE_RATE;
-  const tokenPriceDecimals = calculateTokenPriceDecimals(tokenX, tokenY);
+  const tokenPriceDecimals = calculateV3PoolPriceDecimals(tokenX, tokenY);
+  const shouldShowUsdValues = isExist(tokenXExchangeRate) && isExist(tokenYExchangeRate);
 
   return (position: LiquidityV3Position) => {
     const minRange = toReal(convertToAtomicPrice(position.lower_tick.sqrt_price), tokenPriceDecimals);
@@ -34,14 +32,18 @@ export const mapPositionWithStats = (
     const tokenXFees = toReal(tokenXAtomicFees, tokenX);
     const tokenYFees = toReal(tokenYAtomicFees, tokenY);
 
-    const depositUsd = getSumOfNumbers([
-      multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
-      multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
-    ]);
-    const collectedFeesUsd = getSumOfNumbers([
-      multipliedIfPossible(tokenXFees, tokenXExchangeRate),
-      multipliedIfPossible(tokenYFees, tokenYExchangeRate)
-    ]);
+    const depositUsd = shouldShowUsdValues
+      ? getSumOfNumbers([
+          multipliedIfPossible(tokenXDeposit, tokenXExchangeRate),
+          multipliedIfPossible(tokenYDeposit, tokenYExchangeRate)
+        ])
+      : null;
+    const collectedFeesUsd = shouldShowUsdValues
+      ? getSumOfNumbers([
+          multipliedIfPossible(tokenXFees, tokenXExchangeRate),
+          multipliedIfPossible(tokenYFees, tokenYExchangeRate)
+        ])
+      : null;
     const isInRange = isExist(currentRealPrice) && currentRealPrice.gte(minRange) && currentRealPrice.lt(maxRange);
 
     return {

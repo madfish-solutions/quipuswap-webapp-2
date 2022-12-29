@@ -1,44 +1,29 @@
 import BigNumber from 'bignumber.js';
-import cx from 'classnames';
 
-import { AppRootRoutes } from '@app.router';
-import { LiquidityRoutes, LiquiditySubroutes } from '@modules/liquidity/liquidity-routes.enum';
+import { DexLink } from '@modules/liquidity/helpers';
 import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
 import { getTokensNames } from '@shared/helpers';
-import { ActiveStatus, Token } from '@shared/types';
+import { Token } from '@shared/types';
 import { i18n } from '@translation';
 
-interface RangeLabelClasses {
-  className: string;
-  inRangeClassName: string;
-}
-
 export const mapPositionViewModel = (
-  rangeLabelClasses: RangeLabelClasses,
   tokenX: Token,
   tokenY: Token,
-  poolId: BigNumber
+  poolId: BigNumber,
+  isExchangeRatesError: boolean
 ) => {
   return (positionWithStats: LiquidityV3PositionWithStats) => {
     const { stats, id } = positionWithStats;
     const { collectedFeesUsd, depositUsd, minRange, maxRange, isInRange } = stats;
-    const { className: rangeLabelClassName, inRangeClassName } = rangeLabelClasses;
     const tokensNames = getTokensNames([tokenY, tokenX]);
 
     return {
-      href: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}/${poolId.toFixed()}/${
-        LiquiditySubroutes.positions
-      }/${id.toFixed()}`,
+      href: DexLink.getLiquidityV3PositionLink(poolId, id),
       inputToken: [tokenX, tokenY],
       status: null,
       isNew: false,
-      labels: [
-        {
-          contentClassName: cx(rangeLabelClassName, isInRange && inRangeClassName),
-          status: ActiveStatus.ACTIVE,
-          label: isInRange ? i18n.t('liquidity|inRange') : i18n.t('liquidity|notActive')
-        }
-      ],
+      isInRange,
+      labels: [],
       itemStats: [
         {
           cellName: i18n.t('liquidity|minPrice'),
@@ -66,7 +51,8 @@ export const mapPositionViewModel = (
             amount: depositUsd,
             dollarEquivalent: depositUsd,
             currency: tokensNames,
-            dollarEquivalentOnly: true
+            dollarEquivalentOnly: true,
+            isError: isExchangeRatesError
           },
           DTI: 'deposit',
           tooltip: i18n.t('liquidity|depositTooltip')
@@ -77,7 +63,8 @@ export const mapPositionViewModel = (
             amount: collectedFeesUsd,
             dollarEquivalent: collectedFeesUsd,
             currency: tokensNames,
-            dollarEquivalentOnly: true
+            dollarEquivalentOnly: true,
+            isError: isExchangeRatesError
           },
           DTI: 'collectedFees',
           tooltip: i18n.t('liquidity|collectedFeesTooltip')

@@ -37,7 +37,7 @@
       height: 0;
     }
 
-    &::after {
+    &.underlined::after {
       content: "";
       position: absolute;
 
@@ -148,7 +148,7 @@
   border: none;
   font-style: normal;
   font-weight: 600;
-  font-size: 1.714rem;
+  font-size: 1.2857rem;
   line-height: 1.33;
 }
 
@@ -176,48 +176,54 @@
 }
 
 @include media(">tablet") {
-  .shape {
-    justify-content: space-between;
+  .input {
+    font-size: 1.714rem;
   }
 
-  .dollarEquivalent {
-    order: 1;
-    flex-grow: 1;
-    flex-basis: 50%;
-    overflow: hidden;
-    line-height: unset;
-    max-width: 50%;
-  }
+  .fullWidth {
+    &.shape {
+      justify-content: space-between;
+    }
 
-  .balance {
-    max-width: calc(50% - 16px);
-    width: 100%;
-    margin: 0;
-    order: 2;
-    flex-grow: 1;
-    flex-basis: unset;
-    overflow: hidden;
-    white-space: nowrap;
-    justify-content: flex-end;
-  }
+    .dollarEquivalent {
+      order: 1;
+      flex-grow: 1;
+      flex-basis: 50%;
+      overflow: hidden;
+      line-height: unset;
+      max-width: 50%;
+    }
 
-  .item {
-    margin-top: 8px;
-    order: 3;
-    flex-grow: 1;
-    flex-basis: 20%;
-  }
+    .balance {
+      max-width: calc(50% - 16px);
+      width: 100%;
+      margin: 0;
+      order: 2;
+      flex-grow: 1;
+      flex-basis: unset;
+      overflow: hidden;
+      white-space: nowrap;
+      justify-content: flex-end;
+    }
 
-  .selector {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    order: 4;
-    flex-basis: content;
-  }
+    .item {
+      margin-top: 8px;
+      order: 3;
+      flex-grow: 1;
+      flex-basis: 20%;
+    }
 
-  .dangerContainer {
-    order: 4;
-    margin-left: 6px;
+    .selector {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      order: 4;
+      flex-basis: content;
+    }
+
+    .dangerContainer {
+      order: 4;
+      margin-left: 6px;
+    }
   }
 }

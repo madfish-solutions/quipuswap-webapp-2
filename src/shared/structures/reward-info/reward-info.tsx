@@ -35,6 +35,7 @@ interface Props {
   buttonUp?: boolean;
   details?: ReactNode;
   rewardsLabel?: string;
+  isError?: boolean;
 }
 
 const ZERO_REWARDS = 0;
@@ -58,7 +59,8 @@ export const RewardInfo: CFC<Props> = ({
   buttonUp,
   details,
   children,
-  rewardsLabel
+  rewardsLabel,
+  isError
 }) => {
   const { isDetailsOpen, toggle, transaction, showDetails } = useRewardInfoViewModel();
   const { detailsButtonTransaction } = transaction;
@@ -93,6 +95,7 @@ export const RewardInfo: CFC<Props> = ({
         <PendingRewards
           className={styles.paddingRewards}
           claimablePendingRewards={claimablePendingRewards}
+          isError={isError}
           totalPendingRewards={totalPendingRewards}
           dollarEquivalent={dollarEquivalent}
           amountDecimals={amountDecimals}
