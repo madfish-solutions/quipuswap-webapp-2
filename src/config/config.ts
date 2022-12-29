@@ -120,7 +120,12 @@ export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
 
 const MAINNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<Categories>> = [];
-const TESTNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<Categories>> = [[Categories.Stable], [], [Categories.QuipuSwap], []];
+const TESTNET_LIQUIDITY_V3_POOL_TAGS: Array<Array<Categories>> = [
+  [Categories.Stable, Categories.V3],
+  [Categories.V3],
+  [Categories.QuipuSwap, Categories.V3],
+  [Categories.V3]
+];
 
 export const LIQUIDITY_V3_POOL_TAGS = {
   [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
