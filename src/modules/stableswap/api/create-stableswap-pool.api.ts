@@ -3,9 +3,9 @@ import { BigNumber } from 'bignumber.js';
 
 import { withApproveApiForManyTokens } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { DEFAULT_TOKEN_ID } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
-import { isTokenFa2, saveBigNumber, toAtomic } from '@shared/helpers';
+import { toAtomic } from '@shared/helpers';
+import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { AmountToken, Nullable, Token, TokensValue } from '@shared/types';
 
 interface TokenInfo {
@@ -35,21 +35,6 @@ export interface Fees {
 export interface CreationParams extends StableswapTokenInfo {
   token: Token;
 }
-
-const mapTokenToBlockchainToken = (token: Token): TokensValue => {
-  if (isTokenFa2(token)) {
-    return {
-      fa2: {
-        token_address: token.contractAddress,
-        token_id: saveBigNumber(token.fa2TokenId, new BigNumber(DEFAULT_TOKEN_ID))
-      }
-    };
-  } else {
-    return {
-      fa12: token.contractAddress
-    };
-  }
-};
 
 const mapTokensInfo = ({ reserves, rateF, precisionMultiplierF }: StableswapTokenInfo): TokenInfo => ({
   rate_f: rateF,
@@ -82,7 +67,7 @@ const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees, c
   const tokensInfo = new MichelsonMap<BigNumber, TokenInfo>();
 
   creationParams.forEach(({ token, reserves, rateF, precisionMultiplierF }, index) => {
-    inputTokens.push(mapTokenToBlockchainToken(token));
+    inputTokens.push(mapTokensValue(token));
     amountTokenList.push(mapToAmountToken({ token, reserves }));
     tokensInfo.set(new BigNumber(index), mapTokensInfo({ reserves, rateF, precisionMultiplierF }));
   });

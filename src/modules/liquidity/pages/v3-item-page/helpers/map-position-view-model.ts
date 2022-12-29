@@ -1,19 +1,12 @@
 import BigNumber from 'bignumber.js';
-import cx from 'classnames';
 
 import { DexLink } from '@modules/liquidity/helpers';
 import { LiquidityV3PositionWithStats } from '@modules/liquidity/types';
 import { getTokensNames } from '@shared/helpers';
-import { ActiveStatus, Token } from '@shared/types';
+import { Token } from '@shared/types';
 import { i18n } from '@translation';
 
-interface RangeLabelClasses {
-  className: string;
-  inRangeClassName: string;
-}
-
 export const mapPositionViewModel = (
-  rangeLabelClasses: RangeLabelClasses,
   tokenX: Token,
   tokenY: Token,
   poolId: BigNumber,
@@ -22,7 +15,6 @@ export const mapPositionViewModel = (
   return (positionWithStats: LiquidityV3PositionWithStats) => {
     const { stats, id } = positionWithStats;
     const { collectedFeesUsd, depositUsd, minRange, maxRange, isInRange } = stats;
-    const { className: rangeLabelClassName, inRangeClassName } = rangeLabelClasses;
     const tokensNames = getTokensNames([tokenY, tokenX]);
 
     return {
@@ -30,13 +22,8 @@ export const mapPositionViewModel = (
       inputToken: [tokenX, tokenY],
       status: null,
       isNew: false,
-      labels: [
-        {
-          contentClassName: cx(rangeLabelClassName, isInRange && inRangeClassName),
-          status: ActiveStatus.ACTIVE,
-          label: isInRange ? i18n.t('liquidity|inRange') : i18n.t('liquidity|notActive')
-        }
-      ],
+      isInRange,
+      labels: [],
       itemStats: [
         {
           cellName: i18n.t('liquidity|minPrice'),
