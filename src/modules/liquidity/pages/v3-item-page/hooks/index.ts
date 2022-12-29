@@ -3,3 +3,4 @@ export * from './use-positions-with-stats';
 export * from './use-route-params';
 export * from './use-user-info-rows';
 export * from './create-new-position';
+export * from './use-v3-pool-categories';
