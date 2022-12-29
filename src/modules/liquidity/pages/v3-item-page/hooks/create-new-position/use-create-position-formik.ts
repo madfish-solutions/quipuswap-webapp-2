@@ -1,65 +1,37 @@
-import { useCallback } from 'react';
-
-import BigNumber from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { EMPTY_STRING } from '@config/constants';
-import { useLiquidityV3ItemTokens, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
-import { stringToBigNumber, toAtomic } from '@shared/helpers';
+import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING } from '@config/constants';
+import { useLiquidityV3PoolStore, useV3NewPosition } from '@modules/liquidity/hooks';
+import { sleep, stringToBigNumber } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
-import { calculateLiquidity, calculateTicks } from '../../helpers';
 import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
 import { useCreateNewPositionFormValidationSchema } from './use-create-new-position-form-validation-schema';
-import { useCurrentTick } from './use-current-tick';
-import { useTickSpacing } from './use-tick-spacing';
 
 export const useCreatePositionFormik = (
   initialMinPrice: string,
   initialMaxPrice: string,
   tokensWithBalances: BalanceToken[]
 ) => {
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const tickSpacing = useTickSpacing();
-  const currentTick = useCurrentTick();
-  const priceDecimals = useV3PoolPriceDecimals();
+  const { createNewV3Position } = useV3NewPosition();
+  const poolStore = useLiquidityV3PoolStore();
 
-  const handleSubmit = useCallback(
-    (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
-      actions.setSubmitting(true);
-      // eslint-disable-next-line no-console
-      console.log('TODO: send a transaction');
-      // TODO: remove calculations and console output below as soon as transaction sending is implemented
-      const realTokenXAmount = new BigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]);
-      const x = toAtomic(realTokenXAmount, tokenX);
-      const realTokenYAmount = new BigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT]);
-      const y = toAtomic(realTokenYAmount, tokenY);
-      const realMaxPrice = stringToBigNumber(values[CreatePositionInput.MAX_PRICE]);
-      const realMinPrice = stringToBigNumber(values[CreatePositionInput.MIN_PRICE]);
-      const { lowerTick, upperTick } = calculateTicks(
-        toAtomic(realMinPrice, priceDecimals),
-        toAtomic(realMaxPrice, priceDecimals),
-        tickSpacing
+  const handleSubmit = async (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
+    actions.setSubmitting(true);
+    try {
+      await createNewV3Position(
+        stringToBigNumber(values[CreatePositionInput.MIN_PRICE]),
+        stringToBigNumber(values[CreatePositionInput.MAX_PRICE]),
+        stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]),
+        stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT])
       );
-
-      const liquidity = calculateLiquidity(
-        currentTick!.index,
-        lowerTick!.index,
-        upperTick!.index,
-        currentTick!.price,
-        lowerTick!.price,
-        upperTick!.price,
-        x,
-        y
-      );
-      // eslint-disable-next-line no-console
-      console.log(`Partial transaction parameters: x=${x.toFixed()}, y=${y.toFixed()}, \
-liquidity=${liquidity.toFixed()}, upper_tick_index=${upperTick!.index.toFixed()}, \
-lower_tick_index=${lowerTick!.index.toFixed()}`);
       actions.setSubmitting(false);
-    },
-    [currentTick, priceDecimals, tickSpacing, tokenX, tokenY]
-  );
+      actions.resetForm();
+      await sleep(DELAY_BEFORE_DATA_UPDATE);
+      void poolStore.itemSore.load();
+      void poolStore.contractBalanceStore.load();
+    } catch {}
+  };
   const validationSchema = useCreateNewPositionFormValidationSchema(tokensWithBalances);
 
   return useFormik<CreatePositionFormValues>({
