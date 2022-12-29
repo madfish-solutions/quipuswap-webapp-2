@@ -176,7 +176,8 @@ export namespace V3LiquidityPoolApi {
     tokenX: Token,
     tokenY: Token,
     currentTickIndex: int,
-    feeBps: nat
+    feeBps: nat,
+    tickSpacing: int
   ) => {
     const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
     const symbol = getSymbolsString([tokenX, tokenY]);
