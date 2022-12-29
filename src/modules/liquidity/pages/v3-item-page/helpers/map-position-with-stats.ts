@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js';
 
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
+import { calculateV3PoolPriceDecimals } from '@modules/liquidity/helpers';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-import { getSumOfNumbers, getTokenDecimals, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
+import { getSumOfNumbers, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { calculateDeposit } from './calculate-deposit';
@@ -17,7 +18,7 @@ export const mapPositionWithStats = (
   tokenYExchangeRate: Optional<BigNumber>,
   storage: V3LiquidityPoolApi.V3PoolStorage
 ) => {
-  const tokenPriceDecimals = getTokenDecimals(tokenY) - getTokenDecimals(tokenX);
+  const tokenPriceDecimals = calculateV3PoolPriceDecimals(tokenX, tokenY);
   const shouldShowUsdValues = isExist(tokenXExchangeRate) && isExist(tokenYExchangeRate);
 
   return (position: LiquidityV3Position) => {

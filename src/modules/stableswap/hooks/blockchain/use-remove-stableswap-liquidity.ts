@@ -6,7 +6,7 @@ import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-s
 import { useRootStore } from '@providers/root-store-provider';
 import {
   cloneArray,
-  decreaseBySlippage,
+  decreaseByPercentage,
   getTransactionDeadline,
   isExist,
   isNull,
@@ -40,7 +40,7 @@ export const useRemoveStableswapLiquidity = () => {
 
   const decreaseAmount = useCallback(
     (token: Token, amount: BigNumber, fees: Array<BigNumber>) => {
-      const decreasedAmount = decreaseBySlippage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
+      const decreasedAmount = decreaseByPercentage(amount, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
       const decreasedAmountWithFee = applyStableswapFee(decreasedAmount, fees).integerValue(BigNumber.ROUND_DOWN);
 
