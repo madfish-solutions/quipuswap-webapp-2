@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { FEE_BASE_POINTS_PRECISION } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { isNull, toAtomic, toFraction } from '@shared/helpers';
+import { defined, isNull, toAtomic, toFraction } from '@shared/helpers';
 import { useAmplitudeService } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -12,6 +12,13 @@ import { calculateTickIndex, calculateTokenPriceDecimals } from './helpers';
 import { getCreateV3PoolLogData } from './helpers/get-create-v3-pool-log-data';
 
 const INVERSION_DIVIDEND = 1;
+
+const tickSpacingDictionary = {
+  '0.01': 1,
+  '0.05': 10,
+  '0.3': 60,
+  '1': 200
+};
 
 export const useDoCreateV3Pool = () => {
   const tezos = useTezos();
@@ -24,6 +31,9 @@ export const useDoCreateV3Pool = () => {
     if (isNull(tezos) || isNull(accountPkh)) {
       return;
     }
+    const tickSpacing = new BigNumber(
+      defined(tickSpacingDictionary[feeRate.toFixed() as keyof typeof tickSpacingDictionary], "Can't find tick spacing")
+    );
 
     const logData = getCreateV3PoolLogData(accountPkh, token0, token1, initialPrice, feeRate);
 
@@ -36,7 +46,8 @@ export const useDoCreateV3Pool = () => {
         calculateTickIndex(
           toAtomic(new BigNumber(INVERSION_DIVIDEND).div(initialPrice), calculateTokenPriceDecimals(token0, token1))
         ),
-        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION)
+        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
+        tickSpacing
       );
 
       await confirmOperation(operation.opHash, { message: 'Pool was successfully created' });
