@@ -32,7 +32,7 @@ export const useRouterViewModel = () => {
     !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist && positionId;
 
   useEffect(() => {
-    if (location.pathname.includes('create')) {
+    if (location.pathname.includes('v3/create')) {
       return;
     }
 
@@ -56,7 +56,7 @@ export const useRouterViewModel = () => {
   }, [poolStore, id, positionId, tezos, positionStore, location.pathname]);
 
   return {
-    isLoading: !location.pathname.includes('create') && (poolStore.itemIsLoading || tokensAreLoading),
+    isLoading: !location.pathname.includes('v3/create') && (poolStore.itemIsLoading || tokensAreLoading),
     isNotFound: userPositionNotFound || (poolStore.error && isNotFoundError(poolStore.error)),
     error: poolStore.error
   };
