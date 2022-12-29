@@ -14,5 +14,5 @@ export const sort = (isFirstBigger: boolean, sortDirection: SortDirection) => {
   return SKIP;
 };
 
-export const sortStrings = (a: string, b: string, sortDirection: SortDirection) => sort(a > b, sortDirection);
-export const sortNumbers = (a: number, b: number, sortDirection: SortDirection) => sort(a > b, sortDirection);
+export const sortStrings = (sortDirection: SortDirection) => (a: string, b: string) => sort(a > b, sortDirection);
+export const sortNumbers = (sortDirection: SortDirection) => (a: number, b: number) => sort(a > b, sortDirection);
