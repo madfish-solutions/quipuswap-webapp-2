@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
@@ -9,6 +10,7 @@ import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
+import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
 
 enum eCreatePoolValues {
@@ -88,10 +90,20 @@ const initialValues: CreatePoolValues = {
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
 
-  const handleSubmit = useCallback(async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
-    // eslint-disable-next-line no-console
-    console.log(values, actions);
-  }, []);
+  const { doCreatePool } = useDoCreateV3Pool();
+
+  const handleSubmit = useCallback(
+    async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
+      actions.setSubmitting(true);
+      const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
+      const [token0, token1] = values[eCreatePoolValues.tokens];
+      const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
+
+      await doCreatePool(feeRate, token0, token1, initialPrice);
+      actions.setSubmitting(false);
+    },
+    [doCreatePool]
+  );
 
   const formik = useFormik({
     validationSchema,
