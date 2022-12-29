@@ -2,13 +2,14 @@ import BigNumber from 'bignumber.js';
 
 import { FEE_BASE_POINTS_PRECISION } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
+import { calculateV3PoolPriceDecimals } from '@modules/liquidity/helpers';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { defined, isNull, toAtomic, toFraction } from '@shared/helpers';
 import { useAmplitudeService } from '@shared/hooks';
 import { Token } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { calculateTickIndex, calculateTokenPriceDecimals } from './helpers';
+import { calculateTickIndex } from './helpers';
 import { getCreateV3PoolLogData } from './helpers/get-create-v3-pool-log-data';
 
 const INVERSION_DIVIDEND = 1;
@@ -44,7 +45,7 @@ export const useDoCreateV3Pool = () => {
         token0,
         token1,
         calculateTickIndex(
-          toAtomic(new BigNumber(INVERSION_DIVIDEND).div(initialPrice), calculateTokenPriceDecimals(token0, token1))
+          toAtomic(new BigNumber(INVERSION_DIVIDEND).div(initialPrice), calculateV3PoolPriceDecimals(token0, token1))
         ),
         toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
         tickSpacing

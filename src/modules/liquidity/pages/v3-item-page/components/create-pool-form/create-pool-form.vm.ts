@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema } from '@shared/helpers';
+import { getFormikError, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -96,7 +96,7 @@ export const useCreatePoolFormViewModel = () => {
     async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
       actions.setSubmitting(true);
       const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
-      const [token0, token1] = values[eCreatePoolValues.tokens];
+      const [token0, token1] = values[eCreatePoolValues.tokens].sort(sortTokens);
       const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
 
       await doCreatePool(feeRate, token0, token1, initialPrice);
