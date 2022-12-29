@@ -14,7 +14,7 @@ import {
   sortTokens,
   stringToBigNumber,
   toAtomic,
-  toPercent
+  toFraction
 } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circular dependencies
@@ -79,7 +79,7 @@ export const useCreateFormViewModel = () => {
         await createStableswapPool({
           amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
           fee: {
-            liquidityProvidersFee: toPercent(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
+            liquidityProvidersFee: toFraction(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
           },
           creationParams,
           creationPrice
