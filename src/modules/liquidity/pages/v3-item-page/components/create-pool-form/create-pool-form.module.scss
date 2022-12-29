@@ -1,0 +1,30 @@
+.content {
+  padding: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.tokenSelect {
+  > div > div {
+    height: 72px;
+    align-items: center;
+
+    > * {
+      display: none;
+    }
+
+    div:last-child {
+      flex: 1;
+      display: flex;
+    }
+  }
+}
+
+.svg {
+  display: block;
+  margin: 8px auto;
+}

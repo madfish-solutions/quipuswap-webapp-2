@@ -8,7 +8,7 @@ import { TokenInput } from '../token-input';
 import { TokensModal } from '../tokens-modal';
 import { useTokenSelectViewModel } from './token-select.vm';
 
-interface Props extends HTMLProps<HTMLDivElement> {
+export interface TokenSelectProps extends HTMLProps<HTMLDivElement> {
   className?: string;
   amount?: BigNumber;
   balance?: BigNumber;
@@ -18,11 +18,13 @@ interface Props extends HTMLProps<HTMLDivElement> {
   token?: Token;
   blackListedTokens: Token[];
   id?: string;
+  hiddenPercentSelector?: boolean;
+  hiddenBalance?: boolean;
   onAmountChange: (value: Undefined<BigNumber>) => void;
   onTokenChange: (token: Token) => void;
 }
 
-export const TokenSelect: FC<Props> = ({
+export const TokenSelect: FC<TokenSelectProps> = ({
   id,
   className,
   amount,
@@ -33,6 +35,8 @@ export const TokenSelect: FC<Props> = ({
   onTokenChange,
   token,
   blackListedTokens,
+  hiddenPercentSelector,
+  hiddenBalance,
   ...props
 }) => {
   const {
@@ -60,6 +64,10 @@ export const TokenSelect: FC<Props> = ({
         balance={balance}
         value={localAmount}
         tokens={token}
+        className={className}
+        error={error}
+        hiddenBalance={hiddenBalance}
+        hiddenPercentSelector={hiddenPercentSelector}
         onInputChange={handleAmountChange}
         onSelectorClick={openTokenModal}
       />
