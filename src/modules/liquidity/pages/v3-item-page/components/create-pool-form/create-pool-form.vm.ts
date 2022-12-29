@@ -163,8 +163,8 @@ export const useCreatePoolFormViewModel = () => {
     radioButtonParams,
     tokensSelectData,
     tokens,
-    disabled: !tokens,
-    isSubmitting: false,
+    disabled: !tokens || formik.isSubmitting,
+    isSubmitting: formik.isSubmitting,
     initialPriceValue: formik.values[eCreatePoolValues.initialPrice],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialPriceError: getFormikError(formik as any, eCreatePoolValues.initialPrice),
