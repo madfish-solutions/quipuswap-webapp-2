@@ -1,14 +1,12 @@
-import { calculateTokenPriceDecimals } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { convertToAtomicPrice } from '@modules/liquidity/pages/v3-item-page/helpers/convert-to-atomic-price';
 import { isExist, toReal } from '@shared/helpers';
 
-import { useLiquidityV3ItemStore } from '../store';
-import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
+import { useLiquidityV3PoolStore } from '../store';
+import { useV3PoolPriceDecimals } from './use-v3-pool-price-decimals';
 
 export const useLiquidityV3CurrentPrice = () => {
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const { sqrtPrice } = useLiquidityV3ItemStore();
-  const tokenPriceDecimals = calculateTokenPriceDecimals(tokenX, tokenY);
+  const priceDecimals = useV3PoolPriceDecimals();
+  const { sqrtPrice } = useLiquidityV3PoolStore();
 
-  return isExist(sqrtPrice) ? toReal(convertToAtomicPrice(sqrtPrice), tokenPriceDecimals) : null;
+  return isExist(sqrtPrice) ? toReal(convertToAtomicPrice(sqrtPrice), priceDecimals) : null;
 };

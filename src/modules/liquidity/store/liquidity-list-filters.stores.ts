@@ -13,6 +13,7 @@ import {
   filterByStableSwap,
   filterByTezotopia,
   filterByTokens,
+  filterByV3,
   sortLiquidityItems
 } from '../helpers';
 import { LiquidityItemModel } from '../models';
@@ -33,6 +34,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   showTezotopia = false;
   showBTC = false;
   showDexTwo = false;
+  showV3 = false;
 
   sortField: LiquiditySortField = LiquiditySortField.TVL;
 
@@ -51,6 +53,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       showTezotopia: observable,
       showBTC: observable,
       showDexTwo: observable,
+      showV3: observable,
 
       sortField: observable,
 
@@ -63,6 +66,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       setShowTezotopia: action,
       setShowBTC: action,
       setShowDexTwo: action,
+      setShowV3: action,
       onSortFieldChange: action
     });
   }
@@ -77,6 +81,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       .filter(filterByTezotopia(this.showTezotopia))
       .filter(filterByBTC(this.showBTC))
       .filter(filterByDexTwo(this.showDexTwo))
+      .filter(filterByV3(this.showV3))
       .sort(sortLiquidityItems(this.sortField, this.sortDirection));
   }
 
@@ -108,6 +113,9 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   }
   setShowDexTwo(state: boolean) {
     this.showDexTwo = state;
+  }
+  setShowV3(state: boolean) {
+    this.showV3 = state;
   }
 
   onSortFieldChange(field: LiquiditySortField) {

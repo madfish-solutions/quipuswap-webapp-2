@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { DOLLAR } from '@config/constants';
+import { DOLLAR, NON_INTERACTIVE_ELEMENT_TAB_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Danger } from '@shared/elements';
 import { isNull } from '@shared/helpers';
@@ -41,12 +41,17 @@ export const TokenInput: FC<TokenInputProps> = observer(
     disabled,
     hiddenPercentSelector,
     hiddenBalance,
+    hiddenNotWhitelistedMessage,
+    hiddenUnderline,
     readOnly,
     balanceText,
     decimals,
     tokenInputDTI,
+    fullWidth = true,
+    tokenLogoWidth,
     onInputChange,
-    onSelectorClick
+    onSelectorClick,
+    onBlur
   }) => {
     const { colorThemeMode } = useContext(ColorThemeContext);
     const {
@@ -70,10 +75,17 @@ export const TokenInput: FC<TokenInputProps> = observer(
       readOnly,
       hiddenPercentSelector,
       hiddenBalance,
-      onInputChange
+      hiddenNotWhitelistedMessage,
+      onInputChange,
+      onBlur
     });
     const compoundClassName = cx(
-      { [styles.focused]: isFocused, [styles.error]: !!error, [styles.readOnly]: !isFormReady },
+      {
+        [styles.focused]: isFocused,
+        [styles.error]: !!error,
+        [styles.readOnly]: !isFormReady,
+        [styles.underlined]: !hiddenUnderline
+      },
       themeClass[colorThemeMode],
       className
     );
@@ -86,7 +98,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
         onClick={focusInput}
         onKeyPress={focusInput}
         role="button"
-        tabIndex={0}
+        tabIndex={readOnly ? NON_INTERACTIVE_ELEMENT_TAB_INDEX : 0}
         data-test-id={tokenInputDTI}
       >
         <TokensModal />
@@ -94,7 +106,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
           {label}
         </label>
         <div className={styles.background}>
-          <div className={styles.shape}>
+          <div className={cx(styles.shape, { [styles.fullWidth]: fullWidth })}>
             <div className={cx(styles.dollarEquivalent, styles.label2)}>
               {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
             </div>
@@ -132,8 +144,8 @@ export const TokenInput: FC<TokenInputProps> = observer(
               >
                 {tokens ? (
                   <>
+                    <TokensLogos width={tokenLogoWidth} tokens={tokens} />
                     <TokensSymbols tokens={tokens} />
-                    <TokensLogos tokens={tokens} />
                   </>
                 ) : (
                   'SELECT'

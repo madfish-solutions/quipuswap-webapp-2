@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useToasts } from '@shared/utils';
 
-import { useLiquidityV3ItemStore } from '../store';
+import { useLiquidityV3PoolStore } from '../store';
 
 export const useGetLiquidityV3ItemBalances = () => {
   const { showErrorToast } = useToasts();
-  const liquidityV3ItemStore = useLiquidityV3ItemStore();
+  const liquidityV3ItemStore = useLiquidityV3PoolStore();
   const isReady = useReady();
 
   const getLiquidityV3ItemBalances = useCallback(async () => {
