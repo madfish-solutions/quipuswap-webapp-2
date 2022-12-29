@@ -8,3 +8,4 @@ export * from './invalid-pool-id.error';
 export * from './get-create-position-amount-input-slug-by-index';
 export * from './find-user-position';
 export * from './v3-liquidity-helpers';
+export * from './get-v3-pool-categories';
