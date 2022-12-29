@@ -4,8 +4,7 @@ export enum V3AddTokenInput {
 }
 
 export interface V3AddFormValues {
-  [V3AddTokenInput.firstTokenInput]: string;
-  [V3AddTokenInput.secondTokenInput]: string;
+  [x: string]: string;
 }
 
 export enum V3RemoveTokenInput {
