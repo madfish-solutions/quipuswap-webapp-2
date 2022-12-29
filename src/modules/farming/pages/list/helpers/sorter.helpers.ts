@@ -8,7 +8,7 @@ import { FarmingListItemWithBalances, FarmingSortField } from '../types';
 const sortByDefault =
   (sortDirection: SortDirection) => (first: FarmingListItemWithBalances, second: FarmingListItemWithBalances) => {
     if (first.version !== second.version) {
-      return sortStrings(first.version, second.version, sortDirection);
+      return sortStrings(sortDirection)(first.version, second.version);
     }
 
     return sortBigNumber(new BigNumber(first.id), new BigNumber(second.id), sortDirection);
