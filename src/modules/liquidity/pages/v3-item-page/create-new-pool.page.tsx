@@ -4,8 +4,6 @@ import { useTranslation } from '@translation';
 import { CreatePoolForm } from './components';
 
 export const CreateNewPoolPage = () => {
-  // eslint-disable-next-line no-console
-  console.log('CreateNewPoolPage');
   const { t } = useTranslation();
 
   return (
