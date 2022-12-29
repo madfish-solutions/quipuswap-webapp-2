@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { useLocation } from 'react-router-dom';
 
 import {
   useLiquidityV3ItemTokens,
@@ -16,7 +17,10 @@ import { useRouteParams } from './hooks/use-route-params';
 
 export const useRouterViewModel = () => {
   const { tezos } = useRootStore();
+  const location = useLocation();
+
   const { id, positionId } = useRouteParams();
+
   const poolStore = useLiquidityV3PoolStore();
   const positionStore = useLiquidityV3PositionStore();
   const { positionsWithStats } = usePositionsWithStats();
@@ -28,6 +32,10 @@ export const useRouterViewModel = () => {
     !(isNull(positionId) || isEmptyArray(positionsWithStats)) && !userPositionExist && positionId;
 
   useEffect(() => {
+    if (location.pathname.includes('create')) {
+      return;
+    }
+
     if (isExist(id) && onlyDigits(id) !== id) {
       poolStore.setError(new InvalidPoolIdError(id));
     } else if (isExist(id) && tezos) {
@@ -45,10 +53,10 @@ export const useRouterViewModel = () => {
     }
 
     return () => poolStore.itemSore.resetData();
-  }, [poolStore, id, positionId, tezos, positionStore]);
+  }, [poolStore, id, positionId, tezos, positionStore, location.pathname]);
 
   return {
-    isLoading: poolStore.itemIsLoading || tokensAreLoading,
+    isLoading: !location.pathname.includes('create') && (poolStore.itemIsLoading || tokensAreLoading),
     isNotFound: userPositionNotFound || (poolStore.error && isNotFoundError(poolStore.error)),
     error: poolStore.error
   };
