@@ -1,5 +1,5 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
-import { TezosToolkit } from '@taquito/taquito';
+import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
@@ -12,7 +12,9 @@ import {
   getUniqArray,
   getWalletContract,
   isExist,
-  getTransactionDeadline
+  getTransactionDeadline,
+  toHexString,
+  getSymbolsString
 } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { address, BigMap, int, nat, Token, TokensValue, WithId } from '@shared/types';
@@ -177,13 +179,22 @@ export namespace V3LiquidityPoolApi {
   ) => {
     const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
 
+    const symbol = getSymbolsString([tokenX, tokenY]);
+    const metadata = new MichelsonMap({ prim: 'map', args: [{ prim: 'string' }, { prim: 'bytes' }] });
+    metadata.set('description', toHexString('Yet another Quipuswap V3 pool'));
+    metadata.set('name', toHexString(symbol));
+    metadata.set('shouldPreferSymbol', toHexString(true));
+    metadata.set('symbol', toHexString(symbol));
+    metadata.set('thumbnailUri', toHexString('https://i.imgur.com/1J8Hr3B.png'));
+
     return factoryContract.methodsObject
       .deploy_pool({
         cur_tick_index: currentTickIndex,
         token_x: mapTokensValue(tokenX),
         token_y: mapTokensValue(tokenY),
         fee_bps: feeBps,
-        tick_spacing: tickSpacing
+        tick_spacing: tickSpacing,
+        metadata
       })
       .send();
   };
