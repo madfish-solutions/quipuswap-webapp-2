@@ -11,7 +11,7 @@ import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
-import { calculateOutput, isOneOfTheOutputNotZero } from '../helpers';
+import { calculateOutput, isOneOfTheOutputNotZero, preventRedundantRecalculation } from '../helpers';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 
@@ -35,8 +35,6 @@ export const useV3RemoveLiqFormViewModel = () => {
     }
   };
 
-  const validationSchema = useV3RemoveLiqFormValidation();
-
   const handleInputChange = () => {
     return (inputAmount: string) => {
       const { realValue } = numberAsString(inputAmount, ZERO_AMOUNT);
@@ -44,7 +42,15 @@ export const useV3RemoveLiqFormViewModel = () => {
         return;
       }
 
-      const { tokenXDeposit, tokenYDeposit } = calculateOutput(inputAmount, userPosition, item.storage, tokenX, tokenY);
+      const _inputAmount = preventRedundantRecalculation(inputAmount);
+
+      const { tokenXDeposit, tokenYDeposit } = calculateOutput(
+        _inputAmount,
+        userPosition,
+        item.storage,
+        tokenX,
+        tokenY
+      );
 
       formik.setValues({
         [V3RemoveTokenInput.lpTokenInput]: realValue,
@@ -53,6 +59,8 @@ export const useV3RemoveLiqFormViewModel = () => {
       });
     };
   };
+
+  const validationSchema = useV3RemoveLiqFormValidation();
 
   const formik = useFormik({
     validationSchema,
