@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@config/constants';
-import { decreaseBySlippage, getBlockchainTimestamp, toAtomic } from '@shared/helpers';
+import { decreaseByPercentage, getBlockchainTimestamp, toAtomic } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { getOrderedTokensAmounts } from '../../helpers';
@@ -35,8 +35,8 @@ export const removeLiquidityTokenToToken = async (
   const atomicTokenAOutput = toAtomic(tokenAOutputBN, tokenA);
   const atomicTokenBOutput = toAtomic(tokenBOutputBN, tokenB);
 
-  const withSlippageA = decreaseBySlippage(atomicTokenAOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withSlippageB = decreaseBySlippage(atomicTokenBOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageA = decreaseByPercentage(atomicTokenAOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseByPercentage(atomicTokenBOutput, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 

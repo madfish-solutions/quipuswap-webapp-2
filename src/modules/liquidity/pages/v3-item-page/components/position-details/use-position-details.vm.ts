@@ -1,6 +1,5 @@
-import { LIQUIDITY_V3_POOL_TAGS } from '@config/config';
 import { SLASH } from '@config/constants';
-import { NETWORK_ID, TZKT_EXPLORER_URL } from '@config/environment';
+import { TZKT_EXPLORER_URL } from '@config/environment';
 import { getSymbolsString } from '@shared/helpers';
 
 import {
@@ -11,7 +10,7 @@ import {
   useLiquidityV3ItemTokensSymbols
 } from '../../../../hooks';
 import { findUserPosition } from '../../helpers';
-import { usePositionsWithStats } from '../../hooks';
+import { usePositionsWithStats, useV3PoolCategories } from '../../hooks';
 
 export const usePositionDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
@@ -33,7 +32,7 @@ export const usePositionDetailsViewModel = () => {
 
   const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
 
-  const categories = LIQUIDITY_V3_POOL_TAGS[NETWORK_ID][Number(store.poolId)];
+  const categories = useV3PoolCategories();
 
   return {
     id: positionId,

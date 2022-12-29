@@ -7,7 +7,7 @@ import { getStableswapLiquidityLogData } from '@modules/stableswap/helpers/get-s
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
 import {
-  decreaseBySlippage,
+  decreaseByPercentage,
   toReal,
   isExist,
   isNull,
@@ -73,7 +73,7 @@ export const useAddStableswapLiquidity = () => {
         BigNumber.ROUND_DOWN
       );
 
-      const sharesWithSlippage = decreaseBySlippage(sharesWithFee, liquiditySlippage).integerValue(
+      const sharesWithSlippage = decreaseByPercentage(sharesWithFee, liquiditySlippage).integerValue(
         BigNumber.ROUND_DOWN
       );
 

@@ -12,6 +12,7 @@ export interface TokenInputViewModelProps {
   hiddenPercentSelector?: boolean;
   hiddenBalance?: boolean;
   onInputChange: (value: string) => void;
+  onBlur?: () => void;
 }
 
 export interface TokenInputProps extends TokenInputViewModelProps {
@@ -28,4 +29,5 @@ export interface TokenInputProps extends TokenInputViewModelProps {
   dollarEquivalent?: Optional<BigNumber.Value>;
   tokenInputDTI?: string;
   onSelectorClick?: () => void;
+  hiddenUnderline?: boolean;
 }
