@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { observer } from 'mobx-react-lite';
 
 import { FormHeader } from '@modules/liquidity/components';

@@ -69,5 +69,4 @@ export * from './sort';
 export * from './token-matches-search';
 export * from './fp';
 export * from './tokens-value';
-export * from './get-user-balances';
 export * from './math';
