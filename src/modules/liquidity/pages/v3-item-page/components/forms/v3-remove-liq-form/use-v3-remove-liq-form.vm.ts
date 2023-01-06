@@ -1,6 +1,6 @@
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FIRST_INDEX, ZERO_AMOUNT } from '@config/constants';
+import { FIRST_INDEX, PERCENTAGE_100, ZERO_AMOUNT } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -76,6 +76,7 @@ export const useV3RemoveLiqFormViewModel = () => {
     const formikId = isEqual(FIRST_INDEX, index) ? V3RemoveTokenInput.tokenXInput : V3RemoveTokenInput.tokenYInput;
 
     return {
+      id: `v3-output-${index}`,
       value: formik.values[formikId],
       error: formik.errors[formikId],
       label: t('common|Output'),
@@ -88,8 +89,10 @@ export const useV3RemoveLiqFormViewModel = () => {
   });
 
   const lpData = {
+    id: 'v3-lp-input',
     value: formik.values[V3RemoveTokenInput.lpTokenInput],
     error: formik.errors[V3RemoveTokenInput.lpTokenInput],
+    balance: PERCENTAGE_100,
     label: t('common|Amount'),
     tokens: [tokenX, tokenY],
     hiddenBalance: true,
