@@ -1,12 +1,19 @@
-import BigNumber from 'bignumber.js';
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FIRST_INDEX, OPPOSITE_INDEX } from '@config/constants';
-import { useLiquidityV3ItemTokens } from '@modules/liquidity/hooks';
-import { numberAsString, getUserBalances, isEqual, isNull } from '@shared/helpers';
+import { OPPOSITE_INDEX } from '@config/constants';
+import {
+  useLiquidityV3CurrentPrice,
+  useLiquidityV3ItemTokens,
+  useLiquidityV3PositionStore
+} from '@modules/liquidity/hooks';
+import { numberAsString, isNull, isExist } from '@shared/helpers';
+import { useTokensBalancesOnly } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useCalculateInputAmountValue, usePositionTicks } from '../hooks';
+import { findUserPosition } from '../../../helpers';
+import { usePositionsWithStats } from '../../../hooks';
+import { getCurrentFormikKeyAdd, getCountOfTokens } from '../helpers';
+import { useCalculateValue, usePositionTicks } from '../hooks';
 import { useCurrentTick } from '../hooks/use-current-tick';
 import { V3AddFormValues, V3AddTokenInput } from '../interface';
 import { useV3AddLiqFormValidation } from './use-v3-add-liq-form.validation';
@@ -15,12 +22,20 @@ import { useV3AddLiqFormValidation } from './use-v3-add-liq-form.validation';
 export const useV3AddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const calculateInoutAmountValue = useCalculateInputAmountValue();
   const { lowerTick, upperTick } = usePositionTicks();
   const currentTick = useCurrentTick();
+  const currentPrice = useLiquidityV3CurrentPrice();
+  const { positionsWithStats } = usePositionsWithStats();
+  const { positionId } = useLiquidityV3PositionStore();
+  const { calculateValue } = useCalculateValue();
 
-  const tokens = [tokenX, tokenY];
-  const userBalances = getUserBalances(tokens);
+  const position = findUserPosition(positionsWithStats, positionId);
+
+  const minPrice = position?.stats.minRange;
+  const maxPrice = position?.stats.maxRange;
+
+  const tokens = getCountOfTokens(currentPrice, minPrice, maxPrice, [tokenX, tokenY]);
+  const userBalances = useTokensBalancesOnly(tokens.filter(isExist));
 
   const initialValues: Record<string, string> = {
     [V3AddTokenInput.firstTokenInput]: '',
@@ -43,24 +58,10 @@ export const useV3AddLiqFormViewModel = () => {
         return;
       }
 
-      const localInput = isEqual(FIRST_INDEX, index)
-        ? V3AddTokenInput.firstTokenInput
-        : V3AddTokenInput.secondTokenInput;
-      const notLocInput = isEqual(OPPOSITE_INDEX, index)
-        ? V3AddTokenInput.firstTokenInput
-        : V3AddTokenInput.secondTokenInput;
+      const localInput = getCurrentFormikKeyAdd(index);
+      const notLocInput = getCurrentFormikKeyAdd(index, OPPOSITE_INDEX);
 
-      const formikId = isEqual(FIRST_INDEX, index) ? V3AddTokenInput.firstTokenInput : V3AddTokenInput.secondTokenInput;
-
-      const calculatedValue = calculateInoutAmountValue(
-        formikId,
-        currentTick,
-        upperTick,
-        lowerTick,
-        new BigNumber(inputAmount)
-      );
-
-      console.log(calculatedValue);
+      const calculatedValue = calculateValue(localInput, inputAmount, tokens);
 
       formik.setValues({
         [localInput]: realValue,
@@ -76,11 +77,12 @@ export const useV3AddLiqFormViewModel = () => {
   });
 
   const data = tokens.map((token, index) => {
-    const formikId = isEqual(FIRST_INDEX, index) ? V3AddTokenInput.firstTokenInput : V3AddTokenInput.secondTokenInput;
+    const formikKey = getCurrentFormikKeyAdd(index);
 
     return {
-      value: formik.values[formikId],
-      error: formik.errors[formikId],
+      id: `v3-add-liq-form-${index}`,
+      value: formik.values[formikKey],
+      error: formik.errors[formikKey],
       balance: userBalances[index],
       label: t('common|Input'),
       tokens: token,
