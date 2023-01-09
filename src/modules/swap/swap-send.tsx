@@ -55,7 +55,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     inputToken,
     inputTokenBalance,
     isSubmitting,
-    noRouteFound,
     outputAmount,
     outputExchangeRate,
     outputToken,
@@ -66,7 +65,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     updateRates,
     sellRate,
     shouldHideRouteRow,
+    shouldShowNoRouteFoundError,
     shouldShowPriceImpactWarning,
+    shouldSuggestSmallerAmount,
     submitDisabled,
     swapFee,
     swapFeeError,
@@ -145,7 +146,11 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           )}
 
-          {noRouteFound && (
+          {shouldSuggestSmallerAmount && (
+            <ComplexError error={t('swap|inputAmountIsTooBig')} data-test-id="inputAmountIsTooBig" />
+          )}
+
+          {shouldShowNoRouteFoundError && (
             <ComplexError
               error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })}
               data-test-id="noRouteFound"
