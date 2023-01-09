@@ -3,12 +3,11 @@ import BigNumber from 'bignumber.js';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { calculateV3PoolPriceDecimals } from '@modules/liquidity/helpers';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-import { getSumOfNumbers, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
+import { convertToAtomicPrice, getSumOfNumbers, isExist, multipliedIfPossible, toReal } from '@shared/helpers';
 import { Optional, Token } from '@shared/types';
 
 import { calculateDeposit } from './calculate-deposit';
 import { calculateFees } from './calculate-fees';
-import { convertToAtomicPrice } from './convert-to-atomic-price';
 
 export const mapPositionWithStats = (
   tokenX: Token,
