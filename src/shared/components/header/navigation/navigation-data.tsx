@@ -83,7 +83,7 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
   {
     id: 'Stableswap_Dividends',
     to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
-    label: i18n.t('common|Stableswap Dividends'),
+    label: i18n.t('common|Dividends'),
     Icon: StableswapIcon
   },
   {

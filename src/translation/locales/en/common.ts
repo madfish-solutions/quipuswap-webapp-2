@@ -16,7 +16,6 @@ export const common = {
   Stableswap: 'Stableswap',
   Dividends: 'Dividends',
   'Stableswap Liquidity': 'Stableswap Liquidity',
-  'Stableswap Dividends': 'Stableswap Dividends',
   Feedback: 'Feedback',
   Analytics: 'Analytics',
   Allbridge: 'Allbridge',
