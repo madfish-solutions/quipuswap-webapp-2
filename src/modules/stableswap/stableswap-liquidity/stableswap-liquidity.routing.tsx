@@ -15,7 +15,6 @@ import { StableswapLiquidityFormTabs } from '../types';
 import {
   StableswapLiquidityAddItemPage,
   StableswapLiquidityCreatePage,
-  StableswapLiquidityListPage,
   StableswapLiquidityRemoveItemPage
 } from './pages';
 import { useStableswapLiquidityRouterViewModel } from './stableswap-liquidity.routing.vm';
@@ -58,8 +57,6 @@ export const StableswapLiquidityRouter: FC = observer(() => {
           path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
           element={<StableswapLiquidityRemoveItemPage />}
         />
-
-        <Route index element={<StableswapLiquidityListPage />} />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>
