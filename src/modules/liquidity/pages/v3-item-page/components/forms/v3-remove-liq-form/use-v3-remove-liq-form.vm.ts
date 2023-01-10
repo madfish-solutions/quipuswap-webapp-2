@@ -29,10 +29,14 @@ export const useV3RemoveLiqFormViewModel = () => {
   const handleSubmit = (values: FormikValues, actions: FormikHelpers<V3RemoveFormValues>) => {
     const isAddLiqPossible = isOneOfTheOutputNotZero(values);
 
-    if (isAddLiqPossible) {
-      actions.setSubmitting(true);
-      actions.setSubmitting(false);
+    if (!isAddLiqPossible) {
+      return;
     }
+    // eslint-disable-next-line no-console
+    console.log(values);
+
+    actions.setSubmitting(true);
+    actions.setSubmitting(false);
   };
 
   const handleInputChange = () => {
@@ -99,9 +103,13 @@ export const useV3RemoveLiqFormViewModel = () => {
     onInputChange: handleInputChange()
   };
 
+  const disabled = formik.isSubmitting;
+
   return {
     lpData,
     data: outputData,
+    disabled,
+    isSubmitting: formik.isSubmitting,
     onSubmit: formik.handleSubmit
   };
 };

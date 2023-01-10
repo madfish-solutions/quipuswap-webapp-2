@@ -1,10 +1,12 @@
-import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
 import { ZERO_AMOUNT } from '@config/constants';
+import { isEqual } from '@shared/helpers';
+
+const MAX_ZERO_INPUTS_AMOUNT = 1;
 
 export const isOneOfTheOutputNotZero = (values: FormikValues) => {
-  const preparedOutputValues = Object.values(values).slice(1);
+  const amountOfZeroInputs = Object.values(values).filter(value => isEqual(Number(value), ZERO_AMOUNT)).length;
 
-  return preparedOutputValues.some(value => new BigNumber(value).isGreaterThan(ZERO_AMOUNT));
+  return amountOfZeroInputs <= MAX_ZERO_INPUTS_AMOUNT;
 };

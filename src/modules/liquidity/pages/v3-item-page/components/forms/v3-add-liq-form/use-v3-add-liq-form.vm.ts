@@ -18,7 +18,6 @@ import { useCurrentTick } from '../hooks/use-current-tick';
 import { V3AddFormValues, V3AddTokenInput } from '../interface';
 import { useV3AddLiqFormValidation } from './use-v3-add-liq-form.validation';
 
-/* eslint-disable no-console */
 export const useV3AddLiqFormViewModel = () => {
   const { t } = useTranslation();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
@@ -44,7 +43,6 @@ export const useV3AddLiqFormViewModel = () => {
 
   const handleSubmit = (values: FormikValues, actions: FormikHelpers<V3AddFormValues>) => {
     actions.setSubmitting(true);
-    console.log(values, actions);
     actions.setSubmitting(false);
   };
 
@@ -90,8 +88,12 @@ export const useV3AddLiqFormViewModel = () => {
     };
   });
 
+  const disabled = formik.isSubmitting;
+
   return {
     data,
+    isSubmitting: formik.isSubmitting,
+    disabled,
     onSubmit: formik.handleSubmit
   };
 };

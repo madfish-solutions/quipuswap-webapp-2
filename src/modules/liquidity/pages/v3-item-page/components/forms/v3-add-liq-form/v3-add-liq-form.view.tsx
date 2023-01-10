@@ -10,29 +10,29 @@ import styles from './v3-add-liq-form.module.scss';
 interface Props {
   data: TokenInputProps[];
   onSubmit: () => void;
+  disabled: boolean;
+  isSubmitting: boolean;
 }
 
-export const V3AddLiqFormView: FC<Props> = ({ data, onSubmit }) => {
+export const V3AddLiqFormView: FC<Props> = ({ data, onSubmit, disabled, isSubmitting }) => {
   const { t } = useTranslation();
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
-        <div className={stylesCommonContainer.buttons}>
-          <ConnectWalletOrDoSomething>
-            <Button
-              type="submit"
-              className={stylesCommonContainer.button}
-              disabled={false}
-              loading={false}
-              data-test-id="V3AddLiqButton"
-            >
-              {t('common|Add')}
-            </Button>
-          </ConnectWalletOrDoSomething>
-        </div>
-      </form>
-    </>
+    <form onSubmit={onSubmit}>
+      <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
+      <div className={stylesCommonContainer.buttons}>
+        <ConnectWalletOrDoSomething>
+          <Button
+            type="submit"
+            className={stylesCommonContainer.button}
+            disabled={disabled}
+            loading={isSubmitting}
+            data-test-id="V3AddLiqButton"
+          >
+            {t('common|Add')}
+          </Button>
+        </ConnectWalletOrDoSomething>
+      </div>
+    </form>
   );
 };
