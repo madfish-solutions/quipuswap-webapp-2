@@ -20,10 +20,8 @@ import {
   LiquidityV3PositionsStore as ILiquidityV3PositionsStore
 } from '@modules/liquidity';
 import {
-  StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
   StableswapItemFormStore as IStableswapItemFormStore,
-  StableswapListStore as IStableswapListStore,
   StableDividendsListStore as IStableDividendsListStore,
   StableDividendsFilterStore as IStableDividendsFilterStore,
   StableDividendsItemStore as IStableDividendsItemStore
@@ -56,10 +54,8 @@ export class RootStore {
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
   harvestAndRollStore: Nullable<IHarvestAndRollStore> = null;
 
-  stableswapListStore: Nullable<IStableswapListStore> = null;
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
   stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
-  stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   stableDividendsListStore: Nullable<IStableDividendsListStore> = null;
   stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
@@ -93,11 +89,9 @@ export class RootStore {
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
-      stableswapListStore: observable,
       farmingListStore: observable,
       stableswapItemStore: observable,
       stableswapItemFormStore: observable,
-      stableswapFilterStore: observable,
 
       stableDividendsListStore: observable,
       stableDividendsFilterStore: observable,
@@ -116,10 +110,8 @@ export class RootStore {
       createFarmingItemStore: action,
       createCoinflipStore: action,
 
-      createStableswapListStore: action,
       createStableswapItemStore: action,
       createStableswapItemFormStore: action,
-      createStableswapFilterStore: action,
 
       createStableDividendsListStore: action,
       createStableDividendsFilterStore: action,
@@ -194,13 +186,6 @@ export class RootStore {
     }
   }
 
-  async createStableswapListStore() {
-    if (isNull(this.stableswapListStore)) {
-      const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');
-      this.stableswapListStore = new StableswapListStore(this);
-    }
-  }
-
   async createStableswapItemStore() {
     if (isNull(this.stableswapItemStore)) {
       const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
@@ -212,13 +197,6 @@ export class RootStore {
     if (isNull(this.stableswapItemFormStore)) {
       const { StableswapItemFormStore } = await import('@modules/stableswap/store/stableswap-item-form.store');
       this.stableswapItemFormStore = new StableswapItemFormStore(this);
-    }
-  }
-
-  async createStableswapFilterStore() {
-    if (isNull(this.stableswapFilterStore)) {
-      const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
-      this.stableswapFilterStore = new StableswapFilterStore();
     }
   }
 
