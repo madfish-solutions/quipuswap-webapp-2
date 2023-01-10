@@ -32,8 +32,6 @@ export const useV3RemoveLiqFormViewModel = () => {
     if (!isAddLiqPossible) {
       return;
     }
-    // eslint-disable-next-line no-console
-    console.log(values);
 
     actions.setSubmitting(true);
     actions.setSubmitting(false);
