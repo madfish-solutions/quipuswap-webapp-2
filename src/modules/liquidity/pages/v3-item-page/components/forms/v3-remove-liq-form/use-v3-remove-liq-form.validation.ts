@@ -10,12 +10,12 @@ export const useV3RemoveLiqFormValidation = () => {
   const { t } = useTranslation();
 
   const schema = yup.string().test(
-    'should be less then or equal to 100',
+    'less-or-equal-to-100',
     () => t('liquidity|valueShouldBeLessThen100'),
     value => (isExist(value) ? Number(value) <= PERCENT_100 : true)
   );
 
   return yup.object().shape({
-    [V3RemoveTokenInput.lpTokenInput]: schema.required('Amount is required!')
+    [V3RemoveTokenInput.lpTokenInput]: schema.required(t('common|amountRequired'))
   });
 };
