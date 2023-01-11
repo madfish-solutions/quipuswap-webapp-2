@@ -12,6 +12,7 @@ import { useTranslation } from '@translation';
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import { calculateOutput, isOneOfTheOutputNotZero, preventRedundantRecalculation } from '../helpers';
+import { useV3RemoveLiquidity } from '../hooks';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 
@@ -20,13 +21,14 @@ export const useV3RemoveLiqFormViewModel = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
+  const { removeLiquidity } = useV3RemoveLiquidity();
   const poolStore = useLiquidityV3PoolStore();
   const item = poolStore.item;
 
   const tokens = [tokenX, tokenY];
   const userPosition = findUserPosition(positionsWithStats, positionId);
 
-  const handleSubmit = (values: FormikValues, actions: FormikHelpers<V3RemoveFormValues>) => {
+  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<V3RemoveFormValues>) => {
     const isAddLiqPossible = isOneOfTheOutputNotZero(values);
 
     if (!isAddLiqPossible) {
@@ -34,6 +36,7 @@ export const useV3RemoveLiqFormViewModel = () => {
     }
 
     actions.setSubmitting(true);
+    await removeLiquidity(values);
     actions.setSubmitting(false);
   };
 
