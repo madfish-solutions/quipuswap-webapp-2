@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { toReal } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
@@ -25,7 +26,7 @@ export const useFarmingRewardsListViewModel = () => {
   const handleHarvestAll = async () => {
     amplitudeService.logEvent('HARVEST_ALL_CLICK');
 
-    if (rewardsInQuipu?.isPositive()) {
+    if (rewardsInQuipu?.gt(ZERO_AMOUNT_BN)) {
       await harvestAndRollStore.open();
     } else {
       await harvestAll();
