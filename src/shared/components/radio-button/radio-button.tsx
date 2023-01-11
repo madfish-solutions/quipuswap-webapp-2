@@ -14,7 +14,7 @@ const modeClass = {
 
 export interface RadioButtonProps {
   values: Array<RadioItemProps>;
-  onChange: (value: string) => void;
+  onChange: ((value: string) => void) | ((value: number) => void);
   value: string | number;
   className?: string;
 }

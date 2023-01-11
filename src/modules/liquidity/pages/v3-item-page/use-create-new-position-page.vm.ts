@@ -29,7 +29,6 @@ import { useTranslation } from '@translation';
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
 import { calculateTick, getCreatePositionAmountInputSlugByIndex, shouldAddTokenX, shouldAddTokenY } from './helpers';
-import { X80_FORMAT_PRECISION_POWER } from './helpers/constants';
 import {
   useCreatePositionFormik,
   useCurrentTick,
@@ -47,7 +46,7 @@ import {
   isAmountInput
 } from './types/create-position-form';
 
-const PRICE_RANGE_DECIMALS = X80_FORMAT_PRECISION_POWER * 2;
+const MIN_PRICE_RANGE_DECIMALS = 6;
 const LOWER_PRICE_DELTA_PERCENTAGE = 50;
 const UPPER_PRICE_DELTA_PERCENTAGE = 50;
 
@@ -64,6 +63,7 @@ export const useCreateNewPositionPageViewModel = () => {
   const currentTick = useCurrentTick();
   const tickSpacing = useTickSpacing();
   const priceDecimals = useV3PoolPriceDecimals();
+  const priceRangeDecimals = Math.max(getTokenDecimals(tokenY), MIN_PRICE_RANGE_DECIMALS);
 
   const initialMinPrice = useMemo(() => {
     if (isNull(currentPrice)) {
@@ -73,8 +73,8 @@ export const useCreateNewPositionPageViewModel = () => {
     const basicPrice = decreaseByPercentage(currentPrice, new BigNumber(LOWER_PRICE_DELTA_PERCENTAGE));
     const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
 
-    return toReal(tick.price, priceDecimals).toFixed();
-  }, [currentPrice, priceDecimals, tickSpacing]);
+    return toReal(tick.price, priceDecimals).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_CEIL).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing, priceRangeDecimals]);
   const initialMaxPrice = useMemo(() => {
     if (isNull(currentPrice)) {
       return EMPTY_STRING;
@@ -83,8 +83,8 @@ export const useCreateNewPositionPageViewModel = () => {
     const basicPrice = increaseByPercentage(currentPrice, new BigNumber(UPPER_PRICE_DELTA_PERCENTAGE));
     const tick = calculateTick(toAtomic(basicPrice, priceDecimals), tickSpacing);
 
-    return toReal(tick.price, priceDecimals).toFixed();
-  }, [currentPrice, priceDecimals, tickSpacing]);
+    return toReal(tick.price, priceDecimals).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_CEIL).toFixed();
+  }, [currentPrice, priceDecimals, tickSpacing, priceRangeDecimals]);
 
   useEffect(() => {
     if (dAppReady) {
@@ -106,14 +106,17 @@ export const useCreateNewPositionPageViewModel = () => {
         return;
       }
 
-      const realValue = new BigNumber(numberAsString(inputValue, PRICE_RANGE_DECIMALS).realValue);
+      const realValue = new BigNumber(numberAsString(inputValue, priceRangeDecimals).realValue);
       const tick = realValue.isNaN() ? null : calculateTick(toAtomic(realValue, priceDecimals), tickSpacing);
 
       if (!formik.values[CreatePositionInput.FULL_RANGE_POSITION] && isExist(tick)) {
-        onPriceRangeInputChange(inputSlug, toReal(tick.price, priceDecimals).toFixed());
+        onPriceRangeInputChange(
+          inputSlug,
+          toReal(tick.price, priceDecimals).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_CEIL).toFixed()
+        );
       }
     },
-    [formik.values, onPriceRangeInputChange, priceDecimals, tickSpacing]
+    [formik.values, onPriceRangeInputChange, priceDecimals, tickSpacing, priceRangeDecimals]
   );
 
   const handleInputChange = useCallback(
@@ -187,10 +190,10 @@ export const useCreateNewPositionPageViewModel = () => {
     return rangeInputsSlugs.map((inputSlug, index) => ({
       value: formik.values[inputSlug],
       label: rangeInputsLabels[index],
-      decimals: PRICE_RANGE_DECIMALS,
+      decimals: priceRangeDecimals,
       tokens: tokensList && [...tokensList].reverse(),
       readOnly: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
-      onInputChange: handleInputChange(inputSlug, PRICE_RANGE_DECIMALS),
+      onInputChange: handleInputChange(inputSlug, priceRangeDecimals),
       hiddenBalance: true,
       hiddenPercentSelector: true,
       hiddenNotWhitelistedMessage: true,
@@ -199,7 +202,7 @@ export const useCreateNewPositionPageViewModel = () => {
       hiddenUnderline: true,
       onBlur: handleRangeInputBlur(inputSlug)
     }));
-  }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList]);
+  }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList, priceRangeDecimals]);
 
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
   const bottomError =
