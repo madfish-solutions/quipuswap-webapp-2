@@ -9,3 +9,5 @@ export * from './position-form-card';
 export * from './position-fees-list';
 export * from './positions-fees-list';
 export * from './position-status';
+export * from './create-pool-form';
+export * from './positions-list-item-card';

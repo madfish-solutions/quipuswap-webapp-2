@@ -22,11 +22,12 @@ export const OpenNewPosition: FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { pathname } = useLocation();
   const sanitizedPathname = `/${getRouterParts(pathname).join(SLASH)}`;
+  const url = `${sanitizedPathname}${LiquidityRoutes.create}`;
 
   return (
     <Card contentClassName={styles.content} className={cx(modeClass[colorThemeMode], styles.root)}>
       <p className={styles.text}>{t('liquidity|induceToOpenNewPosition')}</p>
-      <Button className={styles.button} href={`${sanitizedPathname}${LiquidityRoutes.create}`}>
+      <Button className={styles.button} href={url}>
         {t('liquidity|createPosition')}
       </Button>
     </Card>
