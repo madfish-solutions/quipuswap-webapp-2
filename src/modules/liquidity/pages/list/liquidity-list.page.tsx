@@ -17,7 +17,7 @@ export const LiquidityListPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>{t('liquidity|Liquidity')}</PageTitle>
+      <PageTitle data-test-id="LiquidityListTitle">{t('liquidity|Liquidity')}</PageTitle>
       <LiquidityStats />
       <HotPools pools={preparedHotPools} />
       <CreateOwnPool />
