@@ -81,23 +81,10 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     Icon: GameIcon
   },
   {
-    id: 'Stableswap',
-    to: AppRootRoutes.Stableswap,
-    label: i18n.t('common|Stableswap'),
-    Icon: StableswapIcon,
-    opened: true,
-    links: [
-      {
-        id: 'Stableswap_Dividends',
-        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
-        label: i18n.t('common|Dividends')
-      },
-      {
-        id: 'Stableswap_Liquidity',
-        to: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}`,
-        label: i18n.t('common|Liquidity')
-      }
-    ]
+    id: 'Stableswap_Dividends',
+    to: `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
+    label: i18n.t('common|Dividends'),
+    Icon: StableswapIcon
   },
   {
     id: 'Analytics',
