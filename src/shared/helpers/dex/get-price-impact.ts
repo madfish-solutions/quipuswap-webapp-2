@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { calculateXToY, calculateYToX } from 'quipuswap-v3-sdk/dist/helpers/swap';
-import { Nat } from 'quipuswap-v3-sdk/dist/types';
+import { Int, Nat, quipuswapV3Types } from 'quipuswap-v3-sdk/dist/types';
 import { DexTypeEnum, getTradeInputAmount, getTradeOutputAmount, RouteDirectionEnum, Trade } from 'swap-router-sdk';
 
 import { ZERO_AMOUNT } from '@config/constants';
@@ -33,18 +33,37 @@ const getDexPairsAfterSwap = (trade: Trade) =>
       const calculationFunction = direction === RouteDirectionEnum.Direct ? calculateXToY : calculateYToX;
       try {
         const swapRequiredStorage = {
-          liquidity: defined(liquidity),
-          sqrtPrice: defined(sqrtPrice),
-          curTickIndex: defined(curTickIndex),
-          curTickWitness: defined(curTickWitness),
-          lastCumulative: defined(lastCumulative),
-          ticks: defined(ticks),
+          liquidity: new Nat(defined(liquidity)),
+          sqrtPrice: new quipuswapV3Types.x80n(defined(sqrtPrice)),
+          curTickIndex: new Int(defined(curTickIndex)),
+          curTickWitness: new Int(defined(curTickWitness)),
+          lastCumulative: {
+            tick: {
+              sum: new Int(defined(lastCumulative).tick.sum),
+              blockStartValue: new Nat(defined(lastCumulative).tick.blockStartValue)
+            }
+          },
+          ticks: Object.fromEntries(
+            Object.entries(defined(ticks)).map(([key, value]) => [
+              key,
+              {
+                sqrtPrice: new quipuswapV3Types.x80n(value.sqrtPrice),
+                liquidityNet: new Int(value.liquidityNet),
+                prev: new Int(value.prev),
+                next: new Int(value.next),
+                tickCumulativeOutside: new Int(value.tickCumulativeOutside)
+              }
+            ])
+          ),
           constants: {
             feeBps: new Nat(defined(fees?.liquidityProvidersFee))
           }
         };
 
-        const { newStoragePart } = calculationFunction(swapRequiredStorage, new Nat(aTokenAmount));
+        const { newStoragePart } = calculationFunction(
+          swapRequiredStorage,
+          new Nat(aTokenAmount.integerValue(BigNumber.ROUND_DOWN))
+        );
         const { constants, lastCumulative: newLastCumulative, ...restNewStorage } = newStoragePart;
 
         return {
@@ -86,7 +105,7 @@ const getMarketQuotient = (trade: Trade) =>
           .times(aTokenMultiplier ?? FALLBACK_TOKEN_MULTIPLIER)
           .div(bTokenMultiplier ?? FALLBACK_TOKEN_MULTIPLIER);
       case DexTypeEnum.QuipuSwapV3:
-        return marketQuotient.times(convertToAtomicPrice(defined(tradeOperation.sqrtPrice?.toBignumber())));
+        return marketQuotient.times(convertToAtomicPrice(defined(tradeOperation.sqrtPrice)));
       default:
         return marketQuotient.times(bTokenPool).div(aTokenPool);
     }
