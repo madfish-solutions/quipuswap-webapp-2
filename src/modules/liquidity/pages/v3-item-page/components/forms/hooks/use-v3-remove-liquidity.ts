@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
-import { PERCENTAGE_100 } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -9,7 +8,7 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull } from '@shared/helpers';
+import { getTransactionDeadline, isNull, getPercentageFromNumber } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -46,11 +45,7 @@ export const useV3RemoveLiquidity = () => {
     }
 
     const percantage = new BigNumber(inputAmounts[V3RemoveTokenInput.percantageInput]);
-    const liquidity = position.liquidity
-      .dividedBy(PERCENTAGE_100)
-      .multipliedBy(percantage)
-      .integerValue(BigNumber.ROUND_DOWN);
-
+    const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
     const tokensValues = getTokensValues(inputAmounts, tokenX, tokenY);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
@@ -63,8 +58,8 @@ export const useV3RemoveLiquidity = () => {
         item.contractAddress,
         position.id,
         liquidity,
-        tokenX.contractAddress,
-        tokenY.contractAddress,
+        accountPkh,
+        accountPkh,
         deadline,
         tokensValues
       );

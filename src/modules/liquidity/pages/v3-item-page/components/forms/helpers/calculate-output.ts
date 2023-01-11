@@ -1,9 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { PERCENT_100 } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-import { toReal, toFixed } from '@shared/helpers';
+import { toReal, toFixed, getPercentageFromNumber } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { calculateDeposit } from '../../../helpers';
@@ -27,12 +26,8 @@ export const calculateOutput = (
     BigNumber.ROUND_DOWN
   );
 
-  const calculatedTokenXDeposit = toFixed(
-    realTokenXAtomicDeposit.dividedBy(PERCENT_100).multipliedBy(new BigNumber(inputAmount))
-  );
-  const calculatedTokenYDeposit = toFixed(
-    realTokenYAtomicDeposit.dividedBy(PERCENT_100).multipliedBy(new BigNumber(inputAmount))
-  );
+  const calculatedTokenXDeposit = toFixed(getPercentageFromNumber(realTokenXAtomicDeposit, new BigNumber(inputAmount)));
+  const calculatedTokenYDeposit = toFixed(getPercentageFromNumber(realTokenYAtomicDeposit, new BigNumber(inputAmount)));
 
   return { tokenXDeposit: calculatedTokenXDeposit, tokenYDeposit: calculatedTokenYDeposit };
 };
