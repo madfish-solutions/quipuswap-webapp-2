@@ -58,9 +58,9 @@ export const useV3RemoveLiqFormViewModel = () => {
       );
 
       formik.setValues({
-        [V3RemoveTokenInput.lpTokenInput]: realValue,
-        [V3RemoveTokenInput.tokenXInput]: tokenXDeposit,
-        [V3RemoveTokenInput.tokenYInput]: tokenYDeposit
+        [V3RemoveTokenInput.percantageInput]: realValue,
+        [V3RemoveTokenInput.tokenXOutput]: tokenXDeposit,
+        [V3RemoveTokenInput.tokenYOutput]: tokenYDeposit
       });
     };
   };
@@ -70,15 +70,15 @@ export const useV3RemoveLiqFormViewModel = () => {
   const formik = useFormik({
     validationSchema,
     initialValues: {
-      [V3RemoveTokenInput.lpTokenInput]: '',
-      [V3RemoveTokenInput.tokenXInput]: '',
-      [V3RemoveTokenInput.tokenYInput]: ''
+      [V3RemoveTokenInput.percantageInput]: '',
+      [V3RemoveTokenInput.tokenXOutput]: '',
+      [V3RemoveTokenInput.tokenYOutput]: ''
     },
     onSubmit: handleSubmit
   });
 
   const outputData = tokens.map((token, index) => {
-    const formikId = isEqual(FIRST_INDEX, index) ? V3RemoveTokenInput.tokenXInput : V3RemoveTokenInput.tokenYInput;
+    const formikId = isEqual(FIRST_INDEX, index) ? V3RemoveTokenInput.tokenXOutput : V3RemoveTokenInput.tokenYOutput;
 
     return {
       id: `v3-output-${index}`,
@@ -95,8 +95,8 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const lpData = {
     id: 'v3-lp-input',
-    value: formik.values[V3RemoveTokenInput.lpTokenInput],
-    error: formik.errors[V3RemoveTokenInput.lpTokenInput],
+    value: formik.values[V3RemoveTokenInput.percantageInput],
+    error: formik.errors[V3RemoveTokenInput.percantageInput],
     balance: PERCENTAGE_100,
     label: t('common|Amount'),
     tokens: [tokenX, tokenY],

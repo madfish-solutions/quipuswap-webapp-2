@@ -16,6 +16,6 @@ export const useV3RemoveLiqFormValidation = () => {
   );
 
   return yup.object().shape({
-    [V3RemoveTokenInput.lpTokenInput]: schema.required(t('common|amountRequired'))
+    [V3RemoveTokenInput.percantageInput]: schema.required(t('common|amountRequired'))
   });
 };
