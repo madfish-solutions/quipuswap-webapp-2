@@ -1,9 +1,16 @@
 import { useEffect } from 'react';
 
+import { QUIPU_TOKEN } from '@config/tokens';
+import { toReal } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { useFarmingListRewardsStore, useFarmingListStore, useHarvestAndRollStore } from '../../../../hooks';
+import {
+  useFarmingListRewardsStore,
+  useFarmingListStore,
+  useHarvestAll,
+  useHarvestAndRollStore
+} from '../../../../hooks';
 import { calculateTotalDeposit } from '../../helpers';
 
 export const useFarmingRewardsListViewModel = () => {
@@ -12,12 +19,25 @@ export const useFarmingRewardsListViewModel = () => {
 
   const farmingListRewardsStore = useFarmingListRewardsStore();
   const harvestAndRollStore = useHarvestAndRollStore();
+  const { rewardsInQuipu } = harvestAndRollStore;
+  const { harvestAll } = useHarvestAll();
 
   const handleHarvestAll = async () => {
     amplitudeService.logEvent('HARVEST_ALL_CLICK');
 
-    await harvestAndRollStore.open();
+    if (!rewardsInQuipu?.isZero()) {
+      await harvestAndRollStore.open();
+    } else {
+      await harvestAll();
+    }
   };
+
+  useEffect(() => {
+    (async () => {
+      const _rewardsInQuipu = toReal(await farmingListRewardsStore.getQuipuPendingRewards(), QUIPU_TOKEN);
+      harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
+    })();
+  }, [farmingListRewardsStore, harvestAndRollStore]);
 
   useEffect(() => {
     farmingListRewardsStore.updatePendingRewards();
