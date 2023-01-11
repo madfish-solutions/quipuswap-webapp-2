@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN } from '@config/tokens';
-import { toReal } from '@shared/helpers';
+import { isExist, toReal } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
@@ -33,12 +33,14 @@ export const useFarmingRewardsListViewModel = () => {
     }
   };
 
+  const isBalanceLoaded = listBalances.some(({ earnBalance }) => isExist(earnBalance));
+
   useEffect(() => {
     (async () => {
       const _rewardsInQuipu = toReal(await farmingListRewardsStore.getQuipuPendingRewards(), QUIPU_TOKEN);
       harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
     })();
-  }, [farmingListRewardsStore, harvestAndRollStore]);
+  }, [farmingListRewardsStore, harvestAndRollStore, isBalanceLoaded]);
 
   useEffect(() => {
     farmingListRewardsStore.updatePendingRewards();
