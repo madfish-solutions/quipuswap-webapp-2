@@ -1,7 +1,6 @@
 import { PageTitle, StickyBlock, TestnetAlert } from '@shared/components';
 import { i18n } from '@translation';
 
-import { StableswapRoutes } from '../../../stableswap-routes.enum';
 import { CreateForm, DetailsRules } from './components';
 
 export const StableswapLiquidityCreatePage = () => {
@@ -11,7 +10,7 @@ export const StableswapLiquidityCreatePage = () => {
       <PageTitle>{i18n.t('stableswap|newPool')}</PageTitle>
 
       <StickyBlock>
-        <CreateForm subpath={StableswapRoutes.liquidity} />
+        <CreateForm />
         <DetailsRules />
       </StickyBlock>
     </>
