@@ -1,5 +1,7 @@
+import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
+import { PERCENTAGE_100 } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -17,6 +19,7 @@ import { V3RemoveLiquidityApi } from '../../../api';
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import { getTokensValues } from '../helpers';
+import { V3RemoveTokenInput } from '../interface';
 
 // TODO: logData
 
@@ -42,6 +45,12 @@ export const useV3RemoveLiquidity = () => {
       return;
     }
 
+    const percantage = new BigNumber(inputAmounts[V3RemoveTokenInput.percantageInput]);
+    const liquidity = position.liquidity
+      .dividedBy(PERCENTAGE_100)
+      .multipliedBy(percantage)
+      .integerValue(BigNumber.ROUND_DOWN);
+
     const tokensValues = getTokensValues(inputAmounts, tokenX, tokenY);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
@@ -53,7 +62,7 @@ export const useV3RemoveLiquidity = () => {
         tezos,
         item.contractAddress,
         position.id,
-        position.liquidity,
+        liquidity,
         tokenX.contractAddress,
         tokenY.contractAddress,
         deadline,
