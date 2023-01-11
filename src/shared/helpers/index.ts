@@ -70,3 +70,4 @@ export * from './token-matches-search';
 export * from './fp';
 export * from './tokens-value';
 export * from './math';
+export * from './get-precentage-from-number';

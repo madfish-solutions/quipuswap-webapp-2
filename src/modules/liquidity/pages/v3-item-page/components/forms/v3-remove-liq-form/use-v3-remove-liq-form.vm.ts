@@ -6,6 +6,7 @@ import {
   useLiquidityV3PoolStore,
   useLiquidityV3PositionStore
 } from '@modules/liquidity/hooks';
+import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
 import { isEqual, isNull, numberAsString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
@@ -22,6 +23,7 @@ export const useV3RemoveLiqFormViewModel = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { removeLiquidity } = useV3RemoveLiquidity();
+  const { delayedGetLiquidityV3Position } = useGetLiquidityV3Position();
   const poolStore = useLiquidityV3PoolStore();
   const item = poolStore.item;
 
@@ -36,8 +38,13 @@ export const useV3RemoveLiqFormViewModel = () => {
     }
 
     actions.setSubmitting(true);
+
     await removeLiquidity(values);
+
+    await delayedGetLiquidityV3Position();
+
     actions.setSubmitting(false);
+    actions.resetForm();
   };
 
   const handleInputChange = () => {
@@ -93,7 +100,7 @@ export const useV3RemoveLiqFormViewModel = () => {
     };
   });
 
-  const lpData = {
+  const percantageInputData = {
     id: 'v3-lp-input',
     value: formik.values[V3RemoveTokenInput.percantageInput],
     error: formik.errors[V3RemoveTokenInput.percantageInput],
@@ -107,7 +114,7 @@ export const useV3RemoveLiqFormViewModel = () => {
   const disabled = formik.isSubmitting;
 
   return {
-    lpData,
+    percantageInputData,
     data: outputData,
     disabled,
     isSubmitting: formik.isSubmitting,
