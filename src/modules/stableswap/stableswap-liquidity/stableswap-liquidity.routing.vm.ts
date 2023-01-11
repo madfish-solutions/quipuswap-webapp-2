@@ -12,16 +12,9 @@ export const useStableswapLiquidityRouterViewModel = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (
-          isNull(rootStore.stableswapListStore) ||
-          isNull(rootStore.stableswapItemStore) ||
-          isNull(rootStore.stableswapItemFormStore) ||
-          isNull(rootStore.stableswapFilterStore)
-        ) {
-          await rootStore.createStableswapListStore();
+        if (isNull(rootStore.stableswapItemStore) || isNull(rootStore.stableswapItemFormStore)) {
           await rootStore.createStableswapItemStore();
           await rootStore.createStableswapItemFormStore();
-          await rootStore.createStableswapFilterStore();
         }
         setIsInitialazied(true);
       } catch (_error) {
