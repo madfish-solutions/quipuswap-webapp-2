@@ -4,6 +4,7 @@ import { PERCENT_100 } from '@config/constants';
 import { isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { removePercentFromInputValue } from '../helpers';
 import { V3RemoveTokenInput } from '../interface';
 
 export const useV3RemoveLiqFormValidation = () => {
@@ -12,7 +13,7 @@ export const useV3RemoveLiqFormValidation = () => {
   const schema = yup.string().test(
     'less-or-equal-to-100',
     () => t('liquidity|valueShouldBeLessThen100'),
-    value => (isExist(value) ? Number(value) <= PERCENT_100 : true)
+    value => (isExist(value) ? Number(removePercentFromInputValue(value)) <= PERCENT_100 : true)
   );
 
   return yup.object().shape({

@@ -1,17 +1,23 @@
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FIRST_INDEX, PERCENTAGE_100 } from '@config/constants';
+import { FIRST_INDEX, PERCENT, PERCENTAGE_100 } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
   useLiquidityV3PositionStore
 } from '@modules/liquidity/hooks';
-import { isEqual, isNull, numberAsString } from '@shared/helpers';
+import { setCaretPosition } from '@modules/stableswap/stableswap-liquidity/pages/create/components/create-form/positions.helper';
+import { isEmptyString, isEqual, isNull, numberAsString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
-import { calculateOutput, isOneOfTheOutputNotZero, preventRedundantRecalculation } from '../helpers';
+import {
+  calculateOutput,
+  isOneOfTheOutputNotZero,
+  preventRedundantRecalculation,
+  removePercentFromInputValue
+} from '../helpers';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 
@@ -41,12 +47,14 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const handleInputChange = () => {
     return (inputAmount: string) => {
-      const { realValue } = numberAsString(inputAmount, PERCENTAGE_INPUT_DECIMALS);
+      const { realValue } = numberAsString(removePercentFromInputValue(inputAmount), PERCENTAGE_INPUT_DECIMALS);
       if (isNull(item) || isNull(userPosition) || isNull(tokenX) || isNull(tokenY)) {
         return;
       }
+      const _inputAmount = preventRedundantRecalculation(realValue);
 
-      const _inputAmount = preventRedundantRecalculation(inputAmount);
+      const input = document.getElementById('v3-lp-input');
+      setCaretPosition(input as HTMLInputElement);
 
       const { tokenXDeposit, tokenYDeposit } = calculateOutput(
         _inputAmount,
@@ -94,9 +102,12 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const lpData = {
     id: 'v3-lp-input',
-    value: formik.values[V3RemoveTokenInput.lpTokenInput],
+    value: isEmptyString(formik.values[V3RemoveTokenInput.lpTokenInput])
+      ? formik.values[V3RemoveTokenInput.lpTokenInput]
+      : `${formik.values[V3RemoveTokenInput.lpTokenInput]}${PERCENT}`,
     error: formik.errors[V3RemoveTokenInput.lpTokenInput],
     balance: PERCENTAGE_100,
+    decimals: PERCENTAGE_INPUT_DECIMALS,
     label: t('common|Amount'),
     tokens: [tokenX, tokenY],
     hiddenBalance: true,
