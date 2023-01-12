@@ -10,22 +10,21 @@ export const V3RemoveLiquidityApi = async (
   contractAddress: string,
   positionId: BigNumber,
   liquidityDelta: BigNumber,
-  tokenXAddress: string,
-  tokenYAddress: string,
+  receiverAddress: string,
   deadline: string,
   maximumTokensContributed: MaximumTokensContributed
 ) => {
   const v3Contract = await tezos.wallet.at(contractAddress);
 
-  const dexTwoLiquidityParams = v3Contract.methodsObject.update_position({
+  const V3LiquidityParams = v3Contract.methodsObject.update_position({
     position_id: positionId,
     liquidity_delta: ZERO_AMOUNT_BN.minus(liquidityDelta),
-    to_x: tokenXAddress,
-    to_y: tokenYAddress,
+    to_x: receiverAddress,
+    to_y: receiverAddress,
     deadline,
     maximum_tokens_contributed: maximumTokensContributed,
     referral_code: QUIPUSWAP_REFERRAL_CODE
   });
 
-  return await dexTwoLiquidityParams.send();
+  return await V3LiquidityParams.send();
 };
