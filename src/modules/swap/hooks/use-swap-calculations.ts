@@ -10,13 +10,14 @@ import {
   Trade
 } from 'swap-router-sdk';
 
-import { toReal, isEmptyArray, toAtomic } from '@shared/helpers';
+import { toReal, isEmptyArray, toAtomic, getUniqArray, isExist } from '@shared/helpers';
 import { useTokensLoader, useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { BooleanMap, DexPair, Nullable, Optional, Token } from '@shared/types';
+import { Nullable, Optional, Token } from '@shared/types';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
-import { mapTradeToDexPairs } from '../utils/map-trade-to-dex-pairs';
+import { DexPool } from '../types';
+import { mapDexPairs } from '../utils/map-dex-pairs';
 import {
   swapRouterSdkTokenSlugToQuipuTokenSlug,
   useRoutePairsCombinations,
@@ -34,22 +35,29 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
     return [];
   }
 
-  const tokens: BooleanMap = trade.reduce(
-    (
-      acc,
-      { aTokenSlug: swapRouterSdkATokenSlug, aTokenStandard, bTokenSlug: swapRouterSdkBTokenSlug, bTokenStandard }
-    ) => {
-      const aTokenSlug = swapRouterSdkTokenSlugToQuipuTokenSlug(swapRouterSdkATokenSlug, aTokenStandard);
-      const bTokenSlug = swapRouterSdkTokenSlugToQuipuTokenSlug(swapRouterSdkBTokenSlug, bTokenStandard);
-      acc[aTokenSlug] = true;
-      acc[bTokenSlug] = true;
+  return getUniqArray(
+    trade
+      .map(
+        ({
+          aTokenSlug,
+          aTokenStandard,
+          bTokenSlug,
+          bTokenStandard,
+          cTokenSlug,
+          cTokenStandard,
+          dTokenSlug,
+          dTokenStandard
+        }) => {
+          const standards = [aTokenStandard, bTokenStandard, cTokenStandard, dTokenStandard];
 
-      return acc;
-    },
-    {} as BooleanMap
+          return [aTokenSlug, bTokenSlug, cTokenSlug, dTokenSlug]
+            .filter(isExist)
+            .map((slug, index) => swapRouterSdkTokenSlugToQuipuTokenSlug(slug, standards[index]));
+        }
+      )
+      .flat(),
+    x => x
   );
-
-  return Object.keys(tokens);
 };
 
 export const useSwapCalculations = () => {
@@ -60,19 +68,20 @@ export const useSwapCalculations = () => {
     settings: { tradingSlippage }
   } = useSettingsStore();
 
-  const [dexRoute, setDexRoute] = useState<DexPair[]>();
+  const [dexRoute, setDexRoute] = useState<DexPool[]>();
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
+  const allTokensAreLoaded = tokensSlugs.every(slug => tokens.has(slug));
   useTokensLoader(tokensSlugs);
 
   useEffect(() => {
     try {
-      setDexRoute(mapTradeToDexPairs(bestTrade, tokens));
+      setDexRoute(mapDexPairs(bestTrade, tokens));
     } catch {
       setDexRoute(tokensLoading && !isEmptyArray(bestTrade) ? undefined : []);
     }
-  }, [tokensLoading, bestTrade, tokens, tokens.size]);
+  }, [tokensLoading, bestTrade, tokens, allTokensAreLoaded]);
 
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
   const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);

@@ -11,11 +11,12 @@ import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defi
 import { useTokensStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
-import { DexPair, Nullable, SwapTabAction, Undefined } from '@shared/types';
+import { Nullable, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
 import { getSumOfFees } from '../helpers/get-sum-of-fees';
+import { DexPool } from '../types';
 import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';
 
@@ -27,7 +28,7 @@ const initialErrors = {
 export const useSwapFormik = (
   initialAction = SwapTabAction.SWAP,
   bestTrade: Nullable<Trade>,
-  dexRoute: Undefined<DexPair[]>,
+  dexRoute: Undefined<DexPool[]>,
   trade: Nullable<Trade>,
   exchangeRates: Record<string, BigNumber>
 ) => {
@@ -77,7 +78,9 @@ export const useSwapFormik = (
         inputTokenUsd: Number(getDollarEquivalent(inputAmount, exchangeRates[inputTokenSlug])),
         outputTokenUsd: Number(getDollarEquivalent(outputAmount, exchangeRates[outputTokenSlug])),
         ttDexAddress: TOKEN_TO_TOKEN_DEX,
-        path: dexRoute?.map(dex => dex.id),
+        path: dexRoute?.map(dex =>
+          getTokenSlug({ contractAddress: dex.dexAddress, fa2TokenId: dex.dexId?.toNumber() })
+        ),
         pathLength: dexRoute?.length,
         sumOfFees: Number(sumOfFees),
         sumOfDevFees: Number(sumOfDevFees),

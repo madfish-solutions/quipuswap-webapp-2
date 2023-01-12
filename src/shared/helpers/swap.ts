@@ -4,13 +4,14 @@ import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'sw
 
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { DexPair, TokenId } from '@shared/types';
+import { DexPool } from '@modules/swap/types';
+import { TokenId } from '@shared/types';
 
 export interface SwapParams {
   deadlineTimespan?: number;
   inputToken: TokenId;
   inputAmount: BigNumber;
-  dexChain: DexPair[];
+  dexChain: DexPool[];
   trade: Trade;
   slippageTolerance?: BigNumber;
   ttDexAddress?: string;
