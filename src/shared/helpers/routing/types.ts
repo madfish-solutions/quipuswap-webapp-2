@@ -1,7 +1,7 @@
-import { DexPair } from '@shared/types';
+import { DexPool } from '@modules/swap/types';
 
 export interface Vertex {
-  edges: Record<string, DexPair>;
+  edges: Record<string, DexPool>;
 }
 
 export type DexGraph = Record<string, Vertex>;

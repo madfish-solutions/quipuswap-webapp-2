@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DexTypeEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { AppRootRoutes } from '@app.router';
@@ -22,7 +21,7 @@ import {
   makeToken
 } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
-import { useDexGraph, useOnBlock } from '@shared/hooks';
+import { useOnBlock } from '@shared/hooks';
 import { useAmplitudeService } from '@shared/hooks/use-amplitude-service';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
@@ -154,9 +153,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === formik.action)!;
 
-  // TODO: remove useDexGraph and related functions globally
-  const { dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
-  const { routePairs, updateRoutePairs } = useRoutePairs();
+  const { routePairs, updateRoutePairs, dataIsStale, loading: dexPoolsLoading } = useRoutePairs();
   const prevRoutePairsRef = useRef<RoutePair[]>(routePairs);
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
@@ -182,7 +179,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const refreshDexPoolsIfNecessary = () => {
     if (dataIsStale && !dexPoolsLoading) {
-      refreshDexPools();
       updateRoutePairs();
     }
   };
@@ -412,12 +408,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const shouldSuggestSmallerAmount = noRouteFound && atLeastOneRouteWithV3;
   const shouldShowNoRouteFoundError = noRouteFound && !atLeastOneRouteWithV3;
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
-  const shouldHideRouteRow = trade?.some(({ dexType }) => dexType === DexTypeEnum.QuipuSwapCurveLike) ?? false;
-
-  const updateRates = () => {
-    refreshDexPools();
-    updateRoutePairs();
-  };
 
   return {
     accountPkh,
@@ -449,9 +439,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient: formik.recipient,
-    updateRates,
+    updateRates: updateRoutePairs,
     sellRate,
-    shouldHideRouteRow,
     shouldShowNoRouteFoundError,
     shouldShowPriceImpactWarning,
     shouldSuggestSmallerAmount,
