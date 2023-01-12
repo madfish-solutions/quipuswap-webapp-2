@@ -1,6 +1,6 @@
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
-import { FIRST_INDEX, PERCENTAGE_100, ZERO_AMOUNT } from '@config/constants';
+import { FIRST_INDEX, PERCENTAGE_100 } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -14,6 +14,8 @@ import { usePositionsWithStats } from '../../../hooks';
 import { calculateOutput, isOneOfTheOutputNotZero, preventRedundantRecalculation } from '../helpers';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
+
+const PERCENTAGE_INPUT_DECIMALS = 2;
 
 export const useV3RemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
@@ -39,7 +41,7 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const handleInputChange = () => {
     return (inputAmount: string) => {
-      const { realValue } = numberAsString(inputAmount, ZERO_AMOUNT);
+      const { realValue } = numberAsString(inputAmount, PERCENTAGE_INPUT_DECIMALS);
       if (isNull(item) || isNull(userPosition) || isNull(tokenX) || isNull(tokenY)) {
         return;
       }
