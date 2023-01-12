@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 import BigNumber from 'bignumber.js';
 
 import { clamp } from './clamp';
 
-export const getBaseLog = (base: number, value: number) => Math.log(value) / Math.log(base); //
+export const getBaseLog = (base: number, value: number) => Math.log(value) / Math.log(base);
 
 const INTEGER_CHORD_METHOD_EPSILON = 1;
 
@@ -15,7 +14,6 @@ const INTEGER_CHORD_METHOD_EPSILON = 1;
  * @returns the integer value of X for which f(X) <= 0 and is closest to 0.
  */
 export const integerChordMethod = (f: (x: BigNumber) => BigNumber, x0: BigNumber, x1: BigNumber): BigNumber => {
-  console.log('x0', x0.toFixed());
   const y0 = f(x0);
   const y1 = f(x1);
 
