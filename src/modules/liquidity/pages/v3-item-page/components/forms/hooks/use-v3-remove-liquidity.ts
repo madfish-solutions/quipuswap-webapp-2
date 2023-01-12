@@ -59,7 +59,6 @@ export const useV3RemoveLiquidity = () => {
         position.id,
         liquidity,
         accountPkh,
-        accountPkh,
         deadline,
         tokensValues
       );

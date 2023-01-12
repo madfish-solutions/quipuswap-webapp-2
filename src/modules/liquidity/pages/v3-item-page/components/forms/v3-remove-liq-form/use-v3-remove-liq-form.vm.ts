@@ -1,12 +1,15 @@
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 
-import { FIRST_INDEX, PERCENTAGE_100, ZERO_AMOUNT } from '@config/constants';
+import { AppRootRoutes } from '@app.router';
+import { FIRST_INDEX, PERCENTAGE_100, PERCENT_100, SLASH, ZERO_AMOUNT } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
   useLiquidityV3PositionStore
 } from '@modules/liquidity/hooks';
 import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
+import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { isEqual, isNull, numberAsString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
@@ -25,7 +28,10 @@ export const useV3RemoveLiqFormViewModel = () => {
   const { removeLiquidity } = useV3RemoveLiquidity();
   const { delayedGetLiquidityV3Position } = useGetLiquidityV3Position();
   const poolStore = useLiquidityV3PoolStore();
+  const navigate = useNavigate();
+
   const item = poolStore.item;
+  const backHref = `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${poolStore.poolId}`;
 
   const tokens = [tokenX, tokenY];
   const userPosition = findUserPosition(positionsWithStats, positionId);
@@ -40,6 +46,10 @@ export const useV3RemoveLiqFormViewModel = () => {
     actions.setSubmitting(true);
 
     await removeLiquidity(values);
+
+    if (isEqual(Number(values[V3RemoveTokenInput.percantageInput]), PERCENT_100)) {
+      navigate(backHref);
+    }
 
     await delayedGetLiquidityV3Position();
 
