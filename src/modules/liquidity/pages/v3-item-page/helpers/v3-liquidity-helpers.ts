@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 'quipuswap-v3-sdk/dist/helpers/math';
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
@@ -119,16 +120,46 @@ export const calculateLiquidity = (
         .integerValue(BigNumber.ROUND_CEIL)
     : analyticalEstimation;
 
+  console.log('deltaIsLessOrEqual', analyticalEstimationDelta, expectedTokensDelta);
+  console.log('analyticalEstimation', analyticalEstimation.toFixed());
+  console.log(
+    'multipliedBy && BigNumber.max',
+    JSON.stringify(expectedTokensDelta),
+    JSON.stringify(analyticalEstimationDelta)
+  );
+
+  // liquidity => {
+  //   console.log('x1', liquidity.toFixed();
+  //   const delta = calculateTokensDelta(liquidity);
+  //   console.log(JSON.stringify(delta), expectedTokensDelta.x?.toFixed());
+  //   return delta.x.minus(expectedTokensDelta.x!);
+  // }
+
+  // eslint-disable-next-line no-console
+  console.log('1', expectedTokensDelta, lowerEstimation.toFixed(), upperEstimation.toFixed());
+
   const estimationByTokenX = isExist(expectedTokensDelta.x)
     ? integerChordMethod(
-        liquidity => calculateTokensDelta(liquidity).x.minus(expectedTokensDelta.x!),
+        liquidity => {
+          console.log('x1', liquidity.toFixed());
+          const delta = calculateTokensDelta(liquidity);
+          console.log(JSON.stringify(delta), expectedTokensDelta.x?.toFixed());
+
+          return delta.x.minus(expectedTokensDelta.x!);
+        },
         lowerEstimation,
         upperEstimation
       )
     : Infinity;
   const estimationByTokenY = isExist(expectedTokensDelta.y)
     ? integerChordMethod(
-        liquidity => calculateTokensDelta(liquidity).y.minus(expectedTokensDelta.y!),
+        liquidity => {
+          console.log('y1', liquidity.toFixed());
+          const delta = calculateTokensDelta(liquidity);
+          console.log(JSON.stringify(delta), expectedTokensDelta.y?.toFixed());
+
+          return delta.y.minus(expectedTokensDelta.y!);
+        },
         lowerEstimation,
         upperEstimation
       )

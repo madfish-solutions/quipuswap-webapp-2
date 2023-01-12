@@ -32,6 +32,18 @@ export const useCalculateInputAmountValue = () => {
       const tokenGiven = givenInputSlug === V3AddTokenInput.firstTokenInput ? tokenX : tokenY;
       const tokenToCalculate = tokenGiven === tokenX ? tokenY : tokenX;
 
+      // eslint-disable-next-line no-console
+      console.log(
+        currentTick.index.toFixed(),
+        lowerTick.index.toFixed(),
+        upperTick.index.toFixed(),
+        currentTick.price.toFixed(),
+        lowerTick.price.toFixed(),
+        upperTick.price.toFixed(),
+        tokenGiven === tokenX ? toAtomic(realInputAmount, tokenX).toFixed() : new BigNumber(Infinity).toFixed(),
+        tokenGiven === tokenY ? toAtomic(realInputAmount, tokenY).toFixed() : new BigNumber(Infinity).toFixed()
+      );
+
       const liquidity = calculateLiquidity(
         currentTick.index,
         lowerTick.index,
