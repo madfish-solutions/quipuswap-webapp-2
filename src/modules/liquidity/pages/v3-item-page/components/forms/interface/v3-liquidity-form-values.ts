@@ -1,6 +1,6 @@
 export enum V3AddTokenInput {
-  firstTokenInput = 'tokenInput-0',
-  secondTokenInput = 'tokenInput-1'
+  firstTokenInput = 'token-input-0',
+  secondTokenInput = 'token-input-1'
 }
 
 export interface V3AddFormValues {
@@ -8,13 +8,13 @@ export interface V3AddFormValues {
 }
 
 export enum V3RemoveTokenInput {
-  lpTokenInput = 'lpTokenInput',
-  tokenXInput = 'tokenXInput',
-  tokenYInput = 'tokenYInput'
+  percantageInput = 'percantage-input',
+  tokenXOutput = 'token-x-output',
+  tokenYOutput = 'token-y-output'
 }
 
 export interface V3RemoveFormValues {
-  [V3RemoveTokenInput.lpTokenInput]: string;
-  [V3RemoveTokenInput.tokenXInput]: string;
-  [V3RemoveTokenInput.tokenYInput]: string;
+  [V3RemoveTokenInput.percantageInput]: string;
+  [V3RemoveTokenInput.tokenXOutput]: string;
+  [V3RemoveTokenInput.tokenYOutput]: string;
 }
