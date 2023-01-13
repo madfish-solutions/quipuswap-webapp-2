@@ -2,7 +2,7 @@ import { FormikHelpers, FormikValues, useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
-import { FIRST_INDEX, PERCENTAGE_100, PERCENT_100, SLASH, ZERO_AMOUNT } from '@config/constants';
+import { FIRST_INDEX, PERCENTAGE_100, PERCENT_100, SLASH, PERCENT } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -10,15 +10,23 @@ import {
 } from '@modules/liquidity/hooks';
 import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
-import { isEqual, isNull, numberAsString } from '@shared/helpers';
+import { setCaretPosition } from '@modules/stableswap/stableswap-liquidity/pages/create/components/create-form/positions.helper';
+import { isEmptyString, isEqual, isNull, numberAsString } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
-import { calculateOutput, isOneOfTheOutputNotZero, preventRedundantRecalculation } from '../helpers';
+import {
+  calculateOutput,
+  isOneOfTheOutputNotZero,
+  preventRedundantRecalculation,
+  removePercentFromInputValue
+} from '../helpers';
 import { useV3RemoveLiquidity } from '../hooks';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
+
+const PERCENTAGE_INPUT_DECIMALS = 2;
 
 export const useV3RemoveLiqFormViewModel = () => {
   const { t } = useTranslation();
@@ -59,12 +67,14 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const handleInputChange = () => {
     return (inputAmount: string) => {
-      const { realValue } = numberAsString(inputAmount, ZERO_AMOUNT);
+      const { realValue } = numberAsString(removePercentFromInputValue(inputAmount), PERCENTAGE_INPUT_DECIMALS);
       if (isNull(item) || isNull(userPosition) || isNull(tokenX) || isNull(tokenY)) {
         return;
       }
+      const _inputAmount = preventRedundantRecalculation(realValue);
 
-      const _inputAmount = preventRedundantRecalculation(inputAmount);
+      const input = document.getElementById('v3-lp-input');
+      setCaretPosition(input as HTMLInputElement);
 
       const { tokenXDeposit, tokenYDeposit } = calculateOutput(
         _inputAmount,
@@ -112,9 +122,12 @@ export const useV3RemoveLiqFormViewModel = () => {
 
   const percantageInputData = {
     id: 'v3-lp-input',
-    value: formik.values[V3RemoveTokenInput.percantageInput],
+    value: isEmptyString(formik.values[V3RemoveTokenInput.percantageInput])
+      ? formik.values[V3RemoveTokenInput.percantageInput]
+      : `${formik.values[V3RemoveTokenInput.percantageInput]}${PERCENT}`,
     error: formik.errors[V3RemoveTokenInput.percantageInput],
     balance: PERCENTAGE_100,
+    decimals: PERCENTAGE_INPUT_DECIMALS,
     label: t('common|Amount'),
     tokens: [tokenX, tokenY],
     hiddenBalance: true,
