@@ -1,13 +1,16 @@
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 
-import { FIRST_INDEX, PERCENT, PERCENTAGE_100 } from '@config/constants';
+import { AppRootRoutes } from '@app.router';
+import { FIRST_INDEX, PERCENTAGE_100, PERCENT_100, SLASH, PERCENT } from '@config/constants';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
   useLiquidityV3PositionStore
 } from '@modules/liquidity/hooks';
-import { setCaretPosition } from '@modules/stableswap/stableswap-liquidity/pages/create/components/create-form/positions.helper';
-import { isEmptyString, isEqual, isNull, numberAsString } from '@shared/helpers';
+import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
+import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
+import { isEmptyString, isEqual, isNull, numberAsString, setCaretPosition } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../../helpers';
@@ -18,6 +21,7 @@ import {
   preventRedundantRecalculation,
   removePercentFromInputValue
 } from '../helpers';
+import { useV3RemoveLiquidity } from '../hooks';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
 import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 
@@ -28,13 +32,18 @@ export const useV3RemoveLiqFormViewModel = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
+  const { removeLiquidity } = useV3RemoveLiquidity();
+  const { delayedGetLiquidityV3Position } = useGetLiquidityV3Position();
   const poolStore = useLiquidityV3PoolStore();
+  const navigate = useNavigate();
+
   const item = poolStore.item;
+  const backHref = `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${poolStore.poolId}`;
 
   const tokens = [tokenX, tokenY];
   const userPosition = findUserPosition(positionsWithStats, positionId);
 
-  const handleSubmit = (values: FormikValues, actions: FormikHelpers<V3RemoveFormValues>) => {
+  const handleSubmit = async (values: FormikValues, actions: FormikHelpers<V3RemoveFormValues>) => {
     const isAddLiqPossible = isOneOfTheOutputNotZero(values);
 
     if (!isAddLiqPossible) {
@@ -42,7 +51,17 @@ export const useV3RemoveLiqFormViewModel = () => {
     }
 
     actions.setSubmitting(true);
+
+    await removeLiquidity(values);
+
+    if (isEqual(Number(values[V3RemoveTokenInput.percantageInput]), PERCENT_100)) {
+      navigate(backHref);
+    }
+
+    await delayedGetLiquidityV3Position();
+
     actions.setSubmitting(false);
+    actions.resetForm();
   };
 
   const handleInputChange = () => {
@@ -65,9 +84,9 @@ export const useV3RemoveLiqFormViewModel = () => {
       );
 
       formik.setValues({
-        [V3RemoveTokenInput.lpTokenInput]: realValue,
-        [V3RemoveTokenInput.tokenXInput]: tokenXDeposit,
-        [V3RemoveTokenInput.tokenYInput]: tokenYDeposit
+        [V3RemoveTokenInput.percantageInput]: realValue,
+        [V3RemoveTokenInput.tokenXOutput]: tokenXDeposit,
+        [V3RemoveTokenInput.tokenYOutput]: tokenYDeposit
       });
     };
   };
@@ -77,15 +96,15 @@ export const useV3RemoveLiqFormViewModel = () => {
   const formik = useFormik({
     validationSchema,
     initialValues: {
-      [V3RemoveTokenInput.lpTokenInput]: '',
-      [V3RemoveTokenInput.tokenXInput]: '',
-      [V3RemoveTokenInput.tokenYInput]: ''
+      [V3RemoveTokenInput.percantageInput]: '',
+      [V3RemoveTokenInput.tokenXOutput]: '',
+      [V3RemoveTokenInput.tokenYOutput]: ''
     },
     onSubmit: handleSubmit
   });
 
   const outputData = tokens.map((token, index) => {
-    const formikId = isEqual(FIRST_INDEX, index) ? V3RemoveTokenInput.tokenXInput : V3RemoveTokenInput.tokenYInput;
+    const formikId = isEqual(FIRST_INDEX, index) ? V3RemoveTokenInput.tokenXOutput : V3RemoveTokenInput.tokenYOutput;
 
     return {
       id: `v3-output-${index}`,
@@ -100,12 +119,12 @@ export const useV3RemoveLiqFormViewModel = () => {
     };
   });
 
-  const lpData = {
+  const percantageInputData = {
     id: 'v3-lp-input',
-    value: isEmptyString(formik.values[V3RemoveTokenInput.lpTokenInput])
-      ? formik.values[V3RemoveTokenInput.lpTokenInput]
-      : `${formik.values[V3RemoveTokenInput.lpTokenInput]}${PERCENT}`,
-    error: formik.errors[V3RemoveTokenInput.lpTokenInput],
+    value: isEmptyString(formik.values[V3RemoveTokenInput.percantageInput])
+      ? formik.values[V3RemoveTokenInput.percantageInput]
+      : `${formik.values[V3RemoveTokenInput.percantageInput]}${PERCENT}`,
+    error: formik.errors[V3RemoveTokenInput.percantageInput],
     balance: PERCENTAGE_100,
     decimals: PERCENTAGE_INPUT_DECIMALS,
     label: t('common|Amount'),
@@ -117,7 +136,7 @@ export const useV3RemoveLiqFormViewModel = () => {
   const disabled = formik.isSubmitting;
 
   return {
-    lpData,
+    percantageInputData,
     data: outputData,
     disabled,
     isSubmitting: formik.isSubmitting,
