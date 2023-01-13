@@ -28,7 +28,7 @@ export const useV3AddLiqFormValidation = (userBalances: Nullable<BigNumber>[], t
     });
 
     const shapeMap: Array<[string, NumberAsStringSchema]> = inputAmountSchemas.map((item, index) => {
-      return [`tokenInput-${index}`, item.required('Amount is required!')];
+      return [`token-input-${index}`, item.required('Amount is required!')];
     });
 
     const shape: Record<string, NumberAsStringSchema> = Object.fromEntries(shapeMap);
