@@ -12,16 +12,14 @@ export interface RouteFees {
   devFee: BigNumber;
 }
 
+export interface TokenPool {
+  token: Token;
+  pool: BigNumber;
+}
+
 export interface DexPool {
   dexType: DexTypeEnum;
   dexAddress: string;
   dexId?: BigNumber;
-  token1: Token;
-  token2: Token;
-  token1Pool: BigNumber;
-  token2Pool: BigNumber;
-  token3?: Token;
-  token4?: Token;
-  token3Pool?: BigNumber;
-  token4Pool?: BigNumber;
+  tokensPools: TokenPool[];
 }

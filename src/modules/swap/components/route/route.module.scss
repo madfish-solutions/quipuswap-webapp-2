@@ -9,4 +9,22 @@
 }
 .divider {
   margin: 0 8px;
+  display: flex;
+  align-items: center;
+}
+.light {
+  .divider {
+    color: $hover-primary-01-fallback;
+    background: $brand-01;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+.dark {
+  .divider {
+    color: $hover-primary-02-fallback;
+    background: $brand-02;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
