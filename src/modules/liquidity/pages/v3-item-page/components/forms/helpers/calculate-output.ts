@@ -7,8 +7,6 @@ import { Token } from '@shared/types';
 
 import { calculateDeposit } from '../../../helpers';
 
-const PERCENT_DECIMAL_PRECISION = 1e2;
-
 export const calculateOutput = (
   inputAmount: string,
   position: LiquidityV3Position,
@@ -19,28 +17,17 @@ export const calculateOutput = (
   const { x: tokenXAtomicDeposit, y: tokenYAtomicDeposit } = calculateDeposit(position, poolStorage);
 
   const atomicCalculatedTokenXDeposit = getPercentageFromNumber(
-    tokenXAtomicDeposit.multipliedBy(PERCENT_DECIMAL_PRECISION),
-    new BigNumber(inputAmount).multipliedBy(PERCENT_DECIMAL_PRECISION)
-  );
+    tokenXAtomicDeposit,
+    new BigNumber(inputAmount)
+  ).integerValue(BigNumber.ROUND_DOWN);
 
   const atomicCalculatedTokenYDeposit = getPercentageFromNumber(
-    tokenYAtomicDeposit.multipliedBy(PERCENT_DECIMAL_PRECISION),
-    new BigNumber(inputAmount).multipliedBy(PERCENT_DECIMAL_PRECISION)
-  );
+    tokenYAtomicDeposit,
+    new BigNumber(inputAmount)
+  ).integerValue(BigNumber.ROUND_DOWN);
 
-  const realTokenXAtomicDeposit = toFixed(
-    toReal(atomicCalculatedTokenXDeposit, tokenX.metadata.decimals).decimalPlaces(
-      tokenX.metadata.decimals,
-      BigNumber.ROUND_DOWN
-    )
-  );
-
-  const realTokenYAtomicDeposit = toFixed(
-    toReal(atomicCalculatedTokenYDeposit, tokenY.metadata.decimals).decimalPlaces(
-      tokenY.metadata.decimals,
-      BigNumber.ROUND_DOWN
-    )
-  );
+  const realTokenXAtomicDeposit = toFixed(toReal(atomicCalculatedTokenXDeposit, tokenX));
+  const realTokenYAtomicDeposit = toFixed(toReal(atomicCalculatedTokenYDeposit, tokenY));
 
   return { tokenXDeposit: realTokenXAtomicDeposit, tokenYDeposit: realTokenYAtomicDeposit };
 };
