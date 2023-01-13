@@ -7,12 +7,15 @@ import { Skeleton, StateWrapper, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
 import { PageTitleContainer, PositionDetails, PositionFeesList } from './components';
+import { V3AddLiqForm } from './components/forms/v3-add-liq-form';
+import { V3RemoveLiqForm } from './components/forms/v3-remove-liq-form';
+import { LiquidityV3FormTabsCard } from './components/liquidity-v3-form-tabs-card';
 import { useV3ItemPageViewModel } from './use-v3-item-page.vm';
 import styles from './v3-item-page.module.scss';
 
 export const V3ItemPage: FC = observer(() => {
   const { t } = useTranslation();
-  const { isLoading } = useV3ItemPageViewModel();
+  const { isLoading, isAddLiqForm, tabId } = useV3ItemPageViewModel();
 
   return (
     <>
@@ -24,6 +27,9 @@ export const V3ItemPage: FC = observer(() => {
         <PositionFeesList />
       </StateWrapper>
       <StickyBlock>
+        <LiquidityV3FormTabsCard tabActiveId={tabId}>
+          {isAddLiqForm ? <V3AddLiqForm /> : <V3RemoveLiqForm />}
+        </LiquidityV3FormTabsCard>
         <PositionDetails />
       </StickyBlock>
     </>
