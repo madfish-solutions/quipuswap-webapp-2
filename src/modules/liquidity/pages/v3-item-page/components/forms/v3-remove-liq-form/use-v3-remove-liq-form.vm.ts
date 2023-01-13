@@ -10,8 +10,7 @@ import {
 } from '@modules/liquidity/hooks';
 import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
-import { setCaretPosition } from '@modules/stableswap/stableswap-liquidity/pages/create/components/create-form/positions.helper';
-import { isEmptyString, isEqual, isNull, numberAsString } from '@shared/helpers';
+import { isEmptyString, isEqual, isNull, numberAsString, setCaretPosition } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { findUserPosition } from '../../../helpers';
