@@ -4,7 +4,7 @@ import { DexTypeEnum } from 'swap-router-sdk';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@config/config';
 import { Button } from '@shared/components';
-import { getTokenSymbol } from '@shared/helpers';
+import { getTokenSymbol, isEmptyArray } from '@shared/helpers';
 import { ExternalLink } from '@shared/svg';
 import { useTranslation } from '@translation';
 
@@ -20,17 +20,15 @@ interface ViewPairAnlyticsProps {
 export const ViewPairAnlytics: FC<ViewPairAnlyticsProps> = ({ route, iconClassName, className, buttonClassName }) => {
   const { t } = useTranslation(['common']);
 
-  //TODO: Remove after handle swap pair without pool
-  if (!route.length) {
+  if (isEmptyArray(route)) {
     return null;
   }
 
   return (
     <div className={className}>
-      {/* TODO: remove filtering and specify URL for token/token analytics as soon as it is implemented */}
       {route
         .filter(({ dexType }) => dexType === DexTypeEnum.QuipuSwap)
-        .map(({ dexAddress, token1, token2 }) => (
+        .map(({ dexAddress, tokensPools: [token1Pool, token2Pool] }) => (
           <Button
             key={dexAddress}
             className={buttonClassName}
@@ -40,8 +38,8 @@ export const ViewPairAnlytics: FC<ViewPairAnlyticsProps> = ({ route, iconClassNa
             icon={<ExternalLink className={iconClassName} />}
           >
             {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
-              tokenA: getTokenSymbol(token1),
-              tokenB: getTokenSymbol(token2)
+              tokenA: getTokenSymbol(token1Pool.token),
+              tokenB: getTokenSymbol(token2Pool.token)
             })}
           </Button>
         ))}
