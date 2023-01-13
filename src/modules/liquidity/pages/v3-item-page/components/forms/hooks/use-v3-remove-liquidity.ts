@@ -17,7 +17,6 @@ import { useTranslation } from '@translation';
 import { V3RemoveLiquidityApi } from '../../../api';
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
-import { getTokensValues } from '../helpers';
 import { V3RemoveTokenInput } from '../interface';
 
 // TODO: logData
@@ -46,7 +45,6 @@ export const useV3RemoveLiquidity = () => {
 
     const percantage = new BigNumber(inputAmounts[V3RemoveTokenInput.percantageInput]);
     const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
-    const tokensValues = getTokensValues(inputAmounts, tokenX, tokenY);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
     const logData = {};
@@ -59,8 +57,7 @@ export const useV3RemoveLiquidity = () => {
         position.id,
         liquidity,
         accountPkh,
-        deadline,
-        tokensValues
+        deadline
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE_SUCCESS', logData);
