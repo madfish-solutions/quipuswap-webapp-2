@@ -1,9 +1,9 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
+import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 
-import { MaximumTokensContributed } from '../types';
+const DEFAULT_TOKENS_CONTRIBUTED = { x: ZERO_AMOUNT_BN, y: ZERO_AMOUNT_BN };
 
 export const V3RemoveLiquidityApi = async (
   tezos: TezosToolkit,
@@ -11,8 +11,7 @@ export const V3RemoveLiquidityApi = async (
   positionId: BigNumber,
   liquidityDelta: BigNumber,
   receiverAddress: string,
-  deadline: string,
-  maximumTokensContributed: MaximumTokensContributed
+  deadline: string
 ) => {
   const v3Contract = await tezos.wallet.at(contractAddress);
 
@@ -22,7 +21,7 @@ export const V3RemoveLiquidityApi = async (
     to_x: receiverAddress,
     to_y: receiverAddress,
     deadline,
-    maximum_tokens_contributed: maximumTokensContributed,
+    maximum_tokens_contributed: DEFAULT_TOKENS_CONTRIBUTED,
     referral_code: QUIPUSWAP_REFERRAL_CODE
   });
 
