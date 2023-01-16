@@ -4,4 +4,4 @@ export * from './prevent-redunant-recalculation';
 export * from './get-count-of-tokens';
 export * from './get-current-formik-key-add';
 export * from './remove-percent-from-input-value';
-export * from './get-tokens-values';
+export * from './get-values-correct-order';
