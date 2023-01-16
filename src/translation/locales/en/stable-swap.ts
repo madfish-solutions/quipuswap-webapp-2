@@ -16,6 +16,7 @@ export const stableswap = {
   'Token {{tokenSymbol}} locked': 'Token {{tokenSymbol}} locked',
   balancedProportionAdd: 'Add all coins in a balanced proportion',
   balancedProportionRemove: 'Remove all coins in a balanced proportion',
+  successfullyCreated: 'Pool has been successfully created',
   successfullyAdded: 'Liquidity has been successfully added',
   successfullyRemoved: 'Liquidity has been successfully removed',
   successfullyStaked: 'Stake has been successful',
