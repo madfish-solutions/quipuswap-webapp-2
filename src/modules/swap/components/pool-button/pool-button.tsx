@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import { DexTypeEnum } from 'swap-router-sdk';
 
@@ -13,7 +13,7 @@ interface PoolButtonProps {
   pool: DexPool;
 }
 
-const dexTypesIcons: Partial<Record<DexTypeEnum, React.ReactNode>> = {
+const dexTypesIcons: Partial<Record<DexTypeEnum, ReactNode>> = {
   [DexTypeEnum.QuipuSwapCurveLike]: <StableCategory />,
   [DexTypeEnum.QuipuSwap20]: <DexTwoCategoryIcon />,
   [DexTypeEnum.QuipuSwapV3]: <V3Category />

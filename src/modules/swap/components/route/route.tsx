@@ -2,8 +2,9 @@ import React, { Fragment, useContext } from 'react';
 
 import cx from 'classnames';
 
+import { getPoolSlug } from '@modules/swap/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { getTokenSlug, isLastElementIndex } from '@shared/helpers';
+import { isLastElementIndex } from '@shared/helpers';
 
 import { DexPool } from '../../types';
 import { PoolButton } from '../pool-button';
@@ -25,7 +26,7 @@ export const Route: React.FC<RouteProps> = ({ route, className }) => {
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {route.map((pool, index) => (
-        <Fragment key={getTokenSlug({ contractAddress: pool.dexAddress, fa2TokenId: pool.dexId?.toNumber() })}>
+        <Fragment key={getPoolSlug(pool)}>
           <PoolButton pool={pool} />
           {!isLastElementIndex(index, route) && <span className={s.divider}>...</span>}
         </Fragment>

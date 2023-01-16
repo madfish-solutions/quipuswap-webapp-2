@@ -14,7 +14,7 @@ import { amplitudeService } from '@shared/services';
 import { Nullable, SwapTabAction, Undefined } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
+import { getPoolSlug, getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
 import { getSumOfFees } from '../helpers/get-sum-of-fees';
 import { DexPool } from '../types';
 import { SwapField, SwapFormValues } from '../utils/types';
@@ -78,9 +78,7 @@ export const useSwapFormik = (
         inputTokenUsd: Number(getDollarEquivalent(inputAmount, exchangeRates[inputTokenSlug])),
         outputTokenUsd: Number(getDollarEquivalent(outputAmount, exchangeRates[outputTokenSlug])),
         ttDexAddress: TOKEN_TO_TOKEN_DEX,
-        path: dexRoute?.map(dex =>
-          getTokenSlug({ contractAddress: dex.dexAddress, fa2TokenId: dex.dexId?.toNumber() })
-        ),
+        path: dexRoute?.map(getPoolSlug),
         pathLength: dexRoute?.length,
         sumOfFees: Number(sumOfFees),
         sumOfDevFees: Number(sumOfDevFees),
