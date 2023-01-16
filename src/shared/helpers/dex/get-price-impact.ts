@@ -40,7 +40,7 @@ const getDexPairsAfterSwap = (trade: Trade) =>
           lastCumulative: {
             tick: {
               sum: new Int(defined(lastCumulative).tick.sum),
-              blockStartValue: new Nat(defined(lastCumulative).tick.blockStartValue)
+              blockStartValue: new Int(defined(lastCumulative).tick.blockStartValue)
             }
           },
           ticks: Object.fromEntries(
@@ -80,11 +80,20 @@ const getDexPairsAfterSwap = (trade: Trade) =>
           aTokenPool: aTokenPool.plus(aTokenAmount),
           bTokenPool: bTokenPool.minus(bTokenAmount)
         };
-      } catch {}
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
     }
 
     return {
       ...rest,
+      liquidity,
+      sqrtPrice,
+      curTickIndex,
+      curTickWitness,
+      ticks,
+      lastCumulative,
       direction,
       dexType,
       aTokenAmount,
