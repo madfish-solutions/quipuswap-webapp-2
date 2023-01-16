@@ -6,9 +6,9 @@ import { FIRST_INDEX, PERCENTAGE_100, PERCENT_100, SLASH, PERCENT } from '@confi
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
-  useLiquidityV3PositionStore
+  useLiquidityV3PositionStore,
+  useGetLiquidityV3Position
 } from '@modules/liquidity/hooks';
-import { useGetLiquidityV3Position } from '@modules/liquidity/hooks/loaders/use-get-liquidity-v3-position';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { isEmptyString, isEqual, isNull, numberAsString, setCaretPosition } from '@shared/helpers';
 import { useTranslation } from '@translation';
