@@ -72,8 +72,6 @@ export const mapDexPairs = (trade: Nullable<Trade>, knownTokens: TokensMap) =>
         const { dexAddress, dexId, dexType } = operation;
 
         const tokensPools = extractTokensPools(operation, knownTokens);
-        // eslint-disable-next-line no-console
-        console.log('x3', JSON.stringify(tokensPools, undefined, 2));
 
         return {
           dexId,
