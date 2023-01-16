@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
-import { USD_DECIMALS } from '@config/constants';
+// import { USD_DECIMALS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { StateCurrencyAmount } from '@shared/components';
@@ -25,7 +25,6 @@ interface Props {
   pendingRewardDollarEquivalent?: Nullable<BigNumber.Value>;
   claimableRewardsLoading: boolean;
   longTermRewardsLoading: boolean;
-  amountDecimals?: number;
   currency: string;
   className?: string;
 }
@@ -34,7 +33,6 @@ export const YouvesPendingRewards: FC<Props> = ({
   currency,
   claimableRewardDollarEquivalent,
   pendingRewardDollarEquivalent,
-  amountDecimals = USD_DECIMALS,
   claimablePendingRewards,
   longTermPendingRewards,
   claimableRewardsLoading,
@@ -64,7 +62,6 @@ export const YouvesPendingRewards: FC<Props> = ({
                 currency={currency}
                 dollarEquivalent={claimableRewardDollarEquivalent}
                 isLoading={claimableRewardsLoading}
-                amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 data-test-id="claimableRewards"
               />
@@ -75,7 +72,6 @@ export const YouvesPendingRewards: FC<Props> = ({
                 currency={currency}
                 dollarEquivalent={pendingRewardDollarEquivalent}
                 isLoading={longTermRewardsLoading}
-                amountDecimals={amountDecimals}
                 isLeftCurrency={currency === '$'}
                 data-test-id="longTermRewards"
               />
