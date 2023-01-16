@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { isExist } from '@shared/helpers';
-import { getPercantageFromNumber } from '@shared/helpers/get-precantage-from-number';
+import { isExist, getPercentageFromNumber } from '@shared/helpers';
 import { Optional } from '@shared/types';
 
 export const getUserReward = (rewardInAtomic: Optional<BigNumber>, fee: Optional<BigNumber>) => {
@@ -9,5 +8,5 @@ export const getUserReward = (rewardInAtomic: Optional<BigNumber>, fee: Optional
     return null;
   }
 
-  return rewardInAtomic.minus(getPercantageFromNumber(rewardInAtomic, fee));
+  return rewardInAtomic.minus(getPercentageFromNumber(rewardInAtomic, fee));
 };
