@@ -3,7 +3,6 @@ import { FC, useContext } from 'react';
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
-// import { USD_DECIMALS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
 import { StateCurrencyAmount } from '@shared/components';
