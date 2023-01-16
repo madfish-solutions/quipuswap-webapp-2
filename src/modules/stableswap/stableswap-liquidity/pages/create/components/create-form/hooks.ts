@@ -13,7 +13,8 @@ import {
   getFormikError,
   isNull,
   isEmptyString,
-  isEmptyArray
+  isEmptyArray,
+  setCaretPosition
 } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 import { NumberAsStringSchema } from '@shared/validators';
@@ -28,7 +29,6 @@ import {
   MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
   MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
 } from './constants';
-import { setCaretPosition } from './positions.helper';
 
 const MAX_DECIMALS_AMOUNT = 10;
 const MAX_REAL_VALUE_AMOUNT = new BigNumber(UPPER_LIQUIDITY_PROVIDERS_FEE.value);
