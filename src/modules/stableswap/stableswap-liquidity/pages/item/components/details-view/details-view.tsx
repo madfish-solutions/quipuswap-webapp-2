@@ -10,7 +10,7 @@ import { useTranslation } from '@translation';
 import { useDetailsViewModel } from '../details';
 import styles from './details-view.module.scss';
 
-type Props = ReturnType<typeof useDetailsViewModel>; //
+type Props = ReturnType<typeof useDetailsViewModel>;
 
 export const DetailsView: FC<Props> = ({
   feesRate,
