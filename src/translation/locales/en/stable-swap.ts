@@ -58,6 +58,7 @@ export const stableswap = {
   selectTokens: 'Select 2–4 Tokens',
   fees: 'Fees',
   feesRate: 'Fees rate',
+  feesRateTooltip: 'Swap fee charged in this pool.',
   amplificationParameters: 'A (amplification parameters)',
   amplification10: '10 (uncollateralized algoritmic stablecoins)',
   amplification100: '100 (non-redeemable, collateralized assets)',
