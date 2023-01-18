@@ -18,6 +18,7 @@ export const liquidity = {
     'The amount of {{tokenBSymbol}} locked in the pool by liquidity providers.',
   'Pair Analytics': 'Pair Analytics',
   'Pair Contract': 'Pair Contract',
+  'Pool Contract': 'Pool Contract',
   "Note! The pool doesn't exist": "Note! The pool doesn't exist",
   'Liquidity Page': 'Liquidity Page',
   "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.":
