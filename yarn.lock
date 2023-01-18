@@ -12350,10 +12350,10 @@ svgo@^2.7.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
-swap-router-sdk@^1.20.0:
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.20.0.tgz#bc855e4028bc6b4fbf36655e2668953bed44b9d4"
-  integrity sha512-g2Sy9n3Y6/rvtsvJOhmO8DW96vvuP8xvO26airUfkJUeKlay9dT5VUmvZYBTYoVQhLwnkVEotatxgBO3fsQJzg==
+swap-router-sdk@^1.20.1:
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/swap-router-sdk/-/swap-router-sdk-1.20.1.tgz#2f37e7d8cc51a1bced3a6b269223fb04543c5910"
+  integrity sha512-fammuaxn3aWpjbqhZSANAWYR2CKA+bBMsu+nOjbNRQVO2wMYBwYq2PzklqIclFFe6bbQNl1KVwjLe0o9TQhyUg==
   dependencies:
     "@taquito/taquito" "15.0.1"
     async-retry "1.3.3"
