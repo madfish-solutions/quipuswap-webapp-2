@@ -45,7 +45,16 @@ export const useV3RemoveLiquidity = () => {
     const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = makeV3LiquidityOperationLogData(position, liquiditySlippage, tokenX, tokenY);
+    const logData = {
+      removeLiquidity: makeV3LiquidityOperationLogData(
+        position,
+        liquiditySlippage,
+        tokenX,
+        tokenY,
+        inputAmounts[V3RemoveTokenInput.tokenXOutput],
+        inputAmounts[V3RemoveTokenInput.tokenYOutput]
+      )
+    };
 
     try {
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE', logData);

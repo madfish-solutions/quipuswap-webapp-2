@@ -18,6 +18,7 @@ import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../help
 import { calculateLiquidity } from '../../../helpers/v3-liquidity-helpers';
 import { useCurrentTick, usePositionsWithStats } from '../../../hooks';
 import { getTokensValues } from '../helpers/get-tokens-values';
+import { V3AddTokenInput } from '../interface';
 import { usePositionTicks } from './use-position-ticks';
 
 export const useV3AddLiquidity = () => {
@@ -68,7 +69,16 @@ export const useV3AddLiquidity = () => {
       tokensValues.y
     );
 
-    const logData = makeV3LiquidityOperationLogData(position, liquiditySlippage, tokenX, tokenY);
+    const logData = {
+      addLiquidity: makeV3LiquidityOperationLogData(
+        position,
+        liquiditySlippage,
+        tokenX,
+        tokenY,
+        inputAmounts[V3AddTokenInput.firstTokenInput],
+        inputAmounts[V3AddTokenInput.secondTokenInput]
+      )
+    };
 
     try {
       amplitudeService.logEvent('V3_LIQUIDITY_ADD', logData);
