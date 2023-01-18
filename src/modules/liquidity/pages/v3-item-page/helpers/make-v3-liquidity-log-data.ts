@@ -9,15 +9,19 @@ export const makeV3LiquidityOperationLogData = (
   position: LiquidityV3PositionWithStats,
   slippage: BigNumber,
   tokenX: Token,
-  tokenY: Token
+  tokenY: Token,
+  tokenXAmount: BigNumber,
+  tokenYAmount: BigNumber
 ) => ({
-  firstTokenSlug: getTokenSlug(tokenX),
-  secondTokenSlug: getTokenSlug(tokenY),
-  firstTokenName: tokenY.metadata.name,
-  secondTokenName: tokenX.metadata.name,
+  tokenXSlug: getTokenSlug(tokenX),
+  tokenYSlug: getTokenSlug(tokenY),
+  tokenXName: tokenY.metadata.name,
+  tokenYName: tokenX.metadata.name,
   slippage: slippage.toNumber(),
   positionId: position.id.toNumber(),
   liquidity: position.liquidity.toNumber(),
-  positionSizeInUsd: position.stats.depositUsd,
+  positionSizeInUsd: position.stats.depositUsd?.toNumber(),
+  tokenXAmount: Number(tokenXAmount),
+  tokenYAmount: Number(tokenYAmount),
   poolType: PoolType.UNISWAP
 });
