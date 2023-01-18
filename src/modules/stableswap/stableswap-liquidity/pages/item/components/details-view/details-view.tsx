@@ -52,7 +52,7 @@ export const DetailsView: FC<Props> = ({
         </DetailsCardCell>
         <DetailsCardCell
           cellName={t('stableswap|feesRate')}
-          tooltipContent={t('stableswap|feesRate')}
+          tooltipContent={t('stableswap|feesRateTooltip')}
           className={cardCellClassName}
           data-test-id="feesRate"
         >
