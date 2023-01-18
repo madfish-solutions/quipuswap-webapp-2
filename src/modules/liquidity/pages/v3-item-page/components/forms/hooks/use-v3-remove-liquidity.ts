@@ -15,11 +15,9 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3RemoveLiquidityApi } from '../../../api';
-import { findUserPosition } from '../../../helpers';
+import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import { V3RemoveTokenInput } from '../interface';
-
-// TODO: logData
 
 export const useV3RemoveLiquidity = () => {
   const { tezos } = useRootStore();
@@ -27,7 +25,7 @@ export const useV3RemoveLiquidity = () => {
   const confirmOperation = useConfirmOperation();
   const { t } = useTranslation();
   const {
-    settings: { transactionDeadline }
+    settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const poolStore = useLiquidityV3PoolStore();
@@ -47,7 +45,7 @@ export const useV3RemoveLiquidity = () => {
     const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
-    const logData = {};
+    const logData = makeV3LiquidityOperationLogData(position, liquiditySlippage, tokenX, tokenY);
 
     try {
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE', logData);
