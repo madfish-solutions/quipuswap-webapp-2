@@ -12,14 +12,14 @@ import { isNull, toAtomic } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { getHarvestAllParams } from '../../farming/api';
-import { useStakedOnlyFarmIds } from '../../farming/hooks/use-staked-only-farm-ids';
+import { useFullRewardClaimableFarmsIds } from '../../farming/hooks/use-full-reward-claimable-farms-ids';
 import { getBetTokensParams } from '../api';
 
 export const useHarvestAndRoll = () => {
   const { tezos } = useRootStore();
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
-  const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
+  const { getFullRewardClaimableFarmsIds } = useFullRewardClaimableFarmsIds();
   const { getGamersStats } = useGamersStats();
   const { loadUserLastGame } = useUserLastGame();
   const { getUserPendingGame } = useUserPendingGame();
@@ -32,7 +32,7 @@ export const useHarvestAndRoll = () => {
       return null;
     }
 
-    const stakedOnlyFarmIds = getStakedOnlyFarmIds();
+    const stakedOnlyFarmIds = getFullRewardClaimableFarmsIds();
 
     try {
       const atomicInputAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);

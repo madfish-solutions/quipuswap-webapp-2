@@ -66,10 +66,16 @@ export class BlockchainYouvesFarmingApi {
     return await withApproveApi(tezos, contractAddress, token, accountPkh, tokenAmount, [params]);
   }
 
-  static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
+  static async makeHarvestMethod(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
     const contract = await getWalletContract(tezos.wallet, contractAddress);
 
-    return await contract.methods.claim(new BigNumber(stakeId)).send();
+    return contract.methods.claim(new BigNumber(stakeId));
+  }
+
+  static async harvest(tezos: TezosToolkit, contractAddress: string, stakeId: BigNumber.Value) {
+    const harvestMethod = await BlockchainYouvesFarmingApi.makeHarvestMethod(tezos, contractAddress, stakeId);
+
+    return await harvestMethod.send();
   }
 
   static async withdraw(

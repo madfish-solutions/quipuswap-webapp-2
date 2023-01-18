@@ -5,7 +5,7 @@ import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 import { TokenInfo } from '@shared/elements';
 import { i18n } from '@translation';
 
-import { useFarmingListRewardsStore } from '../../../../hooks';
+import { useFarmingListStore } from '../../../../hooks';
 import { TokenRewardCell } from '../token-reward-cell';
 import styles from './reward-tokens-list.module.scss';
 
@@ -53,9 +53,9 @@ const getCustomCellProps = (_: unknown, meta: MetaBase<Row> & { cell: Cell<Row> 
   getColumnProps(meta.cell.column.id);
 
 export const useRewardTokensListViewModel = () => {
-  const { tokensRewardList } = useFarmingListRewardsStore();
+  const farmingListStore = useFarmingListStore();
 
-  const data: Array<Row> = tokensRewardList.map(({ token, staked, claimable }) => {
+  const data: Array<Row> = farmingListStore.tokensRewardList.map(({ token, staked, claimable }) => {
     return {
       [Columns.TOKEN]: <TokenInfo token={token} />,
       [Columns.STAKED]: <TokenRewardCell {...staked} />,
