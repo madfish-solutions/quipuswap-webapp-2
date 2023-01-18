@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import { useFarmingListRewardsStore, useFarmingListStore, useHarvestAndRollStore } from '../../../../hooks';
+import { useFarmingListStore, useHarvestAndRollStore } from '../../../../hooks';
 import { calculateTotalDeposit } from '../../helpers';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation();
-  const { listBalances, listBalancesStore } = useFarmingListStore();
+  const farmingListStore = useFarmingListStore();
+  const { listBalances, listBalancesStore } = farmingListStore;
 
-  const farmingListRewardsStore = useFarmingListRewardsStore();
   const harvestAndRollStore = useHarvestAndRollStore();
 
   const handleHarvestAll = async () => {
@@ -20,13 +20,12 @@ export const useFarmingRewardsListViewModel = () => {
   };
 
   useEffect(() => {
-    farmingListRewardsStore.updatePendingRewards();
-    farmingListRewardsStore.makePendingRewardsLiveable();
+    farmingListStore.makePendingRewardsLiveable();
 
     return () => {
-      farmingListRewardsStore.clearIntervals();
+      farmingListStore.clearIntervals();
     };
-  }, [farmingListRewardsStore]);
+  }, [farmingListStore]);
 
   const userTotalDepositInfo = {
     totalDepositAmount: calculateTotalDeposit(listBalances),

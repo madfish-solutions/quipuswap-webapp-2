@@ -7,23 +7,23 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { useFarmingListRewardsStore } from '../stores';
-import { useStakedOnlyFarmIds } from '../use-staked-only-farm-ids';
+import { useFarmingListStore } from '../stores';
+import { useFullRewardClaimableFarmsIds } from '../use-full-reward-claimable-farms-ids';
 
 export const useDoHarvestAll = () => {
   const { t } = useTranslation();
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const farmingListRewardsStore = useFarmingListRewardsStore();
-  const { getStakedOnlyFarmIds } = useStakedOnlyFarmIds();
+  const farmingListStore = useFarmingListStore();
+  const { getFullRewardClaimableFarmsIds } = useFullRewardClaimableFarmsIds();
 
   const doHarvestAll = useCallback(async () => {
-    const stakedOnlyFarmIds = getStakedOnlyFarmIds();
+    const fullClaimableRewardsFarmIds = getFullRewardClaimableFarmsIds();
     const logData = {
       harvestAll: {
-        farmingIds: stakedOnlyFarmIds,
-        rewardsInUsd: Number(farmingListRewardsStore.getUserRewardsLogData(stakedOnlyFarmIds).toFixed())
+        farmingIds: fullClaimableRewardsFarmIds,
+        rewardsInUsd: defined(farmingListStore.claimablePendingRewardsInUsd).toNumber()
       }
     };
 
@@ -31,7 +31,7 @@ export const useDoHarvestAll = () => {
       amplitudeService.logEvent('HARVEST_ALL', logData);
       const operation = await harvestAllAssets(
         defined(rootStore.tezos),
-        stakedOnlyFarmIds,
+        fullClaimableRewardsFarmIds,
         defined(rootStore.authStore.accountPkh)
       );
 
@@ -42,8 +42,8 @@ export const useDoHarvestAll = () => {
       amplitudeService.logEvent('HARVEST_ALL_FAILED', { ...logData, error });
     }
   }, [
-    getStakedOnlyFarmIds,
-    farmingListRewardsStore,
+    getFullRewardClaimableFarmsIds,
+    farmingListStore,
     rootStore.tezos,
     rootStore.authStore.accountPkh,
     confirmOperation,

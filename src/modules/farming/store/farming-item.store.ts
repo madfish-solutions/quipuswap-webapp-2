@@ -146,7 +146,7 @@ export class FarmingItemStore {
   updatePendingRewards() {
     const userInfo = this.userInfo;
 
-    this.pendingRewards = userInfo && this.item && getUserPendingRewardForFarmingV1(userInfo, this.item);
+    this.pendingRewards = userInfo && this.item && getUserPendingRewardForFarmingV1(userInfo, this.item, Date.now());
   }
 
   clearIntervals() {
