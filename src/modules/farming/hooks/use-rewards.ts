@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { getSumOfNumbers, getTokenSlug, multipliedIfPossible } from '@shared/helpers';
+import { getSumOfNumbers, getTokenSlug, multipliedIfPossible, sumIfPossible } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 import { shouldHarvestInBatch } from '../helpers';
@@ -72,13 +72,19 @@ export const useRewards = () => {
         const fullRewardBalance = reward.fullRewardBalance ?? ZERO_AMOUNT_BN;
         const earnBalance = reward.earnBalance ?? ZERO_AMOUNT_BN;
 
-        if (matchingReward && shouldAddClaimable) {
+        if (matchingReward) {
           matchingReward.staked.amount = matchingReward.staked.amount.plus(fullRewardBalance);
-          matchingReward.staked.dollarEquivalent =
-            matchingReward.staked.dollarEquivalent?.plus(reward.fullRewardUsd ?? ZERO_AMOUNT_BN) ?? null;
-          matchingReward.claimable.amount = matchingReward.claimable.amount.plus(earnBalance);
-          matchingReward.claimable.dollarEquivalent =
-            matchingReward.claimable.dollarEquivalent?.plus(reward.earnBalanceUsd ?? ZERO_AMOUNT_BN) ?? null;
+          matchingReward.staked.dollarEquivalent = sumIfPossible([
+            matchingReward.staked.dollarEquivalent,
+            reward.fullRewardUsd
+          ]);
+          if (shouldAddClaimable) {
+            matchingReward.claimable.amount = matchingReward.claimable.amount.plus(earnBalance);
+            matchingReward.claimable.dollarEquivalent = sumIfPossible([
+              matchingReward.claimable.dollarEquivalent,
+              reward.earnBalanceUsd
+            ]);
+          }
         } else {
           rewardsSum.push({
             token: rewardToken,
