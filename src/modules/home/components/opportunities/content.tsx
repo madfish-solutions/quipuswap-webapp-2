@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react';
 
+import { AppRootRoutes } from '@app.router';
 import { Earn, Farm, Trade } from '@shared/svg';
 import { i18n } from '@translation';
 
@@ -25,7 +26,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     ),
     button: {
       label: i18n.t('home|Start Trading'),
-      href: '/swap'
+      href: AppRootRoutes.Swap
     }
   },
   {
@@ -37,7 +38,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     ),
     button: {
       label: i18n.t('home|Start Farming'),
-      href: '/farming'
+      href: AppRootRoutes.Farming
     }
   },
   {
@@ -49,7 +50,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     ),
     button: {
       label: i18n.t('home|Add Liquidity'),
-      href: '/liquidity/add'
+      href: AppRootRoutes.Liquidity
     }
   }
 ];
