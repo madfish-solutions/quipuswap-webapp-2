@@ -85,10 +85,10 @@ export const useAddLiqFormViewModel = () => {
     const localTokenDecimals = localToken.metadata.decimals;
 
     return async (inputAmount: string) => {
-      const { fixedValue } = numberAsString(inputAmount, localTokenDecimals);
+      const { realValue } = numberAsString(inputAmount, localTokenDecimals);
       const formikKey = getInputSlugByIndex(index);
 
-      formik.setFieldValue(formikKey, fixedValue);
+      formik.setFieldValue(formikKey, realValue);
     };
   };
 
