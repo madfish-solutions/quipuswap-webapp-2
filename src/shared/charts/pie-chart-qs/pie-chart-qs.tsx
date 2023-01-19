@@ -5,6 +5,7 @@ import { Cell, Pie, PieChart } from 'recharts';
 
 import { COLORS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { formatValueBalance } from '@shared/helpers';
 
 import { DefaultChart } from '../components/default-chart';
 import { PieChartData } from '../types';
@@ -28,7 +29,7 @@ export const PieChartQs: FC<PieChartData> = ({ data }) => {
             {data.map(({ tokenValue, tokenSymbol }, index) => (
               <li key={index} className={styles.li}>
                 <span className={styles.legend} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                <span className={styles.tokenAmount}>{tokenValue}</span>
+                <span className={styles.tokenAmount}>{formatValueBalance(tokenValue)}</span>
                 <span className={styles.tokenSymbol}>{tokenSymbol}</span>
               </li>
             ))}
