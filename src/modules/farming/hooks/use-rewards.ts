@@ -6,6 +6,7 @@ import { ZERO_AMOUNT_BN } from '@config/constants';
 import { getSumOfNumbers, getTokenSlug, multipliedIfPossible } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
+import { shouldHarvestInBatch } from '../helpers';
 import { useFarmingListStore } from './stores';
 
 interface RewardAmount {
@@ -46,7 +47,9 @@ export const useRewards = () => {
 
   const claimablePendingRewardsInUsd = useMemo(() => {
     if (rewardsAreReady) {
-      return getSumOfNumbers(rewards.map(({ earnBalanceUsd }) => earnBalanceUsd ?? null));
+      return getSumOfNumbers(
+        rewards.map(reward => (shouldHarvestInBatch(reward) ? reward.earnBalanceUsd ?? null : ZERO_AMOUNT_BN))
+      );
     }
 
     return null;
@@ -63,26 +66,35 @@ export const useRewards = () => {
   const tokensRewardList = useMemo(
     () =>
       rewards.reduce<TokensReward[]>((rewardsSum, reward) => {
-        const matchingReward = rewardsSum.find(({ token }) => getTokenSlug(token) === getTokenSlug(reward.rewardToken));
+        const { rewardToken } = reward;
+        const shouldAddClaimable = shouldHarvestInBatch(reward);
+        const matchingReward = rewardsSum.find(({ token }) => getTokenSlug(token) === getTokenSlug(rewardToken));
+        const fullRewardBalance = reward.fullRewardBalance ?? ZERO_AMOUNT_BN;
+        const earnBalance = reward.earnBalance ?? ZERO_AMOUNT_BN;
 
-        if (matchingReward) {
-          matchingReward.staked.amount = matchingReward.staked.amount.plus(reward.fullRewardBalance ?? ZERO_AMOUNT_BN);
+        if (matchingReward && shouldAddClaimable) {
+          matchingReward.staked.amount = matchingReward.staked.amount.plus(fullRewardBalance);
           matchingReward.staked.dollarEquivalent =
             matchingReward.staked.dollarEquivalent?.plus(reward.fullRewardUsd ?? ZERO_AMOUNT_BN) ?? null;
-          matchingReward.claimable.amount = matchingReward.claimable.amount.plus(reward.earnBalance ?? ZERO_AMOUNT_BN);
+          matchingReward.claimable.amount = matchingReward.claimable.amount.plus(earnBalance);
           matchingReward.claimable.dollarEquivalent =
             matchingReward.claimable.dollarEquivalent?.plus(reward.earnBalanceUsd ?? ZERO_AMOUNT_BN) ?? null;
         } else {
           rewardsSum.push({
-            token: reward.rewardToken,
+            token: rewardToken,
             staked: {
-              amount: reward.fullRewardBalance ?? ZERO_AMOUNT_BN,
+              amount: fullRewardBalance,
               dollarEquivalent: reward.fullRewardUsd ?? null
             },
-            claimable: {
-              amount: reward.earnBalance ?? ZERO_AMOUNT_BN,
-              dollarEquivalent: reward.earnBalanceUsd ?? null
-            }
+            claimable: shouldAddClaimable
+              ? {
+                  amount: earnBalance,
+                  dollarEquivalent: reward.earnBalanceUsd ?? null
+                }
+              : {
+                  amount: ZERO_AMOUNT_BN,
+                  dollarEquivalent: ZERO_AMOUNT_BN
+                }
           });
         }
 
