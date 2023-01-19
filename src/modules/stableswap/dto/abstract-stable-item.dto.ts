@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { Typed } from '@shared/decorators';
 
+import { Version } from '../types';
 import { StableswapTokensInfoDto } from './stableswap-tokens-info.dto';
 
 export abstract class AbstractStableItemDto {
@@ -19,4 +20,7 @@ export abstract class AbstractStableItemDto {
 
   @Typed()
   isWhitelisted: boolean;
+
+  @Typed({ isEnum: true })
+  version: Version;
 }
