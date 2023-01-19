@@ -20,7 +20,7 @@ export const stableDividendsListDataHelper = (
   const shouldShowUserStats =
     !isNull(accountPkh) && (item.yourDeposit?.gt(DEFAULT_VALUE) || item.yourEarnedInUsd?.gt(DEFAULT_VALUE));
 
-  const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${item.stableDividendsItemUrl}`;
+  const link = `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}/${StableDividendsFormTabs.stake}/${item.version}/${item.stableDividendsItemUrl}`;
   const status = defineWhitelistedItemLabel(item);
   const extractedTokens = extractTokens(item.tokensInfo);
 

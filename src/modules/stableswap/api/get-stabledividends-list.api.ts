@@ -1,10 +1,11 @@
-import { STABLEDIVIDENDS_LIST_API_URL } from '@config/constants';
+import { STABLEDIVIDENDS_NEW_LIST_API_URL } from '@config/constants';
 
 import { StableDividendsListResponse } from '../types';
 
 export const getStableDividendsListApi = async () => {
-  const response = await fetch(STABLEDIVIDENDS_LIST_API_URL);
-  const data = (await response.json()) as StableDividendsListResponse;
+  const response = await fetch(STABLEDIVIDENDS_NEW_LIST_API_URL);
+  const data = await response.json();
 
-  return data.list;
+  //@ts-ignore
+  return data.list.map(({ item }) => item) as StableDividendsListResponse['list'];
 };

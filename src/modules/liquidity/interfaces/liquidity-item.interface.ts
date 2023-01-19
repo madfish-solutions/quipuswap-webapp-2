@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { Version } from '@modules/stableswap/types';
 import { BlockInfo, ActiveStatus, Token, Nullable } from '@shared/types';
 
 import { Categories } from './icon-enum';
@@ -39,6 +40,7 @@ export interface LiquidityItem {
   tokensInfo: Array<LiquidityTokenInfo>;
   accordanceSlug?: string;
   feesRate: string;
+  version?: Version;
 }
 
 export interface LiquidityItemResponse {

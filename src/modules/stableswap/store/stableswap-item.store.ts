@@ -7,15 +7,16 @@ import { Nullable } from '@shared/types';
 
 import { getStableswapItemApi } from '../api';
 import { StableswapItemModel } from '../models';
+import { Version } from '../types';
 
 @ModelBuilder()
 export class StableswapItemStore {
   poolId: Nullable<BigNumber> = null;
-
+  version: Nullable<Version> = null;
   //#region item store
   @Led({
     default: null,
-    loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId),
+    loader: async (self: StableswapItemStore) => await getStableswapItemApi(self.poolId, self.version),
     model: StableswapItemModel
   })
   readonly itemStore: LoadingErrorData<StableswapItemModel, null>;
@@ -37,5 +38,9 @@ export class StableswapItemStore {
 
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
+  }
+
+  setVersion(version: Version) {
+    this.version = version;
   }
 }

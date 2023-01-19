@@ -48,13 +48,16 @@ export const StableswapLiquidityRouter: FC = observer(() => {
           path={`/${StableswapLiquidityFormTabs.add}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
           element={<PageNotFoundPage />}
         />
-        <Route path={`/${StableswapLiquidityFormTabs.add}/:poolId`} element={<StableswapLiquidityAddItemPage />} />
+        <Route
+          path={`/${StableswapLiquidityFormTabs.add}/:version/:poolId`}
+          element={<StableswapLiquidityAddItemPage />}
+        />
         <Route
           path={`/${StableswapLiquidityFormTabs.remove}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
           element={<PageNotFoundPage />}
         />
         <Route
-          path={`/${StableswapLiquidityFormTabs.remove}/:poolId`}
+          path={`/${StableswapLiquidityFormTabs.remove}/version/:poolId`}
           element={<StableswapLiquidityRemoveItemPage />}
         />
 
