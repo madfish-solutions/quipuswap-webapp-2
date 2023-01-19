@@ -92,6 +92,7 @@ export const useV3AddLiqFormViewModel = () => {
       value: formik.values[formikKey],
       error: formik.errors[formikKey],
       balance: userBalances[index],
+      decimals: token?.metadata.decimals,
       label: t('common|Input'),
       tokens: token,
       onInputChange: handleInputChange(index)
