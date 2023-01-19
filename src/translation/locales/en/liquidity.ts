@@ -18,6 +18,7 @@ export const liquidity = {
     'The amount of {{tokenBSymbol}} locked in the pool by liquidity providers.',
   'Pair Analytics': 'Pair Analytics',
   'Pair Contract': 'Pair Contract',
+  'Pool Contract': 'Pool Contract',
   "Note! The pool doesn't exist": "Note! The pool doesn't exist",
   'Liquidity Page': 'Liquidity Page',
   "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.":
@@ -75,7 +76,7 @@ export const liquidity = {
   tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
   tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
-  tooltipV3: 'CHANGE ME!',
+  tooltipV3: 'Pools with high capital efficiency.',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
