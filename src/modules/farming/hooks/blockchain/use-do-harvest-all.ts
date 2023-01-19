@@ -7,23 +7,23 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { useFarmingListStore } from '../stores';
-import { useFullRewardClaimableFarmsIds } from '../use-full-reward-claimable-farms-ids';
+import { useHarvestReadyFarmsIds } from '../use-harvest-ready-farms-ids';
+import { useRewards } from '../use-rewards';
 
 export const useDoHarvestAll = () => {
   const { t } = useTranslation();
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const farmingListStore = useFarmingListStore();
-  const { getFullRewardClaimableFarmsIds } = useFullRewardClaimableFarmsIds();
+  const { getHarvestReadyFarmsIds } = useHarvestReadyFarmsIds();
+  const { claimablePendingRewardsInUsd } = useRewards();
 
   const doHarvestAll = useCallback(async () => {
-    const fullClaimableRewardsFarmIds = getFullRewardClaimableFarmsIds();
+    const fullClaimableRewardsFarmIds = getHarvestReadyFarmsIds();
     const logData = {
       harvestAll: {
         farmingIds: fullClaimableRewardsFarmIds,
-        rewardsInUsd: defined(farmingListStore.claimablePendingRewardsInUsd).toNumber()
+        rewardsInUsd: defined(claimablePendingRewardsInUsd).toNumber()
       }
     };
 
@@ -42,8 +42,8 @@ export const useDoHarvestAll = () => {
       amplitudeService.logEvent('HARVEST_ALL_FAILED', { ...logData, error });
     }
   }, [
-    getFullRewardClaimableFarmsIds,
-    farmingListStore,
+    getHarvestReadyFarmsIds,
+    claimablePendingRewardsInUsd,
     rootStore.tezos,
     rootStore.authStore.accountPkh,
     confirmOperation,
