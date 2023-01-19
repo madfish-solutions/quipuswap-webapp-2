@@ -33,7 +33,7 @@ import {
 } from '../interfaces';
 import { mapUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
-import { FarmingItemV1WithBalances, FarmingItemWithBalances } from '../pages/list/types';
+import { FarmingItemV1WithBalances, FarmingListItemWithBalances } from '../pages/list/types';
 import { YouvesFarmStakes, YouvesFarmStorage } from '../pages/youves-item/api/types';
 
 export interface UserBalances {
@@ -71,7 +71,7 @@ export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntege
 export const getUserPendingRewardForFarmingV1 = (
   userInfo: IUsersInfoValue,
   farmingItemModel: FarmingListItemModel | FarmingItemV1Model,
-  timestamp: number
+  timestamp = Date.now()
 ) => {
   const { staked: totalStaked, rewardPerSecond } = farmingItemModel;
 
@@ -231,11 +231,12 @@ export const getUserYouvesFarmingBalances = async (
 export const getUserInfoLastStakedTime = (userInfo: Nullable<IUsersInfoValue>) =>
   userInfo ? new Date(userInfo.last_staked).getTime() : null;
 
-export const fullRewardIsAvailable = ({
+export const shouldHarvestInBatch = ({
   earnBalance,
-  fullRewardBalance
-}: Pick<FarmingItemWithBalances, 'earnBalance' | 'fullRewardBalance'>) =>
-  earnBalance?.gt(ZERO_AMOUNT_BN) && fullRewardBalance?.eq(earnBalance);
+  fullRewardBalance,
+  version
+}: Pick<FarmingListItemWithBalances, 'earnBalance' | 'fullRewardBalance' | 'version'>) =>
+  earnBalance?.gt(ZERO_AMOUNT_BN) && (fullRewardBalance?.eq(earnBalance) || version === FarmVersion.v1);
 
 export const getEndTimestamp = (
   farmingItem: Optional<FarmingListItemModel | FarmingItemV1WithBalances>,

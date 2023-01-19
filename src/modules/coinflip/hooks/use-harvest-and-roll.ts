@@ -12,14 +12,14 @@ import { isNull, toAtomic } from '@shared/helpers';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
 import { getHarvestAllParams } from '../../farming/api';
-import { useFullRewardClaimableFarmsIds } from '../../farming/hooks/use-full-reward-claimable-farms-ids';
+import { useHarvestReadyFarmsIds } from '../../farming/hooks/use-harvest-ready-farms-ids';
 import { getBetTokensParams } from '../api';
 
 export const useHarvestAndRoll = () => {
   const { tezos } = useRootStore();
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
-  const { getFullRewardClaimableFarmsIds } = useFullRewardClaimableFarmsIds();
+  const { getHarvestReadyFarmsIds } = useHarvestReadyFarmsIds();
   const { getGamersStats } = useGamersStats();
   const { loadUserLastGame } = useUserLastGame();
   const { getUserPendingGame } = useUserPendingGame();
@@ -32,7 +32,7 @@ export const useHarvestAndRoll = () => {
       return null;
     }
 
-    const stakedOnlyFarmIds = getFullRewardClaimableFarmsIds();
+    const harvestReadyFarmIds = getHarvestReadyFarmsIds();
 
     try {
       const atomicInputAmount = toAtomic(inputAmount, TEZOS_TOKEN_DECIMALS);
@@ -42,7 +42,7 @@ export const useHarvestAndRoll = () => {
 
       const fee = network_fee;
 
-      const harvestOperationsParams = await getHarvestAllParams(tezos, stakedOnlyFarmIds, accountPkh);
+      const harvestOperationsParams = await getHarvestAllParams(tezos, harvestReadyFarmIds, accountPkh);
 
       const betOperationParams = await getBetTokensParams(
         tezos,
