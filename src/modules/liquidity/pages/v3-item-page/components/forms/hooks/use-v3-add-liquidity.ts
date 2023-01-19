@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
 import {
@@ -7,7 +8,7 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull } from '@shared/helpers';
+import { decreaseByPercentage, getTransactionDeadline, isNull } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -68,6 +69,7 @@ export const useV3AddLiquidity = () => {
       tokensValues.x,
       tokensValues.y
     );
+    const liquidityWithSlippage = decreaseByPercentage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
     const logData = {
       addLiquidity: makeV3LiquidityOperationLogData(
@@ -86,7 +88,7 @@ export const useV3AddLiquidity = () => {
         tezos,
         item.contractAddress,
         position.id,
-        liquidity,
+        liquidityWithSlippage,
         accountPkh,
         deadline,
         tokenX,
