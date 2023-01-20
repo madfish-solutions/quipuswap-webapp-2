@@ -1,5 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
+import { Version } from '@modules/stableswap/types';
 import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 import type { ActiveStatus, Nullable } from '@shared/types';
@@ -75,6 +76,9 @@ export class FarmingItemV1Dto {
 
   @Typed({ optional: true })
   stableswapItemId?: string;
+
+  @Typed({ optional: true, isEnum: true })
+  stableswapVersion?: Version;
 
   @Typed()
   udp: string;
