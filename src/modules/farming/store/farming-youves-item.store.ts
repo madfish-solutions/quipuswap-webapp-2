@@ -59,7 +59,6 @@ export class FarmingYouvesItemStore {
       ? DexLink.getCpmmPoolLink(this.tokens as [Token, Token])
       : DexLink.getStableswapPoolLink(
           new BigNumber(this.item?.stableswapPoolId ?? 0),
-          //TODO: remove v1
           this.item?.stableswapPoolVersion ?? Version.v1
         );
   }
