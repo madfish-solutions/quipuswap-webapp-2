@@ -1,27 +1,22 @@
 import { useEffect } from 'react';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { QUIPU_TOKEN } from '@config/tokens';
-import { isExist, toReal } from '@shared/helpers';
+import { isExist } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { useTranslation } from '@translation';
 
-import {
-  useFarmingListRewardsStore,
-  useFarmingListStore,
-  useHarvestAll,
-  useHarvestAndRollStore
-} from '../../../../hooks';
+import { useFarmingListStore, useHarvestAll, useHarvestAndRollStore, useRewards } from '../../../../hooks';
 import { calculateTotalDeposit } from '../../helpers';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation();
-  const { listBalances, listBalancesStore } = useFarmingListStore();
+  const farmingListStore = useFarmingListStore();
+  const { listBalances, listBalancesStore } = farmingListStore;
 
-  const farmingListRewardsStore = useFarmingListRewardsStore();
   const harvestAndRollStore = useHarvestAndRollStore();
   const { rewardsInQuipu } = harvestAndRollStore;
   const { harvestAll } = useHarvestAll();
+  const { rewardsInQuipu: newRewardsInQuipu } = useRewards();
 
   const handleHarvestAll = async () => {
     amplitudeService.logEvent('HARVEST_ALL_CLICK');
@@ -35,21 +30,18 @@ export const useFarmingRewardsListViewModel = () => {
 
   const isBalanceLoaded = listBalances.some(({ earnBalance }) => isExist(earnBalance));
 
-  useEffect(() => {
-    (async () => {
-      const _rewardsInQuipu = toReal(await farmingListRewardsStore.getQuipuPendingRewards(), QUIPU_TOKEN);
-      harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
-    })();
-  }, [farmingListRewardsStore, harvestAndRollStore, isBalanceLoaded]);
+  useEffect(
+    () => harvestAndRollStore.setRewardsInQuipu(newRewardsInQuipu),
+    [harvestAndRollStore, isBalanceLoaded, newRewardsInQuipu]
+  );
 
   useEffect(() => {
-    farmingListRewardsStore.updatePendingRewards();
-    farmingListRewardsStore.makePendingRewardsLiveable();
+    farmingListStore.makePendingRewardsLiveable();
 
     return () => {
-      farmingListRewardsStore.clearIntervals();
+      farmingListStore.clearIntervals();
     };
-  }, [farmingListRewardsStore]);
+  }, [farmingListStore]);
 
   const userTotalDepositInfo = {
     totalDepositAmount: calculateTotalDeposit(listBalances),
