@@ -7,7 +7,6 @@ import Select, { Props as SelectProps } from 'react-select';
 import { FarmingSortFieldItem } from '@modules/farming/pages/list/types';
 import { LiquiditySortFieldItem } from '@modules/liquidity/pages/list/types';
 import { StableDividendsSortFieldItem } from '@modules/stableswap/stabledividends/pages/list/types';
-import { StableswapSortFieldItem } from '@modules/stableswap/stableswap-liquidity/pages/list/types';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components';
 import { Sort } from '@shared/svg';
@@ -16,15 +15,9 @@ import { Undefined } from '@shared/types';
 import styles from './sorter.module.scss';
 
 export interface SorterProps {
-  sortingValue: Undefined<
-    FarmingSortFieldItem | StableswapSortFieldItem | StableDividendsSortFieldItem | LiquiditySortFieldItem
-  >;
+  sortingValue: Undefined<FarmingSortFieldItem | StableDividendsSortFieldItem | LiquiditySortFieldItem>;
   sortDirectionRotate: boolean;
-  sortingValues:
-    | FarmingSortFieldItem[]
-    | StableswapSortFieldItem[]
-    | StableDividendsSortFieldItem[]
-    | LiquiditySortFieldItem[];
+  sortingValues: FarmingSortFieldItem[] | StableDividendsSortFieldItem[] | LiquiditySortFieldItem[];
   buttonDTI: string;
   sorterSelectDTI: string;
   handleSortFieldChange: (value: unknown) => void;

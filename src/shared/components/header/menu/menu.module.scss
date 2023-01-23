@@ -3,7 +3,6 @@
 
 .root {
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
   background-color: $ui-01;
   overflow: auto;
   display: flex;

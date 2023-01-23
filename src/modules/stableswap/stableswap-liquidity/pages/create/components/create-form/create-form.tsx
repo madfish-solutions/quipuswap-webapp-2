@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
+import { AppRootRoutes } from '@app.router';
 import {
   Card,
   Button,
@@ -17,16 +18,11 @@ import styles from '@styles/CommonContainer.module.scss';
 import { i18n } from '@translation';
 
 import { FormHeader } from '../../../../../components';
-import { StableswapContentRoutes } from '../../../../../stableswap-routes.enum';
 import { CreationCost, SelectTokensButton } from '../../components';
 import createFormStyles from './create-form.module.scss';
 import { useCreateFormViewModel } from './create-form.vm';
 
-interface Props {
-  subpath: StableswapContentRoutes;
-}
-
-export const CreateForm: FC<Props> = observer(({ subpath }) => {
+export const CreateForm: FC = observer(() => {
   const {
     liquidityProvidersFeeInputParams,
     tokenInputsParams,
@@ -40,7 +36,7 @@ export const CreateForm: FC<Props> = observer(({ subpath }) => {
   return (
     <Card
       header={{
-        content: <FormHeader subpath={subpath} />
+        content: <FormHeader backHref={AppRootRoutes.Liquidity} />
       }}
       contentClassName={styles.content}
       data-test-id="stableswapCreateForm"

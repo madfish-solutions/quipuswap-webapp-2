@@ -19,6 +19,6 @@ describe('Specific pool exist', () => {
   // check if 'back to list' arrow works
   it('Should_DisplaySSLList_When_ClickOnBackArrow', () => {
     cy.get('[data-test-id="stableswapFromTabsCard"] [data-test-id="backTTListButton"]').click();
-    cy.get('[data-test-id="SSLPageTitle"]').should('contain', 'Stableswap Liquidity');
+    cy.get('[data-test-id="LiquidityListTitle"]').should('contain', 'Liquidity');
   });
 });

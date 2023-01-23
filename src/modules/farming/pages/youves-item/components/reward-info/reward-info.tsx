@@ -96,7 +96,6 @@ export const RewardInfo: CFC<Props> = ({
           longTermRewardsLoading={longTermRewardsLoading}
           claimableRewardDollarEquivalent={claimableRewardDollarEquivalent}
           pendingRewardDollarEquivalent={pendingRewardDollarEquivalent}
-          amountDecimals={amountDecimals}
           currency={currency}
         />
         <div className={wrapUserInfoContainerClassName}>
