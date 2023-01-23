@@ -72,6 +72,9 @@ export const stableswap = {
   create: 'Create',
   newPool: 'New Pool',
   chooseTokensRecommendations: 'Choose from {{min}} to {{max}} tokens to create stableswap pool',
+  notEnoughQuipuError:
+    '{{cost}} QUIPU is required for pool creation. Your balance is {{balance}} QUIPU. Buy more here:',
+  tezQuipuSwap: 'TEZ/QUIPU swap',
 
   //#region creation rules
   creationRules: 'Stable DEX liquidity pool creation rules',
