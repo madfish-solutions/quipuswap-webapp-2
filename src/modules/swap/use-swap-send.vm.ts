@@ -17,6 +17,7 @@ import {
   getTokenPairSlug,
   getTokenSlug,
   isEmptyArray,
+  isExist,
   makeSwapOrSendRedirectionUrl,
   makeToken
 } from '@shared/helpers';
@@ -51,6 +52,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const amplitude = useAmplitudeService();
 
   const {
+    atLeastOneRouteWithV3,
     bestTrade,
     dexRoute,
     inputAmount,
@@ -402,7 +404,13 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
   const title = `${t('swap|Swap')} ${pairName}`;
   const noRouteFound =
-    isEmptyArray(trade) && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
+    isEmptyArray(trade) &&
+    isExist(formik.inputToken) &&
+    isExist(formik.outputToken) &&
+    (isExist(formik.inputAmount) || isExist(formik.outputAmount));
+  // TODO: remove logic with atLeastOneRouteWithV3 variable after maximal input calculation for Quipuswap V3 is implemented
+  const shouldSuggestSmallerAmount = noRouteFound && atLeastOneRouteWithV3;
+  const shouldShowNoRouteFoundError = noRouteFound && !atLeastOneRouteWithV3;
   const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
   const shouldHideRouteRow = trade?.some(({ dexType }) => dexType === DexTypeEnum.QuipuSwapCurveLike) ?? false;
 
@@ -434,7 +442,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputToken: formik.inputToken,
     inputTokenBalance,
     isSubmitting,
-    noRouteFound,
     outputAmount: formik.outputAmount,
     outputExchangeRate,
     outputToken: formik.outputToken,
@@ -445,7 +452,9 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     updateRates,
     sellRate,
     shouldHideRouteRow,
+    shouldShowNoRouteFoundError,
     shouldShowPriceImpactWarning,
+    shouldSuggestSmallerAmount,
     submitDisabled,
     swapFee,
     swapFeeError,

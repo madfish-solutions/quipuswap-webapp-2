@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { SECONDS_IN_MINUTE } from '@config/constants';
+import { QUIPUSWAP_REFERRAL_CODE, SECONDS_IN_MINUTE } from '@config/constants';
 import { TOKEN_TO_TOKEN_DEX } from '@config/environment';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
@@ -93,7 +93,8 @@ export const useSwapFormik = (
         tezos,
         STABLESWAP_REFERRAL,
         recipient,
-        transactionDeadline.toNumber()
+        transactionDeadline.toNumber(),
+        QUIPUSWAP_REFERRAL_CODE.toNumber()
       );
 
       const walletParamsWithKind = tradeTransferParams.map(tradeTransferParam =>

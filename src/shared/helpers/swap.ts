@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { STABLESWAP_REFERRAL } from '@config/config';
+import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { DexPair, TokenId } from '@shared/types';
 
 export interface SwapParams {
@@ -30,7 +31,8 @@ export const estimateSwapFee = async (
     tezos,
     STABLESWAP_REFERRAL,
     recipientPkh,
-    deadlineTimespan?.toNumber()
+    deadlineTimespan?.toNumber(),
+    QUIPUSWAP_REFERRAL_CODE.toNumber()
   );
 
   const estimations = await tezos.estimate.batch(
