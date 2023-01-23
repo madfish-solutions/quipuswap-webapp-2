@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { EMPTY_STRING, INFINITY_SIGN, ZERO_AMOUNT } from '@config/constants';
 import {
+  useGetLiquidityV3ItemWithPositions,
   useLiquidityV3CurrentPrice,
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
@@ -54,6 +55,7 @@ export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
   const dAppReady = useReady();
   const { getLiquidityV3ItemBalances } = useGetLiquidityV3ItemBalances();
+  const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const tokensList = useMemo(() => (isExist(tokenX) && isExist(tokenY) ? [tokenX, tokenY] : null), [tokenX, tokenY]);
   const tokensWithBalances = useTokensWithBalances(tokensList);
@@ -89,8 +91,9 @@ export const useCreateNewPositionPageViewModel = () => {
   useEffect(() => {
     if (dAppReady) {
       void getLiquidityV3ItemBalances();
+      void getLiquidityV3ItemWithPositions();
     }
-  }, [dAppReady, getLiquidityV3ItemBalances]);
+  }, [dAppReady, getLiquidityV3ItemBalances, getLiquidityV3ItemWithPositions]);
 
   const formik = useCreatePositionFormik(initialMinPrice, initialMaxPrice, tokensWithBalances);
   const { upperTick, lowerTick } = usePositionTicks(formik);
