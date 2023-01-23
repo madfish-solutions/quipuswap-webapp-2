@@ -7,7 +7,7 @@ import { i18n } from '@translation';
 const basicBigNumberSchema: SchemaOf<BigNumber> = mixed().test(
   'value-type',
   () => 'Must be a number',
-  value => !value || value instanceof BigNumber
+  value => !value || BigNumber.isBigNumber(value)
 ) as SchemaOf<BigNumber>;
 
 export const bigNumberSchema = (min?: Optional<BigNumber.Value>, max?: Optional<BigNumber.Value>, message?: string) => {

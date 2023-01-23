@@ -3,11 +3,8 @@ import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
 
 import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
-import { integerChordMethod, isExist } from '@shared/helpers';
+import { convertToAtomicPrice, convertToSqrtPrice, integerChordMethod, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-
-import { convertToAtomicPrice } from './convert-to-atomic-price';
-import { convertToSqrtPrice } from './convert-to-sqrt-price';
 
 export interface Tick {
   index: BigNumber;
