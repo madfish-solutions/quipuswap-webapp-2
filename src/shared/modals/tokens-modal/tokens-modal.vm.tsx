@@ -63,15 +63,17 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
-  const tokensModalCellParams: TokensModalCellProps[] = useMemo(() => {
-    return Array.from(extendTokens)
-      .sort(chosenTokenFirstPredicate(chosenTokens ?? []))
-      .map(token => ({
-        token,
-        balance: null,
-        onTokenClick: () => handleTokenClick(token)
-      }));
-  }, [chosenTokens, extendTokens, handleTokenClick]);
+  const tokensModalCellParams: TokensModalCellProps[] = useMemo(
+    () =>
+      Array.from(extendTokens)
+        .sort(chosenTokenFirstPredicate(chosenTokens ?? []))
+        .map(token => ({
+          token,
+          balance: null,
+          onTokenClick: () => handleTokenClick(token)
+        })),
+    [chosenTokens, extendTokens, handleTokenClick]
+  );
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
