@@ -46,7 +46,10 @@ export const useFarmingItemPageViewModel = () => {
   }, [farmingItemStore]);
 
   useEffect(() => {
-    return () => farmingItemStore.userInfoStore.resetData();
+    return () => {
+      farmingItemStore.itemStore.resetData();
+      farmingItemStore.userInfoStore.resetData();
+    };
   }, [farmingItemStore]);
 
   const { isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;

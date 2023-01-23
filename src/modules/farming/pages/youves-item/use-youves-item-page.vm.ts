@@ -60,7 +60,10 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   }, [farmingYouvesItemStore]);
 
   useEffect(() => {
-    return () => farmingYouvesItemStore.stakesStore.resetData();
+    return () => {
+      farmingYouvesItemStore.itemStore.resetData();
+      farmingYouvesItemStore.stakesStore.resetData();
+    };
   }, [farmingYouvesItemStore]);
 
   const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
