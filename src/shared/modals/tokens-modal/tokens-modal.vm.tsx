@@ -5,11 +5,11 @@ import { Button } from '@shared/components';
 import { isEmptyArray, isEqual } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
-import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 import { i18n } from '@translation';
 
+import { chosenTokenFirstPredicate } from './chosen-token-first-predicate.helper';
 import { ManagedTokensModalCellProps, TokensModalCellProps, TokensQuantityInfo } from './components';
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
@@ -64,13 +64,13 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
   const tokensModalCellParams: TokensModalCellProps[] = useMemo(() => {
-    noopMap(chosenTokens);
-
-    return extendTokens.map(token => ({
-      token,
-      balance: null,
-      onTokenClick: () => handleTokenClick(token)
-    }));
+    return Array.from(extendTokens)
+      .sort(chosenTokenFirstPredicate(chosenTokens ?? []))
+      .map(token => ({
+        token,
+        balance: null,
+        onTokenClick: () => handleTokenClick(token)
+      }));
   }, [chosenTokens, extendTokens, handleTokenClick]);
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
