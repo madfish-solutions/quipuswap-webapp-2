@@ -1,4 +1,17 @@
 .content {
   display: flex;
   column-gap: 4px;
+  align-items: center;
+}
+
+.dexTypeIconWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tooltipText {
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
 }
