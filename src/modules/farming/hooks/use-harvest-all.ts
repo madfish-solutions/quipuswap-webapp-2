@@ -22,13 +22,17 @@ export const useHarvestAll = () => {
     harvestAndRollStore.close();
   };
 
-  const harvestAll = async () => {
+  const harvestAll = async (modalWasShown: boolean) => {
     harvestAndRollStore.startHarvestLoading();
     coinflipStore.setPendingGameTokenToPlay(TokenToPlay.Quipu);
-    log('HARVEST_AND_ROLL_HARVEST_ALL_CLICK');
+    if (modalWasShown) {
+      log('HARVEST_AND_ROLL_HARVEST_ALL_CLICK');
+    }
 
     await doHarvestAll();
-    log('HARVEST_AND_ROLL_HARVEST_ALL_SUCCESS');
+    if (modalWasShown) {
+      log('HARVEST_AND_ROLL_HARVEST_ALL_SUCCESS');
+    }
     harvestAndRollStore.finishHarvestLoading();
     onClose();
   };

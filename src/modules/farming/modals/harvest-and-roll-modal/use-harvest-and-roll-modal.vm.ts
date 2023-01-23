@@ -90,6 +90,8 @@ export const useHarvestAndRollModalViewModel = () => {
     onClose();
   };
 
+  const onHarvestAllClick = async () => harvestAll(true);
+
   return {
     betSize,
     betSizeUsd,
@@ -102,7 +104,7 @@ export const useHarvestAndRollModalViewModel = () => {
     onCoinSideSelect,
 
     onClose,
-    onHarvestAllClick: harvestAll,
+    onHarvestAllClick,
     onHarvestAndRollClick,
 
     texts: {
