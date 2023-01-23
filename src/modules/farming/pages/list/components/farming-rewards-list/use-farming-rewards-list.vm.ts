@@ -24,7 +24,7 @@ export const useFarmingRewardsListViewModel = () => {
     if (rewardsInQuipu?.gt(ZERO_AMOUNT_BN)) {
       await harvestAndRollStore.open();
     } else {
-      await harvestAll();
+      await harvestAll(false);
     }
   };
 
