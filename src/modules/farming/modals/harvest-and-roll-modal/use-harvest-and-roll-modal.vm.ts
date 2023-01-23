@@ -4,8 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
-import { QUIPU_TOKEN } from '@config/tokens';
-import { useAmplitudeService, useTokenAmountInUsd } from '@shared/hooks';
+import { useAmplitudeService } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useCoinflipGeneralStats, useCoinflipStore } from '../../../coinflip/hooks';
@@ -28,7 +27,6 @@ export const useHarvestAndRollModalViewModel = () => {
   const { opened, coinSide, coinSideError, isLoading, isLoadingHarvest, rewardsInQuipu, rewardsQuipuInUsd } =
     harvestAndRollStore;
 
-  const { getUsd } = useTokenAmountInUsd(QUIPU_TOKEN);
   const { rewardsInQuipu: newRewardsInQuipu, rewardsQuipuInUsd: newRewardsQuipuInUsd } = useRewards();
 
   const { onCoinSideSelect, onClose, harvestAll } = useHarvestAll();
@@ -43,7 +41,7 @@ export const useHarvestAndRollModalViewModel = () => {
       harvestAndRollStore.setRewardsInQuipu(newRewardsInQuipu);
       harvestAndRollStore.setRewardsQuipuInUsd(newRewardsQuipuInUsd);
     })();
-  }, [opened, getCoinflipGeneralStats, harvestAndRollStore, getUsd, newRewardsInQuipu, newRewardsQuipuInUsd]);
+  }, [opened, getCoinflipGeneralStats, harvestAndRollStore, newRewardsInQuipu, newRewardsQuipuInUsd]);
 
   const { log } = useAmplitudeService();
 
