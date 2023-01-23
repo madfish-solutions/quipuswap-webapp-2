@@ -25,6 +25,7 @@ export const AUTOSAVE_DEBOUNCE_MS = MS_IN_SECOND;
 //#region liveable rewards time
 export const FARM_REWARD_UPDATE_INTERVAL = MS_IN_SECOND;
 export const FARM_USER_INFO_UPDATE_INTERVAL = 30 * MS_IN_SECOND;
+export const FARMS_LIST_REWARD_UPDATE_INTERVAL = 60 * MS_IN_SECOND;
 //#endregion
 
 //#region numberInput

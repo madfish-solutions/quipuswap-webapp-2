@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { FormikValues } from 'formik';
 
 import {
@@ -7,20 +8,19 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull } from '@shared/helpers';
+import { decreaseByPercentage, getTransactionDeadline, isNull } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { V3AddLiquidityApi } from '../../../api/v3-add-liquidity';
-import { findUserPosition } from '../../../helpers';
+import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
 import { calculateLiquidity } from '../../../helpers/v3-liquidity-helpers';
 import { useCurrentTick, usePositionsWithStats } from '../../../hooks';
 import { getTokensValues } from '../helpers/get-tokens-values';
+import { V3AddTokenInput } from '../interface';
 import { usePositionTicks } from './use-position-ticks';
-
-// TODO: logData
 
 export const useV3AddLiquidity = () => {
   const { tezos } = useRootStore();
@@ -28,7 +28,7 @@ export const useV3AddLiquidity = () => {
   const confirmOperation = useConfirmOperation();
   const { t } = useTranslation();
   const {
-    settings: { transactionDeadline }
+    settings: { transactionDeadline, liquiditySlippage }
   } = useSettingsStore();
   const accountPkh = useAccountPkh();
   const poolStore = useLiquidityV3PoolStore();
@@ -69,8 +69,18 @@ export const useV3AddLiquidity = () => {
       tokensValues.x,
       tokensValues.y
     );
+    const liquidityWithSlippage = decreaseByPercentage(liquidity, liquiditySlippage).integerValue(BigNumber.ROUND_DOWN);
 
-    const logData = {};
+    const logData = {
+      addLiquidity: makeV3LiquidityOperationLogData(
+        position,
+        liquiditySlippage,
+        tokenX,
+        tokenY,
+        inputAmounts[V3AddTokenInput.firstTokenInput],
+        inputAmounts[V3AddTokenInput.secondTokenInput]
+      )
+    };
 
     try {
       amplitudeService.logEvent('V3_LIQUIDITY_ADD', logData);
@@ -78,7 +88,7 @@ export const useV3AddLiquidity = () => {
         tezos,
         item.contractAddress,
         position.id,
-        liquidity,
+        liquidityWithSlippage,
         accountPkh,
         deadline,
         tokenX,

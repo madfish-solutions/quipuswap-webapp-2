@@ -19,6 +19,7 @@ export const DetailsView: FC<Props> = ({
   pieChartData,
   totalLpSupply,
   poolContractUrl,
+  poolContractButtonText,
   cardCellClassName
 }) => {
   const { t } = useTranslation();
@@ -52,7 +53,7 @@ export const DetailsView: FC<Props> = ({
         </DetailsCardCell>
         <DetailsCardCell
           cellName={t('stableswap|feesRate')}
-          tooltipContent={t('stableswap|feesRate')}
+          tooltipContent={t('stableswap|feesRateTooltip')}
           className={cardCellClassName}
           data-test-id="feesRate"
         >
@@ -74,7 +75,7 @@ export const DetailsView: FC<Props> = ({
           icon={<ExternalLink className={commonContainerStyles.linkIcon} />}
           data-test-id="stableswapContractButton"
         >
-          {t('liquidity|Pair Contract')}
+          {poolContractButtonText}
         </Button>
       </div>
     </>
