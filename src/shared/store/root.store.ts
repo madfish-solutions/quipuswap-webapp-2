@@ -6,7 +6,6 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStatsStore as IFarmingListStatsStore,
-  FarmingListRewardsStore as IFarmingListRewardsStore,
   FarmingListStore as IFarmingListStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
@@ -20,10 +19,8 @@ import {
   LiquidityV3PositionsStore as ILiquidityV3PositionsStore
 } from '@modules/liquidity';
 import {
-  StableswapFilterStore as IStableswapFilterStore,
   StableswapItemStore as IStableswapItemStore,
   StableswapItemFormStore as IStableswapItemFormStore,
-  StableswapListStore as IStableswapListStore,
   StableDividendsListStore as IStableDividendsListStore,
   StableDividendsFilterStore as IStableDividendsFilterStore,
   StableDividendsItemStore as IStableDividendsItemStore
@@ -50,16 +47,13 @@ export class RootStore {
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingListStatsStore: Nullable<IFarmingListStatsStore> = null;
-  farmingListRewardsStore: Nullable<IFarmingListRewardsStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
   harvestAndRollStore: Nullable<IHarvestAndRollStore> = null;
 
-  stableswapListStore: Nullable<IStableswapListStore> = null;
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
   stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
-  stableswapFilterStore: Nullable<IStableswapFilterStore> = null;
 
   stableDividendsListStore: Nullable<IStableDividendsListStore> = null;
   stableDividendsFilterStore: Nullable<IStableDividendsFilterStore> = null;
@@ -89,15 +83,12 @@ export class RootStore {
       tezos: observable,
 
       farmingListStatsStore: observable,
-      farmingListRewardsStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
-      stableswapListStore: observable,
       farmingListStore: observable,
       stableswapItemStore: observable,
       stableswapItemFormStore: observable,
-      stableswapFilterStore: observable,
 
       stableDividendsListStore: observable,
       stableDividendsFilterStore: observable,
@@ -110,16 +101,13 @@ export class RootStore {
 
       setTezos: action,
       createFarmingListStatsStore: action,
-      createFarmingListRewardsStore: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
       createCoinflipStore: action,
 
-      createStableswapListStore: action,
       createStableswapItemStore: action,
       createStableswapItemFormStore: action,
-      createStableswapFilterStore: action,
 
       createStableDividendsListStore: action,
       createStableDividendsFilterStore: action,
@@ -194,13 +182,6 @@ export class RootStore {
     }
   }
 
-  async createStableswapListStore() {
-    if (isNull(this.stableswapListStore)) {
-      const { StableswapListStore } = await import('@modules/stableswap/store/stableswap-list.store');
-      this.stableswapListStore = new StableswapListStore(this);
-    }
-  }
-
   async createStableswapItemStore() {
     if (isNull(this.stableswapItemStore)) {
       const { StableswapItemStore } = await import('@modules/stableswap/store/stableswap-item.store');
@@ -212,13 +193,6 @@ export class RootStore {
     if (isNull(this.stableswapItemFormStore)) {
       const { StableswapItemFormStore } = await import('@modules/stableswap/store/stableswap-item-form.store');
       this.stableswapItemFormStore = new StableswapItemFormStore(this);
-    }
-  }
-
-  async createStableswapFilterStore() {
-    if (isNull(this.stableswapFilterStore)) {
-      const { StableswapFilterStore } = await import('@modules/stableswap/store/stableswap-filter.store');
-      this.stableswapFilterStore = new StableswapFilterStore();
     }
   }
 
@@ -240,13 +214,6 @@ export class RootStore {
     if (isNull(this.farmingListStatsStore)) {
       const { FarmingListStatsStore } = await import('@modules/farming/store/farming-list-stats.store');
       this.farmingListStatsStore = new FarmingListStatsStore(this);
-    }
-  }
-
-  async createFarmingListRewardsStore() {
-    if (isNull(this.farmingListRewardsStore)) {
-      const { FarmingListRewardsStore } = await import('@modules/farming/store/farming-list-rewards.store');
-      this.farmingListRewardsStore = new FarmingListRewardsStore(this);
     }
   }
 

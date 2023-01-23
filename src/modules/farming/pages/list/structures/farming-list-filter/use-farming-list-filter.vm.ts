@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import cx from 'classnames';
 
 import { useFarmingFilterStore } from '@modules/farming/hooks';
@@ -66,6 +68,12 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
   const setActiveOnly = (state: boolean) => {
     return farmingFilterStore.setActiveOnly(state);
   };
+
+  useEffect(() => {
+    if (isNull(accountPkh)) {
+      farmingFilterStore.setStakedOnly(false);
+    }
+  }, [accountPkh, farmingFilterStore]);
 
   const switcherDataList = [
     {
