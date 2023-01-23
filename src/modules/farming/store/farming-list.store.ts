@@ -1,5 +1,6 @@
 import { computed, makeObservable, observable } from 'mobx';
 
+import { FARMS_LIST_REWARD_UPDATE_INTERVAL } from '@config/constants';
 import { getFarmingListCommonApi, getFarmingListUserBalances } from '@modules/farming/api';
 import {
   FarmingListBalancesModel,
@@ -7,7 +8,7 @@ import {
   FarmingListItemModel,
   FarmingListResponseModel
 } from '@modules/farming/models';
-import { defined, isEmptyArray, toRealIfPossible } from '@shared/helpers';
+import { defined, isEmptyArray, MakeInterval, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Undefined } from '@shared/types';
@@ -41,12 +42,26 @@ export class FarmingListStore {
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
   //#endregion farming list balances store
 
+  readonly updateBalancesInterval = new MakeInterval(async () => {
+    if (!this.listBalancesStore.isLoading) {
+      await this.listBalancesStore.load();
+    }
+  }, FARMS_LIST_REWARD_UPDATE_INTERVAL);
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       listStore: observable,
 
       list: computed
     });
+  }
+
+  makePendingRewardsLiveable() {
+    this.updateBalancesInterval.start();
+  }
+
+  clearIntervals() {
+    this.updateBalancesInterval.stop();
   }
 
   get list() {

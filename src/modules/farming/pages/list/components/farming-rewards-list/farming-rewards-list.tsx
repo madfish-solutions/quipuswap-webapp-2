@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
-import { useFarmingListRewardsStore } from '@modules/farming/hooks';
+import { useRewards } from '@modules/farming/hooks';
 import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { i18n } from '@translation';
@@ -13,9 +13,9 @@ import styles from './farming-rewards-list.module.scss';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
-  const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = useFarmingListRewardsStore();
   const { handleHarvestAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =
     useFarmingRewardsListViewModel();
+  const { claimablePendingRewardsInUsd, totalPendingRewardsInUsd } = useRewards();
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 

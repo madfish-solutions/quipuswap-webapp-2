@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { QUIPU_TOKEN } from '@config/tokens';
-import { toReal } from '@shared/helpers';
 import { useAmplitudeService, useTokenAmountInUsd } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useCoinflipGeneralStats, useCoinflipStore } from '../../../coinflip/hooks';
-import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll.ts';
-import { useFarmingListRewardsStore, useHarvestAll, useHarvestAndRollStore } from '../../hooks';
+import { useHarvestAndRoll } from '../../../coinflip/hooks/use-harvest-and-roll';
+import { useHarvestAll, useRewards, useHarvestAndRollStore } from '../../hooks';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useHarvestAndRollModalViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
 
@@ -24,13 +24,12 @@ export const useHarvestAndRollModalViewModel = () => {
 
   const { maxBetSize } = useCoinflipStore();
 
-  const farmingListRewardsStore = useFarmingListRewardsStore();
-
   const harvestAndRollStore = useHarvestAndRollStore();
   const { opened, coinSide, coinSideError, isLoading, isLoadingHarvest, rewardsInQuipu, rewardsQuipuInUsd } =
     harvestAndRollStore;
 
   const { getUsd } = useTokenAmountInUsd(QUIPU_TOKEN);
+  const { rewardsInQuipu: newRewardsInQuipu, rewardsQuipuInUsd: newRewardsQuipuInUsd } = useRewards();
 
   const { onCoinSideSelect, onClose, harvestAll } = useHarvestAll();
 
@@ -41,13 +40,10 @@ export const useHarvestAndRollModalViewModel = () => {
       }
       await getCoinflipGeneralStats();
 
-      const _rewardsInQuipu = toReal(await farmingListRewardsStore.getQuipuPendingRewards(), QUIPU_TOKEN);
-      harvestAndRollStore.setRewardsInQuipu(_rewardsInQuipu);
-
-      const _rewardsQuipuInUsd = getUsd(_rewardsInQuipu);
-      harvestAndRollStore.setRewardsQuipuInUsd(_rewardsQuipuInUsd);
+      harvestAndRollStore.setRewardsInQuipu(newRewardsInQuipu);
+      harvestAndRollStore.setRewardsQuipuInUsd(newRewardsQuipuInUsd);
     })();
-  }, [opened, getCoinflipGeneralStats, harvestAndRollStore, getUsd, farmingListRewardsStore]);
+  }, [opened, getCoinflipGeneralStats, harvestAndRollStore, getUsd, newRewardsInQuipu, newRewardsQuipuInUsd]);
 
   const { log } = useAmplitudeService();
 

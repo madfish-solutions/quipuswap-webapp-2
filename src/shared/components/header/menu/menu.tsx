@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 
 import cx from 'classnames';
 
@@ -31,8 +31,21 @@ export const Menu: FC<MenuProps> = ({ className }) => {
     amplitudeService.logEvent('MADFISH_CLICK');
   };
 
+  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => setInnerHeight(window.innerHeight);
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} data-test-id="menu">
+    <div
+      className={cx(styles.root, modeClass[colorThemeMode], className)}
+      data-test-id="menu"
+      style={{ height: innerHeight }}
+    >
       <Navigation className={styles.navigation} />
       <footer className={styles.footer}>
         {IS_NETWORK_MAINNET && (

@@ -77,7 +77,6 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         pendingRewardDollarEquivalent={longTermPendingRewardsInUsd}
         claimableRewardsLoading={claimableRewardsLoading}
         longTermRewardsLoading={longTermRewardsLoading}
-        amountDecimals={rewardTokenDecimals}
         className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
           content: <YouvesRewardHeader />,

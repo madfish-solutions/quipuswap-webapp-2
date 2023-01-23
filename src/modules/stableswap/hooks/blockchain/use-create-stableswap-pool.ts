@@ -57,7 +57,7 @@ export const useCreateStableswapPool = () => {
           creationPrice
         );
 
-        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyHarvested') });
+        await confirmOperation(operation.opHash, { message: t('stableswap|successfullyCreated') });
       } catch (error) {
         showErrorToast(error as Error);
         throw error;
