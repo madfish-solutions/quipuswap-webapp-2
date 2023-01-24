@@ -175,6 +175,8 @@ export const MIN_TICK_INDEX = -1048575;
 export const MAX_TICK_INDEX = 1048575;
 
 export const NON_INTERACTIVE_ELEMENT_TAB_INDEX = -1;
+
+export const DEFAULT_EXTRA_SLOTS = 0;
 //#endregion
 
 // error constant
