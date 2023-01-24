@@ -38,7 +38,7 @@ export const PoolButton: FC<PoolButtonProps> = ({ pool }) => {
         <TokensLogos tokens={tokens} />
       </Button>
       {dexTypeIcon && (
-        <Tooltip content={`${getSymbolsString(tokens)} ${poolTypesVersions[pool.dexType]}}`} placement="bottom">
+        <Tooltip content={`${getSymbolsString(tokens)} ${poolTypesVersions[pool.dexType]}`} placement="bottom">
           <div className={s.dexTypeIconWrapper}>{dexTypeIcon}</div>
         </Tooltip>
       )}
