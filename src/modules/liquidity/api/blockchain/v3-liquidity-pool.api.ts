@@ -3,7 +3,7 @@ import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
-import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
+import { DEFAULT_EXTRA_SLOTS, QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
@@ -194,6 +194,7 @@ export namespace V3LiquidityPoolApi {
         token_y: mapTokensValue(tokenY),
         fee_bps: feeBps,
         tick_spacing: tickSpacing,
+        extra_slots: DEFAULT_EXTRA_SLOTS,
         metadata
       })
       .send();
