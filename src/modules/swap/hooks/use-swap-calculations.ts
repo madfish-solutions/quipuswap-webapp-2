@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import {
+  DexTypeEnum,
   getBestTradeExactInput,
   getBestTradeExactOutput,
   getTradeInputAmount,
@@ -79,6 +80,11 @@ export const useSwapCalculations = () => {
   const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
 
   const routePairsCombinations = useRoutePairsCombinations(inputToken, outputToken, routePairs);
+  const atLeastOneRouteWithV3 = routePairsCombinations.some(pairs =>
+    pairs.some(
+      pair => pair.dexType === DexTypeEnum.QuipuSwapV3 && pair.aTokenPool.isPositive() && pair.bTokenPool.isPositive()
+    )
+  );
   const bestTradeWithSlippageTolerance = useTradeWithSlippageTolerance(
     inputAmount && toAtomic(inputAmount, inputToken),
     bestTrade,
@@ -144,6 +150,7 @@ export const useSwapCalculations = () => {
   };
 
   return {
+    atLeastOneRouteWithV3,
     bestTrade,
     dexRoute,
     onInputAmountChange,

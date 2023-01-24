@@ -14,6 +14,8 @@ const mapDexType = (dexType: DexTypeEnum): DexPairType => {
       return DexPairType.TokenToToken;
     case DexTypeEnum.QuipuSwap20:
       return DexPairType.QuipuSwapDexTwo;
+    case DexTypeEnum.QuipuSwapV3:
+      return DexPairType.QuipuSwapV3;
     default:
       throw new UnsupportedDexType();
   }
@@ -33,7 +35,7 @@ const mapTradeToDexPair = (operation: TradeOperation, token1: Token, token2: Tok
 
   const type = mapDexType(dexType);
 
-  if (type === DexPairType.TokenToXtz) {
+  if (type === DexPairType.TokenToXtz || type === DexPairType.QuipuSwapV3) {
     return {
       ...dex,
       id: dexAddress,
