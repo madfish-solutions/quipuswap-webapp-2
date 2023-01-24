@@ -11,18 +11,22 @@ interface NotEnoughQuipuErrorToastProps {
   balance: string;
 }
 
+const LINK_SUBSTITUTION_STRING = '%E';
+
 export const NotEnoughQuipuErrorToast: FC<NotEnoughQuipuErrorToastProps> = ({ cost, balance }) => {
   const { t } = useTranslation();
+  const [leftMessagePart, rightMessagePart] = t('stableswap|notEnoughQuipuError', {
+    cost,
+    balance
+  }).split(LINK_SUBSTITUTION_STRING);
 
   return (
     <div>
-      {t('stableswap|notEnoughQuipuError', {
-        cost,
-        balance
-      })}
+      {leftMessagePart}
       <Button href={`${AppRootRoutes.Swap}/${getTokenPairSlug(TEZOS_TOKEN, QUIPU_TOKEN)}`} theme="underlined">
-        {t('stableswap|tezQuipuSwap')}
+        {t('stableswap|tezQuipuSwapLinkText')}
       </Button>
+      {rightMessagePart}
     </div>
   );
 };
