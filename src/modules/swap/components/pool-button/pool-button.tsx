@@ -20,12 +20,12 @@ const dexTypesIcons: Partial<Record<DexTypeEnum, ReactElement>> = {
   [DexTypeEnum.QuipuSwapV3]: <V3Category size={16} fill="#505565" />
 };
 
-const poolTypesNames: Partial<Record<DexTypeEnum, string>> = {
-  [DexTypeEnum.QuipuSwap]: 'QuipuSwap V1',
-  [DexTypeEnum.QuipuSwapTokenToTokenDex]: 'QuipuSwap V1',
+const poolTypesVersions: Partial<Record<DexTypeEnum, string>> = {
+  [DexTypeEnum.QuipuSwap]: '1.0',
+  [DexTypeEnum.QuipuSwapTokenToTokenDex]: '1.0',
   [DexTypeEnum.QuipuSwapCurveLike]: 'Stable',
-  [DexTypeEnum.QuipuSwap20]: 'QuipuSwap V2',
-  [DexTypeEnum.QuipuSwapV3]: 'QuipuSwap V3'
+  [DexTypeEnum.QuipuSwap20]: '2.0',
+  [DexTypeEnum.QuipuSwapV3]: '3.0'
 };
 
 export const PoolButton: FC<PoolButtonProps> = ({ pool }) => {
@@ -38,15 +38,7 @@ export const PoolButton: FC<PoolButtonProps> = ({ pool }) => {
         <TokensLogos tokens={tokens} />
       </Button>
       {dexTypeIcon && (
-        <Tooltip
-          content={
-            <>
-              <p className={s.tooltipText}>{poolTypesNames[pool.dexType]} pool:</p>
-              <p className={s.tooltipText}>{getSymbolsString(tokens)}</p>
-            </>
-          }
-          placement="bottom"
-        >
+        <Tooltip content={`${getSymbolsString(tokens)} ${poolTypesVersions[pool.dexType]}}`} placement="bottom">
           <div className={s.dexTypeIconWrapper}>{dexTypeIcon}</div>
         </Tooltip>
       )}
