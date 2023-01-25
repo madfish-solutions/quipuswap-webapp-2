@@ -52,7 +52,7 @@ export const PositionDetails: FC = observer(() => {
     >
       <DetailsCardCell
         cellName={t('liquidity|tags')}
-        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        tooltipContent={t('liquidity|tagsTooltip')}
         className={styles.deviantBehavior}
       >
         <LiquidityLabels categories={categories} colored={true} />
