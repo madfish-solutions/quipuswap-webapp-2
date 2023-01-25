@@ -126,6 +126,7 @@ export const liquidity = {
   minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower of equal to max price.',
   maxPriceShouldBePositive: 'Maximal price should be positive.',
   tags: 'Tags',
+  tagsTooltip: 'The tags for the tokens in the pool.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.',
   initialPrice: 'Initial price',
