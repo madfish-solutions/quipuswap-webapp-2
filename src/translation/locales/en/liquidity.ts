@@ -88,7 +88,8 @@ export const liquidity = {
   currentPrice: 'Current price',
   currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
   feeRate: 'Fee rate',
-  feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions.',
+  feeRateTooltip:
+    'The share of swaps value which is accrued to liquidity providers active positions to liquidity providers active positions and dev fund.',
   tokenReserves: '{{tokenSymbol}} reserves',
   tokenReservesTooltip: 'The amount of added base assets in a selected liquidity pool.',
   Token: 'Token',
