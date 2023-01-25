@@ -5,7 +5,6 @@ export * from './use-single-modal-state';
 export * from './use-ui-store';
 export * from './use-on-block';
 export const useUpdateOnBlockSWR = useUpdateOnBlockSWR_;
-export * from './use-dex-graph';
 export * from './use-loading.decorator';
 export * from './use-svg-helper';
 export * from './use-token-balance';

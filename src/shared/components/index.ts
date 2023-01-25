@@ -47,7 +47,6 @@ export * from './tooltip';
 export * from './top-stats';
 export * from './deadline-input';
 export * from './tokens-logo';
-export * from './view-pair-analytics';
 export * from './settings-button';
 export * from './slippage';
 export * from './amplitude-subscription';
