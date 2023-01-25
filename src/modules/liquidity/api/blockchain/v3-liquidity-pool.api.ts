@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { sendBatch } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
+import { WTEZ_TOKEN } from '@config/tokens';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   bigNumberToString,
@@ -14,7 +15,8 @@ import {
   isExist,
   getTransactionDeadline,
   toHexString,
-  getSymbolsString
+  getSymbolsString,
+  isTezosToken
 } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { address, BigMap, int, nat, Token, TokensValue, WithId } from '@shared/types';
@@ -177,6 +179,8 @@ export namespace V3LiquidityPoolApi {
     feeBps: nat,
     tickSpacing: int
   ) => {
+    const wrappedTokenX = isTezosToken(tokenX) ? WTEZ_TOKEN : tokenX;
+    const wrappedTokenY = isTezosToken(tokenY) ? WTEZ_TOKEN : tokenY;
     const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
 
     const symbol = getSymbolsString([tokenX, tokenY]);
@@ -190,8 +194,8 @@ export namespace V3LiquidityPoolApi {
     return factoryContract.methodsObject
       .deploy_pool({
         cur_tick_index: currentTickIndex,
-        token_x: mapTokensValue(tokenX),
-        token_y: mapTokensValue(tokenY),
+        token_x: mapTokensValue(wrappedTokenX),
+        token_y: mapTokensValue(wrappedTokenY),
         fee_bps: feeBps,
         tick_spacing: tickSpacing,
         metadata
