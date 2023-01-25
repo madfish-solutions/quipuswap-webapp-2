@@ -6,3 +6,5 @@ export * from './user-balances-subscription';
 export * from './send-batch';
 export * from './get-user-lp-balance-in-dex';
 export * from './migrate-liquidity';
+export * from './with-wtez-burn-on-output.api';
+export * from './with-wtez-mint-on-input.api';

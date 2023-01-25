@@ -1,5 +1,6 @@
 import { Button, Card, ConnectWalletOrDoSomething, Iterator, RadioButton, TokenInput } from '@shared/components';
 import { TokenSelect } from '@shared/components/token-select';
+import { WarningAlert } from '@shared/components/warning-alert';
 import { Plus } from '@shared/svg';
 import commonStyles from '@styles/CommonContainer.module.scss';
 
@@ -17,7 +18,8 @@ export const CreatePoolForm = () => {
     initialPriceValue,
     initialPriceError,
     setInitialPriceValue,
-    onSubmit
+    onSubmit,
+    warningMessage
   } = useCreatePoolFormViewModel();
 
   const { create, initialPrice, feeRates } = translation;
@@ -41,6 +43,7 @@ export const CreatePoolForm = () => {
 
         <h3>{feeRates}</h3>
         <RadioButton {...radioButtonParams} />
+        <WarningAlert message={warningMessage} />
         <div className={commonStyles.buttons}>
           <ConnectWalletOrDoSomething>
             <Button

@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
+import { getFormikError, isExist, isTezosToken, operationAmountSchema, sortTokens } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -157,6 +157,10 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
+  const warningMessage =
+    (isExist(token0) && isTezosToken(token0)) || (isExist(token1) && isTezosToken(token1))
+      ? t('liquidity|v3PoolWithTezCreationWarning')
+      : null;
 
   return {
     translation,
@@ -169,6 +173,7 @@ export const useCreatePoolFormViewModel = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialPriceError: getFormikError(formik as any, eCreatePoolValues.initialPrice),
     setInitialPriceValue,
-    onSubmit: formik.handleSubmit
+    onSubmit: formik.handleSubmit,
+    warningMessage
   };
 };
