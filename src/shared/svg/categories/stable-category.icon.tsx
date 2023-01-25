@@ -1,5 +1,6 @@
 import { FC, useContext } from 'react';
 
+import { DEFAULT_CATEGORY_ICON_SIZE } from '@config/constants';
 import { ColorThemeContext } from '@providers/color-theme-context';
 import { useSvgHelper } from '@shared/hooks';
 import { IconProps } from '@shared/types';
@@ -18,17 +19,19 @@ const valuesOfDAttribute = [
   'M5 12v-1a7 7 0 1 1 14 0v1'
 ];
 
-export const StableCategory: FC<Props> = ({ colored }) => {
+export const StableCategory: FC<Props> = ({ colored, size = DEFAULT_CATEGORY_ICON_SIZE, stroke }) => {
   const { getId, getUrl } = useSvgHelper('StableCategory');
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
-    <svg width={24} height={24} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" xmlns="http://www.w3.org/2000/svg">
       <>
         {valuesOfDAttribute.map((value, index) => (
           <path
             d={value}
-            stroke={colored ? getUrl(String.fromCharCode(asciiLetterA + index)) : themeColors.fillIconCategories}
+            stroke={
+              colored ? getUrl(String.fromCharCode(asciiLetterA + index)) : stroke ?? themeColors.fillIconCategories
+            }
           />
         ))}
       </>
