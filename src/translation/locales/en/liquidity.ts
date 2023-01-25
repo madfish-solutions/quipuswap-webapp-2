@@ -133,5 +133,7 @@ export const liquidity = {
   feeRates03: '0.3% (Suitable for volatile pairs)',
   feeRates1: '1% (Suitable for exotic pairs)',
   v3PoolWithTezCreationWarning:
-    'The pool will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!'
+    'The pool will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  v3PositionWithTezCreationWarning:
+    'The position will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!'
 } as const;
