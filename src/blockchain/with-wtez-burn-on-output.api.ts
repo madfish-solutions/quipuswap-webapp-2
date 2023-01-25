@@ -12,6 +12,10 @@ export const getWithWtezBurnOnOutputParams = async (
   accountPkh: string,
   operationParams: TransferParams[]
 ) => {
+  if (mutezAmount.isZero()) {
+    return operationParams;
+  }
+
   const wTezContract = await getContract(tezos, WTEZ_TOKEN.contractAddress);
 
   return operationParams.concat(wTezContract.methods.burn(accountPkh, accountPkh, mutezAmount).toTransferParams());

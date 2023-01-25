@@ -7,7 +7,7 @@ import {
 } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
-import { getFormikError, getTokenDecimals, isExist, isTezosToken } from '@shared/helpers';
+import { getFormikError, getTokenDecimals, isExist } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -21,6 +21,7 @@ import {
   useInitialPriceRange
 } from './hooks';
 import { CreatePositionInput } from './types/create-position-form';
+import { tezosTokenIsIncluded } from './helpers';
 
 const MIN_PRICE_RANGE_DECIMALS = 6;
 
@@ -82,7 +83,7 @@ export const useCreateNewPositionPageViewModel = () => {
     getFormikError(formik, CreatePositionInput.MIN_PRICE) ?? getFormikError(formik, CreatePositionInput.MAX_PRICE);
   const disabled = formik.isSubmitting || isExist(bottomError);
   const warningMessage =
-    ((isExist(tokenX) && isTezosToken(tokenX)) || (isExist(tokenY) && isTezosToken(tokenY))) && !isExist(bottomError)
+    tezosTokenIsIncluded([tokenX, tokenY]) && !isExist(bottomError)
       ? t('liquidity|v3PositionWithTezCreationWarning')
       : null;
 

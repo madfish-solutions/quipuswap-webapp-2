@@ -12,6 +12,10 @@ export const getWithWtezMintOnInputParams = async (
   accountPkh: string,
   operationParams: TransferParams[]
 ) => {
+  if (mutezAmount.isZero()) {
+    return operationParams;
+  }
+
   const wTezContract = await getContract(tezos, WTEZ_TOKEN.contractAddress);
 
   return [
