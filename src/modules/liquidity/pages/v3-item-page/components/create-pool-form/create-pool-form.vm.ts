@@ -1,11 +1,14 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
+import { useGetLiquidityList, useLiquidityListStore } from '@modules/liquidity/hooks';
+import { mapLiquidityListItem } from '@modules/liquidity/pages/list/map-liquidity-list-item';
+import { useReady } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
+import { getFormikError, isEqual, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -89,6 +92,9 @@ const initialValues: CreatePoolValues = {
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
+  const isReady = useReady();
+  const { list } = useLiquidityListStore();
+  const { getLiquidityList, delayedGetLiquidityList } = useGetLiquidityList();
 
   const { doCreatePool } = useDoCreateV3Pool();
 
@@ -99,10 +105,29 @@ export const useCreatePoolFormViewModel = () => {
       const [token0, token1] = values[eCreatePoolValues.tokens].sort(sortTokens);
       const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
 
+      // eslint-disable-next-line no-console
+      console.log(list);
+      // eslint-disable-next-line no-console
+      console.log(
+        '0',
+        list.filter(item => isEqual(item.type, 'UNISWAP')).map(mapLiquidityListItem)
+        // .map(item => item.id.toFixed())
+      );
+
       await doCreatePool(feeRate, token0, token1, initialPrice);
+      await delayedGetLiquidityList();
+
+      // eslint-disable-next-line no-console
+      console.log(
+        '1',
+        list.filter(item => isEqual(item.type, 'UNISWAP')).map(mapLiquidityListItem)
+        // .map(item => item.id.toFixed())
+      );
+
+      actions.resetForm();
       actions.setSubmitting(false);
     },
-    [doCreatePool]
+    [list, doCreatePool, delayedGetLiquidityList]
   );
 
   const formik = useFormik({
@@ -157,6 +182,12 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
+
+  useEffect(() => {
+    if (isReady) {
+      void getLiquidityList();
+    }
+  }, [getLiquidityList, isReady]);
 
   return {
     translation,
