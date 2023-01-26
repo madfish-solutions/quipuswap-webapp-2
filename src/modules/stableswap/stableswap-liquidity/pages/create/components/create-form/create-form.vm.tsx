@@ -3,9 +3,14 @@ import { useCallback, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
-import { TEZOS_TOKEN } from '@config/tokens';
+import { getUserTokenBalance } from '@blockchain';
+import { ZERO_AMOUNT_BN } from '@config/constants';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
+import { useRootStore } from '@providers/root-store-provider';
 import {
+  defined,
+  formatValueBalance,
   getTokenIdFromSlug,
   isEmptyArray,
   isExist,
@@ -14,14 +19,17 @@ import {
   sortTokens,
   stringToBigNumber,
   toAtomic,
-  toFraction
+  toFraction,
+  toReal
 } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 //TODO: fix circular dependencies
 import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Nullable, Token } from '@shared/types';
+import { useToasts } from '@shared/utils';
 
 import { useCreateStableswapPool, usePoolCreationPrice } from '../../../../../hooks';
+import { NotEnoughQuipuErrorToast } from '../not-enough-quipu-error-toast';
 import {
   AMPLIFICATION_FIELD_NAME,
   LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
@@ -39,9 +47,12 @@ import {
 import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 
 export const useCreateFormViewModel = () => {
+  const { authStore, tezos } = useRootStore();
+  const { accountPkh } = authStore;
   const { creationPrice } = usePoolCreationPrice();
   const { chooseTokens } = useChooseTokens();
   const { createStableswapPool } = useCreateStableswapPool();
+  const { showRichTextErrorToast } = useToasts();
   const [tokens, setTokens] = useState<Nullable<Array<Token>>>(null);
 
   const balances = useTokensBalancesOnly(tokens);
@@ -76,6 +87,23 @@ export const useCreateFormViewModel = () => {
         .sort((a, b) => sortTokens(a.token, b.token));
 
       try {
+        const quipuBalance = toReal(
+          (await getUserTokenBalance(defined(tezos), defined(accountPkh), QUIPU_TOKEN)) ?? ZERO_AMOUNT_BN,
+          QUIPU_TOKEN
+        );
+        const displayedQuipuBalance = formatValueBalance(quipuBalance);
+        const displayedCreationCost = formatValueBalance(creationPrice ?? ZERO_AMOUNT_BN);
+        if (quipuBalance.lt(creationPrice ?? ZERO_AMOUNT_BN)) {
+          const error = new Error(
+            `Not enough QUIPU tokens to create a pool, cost is ${displayedCreationCost} QUIPU, balance is ${displayedQuipuBalance} QUIPU`
+          );
+          showRichTextErrorToast(
+            error,
+            <NotEnoughQuipuErrorToast cost={displayedCreationCost} balance={displayedQuipuBalance} />
+          );
+          throw error;
+        }
+
         await createStableswapPool({
           amplificationParameter: new BigNumber(values[AMPLIFICATION_FIELD_NAME]),
           fee: {
@@ -91,7 +119,7 @@ export const useCreateFormViewModel = () => {
         actions.setSubmitting(false);
       }
     },
-    [createStableswapPool, creationPrice, tokens]
+    [accountPkh, createStableswapPool, creationPrice, showRichTextErrorToast, tezos, tokens]
   );
 
   const { validationSchema, initialValues } = useFormikParams(tokens, balances);
