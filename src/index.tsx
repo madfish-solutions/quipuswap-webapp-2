@@ -10,7 +10,6 @@ import { DAppTokensProvider } from '@providers/dapp-tokens';
 import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppProvider } from '@providers/use-dapp';
 import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
-import { DexGraphProvider } from '@shared/hooks';
 import { sentryService } from '@shared/services';
 
 import { App } from './app';
@@ -34,9 +33,7 @@ if (container) {
                 <DAppBakerProvider>
                   <DAppTokensProvider>
                     <BalancesProvider>
-                      <DexGraphProvider>
-                        <App />
-                      </DexGraphProvider>
+                      <App />
                     </BalancesProvider>
                   </DAppTokensProvider>
                 </DAppBakerProvider>
