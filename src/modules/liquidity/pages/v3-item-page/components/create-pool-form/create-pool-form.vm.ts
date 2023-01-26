@@ -4,13 +4,14 @@ import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
+import { WTEZ_TOKEN } from '@config/tokens';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
+import { getFormikError, isExist, isNull, operationAmountSchema, sortTokens } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
-import { tezosTokenIsIncluded } from '../../helpers';
+import { tezosTokenIsIncluded, tokenIsIncluded } from '../../helpers';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
 
@@ -158,20 +159,26 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
-  const warningMessage = tezosTokenIsIncluded([token0, token1]) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
+  const errorMessage =
+    tezosTokenIsIncluded([token0, token1]) && tokenIsIncluded([token0, token1], WTEZ_TOKEN)
+      ? t('liquidity|cannotCreatePoolError')
+      : null;
+  const warningMessage =
+    tezosTokenIsIncluded([token0, token1]) && isNull(errorMessage) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
 
   return {
     translation,
     radioButtonParams,
     tokensSelectData,
     tokens,
-    disabled: !tokens || formik.isSubmitting,
+    disabled: !tokens || formik.isSubmitting || isExist(errorMessage),
     isSubmitting: formik.isSubmitting,
     initialPriceValue: formik.values[eCreatePoolValues.initialPrice],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialPriceError: getFormikError(formik as any, eCreatePoolValues.initialPrice),
     setInitialPriceValue,
     onSubmit: formik.handleSubmit,
-    warningMessage
+    warningMessage,
+    errorMessage
   };
 };
