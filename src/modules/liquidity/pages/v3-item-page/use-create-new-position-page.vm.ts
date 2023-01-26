@@ -13,6 +13,7 @@ import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
+import { tezosTokenIsIncluded } from './helpers';
 import {
   useCreatePositionFormik,
   useCurrentTick,
@@ -21,7 +22,6 @@ import {
   useInitialPriceRange
 } from './hooks';
 import { CreatePositionInput } from './types/create-position-form';
-import { tezosTokenIsIncluded } from './helpers';
 
 const MIN_PRICE_RANGE_DECIMALS = 6;
 
