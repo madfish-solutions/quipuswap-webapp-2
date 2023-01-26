@@ -10,9 +10,9 @@ import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
+import { tezosTokenIsIncluded } from '../../helpers';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
-import { tezosTokenIsIncluded } from '../../helpers';
 
 enum eCreatePoolValues {
   feeRate = 'feeRate',
@@ -158,8 +158,7 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
-  const warningMessage =
-    tezosTokenIsIncluded([token0, token1]) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
+  const warningMessage = tezosTokenIsIncluded([token0, token1]) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
 
   return {
     translation,

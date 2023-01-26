@@ -2,7 +2,7 @@ import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { sendBatch } from '@blockchain';
+import { withWtezBurnOnOutput } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { WTEZ_TOKEN } from '@config/tokens';
@@ -91,13 +91,16 @@ export namespace V3LiquidityPoolApi {
     contractAddress: string,
     positionsIds: BigNumber[],
     accountPkh: string,
-    transactionDuration: BigNumber
+    transactionDuration: BigNumber,
+    mutezToBurn: BigNumber
   ) => {
     const contract = await getContract(tezos, contractAddress);
     const transactionDeadline = await getTransactionDeadline(tezos, transactionDuration);
 
-    return await sendBatch(
+    return await withWtezBurnOnOutput(
       tezos,
+      mutezToBurn,
+      accountPkh,
       positionsIds.map(id =>
         contract.methods
           .update_position(
