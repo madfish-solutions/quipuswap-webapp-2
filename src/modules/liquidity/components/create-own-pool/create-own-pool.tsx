@@ -22,12 +22,7 @@ export const CreateOwnPool: FC = () => {
   return (
     <Card contentClassName={styles.content} className={cx(modeClass[colorThemeMode], styles.root)}>
       <p className={styles.text}>{t('liquidity|noPool')}</p>
-      <Button
-        className={styles.button}
-        external
-        href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.create}`}
-        theme="secondary"
-      >
+      <Button className={styles.button} href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.create}`} theme="secondary">
         {t('liquidity|createPool')}
       </Button>
     </Card>
