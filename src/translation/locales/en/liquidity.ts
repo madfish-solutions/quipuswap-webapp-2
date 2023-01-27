@@ -43,6 +43,7 @@ export const liquidity = {
   poolsTooltip:
     'The total number of token pools on QuipuSwap, including stable pools, token-to-token pools, and tez-to-token pools.',
   feesRateTooltip: 'Trading fees charged in this pool.',
+  feeRateTooltipPosDetails: 'The share of swaps value which is accrued to liquidity providers active positions.',
   totalLpSupplyTooltip: 'Number of liquidity provider tokens.',
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',

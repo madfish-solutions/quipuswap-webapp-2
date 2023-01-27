@@ -70,7 +70,7 @@ export const PositionDetails: FC = observer(() => {
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
         <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feeRateTooltipPosDetails')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|minPriceTooltip')}>
