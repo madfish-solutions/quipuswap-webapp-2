@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import {
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore,
+  useLiquidityV3PositionsStore,
   useLiquidityV3PositionStore
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
@@ -23,6 +24,7 @@ export const useRouterViewModel = () => {
 
   const poolStore = useLiquidityV3PoolStore();
   const positionStore = useLiquidityV3PositionStore();
+  const { positionsStore } = useLiquidityV3PositionsStore();
   const { positionsWithStats } = usePositionsWithStats();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
@@ -37,7 +39,7 @@ export const useRouterViewModel = () => {
     }
 
     if (isExist(id) && onlyDigits(id) !== id) {
-      poolStore.setError(new InvalidPoolIdError(id));
+      poolStore.itemSore.setError(new InvalidPoolIdError(id));
     } else if (isExist(id) && tezos) {
       if (isExist(positionId)) {
         positionStore.setPositionId(new BigNumber(positionId));
@@ -46,14 +48,15 @@ export const useRouterViewModel = () => {
       (async () => {
         try {
           await poolStore.itemSore.load();
-        } catch (_error) {
-          poolStore.setError(_error as Error);
-        }
+        } catch {}
       })();
     }
 
-    return () => poolStore.itemSore.resetData();
-  }, [poolStore, id, positionId, tezos, positionStore, location.pathname]);
+    return () => {
+      poolStore.itemSore.resetData();
+      positionsStore.resetData();
+    };
+  }, [poolStore, id, positionId, tezos, positionStore, location.pathname, positionsStore]);
 
   return {
     isLoading: !location.pathname.includes('v3/create') && (poolStore.itemIsLoading || tokensAreLoading),
