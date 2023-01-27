@@ -9,5 +9,6 @@ export const KNOWN_DEX_TYPES = [
   DexTypeEnum.QuipuSwapTokenToTokenDex,
   DexTypeEnum.QuipuSwapCurveLike,
   DexTypeEnum.QuipuSwap20,
-  DexTypeEnum.QuipuSwapV3
+  DexTypeEnum.QuipuSwapV3,
+  DexTypeEnum.YupanaWtez
 ];
