@@ -21,7 +21,11 @@ export const getDevFeeRatio = (route: TradeOperation) => {
           .dividedBy(CONTRACT_DECIMALS_PRECISION) ?? ZERO_AMOUNT_BN
       );
     case DexTypeEnum.QuipuSwapV3:
-      return new BigNumber(1).minus(route.fees?.devFee?.dividedBy(FEE_BASE_POINTS_PRECISION) ?? ZERO_AMOUNT_BN);
+      return new BigNumber(1).minus(
+        route.fees?.devFee && route.fees.liquidityProvidersFee
+          ? route.fees.devFee.dividedBy(route.fees.liquidityProvidersFee).dividedBy(FEE_BASE_POINTS_PRECISION ** 2)
+          : ZERO_AMOUNT_BN
+      );
     default:
       return new BigNumber(1).minus(route.fees?.devFee?.dividedBy(STABLESWAP_PRECISION_FEE) ?? ZERO_AMOUNT_BN);
   }

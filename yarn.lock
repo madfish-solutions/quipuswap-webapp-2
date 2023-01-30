@@ -10962,10 +10962,10 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-quipuswap-v3-sdk@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/quipuswap-v3-sdk/-/quipuswap-v3-sdk-0.0.4.tgz#8778025e9d2ec8a1714624d4494ba2794e437b0e"
-  integrity sha512-jIOAI0XoTqzW3ld7yYfTzIbnmNhJxtnQj1/AwT+s1DLYv7uAQ7EuSIcOKgyiXOx5GQ7k/PJrG3vDABQCOooY3g==
+quipuswap-v3-sdk@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/quipuswap-v3-sdk/-/quipuswap-v3-sdk-0.0.5.tgz#85eac83475dde1c05ccd5776bdd9542a80745213"
+  integrity sha512-I1lmAIwXCT9GPy5y5T9/NWY/MIW9GGqF7Fbu89oDxiuBJ2sdI8N8SRJ0MIVHWzin+ql4imCToGdG+Y3Q+js08g==
   dependencies:
     "@taquito/http-utils" "^15.0.1"
     "@taquito/local-forging" "^15.0.1"
