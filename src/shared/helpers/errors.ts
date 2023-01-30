@@ -1,4 +1,4 @@
-export const NOT_FOUND_MESSAGES = ['Cannot parse contract id', 'is invalid', '404'];
+export const NOT_FOUND_MESSAGES = ['Cannot parse contract id', 'is invalid', '404', 'Cannot find'];
 
-export const isNotFoundError = (error: Error): boolean =>
-  NOT_FOUND_MESSAGES.some(message => error.message.includes(message));
+export const isNotFoundError = (error: string | Error): boolean =>
+  NOT_FOUND_MESSAGES.some(message => (error instanceof Error ? error.message : error).includes(message));

@@ -16,7 +16,6 @@ import { LiquidityContractTokenBalancesModel } from '../models';
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
 @ModelBuilder()
 export class LiquidityV3PoolStore {
-  error: Nullable<Error> = null;
   poolId: Nullable<BigNumber> = null;
   activeTokenIndex = FIRST_INDEX;
 
@@ -55,25 +54,24 @@ export class LiquidityV3PoolStore {
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       itemSore: observable,
-      error: observable,
       activeTokenIndex: observable,
       item: computed,
       itemModel: computed,
       feeBps: computed,
       sqrtPrice: computed,
       contractAddress: computed,
+      error: computed,
       setPoolId: action,
-      setError: action,
       setActiveTokenIndex: action
     });
   }
 
-  setPoolId(id: BigNumber) {
-    this.poolId = id;
+  get error() {
+    return this.itemSore.error;
   }
 
-  setError(error: Error) {
-    this.error = error;
+  setPoolId(id: BigNumber) {
+    this.poolId = id;
   }
 
   setActiveTokenIndex(tokenIndex: number) {
