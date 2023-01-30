@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens, getWithWtezMintOnInputParams } from '@blockchain';
 import { MIN_TICK_INDEX, QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
-import { calculateLiquidity, calculateTick, calculateTickPrice } from '@modules/liquidity/pages/v3-item-page/helpers';
+import { calculateLiquidity, calculateTick } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { Tzkt } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import {
@@ -49,6 +49,7 @@ export namespace V3Positions {
     liquiditySlippage: BigNumber,
 
     currentTickIndex: BigNumber,
+    currentPrice: BigNumber,
 
     minPrice: BigNumber,
     maxPrice: BigNumber,
@@ -60,7 +61,6 @@ export namespace V3Positions {
 
     const lowerTick = calculateTick(minPrice, tickSpacing);
     const upperTick = calculateTick(maxPrice, tickSpacing);
-    const currentTickPrice = calculateTickPrice(currentTickIndex);
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
@@ -68,7 +68,7 @@ export namespace V3Positions {
       currentTickIndex,
       lowerTick.index,
       upperTick.index,
-      currentTickPrice,
+      currentPrice,
       lowerTick.price,
       upperTick.price,
       xTokenAmount,
