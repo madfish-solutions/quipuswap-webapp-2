@@ -1,11 +1,12 @@
-/* eslint-disable no-console */
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { FEE_BASE_POINTS_PRECISION } from '@config/constants';
+import { AppRootRoutes } from '@app.router';
+import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
+import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
 import { getFormikError, isExist, operationAmountSchema, sortTokens, toFraction } from '@shared/helpers';
@@ -63,6 +64,11 @@ const standardTokenSelectProps = {
   blackListedTokens: []
 };
 
+const DEFAULT_ALARM_MESSAGE_INFO = {
+  poolExists: false,
+  poolLink: EMPTY_STRING
+};
+
 const validationSchema = yup.object().shape({
   [eCreatePoolValues.feeRate]: yup.number().required(),
   [eCreatePoolValues.initialPrice]: operationAmountSchema(
@@ -95,6 +101,7 @@ export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
   const tezos = useTezos();
   const { doCreatePool } = useDoCreateV3Pool();
+  const [alarmMessageInfo, setAlarmMessageInfo] = useState(DEFAULT_ALARM_MESSAGE_INFO);
 
   const handleSubmit = useCallback(
     async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
@@ -109,8 +116,15 @@ export const useCreatePoolFormViewModel = () => {
       );
 
       if (isExist(pool)) {
+        setAlarmMessageInfo({
+          poolExists: true,
+          poolLink: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${pool}`
+        });
+
         return;
       }
+
+      setAlarmMessageInfo(DEFAULT_ALARM_MESSAGE_INFO);
 
       await doCreatePool(feeRate, token0, token1, initialPrice);
       actions.setSubmitting(false);
@@ -126,6 +140,7 @@ export const useCreatePoolFormViewModel = () => {
 
   const radioButtonParams = {
     onChange: (value: number) => {
+      setAlarmMessageInfo(DEFAULT_ALARM_MESSAGE_INFO);
       formik.setFieldValue(eCreatePoolValues.feeRate, Number(value));
     },
     value: formik.values[eCreatePoolValues.feeRate],
@@ -144,6 +159,7 @@ export const useCreatePoolFormViewModel = () => {
       ...standardTokenSelectProps,
       token: token0,
       onTokenChange(token) {
+        setAlarmMessageInfo(DEFAULT_ALARM_MESSAGE_INFO);
         formik.setFieldValue(eCreatePoolValues.tokens, [token, token1]);
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -154,6 +170,7 @@ export const useCreatePoolFormViewModel = () => {
       ...standardTokenSelectProps,
       token: token1,
       onTokenChange(token) {
+        setAlarmMessageInfo(DEFAULT_ALARM_MESSAGE_INFO);
         formik.setFieldValue(eCreatePoolValues.tokens, [token0, token]);
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -172,6 +189,7 @@ export const useCreatePoolFormViewModel = () => {
   const tokens = formik.values[eCreatePoolValues.tokens];
 
   return {
+    alarmMessageInfo,
     translation,
     radioButtonParams,
     tokensSelectData,
