@@ -3,14 +3,10 @@ import { cloneArray, isNull, sortBigNumber, SortDirection } from '@shared/helper
 import { LiquidityItemModel } from '../../../models';
 import { LiquiditySortField } from '../types';
 
-const sortById = (first: LiquidityItemModel, second: LiquidityItemModel, sortDirection: SortDirection) =>
-  sortBigNumber(first.item.id, second.item.id, sortDirection);
-
 const sortByTvl = (first: LiquidityItemModel, second: LiquidityItemModel, sortDirection: SortDirection) =>
   sortBigNumber(first.item.tvlInUsd, second.item.tvlInUsd, sortDirection);
 
 const stableswapSorts = {
-  [LiquiditySortField.ID]: sortById,
   [LiquiditySortField.TVL]: sortByTvl
 };
 

@@ -33,9 +33,10 @@ export const usePositionsFeesListViewModel = () => {
     onButtonClick: claimAll,
     translation: {
       claimFeeTranslation: t('liquidity|claimFee'),
-      rewardsTooltipTranslation: t('farm|rewardsTooltip'),
+      rewardsTooltipTranslation: t('liquidity|rewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
-      totalDepositTranslation: t('liquidity|totalDeposit')
+      totalDepositTranslation: t('liquidity|totalDeposit'),
+      totalDepositTooltipTranslation: t('liquidity|totalDepositTooltip')
     },
     claimablePendingRewards: claimablePendingRewardsInUsd,
     details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionsFeeTokensList />,
