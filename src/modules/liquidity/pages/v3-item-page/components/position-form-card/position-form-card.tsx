@@ -1,5 +1,5 @@
 import { FormHeader } from '@modules/liquidity/components';
-import { Card } from '@shared/components';
+import { Card, SettingsButton } from '@shared/components';
 import { CFC } from '@shared/types';
 import CommonContainerStyles from '@styles/CommonContainer.module.scss';
 
@@ -13,7 +13,8 @@ export const PositionFormCard: CFC<PositionFormCardProps> = ({ children, backHre
   <Card
     subheader={{
       content: <FormHeader className={styles.formHeader} href={backHref} />,
-      className: CommonContainerStyles.header
+      className: CommonContainerStyles.header,
+      button: <SettingsButton colored />
     }}
     contentClassName={CommonContainerStyles.content}
     data-test-id="positionFormCard"

@@ -63,7 +63,7 @@ export const PoolDetailsCreate: FC = observer(() => {
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
         <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feeRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
       <DetailsCardCell
@@ -74,7 +74,7 @@ export const PoolDetailsCreate: FC = observer(() => {
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('liquidity|tokenReserves', { tokenSymbol: tokenYSymbol })}
-        tooltipContent={t('liquidity|tokenReservesTooltip')}
+        tooltipContent={t('liquidity|tokenQuoteReservesTooltip')}
       >
         <StateCurrencyAmount amount={tokenYAmount} currency={tokenYSymbol} />
       </DetailsCardCell>
