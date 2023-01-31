@@ -1,13 +1,23 @@
-import { Button, Card, ConnectWalletOrDoSomething, Iterator, RadioButton, TokenInput } from '@shared/components';
+import {
+  AlarmMessage,
+  Button,
+  Card,
+  ConnectWalletOrDoSomething,
+  Iterator,
+  RadioButton,
+  TokenInput
+} from '@shared/components';
 import { TokenSelect } from '@shared/components/token-select';
 import { Plus } from '@shared/svg';
 import commonStyles from '@styles/CommonContainer.module.scss';
 
+import { LiquidityPoolExist } from '../../../../components';
 import styles from './create-pool-form.module.scss';
 import { useCreatePoolFormViewModel } from './create-pool-form.vm';
 
 export const CreatePoolForm = () => {
   const {
+    alarmMessageInfo,
     translation,
     tokensSelectData,
     tokens,
@@ -21,6 +31,7 @@ export const CreatePoolForm = () => {
   } = useCreatePoolFormViewModel();
 
   const { create, initialPrice, feeRates } = translation;
+  const { poolExists, poolLink } = alarmMessageInfo;
 
   return (
     <Card contentClassName={styles.content}>
@@ -38,6 +49,12 @@ export const CreatePoolForm = () => {
           error={initialPriceError}
           onInputChange={setInitialPriceValue}
         />
+
+        {poolExists && (
+          <AlarmMessage>
+            <LiquidityPoolExist className={styles.poolExistWarning} existingPoolLink={poolLink} />
+          </AlarmMessage>
+        )}
 
         <h3>{feeRates}</h3>
         <RadioButton {...radioButtonParams} />

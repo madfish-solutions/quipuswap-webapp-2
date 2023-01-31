@@ -173,6 +173,7 @@ export const FARMING_FEES_PERCENTAGE_PRECISION = 16;
 export const DEFAULT_TICK_SPACING = 1;
 export const MIN_TICK_INDEX = -1048575;
 export const MAX_TICK_INDEX = 1048575;
+export const DEFAULT_EXTRA_SLOTS = 0;
 
 export const NON_INTERACTIVE_ELEMENT_TAB_INDEX = -1;
 

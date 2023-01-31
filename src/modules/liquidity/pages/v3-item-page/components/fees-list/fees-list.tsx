@@ -36,7 +36,13 @@ export const FeesList: FC<Props> = ({
   claimIsDisabled = false,
   isRewardsError
 }) => {
-  const { rewardsTooltipTranslation, claimFeeTranslation, totalFeesTranslation, totalDepositTranslation } = translation;
+  const {
+    rewardsTooltipTranslation,
+    claimFeeTranslation,
+    totalFeesTranslation,
+    totalDepositTranslation,
+    totalDepositTooltipTranslation
+  } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
@@ -62,6 +68,7 @@ export const FeesList: FC<Props> = ({
           className={styles.totalDeposit}
           cellNameClassName={styles.totalDepositCellName}
           cellName={totalDepositTranslation}
+          tooltipContent={totalDepositTooltipTranslation}
           data-test-id="totalDeposit"
         >
           <StateCurrencyAmount
