@@ -82,7 +82,7 @@ export namespace V3LiquidityPoolApi {
 
   export const getPool = async (tezos: TezosToolkit, id: BigNumber) => {
     const factoryStorage = await getStorageInfo<V3PartialFactoryStorage>(tezos, DEX_V3_FACTORY_ADDRESS);
-    const contractAddress = defined(await factoryStorage.pools.get(id), 'contractAddress');
+    const contractAddress = defined(await factoryStorage.pools.get(id), 'Cannot find pool contract');
 
     return {
       contractAddress,
