@@ -124,8 +124,6 @@ export const useCreatePoolFormViewModel = () => {
         return;
       }
 
-      setAlarmMessageInfo(DEFAULT_ALARM_MESSAGE_INFO);
-
       await doCreatePool(feeRate, token0, token1, initialPrice);
       actions.setSubmitting(false);
     },
