@@ -1,5 +1,4 @@
 export enum LiquiditySortField {
-  ID = 'ID',
   TVL = 'TVL'
 }
 

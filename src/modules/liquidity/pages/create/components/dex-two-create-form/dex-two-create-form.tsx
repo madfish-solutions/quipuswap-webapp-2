@@ -12,7 +12,7 @@ import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { LiquidityPoolExist } from '../liquidity-pool-exist';
+import { LiquidityPoolExist } from '../../../../components';
 import styles from './dex-two-create-form.module.scss';
 import { DexTwoCreateFormProps } from './dex-two-create-form.types';
 
