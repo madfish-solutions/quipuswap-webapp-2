@@ -1,15 +1,19 @@
+/* eslint-disable no-console */
 import { useCallback } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 import * as yup from 'yup';
 
+import { FEE_BASE_POINTS_PRECISION } from '@config/constants';
+import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema, sortTokens } from '@shared/helpers';
+import { getFormikError, isExist, operationAmountSchema, sortTokens, toFraction } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
+import { findPool } from '../../helpers/find-pool';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
 
@@ -89,7 +93,7 @@ const initialValues: CreatePoolValues = {
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
-
+  const tezos = useTezos();
   const { doCreatePool } = useDoCreateV3Pool();
 
   const handleSubmit = useCallback(
@@ -98,11 +102,20 @@ export const useCreatePoolFormViewModel = () => {
       const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
       const [token0, token1] = values[eCreatePoolValues.tokens].sort(sortTokens);
       const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
+      const pool = await findPool(
+        tezos,
+        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
+        values[eCreatePoolValues.tokens]
+      );
+
+      if (isExist(pool)) {
+        return;
+      }
 
       await doCreatePool(feeRate, token0, token1, initialPrice);
       actions.setSubmitting(false);
     },
-    [doCreatePool]
+    [doCreatePool, tezos]
   );
 
   const formik = useFormik({
