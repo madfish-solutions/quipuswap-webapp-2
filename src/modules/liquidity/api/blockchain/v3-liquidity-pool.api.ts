@@ -3,7 +3,12 @@ import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { sendBatch } from '@blockchain';
-import { DEFAULT_EXTRA_SLOTS, QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
+import {
+  DEFAULT_EXTRA_SLOTS,
+  LIQUIDITY_V3_ITEM_API_URL,
+  QUIPUSWAP_REFERRAL_CODE,
+  ZERO_AMOUNT_BN
+} from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
@@ -88,6 +93,12 @@ export namespace V3LiquidityPoolApi {
       contractAddress,
       storage: await getStorageInfo<V3PoolStorage>(tezos, contractAddress)
     };
+  };
+
+  export const getLiquidityV3Item = async (id: BigNumber) => {
+    const response = await fetch(`${LIQUIDITY_V3_ITEM_API_URL}/${id.toFixed()}`);
+
+    return await response.json();
   };
 
   export const claimFees = async (
