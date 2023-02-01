@@ -3,7 +3,7 @@ import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswa
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { FarmVersion } from '@modules/farming/interfaces';
-import { Categories, PoolType } from '@modules/liquidity/interfaces';
+import { PoolType } from '@modules/liquidity/interfaces';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
 import { NETWORK_ID, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
@@ -118,14 +118,3 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 // Coinflip
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
-
-const MAINNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {};
-const TESTNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {
-  0: [Categories.Stable, Categories.V3],
-  2: [Categories.Stable, Categories.QuipuSwap, Categories.V3]
-};
-
-export const LIQUIDITY_V3_POOL_TAGS = {
-  [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
-  [NetworkType.GHOSTNET]: TESTNET_LIQUIDITY_V3_POOL_TAGS
-};

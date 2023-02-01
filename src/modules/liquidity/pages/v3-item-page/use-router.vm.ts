@@ -39,7 +39,7 @@ export const useRouterViewModel = () => {
     }
 
     if (isExist(id) && onlyDigits(id) !== id) {
-      poolStore.itemSore.setError(new InvalidPoolIdError(id));
+      poolStore.poolStore.setError(new InvalidPoolIdError(id));
     } else if (isExist(id) && tezos) {
       if (isExist(positionId)) {
         positionStore.setPositionId(new BigNumber(positionId));
@@ -47,13 +47,15 @@ export const useRouterViewModel = () => {
       poolStore.setPoolId(new BigNumber(id));
       (async () => {
         try {
-          await poolStore.itemSore.load();
+          await poolStore.poolStore.load();
+          await poolStore.itemStore.load();
         } catch {}
       })();
     }
 
     return () => {
-      poolStore.itemSore.resetData();
+      poolStore.poolStore.resetData();
+      poolStore.itemStore.resetData();
       positionsStore.resetData();
     };
   }, [poolStore, id, positionId, tezos, positionStore, location.pathname, positionsStore]);
