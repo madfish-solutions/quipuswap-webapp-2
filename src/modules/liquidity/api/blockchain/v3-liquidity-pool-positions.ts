@@ -4,11 +4,12 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens, getWithWtezMintOnInputParams } from '@blockchain';
 import { MIN_TICK_INDEX, QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
-import { calculateLiquidity, calculateTick } from '@modules/liquidity/pages/v3-item-page/helpers';
+import { calculateLiquidity, calculateTicks } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { Tzkt } from '@shared/api';
 import { getContract } from '@shared/dapp';
 import {
   decreaseByPercentage,
+  defined,
   getFirstElement,
   getTransactionDeadline,
   isTezosToken,
@@ -59,8 +60,9 @@ export namespace V3Positions {
   ) => {
     const contract = await getContract(tezos, contractAddress);
 
-    const lowerTick = calculateTick(minPrice, tickSpacing);
-    const upperTick = calculateTick(maxPrice, tickSpacing);
+    const ticks = calculateTicks(minPrice, maxPrice, tickSpacing);
+    const lowerTick = defined(ticks.lowerTick, 'lowerTick');
+    const upperTick = defined(ticks.upperTick, 'upperTick');
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 

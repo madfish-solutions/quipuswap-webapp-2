@@ -126,7 +126,7 @@ export const liquidity = {
   id: 'ID',
   idTooltip: 'The unique ID number of a selected position.',
   priceCannotBeNegative: 'Price cannot be negative.',
-  minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower of equal to max price.',
+  minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower or equal to max price.',
   maxPriceShouldBePositive: 'Maximal price should be positive.',
   tags: 'Tags',
   tagsTooltip: 'The tags for the tokens in the pool.',
