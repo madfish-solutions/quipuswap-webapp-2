@@ -137,7 +137,7 @@ export const useCreatePoolFormViewModel = () => {
         values[eCreatePoolValues.tokens]
       );
 
-      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}`);
+      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}${LiquidityRoutes.create}`);
 
       actions.resetForm();
       actions.setSubmitting(false);
