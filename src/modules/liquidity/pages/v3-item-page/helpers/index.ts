@@ -10,3 +10,4 @@ export * from './get-v3-pool-categories';
 export * from './make-v3-liquidity-log-data';
 export * from './sort-positions-by-newer';
 export * from './find-pool';
+export * from './get-last-pool-id';

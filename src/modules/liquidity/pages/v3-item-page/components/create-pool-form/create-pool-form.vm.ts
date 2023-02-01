@@ -1,21 +1,22 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { AppRootRoutes } from '@app.router';
 import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { useGetLiquidityList, useLiquidityListStore } from '@modules/liquidity/hooks';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
-import { mapLiquidityListItem } from '@modules/liquidity/pages/list/map-liquidity-list-item';
 import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isEqual, isExist, operationAmountSchema, sortTokens, toFraction } from '@shared/helpers';
+import { getFormikError, isExist, operationAmountSchema, sortTokens, toFraction } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
+import { getLastPoolId } from '../../helpers';
 import { findPool } from '../../helpers/find-pool';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
@@ -101,11 +102,12 @@ const initialValues: CreatePoolValues = {
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
-  const { list } = useLiquidityListStore();
-  const { delayedGetLiquidityList } = useGetLiquidityList();
+  const liquidityListStore = useLiquidityListStore();
+  const { delayedGetLiquidityList, getLiquidityList } = useGetLiquidityList();
   const tezos = useTezos();
   const { doCreatePool } = useDoCreateV3Pool();
   const [alarmMessageInfo, setAlarmMessageInfo] = useState(DEFAULT_ALARM_MESSAGE_INFO);
+  const navigate = useNavigate();
 
   const handleSubmit = useCallback(
     async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
@@ -128,29 +130,17 @@ export const useCreatePoolFormViewModel = () => {
         return;
       }
 
-      // eslint-disable-next-line no-console
-      console.log(list);
-      // eslint-disable-next-line no-console
-      console.log(
-        '0',
-        list.filter(item => isEqual(item.type, 'UNISWAP')).map(mapLiquidityListItem)
-        // .map(item => item.id.toFixed())
-      );
-
       await doCreatePool(feeRate, token0, token1, initialPrice);
       await delayedGetLiquidityList();
 
-      // eslint-disable-next-line no-console
-      console.log(
-        '1',
-        list.filter(item => isEqual(item.type, 'UNISWAP')).map(mapLiquidityListItem)
-        // .map(item => item.id.toFixed())
-      );
+      const lastId = getLastPoolId(liquidityListStore.list);
+
+      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${lastId}`);
 
       actions.resetForm();
       actions.setSubmitting(false);
     },
-    [list, doCreatePool, tezos, delayedGetLiquidityList]
+    [tezos, doCreatePool, delayedGetLiquidityList, liquidityListStore.list, navigate]
   );
 
   const formik = useFormik({
@@ -208,6 +198,10 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
+
+  useEffect(() => {
+    void getLiquidityList();
+  }, [getLiquidityList]);
 
   return {
     alarmMessageInfo,
