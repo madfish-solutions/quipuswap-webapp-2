@@ -6,3 +6,4 @@ export * from './liquidity-stats';
 export * from './form-header';
 export * from './liquidity-form-tabs-card';
 export * from './create-own-pool';
+export * from './liquidity-pool-exist';
