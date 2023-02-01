@@ -2,7 +2,7 @@ import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { isFa12TokenTokensValue, isFa2TokenTokensValue, isTokenEqual } from '@shared/helpers';
 import { Standard, TokenAddress, TokensValue } from '@shared/types';
 
-export const mapV3TokenAddress = (value: TokensValue): TokenAddress => {
+export const mapV3TokenAddress = (value: TokensValue, shouldReplaceWtezToken = true): TokenAddress => {
   if (isFa2TokenTokensValue(value)) {
     const inputTokenId = {
       contractAddress: value.fa2.token_address,
@@ -10,7 +10,7 @@ export const mapV3TokenAddress = (value: TokensValue): TokenAddress => {
       type: Standard.Fa2
     };
 
-    if (isTokenEqual(inputTokenId, WTEZ_TOKEN)) {
+    if (isTokenEqual(inputTokenId, WTEZ_TOKEN) && shouldReplaceWtezToken) {
       return TEZOS_TOKEN;
     }
 
