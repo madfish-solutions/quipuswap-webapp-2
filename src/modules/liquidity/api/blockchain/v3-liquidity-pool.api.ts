@@ -1,5 +1,5 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
-import { TezosToolkit } from '@taquito/taquito';
+import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { withWtezBurnOnOutput } from '@blockchain';
@@ -70,13 +70,21 @@ export namespace V3LiquidityPoolApi {
     id: nat;
   }
 
-  interface V3FactoryStorage {
+  export interface V3FactoryStorage {
+    dev_fee_bps: BigNumber;
+    owner: string;
+    pool_count: BigNumber;
+    pool_ids: BigMapAbstraction;
+    pools: BigMapAbstraction;
+  }
+
+  interface V3PartialFactoryStorage {
     pools: BigMap<nat, address>;
   }
 
   export const getPool = async (tezos: TezosToolkit, id: BigNumber) => {
-    const factoryStorage = await getStorageInfo<V3FactoryStorage>(tezos, DEX_V3_FACTORY_ADDRESS);
-    const contractAddress = defined(await factoryStorage.pools.get(id), 'contractAddress');
+    const factoryStorage = await getStorageInfo<V3PartialFactoryStorage>(tezos, DEX_V3_FACTORY_ADDRESS);
+    const contractAddress = defined(await factoryStorage.pools.get(id), 'Cannot find pool contract');
 
     return {
       contractAddress,

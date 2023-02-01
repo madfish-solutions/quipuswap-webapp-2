@@ -17,7 +17,7 @@ export const useLiquidityV3PoolStatsViewModel = () => {
       {
         title: t('liquidity|tvl'),
         amount: poolTvl,
-        tooltip: t('liquidity|tvlTooltip'),
+        tooltip: t('liquidity|tvlV3Tooltip'),
         currency: DOLLAR,
         isError: isExchangeRatesError
       },
