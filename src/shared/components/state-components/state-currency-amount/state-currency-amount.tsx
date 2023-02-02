@@ -13,6 +13,11 @@ import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
 import styles from './state-currency-amount.module.scss';
 
+export enum TextAlignment {
+  START = 'START',
+  END = 'END'
+}
+
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amountClassName?: string;
@@ -29,6 +34,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   dollarEquivalentOnly?: boolean;
   testId?: string;
   maxAmountWithoutLetters?: number;
+  textAlignment?: TextAlignment;
 }
 
 interface CurrencyProps extends HTMLProps<HTMLDivElement> {
@@ -39,6 +45,11 @@ const sizeClass = {
   extraLarge: styles.extraLarge,
   large: styles.large,
   small: styles.small
+};
+
+const textAlignmentClass = {
+  [TextAlignment.START]: styles.alignStart,
+  [TextAlignment.END]: styles.alignEnd
 };
 
 const modeClass = {
@@ -73,6 +84,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   dollarEquivalentOnly,
   testId = 'amount',
   maxAmountWithoutLetters = MAX_AMOUNT_WITHOUT_LETTERS,
+  textAlignment = TextAlignment.START,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -130,7 +142,10 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   }
 
   return (
-    <div className={cx(styles.root, modeClass[colorThemeMode], className)} {...props}>
+    <div
+      className={cx(styles.root, modeClass[colorThemeMode], textAlignmentClass[textAlignment], className)}
+      {...props}
+    >
       {!dollarEquivalentOnly ? content : null}
       <StateDollarEquivalent dollarEquivalent={dollarEquivalent} className={styles.dollarEquivalentOnly} />
     </div>
