@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
+import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
+import { sleep } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { noopMap } from '@shared/mapping';
 import { useToasts } from '@shared/utils';
@@ -27,5 +29,10 @@ export const useGetLiquidityList = () => {
     noopMap(authStore.accountPkh);
   }, [isReady, liquidityListStore, authStore.accountPkh, showErrorToast]);
 
-  return { getLiquidityList };
+  const delayedGetLiquidityList = useCallback(async () => {
+    await sleep(DELAY_BEFORE_DATA_UPDATE);
+    await getLiquidityList();
+  }, [getLiquidityList]);
+
+  return { getLiquidityList, delayedGetLiquidityList };
 };

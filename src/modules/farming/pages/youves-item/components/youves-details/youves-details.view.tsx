@@ -15,7 +15,8 @@ import {
   Tabs,
   YouTube,
   Iterator,
-  LabelComponentProps
+  LabelComponentProps,
+  TextAlignment
 } from '@shared/components';
 import { Tabs as DetailsTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
@@ -118,6 +119,7 @@ export const YouvesDetailsView: FC<Props> = observer(
                 currency={stakedTokenSymbol}
                 amount={tvl}
                 isError={isError}
+                textAlignment={TextAlignment.END}
               />
             </DetailsCardCell>
 
@@ -132,6 +134,7 @@ export const YouvesDetailsView: FC<Props> = observer(
                 currency={rewardTokenSymbol}
                 amount={dailyDistribution}
                 isError={isError}
+                textAlignment={TextAlignment.END}
               />
             </DetailsCardCell>
             <DetailsCardCell

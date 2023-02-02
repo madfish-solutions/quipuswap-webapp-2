@@ -1,16 +1,18 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { AppRootRoutes } from '@app.router';
-import { EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
+import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
 import { WTEZ_TOKEN } from '@config/tokens';
+import { useGetLiquidityList } from '@modules/liquidity/hooks';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, isNull, operationAmountSchema, sortTokens, toFraction } from '@shared/helpers';
+import { getFormikError, isExist, isNull, operationAmountSchema, sortTokens, toFraction, sleep } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -100,9 +102,11 @@ const initialValues: CreatePoolValues = {
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
+  const { getLiquidityList } = useGetLiquidityList();
   const tezos = useTezos();
   const { doCreatePool } = useDoCreateV3Pool();
   const [alarmMessageInfo, setAlarmMessageInfo] = useState(DEFAULT_ALARM_MESSAGE_INFO);
+  const navigate = useNavigate();
 
   const handleSubmit = useCallback(
     async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
@@ -110,25 +114,36 @@ export const useCreatePoolFormViewModel = () => {
       const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
       const [token0, token1] = values[eCreatePoolValues.tokens].sort(sortTokens);
       const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
-      const pool = await findPool(
+      const poolId = await findPool(
         tezos,
         toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
         values[eCreatePoolValues.tokens]
       );
 
-      if (isExist(pool)) {
+      if (isExist(poolId)) {
         setAlarmMessageInfo({
           poolExists: true,
-          poolLink: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${pool}`
+          poolLink: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${poolId}`
         });
 
         return;
       }
 
       await doCreatePool(feeRate, token0, token1, initialPrice);
+      await sleep(DELAY_BEFORE_DATA_UPDATE);
+
+      const newPoolId = await findPool(
+        tezos,
+        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
+        values[eCreatePoolValues.tokens]
+      );
+
+      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}${LiquidityRoutes.create}`);
+
+      actions.resetForm();
       actions.setSubmitting(false);
     },
-    [doCreatePool, tezos]
+    [tezos, doCreatePool, navigate]
   );
 
   const formik = useFormik({
@@ -192,6 +207,10 @@ export const useCreatePoolFormViewModel = () => {
       : null;
   const warningMessage =
     tezosTokenIsIncluded([token0, token1]) && isNull(errorMessage) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
+
+  useEffect(() => {
+    void getLiquidityList();
+  }, [getLiquidityList]);
 
   return {
     alarmMessageInfo,
