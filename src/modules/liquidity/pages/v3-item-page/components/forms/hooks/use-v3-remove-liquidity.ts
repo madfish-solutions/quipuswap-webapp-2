@@ -8,7 +8,7 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull, getPercentageFromNumber } from '@shared/helpers';
+import { getTransactionDeadline, isNull, getPercentageFromNumber, toAtomic } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -45,14 +45,16 @@ export const useV3RemoveLiquidity = () => {
     const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
+    const tokenXOutput = inputAmounts[V3RemoveTokenInput.tokenXOutput];
+    const tokenYOutput = inputAmounts[V3RemoveTokenInput.tokenYOutput];
     const logData = {
       removeLiquidity: makeV3LiquidityOperationLogData(
         position,
         liquiditySlippage,
         tokenX,
         tokenY,
-        inputAmounts[V3RemoveTokenInput.tokenXOutput],
-        inputAmounts[V3RemoveTokenInput.tokenYOutput]
+        tokenXOutput,
+        tokenYOutput
       )
     };
 
@@ -64,7 +66,11 @@ export const useV3RemoveLiquidity = () => {
         position.id,
         liquidity,
         accountPkh,
-        deadline
+        deadline,
+        tokenX,
+        tokenY,
+        toAtomic(new BigNumber(tokenXOutput), tokenX),
+        toAtomic(new BigNumber(tokenYOutput), tokenY)
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE_SUCCESS', logData);
