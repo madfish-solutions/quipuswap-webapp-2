@@ -1,4 +1,15 @@
 .listWrapper {
   display: grid;
   place-items: center;
+  row-gap: 16px;
+}
+
+.notFoundLabel {
+  font-size: 18px;
+  line-height: 1.33; 
+}
+
+.illustration {
+  max-width: 327px;
+  width: 100%;
 }
