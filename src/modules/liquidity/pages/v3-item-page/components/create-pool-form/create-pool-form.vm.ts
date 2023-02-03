@@ -7,16 +7,17 @@ import * as yup from 'yup';
 
 import { AppRootRoutes } from '@app.router';
 import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
+import { WTEZ_TOKEN } from '@config/tokens';
 import { useGetLiquidityList } from '@modules/liquidity/hooks';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, operationAmountSchema, sleep, sortTokens, toFraction } from '@shared/helpers';
+import { getFormikError, isExist, isNull, operationAmountSchema, sortTokens, toFraction, sleep } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
-import { findPool } from '../../helpers/find-pool';
+import { tezosTokenIsIncluded, tokenIsIncluded, findPool } from '../../helpers';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
 
@@ -200,6 +201,12 @@ export const useCreatePoolFormViewModel = () => {
   };
 
   const tokens = formik.values[eCreatePoolValues.tokens];
+  const errorMessage =
+    tezosTokenIsIncluded([token0, token1]) && tokenIsIncluded([token0, token1], WTEZ_TOKEN)
+      ? t('liquidity|cannotCreatePoolError')
+      : null;
+  const warningMessage =
+    tezosTokenIsIncluded([token0, token1]) && isNull(errorMessage) ? t('liquidity|v3PoolWithTezCreationWarning') : null;
 
   useEffect(() => {
     void getLiquidityList();
@@ -211,12 +218,14 @@ export const useCreatePoolFormViewModel = () => {
     radioButtonParams,
     tokensSelectData,
     tokens,
-    disabled: !tokens || formik.isSubmitting,
+    disabled: !tokens || formik.isSubmitting || isExist(errorMessage),
     isSubmitting: formik.isSubmitting,
     initialPriceValue: formik.values[eCreatePoolValues.initialPrice],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialPriceError: getFormikError(formik as any, eCreatePoolValues.initialPrice),
     setInitialPriceValue,
-    onSubmit: formik.handleSubmit
+    onSubmit: formik.handleSubmit,
+    warningMessage,
+    errorMessage
   };
 };

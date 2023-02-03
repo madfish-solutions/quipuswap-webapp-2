@@ -140,5 +140,12 @@ export const liquidity = {
   feeRates001: '0.01% (Suitable for very stable pairs)',
   feeRates005: '0.05% (Suitable for stable pairs)',
   feeRates03: '0.3% (Suitable for volatile pairs)',
-  feeRates1: '1% (Suitable for exotic pairs)'
+  feeRates1: '1% (Suitable for exotic pairs)',
+  v3PoolWithTezCreationWarning:
+    'The pool will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  v3PositionWithTezCreationWarning:
+    'The position will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  v3PoolAddLiquidityWarning:
+    'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  cannotCreatePoolError: "Sorry, the pool can't be created"
 } as const;
