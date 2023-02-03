@@ -12,8 +12,6 @@ import { useConfirmOperation, useToasts } from '@shared/utils';
 import { calculateTickIndex } from './helpers';
 import { getCreateV3PoolLogData } from './helpers/get-create-v3-pool-log-data';
 
-const INVERSION_DIVIDEND = 1;
-
 const tickSpacingDictionary = {
   '0.01': 1,
   '0.05': 10,
@@ -28,7 +26,7 @@ export const useDoCreateV3Pool = () => {
   const { showErrorToast } = useToasts();
   const { log } = useAmplitudeService();
 
-  const doCreatePool = async (feeRate: BigNumber, token0: Token, token1: Token, initialPrice: BigNumber) => {
+  const doCreatePool = async (feeRate: BigNumber, tokenX: Token, tokenY: Token, initialPrice: BigNumber) => {
     if (isNull(tezos) || isNull(accountPkh)) {
       return;
     }
@@ -36,17 +34,15 @@ export const useDoCreateV3Pool = () => {
       defined(tickSpacingDictionary[feeRate.toFixed() as keyof typeof tickSpacingDictionary], "Can't find tick spacing")
     );
 
-    const logData = getCreateV3PoolLogData(accountPkh, token0, token1, initialPrice, feeRate);
+    const logData = getCreateV3PoolLogData(accountPkh, tokenX, tokenY, initialPrice, feeRate);
 
     try {
       log('CREATE_V3_POOL', logData);
       const operation = await V3LiquidityPoolApi.createPool(
         tezos,
-        token0,
-        token1,
-        calculateTickIndex(
-          toAtomic(new BigNumber(INVERSION_DIVIDEND).div(initialPrice), calculateV3PoolPriceDecimals(token0, token1))
-        ),
+        tokenX,
+        tokenY,
+        calculateTickIndex(toAtomic(initialPrice, calculateV3PoolPriceDecimals(tokenX, tokenY))),
         toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
         tickSpacing
       );
@@ -56,6 +52,7 @@ export const useDoCreateV3Pool = () => {
     } catch (error) {
       showErrorToast(error as Error);
       log('CREATE_V3_POOL_ERROR', { ...logData, error });
+      throw error;
     }
   };
 
