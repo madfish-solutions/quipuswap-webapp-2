@@ -12,7 +12,16 @@ import { useGetLiquidityList } from '@modules/liquidity/hooks';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { useTezos } from '@providers/use-dapp';
 import { TokenSelectProps } from '@shared/components/token-select';
-import { getFormikError, isExist, isNull, operationAmountSchema, sortTokens, toFraction, sleep } from '@shared/helpers';
+import {
+  getFirstElement,
+  getFormikError,
+  isExist,
+  isNull,
+  operationAmountSchema,
+  sortTokens,
+  toFraction,
+  sleep
+} from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
@@ -32,6 +41,8 @@ interface CreatePoolValues {
   [eCreatePoolValues.initialPrice]: string;
   [eCreatePoolValues.tokens]: Array<Token>;
 }
+
+const INVERSION_DIVIDEND = 1;
 
 export const feeRateRadioButtonOptions = [
   {
@@ -112,13 +123,15 @@ export const useCreatePoolFormViewModel = () => {
     async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
       actions.setSubmitting(true);
       const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
-      const [token0, token1] = values[eCreatePoolValues.tokens].sort(sortTokens);
-      const initialPrice = new BigNumber(values[eCreatePoolValues.initialPrice]);
-      const poolId = await findPool(
-        tezos,
-        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
-        values[eCreatePoolValues.tokens]
-      );
+      const tokens = values[eCreatePoolValues.tokens];
+      const sortedTokens = Array.from(values[eCreatePoolValues.tokens]).sort(sortTokens);
+      const [token0, token1] = sortedTokens;
+      const tokensAreSwapped = token0 !== getFirstElement(tokens);
+      const rawInitialPrice = values[eCreatePoolValues.initialPrice];
+      const initialPrice = tokensAreSwapped
+        ? new BigNumber(rawInitialPrice)
+        : new BigNumber(INVERSION_DIVIDEND).div(rawInitialPrice);
+      const poolId = await findPool(tezos, toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION), sortedTokens);
 
       if (isExist(poolId)) {
         setAlarmMessageInfo({
@@ -129,19 +142,21 @@ export const useCreatePoolFormViewModel = () => {
         return;
       }
 
-      await doCreatePool(feeRate, token0, token1, initialPrice);
-      await sleep(DELAY_BEFORE_DATA_UPDATE);
+      try {
+        await doCreatePool(feeRate, token0, token1, initialPrice);
+        await sleep(DELAY_BEFORE_DATA_UPDATE);
 
-      const newPoolId = await findPool(
-        tezos,
-        toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
-        values[eCreatePoolValues.tokens]
-      );
+        const newPoolId = await findPool(
+          tezos,
+          toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
+          sortedTokens
+        );
 
-      navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}${LiquidityRoutes.create}`);
-
-      actions.resetForm();
-      actions.setSubmitting(false);
+        navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}${LiquidityRoutes.create}`);
+      } finally {
+        actions.resetForm();
+        actions.setSubmitting(false);
+      }
     },
     [tezos, doCreatePool, navigate]
   );

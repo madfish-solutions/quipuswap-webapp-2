@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { PERCENT } from '@config/constants';
 import { ListItemCardProps } from '@shared/components';
-import { getTokenSymbol, isNull, isOptionalGreaterThanZero, multipliedIfPossible } from '@shared/helpers';
+import { getTokenSymbol, isNull, multipliedIfPossible } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -22,13 +22,12 @@ interface StateCurrAmount {
 }
 
 export const mapFarmingItemForView =
-  (accountPkh: Nullable<string>) =>
+  (accountPkh: Nullable<string>, userStatsAreLoading: boolean) =>
   (farmingItem: FarmingListItemWithBalances): ListItemCardProps => {
     const labels = getFarmingLabel(farmingItem);
 
     const shouldShowUserStats =
-      !isNull(accountPkh) &&
-      (isOptionalGreaterThanZero(farmingItem.depositBalance) || isOptionalGreaterThanZero(farmingItem.earnBalance));
+      !isNull(accountPkh) && (!farmingItem.depositBalance?.isZero() || !farmingItem.earnBalance?.isZero());
 
     const itemStats: Array<StateCurrAmount> = [
       {
@@ -66,7 +65,8 @@ export const mapFarmingItemForView =
               amount: farmingItem.depositBalance,
               dollarEquivalent: multipliedIfPossible(farmingItem.depositBalance, farmingItem.depositExchangeRate),
               currency: getTokenSymbol(farmingItem.stakedToken),
-              dollarEquivalentOnly: true
+              dollarEquivalentOnly: true,
+              loading: userStatsAreLoading
             }
           },
           {
@@ -75,7 +75,8 @@ export const mapFarmingItemForView =
               amount: farmingItem.earnBalance,
               dollarEquivalent: multipliedIfPossible(farmingItem.earnBalance, farmingItem.earnExchangeRate),
               currency: getTokenSymbol(farmingItem.rewardToken),
-              dollarEquivalentOnly: true
+              dollarEquivalentOnly: true,
+              loading: userStatsAreLoading
             }
           }
         ]
