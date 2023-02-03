@@ -4,13 +4,13 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { getUserBalance } from '@blockchain';
 import { FIRST_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
 import { defined, isNull, isTokenAddressFa2, t } from '@shared/helpers';
-import { mapTokenAddress } from '@shared/mapping';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { Fled } from '@shared/model-builder/fled';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Standard } from '@shared/types';
 
 import { V3LiquidityPoolApi } from '../api';
+import { mapV3TokenAddress } from '../helpers';
 import { LiquidityContractTokenBalancesModel, LiquidityItemModel } from '../models';
 
 const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYBalance: ZERO_AMOUNT_BN };
@@ -109,8 +109,8 @@ export class LiquidityV3PoolStore {
       return DEFAULT_CONTRACT_TOKENS_BALANCE;
     }
 
-    const tokenXInfo = mapTokenAddress(this.item.storage.constants.token_x);
-    const tokenYInfo = mapTokenAddress(this.item.storage.constants.token_y);
+    const tokenXInfo = mapV3TokenAddress(this.item.storage.constants.token_x, false);
+    const tokenYInfo = mapV3TokenAddress(this.item.storage.constants.token_y, false);
 
     const tokenXBalance = await getUserBalance(
       tezos,

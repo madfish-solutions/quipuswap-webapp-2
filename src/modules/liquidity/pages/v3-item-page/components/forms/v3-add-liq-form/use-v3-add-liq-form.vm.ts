@@ -11,7 +11,7 @@ import { numberAsString, isNull, isExist } from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { findUserPosition } from '../../../helpers';
+import { findUserPosition, tezosTokenIsIncluded } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import { getCountOfTokens, getCurrentFormikKeyAdd, getValuesCorrectOrder } from '../helpers';
 import { useCalculateValue, usePositionTicks } from '../hooks';
@@ -101,10 +101,13 @@ export const useV3AddLiqFormViewModel = () => {
 
   const disabled = formik.isSubmitting;
 
+  const warningMessage = tezosTokenIsIncluded([tokenX, tokenY]) ? t('liquidity|v3PoolAddLiquidityWarning') : null;
+
   return {
     data,
     isSubmitting: formik.isSubmitting,
     disabled,
-    onSubmit: formik.handleSubmit
+    onSubmit: formik.handleSubmit,
+    warningMessage
   };
 };

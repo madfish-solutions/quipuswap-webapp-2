@@ -115,6 +115,8 @@ const getMarketQuotient = (trade: Trade) =>
           .div(bTokenMultiplier ?? FALLBACK_TOKEN_MULTIPLIER);
       case DexTypeEnum.QuipuSwapV3:
         return marketQuotient.times(convertToAtomicPrice(defined(tradeOperation.sqrtPrice)));
+      case DexTypeEnum.YupanaWtez:
+        return marketQuotient;
       default:
         return marketQuotient.times(bTokenPool).div(aTokenPool);
     }

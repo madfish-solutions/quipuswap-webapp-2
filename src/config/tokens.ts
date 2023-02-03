@@ -46,6 +46,31 @@ export const networksQuipuTokens: Record<SupportedNetworks, Token> = {
 
 export const QUIPU_TOKEN = networksQuipuTokens[NETWORK_ID];
 
+export const MAINNET_WTEZ_TOKEN: Token = {
+  type: Standard.Fa2,
+  contractAddress: 'KT1UpeXdK6AJbX58GJ92pLZVCucn2DR8Nu4b',
+  fa2TokenId: 0,
+  isWhitelisted: true,
+  metadata: {
+    decimals: 6,
+    symbol: 'wTEZ',
+    name: 'Wrapped Tezos FA2 token',
+    thumbnailUri: 'ipfs://QmUWhCYXtC8r8aXgjrwsLrZmopiGMHdLWoQzEueAktJbHB'
+  }
+};
+
+export const GHOSTNET_WTEZ_TOKEN: Token = {
+  ...MAINNET_WTEZ_TOKEN,
+  contractAddress: 'KT1L8ujeb25JWKa4yPB61ub4QG2NbaKfdJDK'
+};
+
+export const networksWtezTokens: Record<SupportedNetworks, Token> = {
+  [NetworkType.MAINNET]: MAINNET_WTEZ_TOKEN,
+  [NetworkType.GHOSTNET]: GHOSTNET_WTEZ_TOKEN
+};
+
+export const WTEZ_TOKEN = networksWtezTokens[NETWORK_ID];
+
 export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, QUIPU_TOKEN];
 
 export const QUIPU_TOKEN_DECIMALS_PRECISION = 1e6;
