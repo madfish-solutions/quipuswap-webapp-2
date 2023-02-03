@@ -72,6 +72,10 @@ export class FarmingListStore {
     return this.listStore.isLoading;
   }
 
+  get balancesAreLoading() {
+    return this.listBalancesStore.isLoading;
+  }
+
   get farmingItemsWithBalances(): FarmingListItemWithBalances[] {
     return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
   }
