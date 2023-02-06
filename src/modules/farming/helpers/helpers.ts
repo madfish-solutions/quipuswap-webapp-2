@@ -227,6 +227,7 @@ export const calculateYouvesFarmingRewards = (
   return { claimableReward, fullReward };
 };
 
+const TOKEN_BALANCE_RETRY_TIMES = 3;
 export const getUserYouvesFarmingBalances = async (
   accountPkh: string,
   farming: FarmingListItemModel,
@@ -234,7 +235,8 @@ export const getUserYouvesFarmingBalances = async (
   timestampMs: number
 ) => {
   const farmRewardTokenBalanceBN = await retry(
-    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken)
+    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken),
+    TOKEN_BALANCE_RETRY_TIMES
   );
   const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
 
