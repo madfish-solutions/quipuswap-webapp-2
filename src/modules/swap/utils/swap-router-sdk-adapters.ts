@@ -7,11 +7,13 @@ import {
   useTradeWithSlippageTolerance as originalUseTradeWithSlippageTolerance
 } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
+import { WhitelistedPair } from 'swap-router-sdk/dist/interface/whitelisted-pair.interface';
 
 import { MAX_HOPS_COUNT } from '@config/constants';
-import { WHITELISTED_POOLS } from '@config/whitelisted-pools';
 import { getTokenIdFromSlug, getTokenSlug, isExist, isTezosToken } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
+
+import { useRoutePairs } from '../providers/route-pairs-provider';
 
 const FALLBACK_TRADE: Trade = [];
 const FALLBACK_TOKEN_ID = 0;
@@ -39,21 +41,29 @@ export const useRoutePairsCombinations = (
   inputToken: Optional<Token>,
   outputToken: Optional<Token>,
   routePairs: RoutePair[]
-) =>
-  originalUseRoutePairsCombinations(
+) => {
+  const { whitelistedPairs } = useRoutePairs();
+
+  return originalUseRoutePairsCombinations(
     inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
     outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
     routePairs,
-    WHITELISTED_POOLS,
+    whitelistedPairs,
     MAX_HOPS_COUNT
   );
+};
 
-export const getAllowedRoutePairsCombinations = (inputToken: Token, outputToken: Token, routePairs: RoutePair[]) =>
+export const getAllowedRoutePairsCombinations = (
+  inputToken: Token,
+  outputToken: Token,
+  routePairs: RoutePair[],
+  whitelistedPairs: WhitelistedPair[]
+) =>
   originalGetAllowedRoutePairsCombinations(
     inputToken ? getSwapRouterSdkTokenSlug(inputToken) : undefined,
     outputToken ? getSwapRouterSdkTokenSlug(outputToken) : undefined,
     routePairs,
-    WHITELISTED_POOLS,
+    whitelistedPairs,
     MAX_HOPS_COUNT
   );
 
