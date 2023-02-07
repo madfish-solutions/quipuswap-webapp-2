@@ -25,7 +25,7 @@ const DUST_THRESHOLD_BN = new BigNumber(DUST_THRESHOLD);
 export class LiquidityListFiltersStore extends BaseFilterStore {
   tokens: Nullable<Array<Token>> = null;
 
-  showDust = false;
+  showDust = true;
   investedOnly = false;
 
   showStable = false;
