@@ -108,3 +108,18 @@ export interface IBannedBakersValue {
   period: nat;
   start: timestamp;
 }
+
+export interface TzktFarmingUserInfoKey {
+  nat: string;
+  address: string;
+}
+
+export interface TzktFarmingUserInfoValue {
+  earned: string;
+  staked: string;
+  claimed: string;
+  allowances: string[];
+  last_staked: string;
+  prev_earned: string;
+  prev_staked: string;
+}

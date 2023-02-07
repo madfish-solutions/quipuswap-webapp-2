@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { getUserTokenBalance } from '@blockchain';
 import { PRECISION_FACTOR, PRECISION_FACTOR_STABLESWAP_LP, SECONDS_IN_DAY, ZERO_AMOUNT_BN } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
+import { Tzkt } from '@shared/api';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   calculateTimeDiffInMs,
@@ -29,9 +30,10 @@ import {
   FarmVersion,
   IRawUsersInfoValue,
   IUsersInfoValue,
-  UsersInfoKey
+  TzktFarmingUserInfoKey,
+  TzktFarmingUserInfoValue
 } from '../interfaces';
-import { mapUsersInfoValue } from '../mapping';
+import { mapTzktUsersInfoValue } from '../mapping';
 import { FarmingItemV1Model, FarmingListItemModel } from '../models';
 import { FarmingItemV1WithBalances, FarmingListItemWithBalances } from '../pages/list/types';
 import { YouvesFarmStakes, YouvesFarmStorage } from '../pages/youves-item/api/types';
@@ -60,6 +62,16 @@ export const DEFAULT_RAW_USER_INFO: IRawUsersInfoValue = {
   prev_earned: ZERO_AMOUNT_BN,
   prev_staked: ZERO_AMOUNT_BN,
   allowances: []
+};
+
+const TZKT_DEFAULT_USER_INFO: TzktFarmingUserInfoValue = {
+  earned: ZERO_AMOUNT_BN.toString(),
+  staked: ZERO_AMOUNT_BN.toString(),
+  claimed: ZERO_AMOUNT_BN.toString(),
+  allowances: [],
+  last_staked: DEFAULT_RAW_USER_INFO.last_staked,
+  prev_earned: ZERO_AMOUNT_BN.toString(),
+  prev_staked: ZERO_AMOUNT_BN.toString()
 };
 
 const NOTHING_STAKED_VALUE = 0;
@@ -122,32 +134,49 @@ export const calculateV1FarmingBalances = (
   };
 };
 
+const TZKT_PAGE_SIZE = 200;
+
 export const getV1FarmsUserInfo = async (
   storage: FarmingContractStorage,
   accountAddress: string,
   farmsWithBalanceIds: Nullable<Array<BigNumber>> = null
 ) => {
-  const farmsIds = isNull(farmsWithBalanceIds) ? fillIndexArray(storage.farms_count.toNumber()) : farmsWithBalanceIds;
+  const resultsCount = isNull(farmsWithBalanceIds) ? storage.farms_count.toNumber() : farmsWithBalanceIds.length;
+  const entriesChunks = await Promise.all(
+    fillIndexArray(Math.ceil(resultsCount / TZKT_PAGE_SIZE)).map(
+      async index =>
+        await Tzkt.getContractBigmapKeys<[TzktFarmingUserInfoKey, TzktFarmingUserInfoValue]>(
+          FARMING_CONTRACT_ADDRESS,
+          'users_info',
+          {
+            'select.values': 'key,value',
+            active: true,
+            'key.address.eq': accountAddress,
+            limit: TZKT_PAGE_SIZE,
+            offset: index.toNumber() * TZKT_PAGE_SIZE
+          }
+        )
+    )
+  );
+  const entries = entriesChunks.flat();
+  const entriesWithFallbacks = (farmsWithBalanceIds ?? fillIndexArray(storage.farms_count.toNumber())).map(
+    (id): [TzktFarmingUserInfoKey, TzktFarmingUserInfoValue] =>
+      entries.find(([key]) => id.eq(key.nat)) ?? [
+        { nat: id.toFixed(), address: accountAddress },
+        TZKT_DEFAULT_USER_INFO
+      ]
+  );
 
-  const userInfoKeys = farmsIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
-  const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
-
-  const usersInfoValues: Array<IFarmingListUsersInfoValueWithId> = [];
-
-  usersInfoValuesMap.forEach((userInfoValue, key) => {
-    const value = defined(mapUsersInfoValue(userInfoValue ? userInfoValue : DEFAULT_RAW_USER_INFO));
-    const id = (key as UsersInfoKey)[0];
-
-    return usersInfoValues.push({ id, ...value });
-  });
-
-  return usersInfoValues;
+  return entriesWithFallbacks.map(([key, value]) => ({
+    id: new BigNumber(key.nat),
+    ...mapTzktUsersInfoValue(value)
+  }));
 };
 
-export const getUserV1FarmingBalances = async (
+export const getUserV1FarmingsBalances = async (
   accountPkh: string,
   tezos: TezosToolkit,
-  farming: FarmingListItemModel,
+  farmings: FarmingListItemModel[],
   timestampMs: number
 ) => {
   const wrapStorage: FarmingContractStorageWrapper = await (
@@ -155,9 +184,15 @@ export const getUserV1FarmingBalances = async (
   ).storage();
   const storage = wrapStorage.storage;
 
-  const [userInfoValue] = await getV1FarmsUserInfo(storage, accountPkh, [new BigNumber(farming.id)]);
+  const userInfoValues = await getV1FarmsUserInfo(
+    storage,
+    accountPkh,
+    farmings.map(({ id }) => new BigNumber(id))
+  );
 
-  return calculateV1FarmingBalances(userInfoValue, farming, timestampMs);
+  return userInfoValues.map((userInfoValue, index) =>
+    calculateV1FarmingBalances(userInfoValue, farmings[index], timestampMs)
+  );
 };
 
 export const calculateYouvesFarmingRewards = (
@@ -192,6 +227,7 @@ export const calculateYouvesFarmingRewards = (
   return { claimableReward, fullReward };
 };
 
+const TOKEN_BALANCE_RETRY_TIMES = 3;
 export const getUserYouvesFarmingBalances = async (
   accountPkh: string,
   farming: FarmingListItemModel,
@@ -199,7 +235,8 @@ export const getUserYouvesFarmingBalances = async (
   timestampMs: number
 ) => {
   const farmRewardTokenBalanceBN = await retry(
-    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken)
+    async () => await getUserTokenBalance(tezos, defined(farming.contractAddress), farming.rewardToken),
+    TOKEN_BALANCE_RETRY_TIMES
   );
   const farmRewardTokenBalance = saveBigNumber(farmRewardTokenBalanceBN, ZERO_AMOUNT_BN);
 
