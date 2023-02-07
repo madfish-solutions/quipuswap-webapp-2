@@ -2,7 +2,7 @@ import { ChainIds, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { getReadOnlyTezos } from '@shared/dapp';
+import { getContract, getReadOnlyTezos } from '@shared/dapp';
 import { Standard, TokenId } from '@shared/types';
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
@@ -21,7 +21,7 @@ export const getUserBalance = async (
   if (contractAddress === 'tez') {
     return newTezos.tz.getBalance(account);
   }
-  const contract = await newTezos.contract.at(contractAddress);
+  const contract = await getContract(newTezos, contractAddress);
 
   const chainId = (await loadChainId(newTezos)) as ChainIds;
 
