@@ -42,7 +42,8 @@ export const useRewards = () => {
           id,
           version
         })),
-    [farmingListStore.farmingItemsWithBalances]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [farmingListStore, listStore.model, listBalancesStore.model]
   );
 
   const claimablePendingRewardsInUsd = useMemo(() => {
