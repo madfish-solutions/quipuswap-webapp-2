@@ -59,6 +59,13 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
     return () => farmingYouvesItemStore.clearIntervals();
   }, [farmingYouvesItemStore]);
 
+  useEffect(() => {
+    return () => {
+      farmingYouvesItemStore.itemStore.resetData();
+      farmingYouvesItemStore.stakesStore.resetData();
+    };
+  }, [farmingYouvesItemStore]);
+
   const title = t('farm|farmingTokens', { tokens: isEmptyArray(tokens) ? '...' : getTokensNames(tokens) });
 
   return {

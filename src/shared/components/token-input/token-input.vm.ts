@@ -1,9 +1,10 @@
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
 import { getMessageNotWhitelistedTokenPair, getTokenInputAmountCap } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
+import { Nullable } from '@shared/types';
 
 import { TokenInputViewModelProps } from './types';
 
@@ -19,6 +20,13 @@ export const useTokenInputViewModel = ({
   const { accountPkh } = useAuthStore();
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [selection, setSelection] = useState<[Nullable<number>, Nullable<number>] | null>(null);
+
+  useLayoutEffect(() => {
+    if (selection && inputRef.current) {
+      [inputRef.current.selectionStart, inputRef.current.selectionEnd] = selection;
+    }
+  }, [selection]);
 
   const handleInputFocus = () => {
     setIsFocused(true);
@@ -40,6 +48,7 @@ export const useTokenInputViewModel = ({
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     onInputChange(event.target.value);
+    setSelection([event.target.selectionStart, event.target.selectionEnd]);
   };
 
   const handlePercentageSelect = (result: string) => {

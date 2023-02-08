@@ -94,6 +94,7 @@ export const SKIP = -1;
 export const LIST = 'list';
 export const STATS = 'stats';
 export const DEX_TWO_ITEM = 'dex-two-item';
+export const UNISWAP_ITEM = 'uniswap-item';
 // TODO: change api address => change farm => dividends (if needed)
 export const DIVIDENDS = 'farm';
 
@@ -118,6 +119,7 @@ export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}
 export const LIQUIDITY_LIST_API_URL = `${LIQUIDITY_API_URL}/${LIST}`;
 export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
 export const LIQUIDITY_DEX_TWO_ITEM_API_URL = `${LIQUIDITY_API_URL}/${DEX_TWO_ITEM}`;
+export const LIQUIDITY_V3_ITEM_API_URL = `${LIQUIDITY_API_URL}/${UNISWAP_ITEM}`;
 //#endregion
 
 //TODO: assort mix
@@ -173,8 +175,11 @@ export const FARMING_FEES_PERCENTAGE_PRECISION = 16;
 export const DEFAULT_TICK_SPACING = 1;
 export const MIN_TICK_INDEX = -1048575;
 export const MAX_TICK_INDEX = 1048575;
+export const DEFAULT_EXTRA_SLOTS = 0;
 
 export const NON_INTERACTIVE_ELEMENT_TAB_INDEX = -1;
+
+export const DEFAULT_CATEGORY_ICON_SIZE = 24;
 //#endregion
 
 // error constant

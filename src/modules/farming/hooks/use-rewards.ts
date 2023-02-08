@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { getSumOfNumbers, getTokenSlug, multipliedIfPossible, sumIfPossible } from '@shared/helpers';
+import { getSumOfNumbers, getTokenSlug, isQuipuToken, multipliedIfPossible, sumIfPossible } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
 import { shouldHarvestInBatch } from '../helpers';
@@ -42,7 +42,8 @@ export const useRewards = () => {
           id,
           version
         })),
-    [farmingListStore.farmingItemsWithBalances]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [farmingListStore, listStore.model, listBalancesStore.model]
   );
 
   const claimablePendingRewardsInUsd = useMemo(() => {
@@ -109,9 +110,24 @@ export const useRewards = () => {
     [rewards]
   );
 
+  const quipuRewards = useMemo(
+    () => rewards.filter(reward => isQuipuToken(reward.rewardToken) && shouldHarvestInBatch(reward)),
+    [rewards]
+  );
+  const rewardsInQuipu = useMemo(
+    () => getSumOfNumbers(quipuRewards.map(({ earnBalance }) => earnBalance ?? null)),
+    [quipuRewards]
+  );
+  const rewardsQuipuInUsd = useMemo(
+    () => getSumOfNumbers(quipuRewards.map(({ earnBalanceUsd }) => earnBalanceUsd ?? null)),
+    [quipuRewards]
+  );
+
   return {
     rewards,
     claimablePendingRewardsInUsd,
+    rewardsInQuipu,
+    rewardsQuipuInUsd,
     totalPendingRewardsInUsd,
     tokensRewardList
   };
