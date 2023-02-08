@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import constate from 'constate';
-import { RouteDirectionEnum, useAllRoutePairs } from 'swap-router-sdk';
+import { DexTypeEnum, RouteDirectionEnum, useAllRoutePairs } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
-import { TOKENS } from '@config/config';
+import { TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES, TOKENS } from '@config/config';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
-import { getTokenSlug, getUniqArray } from '@shared/helpers';
+import { getTokenSlug, getUniqArray, isMainnet } from '@shared/helpers';
 import { mapBackendToken } from '@shared/mapping';
 import { Token } from '@shared/types';
 
@@ -64,7 +64,11 @@ export const [RoutePairsProvider, useRoutePairs] = constate(() => {
               tokensMap
             );
 
-            return true;
+            return (
+              pair.dexType !== DexTypeEnum.QuipuSwap ||
+              !isMainnet ||
+              TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES.includes(pair.dexAddress)
+            );
           } catch {
             return false;
           }
