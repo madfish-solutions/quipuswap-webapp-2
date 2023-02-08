@@ -18,7 +18,6 @@ import {
   isExist,
   isNull,
   operationAmountSchema,
-  sortTokens,
   toFraction,
   sleep
 } from '@shared/helpers';
@@ -26,7 +25,7 @@ import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
-import { tezosTokenIsIncluded, tokenIsIncluded, findPool } from '../../helpers';
+import { tezosTokenIsIncluded, tokenIsIncluded, findPool, sortTokens } from '../../helpers';
 import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
 import styles from './create-pool-form.module.scss';
 
