@@ -54,6 +54,16 @@ const TOKENS_MAP = {
 export const TOKENS = TOKENS_MAP[NETWORK_ID];
 //#endregion TOKENS
 
+export const TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES = [
+  'KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6',
+  'KT1WxgZ1ZSfMgmsSDDcUn8Xn577HwnQ7e1Lb',
+  'KT1PL1YciLdwMbydt21Ax85iZXXyGSrKT2BE',
+  'KT1KFszq8UFCcWxnXuhZPUyHT9FK3gjmSKm6',
+  'KT1Ucg1fTZXBD8P426rTRXyu7YQUgYXV7RVu',
+  'KT1EtjRRCBC2exyCRXz8UfV7jz7svnkqi7di',
+  'KT1X3zxdTzPB9DgVzA3ad6dgZe9JEamoaeRy'
+];
+
 export const FACTORIES: Record<SupportedNetworks, { fa1_2Factory: string[]; fa2Factory: string[] }> = {
   [NetworkType.MAINNET]: {
     fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
