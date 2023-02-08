@@ -4,7 +4,7 @@ import { Token } from '@shared/types';
 
 export const sortTokens = (tokenA: Token, tokenB: Token) => {
   if (isTokenFa12(tokenA) && isTokenFa12(tokenB)) {
-    return -sortAddresses(tokenA.contractAddress, tokenB.contractAddress);
+    return sortAddresses(tokenA.contractAddress, tokenB.contractAddress);
   }
 
   if (isTokenFa2(tokenA) && isTokenFa2(tokenB)) {
@@ -16,7 +16,7 @@ export const sortTokens = (tokenA: Token, tokenB: Token) => {
       return SWAP;
     }
 
-    return -sortAddresses(tokenA.contractAddress, tokenB.contractAddress);
+    return sortAddresses(tokenA.contractAddress, tokenB.contractAddress);
   }
 
   if (isTokenFa2(tokenA) && isTokenFa12(tokenB)) {
