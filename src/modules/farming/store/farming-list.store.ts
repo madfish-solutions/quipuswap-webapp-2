@@ -72,6 +72,10 @@ export class FarmingListStore {
     return this.listStore.isLoading;
   }
 
+  get balancesAreLoading() {
+    return this.listBalancesStore.isLoading;
+  }
+
   get farmingItemsWithBalances(): FarmingListItemWithBalances[] {
     return isEmptyArray(this.listBalances) ? this.list : this.listBalances;
   }
@@ -85,7 +89,6 @@ export class FarmingListStore {
         farmingItemModel: this.getFarmingItemModelById(balance.id, balance.contractAddress)
       }))
       .map(({ balance, farmingItemModel }) => {
-        const myBalance = toRealIfPossible(balance.myBalance, farmingItemModel?.stakedToken);
         const depositBalance = toRealIfPossible(balance.depositBalance, farmingItemModel?.stakedToken);
         const earnBalance = toRealIfPossible(balance.earnBalance, farmingItemModel?.rewardToken);
         const fullRewardBalance = toRealIfPossible(balance.fullRewardBalance, farmingItemModel?.rewardToken);
@@ -93,7 +96,6 @@ export class FarmingListStore {
         return {
           ...balance,
           ...defined(farmingItemModel, balance.id),
-          myBalance,
           depositBalance,
           earnBalance,
           fullRewardBalance

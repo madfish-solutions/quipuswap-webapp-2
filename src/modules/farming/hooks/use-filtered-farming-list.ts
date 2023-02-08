@@ -15,7 +15,7 @@ export const useFilteredFarmingList = () => {
     .filter(filterByStakedOnly(stakedOnly, accountPkh))
     .filter(filterBySearch(search, tokenId))
     .sort(sortFarming(sortField, sortDirection))
-    .map(mapFarmingItemForView(accountPkh));
+    .map(mapFarmingItemForView(accountPkh, farmingListStore.balancesAreLoading));
 
   return { farmings };
 };

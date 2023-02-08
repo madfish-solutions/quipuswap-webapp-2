@@ -5,3 +5,6 @@ export * from './use-on-price-range-change';
 export * from './use-on-price-range-input-change';
 export * from './use-position-ticks';
 export * from './use-tick-spacing';
+export * from './use-amount-inputs-props';
+export * from './use-inputs-handlers';
+export * from './use-initial-price-range';

@@ -8,7 +8,7 @@ import { Nullable } from '@shared/types';
 import { DexPool } from '../types';
 import { swapRouterSdkTokenSlugToQuipuTokenSlug } from './swap-router-sdk-adapters';
 
-const extractTokensPools = (operation: TradeOperation, knownTokens: TokensMap) => {
+export const extractTokensPools = (operation: TradeOperation, knownTokens: TokensMap) => {
   const {
     aTokenSlug,
     bTokenSlug,

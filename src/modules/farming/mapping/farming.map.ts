@@ -9,8 +9,8 @@ import {
   FarmingStats,
   RawFarmingItem,
   RawFarmingStats,
-  IRawUsersInfoValue,
-  IUsersInfoValue
+  IUsersInfoValue,
+  TzktFarmingUserInfoValue
 } from '../interfaces';
 import { FarmingItemV1WithBalances } from '../pages/list/types';
 
@@ -73,11 +73,15 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   maxApr: new BigNumber(raw.maxApr)
 });
 
-export const mapUsersInfoValue = (raw: Nullable<IRawUsersInfoValue>): Nullable<IUsersInfoValue> =>
-  raw && {
-    ...raw,
-    last_staked: new Date(raw.last_staked)
-  };
+export const mapTzktUsersInfoValue = (raw: TzktFarmingUserInfoValue): IUsersInfoValue => ({
+  staked: new BigNumber(raw.staked),
+  claimed: new BigNumber(raw.claimed),
+  allowances: raw.allowances,
+  earned: new BigNumber(raw.earned),
+  prev_earned: new BigNumber(raw.prev_earned),
+  prev_staked: new BigNumber(raw.prev_staked),
+  last_staked: new Date(raw.last_staked)
+});
 
 export const clearFarmingItem = (farmingItem: FarmingItemV1WithBalances) => {
   return {
