@@ -4,7 +4,7 @@ import { Token } from '@shared/types';
 import { getTokenSlug } from './token-slug';
 import { isTokenFa12, isTokenFa2 } from './token-type';
 
-const sortAddresses = (address1: string, address2: string) => (address1 > address2 ? SWAP : SKIP);
+export const sortAddresses = (address1: string, address2: string) => (address1 > address2 ? SWAP : SKIP);
 
 export const sortTokens = (tokenA: Token, tokenB: Token) => {
   const isFa12Tokens = isTokenFa12(tokenA) && isTokenFa12(tokenB);

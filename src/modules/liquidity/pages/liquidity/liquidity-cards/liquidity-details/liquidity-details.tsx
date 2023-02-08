@@ -133,7 +133,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           currency={tokenASymbol}
           isLoading={isLoadingA}
           isError={isErrorA}
-          amountDecimals={tokenA?.metadata.decimals}
         />
       </DetailsCardCell>
 
@@ -150,7 +149,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           currency={tokenBSymbol}
           isLoading={isLoadingB}
           isError={isErrorB}
-          amountDecimals={tokenB?.metadata.decimals}
         />
       </DetailsCardCell>
 

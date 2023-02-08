@@ -2,9 +2,15 @@ import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { sendBatch } from '@blockchain';
-import { DEFAULT_EXTRA_SLOTS, QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
+import { withWtezBurnOnOutput } from '@blockchain';
+import {
+  DEFAULT_EXTRA_SLOTS,
+  LIQUIDITY_V3_ITEM_API_URL,
+  QUIPUSWAP_REFERRAL_CODE,
+  ZERO_AMOUNT_BN
+} from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
+import { WTEZ_TOKEN } from '@config/tokens';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   bigNumberToString,
@@ -12,7 +18,8 @@ import {
   getUniqArray,
   getWalletContract,
   isExist,
-  getTransactionDeadline
+  getTransactionDeadline,
+  isTezosToken
 } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { address, BigMap, int, nat, Token, TokensValue, WithId } from '@shared/types';
@@ -90,18 +97,27 @@ export namespace V3LiquidityPoolApi {
     };
   };
 
+  export const getLiquidityV3Item = async (id: BigNumber) => {
+    const response = await fetch(`${LIQUIDITY_V3_ITEM_API_URL}/${id.toFixed()}`);
+
+    return await response.json();
+  };
+
   export const claimFees = async (
     tezos: TezosToolkit,
     contractAddress: string,
     positionsIds: BigNumber[],
     accountPkh: string,
-    transactionDuration: BigNumber
+    transactionDuration: BigNumber,
+    mutezToBurn: BigNumber
   ) => {
     const contract = await getContract(tezos, contractAddress);
     const transactionDeadline = await getTransactionDeadline(tezos, transactionDuration);
 
-    return await sendBatch(
+    return await withWtezBurnOnOutput(
       tezos,
+      mutezToBurn,
+      accountPkh,
       positionsIds.map(id =>
         contract.methods
           .update_position(
@@ -183,13 +199,15 @@ export namespace V3LiquidityPoolApi {
     feeBps: nat,
     tickSpacing: int
   ) => {
+    const wrappedTokenX = isTezosToken(tokenX) ? WTEZ_TOKEN : tokenX;
+    const wrappedTokenY = isTezosToken(tokenY) ? WTEZ_TOKEN : tokenY;
     const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
 
     return factoryContract.methodsObject
       .deploy_pool({
         cur_tick_index: currentTickIndex,
-        token_x: mapTokensValue(tokenX),
-        token_y: mapTokensValue(tokenY),
+        token_x: mapTokensValue(wrappedTokenX),
+        token_y: mapTokensValue(wrappedTokenY),
         fee_bps: feeBps,
         tick_spacing: tickSpacing,
         extra_slots: DEFAULT_EXTRA_SLOTS

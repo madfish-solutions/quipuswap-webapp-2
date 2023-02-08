@@ -33,7 +33,7 @@ export const useV3ItemPageViewModel = () => {
     void getLiquidityV3Pool();
     void getLiquidityV3ItemBalances();
     void v3PositionsStore.positionsStore.load();
-  }, [getLiquidityV3ItemBalances, getLiquidityV3Pool, v3PositionsStore.positionsStore, poolId]);
+  }, [getLiquidityV3ItemBalances, getLiquidityV3Pool, v3PositionsStore.positionsStore, poolId, tabId]);
 
   return { isLoading, error, isAddLiqForm, tabId };
 };

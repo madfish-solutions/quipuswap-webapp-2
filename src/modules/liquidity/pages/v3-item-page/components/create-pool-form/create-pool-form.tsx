@@ -8,6 +8,8 @@ import {
   TokenInput
 } from '@shared/components';
 import { TokenSelect } from '@shared/components/token-select';
+import { WarningAlert } from '@shared/components/warning-alert';
+import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import commonStyles from '@styles/CommonContainer.module.scss';
 
@@ -27,7 +29,9 @@ export const CreatePoolForm = () => {
     initialPriceValue,
     initialPriceError,
     setInitialPriceValue,
-    onSubmit
+    onSubmit,
+    warningMessage,
+    errorMessage
   } = useCreatePoolFormViewModel();
 
   const { create, initialPrice, feeRates } = translation;
@@ -58,6 +62,8 @@ export const CreatePoolForm = () => {
 
         <h3>{feeRates}</h3>
         <RadioButton {...radioButtonParams} />
+        <WarningAlert message={warningMessage} />
+        {isExist(errorMessage) && <AlarmMessage message={errorMessage} />}
         <div className={commonStyles.buttons}>
           <ConnectWalletOrDoSomething>
             <Button
