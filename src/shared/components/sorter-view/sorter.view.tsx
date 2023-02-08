@@ -33,6 +33,8 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const MIN_OPTIONS_COUNT_WITH_MENU = 2;
+
 export const SorterView: FC<Props> = observer(
   ({
     sortingValue,
@@ -56,6 +58,7 @@ export const SorterView: FC<Props> = observer(
           isSearchable={false}
           value={sortingValue}
           data-test-id={sorterSelectDTI}
+          isDisabled={sortingValues.length < MIN_OPTIONS_COUNT_WITH_MENU}
           {...props}
         />
         <Button theme="tertiary" onClick={handleSortDirectionToggle} data-test-id={buttonDTI}>

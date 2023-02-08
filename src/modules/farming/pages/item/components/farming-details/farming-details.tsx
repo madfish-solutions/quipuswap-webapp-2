@@ -14,7 +14,8 @@ import {
   LabelComponent,
   Tabs,
   YouTube,
-  Iterator
+  Iterator,
+  TextAlignment
 } from '@shared/components';
 import { useYoutubeTabs } from '@shared/hooks';
 import { ExternalLink } from '@shared/svg/external-link';
@@ -95,6 +96,7 @@ export const FarmingDetails: FC = observer(() => {
               currency={stakedTokenSymbol}
               amount={tvl}
               isError={isError}
+              textAlignment={TextAlignment.END}
             />
           </DetailsCardCell>
 
@@ -109,6 +111,7 @@ export const FarmingDetails: FC = observer(() => {
               currency={rewardTokenSymbol}
               amount={dailyDistribution}
               isError={isError}
+              textAlignment={TextAlignment.END}
             />
           </DetailsCardCell>
 

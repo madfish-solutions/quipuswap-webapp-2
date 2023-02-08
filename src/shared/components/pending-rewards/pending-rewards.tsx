@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -6,11 +6,13 @@ import cx from 'classnames';
 import { USD_DECIMALS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useAccountPkh } from '@providers/use-dapp';
+import { isExist } from '@shared/helpers';
 import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { StateCurrencyAmount } from '../state-components';
+import { Tooltip } from '../tooltip';
 import styles from './pending-rewards.module.scss';
 
 const modeClass = {
@@ -27,6 +29,7 @@ interface Props {
   isError?: boolean;
   className?: string;
   rewardsLabel?: string;
+  rewardTooltip?: ReactNode;
 }
 
 export const PendingRewards: FC<Props> = ({
@@ -37,7 +40,8 @@ export const PendingRewards: FC<Props> = ({
   totalPendingRewards,
   className,
   isError,
-  rewardsLabel
+  rewardsLabel,
+  rewardTooltip
 }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['farm']);
@@ -54,10 +58,12 @@ export const PendingRewards: FC<Props> = ({
                   {t('farm|Your Claimable')}
                   <span className={styles.slash}>{'/'}</span>
                   <p className={styles.fullRewards}>{t('farm|Your Full Rewards')}</p>
+                  {isExist(rewardTooltip) && <Tooltip content={rewardTooltip} />}
                 </span>
               ) : (
                 <span className={styles.title} data-test-id="farmingYourFullRewards">
                   {rewardsLabel ?? t('farm|Your Full Rewards')}
+                  {isExist(rewardTooltip) && <Tooltip content={rewardTooltip} />}
                 </span>
               )}
             </div>

@@ -82,6 +82,7 @@ export const useV3NewPosition = () => {
         transactionDeadline,
         liquiditySlippage,
         currentTick!.index,
+        currentTick!.price,
         toAtomic(minPrice, priceDecimals),
         toAtomic(maxPrice, priceDecimals),
         toAtomic(xTokenAmount, tokenX),

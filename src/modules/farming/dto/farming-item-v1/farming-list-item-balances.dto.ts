@@ -10,9 +10,6 @@ export class FarmingListItemBalancesDto {
   contractAddress?: string;
 
   @Typed({ optional: true })
-  myBalance?: BigNumber;
-
-  @Typed({ optional: true })
   depositBalance?: BigNumber;
 
   @Typed({ optional: true })
