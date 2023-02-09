@@ -1,4 +1,4 @@
-import { BlockResponse, OperationEntry } from '@taquito/rpc';
+import { BlockResponse, OperationEntry, OperationContents, OperationContentsAndResult } from '@taquito/rpc';
 
 import { Nullable } from '@shared/types';
 
@@ -13,3 +13,8 @@ export const findOperation = (block: BlockResponse, opHash: string): Nullable<Op
 
   return null;
 };
+
+export const getOperationStatus = (operationContents: OperationContents | OperationContentsAndResult) =>
+  'metadata' in operationContents && 'operation_result' in operationContents.metadata
+    ? operationContents.metadata.operation_result.status
+    : null;
