@@ -31,7 +31,6 @@ export const farm = {
   unlockFeeTooltip:
     'The fee will be charged from your deposit amount if you withdraw your assets before the farm locked period ends. All unlock fees may be used to buy back and burn QUIPU.',
   interfaceFeeTooltip: 'Percentage of earned tokens charged for providing an interface.',
-  'Back to the list': 'Back to the list',
   yourShareTooltip: 'Current value of your stake in this farm.',
   yourDelegateTooltip:
     'The baker you prefer to vote for with your tokens on the Dex to increase chances this baker will be chosen as the delegate for the pool.',

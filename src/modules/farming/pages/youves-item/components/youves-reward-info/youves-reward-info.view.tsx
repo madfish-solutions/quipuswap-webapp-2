@@ -5,15 +5,15 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
+import { AppRootRoutes } from '@app.router';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { StateCurrencyAmount } from '@shared/components';
+import { StateCurrencyAmount, BackToListRewardHeader } from '@shared/components';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { Countdown } from '../countdown';
 import { NextRewardsTimer } from '../next-rewards-timer';
 import { RewardInfo } from '../reward-info';
-import { YouvesRewardHeader } from '../youves-reward-header';
 import { YouvesStatsItem } from '../youves-stats-item';
 import styles from './youves-reward-info.module.scss';
 
@@ -79,7 +79,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         longTermRewardsLoading={longTermRewardsLoading}
         className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
-          content: <YouvesRewardHeader />,
+          content: <BackToListRewardHeader backHref={AppRootRoutes.Farming} />,
           className: styles.rewardHeader
         }}
         footer={<NextRewardsTimer />}
