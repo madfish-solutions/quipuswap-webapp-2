@@ -14,7 +14,7 @@ export const FarmingRewardHeader: FC = () => {
       <Button href="/farming" theme="quaternary" icon className={styles.arrowButton} data-test-id="backTTListButton">
         <ArrowDown className={styles.backArrow} />
       </Button>
-      <span>{t('farm|Back to the list')}</span>
+      <span>{t('common|Back to the list')}</span>
     </div>
   );
 };
