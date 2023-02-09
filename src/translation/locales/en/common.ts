@@ -168,5 +168,6 @@ export const common = {
   tokensFilter: 'Filter by tokens',
   valueShouldBeNonNegative: 'The value should be non-negative.',
   valueShouldBePositive: 'The value should be greater than zero.',
-  maxAvailableValueError: 'Max available value is {{value}}'
+  maxAvailableValueError: 'Max available value is {{value}}',
+  'Back to the list': 'Back to the list'
 } as const;

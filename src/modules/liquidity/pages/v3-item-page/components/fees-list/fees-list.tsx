@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
-import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { BackToListRewardHeader, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { Nullable } from '@shared/types';
 
@@ -24,6 +24,7 @@ interface Props {
   details: ReactNode;
   claimIsDisabled?: boolean;
   isRewardsError: boolean;
+  backHref?: string;
 }
 
 export const FeesList: FC<Props> = ({
@@ -34,7 +35,8 @@ export const FeesList: FC<Props> = ({
   translation,
   details,
   claimIsDisabled = false,
-  isRewardsError
+  isRewardsError,
+  backHref
 }) => {
   const {
     rewardsTooltipTranslation,
@@ -62,6 +64,14 @@ export const FeesList: FC<Props> = ({
       details={details}
       disabled={claimIsDisabled}
       rewardsLabel={totalFeesTranslation}
+      header={
+        backHref
+          ? {
+              content: <BackToListRewardHeader backHref={backHref} />,
+              className: styles.rewardHeader
+            }
+          : undefined
+      }
     >
       {isUserTotalDepositExist && (
         <DetailsCardCell

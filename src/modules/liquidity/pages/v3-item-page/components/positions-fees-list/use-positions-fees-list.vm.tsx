@@ -1,3 +1,4 @@
+import { AppRootRoutes } from '@app.router';
 import { getSumOfNumbers, isEmptyArray } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
@@ -41,6 +42,7 @@ export const usePositionsFeesListViewModel = () => {
     claimablePendingRewards: claimablePendingRewardsInUsd,
     details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionsFeeTokensList />,
     claimIsDisabled,
-    isRewardsError: isExchangeRatesError
+    isRewardsError: isExchangeRatesError,
+    backHref: AppRootRoutes.Liquidity
   };
 };
