@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { DOLLAR, PERCENT } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card, DashboardCard, TokensLogos, TokensSymbols } from '@shared/components';
+import { isExist } from '@shared/helpers';
 import { Confettis } from '@shared/svg';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
@@ -53,15 +54,17 @@ export const HotPoolCard: FC<Props> = ({ tvl, apr, tokens, href }) => {
               currency={DOLLAR}
               data-test-id="TVL"
             />
-            <DashboardCard
-              stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
-              className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
-              size="large"
-              volume={fixedApr}
-              label={t('liquidity|aprUpTo')}
-              currency={PERCENT}
-              data-test-id="aprUpTo"
-            />
+            {isExist(apr) && (
+              <DashboardCard
+                stateCurrencyClassName={cx(styles.amountClassName, modeClass[colorThemeMode])}
+                className={cx(styles.dashboardCard, modeClass[colorThemeMode])}
+                size="large"
+                volume={fixedApr}
+                label={t('liquidity|aprUpTo')}
+                currency={PERCENT}
+                data-test-id="aprUpTo"
+              />
+            )}
           </div>
         </div>
       </Card>
