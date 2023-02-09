@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
-import { DOLLAR, PERCENT } from '@config/constants';
+import { DOLLAR, PERCENT, ZERO_AMOUNT } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
 import { isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
@@ -85,7 +85,7 @@ export const mapLiquidityListItem = ({
     id,
     type,
     tvlInUsd,
-    maxApr,
+    maxApr: type === PoolType.UNISWAP ? maxApr : maxApr ?? ZERO_AMOUNT,
     itemStats,
     categories: poolLabels,
     inputToken: tokens,
