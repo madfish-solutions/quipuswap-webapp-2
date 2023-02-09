@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import constate from 'constate';
-import { DexTypeEnum, RouteDirectionEnum, useAllRoutePairs } from 'swap-router-sdk';
+import { DexTypeEnum, RouteDirectionEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES, TOKENS } from '@config/config';
@@ -12,6 +12,7 @@ import { mapBackendToken } from '@shared/mapping';
 import { Token } from '@shared/types';
 
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
+import { useAllRoutePairs } from '../hooks/use-all-route-pairs';
 import { extractTokensPools } from '../utils/map-dex-pairs';
 
 const tokensMap = new Map<string, Token>(
