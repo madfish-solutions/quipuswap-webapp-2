@@ -9,3 +9,9 @@ export class ConfirmPollingCanceledError extends Error {
     super('Confirmation polling cancelled');
   }
 }
+
+export class OperationRejectedError extends Error {
+  constructor() {
+    super('Sorry, the operation was rejected.  Please, try again');
+  }
+}
