@@ -27,7 +27,6 @@ export const PositionDetails: FC = observer(() => {
     handleButtonClick,
     minPrice,
     maxPrice,
-    priceRangeSymbols,
     isInRange,
     categories
   } = usePositionDetailsViewModel();
@@ -74,10 +73,10 @@ export const PositionDetails: FC = observer(() => {
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|minPriceTooltip')}>
-        <StateCurrencyAmount amount={minPrice} currency={priceRangeSymbols} />
+        <StateCurrencyAmount amount={minPrice} currency={tokensSymbols} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|maxPriceTooltip')}>
-        <StateCurrencyAmount amount={maxPrice} currency={priceRangeSymbols} />
+        <StateCurrencyAmount amount={maxPrice} currency={tokensSymbols} />
       </DetailsCardCell>
       <div className={commonContainerStyles.detailsButtons}>
         <Button
