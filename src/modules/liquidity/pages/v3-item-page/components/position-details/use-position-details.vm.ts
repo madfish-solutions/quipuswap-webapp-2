@@ -1,10 +1,8 @@
 import { SLASH } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
-import { getSymbolsString } from '@shared/helpers';
 
 import {
   useLiquidityV3PoolStore,
-  useLiquidityV3ItemTokens,
   useLiquidityV3PositionStore,
   useLiquidityV3PoolStats,
   useLiquidityV3ItemTokensSymbols
@@ -16,21 +14,15 @@ export const usePositionDetailsViewModel = () => {
   const store = useLiquidityV3PoolStore();
   const { positionId } = useLiquidityV3PositionStore();
   const { contractAddress } = useLiquidityV3PoolStore();
-  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { tokenXSymbol, tokenYSymbol } = useLiquidityV3ItemTokensSymbols();
   const { positionsWithStats } = usePositionsWithStats();
-  const { currentPrice, feeBpsPercentage, tokensSymbols } = useLiquidityV3PoolStats();
+  const { currentPrice, minPrice, maxPrice, feeBpsPercentage, tokensSymbols } = useLiquidityV3PoolStats();
 
   const position = findUserPosition(positionsWithStats, positionId);
-
-  const minPrice = position?.stats.minRange;
-  const maxPrice = position?.stats.maxRange;
 
   const isInRange = position?.stats.isInRange ?? false;
 
   const handleButtonClick = (index: number) => store.setActiveTokenIndex(index);
-
-  const priceRangeSymbols = getSymbolsString([tokenY, tokenX]);
 
   const categories = useV3PoolCategories();
 
@@ -46,7 +38,6 @@ export const usePositionDetailsViewModel = () => {
     handleButtonClick,
     minPrice,
     maxPrice,
-    priceRangeSymbols,
     isInRange,
     categories
   };
