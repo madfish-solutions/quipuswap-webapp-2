@@ -10,13 +10,14 @@ import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 import { WhitelistedPair } from 'swap-router-sdk/dist/interface/whitelisted-pair.interface';
 
 import { MAX_HOPS_COUNT } from '@config/constants';
-import { getTokenIdFromSlug, getTokenSlug, isExist, isTezosToken } from '@shared/helpers';
+import { getTokenIdFromSlug, getTokenSlug, isExist, isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
 
 const FALLBACK_TRADE: Trade = [];
 const FALLBACK_TOKEN_ID = 0;
+const MIN_VALID_SWAP_AMOUNT = 1;
 
 export const getSwapRouterSdkTokenSlug = (token: Token) =>
   getTokenSlug({
@@ -67,6 +68,14 @@ export const getAllowedRoutePairsCombinations = (
     MAX_HOPS_COUNT
   );
 
+const getCorrectedTokenAmountWithSlippage = (
+  tokenAmountWithSlippage: BigNumber,
+  tokenAmountWithoutSlippage: BigNumber
+) =>
+  isGreaterThanZero(tokenAmountWithoutSlippage) && tokenAmountWithSlippage.isZero()
+    ? new BigNumber(MIN_VALID_SWAP_AMOUNT)
+    : tokenAmountWithSlippage;
+
 export const useTradeWithSlippageTolerance = (
   inputAmount: Nullable<BigNumber>,
   bestTrade: Nullable<Trade>,
@@ -77,6 +86,16 @@ export const useTradeWithSlippageTolerance = (
     bestTrade ?? FALLBACK_TRADE,
     tradingSlippage.toNumber()
   );
+  const correctedValue = originalValue.map((operation, index) => {
+    const { aTokenAmount: aTokenAmountWithSlippage, bTokenAmount: bTokenAmountWithSlippage } = operation;
+    const { aTokenAmount: aTokenAmountWithoutSlippage, bTokenAmount: bTokenAmountWithoutSlippage } = bestTrade![index];
 
-  return bestTrade && originalValue;
+    return {
+      ...operation,
+      aTokenAmount: getCorrectedTokenAmountWithSlippage(aTokenAmountWithSlippage, aTokenAmountWithoutSlippage),
+      bTokenAmount: getCorrectedTokenAmountWithSlippage(bTokenAmountWithSlippage, bTokenAmountWithoutSlippage)
+    };
+  });
+
+  return bestTrade && correctedValue;
 };
