@@ -44,7 +44,8 @@ export const liquidity = {
   poolsTooltip:
     'The total number of token pools on QuipuSwap, including stable pools, token-to-token pools, and tez-to-token pools.',
   feesRateTooltip: 'Trading fees charged in this pool.',
-  feeRateTooltipPosDetails: "The share of swaps value which is accrued to liquidity providers' active positions.",
+  feeRateTooltipPosDetails:
+    'The fee rate is charged for each swap. Part of the fee goes to liquidity providers and part – to dev fund.',
   totalLpSupplyTooltip: 'Number of liquidity provider tokens.',
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',
@@ -147,5 +148,6 @@ export const liquidity = {
     'The position will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
   v3PoolAddLiquidityWarning:
     'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
-  cannotCreatePoolError: "Sorry, the pool can't be created"
+  cannotCreatePoolError: "Sorry, the pool can't be created",
+  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool'
 } as const;
