@@ -21,7 +21,7 @@ const updateTokensAmounts = (prevAmounts: TokensAmounts, token1: Token, token2: 
 });
 
 export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
-  const { routePairs } = useRoutePairs();
+  const { routePairs, whitelistedPairs } = useRoutePairs();
 
   const [maxInputAmounts, setMaxInputAmounts] = useState<TokensAmounts>({});
   const [maxOutputAmounts, setMaxOutputAmounts] = useState<TokensAmounts>({});
@@ -36,7 +36,7 @@ export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
 
   const updateSwapLimits = (token1: Token, token2: Token) => {
     try {
-      const combinations = getAllowedRoutePairsCombinations(token1, token2, routePairs);
+      const combinations = getAllowedRoutePairsCombinations(token1, token2, routePairs, whitelistedPairs);
 
       const { value: atomsMaxInputAmount } = getMaxInputRoute(combinations);
       updateMaxInputAmount(token1, token2, toReal(atomsMaxInputAmount, token1));

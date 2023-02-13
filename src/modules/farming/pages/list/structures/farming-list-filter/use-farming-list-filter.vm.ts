@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
+
 import cx from 'classnames';
 
-import { useFarmingFilterStore } from '@modules/farming/hooks';
+import { useFarmingFilterStore, useFarmingListStore } from '@modules/farming/hooks';
 import { ListFilterInputViewProps } from '@shared/components';
 import { isNull, isDirectOrder } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
@@ -12,6 +14,7 @@ import styles from './farming-list-filter.module.scss';
 export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
   const { accountPkh } = useAuthStore();
   const farmingFilterStore = useFarmingFilterStore();
+  const farmingListStore = useFarmingListStore();
 
   const {
     search,
@@ -67,11 +70,17 @@ export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
     return farmingFilterStore.setActiveOnly(state);
   };
 
+  useEffect(() => {
+    if (isNull(accountPkh)) {
+      farmingFilterStore.setStakedOnly(false);
+    }
+  }, [accountPkh, farmingFilterStore]);
+
   const switcherDataList = [
     {
       value: stakedOnly,
       onClick: setStakedOnly,
-      disabled: isNull(accountPkh),
+      disabled: isNull(accountPkh) || farmingListStore.balancesAreLoading,
       switcherDTI: 'stakedOnlySwitcher',
       switcherTranslationDTI: 'stakedOnlySwitcherTranslation',
       translation: t('farm|stakedOnly'),

@@ -1,9 +1,14 @@
 import { ZERO_AMOUNT_BN } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
-import { useGetLiquidityV3ItemWithPositions, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
-import { useLiquidityV3PoolStore } from '@modules/liquidity/hooks/store/use-liqudity-v3-pool.store';
+import {
+  useLiquidityV3ItemTokens,
+  useGetLiquidityV3ItemWithPositions,
+  useLiquidityV3PositionStore,
+  useLiquidityV3PoolStore
+} from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
-import { defined } from '@shared/helpers';
+import { defined, getSumOfNumbers, isExist, isTezosToken, toAtomic } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
@@ -29,6 +34,7 @@ export const usePositionFeesListViewModel = () => {
   } = useSettingsStore();
   const confirmOperation = useConfirmOperation();
   const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
+  const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
   const contractAddress = v3PoolStore.item?.contractAddress;
 
@@ -52,12 +58,17 @@ export const usePositionFeesListViewModel = () => {
     };
     try {
       amplitudeService.logEvent('CLAIM_V3_FEE_CLICK', logData);
+      const rewardInTez = getSumOfNumbers([
+        isExist(tokenX) && isTezosToken(tokenX) ? userPosition!.stats.tokenXFees : ZERO_AMOUNT_BN,
+        isExist(tokenY) && isTezosToken(tokenY) ? userPosition!.stats.tokenYFees : ZERO_AMOUNT_BN
+      ]);
       const operation = await V3LiquidityPoolApi.claimFees(
         defined(tezos, 'tezos'),
         defined(contractAddress, 'contractAddress'),
         [defined(positionId, 'positionId')],
         defined(accountPkh, 'accountPkh'),
-        transactionDeadline
+        transactionDeadline,
+        toAtomic(rewardInTez, TEZOS_TOKEN)
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|claimingSuccessful') });
       void getLiquidityV3ItemWithPositions();
@@ -76,7 +87,8 @@ export const usePositionFeesListViewModel = () => {
       claimFeeTranslation: t('liquidity|claimFee'),
       rewardsTooltipTranslation: t('farm|rewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
-      totalDepositTranslation: t('liquidity|totalDeposit')
+      totalDepositTranslation: t('liquidity|totalDeposit'),
+      totalDepositTooltipTranslation: t('liquidity|totalDepositTooltip')
     },
     claimablePendingRewards: claimablePendingRewardsInUsd,
     details: !userTotalDepositInfo.totalDepositAmount.isZero() && <PositionFeeTokensList />,

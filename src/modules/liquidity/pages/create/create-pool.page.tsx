@@ -18,8 +18,7 @@ export const CreatePoolPage: FC = observer(() => {
     translations,
     createHighEfficiencyPoolIcon,
     createRegularPoolIcon,
-    createStablePoolIcon,
-    shouldShowCreateHighEfficiencyPool
+    createStablePoolIcon
   } = useCreatePoolViewModel();
 
   const { createPool, highEfficiencyPool, stablePool, regularPool, back } = translations;
@@ -47,18 +46,16 @@ export const CreatePoolPage: FC = observer(() => {
           )
         }}
       >
-        {shouldShowCreateHighEfficiencyPool && (
-          <div className={styles.poolWrapper}>
-            <img className={styles.img} src={createHighEfficiencyPoolIcon} alt="Create high efficiency pool icon" />
-            <h2 className={styles.subtitle}>{highEfficiencyPool}</h2>
-            <Button
-              className={styles.button}
-              href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${LiquidityRoutes.create}`}
-            >
-              {createPool}
-            </Button>
-          </div>
-        )}
+        <div className={styles.poolWrapper}>
+          <img className={styles.img} src={createHighEfficiencyPoolIcon} alt="Create high efficiency pool icon" />
+          <h2 className={styles.subtitle}>{highEfficiencyPool}</h2>
+          <Button
+            className={styles.button}
+            href={`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${LiquidityRoutes.create}`}
+          >
+            {createPool}
+          </Button>
+        </div>
         <div className={styles.poolWrapper}>
           <img className={styles.img} src={createRegularPoolIcon} alt="Create regular pool icon" />
           <h2 className={styles.subtitle}>{regularPool}</h2>

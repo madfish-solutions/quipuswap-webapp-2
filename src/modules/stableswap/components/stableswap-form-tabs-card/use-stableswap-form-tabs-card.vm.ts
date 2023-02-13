@@ -56,6 +56,10 @@ export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
   );
 
   return {
+    backHref:
+      subpath === StableswapRoutes.liquidity
+        ? AppRootRoutes.Liquidity
+        : `${AppRootRoutes.Stableswap}${StableswapRoutes.dividends}`,
     isLoading: !Boolean(stableswapItemStore?.item) && !Boolean(stableDividendsItemStore?.item),
     changeTabHandle
   };

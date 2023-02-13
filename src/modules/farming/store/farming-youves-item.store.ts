@@ -139,7 +139,8 @@ export class FarmingYouvesItemStore {
       this.item,
       this.version,
       this.contractBalance,
-      this.currentStake
+      this.currentStake,
+      Date.now()
     );
 
     this.claimableRewards = toReal(claimableReward, this.item.rewardToken);

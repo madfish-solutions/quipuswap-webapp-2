@@ -1,5 +1,6 @@
 import { computed, makeObservable, observable } from 'mobx';
 
+import { FARMS_LIST_REWARD_UPDATE_INTERVAL } from '@config/constants';
 import { getFarmingListCommonApi, getFarmingListUserBalances } from '@modules/farming/api';
 import {
   FarmingListBalancesModel,
@@ -7,7 +8,7 @@ import {
   FarmingListItemModel,
   FarmingListResponseModel
 } from '@modules/farming/models';
-import { defined, isEmptyArray, toRealIfPossible } from '@shared/helpers';
+import { defined, isEmptyArray, MakeInterval, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Undefined } from '@shared/types';
@@ -41,6 +42,12 @@ export class FarmingListStore {
   readonly listBalancesStore: LoadingErrorData<FarmingListBalancesModel, typeof defaultListBalances>;
   //#endregion farming list balances store
 
+  readonly updateBalancesInterval = new MakeInterval(async () => {
+    if (!this.listBalancesStore.isLoading) {
+      await this.listBalancesStore.load();
+    }
+  }, FARMS_LIST_REWARD_UPDATE_INTERVAL);
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       listStore: observable,
@@ -49,12 +56,24 @@ export class FarmingListStore {
     });
   }
 
+  makePendingRewardsLiveable() {
+    this.updateBalancesInterval.start();
+  }
+
+  clearIntervals() {
+    this.updateBalancesInterval.stop();
+  }
+
   get list() {
     return this.listStore.model.list.map(({ item }) => item);
   }
 
   get isLoading() {
     return this.listStore.isLoading;
+  }
+
+  get balancesAreLoading() {
+    return this.listBalancesStore.isLoading;
   }
 
   get farmingItemsWithBalances(): FarmingListItemWithBalances[] {
@@ -70,7 +89,6 @@ export class FarmingListStore {
         farmingItemModel: this.getFarmingItemModelById(balance.id, balance.contractAddress)
       }))
       .map(({ balance, farmingItemModel }) => {
-        const myBalance = toRealIfPossible(balance.myBalance, farmingItemModel?.stakedToken);
         const depositBalance = toRealIfPossible(balance.depositBalance, farmingItemModel?.stakedToken);
         const earnBalance = toRealIfPossible(balance.earnBalance, farmingItemModel?.rewardToken);
         const fullRewardBalance = toRealIfPossible(balance.fullRewardBalance, farmingItemModel?.rewardToken);
@@ -78,7 +96,6 @@ export class FarmingListStore {
         return {
           ...balance,
           ...defined(farmingItemModel, balance.id),
-          myBalance,
           depositBalance,
           earnBalance,
           fullRewardBalance

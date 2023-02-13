@@ -45,6 +45,13 @@ export const useFarmingItemPageViewModel = () => {
     return () => farmingItemStore.clearIntervals();
   }, [farmingItemStore]);
 
+  useEffect(() => {
+    return () => {
+      farmingItemStore.itemStore.resetData();
+      farmingItemStore.userInfoStore.resetData();
+    };
+  }, [farmingItemStore]);
+
   const { isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
   const farmingItem = farmingItemStore.item;
   const itemApiError = farmingItemStore.itemApiError;

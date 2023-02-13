@@ -1,5 +1,4 @@
-import { convertToAtomicPrice } from '@modules/liquidity/pages/v3-item-page/helpers/convert-to-atomic-price';
-import { isExist, toReal } from '@shared/helpers';
+import { convertToAtomicPrice, isExist, toReal } from '@shared/helpers';
 
 import { useLiquidityV3PoolStore } from '../store';
 import { useV3PoolPriceDecimals } from './use-v3-pool-price-decimals';

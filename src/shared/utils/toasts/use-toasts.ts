@@ -13,6 +13,7 @@ export interface UseToasts {
   showErrorToast: (error: Error | string) => void;
   showSuccessToast: (render: ToastContent) => void;
   showInfoToast: (render: ToastContent) => void;
+  showRichTextErrorToast: (error: Error | string, render: ToastContent) => void;
 }
 
 export const useToasts = (): UseToasts => {
@@ -66,6 +67,14 @@ export const useToasts = (): UseToasts => {
     [updateToast, knownErrorsMessages]
   );
 
+  const showRichTextErrorToast = useCallback(
+    (error: Error | string, render: ToastContent) => {
+      captureException(error instanceof Error ? error : new Error(error));
+      updateToast({ type: 'error', render });
+    },
+    [updateToast]
+  );
+
   const showInfoToast = useCallback(
     (render: ToastContent) => {
       updateToast({
@@ -90,6 +99,7 @@ export const useToasts = (): UseToasts => {
     updateToast,
     showInfoToast,
     showSuccessToast,
-    showErrorToast
+    showErrorToast,
+    showRichTextErrorToast
   };
 };

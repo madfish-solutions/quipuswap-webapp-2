@@ -17,7 +17,7 @@ export const useGetLiquidityV3ItemWithPositions = () => {
     }
 
     try {
-      await liquidityV3ItemStore.itemSore.load();
+      await liquidityV3ItemStore.poolStore.load();
       await liquidityV3ItemStore.contractBalanceStore.load();
       await liquidityV3PositionsStore.positionsStore.load();
     } catch (error) {
