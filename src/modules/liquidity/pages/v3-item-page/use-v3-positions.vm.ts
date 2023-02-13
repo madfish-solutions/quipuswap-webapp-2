@@ -9,6 +9,7 @@ import { useRootStore } from '@providers/root-store-provider';
 import { isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { sortPositionsByNewer } from './helpers';
 import { mapPositionViewModel } from './helpers/map-position-view-model';
 import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
 import { usePositionsWithStats } from './hooks/use-positions-with-stats';
@@ -37,7 +38,9 @@ export const useV3PositionsViewModel = () => {
       return [];
     }
 
-    return positionsWithStats.map(mapPositionViewModel(tokenX, tokenY, poolId, isExchangeRatesError));
+    return positionsWithStats
+      .sort(sortPositionsByNewer)
+      .map(mapPositionViewModel(tokenX, tokenY, poolId, isExchangeRatesError));
   }, [positionsWithStats, tokenX, tokenY, poolId, isExchangeRatesError]);
 
   return { isLoading, positionsViewModel, error, warningAlertMessage };

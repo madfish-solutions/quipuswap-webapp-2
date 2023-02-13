@@ -3,13 +3,15 @@ import { BigNumber } from 'bignumber.js';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { DexPair, TokenId } from '@shared/types';
+import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
+import { DexPool } from '@modules/swap/types';
+import { TokenId } from '@shared/types';
 
 export interface SwapParams {
   deadlineTimespan?: number;
   inputToken: TokenId;
   inputAmount: BigNumber;
-  dexChain: DexPair[];
+  dexChain: DexPool[];
   trade: Trade;
   slippageTolerance?: BigNumber;
   ttDexAddress?: string;
@@ -30,7 +32,8 @@ export const estimateSwapFee = async (
     tezos,
     STABLESWAP_REFERRAL,
     recipientPkh,
-    deadlineTimespan?.toNumber()
+    deadlineTimespan?.toNumber(),
+    QUIPUSWAP_REFERRAL_CODE.toNumber()
   );
 
   const estimations = await tezos.estimate.batch(

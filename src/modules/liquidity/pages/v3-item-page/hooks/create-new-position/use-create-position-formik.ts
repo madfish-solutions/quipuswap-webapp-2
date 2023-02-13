@@ -28,7 +28,8 @@ export const useCreatePositionFormik = (
       actions.setSubmitting(false);
       actions.resetForm();
       await sleep(DELAY_BEFORE_DATA_UPDATE);
-      void poolStore.itemSore.load();
+      void poolStore.poolStore.load();
+      void poolStore.itemStore.load();
       void poolStore.contractBalanceStore.load();
     } catch {}
   };

@@ -18,6 +18,7 @@ export const liquidity = {
     'The amount of {{tokenBSymbol}} locked in the pool by liquidity providers.',
   'Pair Analytics': 'Pair Analytics',
   'Pair Contract': 'Pair Contract',
+  'Pool Contract': 'Pool Contract',
   "Note! The pool doesn't exist": "Note! The pool doesn't exist",
   'Liquidity Page': 'Liquidity Page',
   "Total amount of this pool'styles LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool.":
@@ -31,6 +32,7 @@ export const liquidity = {
   TVL: 'TVL',
   tvl: 'Total Value Locked',
   tvlTooltip: 'Total amount of assets locked in pool.',
+  tvlV3Tooltip: 'The value of funds locked in this liquidity pool by all users.',
   tvlV3PoolTooltip: 'The value of funds locked in this liquidity pool by all users and unclaimed fees.',
   tvlTooltipStats: 'Total amount of assets locked across all pools.',
   APR: 'APR',
@@ -42,6 +44,7 @@ export const liquidity = {
   poolsTooltip:
     'The total number of token pools on QuipuSwap, including stable pools, token-to-token pools, and tez-to-token pools.',
   feesRateTooltip: 'Trading fees charged in this pool.',
+  feeRateTooltipPosDetails: "The share of swaps value which is accrued to liquidity providers' active positions.",
   totalLpSupplyTooltip: 'Number of liquidity provider tokens.',
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',
@@ -75,7 +78,7 @@ export const liquidity = {
   tooltipTezotopia: 'Pools with Tezotopia tokens. Tezotopia is a popular real-time NFT Strategy Game on Tezos.',
   tooltipBTC: 'Pools with tokens pegged to BTC value: tzBTC, uBTC, etc.',
   tooltipDexTwo: 'Dex 2.0 Pools',
-  tooltipV3: 'CHANGE ME!',
+  tooltipV3: 'Pools with high capital efficiency.',
   currentBaker: 'Current baker',
   currentBakerTooltip:
     'A current baker elected by a simple majority of votes. All TEZ in the pool are delegated for him.',
@@ -87,12 +90,13 @@ export const liquidity = {
   currentPrice: 'Current price',
   currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
   feeRate: 'Fee rate',
-  feeRateTooltip: 'The share of swaps value which is accrued to liquidity providers active positions.',
+  feeRateTooltip: "The share of swaps value which is accrued to liquidity providers' active positions.",
   tokenReserves: '{{tokenSymbol}} reserves',
   tokenReservesTooltip: 'The amount of added base assets in a selected liquidity pool.',
+  tokenQuoteReservesTooltip: 'The amount of added quote assets in a selected liquidity pool.',
   Token: 'Token',
   Deposit: 'Deposit',
-  depositTooltip: 'Deposit',
+  depositTooltip: 'The value of a selected position.',
   Fee: 'Fee',
   noPositionsText: 'Here can be your positions.',
   totalFees: 'Total fees',
@@ -100,14 +104,15 @@ export const liquidity = {
   inRange: 'In range',
   notActive: 'Not active',
   minPrice: 'Min. price',
-  minPriceTooltip: 'Minimal price',
+  minPriceTooltip: "The minimum price of a base asset for the user's position to be involved in exchanges.",
   maxPrice: 'Max. price',
-  maxPriceTooltip: 'Maximal price',
+  maxPriceTooltip: "The maximum price of a base asset for the user's position to be involved in exchanges.",
   collectedFees: 'Collected fees',
-  collectedFeesTooltip: 'CollectedFees',
+  collectedFeesTooltip: 'The value of fees accrued to a selected position.',
   position: 'Position',
   claimFee: 'Claim fee',
   claimingSuccessful: 'Claiming successful',
+  valueShouldBeLessThen100: 'Value should be less than 100!',
   // V3
   v3ExchangeRatesError:
     "Oops… It seems we don't know the prices of the assets in the pool. So, dollar values related to this pool and positions in it won't be displayed.",
@@ -116,11 +121,17 @@ export const liquidity = {
     'If this option is selected, your liquidity is used for swaps at any price. It makes you position always earn fee but capital efficiency significantly decreases.',
   positionDetails: 'Position details',
   status: 'Status',
+  statusTooltip:
+    "The status of a selected position. If the current price is within the position's price range, position is active and earns fees.",
   id: 'ID',
+  idTooltip: 'The unique ID number of a selected position.',
   priceCannotBeNegative: 'Price cannot be negative.',
-  minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower of equal to max price.',
+  minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower or equal to max price.',
   maxPriceShouldBePositive: 'Maximal price should be positive.',
   tags: 'Tags',
+  tagsTooltip: 'The tags for the tokens in the pool.',
+  rewardsTooltip: "The value of fees accrued on user's positions in the selected liquidity pool.",
+  totalDepositTooltip: 'The value of all opened positions for the selected liquidity pool.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.',
   initialPrice: 'Initial price',
@@ -129,5 +140,12 @@ export const liquidity = {
   feeRates001: '0.01% (Suitable for very stable pairs)',
   feeRates005: '0.05% (Suitable for stable pairs)',
   feeRates03: '0.3% (Suitable for volatile pairs)',
-  feeRates1: '1% (Suitable for exotic pairs)'
+  feeRates1: '1% (Suitable for exotic pairs)',
+  v3PoolWithTezCreationWarning:
+    'The pool will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  v3PositionWithTezCreationWarning:
+    'The position will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  v3PoolAddLiquidityWarning:
+    'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
+  cannotCreatePoolError: "Sorry, the pool can't be created"
 } as const;
