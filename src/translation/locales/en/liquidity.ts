@@ -88,7 +88,7 @@ export const liquidity = {
   positions: 'Positions',
   weeklyVolumeV3PoolTooltip: 'The weekly trading volume for a selected liquidity pool.',
   currentPrice: 'Current price',
-  currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
+  currentPriceTooltip: 'The exchange rate between tokens in the pool.',
   feeRate: 'Fee rate',
   feeRateTooltip: "The share of swaps value which is accrued to liquidity providers' active positions.",
   tokenReserves: '{{tokenSymbol}} reserves',
