@@ -36,7 +36,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     accountPkh,
     action,
     blackListedTokens,
-    buyRate,
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,
@@ -195,7 +194,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           inputToken={inputToken}
           outputToken={outputToken}
           route={dexRoute}
-          buyRate={buyRate}
           sellRate={sellRate}
         />
       </StickyBlock>
