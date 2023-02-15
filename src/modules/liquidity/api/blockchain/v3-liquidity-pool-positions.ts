@@ -7,14 +7,7 @@ import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { calculateLiquidity, calculateTicks } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { Tzkt } from '@shared/api';
 import { getContract } from '@shared/dapp';
-import {
-  decreaseByPercentage,
-  defined,
-  getFirstElement,
-  getTransactionDeadline,
-  isTezosToken,
-  isTokenEqual
-} from '@shared/helpers';
+import { decreaseByPercentage, defined, getTransactionDeadline, isTezosToken, isTokenEqual } from '@shared/helpers';
 import { AmountToken, Token, Undefined } from '@shared/types';
 
 interface ILiquidityTickRaw {
@@ -34,7 +27,9 @@ export namespace V3Positions {
       active: true
     });
 
-    return new BigNumber(getFirstElement(rawTicks)?.key ?? MIN_TICK_INDEX);
+    const matchingTick = rawTicks.find(({ key, value }) => tickIndex.gt(key) && tickIndex.lte(value.next));
+
+    return new BigNumber(matchingTick?.key ?? MIN_TICK_INDEX);
   };
 
   export const doNewPositionTransaction = async (
