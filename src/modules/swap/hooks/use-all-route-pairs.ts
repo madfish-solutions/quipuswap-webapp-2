@@ -15,7 +15,7 @@ export const useAllRoutePairs = (webSocketUrl: string) => {
   const webSocketRef = useRef<WebSocket>();
 
   const [data, setData] = useState<RoutePair[]>([]);
-  const [isReconnecting, setIsReconnecting] = useState(false);
+  const isReconnectingRef = useRef(false);
   const mounted = useRef(false);
 
   useEffect(() => {
@@ -27,6 +27,10 @@ export const useAllRoutePairs = (webSocketUrl: string) => {
   }, []);
 
   const initializeSocket = useCallback(() => {
+    if (isReconnectingRef.current) {
+      return;
+    }
+
     webSocketRef.current = new WebSocket(webSocketUrl);
 
     const reconnect = () => {
@@ -34,14 +38,14 @@ export const useAllRoutePairs = (webSocketUrl: string) => {
         return;
       }
 
-      setIsReconnecting(true);
+      isReconnectingRef.current = true;
       setTimeout(() => initializeSocket(), RECONNECT_TIMEOUT);
     };
     webSocketRef.current.onerror = reconnect;
     webSocketRef.current.onclose = reconnect;
 
     webSocketRef.current.onmessage = (event: MessageEvent<string>) => {
-      setIsReconnecting(false);
+      isReconnectingRef.current = false;
       const rawResponse: ResponseInterface = JSON.parse(event.data);
 
       const allPairs = rawResponse.routePairs.map<RoutePair>(rawPair => ({
@@ -110,5 +114,5 @@ export const useAllRoutePairs = (webSocketUrl: string) => {
     return () => webSocketRef.current?.close();
   }, [initializeSocket]);
 
-  return { data, isReconnecting };
+  return { data };
 };
