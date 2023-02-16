@@ -127,7 +127,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     });
   }, [formik.outputAmount, validateField, setFieldTouched]);
 
-  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useRealSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, sellRate } = useRealSwapDetails({
     inputToken: formik.inputToken,
     outputToken: formik.outputToken,
     inputAmount: formik.inputAmount,
@@ -413,7 +413,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     accountPkh,
     action: formik.action,
     blackListedTokens,
-    buyRate,
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,

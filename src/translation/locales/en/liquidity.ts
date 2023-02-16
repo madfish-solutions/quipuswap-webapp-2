@@ -44,7 +44,8 @@ export const liquidity = {
   poolsTooltip:
     'The total number of token pools on QuipuSwap, including stable pools, token-to-token pools, and tez-to-token pools.',
   feesRateTooltip: 'Trading fees charged in this pool.',
-  feeRateTooltipPosDetails: "The share of swaps value which is accrued to liquidity providers' active positions.",
+  feeRateTooltipPosDetails:
+    'The fee rate is charged for each swap. Part of the fee goes to liquidity providers and part – to dev fund.',
   totalLpSupplyTooltip: 'Number of liquidity provider tokens.',
   weeklyVolumeTooltip: 'How many assets were exchanged during the 7 days.',
   successful: 'Successful',
@@ -132,6 +133,10 @@ export const liquidity = {
   tagsTooltip: 'The tags for the tokens in the pool.',
   rewardsTooltip: "The value of fees accrued on user's positions in the selected liquidity pool.",
   totalDepositTooltip: 'The value of all opened positions for the selected liquidity pool.',
+  v3TwoTokensRatioNotification:
+    'Unlike in old version, the ratio of added tokens can be arbitrary, not only 50/50. The ratio depends on the price range.',
+  v3OneTokenNotification:
+    'If the current market price is not in the selected range, only one token is required. Once the market price reaches your range the proportion of tokens in your position will change since some of your {{inputToken}} tokens will be sold in exchange for token {{outputToken}}.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.',
   initialPrice: 'Initial price',
@@ -147,5 +152,6 @@ export const liquidity = {
     'The position will be created with the wrapped TEZ. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
   v3PoolAddLiquidityWarning:
     'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
-  cannotCreatePoolError: "Sorry, the pool can't be created"
+  cannotCreatePoolError: "Sorry, the pool can't be created",
+  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool.'
 } as const;

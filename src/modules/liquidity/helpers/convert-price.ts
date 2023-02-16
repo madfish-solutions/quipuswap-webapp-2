@@ -5,5 +5,5 @@ import { isEqual } from '@shared/helpers';
 
 import { oppositeCurrentPrice } from '../pages/v3-item-page/helpers';
 
-export const getCurrentPrice = (currentPrice: BigNumber, activeTokenIndex: number) =>
-  isEqual(DEFAULT_TOKEN_ID, activeTokenIndex) ? currentPrice : oppositeCurrentPrice(currentPrice);
+export const convertPrice = (actualPrice: BigNumber, activeTokenIndex: number) =>
+  isEqual(DEFAULT_TOKEN_ID, activeTokenIndex) ? actualPrice : oppositeCurrentPrice(actualPrice);

@@ -13,7 +13,7 @@ import {
 import { WarningAlert } from '@shared/components/warning-alert';
 import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
-import { Nullable, Optional } from '@shared/types';
+import { Optional } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -28,7 +28,7 @@ interface OpenNewPositionFormProps {
   loading: boolean;
   isFullRangePosition: boolean;
   onFullRangeSwitcherClick: (newState: boolean) => void;
-  warningMessage: Nullable<string>;
+  warningMessages: string[];
 }
 
 export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
@@ -40,7 +40,7 @@ export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
   loading,
   isFullRangePosition,
   onFullRangeSwitcherClick,
-  warningMessage
+  warningMessages
 }) => {
   const { t } = useTranslation();
 
@@ -66,7 +66,9 @@ export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
       <Iterator render={TokenInput} data={amountInputsProps} separator={<Plus className={styles.svg} />} />
 
       {isExist(bottomError) && <AlarmMessage message={bottomError} className={stylesCommonContainer.mt24} />}
-      <WarningAlert message={warningMessage} className={stylesCommonContainer.mt24} />
+      {warningMessages.map(message => (
+        <WarningAlert message={message} key={message} className={stylesCommonContainer.mt24} />
+      ))}
 
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
