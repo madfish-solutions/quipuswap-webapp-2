@@ -27,14 +27,10 @@ export const useAllRoutePairs = (webSocketUrl: string) => {
   }, []);
 
   const initializeSocket = useCallback(() => {
-    if (isReconnectingRef.current) {
-      return;
-    }
-
     webSocketRef.current = new WebSocket(webSocketUrl);
 
     const reconnect = () => {
-      if (!mounted.current) {
+      if (!mounted.current || isReconnectingRef.current) {
         return;
       }
 
