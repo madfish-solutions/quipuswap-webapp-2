@@ -7,19 +7,20 @@ import {
 } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
 import { TokenInputProps } from '@shared/components';
-import { getFormikError, getTokenDecimals, isExist } from '@shared/helpers';
+import { getFormikError, getTokenDecimals, getTokenSymbol, isExist } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
-import { tezosTokenIsIncluded } from './helpers';
+import { shouldAddTokenX, shouldAddTokenY, tezosTokenIsIncluded } from './helpers';
 import {
   useCreatePositionFormik,
   useCurrentTick,
   useAmountInputsProps,
   useInputsHandlers,
-  useInitialPriceRange
+  useInitialPriceRange,
+  usePositionTicks
 } from './hooks';
 import { CreatePositionInput } from './types/create-position-form';
 
@@ -48,6 +49,7 @@ export const useCreateNewPositionPageViewModel = () => {
 
   const formik = useCreatePositionFormik(initialMinPrice, initialMaxPrice, tokensWithBalances);
 
+  const { upperTick, lowerTick } = usePositionTicks(formik);
   const { handleInputChange, handleRangeInputBlur, onFullRangeSwitcherClick } = useInputsHandlers(
     formik,
     priceRangeDecimals,
@@ -82,10 +84,33 @@ export const useCreateNewPositionPageViewModel = () => {
   const bottomError =
     getFormikError(formik, CreatePositionInput.MIN_PRICE) ?? getFormikError(formik, CreatePositionInput.MAX_PRICE);
   const disabled = formik.isSubmitting || isExist(bottomError);
-  const warningMessage =
-    tezosTokenIsIncluded([tokenX, tokenY]) && !isExist(bottomError)
-      ? t('liquidity|v3PositionWithTezCreationWarning')
-      : null;
+  const warningMessages = useMemo(() => {
+    if (isExist(bottomError)) {
+      return [];
+    }
+
+    const result: string[] = [];
+    const _shouldAddTokenX = currentTick && upperTick && shouldAddTokenX(currentTick.index, upperTick.index);
+    const _shouldAddTokenY = currentTick && lowerTick && shouldAddTokenY(currentTick.index, lowerTick.index);
+
+    if (tezosTokenIsIncluded([tokenX, tokenY])) {
+      result.push(t('liquidity|v3PositionWithTezCreationWarning'));
+    }
+    if (_shouldAddTokenX && _shouldAddTokenY) {
+      result.push(t('liquidity|v3TwoTokensRatioNotification'));
+    } else if ((_shouldAddTokenX || _shouldAddTokenY) && isExist(tokenX) && isExist(tokenY)) {
+      const inputToken = _shouldAddTokenX ? tokenX : tokenY;
+      const outputToken = _shouldAddTokenX ? tokenY : tokenX;
+      result.push(
+        t('liquidity|v3OneTokenNotification', {
+          inputToken: getTokenSymbol(inputToken),
+          outputToken: getTokenSymbol(outputToken)
+        })
+      );
+    }
+
+    return result;
+  }, [bottomError, currentTick, lowerTick, t, tokenX, tokenY, upperTick]);
 
   return {
     bottomError,
@@ -98,6 +123,6 @@ export const useCreateNewPositionPageViewModel = () => {
     rangeInputsProps,
     titleText: t('liquidity|createPosition'),
     backHref,
-    warningMessage
+    warningMessages
   };
 };

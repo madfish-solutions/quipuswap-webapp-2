@@ -70,7 +70,7 @@ export const mapLiquidityListItem = ({
     });
   }
 
-  if (!isNull(maxApr)) {
+  if (!isNull(maxApr) && maxApr !== ZERO_AMOUNT) {
     itemStats.push({
       cellName: i18n.t('liquidity|maxApr'),
       tooltip: i18n.t('liquidity|maxAprTooltip'),
