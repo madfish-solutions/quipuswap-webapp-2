@@ -85,7 +85,7 @@ export const usePositionFeesListViewModel = () => {
     onButtonClick: handleClaimAll,
     translation: {
       claimFeeTranslation: t('liquidity|claimFee'),
-      rewardsTooltipTranslation: t('farm|rewardsTooltip'),
+      rewardsTooltipTranslation: t('liquidity|v3PoolRewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
       totalDepositTranslation: t('liquidity|totalDeposit'),
       totalDepositTooltipTranslation: t('liquidity|totalDepositTooltip')

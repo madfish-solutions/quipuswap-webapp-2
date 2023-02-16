@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { OPPOSITE_INDEX, ZERO_AMOUNT } from '@config/constants';
@@ -7,7 +9,15 @@ import {
   useLiquidityV3PositionStore,
   useGetLiquidityV3Position
 } from '@modules/liquidity/hooks';
-import { numberAsString, isNull, isExist } from '@shared/helpers';
+import {
+  numberAsString,
+  isNull,
+  isExist,
+  isArrayPairTuple,
+  isEmptyArray,
+  getFirstElement,
+  getTokenSymbol
+} from '@shared/helpers';
 import { useTokensBalancesOnly } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
@@ -101,13 +111,33 @@ export const useV3AddLiqFormViewModel = () => {
 
   const disabled = formik.isSubmitting;
 
-  const warningMessage = tezosTokenIsIncluded([tokenX, tokenY]) ? t('liquidity|v3PoolAddLiquidityWarning') : null;
+  const warningMessages = useMemo(() => {
+    const result: string[] = [];
+
+    if (tezosTokenIsIncluded([tokenX, tokenY])) {
+      result.push(t('liquidity|v3PoolAddLiquidityWarning'));
+    }
+    if (isArrayPairTuple(tokens)) {
+      result.push(t('liquidity|v3TwoTokensRatioNotification'));
+    } else if (!isEmptyArray(tokens) && tokenX && tokenY) {
+      const inputToken = getFirstElement(tokens);
+      const outputToken = inputToken === tokenX ? tokenY : tokenX;
+      result.push(
+        t('liquidity|v3OneTokenNotification', {
+          inputToken: getTokenSymbol(inputToken!),
+          outputToken: getTokenSymbol(outputToken)
+        })
+      );
+    }
+
+    return result;
+  }, [tokenX, tokenY, t, tokens]);
 
   return {
     data,
     isSubmitting: formik.isSubmitting,
     disabled,
     onSubmit: formik.handleSubmit,
-    warningMessage
+    warningMessages
   };
 };
