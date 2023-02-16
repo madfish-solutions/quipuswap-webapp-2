@@ -4,7 +4,11 @@ import constate from 'constate';
 import { DexTypeEnum, RouteDirectionEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
-import { TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES, TOKENS } from '@config/config';
+import {
+  TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES,
+  TOKENS,
+  TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS
+} from '@config/config';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { getTokenSlug, getUniqArray, isMainnet } from '@shared/helpers';
@@ -66,9 +70,12 @@ export const [RoutePairsProvider, useRoutePairs] = constate(() => {
             );
 
             return (
-              pair.dexType !== DexTypeEnum.QuipuSwap ||
+              (pair.dexType !== DexTypeEnum.QuipuSwap && pair.dexType !== DexTypeEnum.QuipuSwapTokenToTokenDex) ||
               !isMainnet ||
-              TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES.includes(pair.dexAddress)
+              TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES.includes(pair.dexAddress) ||
+              TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS.some(
+                ({ address, id }) => pair.dexId?.eq(id) && pair.dexAddress === address
+              )
             );
           } catch {
             return false;
