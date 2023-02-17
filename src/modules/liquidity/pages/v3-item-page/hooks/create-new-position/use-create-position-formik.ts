@@ -2,7 +2,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING } from '@config/constants';
 import { useLiquidityV3PoolStore, useV3NewPosition } from '@modules/liquidity/hooks';
-import { sleep, stringToBigNumber } from '@shared/helpers';
+import { getInvertedValue, sleep, stringToBigNumber } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
 import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
@@ -17,11 +17,14 @@ export const useCreatePositionFormik = (
   const poolStore = useLiquidityV3PoolStore();
 
   const handleSubmit = async (values: CreatePositionFormValues, actions: FormikHelpers<CreatePositionFormValues>) => {
+    const shouldShowTokenXToYPrice = poolStore.localShouldShowXToYPrice;
     actions.setSubmitting(true);
     try {
+      const displayedMinPrice = stringToBigNumber(values[CreatePositionInput.MIN_PRICE]);
+      const displayedMaxPrice = stringToBigNumber(values[CreatePositionInput.MAX_PRICE]);
       await createNewV3Position(
-        stringToBigNumber(values[CreatePositionInput.MIN_PRICE]),
-        stringToBigNumber(values[CreatePositionInput.MAX_PRICE]),
+        shouldShowTokenXToYPrice ? getInvertedValue(displayedMaxPrice) : displayedMinPrice,
+        shouldShowTokenXToYPrice ? getInvertedValue(displayedMinPrice) : displayedMaxPrice,
         stringToBigNumber(values[CreatePositionInput.FIRST_AMOUNT_INPUT]),
         stringToBigNumber(values[CreatePositionInput.SECOND_AMOUNT_INPUT])
       );
