@@ -42,7 +42,7 @@ export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: Bal
             { value: ZERO_AMOUNT_BN, isInclusive: true },
             null,
             t('liquidity|priceCannotBeNegative')
-          ).required(requiredFieldMessage);
+          ).required(t('liquidity|minPriceIsRequired'));
         }
 
         return numberAsStringSchema(
@@ -50,13 +50,13 @@ export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: Bal
           { value: maxPrice, isInclusive: true },
           t('liquidity|priceCannotBeNegative'),
           t('liquidity|minPriceLteMaxPrice')
-        ).required(requiredFieldMessage);
+        ).required(t('liquidity|minPriceIsRequired'));
       }),
       [CreatePositionInput.MAX_PRICE]: numberAsStringSchema(
         { value: ZERO_AMOUNT_BN, isInclusive: false },
         null,
         t('liquidity|maxPriceShouldBePositive')
-      ).required(requiredFieldMessage),
+      ).required(t('liquidity|maxPriceIsRequired')),
       [CreatePositionInput.FULL_RANGE_POSITION]: boolSchema().required(),
       [CreatePositionInput.FIRST_AMOUNT_INPUT]: mixed().when(
         [CreatePositionInput.MIN_PRICE, CreatePositionInput.MAX_PRICE],

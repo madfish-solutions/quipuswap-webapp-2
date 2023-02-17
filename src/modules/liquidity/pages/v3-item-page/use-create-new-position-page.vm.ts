@@ -74,8 +74,8 @@ export const useCreateNewPositionPageViewModel = () => {
       onPriceRangeChange(ZERO_AMOUNT_BN.toString(), toPriceRangeInputValue(new BigNumber(Infinity)));
     } else if (shouldInvertPrices) {
       const shiftPreventionMultiplier = shouldShowTokenXToYPrice
-        ? NO_EFFECT_MULTIPLIER - Number.EPSILON
-        : NO_EFFECT_MULTIPLIER + Number.EPSILON;
+        ? NO_EFFECT_MULTIPLIER + Number.EPSILON
+        : NO_EFFECT_MULTIPLIER - Number.EPSILON;
       const currentMinPrice = stringToBigNumber(formik.values[CreatePositionInput.MIN_PRICE]);
       const currentMaxPrice = stringToBigNumber(formik.values[CreatePositionInput.MAX_PRICE]);
       const newMaxPrice = getInvertedValue(currentMinPrice.times(shiftPreventionMultiplier));
