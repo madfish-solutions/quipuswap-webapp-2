@@ -56,7 +56,8 @@ export class FarmingYouvesItemStore {
     return (
       item && {
         ...item,
-        tvlInStakedToken: BigNumber.maximum(item.tvlInStakedToken, currentStakeRealBalance ?? ZERO_AMOUNT_BN)
+        tvlInStakedToken: BigNumber.maximum(item.tvlInStakedToken, currentStakeRealBalance ?? ZERO_AMOUNT_BN),
+        staked: BigNumber.maximum(item.staked, this.currentStakeBalance ?? ZERO_AMOUNT_BN)
       }
     );
   }
