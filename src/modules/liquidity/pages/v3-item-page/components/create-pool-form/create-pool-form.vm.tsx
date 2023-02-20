@@ -1,47 +1,44 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-import { FormikHelpers, useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import BigNumber from 'bignumber.js';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { AppRootRoutes } from '@app.router';
-import { DELAY_BEFORE_DATA_UPDATE, EMPTY_STRING, FEE_BASE_POINTS_PRECISION, SLASH } from '@config/constants';
-import { WTEZ_TOKEN } from '@config/tokens';
+import { EMPTY_STRING, FIRST_INDEX, SECOND_TUPLE_INDEX } from '@config/constants';
+import { TEZOS_TOKEN_DECIMALS, WTEZ_TOKEN } from '@config/tokens';
 import { useGetLiquidityList } from '@modules/liquidity/hooks';
-import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
-import { useTezos } from '@providers/use-dapp';
+import { AssetSwitcher } from '@shared/components';
 import { TokenSelectProps } from '@shared/components/token-select';
 import {
-  getFirstElement,
   getFormikError,
+  getInvertedValue,
+  getTokenSymbol,
   isExist,
   isNull,
   operationAmountSchema,
-  toFraction,
-  sleep
+  stringToBigNumber
 } from '@shared/helpers';
 import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
-import { tezosTokenIsIncluded, tokenIsIncluded, findPool, sortTokens } from '../../helpers';
-import { useDoCreateV3Pool } from '../../use-create-new-pool-page.vm';
+import { tezosTokenIsIncluded, tokenIsIncluded } from '../../helpers';
 import styles from './create-pool-form.module.scss';
+import { useHandleSubmit } from './use-handle-submit';
 
 enum eCreatePoolValues {
   feeRate = 'feeRate',
   initialPrice = 'initialPrice',
-  tokens = 'tokens'
+  tokens = 'tokens',
+  activeAssetIndex = 'activeAssetIndex'
 }
 
 interface CreatePoolValues {
   [eCreatePoolValues.feeRate]: number;
   [eCreatePoolValues.initialPrice]: string;
   [eCreatePoolValues.tokens]: Array<Token>;
+  [eCreatePoolValues.activeAssetIndex]: number;
 }
-
-const INVERSION_DIVIDEND = 1;
 
 export const feeRateRadioButtonOptions = [
   {
@@ -87,7 +84,7 @@ const validationSchema = yup.object().shape({
   [eCreatePoolValues.initialPrice]: operationAmountSchema(
     null,
     true,
-    6,
+    TEZOS_TOKEN_DECIMALS,
     'The value should be less than 6 decimals.'
   ).required(),
   [eCreatePoolValues.tokens]: yup
@@ -101,64 +98,23 @@ const validationSchema = yup.object().shape({
       const [firstToken, secondToken] = tokens;
 
       return isExist(firstToken) && isExist(secondToken);
-    })
+    }),
+  [eCreatePoolValues.activeAssetIndex]: yup.number().required()
 });
 
 const initialValues: CreatePoolValues = {
   [eCreatePoolValues.feeRate]: feeRateRadioButtonOptions[0].value,
   [eCreatePoolValues.initialPrice]: '',
-  [eCreatePoolValues.tokens]: []
+  [eCreatePoolValues.tokens]: [],
+  [eCreatePoolValues.activeAssetIndex]: FIRST_INDEX
 };
 
 export const useCreatePoolFormViewModel = () => {
   const { t } = useTranslation();
   const { getLiquidityList } = useGetLiquidityList();
-  const tezos = useTezos();
-  const { doCreatePool } = useDoCreateV3Pool();
   const [alarmMessageInfo, setAlarmMessageInfo] = useState(DEFAULT_ALARM_MESSAGE_INFO);
-  const navigate = useNavigate();
 
-  const handleSubmit = useCallback(
-    async (values: CreatePoolValues, actions: FormikHelpers<CreatePoolValues>) => {
-      actions.setSubmitting(true);
-      const feeRate = new BigNumber(values[eCreatePoolValues.feeRate]);
-      const tokens = values[eCreatePoolValues.tokens];
-      const sortedTokens = Array.from(values[eCreatePoolValues.tokens]).sort(sortTokens);
-      const [token0, token1] = sortedTokens;
-      const tokensAreSwapped = token0 !== getFirstElement(tokens);
-      const rawInitialPrice = values[eCreatePoolValues.initialPrice];
-      const initialPrice = tokensAreSwapped
-        ? new BigNumber(rawInitialPrice)
-        : new BigNumber(INVERSION_DIVIDEND).div(rawInitialPrice);
-      const poolId = await findPool(tezos, toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION), sortedTokens);
-
-      if (isExist(poolId)) {
-        setAlarmMessageInfo({
-          poolExists: true,
-          poolLink: `${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${poolId}`
-        });
-
-        return;
-      }
-
-      try {
-        await doCreatePool(feeRate, token0, token1, initialPrice);
-        await sleep(DELAY_BEFORE_DATA_UPDATE);
-
-        const newPoolId = await findPool(
-          tezos,
-          toFraction(feeRate).multipliedBy(FEE_BASE_POINTS_PRECISION),
-          sortedTokens
-        );
-
-        navigate(`${AppRootRoutes.Liquidity}${LiquidityRoutes.v3}${SLASH}${newPoolId}${LiquidityRoutes.create}`);
-      } finally {
-        actions.resetForm();
-        actions.setSubmitting(false);
-      }
-    },
-    [tezos, doCreatePool, navigate]
-  );
+  const handleSubmit = useHandleSubmit(setAlarmMessageInfo);
 
   const formik = useFormik({
     validationSchema,
@@ -179,8 +135,22 @@ export const useCreatePoolFormViewModel = () => {
     formik.setFieldValue(eCreatePoolValues.initialPrice, value);
   };
 
-  const token0 = formik.values[eCreatePoolValues.tokens][0];
-  const token1 = formik.values[eCreatePoolValues.tokens][1];
+  const handleAssetSwitch = async (index: number) =>
+    formik.setValues(prevValues => {
+      const prevInitialPrice = stringToBigNumber(prevValues[eCreatePoolValues.initialPrice]);
+
+      return {
+        ...prevValues,
+        [eCreatePoolValues.activeAssetIndex]: index,
+        [eCreatePoolValues.initialPrice]:
+          prevInitialPrice.isZero() || !prevInitialPrice.isFinite()
+            ? ''
+            : getInvertedValue(prevInitialPrice).decimalPlaces(TEZOS_TOKEN_DECIMALS, BigNumber.ROUND_DOWN).toFixed()
+      };
+    });
+
+  const tokens = formik.values[eCreatePoolValues.tokens];
+  const [token0, token1] = tokens;
 
   const tokensSelectData: Array<TokenSelectProps> = [
     {
@@ -192,7 +162,7 @@ export const useCreatePoolFormViewModel = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       error: !token0 ? getFormikError(formik as any, eCreatePoolValues.tokens) : undefined,
-      blackListedTokens: token1 ? [token1] : []
+      blackListedTokens: [token1].filter(isExist)
     },
     {
       ...standardTokenSelectProps,
@@ -203,18 +173,16 @@ export const useCreatePoolFormViewModel = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       error: !token1 ? getFormikError(formik as any, eCreatePoolValues.tokens) : undefined,
-      blackListedTokens: token0 ? [token0] : []
+      blackListedTokens: [token0].filter(isExist)
     }
   ];
 
   const translation = {
     tokenSelect: t('common|Input'),
-    initialPrice: t('liquidity|initialPrice'),
     feeRates: t('liquidity|feeRates'),
     create: t('common|Create')
   };
 
-  const tokens = formik.values[eCreatePoolValues.tokens];
   const errorMessage =
     tezosTokenIsIncluded([token0, token1]) && tokenIsIncluded([token0, token1], WTEZ_TOKEN)
       ? t('liquidity|cannotCreatePoolError')
@@ -226,19 +194,39 @@ export const useCreatePoolFormViewModel = () => {
     void getLiquidityList();
   }, [getLiquidityList]);
 
+  const activeAssetIndex = formik.values[eCreatePoolValues.activeAssetIndex];
+  const initialPriceLabel = useMemo(() => {
+    const baseToken = tokens[SECOND_TUPLE_INDEX - activeAssetIndex];
+    if (isExist(baseToken)) {
+      return `${t('liquidity|initialPrice')}: 1 ${getTokenSymbol(baseToken)} =`;
+    }
+
+    return t('liquidity|initialPrice');
+  }, [t, tokens, activeAssetIndex]);
+
+  const tokensSwitcher = isExist(token0) && isExist(token1) && (
+    <AssetSwitcher
+      labels={[getTokenSymbol(token0), getTokenSymbol(token1)]}
+      activeIndex={activeAssetIndex}
+      handleButtonClick={handleAssetSwitch}
+    />
+  );
+
   return {
     alarmMessageInfo,
     translation,
     radioButtonParams,
     tokensSelectData,
-    tokens,
+    quoteToken: tokens[activeAssetIndex],
     disabled: !tokens || formik.isSubmitting || isExist(errorMessage) || alarmMessageInfo.poolExists,
     isSubmitting: formik.isSubmitting,
+    initialPriceLabel,
     initialPriceValue: formik.values[eCreatePoolValues.initialPrice],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialPriceError: getFormikError(formik as any, eCreatePoolValues.initialPrice),
     setInitialPriceValue,
     onSubmit: formik.handleSubmit,
+    tokensSwitcher,
     warningMessage,
     errorMessage
   };
