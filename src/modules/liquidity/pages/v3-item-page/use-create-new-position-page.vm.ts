@@ -1,30 +1,35 @@
 import { useEffect, useMemo } from 'react';
 
+import BigNumber from 'bignumber.js';
+
+import { ZERO_AMOUNT_BN } from '@config/constants';
 import {
   useGetLiquidityV3ItemWithPositions,
   useLiquidityV3ItemTokens,
   useLiquidityV3PoolStore
 } from '@modules/liquidity/hooks';
 import { useReady } from '@providers/use-dapp';
-import { TokenInputProps } from '@shared/components';
-import { getFormikError, getTokenDecimals, getTokenSymbol, isExist } from '@shared/helpers';
+import { getInvertedValue, getTokenDecimals, isExist, stringToBigNumber } from '@shared/helpers';
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
-import { shouldAddTokenX, shouldAddTokenY, tezosTokenIsIncluded } from './helpers';
 import {
+  useBottomMessages,
   useCreatePositionFormik,
   useCurrentTick,
   useAmountInputsProps,
   useInputsHandlers,
   useInitialPriceRange,
-  usePositionTicks
+  useShouldShowTokenXToYPrice,
+  useRangeInputsProps,
+  useToPriceRangeInputValue
 } from './hooks';
 import { CreatePositionInput } from './types/create-position-form';
 
 const MIN_PRICE_RANGE_DECIMALS = 6;
+const NO_EFFECT_MULTIPLIER = 1;
 
 export const useCreateNewPositionPageViewModel = () => {
   const { t } = useTranslation();
@@ -36,7 +41,12 @@ export const useCreateNewPositionPageViewModel = () => {
   const tokensWithBalances = useTokensWithBalances(tokensList);
   const poolStore = useLiquidityV3PoolStore();
   const currentTick = useCurrentTick();
-  const priceRangeDecimals = Math.max(getTokenDecimals(tokenY), MIN_PRICE_RANGE_DECIMALS);
+  const shouldShowTokenXToYPrice = useShouldShowTokenXToYPrice();
+  const priceRangeDecimals = Math.max(
+    getTokenDecimals(shouldShowTokenXToYPrice ? tokenX : tokenY),
+    MIN_PRICE_RANGE_DECIMALS
+  );
+  const toPriceRangeInputValue = useToPriceRangeInputValue(priceRangeDecimals);
 
   const { minPrice: initialMinPrice, maxPrice: initialMaxPrice } = useInitialPriceRange(priceRangeDecimals);
 
@@ -48,69 +58,45 @@ export const useCreateNewPositionPageViewModel = () => {
   }, [dAppReady, getLiquidityV3ItemBalances, getLiquidityV3ItemWithPositions]);
 
   const formik = useCreatePositionFormik(initialMinPrice, initialMaxPrice, tokensWithBalances);
+  const isFullRangePosition = formik.values[CreatePositionInput.FULL_RANGE_POSITION];
 
-  const { upperTick, lowerTick } = usePositionTicks(formik);
-  const { handleInputChange, handleRangeInputBlur, onFullRangeSwitcherClick } = useInputsHandlers(
+  const { handleInputChange, handleRangeInputBlur, onFullRangeSwitcherClick, onPriceRangeChange } = useInputsHandlers(
     formik,
     priceRangeDecimals,
     initialMinPrice,
     initialMaxPrice
   );
 
+  useEffect(() => {
+    const shouldInvertPrices = poolStore.localShouldShowXToYPrice !== shouldShowTokenXToYPrice;
+    poolStore.localShouldShowXToYPrice = shouldShowTokenXToYPrice;
+    if (shouldInvertPrices && isFullRangePosition) {
+      onPriceRangeChange(ZERO_AMOUNT_BN.toString(), toPriceRangeInputValue(new BigNumber(Infinity)));
+    } else if (shouldInvertPrices) {
+      const shiftPreventionMultiplier = shouldShowTokenXToYPrice
+        ? NO_EFFECT_MULTIPLIER + Number.EPSILON
+        : NO_EFFECT_MULTIPLIER - Number.EPSILON;
+      const currentMinPrice = stringToBigNumber(formik.values[CreatePositionInput.MIN_PRICE]);
+      const currentMaxPrice = stringToBigNumber(formik.values[CreatePositionInput.MAX_PRICE]);
+      const newMaxPrice = getInvertedValue(currentMinPrice.times(shiftPreventionMultiplier));
+      const newMinPrice = getInvertedValue(currentMaxPrice.times(shiftPreventionMultiplier));
+      onPriceRangeChange(toPriceRangeInputValue(newMinPrice), toPriceRangeInputValue(newMaxPrice));
+    }
+  }, [shouldShowTokenXToYPrice, onPriceRangeChange, formik, toPriceRangeInputValue, isFullRangePosition, poolStore]);
+
   const amountInputsProps = useAmountInputsProps(tokensWithBalances, handleInputChange, currentTick, formik);
 
-  const rangeInputsProps = useMemo<TokenInputProps[]>(() => {
-    const rangeInputsSlugs = [CreatePositionInput.MIN_PRICE, CreatePositionInput.MAX_PRICE] as const;
-    const rangeInputsLabels = [t('liquidity|minPrice'), t('liquidity|maxPrice')];
+  const rangeInputsProps = useRangeInputsProps(
+    formik,
+    tokensList,
+    priceRangeDecimals,
+    handleInputChange,
+    handleRangeInputBlur
+  );
 
-    return rangeInputsSlugs.map((inputSlug, index) => ({
-      value: formik.values[inputSlug],
-      label: rangeInputsLabels[index],
-      decimals: priceRangeDecimals,
-      tokens: tokensList && [...tokensList].reverse(),
-      readOnly: formik.values[CreatePositionInput.FULL_RANGE_POSITION],
-      onInputChange: handleInputChange(inputSlug, priceRangeDecimals),
-      hiddenBalance: true,
-      hiddenPercentSelector: true,
-      hiddenNotWhitelistedMessage: true,
-      fullWidth: false,
-      tokenLogoWidth: 32,
-      hiddenUnderline: true,
-      onBlur: handleRangeInputBlur(inputSlug)
-    }));
-  }, [formik, handleInputChange, handleRangeInputBlur, t, tokensList, priceRangeDecimals]);
-
+  const { bottomError, warningMessages } = useBottomMessages(formik);
   const backHref = `${FULL_PATH_PREFIX}/${poolStore.poolId?.toFixed()}`;
-  const bottomError =
-    getFormikError(formik, CreatePositionInput.MIN_PRICE) ?? getFormikError(formik, CreatePositionInput.MAX_PRICE);
   const disabled = formik.isSubmitting || isExist(bottomError);
-  const warningMessages = useMemo(() => {
-    if (isExist(bottomError)) {
-      return [];
-    }
-
-    const result: string[] = [];
-    const _shouldAddTokenX = currentTick && upperTick && shouldAddTokenX(currentTick.index, upperTick.index);
-    const _shouldAddTokenY = currentTick && lowerTick && shouldAddTokenY(currentTick.index, lowerTick.index);
-
-    if (tezosTokenIsIncluded([tokenX, tokenY])) {
-      result.push(t('liquidity|v3PositionWithTezCreationWarning'));
-    }
-    if (_shouldAddTokenX && _shouldAddTokenY) {
-      result.push(t('liquidity|v3TwoTokensRatioNotification'));
-    } else if ((_shouldAddTokenX || _shouldAddTokenY) && isExist(tokenX) && isExist(tokenY)) {
-      const inputToken = _shouldAddTokenX ? tokenX : tokenY;
-      const outputToken = _shouldAddTokenX ? tokenY : tokenX;
-      result.push(
-        t('liquidity|v3OneTokenNotification', {
-          inputToken: getTokenSymbol(inputToken),
-          outputToken: getTokenSymbol(outputToken)
-        })
-      );
-    }
-
-    return result;
-  }, [bottomError, currentTick, lowerTick, t, tokenX, tokenY, upperTick]);
 
   return {
     bottomError,
