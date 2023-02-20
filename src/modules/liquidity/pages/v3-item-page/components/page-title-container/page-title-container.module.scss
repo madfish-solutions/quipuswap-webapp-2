@@ -1,0 +1,22 @@
+@import '@styles/breakpoints';
+@import '@styles/variables';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  @include media('>=phone') {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+.poolTokens {
+  color: $text-03;
+}
+
+.switcher {
+  height: 32px !important;
+}

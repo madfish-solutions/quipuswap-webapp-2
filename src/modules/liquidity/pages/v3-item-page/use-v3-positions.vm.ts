@@ -11,7 +11,7 @@ import { useTranslation } from '@translation';
 
 import { sortPositionsByNewer } from './helpers';
 import { mapPositionViewModel } from './helpers/map-position-view-model';
-import { useLiquidityV3ItemTokensExchangeRates } from './hooks';
+import { useLiquidityV3ItemTokensExchangeRates, useShouldShowTokenXToYPrice } from './hooks';
 import { usePositionsWithStats } from './hooks/use-positions-with-stats';
 
 export const useV3PositionsViewModel = () => {
@@ -21,6 +21,7 @@ export const useV3PositionsViewModel = () => {
   const { isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const { tezos } = useRootStore();
   const { getLiquidityV3ItemWithPositions } = useGetLiquidityV3ItemWithPositions();
+  const shouldShowTokenXToYPrice = useShouldShowTokenXToYPrice();
 
   const poolId = v3PositionsStore.poolId;
 
@@ -40,8 +41,8 @@ export const useV3PositionsViewModel = () => {
 
     return positionsWithStats
       .sort(sortPositionsByNewer)
-      .map(mapPositionViewModel(tokenX, tokenY, poolId, isExchangeRatesError));
-  }, [positionsWithStats, tokenX, tokenY, poolId, isExchangeRatesError]);
+      .map(mapPositionViewModel(tokenX, tokenY, poolId, isExchangeRatesError, shouldShowTokenXToYPrice));
+  }, [positionsWithStats, tokenX, tokenY, poolId, isExchangeRatesError, shouldShowTokenXToYPrice]);
 
   return { isLoading, positionsViewModel, error, warningAlertMessage };
 };

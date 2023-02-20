@@ -73,4 +73,4 @@ export * from './virtual-list';
 export * from './error-fallback';
 export * from './loader-fallback';
 export * from './asset-switcher';
-export * from './back-to-list-reward-header';
+export * from './card-header-with-back-button';

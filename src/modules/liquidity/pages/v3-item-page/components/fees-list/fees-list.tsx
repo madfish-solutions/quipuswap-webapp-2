@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
-import { BackToListRewardHeader, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { CardHeaderWithBackButton, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { Nullable } from '@shared/types';
 
@@ -40,6 +40,7 @@ export const FeesList: FC<Props> = ({
 }) => {
   const {
     rewardsTooltipTranslation,
+    backToTheListTranslation,
     claimFeeTranslation,
     totalFeesTranslation,
     totalDepositTranslation,
@@ -67,7 +68,7 @@ export const FeesList: FC<Props> = ({
       header={
         backHref
           ? {
-              content: <BackToListRewardHeader backHref={backHref} />,
+              content: <CardHeaderWithBackButton backHref={backHref} text={backToTheListTranslation} />,
               className: styles.rewardHeader
             }
           : undefined

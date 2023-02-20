@@ -4,32 +4,23 @@ import { observer } from 'mobx-react-lite';
 
 import { PERCENT } from '@config/constants';
 import { LiquidityLabels } from '@modules/liquidity/components';
-import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
+import { Button, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { useShouldShowTokenXToYPrice } from '../../hooks';
 import { PositionStatus } from '../position-status';
+import { PriceView } from '../price-view';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './position-details.module.scss';
 import { usePositionDetailsViewModel } from './use-position-details.vm';
 
 export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();
-  const {
-    poolContractUrl,
-    id,
-    feeBps,
-    currentPrice,
-    tokensSymbols,
-    tokenXSymbol,
-    tokenYSymbol,
-    tokenActiveIndex,
-    handleButtonClick,
-    minPrice,
-    maxPrice,
-    isInRange,
-    categories
-  } = usePositionDetailsViewModel();
+  const { poolContractUrl, id, feeBps, currentPrice, minPrice, maxPrice, isInRange, categories } =
+    usePositionDetailsViewModel();
+  const shouldShowTokenXToYPrice = useShouldShowTokenXToYPrice();
 
   return (
     <Card
@@ -37,12 +28,7 @@ export const PositionDetails: FC = observer(() => {
         content: (
           <div className={styles.cardHeader}>
             {t('liquidity|positionDetails')}
-            <AssetSwitcher
-              labels={[tokenYSymbol, tokenXSymbol]}
-              activeIndex={tokenActiveIndex}
-              handleButtonClick={handleButtonClick}
-              className={styles.tokenSwitcher}
-            />
+            <TokensOrderSwitcher className={styles.tokenSwitcher} />
           </div>
         ),
         className: styles.header
@@ -67,16 +53,16 @@ export const PositionDetails: FC = observer(() => {
         <StateCurrencyAmount amount={id} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
-        <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
+        <PriceView price={currentPrice} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feeRateTooltipPosDetails')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|minPriceTooltip')}>
-        <StateCurrencyAmount amount={minPrice} currency={tokensSymbols} />
+        <PriceView price={shouldShowTokenXToYPrice ? maxPrice : minPrice} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|maxPriceTooltip')}>
-        <StateCurrencyAmount amount={maxPrice} currency={tokensSymbols} />
+        <PriceView price={shouldShowTokenXToYPrice ? minPrice : maxPrice} />
       </DetailsCardCell>
       <div className={commonContainerStyles.detailsButtons}>
         <Button
