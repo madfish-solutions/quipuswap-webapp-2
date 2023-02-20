@@ -27,6 +27,6 @@ export const useOnPriceRangeInputChange = (
         EMPTY_STRING;
       onPriceRangeChange(newRawMinPrice, newRawMaxPrice);
     },
-    [formik.values, onPriceRangeChange]
+    [formik, onPriceRangeChange]
   );
 };
