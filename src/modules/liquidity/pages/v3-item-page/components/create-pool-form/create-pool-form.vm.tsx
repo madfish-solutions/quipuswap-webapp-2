@@ -144,7 +144,7 @@ export const useCreatePoolFormViewModel = () => {
         [eCreatePoolValues.activeAssetIndex]: index,
         [eCreatePoolValues.initialPrice]:
           prevInitialPrice.isZero() || !prevInitialPrice.isFinite()
-            ? ''
+            ? EMPTY_STRING
             : getInvertedValue(prevInitialPrice).decimalPlaces(TEZOS_TOKEN_DECIMALS, BigNumber.ROUND_DOWN).toFixed()
       };
     });
