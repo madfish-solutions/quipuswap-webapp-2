@@ -1,7 +1,9 @@
+import { AppRootRoutes } from '@app.router';
 import {
   AlarmMessage,
   Button,
   Card,
+  CardHeaderWithBackButton,
   ConnectWalletOrDoSomething,
   Iterator,
   RadioButton,
@@ -22,23 +24,31 @@ export const CreatePoolForm = () => {
     alarmMessageInfo,
     translation,
     tokensSelectData,
-    tokens,
+    quoteToken,
     radioButtonParams,
     disabled,
     isSubmitting,
+    initialPriceLabel,
     initialPriceValue,
     initialPriceError,
     setInitialPriceValue,
     onSubmit,
     warningMessage,
-    errorMessage
+    errorMessage,
+    tokensSwitcher
   } = useCreatePoolFormViewModel();
 
-  const { create, initialPrice, feeRates } = translation;
+  const { create, feeRates } = translation;
   const { poolExists, poolLink } = alarmMessageInfo;
 
   return (
-    <Card contentClassName={styles.content}>
+    <Card
+      contentClassName={styles.content}
+      header={{
+        content: <CardHeaderWithBackButton backHref={AppRootRoutes.Liquidity} />,
+        button: tokensSwitcher
+      }}
+    >
       <form className={styles.form} onSubmit={onSubmit}>
         <div>
           <Iterator render={TokenSelect} data={tokensSelectData} separator={<Plus className={styles.svg} />} />
@@ -46,10 +56,10 @@ export const CreatePoolForm = () => {
 
         <TokenInput
           value={initialPriceValue}
-          label={initialPrice}
+          label={initialPriceLabel}
           hiddenPercentSelector
           hiddenBalance
-          tokens={tokens}
+          tokens={quoteToken}
           error={initialPriceError}
           onInputChange={setInitialPriceValue}
         />
