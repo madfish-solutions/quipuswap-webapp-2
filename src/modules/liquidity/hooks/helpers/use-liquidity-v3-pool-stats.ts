@@ -11,14 +11,14 @@ import { getSymbolsString, isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
 import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '../store';
-import { useLiquidityV3CurrentPrice } from './use-liquidity-v3-current-price';
+import { useLiquidityV3CurrentYToXPrice } from './use-liquidity-v3-current-y-to-x-price';
 import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 export const useLiquidityV3PoolStats = () => {
   const store = useLiquidityV3PoolStore();
   const { contractBalance, feeBps } = store;
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
-  const currentPrice = useLiquidityV3CurrentPrice();
+  const currentPrice = useLiquidityV3CurrentYToXPrice();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
