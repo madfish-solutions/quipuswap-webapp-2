@@ -25,7 +25,11 @@ export const V3PositionsPage: FC = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitleContainer dataTestId="v3LiqPositions" titleText={t('liquidity|Liquidity')} />
+      <PageTitleContainer
+        dataTestId="v3LiqPositions"
+        titleText={t('liquidity|Liquidity')}
+        shouldShowTokensOrderSwitcher
+      />
       <WarningAlert message={warningAlertMessage} className={styles.warningAlert} />
       <LiquidityV3PoolStats />
       <StateWrapper

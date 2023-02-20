@@ -18,6 +18,7 @@ const DEFAULT_CONTRACT_TOKENS_BALANCE = { tokenXBalance: ZERO_AMOUNT_BN, tokenYB
 export class LiquidityV3PoolStore {
   poolId: Nullable<BigNumber> = null;
   activeTokenIndex = FIRST_INDEX;
+  localShouldShowXToYPrice = false; // should not be observable
 
   //#region Quipuswap V3 pool tokens balance store
   @Led({
@@ -80,6 +81,7 @@ export class LiquidityV3PoolStore {
 
   setPoolId(id: BigNumber) {
     this.poolId = id;
+    this.localShouldShowXToYPrice = this.rootStore.settingsStore.v3PoolsTokensOrder[id.toNumber()] ?? false;
   }
 
   setActiveTokenIndex(tokenIndex: number) {
