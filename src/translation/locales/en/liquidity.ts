@@ -89,7 +89,7 @@ export const liquidity = {
   positions: 'Positions',
   weeklyVolumeV3PoolTooltip: 'The weekly trading volume for a selected liquidity pool.',
   currentPrice: 'Current price',
-  currentPriceTooltip: 'The price of a base asset in relation to a quote asset.',
+  currentPriceTooltip: 'The exchange rate between tokens in the pool.',
   feeRate: 'Fee rate',
   feeRateTooltip: "The share of swaps value which is accrued to liquidity providers' active positions.",
   tokenReserves: '{{tokenSymbol}} reserves',
@@ -129,10 +129,16 @@ export const liquidity = {
   priceCannotBeNegative: 'Price cannot be negative.',
   minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower or equal to max price.',
   maxPriceShouldBePositive: 'Maximal price should be positive.',
+  minPriceIsRequired: 'Min. price is required.',
+  maxPriceIsRequired: 'Max. price is required.',
   tags: 'Tags',
   tagsTooltip: 'The tags for the tokens in the pool.',
   rewardsTooltip: "The value of fees accrued on user's positions in the selected liquidity pool.",
   totalDepositTooltip: 'The value of all opened positions for the selected liquidity pool.',
+  v3TwoTokensRatioNotification:
+    'Unlike in old version, the ratio of added tokens can be arbitrary, not only 50/50. The ratio depends on the price range.',
+  v3OneTokenNotification:
+    'If the current market price is not in the selected range, only one token is required. Once the market price reaches your range the proportion of tokens in your position will change since some of your {{inputToken}} tokens will be sold in exchange for token {{outputToken}}.',
   // Chart
   defaultChartText: 'Oops... Imagine a beautiful chart with pool reserves while we handle the issue.',
   initialPrice: 'Initial price',

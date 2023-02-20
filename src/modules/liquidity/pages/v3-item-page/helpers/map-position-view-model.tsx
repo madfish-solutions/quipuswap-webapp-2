@@ -6,11 +6,14 @@ import { getTokensNames } from '@shared/helpers';
 import { Token } from '@shared/types';
 import { i18n } from '@translation';
 
+import { PriceView } from '../components';
+
 export const mapPositionViewModel = (
   tokenX: Token,
   tokenY: Token,
   poolId: BigNumber,
-  isExchangeRatesError: boolean
+  isExchangeRatesError: boolean,
+  shouldShowTokenXToYPrice: boolean
 ) => {
   return (positionWithStats: LiquidityV3PositionWithStats) => {
     const { stats, id } = positionWithStats;
@@ -27,21 +30,15 @@ export const mapPositionViewModel = (
       itemStats: [
         {
           cellName: i18n.t('liquidity|minPrice'),
-          amounts: {
-            amount: minRange,
-            dollarEquivalent: null,
-            currency: tokensNames
-          },
+          amounts: { amount: undefined },
+          children: <PriceView price={shouldShowTokenXToYPrice ? maxRange : minRange} />,
           DTI: 'minPrice',
           tooltip: i18n.t('liquidity|minPriceTooltip')
         },
         {
           cellName: i18n.t('liquidity|maxPrice'),
-          amounts: {
-            amount: maxRange,
-            dollarEquivalent: null,
-            currency: tokensNames
-          },
+          amounts: { amount: undefined },
+          children: <PriceView price={shouldShowTokenXToYPrice ? minRange : maxRange} />,
           DTI: 'maxPrice',
           tooltip: i18n.t('liquidity|maxPriceTooltip')
         },
