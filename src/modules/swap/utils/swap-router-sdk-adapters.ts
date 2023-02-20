@@ -4,13 +4,21 @@ import {
   Trade,
   getAllowedRoutePairsCombinations as originalGetAllowedRoutePairsCombinations,
   useRoutePairsCombinations as originalUseRoutePairsCombinations,
-  useTradeWithSlippageTolerance as originalUseTradeWithSlippageTolerance
+  useTradeWithSlippageTolerance as originalUseTradeWithSlippageTolerance,
+  DexTypeEnum
 } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 import { WhitelistedPair } from 'swap-router-sdk/dist/interface/whitelisted-pair.interface';
 
 import { MAX_HOPS_COUNT } from '@config/constants';
-import { getTokenIdFromSlug, getTokenSlug, isExist, isGreaterThanZero, isTezosToken } from '@shared/helpers';
+import {
+  getTokenIdFromSlug,
+  getTokenSlug,
+  isExist,
+  isGreaterThanZero,
+  isLastElementIndex,
+  isTezosToken
+} from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 
 import { useRoutePairs } from '../providers/route-pairs-provider';
@@ -87,13 +95,16 @@ export const useTradeWithSlippageTolerance = (
     tradingSlippage.toNumber()
   );
   const correctedValue = originalValue.map((operation, index) => {
-    const { aTokenAmount: aTokenAmountWithSlippage, bTokenAmount: bTokenAmountWithSlippage } = operation;
+    const { aTokenAmount: aTokenAmountWithSlippage, bTokenAmount: bTokenAmountWithSlippage, dexType } = operation;
     const { aTokenAmount: aTokenAmountWithoutSlippage, bTokenAmount: bTokenAmountWithoutSlippage } = bestTrade![index];
 
     return {
       ...operation,
       aTokenAmount: getCorrectedTokenAmountWithSlippage(aTokenAmountWithSlippage, aTokenAmountWithoutSlippage),
-      bTokenAmount: getCorrectedTokenAmountWithSlippage(bTokenAmountWithSlippage, bTokenAmountWithoutSlippage)
+      bTokenAmount:
+        isLastElementIndex(index, originalValue) && dexType === DexTypeEnum.QuipuSwapV3
+          ? bTokenAmountWithSlippage
+          : getCorrectedTokenAmountWithSlippage(bTokenAmountWithSlippage, bTokenAmountWithoutSlippage)
     };
   });
 
