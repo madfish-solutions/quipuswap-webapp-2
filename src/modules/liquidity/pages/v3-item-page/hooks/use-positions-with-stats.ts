@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import {
-  useLiquidityV3CurrentPrice,
+  useLiquidityV3CurrentYToXPrice,
   useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionsStore
@@ -12,7 +12,7 @@ import { mapPositionWithStats } from '../helpers';
 import { useLiquidityV3ItemTokensExchangeRates } from './use-liquidity-v3-item-tokens-exchange-rates';
 
 export const usePositionsWithStats = () => {
-  const currentPrice = useLiquidityV3CurrentPrice();
+  const currentPrice = useLiquidityV3CurrentYToXPrice();
   const poolStore = useLiquidityV3PoolStore();
   const v3PositionsStore = useLiquidityV3PositionsStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();

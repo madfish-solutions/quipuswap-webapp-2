@@ -1,6 +1,5 @@
 export * from './calculate-deposit';
 export * from './calculate-ticks';
-export * from './opposite-current-price';
 export * from './map-position-with-stats';
 export * from './invalid-pool-id.error';
 export * from './get-create-position-amount-input-slug-by-index';

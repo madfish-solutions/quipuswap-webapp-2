@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 
 import { DOLLAR, PERCENT } from '@config/constants';
+import { PriceView } from '@modules/liquidity/pages/v3-item-page/components';
+import StatsStyles from '@shared/components/top-stats/top-stats.module.scss';
 import { useTranslation } from '@translation';
 
 import { useLiquidityV3PoolStats } from './use-liquidity-v3-pool-stats';
@@ -9,8 +11,7 @@ const MAX_SLIDES_TO_SHOW = 4;
 
 export const useLiquidityV3PoolStatsViewModel = () => {
   const { t } = useTranslation();
-  const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage } =
-    useLiquidityV3PoolStats();
+  const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, feeBpsPercentage } = useLiquidityV3PoolStats();
 
   const stats = useMemo(
     () => [
@@ -23,9 +24,9 @@ export const useLiquidityV3PoolStatsViewModel = () => {
       },
       {
         title: t('liquidity|currentPrice'),
-        amount: tokenYToXCurrentPrice,
+        amount: undefined,
         tooltip: t('liquidity|currentPriceTooltip'),
-        currency: tokenYToXTokensSymbols
+        children: <PriceView price={tokenYToXCurrentPrice} textClassName={StatsStyles.currencyAmount} />
       },
       {
         title: t('liquidity|feeRate'),
@@ -34,7 +35,7 @@ export const useLiquidityV3PoolStatsViewModel = () => {
         currency: PERCENT
       }
     ],
-    [t, poolTvl, tokenYToXCurrentPrice, tokenYToXTokensSymbols, feeBpsPercentage, isExchangeRatesError]
+    [t, poolTvl, tokenYToXCurrentPrice, feeBpsPercentage, isExchangeRatesError]
   );
 
   return { stats, slidesToShow: Math.min(stats.length, MAX_SLIDES_TO_SHOW) };

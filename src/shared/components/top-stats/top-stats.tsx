@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -16,9 +16,10 @@ interface TopStatsProps {
   tooltip: string;
   currency?: Nullable<string>;
   isError?: boolean;
+  children?: ReactNode;
 }
 
-export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, isError, currency = DOLLAR }) => {
+export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, isError, currency = DOLLAR, children }) => {
   const isDollar = isEqual(currency, DOLLAR);
   const loading = !isExist(amount);
 
@@ -28,15 +29,17 @@ export const TopStats: FC<TopStatsProps> = ({ title, amount, tooltip, isError, c
         <span data-test-id="topStatsTitle">{title}</span> <Tooltip content={tooltip} />
       </span>
 
-      <StateCurrencyAmount
-        className={styles.currencyAmount}
-        currency={currency}
-        isError={isError}
-        isLoading={loading}
-        amount={amount || null}
-        isLeftCurrency={isDollar}
-        maxAmountWithoutLetters={1e9}
-      />
+      {children ?? (
+        <StateCurrencyAmount
+          className={styles.currencyAmount}
+          currency={currency}
+          isError={isError}
+          isLoading={loading}
+          amount={amount || null}
+          isLeftCurrency={isDollar}
+          maxAmountWithoutLetters={1e9}
+        />
+      )}
     </div>
   );
 };

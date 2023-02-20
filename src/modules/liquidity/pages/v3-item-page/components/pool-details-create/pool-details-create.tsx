@@ -4,11 +4,13 @@ import { observer } from 'mobx-react-lite';
 
 import { DOLLAR, PERCENT } from '@config/constants';
 import { LiquidityLabels } from '@modules/liquidity/components';
-import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
+import { Button, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { PriceView } from '../price-view';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './pool-details-create.module.scss';
 import { usePoolDetailsCreateViewModel } from './use-pool-details-create.vm';
 
@@ -19,13 +21,10 @@ export const PoolDetailsCreate: FC = observer(() => {
     tvl,
     feeBps,
     currentPrice,
-    tokensSymbols,
     tokenXSymbol,
     tokenXAmount,
     tokenYSymbol,
     tokenYAmount,
-    tokenActiveIndex,
-    handleButtonClick,
     categories
   } = usePoolDetailsCreateViewModel();
 
@@ -35,12 +34,7 @@ export const PoolDetailsCreate: FC = observer(() => {
         content: (
           <div className={styles.cardHeader}>
             {t('liquidity|poolDetails')}
-            <AssetSwitcher
-              labels={[tokenYSymbol, tokenXSymbol]}
-              activeIndex={tokenActiveIndex}
-              handleButtonClick={handleButtonClick}
-              className={styles.tokenSwitcher}
-            />
+            <TokensOrderSwitcher className={styles.tokenSwitcher} />
           </div>
         ),
         className: styles.header
@@ -61,7 +55,7 @@ export const PoolDetailsCreate: FC = observer(() => {
         <StateCurrencyAmount amount={1} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
-        <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
+        <PriceView price={currentPrice} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feeRateTooltip')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />

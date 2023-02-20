@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { Button, ConnectWalletOrDoSomething, Iterator, TokenInput, TokenInputProps } from '@shared/components';
 import { WarningAlert } from '@shared/components/warning-alert';
 import { Plus } from '@shared/svg';
-import { Nullable } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
@@ -14,16 +13,18 @@ interface Props {
   onSubmit: () => void;
   disabled: boolean;
   isSubmitting: boolean;
-  warningMessage: Nullable<string>;
+  warningMessages: string[];
 }
 
-export const V3AddLiqFormView: FC<Props> = ({ data, onSubmit, disabled, isSubmitting, warningMessage }) => {
+export const V3AddLiqFormView: FC<Props> = ({ data, onSubmit, disabled, isSubmitting, warningMessages }) => {
   const { t } = useTranslation();
 
   return (
     <form onSubmit={onSubmit}>
       <Iterator render={TokenInput} data={data} separator={<Plus className={styles.svg} />} />
-      <WarningAlert message={warningMessage} className={stylesCommonContainer.mt24} />
+      {warningMessages.map(message => (
+        <WarningAlert message={message} key={message} className={stylesCommonContainer.mt24} />
+      ))}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
           <Button

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 
@@ -13,6 +13,7 @@ interface Stats {
   tooltip: string;
   currency?: Nullable<string>;
   isError?: boolean;
+  children?: ReactNode;
 }
 interface Props {
   slidesToShow?: number;
@@ -25,8 +26,10 @@ export const ListStats: FC<Props> = ({ stats, slidesToShow = DEFAULT_SLIDES_TO_S
   return (
     <div className={styles.listStats} data-test-id="farmingListStats">
       <Slider slidesToShow={slidesToShow}>
-        {stats.map(({ title, amount, tooltip, currency, isError }) => (
-          <TopStats title={title} amount={amount} currency={currency} key={title} tooltip={tooltip} isError={isError} />
+        {stats.map(({ title, amount, tooltip, currency, isError, children }) => (
+          <TopStats title={title} amount={amount} currency={currency} key={title} tooltip={tooltip} isError={isError}>
+            {children}
+          </TopStats>
         ))}
       </Slider>
     </div>

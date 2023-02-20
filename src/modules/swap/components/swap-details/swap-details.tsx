@@ -33,7 +33,6 @@ interface SwapDetailsProps {
   inputToken?: Token;
   outputToken?: Token;
   route?: DexPool[];
-  buyRate: Nullable<BigNumber>;
   sellRate: Nullable<BigNumber>;
 }
 
@@ -46,7 +45,6 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   inputToken,
   outputToken,
   route,
-  buyRate,
   sellRate
 }) => {
   const { t } = useTranslation();
@@ -82,7 +80,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
             <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
           </DetailsCardCell>
 
-          <DetailsCardCell
+          {/* <DetailsCardCell
             cellName={t('common|Buy Price')}
             tooltipContent={t(
               'common|The amount of token A you receive for 1 token B according to the current exchange rate.'
@@ -91,7 +89,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
             data-test-id="buyPrice"
           >
             <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
-          </DetailsCardCell>
+          </DetailsCardCell> */}
 
           <DetailsCardCell
             cellName={t('common|Price impact')}

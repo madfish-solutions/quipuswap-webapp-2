@@ -15,7 +15,7 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
     return null;
   }
 
-  const { lpToken } = item;
+  const { lpToken, tokensInfo } = item;
 
   const lpTokenInputDTI = 'lpTokenInput';
 
@@ -24,11 +24,13 @@ export const useStableLpInputViewModel = (formik: IFormik<RemoveLiqFormValues>) 
   const hiddenPercentSelector = !Boolean(accountPkh);
   //TODO: Calculate lp exchangeRate on backend
   const dollarEquivalent = multipliedIfPossible(formik.values[LP_INPUT_KEY], null);
+  const tokens = tokensInfo.map(tokenInfo => tokenInfo.token);
 
   return {
     value,
     error,
     lpToken,
+    tokens,
     lpTokenInputDTI,
     dollarEquivalent: dollarEquivalent?.isNaN() ? null : dollarEquivalent,
     hiddenPercentSelector

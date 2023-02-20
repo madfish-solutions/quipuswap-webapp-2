@@ -3,9 +3,9 @@ import { MutableRefObject, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_STRING } from '@config/constants';
-import { useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { useLiquidityV3PoolStore, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { CreatePositionFormik } from '@modules/liquidity/types';
-import { isExist, stringToBigNumber, toAtomic } from '@shared/helpers';
+import { getInvertedValue, isExist, stringToBigNumber, toAtomic } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { calculateTicks, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
@@ -26,15 +26,19 @@ export const useOnPriceRangeChange = (
   const priceDecimals = useV3PoolPriceDecimals();
   const currentTick = useCurrentTick();
   const tickSpacing = useTickSpacing();
+  const poolStore = useLiquidityV3PoolStore();
 
   return useCallback(
     (rawMinPrice: string, rawMaxPrice: string) => {
+      const shouldShowTokenXToYPrice = poolStore.localShouldShowXToYPrice;
       const newValues: Partial<CreatePositionFormValues> = {
         [CreatePositionInput.MIN_PRICE]: rawMinPrice,
         [CreatePositionInput.MAX_PRICE]: rawMaxPrice
       };
-      const newMinPrice = stringToBigNumber(rawMinPrice);
-      const newMaxPrice = stringToBigNumber(rawMaxPrice);
+      const newDisplayedMinPrice = stringToBigNumber(rawMinPrice);
+      const newDisplayedMaxPrice = stringToBigNumber(rawMaxPrice);
+      const newMinPrice = shouldShowTokenXToYPrice ? getInvertedValue(newDisplayedMaxPrice) : newDisplayedMinPrice;
+      const newMaxPrice = shouldShowTokenXToYPrice ? getInvertedValue(newDisplayedMinPrice) : newDisplayedMaxPrice;
       const { lowerTick, upperTick } = calculateTicks(
         toAtomic(newMinPrice, priceDecimals),
         toAtomic(newMaxPrice, priceDecimals),
@@ -88,6 +92,6 @@ export const useOnPriceRangeChange = (
         ...newValues
       }));
     },
-    [formik, priceDecimals, tickSpacing, currentTick, lastEditedAmountFieldRef, calculateInputAmountValue]
+    [poolStore, priceDecimals, tickSpacing, formik, currentTick, lastEditedAmountFieldRef, calculateInputAmountValue]
   );
 };

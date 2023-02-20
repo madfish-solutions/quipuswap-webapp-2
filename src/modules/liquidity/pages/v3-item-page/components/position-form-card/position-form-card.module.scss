@@ -1,3 +1,8 @@
 .formHeader {
   min-height: 50px;
 }
+
+.buttons {
+  display: inline-flex;
+  column-gap: 8px;
+}

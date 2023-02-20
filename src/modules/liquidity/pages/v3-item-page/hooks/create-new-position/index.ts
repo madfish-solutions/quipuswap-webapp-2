@@ -8,3 +8,6 @@ export * from './use-tick-spacing';
 export * from './use-amount-inputs-props';
 export * from './use-inputs-handlers';
 export * from './use-initial-price-range';
+export * from './use-range-inputs-props';
+export * from './use-to-price-range-input-value';
+export * from './use-bottom-messages';

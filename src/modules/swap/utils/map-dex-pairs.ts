@@ -1,6 +1,6 @@
-import { DexTypeEnum, RouteDirectionEnum, Trade, TradeOperation } from 'swap-router-sdk';
+import { Trade, TradeOperation } from 'swap-router-sdk';
 
-import { FIRST_INDEX, ZERO_AMOUNT } from '@config/constants';
+import { SECOND_TUPLE_INDEX, SINGLE_TOKEN_VALUE } from '@config/constants';
 import { isExist } from '@shared/helpers';
 import { TokensMap } from '@shared/store/tokens.store';
 import { Nullable } from '@shared/types';
@@ -14,7 +14,6 @@ export const extractTokensPools = (operation: TradeOperation, knownTokens: Token
     bTokenSlug,
     cTokenSlug,
     dTokenSlug,
-    dexType,
     aTokenPool,
     bTokenPool,
     cTokenPool,
@@ -22,16 +21,8 @@ export const extractTokensPools = (operation: TradeOperation, knownTokens: Token
     aTokenStandard,
     bTokenStandard,
     cTokenStandard,
-    dTokenStandard,
-    direction
+    dTokenStandard
   } = operation;
-
-  let { aTokenIndex, bTokenIndex } = operation;
-  if (direction === RouteDirectionEnum.Inverted) {
-    const swapBuffer = aTokenIndex;
-    aTokenIndex = bTokenIndex;
-    bTokenIndex = swapBuffer;
-  }
 
   const tokensAmounts = [aTokenPool, bTokenPool, cTokenPool, dTokenPool];
   const tokensStandards = [aTokenStandard, bTokenStandard, cTokenStandard, dTokenStandard];
@@ -50,18 +41,8 @@ export const extractTokensPools = (operation: TradeOperation, knownTokens: Token
       return { token, pool: tokensAmounts[index]! };
     })
     .filter(isExist);
-  const [tokenAPool, tokenBPool] = tokensPools.splice(FIRST_INDEX, 2);
-  if (dexType === DexTypeEnum.QuipuSwapCurveLike && aTokenIndex! > bTokenIndex!) {
-    tokensPools.splice(bTokenIndex!, ZERO_AMOUNT, tokenBPool);
-    tokensPools.splice(aTokenIndex!, ZERO_AMOUNT, tokenAPool);
-  } else if (dexType === DexTypeEnum.QuipuSwapCurveLike) {
-    tokensPools.splice(aTokenIndex!, ZERO_AMOUNT, tokenAPool);
-    tokensPools.splice(bTokenIndex!, ZERO_AMOUNT, tokenBPool);
-  } else if (direction === RouteDirectionEnum.Inverted) {
-    tokensPools.unshift(tokenBPool, tokenAPool);
-  } else {
-    tokensPools.unshift(tokenAPool, tokenBPool);
-  }
+  const [tokenBPool] = tokensPools.splice(SECOND_TUPLE_INDEX, SINGLE_TOKEN_VALUE);
+  tokensPools.push(tokenBPool);
 
   return tokensPools;
 };

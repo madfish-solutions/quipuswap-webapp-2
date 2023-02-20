@@ -64,6 +64,8 @@ export const TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES = [
   'KT1X3zxdTzPB9DgVzA3ad6dgZe9JEamoaeRy'
 ];
 
+export const TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS = [{ address: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi', id: 21 }];
+
 export const FACTORIES: Record<SupportedNetworks, { fa1_2Factory: string[]; fa2Factory: string[] }> = {
   [NetworkType.MAINNET]: {
     fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],

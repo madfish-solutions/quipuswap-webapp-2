@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { DEFAULT_DECIMALS } from '@config/constants';
 import { TZKT_EXPLORER_URL } from '@config/environment';
 import { opportunityHelper } from '@modules/stableswap/stableswap-liquidity/pages/item/opportunity.helper';
-import { getTokenSymbol, toReal } from '@shared/helpers';
+import { getTokenSymbol, isGreaterThanZero, toReal } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
@@ -30,7 +30,7 @@ export const useDexTwoDetailsViewModel = () => {
   const dexTwoContractAddress = item?.contractAddress;
   const poolContractUrl = `${TZKT_EXPLORER_URL}/${dexTwoContractAddress}`;
 
-  const opportunities = item?.opportunities?.map(opportunityHelper);
+  const opportunities = item?.opportunities?.map(opportunityHelper).filter(({ apr }) => isGreaterThanZero(apr));
 
   return {
     detailsViewProps: {

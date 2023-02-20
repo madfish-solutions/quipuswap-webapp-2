@@ -7,17 +7,34 @@ import { getTokensNames } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
 import { useLiquidityV3ItemTokens } from '../../../../hooks';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
+import styles from './page-title-container.module.scss';
 
 interface Props {
   dataTestId: string;
   titleText: string;
+  shouldShowTokensOrderSwitcher?: boolean;
 }
 
-export const PageTitleContainer: FC<Props> = observer(({ dataTestId, titleText }) => {
+export const PageTitleContainer: FC<Props> = observer(({ dataTestId, titleText, shouldShowTokensOrderSwitcher }) => {
   const { t } = useTranslation();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
 
-  const title = tokenX && tokenY ? `${titleText} ${getTokensNames([tokenX, tokenY])}` : t('common|loading');
+  const title =
+    tokenX && tokenY ? (
+      <>
+        <span>
+          {titleText} <span className={styles.poolTokens}>{getTokensNames([tokenX, tokenY])}</span>
+        </span>
+        {shouldShowTokensOrderSwitcher && <TokensOrderSwitcher className={styles.switcher} />}
+      </>
+    ) : (
+      t('common|loading')
+    );
 
-  return <PageTitle data-test-id={dataTestId}>{title}</PageTitle>;
+  return (
+    <PageTitle className={styles.root} data-test-id={dataTestId}>
+      {title}
+    </PageTitle>
+  );
 });

@@ -27,12 +27,13 @@ export const StableLpInput: FC<Props> = observer(({ formik, label, disabled, bal
     return null;
   }
 
-  const { value, error, lpToken, lpTokenInputDTI, dollarEquivalent, hiddenPercentSelector } = outputComponentViewModel;
+  const { value, error, tokens, lpToken, lpTokenInputDTI, dollarEquivalent, hiddenPercentSelector } =
+    outputComponentViewModel;
 
   return (
     <TokenInput
       className={className}
-      tokens={lpToken}
+      tokens={tokens}
       decimals={lpToken.metadata.decimals}
       label={label}
       id={LP_INPUT_KEY}
