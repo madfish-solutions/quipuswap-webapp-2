@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { ZERO_AMOUNT, INFINITY_SIGN } from '@config/constants';
-import { useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
+import { useLiquidityV3PoolStore, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { CreatePositionFormik } from '@modules/liquidity/types';
-import { isExist, numberAsString, toAtomic, toReal } from '@shared/helpers';
+import { getInvertedValue, isExist, numberAsString, toAtomic, toReal } from '@shared/helpers';
 
 import { calculateTick } from '../../helpers';
 import {
@@ -30,26 +30,29 @@ export const useInputsHandlers = (
   const tickSpacing = useTickSpacing();
   const onPriceRangeInputChange = useOnPriceRangeInputChange(formik, lastEditedAmountFieldRef);
   const onPriceRangeChange = useOnPriceRangeChange(formik, lastEditedAmountFieldRef);
+  const poolStore = useLiquidityV3PoolStore();
 
   const handleRangeInputBlur = useCallback(
     (inputSlug: CreatePositionPriceInput) => () => {
+      const shouldShowTokenXToYPrice = poolStore.localShouldShowXToYPrice;
       const inputValue = formik.values[inputSlug];
 
       if (!isExist(inputValue)) {
         return;
       }
 
-      const realValue = new BigNumber(numberAsString(inputValue, priceRangeDecimals).realValue);
+      const displayedRealValue = new BigNumber(numberAsString(inputValue, priceRangeDecimals).realValue);
+      const realValue = shouldShowTokenXToYPrice ? getInvertedValue(displayedRealValue) : displayedRealValue;
       const tick = realValue.isNaN() ? null : calculateTick(toAtomic(realValue, priceDecimals), tickSpacing);
 
       if (!formik.values[CreatePositionInput.FULL_RANGE_POSITION] && isExist(tick)) {
-        onPriceRangeInputChange(
-          inputSlug,
-          toReal(tick.price, priceDecimals).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_CEIL).toFixed()
-        );
+        const newValue = shouldShowTokenXToYPrice
+          ? getInvertedValue(toReal(tick.price, priceDecimals)).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_FLOOR)
+          : toReal(tick.price, priceDecimals).decimalPlaces(priceRangeDecimals, BigNumber.ROUND_CEIL);
+        onPriceRangeInputChange(inputSlug, newValue.toFixed());
       }
     },
-    [formik.values, onPriceRangeInputChange, priceDecimals, tickSpacing, priceRangeDecimals]
+    [formik, priceRangeDecimals, poolStore, priceDecimals, tickSpacing, onPriceRangeInputChange]
   );
 
   const handleInputChange = useCallback(
@@ -80,6 +83,7 @@ export const useInputsHandlers = (
   return {
     handleRangeInputBlur,
     handleInputChange,
-    onFullRangeSwitcherClick
+    onFullRangeSwitcherClick,
+    onPriceRangeChange
   };
 };

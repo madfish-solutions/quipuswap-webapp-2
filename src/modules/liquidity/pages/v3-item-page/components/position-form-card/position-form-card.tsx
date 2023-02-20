@@ -3,6 +3,7 @@ import { Card, SettingsButton } from '@shared/components';
 import { CFC } from '@shared/types';
 import CommonContainerStyles from '@styles/CommonContainer.module.scss';
 
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './position-form-card.module.scss';
 
 interface PositionFormCardProps {
@@ -14,7 +15,12 @@ export const PositionFormCard: CFC<PositionFormCardProps> = ({ children, backHre
     subheader={{
       content: <FormHeader className={styles.formHeader} href={backHref} />,
       className: CommonContainerStyles.header,
-      button: <SettingsButton colored />
+      button: (
+        <div className={styles.buttons}>
+          <TokensOrderSwitcher />
+          <SettingsButton colored />
+        </div>
+      )
     }}
     contentClassName={CommonContainerStyles.content}
     data-test-id="positionFormCard"

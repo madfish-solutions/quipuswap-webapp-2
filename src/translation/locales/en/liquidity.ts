@@ -129,6 +129,8 @@ export const liquidity = {
   priceCannotBeNegative: 'Price cannot be negative.',
   minPriceLteMaxPrice: 'The price range has invalid bounds. Min price should be lower or equal to max price.',
   maxPriceShouldBePositive: 'Maximal price should be positive.',
+  minPriceIsRequired: 'Min. price is required.',
+  maxPriceIsRequired: 'Max. price is required.',
   tags: 'Tags',
   tagsTooltip: 'The tags for the tokens in the pool.',
   rewardsTooltip: "The value of fees accrued on user's positions in the selected liquidity pool.",

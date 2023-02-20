@@ -4,7 +4,7 @@ import { FormikHelpers, FormikValues, useFormik } from 'formik';
 
 import { OPPOSITE_INDEX, ZERO_AMOUNT } from '@config/constants';
 import {
-  useLiquidityV3CurrentPrice,
+  useLiquidityV3CurrentYToXPrice,
   useLiquidityV3ItemTokens,
   useLiquidityV3PositionStore,
   useGetLiquidityV3Position
@@ -35,7 +35,7 @@ export const useV3AddLiqFormViewModel = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const { lowerTick, upperTick } = usePositionTicks();
   const currentTick = useCurrentTick();
-  const currentPrice = useLiquidityV3CurrentPrice();
+  const currentPrice = useLiquidityV3CurrentYToXPrice();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { calculateValue } = useCalculateValue();
