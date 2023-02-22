@@ -2,12 +2,13 @@ import { useCallback } from 'react';
 
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
-import { defined, toReal, getTokenSlug, isExist, isEmptyArray } from '@shared/helpers';
+import { defined, toReal, getTokenSlug, isEmptyArray } from '@shared/helpers';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Undefined } from '@shared/types';
 
 import { NoMediatorsSwapBlockchainApi, ThreeRouteBlockchainApi } from '../api';
+import { getThreeRouteSwapSWRKey } from '../utils/get-three-route-swap-swr-key';
 import { getTradeSWRKey } from '../utils/get-trade-swr-key';
 import { SwapDetailsParams } from '../utils/types';
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
@@ -33,23 +34,23 @@ export const useRealSwapFee = ({
       const swapIsDefined = !isEmptyArray(threeRouteSwap?.chains ?? noMediatorsTrade);
       if (senderPkh && inputToken && swapIsDefined && inputAmount && outputToken) {
         try {
-          const rawNewFee = isExist(threeRouteSwap)
-            ? await ThreeRouteBlockchainApi.estimateSwapFee(
+          const rawNewFee = isEmptyArray(threeRouteSwap?.chains ?? null)
+            ? await NoMediatorsSwapBlockchainApi.estimateSwapFee(
+                defined(tezos),
+                senderPkh,
+                defined(noMediatorsTrade),
+                recipientPkh,
+                transactionDeadline
+              )
+            : await ThreeRouteBlockchainApi.estimateSwapFee(
                 defined(tezos),
                 senderPkh,
                 recipientPkh ?? senderPkh,
                 inputToken,
                 outputToken,
                 swapStore.threeRouteTokens,
-                threeRouteSwap,
+                defined(threeRouteSwap),
                 tradingSlippage
-              )
-            : await NoMediatorsSwapBlockchainApi.estimateSwapFee(
-                defined(tezos),
-                senderPkh,
-                defined(noMediatorsTrade),
-                recipientPkh,
-                transactionDeadline
               );
 
           return toReal(rawNewFee, TEZOS_TOKEN);
@@ -81,6 +82,7 @@ export const useRealSwapFee = ({
       accountPkh,
       recipient,
       noMediatorsTrade && getTradeSWRKey(noMediatorsTrade),
+      threeRouteSwap && getThreeRouteSwapSWRKey(threeRouteSwap),
       inputAmount?.toFixed(),
       inputToken && getTokenSlug(inputToken)
     ],
