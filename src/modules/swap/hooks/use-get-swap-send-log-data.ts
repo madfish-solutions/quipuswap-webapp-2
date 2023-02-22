@@ -51,8 +51,6 @@ export const useGetSwapSendLogData = () => {
       if (isExist(noMediatorsTradeNoSlippage)) {
         const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, noMediatorsTradeNoSlippage, tokens);
         const userRouteFeesInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRates);
-        // eslint-disable-next-line no-console
-        console.log('fuflo1', JSON.stringify(userRouteFeesInDollars), noMediatorsTradeNoSlippage);
         sumOfUserFees = getSumOfFees(userRouteFeesInDollars);
       } else {
         const sumOfFees = getPercentageFromNumber(inputAmount!, new BigNumber(STUB_THREE_ROUTE_FEE_PERCENTAGE));
