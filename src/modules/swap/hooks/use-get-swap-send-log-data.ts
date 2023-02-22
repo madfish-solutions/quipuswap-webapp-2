@@ -40,19 +40,19 @@ export const useGetSwapSendLogData = () => {
     (
       formValues: Partial<SwapFormValues>,
       threeRouteSwap: Nullable<ThreeRouteSwapResponse>,
-      swapRouterSdkTradeNoSlippage: Nullable<Trade>,
-      swapRouterSdkTradeWithSlippage: Nullable<Trade>
+      noMediatorsTradeNoSlippage: Nullable<Trade>,
+      noMediatorsTradeWithSlippage: Nullable<Trade>
     ) => {
       const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
       const inputTokenSlug = getTokenSlug(inputToken!);
       const outputTokenSlug = getTokenSlug(outputToken!);
 
       let sumOfUserFees: Record<'sumOfFees' | 'sumOfDevFees' | 'sumOfTotalFees', BigNumber>;
-      if (isExist(swapRouterSdkTradeNoSlippage)) {
-        const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, swapRouterSdkTradeNoSlippage, tokens);
+      if (isExist(noMediatorsTradeNoSlippage)) {
+        const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, noMediatorsTradeNoSlippage, tokens);
         const userRouteFeesInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRates);
         // eslint-disable-next-line no-console
-        console.log('fuflo1', JSON.stringify(userRouteFeesInDollars), swapRouterSdkTradeNoSlippage);
+        console.log('fuflo1', JSON.stringify(userRouteFeesInDollars), noMediatorsTradeNoSlippage);
         sumOfUserFees = getSumOfFees(userRouteFeesInDollars);
       } else {
         const sumOfFees = getPercentageFromNumber(inputAmount!, new BigNumber(STUB_THREE_ROUTE_FEE_PERCENTAGE));
@@ -80,12 +80,12 @@ export const useGetSwapSendLogData = () => {
           ttDexAddress: TOKEN_TO_TOKEN_DEX,
           path:
             threeRouteSwap?.chains.map(({ hops }) => hops.map(({ dex }) => dex.toFixed())).flat() ??
-            swapRouterSdkTradeWithSlippage?.map(({ dexAddress, dexId }) =>
+            noMediatorsTradeWithSlippage?.map(({ dexAddress, dexId }) =>
               getTokenSlug({ contractAddress: dexAddress, fa2TokenId: dexId?.toNumber() })
             ),
           pathLength:
             threeRouteSwap?.chains.reduce<number>((sum, { hops }) => sum + hops.length, ZERO_AMOUNT) ??
-            swapRouterSdkTradeWithSlippage?.length,
+            noMediatorsTradeWithSlippage?.length,
           sumOfFees: sumOfFees.toNumber(),
           sumOfDevFees: sumOfDevFees.toNumber(),
           sumOfTotalFees: sumOfTotalFees.toNumber()

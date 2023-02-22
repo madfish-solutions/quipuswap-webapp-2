@@ -54,7 +54,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const {
     atLeastOneRouteWithV3,
-    bestTrade,
+    noMediatorsTrade,
     threeRouteSwap,
     dexRoute,
     inputAmount,
@@ -64,7 +64,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     onSwapPairChange,
     outputAmount,
     resetCalculations,
-    trade,
+    noMediatorsTradeWithSlippage,
     updateCalculations
   } = useSwapCalculations();
 
@@ -78,7 +78,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, threeRouteSwap, bestTrade, trade);
+  } = useSwapFormik(initialAction, threeRouteSwap, noMediatorsTrade, noMediatorsTradeWithSlippage);
   const formik = values;
 
   const navigate = useNavigate();
@@ -145,7 +145,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
     dexRoute,
-    trade,
+    noMediatorsTrade,
     threeRouteSwap,
     recipient: formik.recipient
   });
@@ -414,7 +414,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const noRouteFound =
     isEmptyArray(threeRouteSwap?.chains ?? null) &&
     !isLoading &&
-    isEmptyArray(trade) &&
+    isEmptyArray(noMediatorsTradeWithSlippage) &&
     isExist(formik.inputToken) &&
     isExist(formik.outputToken) &&
     (isExist(formik.inputAmount) || isExist(formik.outputAmount));
@@ -444,6 +444,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputExchangeRate,
     inputToken: formik.inputToken,
     inputTokenBalance,
+    isLoading,
     isSubmitting,
     outputAmount: formik.outputAmount,
     outputExchangeRate,

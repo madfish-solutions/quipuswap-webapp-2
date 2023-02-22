@@ -53,6 +53,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     inputExchangeRate,
     inputToken,
     inputTokenBalance,
+    isLoading,
     isSubmitting,
     outputAmount,
     outputExchangeRate,
@@ -178,7 +179,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           {accountPkh && (!dataIsStale || isSubmitting) && (
             <Button
               disabled={submitDisabled}
-              loading={isSubmitting}
+              loading={isSubmitting || isLoading}
               type="submit"
               onClick={handleSubmit}
               className={styles.button}
