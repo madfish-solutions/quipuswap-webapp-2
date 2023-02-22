@@ -1,23 +1,21 @@
-import { BigNumber } from 'bignumber.js';
+import { BatchWalletOperation } from '@taquito/taquito/dist/types/wallet/batch-operation';
 import { useFormik } from 'formik';
 import { getTradeOpParams, parseTransferParamsToParamsWithKind, Trade } from 'swap-router-sdk';
 
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { QUIPUSWAP_REFERRAL_CODE, SECONDS_IN_MINUTE } from '@config/constants';
-import { TOKEN_TO_TOKEN_DEX } from '@config/environment';
+import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { useAccountPkh, useTezos } from '@providers/use-dapp';
-import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
-import { getTokenSlug, getTokenSymbol, getSwapMessage, getDollarEquivalent, defined } from '@shared/helpers';
-import { useTokensStore } from '@shared/hooks';
+import { getTokenSymbol, getSwapMessage, defined, isExist } from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
-import { Nullable, SwapTabAction, Undefined } from '@shared/types';
+import { Nullable, SwapTabAction } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { getPoolSlug, getUserRouteFeesAndSlug, getUserRouteFeesInDollars } from '../helpers';
-import { getSumOfFees } from '../helpers/get-sum-of-fees';
-import { DexPool } from '../types';
+import { doThreeRouteSwap } from '../api';
+import { ThreeRouteSwapResponse } from '../types';
 import { SwapField, SwapFormValues } from '../utils/types';
+import { useGetSwapSendLogData } from './use-get-swap-send-log-data';
+import { useSwapStore } from './use-swap-store';
 import { useValidationSchema } from './use-validation-schema';
 
 const initialErrors = {
@@ -27,21 +25,20 @@ const initialErrors = {
 
 export const useSwapFormik = (
   initialAction = SwapTabAction.SWAP,
-  bestTrade: Nullable<Trade>,
-  dexRoute: Undefined<DexPool[]>,
-  trade: Nullable<Trade>,
-  exchangeRates: Record<string, BigNumber>
+  threeRouteSwap: Nullable<ThreeRouteSwapResponse>,
+  swapRouterSdkTradeNoSlippage: Nullable<Trade>,
+  swapRouterSdkTradeWithSlippage: Nullable<Trade>
 ) => {
   const validationSchema = useValidationSchema();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
-  const exchangeRate = useNewExchangeRates();
-  const { tokens } = useTokensStore();
+  const getSwapSendLogData = useGetSwapSendLogData();
+  const swapStore = useSwapStore();
 
   const {
-    settings: { tradingSlippage, transactionDeadline }
+    settings: { transactionDeadline, tradingSlippage }
   } = useSettingsStore();
 
   const initialValues: Partial<SwapFormValues> = {
@@ -53,56 +50,47 @@ export const useSwapFormik = (
       return;
     }
 
-    const { inputAmount, outputAmount, inputToken, outputToken, recipient, action } = formValues;
+    const { inputToken, outputToken, recipient } = formValues;
 
-    const userRouteFeesAndSlug = getUserRouteFeesAndSlug(tezos, bestTrade, tokens);
-    const userRouteFeesInDollars = getUserRouteFeesInDollars(userRouteFeesAndSlug, exchangeRate);
-    const sumOfUserFees = getSumOfFees(userRouteFeesInDollars);
-
-    const { sumOfFees, sumOfDevFees, sumOfTotalFees } = sumOfUserFees;
-
-    const inputTokenSlug = getTokenSlug(inputToken!);
-    const outputTokenSlug = getTokenSlug(outputToken!);
-    const logData = {
-      swap: {
-        action,
-        deadlineTimespan: transactionDeadline.times(SECONDS_IN_MINUTE).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
-        inputAmount: Number(inputAmount?.toFixed()),
-        outputAmount: Number(outputAmount?.toFixed()),
-        recipient: action === 'send' ? recipient : undefined,
-        slippageTolerance: Number(tradingSlippage.div(100).toFixed()),
-        inputToken: inputTokenSlug,
-        outputToken: outputTokenSlug,
-        inputTokenSymbol: getTokenSymbol(inputToken!),
-        outputTokenSymbol: getTokenSymbol(outputToken!),
-        inputTokenUsd: Number(getDollarEquivalent(inputAmount, exchangeRates[inputTokenSlug])),
-        outputTokenUsd: Number(getDollarEquivalent(outputAmount, exchangeRates[outputTokenSlug])),
-        ttDexAddress: TOKEN_TO_TOKEN_DEX,
-        path: dexRoute?.map(getPoolSlug),
-        pathLength: dexRoute?.length,
-        sumOfFees: Number(sumOfFees),
-        sumOfDevFees: Number(sumOfDevFees),
-        sumOfTotalFees: Number(sumOfTotalFees)
-      }
-    };
+    const logData = getSwapSendLogData(
+      formValues,
+      threeRouteSwap,
+      swapRouterSdkTradeNoSlippage,
+      swapRouterSdkTradeWithSlippage
+    );
 
     try {
       amplitudeService.logEvent('SWAP_SEND', logData);
-      const tradeTransferParams = await getTradeOpParams(
-        defined(trade),
-        accountPkh,
-        tezos,
-        STABLESWAP_REFERRAL,
-        recipient,
-        transactionDeadline.toNumber(),
-        QUIPUSWAP_REFERRAL_CODE.toNumber()
-      );
+      let walletOperation: BatchWalletOperation;
 
-      const walletParamsWithKind = tradeTransferParams.map(tradeTransferParam =>
-        parseTransferParamsToParamsWithKind(tradeTransferParam)
-      );
+      if (isExist(threeRouteSwap)) {
+        walletOperation = await doThreeRouteSwap(
+          tezos,
+          accountPkh,
+          recipient ?? accountPkh,
+          inputToken!,
+          outputToken!,
+          swapStore.threeRouteTokens,
+          swapStore.threeRouteSwap,
+          tradingSlippage
+        );
+      } else {
+        const tradeTransferParams = await getTradeOpParams(
+          defined(swapRouterSdkTradeWithSlippage),
+          accountPkh,
+          tezos,
+          STABLESWAP_REFERRAL,
+          recipient,
+          transactionDeadline.toNumber(),
+          QUIPUSWAP_REFERRAL_CODE.toNumber()
+        );
 
-      const walletOperation = await tezos.wallet.batch(walletParamsWithKind).send();
+        const walletParamsWithKind = tradeTransferParams.map(tradeTransferParam =>
+          parseTransferParamsToParamsWithKind(tradeTransferParam)
+        );
+
+        walletOperation = await tezos.wallet.batch(walletParamsWithKind).send();
+      }
 
       const inputTokenSymbol = getTokenSymbol(inputToken!);
       const outputTokenSymbol = getTokenSymbol(outputToken!);

@@ -12,6 +12,7 @@ import { useAccountPkh } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
+  canUseThreeRouteApi,
   getSymbolsString,
   getTokenPairSlug,
   getTokenSlug,
@@ -27,6 +28,7 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useGetThreeRouteTokens } from './hooks/loaders';
 import { useInitialTokensSlugs } from './hooks/use-initial-tokens-slugs';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
@@ -53,8 +55,10 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const {
     atLeastOneRouteWithV3,
     bestTrade,
+    threeRouteSwap,
     dexRoute,
     inputAmount,
+    isLoading,
     onInputAmountChange,
     onOutputAmountChange,
     onSwapPairChange,
@@ -74,7 +78,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, bestTrade, dexRoute, trade, exchangeRates);
+  } = useSwapFormik(initialAction, threeRouteSwap, bestTrade, trade);
   const formik = values;
 
   const navigate = useNavigate();
@@ -85,6 +89,13 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const {
     settings: { tradingSlippage }
   } = useSettingsStore();
+  const { getThreeRouteTokens } = useGetThreeRouteTokens();
+
+  useEffect(() => {
+    if (canUseThreeRouteApi()) {
+      void getThreeRouteTokens();
+    }
+  }, [getThreeRouteTokens]);
 
   const getRedirectionUrl = useCallback(
     (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, formik.action),
@@ -135,6 +146,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     slippageTolerance: tradingSlippage,
     dexRoute,
     trade,
+    threeRouteSwap,
     recipient: formik.recipient
   });
 
@@ -400,6 +412,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
   const title = `${t('swap|Swap')} ${pairName}`;
   const noRouteFound =
+    isEmptyArray(threeRouteSwap?.chains ?? null) &&
+    !isLoading &&
     isEmptyArray(trade) &&
     isExist(formik.inputToken) &&
     isExist(formik.outputToken) &&

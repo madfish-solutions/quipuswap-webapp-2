@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import {
@@ -10,20 +10,20 @@ import {
   Trade
 } from 'swap-router-sdk';
 
-import { toReal, isEmptyArray, toAtomic, getUniqArray, isExist } from '@shared/helpers';
-import { useTokensLoader, useTokensStore } from '@shared/hooks';
+import { toReal, toAtomic, getUniqArray, isEmptyArray, isExist, canUseThreeRouteApi } from '@shared/helpers';
+import { useTokensLoader } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Optional, Token } from '@shared/types';
 
+import { threeRouteTokenMatches } from '../helpers';
 import { useRoutePairs } from '../providers/route-pairs-provider';
-import { DexPool } from '../types';
-import { mapDexPairs } from '../utils/map-dex-pairs';
 import {
   swapRouterSdkTokenSlugToQuipuTokenSlug,
   useRoutePairsCombinations,
   useTradeWithSlippageTolerance
 } from '../utils/swap-router-sdk-adapters';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
+import { useSwapStore } from './use-swap-store';
 
 interface SwapPair {
   inputToken: Optional<Token>;
@@ -60,28 +60,19 @@ const getTokenSlugsFromTrade = (trade: Nullable<Trade>): string[] => {
   );
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useSwapCalculations = () => {
   const { routePairs } = useRoutePairs();
 
-  const { tokens, loading: tokensLoading } = useTokensStore();
   const {
     settings: { tradingSlippage }
   } = useSettingsStore();
+  const swapStore = useSwapStore();
 
-  const [dexRoute, setDexRoute] = useState<DexPool[]>();
   const [bestTrade, setBestTrade] = useState<Nullable<Trade>>(null);
 
   const tokensSlugs = getTokenSlugsFromTrade(bestTrade);
-  const allTokensAreLoaded = tokensSlugs.every(slug => tokens.has(slug));
   useTokensLoader(tokensSlugs);
-
-  useEffect(() => {
-    try {
-      setDexRoute(mapDexPairs(bestTrade, tokens));
-    } catch {
-      setDexRoute(tokensLoading && !isEmptyArray(bestTrade) ? undefined : []);
-    }
-  }, [tokensLoading, bestTrade, tokens, allTokensAreLoaded]);
 
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({ inputToken: null, outputToken: null });
   const [inputAmount, setInputAmount] = useState<Nullable<BigNumber>>(null);
@@ -107,19 +98,43 @@ export const useSwapCalculations = () => {
     setInputAmount(initialInputAmount);
     setOutputAmount(initialOutputAmount);
     setBestTrade(null);
+    swapStore.threeRouteSwapStore.resetData();
   };
 
-  const onInputAmountChange = (newInputAmount: Nullable<BigNumber>) => {
+  const onInputAmountChange = async (newInputAmount: Nullable<BigNumber>) => {
     setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
 
-    if (!newInputAmount || !routePairsCombinations.length) {
+    if (!newInputAmount || isEmptyArray(routePairsCombinations)) {
       return resetCalculations(newInputAmount, null);
     }
 
     setInputAmount(newInputAmount);
 
+    if (canUseThreeRouteApi()) {
+      try {
+        const [threeRouteInputToken, threeRouteOutputToken] = [inputToken, outputToken].map(
+          token =>
+            token && swapStore.threeRouteTokens.find(threeRouteToken => threeRouteTokenMatches(threeRouteToken, token))
+        );
+
+        if (threeRouteInputToken && threeRouteOutputToken) {
+          swapStore.inputTokenSymbol = threeRouteInputToken.symbol;
+          swapStore.outputTokenSymbol = threeRouteOutputToken.symbol;
+          swapStore.realAmount = newInputAmount;
+          await swapStore.threeRouteSwapStore.load();
+          setOutputAmount(isEmptyArray(swapStore.threeRouteSwap.chains) ? null : swapStore.threeRouteSwap.output);
+          setBestTrade([]);
+
+          return;
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      }
+    }
     const bestTradeExact = getBestTradeExactInput(toAtomic(newInputAmount, inputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
+    swapStore.threeRouteSwapStore.resetData();
 
     const atomicOutputAmount = getTradeOutputAmount(bestTradeExact);
     setOutputAmount(atomicOutputAmount ? toReal(atomicOutputAmount, outputToken) : null);
@@ -128,7 +143,7 @@ export const useSwapCalculations = () => {
   const onOutputAmountChange = (newOutputAmount: Nullable<BigNumber>) => {
     setLastAmountFieldChanged(SwapField.OUTPUT_AMOUNT);
 
-    if (!newOutputAmount || !routePairsCombinations.length) {
+    if (!newOutputAmount || isEmptyArray(routePairsCombinations)) {
       return resetCalculations(null, newOutputAmount);
     }
 
@@ -161,7 +176,10 @@ export const useSwapCalculations = () => {
   return {
     atLeastOneRouteWithV3,
     bestTrade,
-    dexRoute,
+    threeRouteSwap: isEmptyArray(swapStore.threeRouteSwap.chains) ? null : swapStore.threeRouteSwap,
+    isLoading: swapStore.threeRouteSwapIsLoading,
+    // TODO: change logic as soon as UI for multiple routes is implemented
+    dexRoute: [],
     onInputAmountChange,
     onOutputAmountChange,
     onSwapPairChange,

@@ -3,7 +3,7 @@ import { Trade } from 'swap-router-sdk';
 
 import { Nullable, SwapTabAction, Token, Undefined } from '@shared/types';
 
-import { DexPool } from '../types';
+import { DexPool, ThreeRouteSwapResponse } from '../types';
 
 export enum SwapField {
   INPUT_AMOUNT = 'inputAmount',
@@ -35,5 +35,6 @@ export interface SwapDetailsParams {
   slippageTolerance: Undefined<BigNumber>;
   dexRoute: Undefined<DexPool[]>;
   trade: Nullable<Trade>;
+  threeRouteSwap: Nullable<ThreeRouteSwapResponse>;
   recipient: Undefined<string>;
 }
