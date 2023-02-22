@@ -34,7 +34,7 @@ export interface SwapDetailsParams {
   outputAmount: Undefined<BigNumber>;
   slippageTolerance: Undefined<BigNumber>;
   dexRoute: Undefined<DexPool[]>;
-  trade: Nullable<Trade>;
+  noMediatorsTrade: Nullable<Trade>;
   threeRouteSwap: Nullable<ThreeRouteSwapResponse>;
   recipient: Undefined<string>;
 }

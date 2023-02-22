@@ -4,7 +4,7 @@ import { EMPTY_STRING, ZERO_AMOUNT_BN } from '@config/constants';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData } from '@shared/store';
 
-import { getThreeRouteSwap, getThreeRouteTokens } from '../api';
+import { ThreeRouteBackendApi } from '../api';
 import { ThreeRouteSwapResponseModel, ThreeRouteTokenModel, ThreeRouteTokensResponseModel } from '../models';
 import { ThreeRouteSwapResponse, ThreeRouteToken } from '../types';
 
@@ -28,7 +28,7 @@ export class SwapStore {
   @Led({
     default: defaultThreeTokensListResponse,
     model: ThreeRouteTokensResponseModel,
-    loader: async () => ({ tokens: await getThreeRouteTokens() })
+    loader: async () => ({ tokens: await ThreeRouteBackendApi.getTokens() })
   })
   readonly threeRouteTokensStore: LoadingErrorData<
     ThreeRouteTokensResponseModel,
@@ -48,7 +48,8 @@ export class SwapStore {
   @Led({
     default: defaultThreeRouteSwapResponse,
     model: ThreeRouteSwapResponseModel,
-    loader: async self => await getThreeRouteSwap(self.inputTokenSymbol, self.outputTokenSymbol, self.realAmount)
+    loader: async self =>
+      await ThreeRouteBackendApi.getSwap(self.inputTokenSymbol, self.outputTokenSymbol, self.realAmount)
   })
   readonly threeRouteSwapStore: LoadingErrorData<ThreeRouteSwapResponseModel, typeof defaultThreeRouteSwapResponse>;
 

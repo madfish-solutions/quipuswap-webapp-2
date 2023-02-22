@@ -31,7 +31,6 @@ export * from './readonly-signer';
 export * from './shortize';
 export * from './sleep';
 export * from './strings';
-export * from './swap';
 export * from './taquito-fast-rpc';
 export * from './type-checks';
 export * from './parse-decimals';

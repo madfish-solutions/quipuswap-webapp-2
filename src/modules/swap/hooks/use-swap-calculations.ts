@@ -175,7 +175,7 @@ export const useSwapCalculations = () => {
 
   return {
     atLeastOneRouteWithV3,
-    bestTrade,
+    noMediatorsTrade: bestTrade,
     threeRouteSwap: isEmptyArray(swapStore.threeRouteSwap.chains) ? null : swapStore.threeRouteSwap,
     isLoading: swapStore.threeRouteSwapIsLoading,
     // TODO: change logic as soon as UI for multiple routes is implemented
@@ -186,7 +186,7 @@ export const useSwapCalculations = () => {
     inputAmount,
     outputAmount,
     resetCalculations,
-    trade: bestTradeWithSlippageTolerance,
+    noMediatorsTradeWithSlippage: bestTradeWithSlippageTolerance,
     updateCalculations
   };
 };
