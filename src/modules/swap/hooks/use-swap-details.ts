@@ -8,8 +8,8 @@ import { usePriceImpact } from './use-price-impact';
 import { useRealSwapFee } from './use-swap-fee';
 
 export const useRealSwapDetails = (params: SwapDetailsParams) => {
-  const { trade, inputToken, outputToken, inputAmount, outputAmount } = params;
-  const priceImpact = usePriceImpact(trade);
+  const { noMediatorsTrade, inputToken, outputToken, inputAmount, outputAmount } = params;
+  const priceImpact = usePriceImpact(noMediatorsTrade);
   const { data: swapFee = null, error: swapFeeError } = useRealSwapFee(params);
 
   const sellRate = useMemo(

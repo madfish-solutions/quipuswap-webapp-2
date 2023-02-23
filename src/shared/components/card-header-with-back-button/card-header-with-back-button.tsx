@@ -4,13 +4,14 @@ import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
 import { useTranslation } from '@translation';
 
-import styles from './back-to-list-reward-header.module.scss';
+import styles from './card-header-with-back-button.module.scss';
 
-interface BackToListRewardHeaderProps {
+interface CardHeaderWithBackButtonProps {
   backHref: string;
+  text?: string;
 }
 
-export const BackToListRewardHeader: FC<BackToListRewardHeaderProps> = ({ backHref }) => {
+export const CardHeaderWithBackButton: FC<CardHeaderWithBackButtonProps> = ({ backHref, text }) => {
   const { t } = useTranslation();
 
   return (
@@ -18,7 +19,7 @@ export const BackToListRewardHeader: FC<BackToListRewardHeaderProps> = ({ backHr
       <Button href={backHref} theme="quaternary" icon className={styles.arrowButton} data-test-id="backTTListButton">
         <ArrowDown className={styles.backArrow} />
       </Button>
-      <span>{t('common|Back to the list')}</span>
+      <span>{text ?? t('common|Back')}</span>
     </div>
   );
 };

@@ -33,6 +33,7 @@ export const usePositionsFeesListViewModel = () => {
     isUserTotalDepositExist,
     onButtonClick: claimAll,
     translation: {
+      backToTheListTranslation: t('common|Back to the list'),
       claimFeeTranslation: t('liquidity|claimFee'),
       rewardsTooltipTranslation: t('liquidity|rewardsTooltip'),
       totalFeesTranslation: t('liquidity|totalFees'),
