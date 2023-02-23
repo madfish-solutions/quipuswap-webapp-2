@@ -21,12 +21,21 @@ const knownErrorsMessages = {
   'Permission Not Granted': 'You rejected the operation.'
 };
 
-const getErrorMessage = (error: Error) => {
+const getErrorMessage = (error: Error | object | string) => {
+  const errorMessage = typeof error === 'string' ? error : `${JSON.stringify(error)}`;
+
   const foundKey = Object.keys(knownErrorsMessages).find(key =>
-    error.message.includes(key)
+    errorMessage.includes(key)
   ) as keyof typeof knownErrorsMessages;
 
-  return foundKey ? knownErrorsMessages[foundKey] : `${error.name}: ${error.message}`;
+  if (foundKey) {
+    return knownErrorsMessages[foundKey];
+  }
+  if (error instanceof Error) {
+    return `${error.name}: ${error.message}`;
+  }
+
+  return errorMessage;
 };
 
 export const useToasts = (): UseToasts => {
@@ -34,21 +43,10 @@ export const useToasts = (): UseToasts => {
 
   const showErrorToast = useCallback(
     (error: Error | string) => {
-      if (error instanceof Error) {
-        captureException(error);
+      const errorMessage = getErrorMessage(error);
 
-        const errorMessage = getErrorMessage(error);
+      captureException(error instanceof Error ? error : new Error(errorMessage));
 
-        updateToast({
-          type: 'error',
-          render: errorMessage
-        });
-
-        return;
-      }
-
-      const errorMessage = typeof error === 'string' ? error : `${JSON.stringify(error)}`;
-      captureException(new Error(errorMessage));
       updateToast({
         type: 'error',
         render: errorMessage
