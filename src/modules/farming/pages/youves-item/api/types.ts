@@ -23,6 +23,7 @@ export interface YouvesFarmStorage {
   stakes: BigMap<nat, YouvesFarmStakes>;
   stakes_owner_lookup: BigMap<address, nat[]>;
   total_stake: BigNumber;
+  expected_rewards: BigNumber;
 }
 
 export interface YouvesFarmStakes {

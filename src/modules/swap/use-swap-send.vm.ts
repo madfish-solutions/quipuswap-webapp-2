@@ -12,11 +12,11 @@ import { useAccountPkh } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
+  canUseThreeRouteApi,
   getSymbolsString,
   getTokenPairSlug,
   getTokenSlug,
   isEmptyArray,
-  isExist,
   makeSwapOrSendRedirectionUrl,
   makeToken
 } from '@shared/helpers';
@@ -27,6 +27,8 @@ import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useGetThreeRouteTokens } from './hooks/loaders';
+import { useComplexErrorsProps } from './hooks/use-complex-errors-props';
 import { useInitialTokensSlugs } from './hooks/use-initial-tokens-slugs';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
@@ -52,15 +54,18 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const {
     atLeastOneRouteWithV3,
-    bestTrade,
+    noMediatorsTrade,
+    threeRouteSwap,
     dexRoute,
     inputAmount,
+    isLoading,
     onInputAmountChange,
     onOutputAmountChange,
     onSwapPairChange,
     outputAmount,
     resetCalculations,
-    trade,
+    noMediatorsTradeWithSlippage,
+    poolsForTokensArePresent,
     updateCalculations
   } = useSwapCalculations();
 
@@ -74,7 +79,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, bestTrade, dexRoute, trade, exchangeRates);
+  } = useSwapFormik(initialAction, threeRouteSwap, noMediatorsTrade, noMediatorsTradeWithSlippage);
   const formik = values;
 
   const navigate = useNavigate();
@@ -85,6 +90,13 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const {
     settings: { tradingSlippage }
   } = useSettingsStore();
+  const { getThreeRouteTokens } = useGetThreeRouteTokens();
+
+  useEffect(() => {
+    if (canUseThreeRouteApi()) {
+      void getThreeRouteTokens();
+    }
+  }, [getThreeRouteTokens]);
 
   const getRedirectionUrl = useCallback(
     (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, formik.action),
@@ -134,7 +146,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
     dexRoute,
-    trade,
+    noMediatorsTrade,
+    threeRouteSwap,
     recipient: formik.recipient
   });
 
@@ -399,15 +412,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const pairName =
     formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
   const title = `${t('swap|Swap')} ${pairName}`;
-  const noRouteFound =
-    isEmptyArray(trade) &&
-    isExist(formik.inputToken) &&
-    isExist(formik.outputToken) &&
-    (isExist(formik.inputAmount) || isExist(formik.outputAmount));
-  // TODO: remove logic with atLeastOneRouteWithV3 variable after maximal input calculation for Quipuswap V3 is implemented
-  const shouldSuggestSmallerAmount = noRouteFound && atLeastOneRouteWithV3;
-  const shouldShowNoRouteFoundError = noRouteFound && !atLeastOneRouteWithV3;
-  const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
+  const complexErrorsProps = useComplexErrorsProps(
+    formik,
+    threeRouteSwap,
+    noMediatorsTradeWithSlippage,
+    isLoading,
+    priceImpact,
+    atLeastOneRouteWithV3,
+    poolsForTokensArePresent
+  );
 
   return {
     accountPkh,
@@ -430,6 +443,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputExchangeRate,
     inputToken: formik.inputToken,
     inputTokenBalance,
+    isLoading,
     isSubmitting,
     outputAmount: formik.outputAmount,
     outputExchangeRate,
@@ -440,9 +454,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     recipient: formik.recipient,
     updateRates: updateRoutePairs,
     sellRate,
-    shouldShowNoRouteFoundError,
-    shouldShowPriceImpactWarning,
-    shouldSuggestSmallerAmount,
+    complexErrorsProps,
     submitDisabled,
     swapFee,
     swapFeeError,

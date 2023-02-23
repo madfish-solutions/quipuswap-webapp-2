@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { captureException } from '@sentry/react';
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
-import { SERVER_UNAVAILABLE_ERROR_MESSAGE, SERVER_UNAVAILABLE_MESSAGE } from '@config/constants';
-import { useTranslation } from '@translation';
+import { i18n } from '@translation';
 
 import { useUpdateToast } from './use-update-toast';
 
@@ -16,55 +15,44 @@ export interface UseToasts {
   showRichTextErrorToast: (error: Error | string, render: ToastContent) => void;
 }
 
+const knownErrorsMessages = {
+  'Dex/high-min-out': i18n.t('common|highMinOutError'),
+  '503 Service Temporarily Unavailable': 'The server is temporarily unavailable.',
+  'Permission Not Granted': 'You rejected the operation.'
+};
+
+const getErrorMessage = (error: Error | object | string) => {
+  const errorMessage = typeof error === 'string' ? error : `${JSON.stringify(error)}`;
+
+  const foundKey = Object.keys(knownErrorsMessages).find(key =>
+    errorMessage.includes(key)
+  ) as keyof typeof knownErrorsMessages;
+
+  if (foundKey) {
+    return knownErrorsMessages[foundKey];
+  }
+  if (error instanceof Error) {
+    return `${error.name}: ${error.message}`;
+  }
+
+  return errorMessage;
+};
+
 export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
 
-  const { t } = useTranslation();
-  const knownErrorsMessages = useMemo<Record<string, string>>(
-    () => ({
-      'Dex/high-min-out': t('common|highMinOutError')
-    }),
-    [t]
-  );
-
   const showErrorToast = useCallback(
     (error: Error | string) => {
-      if (typeof error === 'string') {
-        captureException(new Error(error));
+      const errorMessage = getErrorMessage(error);
 
-        updateToast({
-          type: 'error',
-          render: error
-        });
+      captureException(error instanceof Error ? error : new Error(errorMessage));
 
-        return;
-      }
-
-      if (error instanceof Error) {
-        captureException(error);
-
-        let knownErrorMessage = knownErrorsMessages[error.message];
-
-        if (error.message.includes(SERVER_UNAVAILABLE_ERROR_MESSAGE)) {
-          knownErrorMessage = SERVER_UNAVAILABLE_MESSAGE;
-        }
-
-        updateToast({
-          type: 'error',
-          render: knownErrorMessage ?? `${error.name}: ${error.message}`
-        });
-
-        return;
-      }
-
-      const errorMessage = `${JSON.stringify(error)}`;
-      captureException(new Error(errorMessage));
       updateToast({
         type: 'error',
         render: errorMessage
       });
     },
-    [updateToast, knownErrorsMessages]
+    [updateToast]
   );
 
   const showRichTextErrorToast = useCallback(

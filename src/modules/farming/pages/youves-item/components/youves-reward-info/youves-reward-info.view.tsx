@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { StateCurrencyAmount, BackToListRewardHeader } from '@shared/components';
+import { StateCurrencyAmount, CardHeaderWithBackButton } from '@shared/components';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
@@ -79,7 +79,7 @@ export const YouvesRewardInfoView: FC<Props> = observer(
         longTermRewardsLoading={longTermRewardsLoading}
         className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
-          content: <BackToListRewardHeader backHref={AppRootRoutes.Farming} />,
+          content: <CardHeaderWithBackButton backHref={AppRootRoutes.Farming} text={t('common|Back to the list')} />,
           className: styles.rewardHeader
         }}
         footer={<NextRewardsTimer />}

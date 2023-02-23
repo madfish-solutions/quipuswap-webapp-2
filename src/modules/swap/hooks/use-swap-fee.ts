@@ -1,39 +1,57 @@
 import { useCallback } from 'react';
 
-import { BigNumber } from 'bignumber.js';
-import { Trade } from 'swap-router-sdk';
-
 import { TEZOS_TOKEN } from '@config/tokens';
 import { useAccountPkh, useEstimationToolkit } from '@providers/use-dapp';
-import { defined, toReal, getTokenSlug } from '@shared/helpers';
-import { estimateSwapFee } from '@shared/helpers/swap';
+import { defined, toReal, getTokenSlug, isEmptyArray } from '@shared/helpers';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
-import { Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, Undefined } from '@shared/types';
 
+import { NoMediatorsSwapBlockchainApi, ThreeRouteBlockchainApi } from '../api';
+import { getThreeRouteSwapSWRKey } from '../utils/get-three-route-swap-swr-key';
 import { getTradeSWRKey } from '../utils/get-trade-swr-key';
+import { SwapDetailsParams } from '../utils/types';
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
+import { useSwapStore } from './use-swap-store';
 
-interface SwapParams {
-  inputToken: Undefined<Token>;
-  inputAmount: Undefined<BigNumber>;
-  outputAmount: Undefined<BigNumber>;
-  trade: Nullable<Trade>;
-  recipient: Undefined<string>;
-}
-
-export const useRealSwapFee = ({ inputToken, inputAmount, trade, recipient }: SwapParams) => {
+export const useRealSwapFee = ({
+  inputToken,
+  inputAmount,
+  threeRouteSwap,
+  noMediatorsTrade,
+  recipient,
+  outputToken
+}: SwapDetailsParams) => {
   const accountPkh = useAccountPkh();
   const tezos = useEstimationToolkit();
   const {
-    settings: { transactionDeadline }
+    settings: { transactionDeadline, tradingSlippage }
   } = useSettingsStore();
+  const swapStore = useSwapStore();
 
   const updateRealSwapFee = useCallback(
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
-      if (senderPkh && inputToken && trade && inputAmount) {
+      const swapIsDefined = !isEmptyArray(threeRouteSwap?.chains ?? noMediatorsTrade);
+      if (senderPkh && inputToken && swapIsDefined && inputAmount && outputToken) {
         try {
-          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, trade, recipientPkh, transactionDeadline);
+          const rawNewFee = isEmptyArray(threeRouteSwap?.chains ?? null)
+            ? await NoMediatorsSwapBlockchainApi.estimateSwapFee(
+                defined(tezos),
+                senderPkh,
+                defined(noMediatorsTrade),
+                recipientPkh,
+                transactionDeadline
+              )
+            : await ThreeRouteBlockchainApi.estimateSwapFee(
+                defined(tezos),
+                senderPkh,
+                recipientPkh ?? senderPkh,
+                inputToken,
+                outputToken,
+                swapStore.threeRouteTokens,
+                defined(threeRouteSwap),
+                tradingSlippage
+              );
 
           return toReal(rawNewFee, TEZOS_TOKEN);
         } catch (error) {
@@ -44,7 +62,17 @@ export const useRealSwapFee = ({ inputToken, inputAmount, trade, recipient }: Sw
 
       throw new SwapFeeNotEnoughParametersError();
     },
-    [trade, inputAmount, inputToken, tezos, transactionDeadline]
+    [
+      inputToken,
+      threeRouteSwap,
+      noMediatorsTrade,
+      inputAmount,
+      tezos,
+      swapStore,
+      tradingSlippage,
+      transactionDeadline,
+      outputToken
+    ]
   );
 
   return useUpdateOnBlockSWR(
@@ -53,7 +81,8 @@ export const useRealSwapFee = ({ inputToken, inputAmount, trade, recipient }: Sw
       'swap-fee',
       accountPkh,
       recipient,
-      trade && getTradeSWRKey(trade),
+      noMediatorsTrade && getTradeSWRKey(noMediatorsTrade),
+      threeRouteSwap && getThreeRouteSwapSWRKey(threeRouteSwap),
       inputAmount?.toFixed(),
       inputToken && getTokenSlug(inputToken)
     ],

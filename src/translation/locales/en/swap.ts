@@ -17,5 +17,7 @@ export const swap = {
   priceImpactWarning:
     'Note! Your price impact is {{priceImpact}}%. Double check the output amount and/or try to split the exchange to the smaller trades.',
   exchangeDetails: 'Exchange Details',
-  inputAmountIsTooBig: 'Input amount is too big, try a smaller one'
+  inputAmountIsTooBig: 'Input amount is too big, try a smaller one',
+  tryChangingAmount: 'Failed to find a route, try changing the amount',
+  failedToFindNotEmptyPoolsForTokens: 'Failed to find not empty pools for the specified tokens'
 } as const;
