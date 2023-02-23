@@ -1,7 +1,29 @@
+@import '@styles/variables';
+
 .button {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px
+}
+
+.filterIcon {
+  margin-right: 8px;
+}
+
+.innerButton {
+  display: flex;
+}
+
+.dark {
+  .filterIcon {
+    fill: $text-01;
+  }
+}
+
+.light {
+  .filterIcon {
+    fill: $text-inverse;
+  }
 }
