@@ -17,15 +17,18 @@
 .sorterView {
   order: 1 !important;
   align-self: flex-start !important;
+  flex: 0 !important;
 }
 
 .leftSide {
   display: flex;
-  flex: 1 !important;
+  align-items: center;
   order: 2 !important;
 }
 
 .rightSide {
+  display: flex;
+  align-items: center;
   order: 3 !important;
 }
 
@@ -35,8 +38,11 @@
     align-items: center !important;
   }
 
-  .rightSide,
-  .sorterView {
+  .rightSide {
+    justify-content: flex-end;
+  }
+
+  .rightSide {
     order: 4 !important;
   }
 

@@ -8,11 +8,6 @@ import { SorterProps, SorterView } from '../sorter-view';
 import { SwitcherLabel, SwitcherLabelProps } from '../switcher-list-filter-view';
 import styles from './list-filter-base-view.module.scss';
 
-export enum SorterPositionEnum {
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT'
-}
-
 export interface ListFilterBaseViewProps {
   switcherDataList: Array<SwitcherLabelProps>;
   sorterProps: SorterProps;
@@ -20,7 +15,6 @@ export interface ListFilterBaseViewProps {
   rightSide?: ReactNode;
   contentClassName?: string;
   sorterClassName?: string;
-  sorterPosition?: SorterPositionEnum;
 }
 
 export const ListFilterBaseView: FC<ListFilterBaseViewProps> = ({
@@ -29,8 +23,7 @@ export const ListFilterBaseView: FC<ListFilterBaseViewProps> = ({
   leftSide,
   rightSide,
   contentClassName,
-  sorterClassName,
-  sorterPosition = SorterPositionEnum.RIGHT
+  sorterClassName
 }) => {
   return (
     <Card
@@ -38,23 +31,15 @@ export const ListFilterBaseView: FC<ListFilterBaseViewProps> = ({
       className={styles.filterCard}
       data-test-id="ListFilterInputView"
     >
-      {sorterPosition === SorterPositionEnum.LEFT && (
-        <div className={cx(sorterClassName, styles.switcherContainer, styles.sorterContainer)}>
-          <SorterView {...sorterProps} />
-        </div>
-      )}
-
       {leftSide}
 
       <Iterator render={SwitcherLabel} data={switcherDataList} />
 
       {rightSide}
 
-      {sorterPosition === SorterPositionEnum.RIGHT && (
-        <div className={cx(sorterClassName, styles.switcherContainer, styles.sorterContainer)}>
-          <SorterView {...sorterProps} />
-        </div>
-      )}
+      <div className={cx(sorterClassName, styles.switcherContainer, styles.sorterContainer)}>
+        <SorterView {...sorterProps} />
+      </div>
     </Card>
   );
 };
