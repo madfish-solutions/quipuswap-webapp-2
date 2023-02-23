@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 
-import { ListFilterBaseView, TokensFilter } from '@shared/components';
+import { ListFilterBaseView, SorterPositionEnum, TokensFilter } from '@shared/components';
 
-import { TokensCategoriesFilter } from '../tokens-categories-filter';
+import { PoolTypeFilter } from '../pool-type-filter';
 import styles from './list-filter.module.scss';
 import { useListFilterViewModel } from './list-filter.vm';
 
@@ -13,9 +13,14 @@ export const ListFilter = observer(() => {
     <>
       <ListFilterBaseView
         sorterClassName={styles.sorterView}
+        sorterPosition={SorterPositionEnum.LEFT}
         contentClassName={styles.filterCard}
-        leftSide={<TokensFilter className={styles.leftSide} />}
-        rightSide={<TokensCategoriesFilter className={styles.rightSide} />}
+        leftSide={
+          <div className={styles.leftSide}>
+            <TokensFilter />
+          </div>
+        }
+        rightSide={<PoolTypeFilter className={styles.rightSide} />}
         {...params}
       />
     </>

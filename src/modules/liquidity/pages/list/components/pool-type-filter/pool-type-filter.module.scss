@@ -1,0 +1,17 @@
+@import '@styles/breakpoints';
+
+.root {
+  height: 40px !important;
+  column-gap: 0 !important;
+  & > button {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px;
+  }
+}
+
+@include media('>Ltablet') {
+  .root > button {
+    padding: 12px 20px;
+  }
+}
