@@ -17,7 +17,6 @@ import {
   getTokenPairSlug,
   getTokenSlug,
   isEmptyArray,
-  isExist,
   makeSwapOrSendRedirectionUrl,
   makeToken
 } from '@shared/helpers';
@@ -29,6 +28,7 @@ import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
 import { useGetThreeRouteTokens } from './hooks/loaders';
+import { useComplexErrorsProps } from './hooks/use-complex-errors-props';
 import { useInitialTokensSlugs } from './hooks/use-initial-tokens-slugs';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
@@ -65,6 +65,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     outputAmount,
     resetCalculations,
     noMediatorsTradeWithSlippage,
+    poolsForTokensArePresent,
     updateCalculations
   } = useSwapCalculations();
 
@@ -411,17 +412,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const pairName =
     formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
   const title = `${t('swap|Swap')} ${pairName}`;
-  const noRouteFound =
-    isEmptyArray(threeRouteSwap?.chains ?? null) &&
-    !isLoading &&
-    isEmptyArray(noMediatorsTradeWithSlippage) &&
-    isExist(formik.inputToken) &&
-    isExist(formik.outputToken) &&
-    (isExist(formik.inputAmount) || isExist(formik.outputAmount));
-  // TODO: remove logic with atLeastOneRouteWithV3 variable after maximal input calculation for Quipuswap V3 is implemented
-  const shouldSuggestSmallerAmount = noRouteFound && atLeastOneRouteWithV3;
-  const shouldShowNoRouteFoundError = noRouteFound && !atLeastOneRouteWithV3;
-  const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
+  const complexErrorsProps = useComplexErrorsProps(
+    formik,
+    threeRouteSwap,
+    noMediatorsTradeWithSlippage,
+    isLoading,
+    priceImpact,
+    atLeastOneRouteWithV3,
+    poolsForTokensArePresent
+  );
 
   return {
     accountPkh,
@@ -455,9 +454,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     recipient: formik.recipient,
     updateRates: updateRoutePairs,
     sellRate,
-    shouldShowNoRouteFoundError,
-    shouldShowPriceImpactWarning,
-    shouldSuggestSmallerAmount,
+    complexErrorsProps,
     submitDisabled,
     swapFee,
     swapFeeError,

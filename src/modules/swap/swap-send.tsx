@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { MAX_HOPS_COUNT } from '@config/constants';
+import { DATA_TEST_ID_PROP_NAME } from '@config/constants';
 import {
   Button,
   Card,
@@ -17,7 +17,7 @@ import {
   TestnetAlert
 } from '@shared/components';
 import { NewTokenSelect } from '@shared/components/ComplexInput/new-token-select';
-import { defined, FormatNumber } from '@shared/helpers';
+import { defined } from '@shared/helpers';
 import { SwapTabAction } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
@@ -59,14 +59,11 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     outputExchangeRate,
     outputToken,
     outputTokenBalance,
-    PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient,
     updateRates,
     sellRate,
-    shouldShowNoRouteFoundError,
-    shouldShowPriceImpactWarning,
-    shouldSuggestSmallerAmount,
+    complexErrorsProps,
     submitDisabled,
     swapFee,
     swapFeeError,
@@ -145,25 +142,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           )}
 
-          {shouldSuggestSmallerAmount && (
-            <ComplexError error={t('swap|inputAmountIsTooBig')} data-test-id="inputAmountIsTooBig" />
-          )}
-
-          {shouldShowNoRouteFoundError && (
-            <ComplexError
-              error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })}
-              data-test-id="noRouteFound"
-            />
-          )}
-
-          {shouldShowPriceImpactWarning && (
-            <ComplexError
-              error={t('swap|priceImpactWarning', {
-                priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
-              })}
-              data-test-id="shouldShowPriceImpactWarning"
-            />
-          )}
+          {complexErrorsProps.map(({ error, [DATA_TEST_ID_PROP_NAME]: dataTestId }) => (
+            <ComplexError error={error} data-test-id={dataTestId} key={dataTestId} />
+          ))}
 
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
           {accountPkh && dataIsStale && !isSubmitting && (
