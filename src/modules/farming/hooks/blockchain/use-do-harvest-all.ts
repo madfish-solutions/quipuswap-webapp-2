@@ -35,7 +35,7 @@ export const useDoHarvestAll = () => {
         defined(rootStore.authStore.accountPkh)
       );
 
-      await confirmOperation(operation.opHash, { message: t('farm|Stake successful') });
+      await confirmOperation(operation.opHash, { message: t('farm|Harvest successful') });
       amplitudeService.logEvent('HARVEST_ALL_SUCCESS', logData);
     } catch (error) {
       showErrorToast(error as Error);
