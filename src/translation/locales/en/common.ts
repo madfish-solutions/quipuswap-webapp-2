@@ -166,8 +166,11 @@ export const common = {
     'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
   Reconnect: 'Reconnect',
   tokensFilter: 'Filter by tokens',
+  filter: 'Filter',
   valueShouldBeNonNegative: 'The value should be non-negative.',
   valueShouldBePositive: 'The value should be greater than zero.',
   maxAvailableValueError: 'Max available value is {{value}}',
-  'Back to the list': 'Back to the list'
+  'Back to the list': 'Back to the list',
+  cancel: 'Cancel',
+  applyFilter: 'Apply Filter'
 } as const;
