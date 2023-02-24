@@ -3,6 +3,7 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 import { useLocation } from 'react-router-dom';
 
+import { ZERO_BAKER_ADDRESS } from '@config/constants';
 import { getCandidateInfo, unvoteOrRemoveVeto } from '@modules/voting/helpers';
 import { useVoter, useVotingDex, useVotingHandlers, useVotingRouting } from '@modules/voting/helpers/voting.provider';
 import { VotingTabs } from '@modules/voting/tabs.enum';
@@ -36,7 +37,7 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
   const isVoteTab = currentTab.id === VotingTabs.vote;
   const { currentCandidate } = getCandidateInfo(dex, bakers);
 
-  const wrapCandidate = isVoteTab ? candidate : currentCandidate?.address;
+  const wrapCandidate = isVoteTab ? candidate : currentCandidate?.address ?? ZERO_BAKER_ADDRESS;
 
   const isCandidateAbsent = !isExist(wrapCandidate);
 
