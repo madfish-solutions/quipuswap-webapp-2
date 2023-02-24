@@ -1,21 +1,28 @@
+import { useMemo } from 'react';
+
 import { useLiquidityListFiltersStore } from '@modules/liquidity/hooks';
 import { PoolTypeOptionEnum } from '@modules/liquidity/interfaces';
-
-const labels = ['All', 'V1', 'V2', 'V3', 'Stableswap'];
-const poolTypesOptions = [
-  PoolTypeOptionEnum.ALL,
-  PoolTypeOptionEnum.V1,
-  PoolTypeOptionEnum.V2,
-  PoolTypeOptionEnum.V3,
-  PoolTypeOptionEnum.STABLESWAP
-];
+import { useTranslation } from '@translation';
 
 export const usePoolTypeFilterViewModel = () => {
   const filtersStore = useLiquidityListFiltersStore();
+  const { t } = useTranslation();
+
+  const options = useMemo(
+    () => [
+      { label: t('liquidity|allPoolTypes'), value: PoolTypeOptionEnum.ALL },
+      { label: 'V1', value: PoolTypeOptionEnum.V1 },
+      { label: 'V2', value: PoolTypeOptionEnum.V2 },
+      { label: 'V3', value: PoolTypeOptionEnum.V3 },
+      { label: t('common|Stableswap'), value: PoolTypeOptionEnum.STABLESWAP }
+    ],
+    [t]
+  );
+  const labels = useMemo(() => options.map(({ label }) => label), [options]);
 
   const handlePoolTypeButtonClick = (poolTypeIndex: number) =>
-    filtersStore.setPoolTypeOption(poolTypesOptions[poolTypeIndex]);
-  const activePoolTypeIndex = poolTypesOptions.indexOf(filtersStore.poolTypeOption);
+    filtersStore.setPoolTypeOption(options[poolTypeIndex].value);
+  const activePoolTypeIndex = options.findIndex(({ value }) => value === filtersStore.poolTypeOption);
 
   return {
     labels,

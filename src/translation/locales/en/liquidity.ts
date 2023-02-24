@@ -155,5 +155,6 @@ export const liquidity = {
   v3PoolAddLiquidityWarning:
     'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
   cannotCreatePoolError: "Sorry, the pool can't be created",
-  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool.'
+  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool.',
+  allPoolTypes: 'All'
 } as const;
