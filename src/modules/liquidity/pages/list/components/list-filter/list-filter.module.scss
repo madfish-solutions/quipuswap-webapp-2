@@ -8,6 +8,7 @@
   flex-direction: column !important;
   gap: 24px !important;
   flex-wrap: wrap !important;
+  padding-top: 4px;
 
   * {
     order: 4;
@@ -20,6 +21,7 @@
   
   .leftSide {
     order: 2;
+    margin-top: 12px;
   }
   
   .rightSide {
@@ -27,17 +29,50 @@
   }
 }
 
+.sorterView {
+  margin: -12px 0;
+  position: relative;
+  width: 100%;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -24px;
+    width: calc(100% + 48px);
+    height: 1px;
+    background-color: $text-01;
+  }
+
+  // TODO: consider removing this after at least one more option for sorting is added
+  :global(.sorterSelect__value-container) {
+    min-width: 100% !important;
+  }
+
+  :global(.sorterSelect__single-value) {
+    padding-left: 0 !important;
+  }
+}
+
 @include media('>Ltablet') {
   .filterCard {
     flex-direction: row !important;
     align-items: center !important;
+    padding-top: 16px;
 
     .leftSide {
+      margin-top: 0;
       order: 5;
     }
   
     .rightSide {
       order: 4;
+    }
+  }
+
+  .sorterView {
+    margin: 0;
+    &::after {
+      display: none;
     }
   }
 }
