@@ -3,12 +3,16 @@ import { FormEvent, useCallback } from 'react';
 import { isNull } from '@shared/helpers';
 import { BaseFilterStore } from '@shared/store';
 
+import { useAmplitudeService } from './use-amplitude-service';
+
 export const useBaseFilterStoreConverter = (store: BaseFilterStore) => {
   const { search, tokenIdValue, sortDirection } = store;
+  const { log } = useAmplitudeService();
 
   const handleSortDirectionToggle = useCallback(() => {
-    return store.onSortDirectionToggle();
-  }, [store]);
+    store.onSortDirectionToggle();
+    log('SORT_DIRECTION_CHANGED', { direction: store.sortDirection });
+  }, [store, log]);
 
   const onSearchChange = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
