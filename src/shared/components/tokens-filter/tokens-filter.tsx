@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
-import { isNull } from '@shared/helpers';
+import { isEmptyArray } from '@shared/helpers';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import { FilterIcon } from '@shared/svg';
 import { useTranslation } from '@translation';
@@ -34,9 +34,15 @@ export const TokensFilter: FC<Props> = observer(({ className }) => {
       <div className={cx(className, modeClass[colorThemeMode], styles.button)}>
         <Button className={styles.innerButton} onClick={handleSelectTokensClick}>
           <FilterIcon className={styles.filterIcon} />
-          <span>{t('common|tokensFilter')}</span>
+          {isEmptyArray(tokens) ? (
+            <span>{t('common|tokensFilter')}</span>
+          ) : (
+            <>
+              <span>{t('common|filter')}</span>
+              <TokensLogos tokens={tokens} />
+            </>
+          )}
         </Button>
-        {!isNull(tokens) && <TokensLogos tokens={tokens} />}
       </div>
     </>
   );
