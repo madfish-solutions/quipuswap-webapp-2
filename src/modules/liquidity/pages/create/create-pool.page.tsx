@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { AppRootRoutes } from '@app.router';
+import { STABLESWAP_V2_IS_AVAILABLE } from '@config/config';
 import { StableswapRoutes } from '@modules/stableswap';
 import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
 import { Button, Card, PageTitle, TestnetAlert } from '@shared/components';
@@ -17,6 +18,7 @@ export const CreatePoolPage: FC = observer(() => {
     cardContentClassName,
     translations,
     createHighEfficiencyPoolIcon,
+    createNewStablePoolIcon,
     createRegularPoolIcon,
     createStablePoolIcon
   } = useCreatePoolViewModel();
@@ -67,7 +69,11 @@ export const CreatePoolPage: FC = observer(() => {
           </Button>
         </div>
         <div className={styles.poolWrapper}>
-          <img className={styles.img} src={createStablePoolIcon} alt="Create stable pool icon" />
+          <img
+            className={styles.img}
+            src={STABLESWAP_V2_IS_AVAILABLE ? createNewStablePoolIcon : createStablePoolIcon}
+            alt="Create stable pool icon"
+          />
           <h2 className={styles.subtitle}>{stablePool}</h2>
           <Button
             className={styles.button}

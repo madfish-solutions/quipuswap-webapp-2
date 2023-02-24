@@ -2,11 +2,15 @@ import { useCallback, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
+import { parse as parseQueryParams } from 'qs';
+import { useLocation } from 'react-router-dom';
 
 import { getUserTokenBalance } from '@blockchain';
+import { STABLESWAP_V2_IS_AVAILABLE } from '@config/config';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
+import { StableswapVersion } from '@modules/stableswap/types';
 import { useRootStore } from '@providers/root-store-provider';
 import {
   defined,
@@ -46,6 +50,8 @@ import {
 } from './hooks';
 import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 
+const DEFAULT_VERSION = STABLESWAP_V2_IS_AVAILABLE ? StableswapVersion.V2 : StableswapVersion.V1;
+
 export const useCreateFormViewModel = () => {
   const { authStore, tezos } = useRootStore();
   const { accountPkh } = authStore;
@@ -54,6 +60,8 @@ export const useCreateFormViewModel = () => {
   const { createStableswapPool } = useCreateStableswapPool();
   const { showRichTextErrorToast } = useToasts();
   const [tokens, setTokens] = useState<Nullable<Array<Token>>>(null);
+  const location = useLocation();
+  const { version = DEFAULT_VERSION } = parseQueryParams(location.search, { ignoreQueryPrefix: true });
 
   const balances = useTokensBalancesOnly(tokens);
 
@@ -110,7 +118,8 @@ export const useCreateFormViewModel = () => {
             liquidityProvidersFee: toFraction(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
           },
           creationParams,
-          creationPrice
+          creationPrice,
+          version: version as StableswapVersion
         });
 
         actions.resetForm();
@@ -119,7 +128,7 @@ export const useCreateFormViewModel = () => {
         actions.setSubmitting(false);
       }
     },
-    [accountPkh, createStableswapPool, creationPrice, showRichTextErrorToast, tezos, tokens]
+    [accountPkh, createStableswapPool, creationPrice, showRichTextErrorToast, tezos, tokens, version]
   );
 
   const { validationSchema, initialValues } = useFormikParams(tokens, balances);

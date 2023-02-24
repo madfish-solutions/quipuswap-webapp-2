@@ -14,6 +14,11 @@ export enum StableDividendsFormTabs {
   unstake = 'unstake'
 }
 
+export enum StableswapVersion {
+  V1 = '1',
+  V2 = '2'
+}
+
 export type StableswapFormTabs = StableDividendsFormTabs | StableswapLiquidityFormTabs;
 
 export const mapTokensValueToTokenAddress = (tokensValue: TokensValue): TokenId => {
