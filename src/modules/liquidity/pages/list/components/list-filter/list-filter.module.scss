@@ -43,11 +43,6 @@
     background-color: $text-01;
   }
 
-  // TODO: consider removing this after at least one more option for sorting is added
-  :global(.sorterSelect__value-container) {
-    min-width: 100% !important;
-  }
-
   :global(.sorterSelect__single-value) {
     padding-left: 0 !important;
   }
