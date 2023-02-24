@@ -57,7 +57,7 @@
   .filterCard {
     flex-direction: row !important;
     align-items: center !important;
-    padding-top: 16px;
+    padding: 16px 8px 0;
 
     .leftSide {
       margin-top: 0;
@@ -70,7 +70,7 @@
   }
 
   .sorterView {
-    margin: 0;
+    margin: -8px 0;
     &::after {
       display: none;
     }
