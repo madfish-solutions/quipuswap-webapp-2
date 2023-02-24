@@ -7,7 +7,8 @@ import {
   DEFAULT_STABLESWAP_STAKERS_FEE_WITH_PRECISION,
   STABLESWAP_PRECISION_FEE
 } from '@config/constants';
-import { STABLESWAP_FACTORY_CONTRACT_ADDRESS } from '@config/environment';
+import { STABLESWAP_FACTORY_CONTRACT_ADDRESS, STABLESWAP_V2_FACTORY_ADDRESS } from '@config/environment';
+import { StableswapVersion } from '@modules/stableswap/types';
 import { useRootStore } from '@providers/root-store-provider';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
@@ -22,6 +23,7 @@ interface Params {
   amplificationParameter: BigNumber;
   fee: Pick<Fees, 'liquidityProvidersFee'>;
   creationParams: Array<CreationParams>;
+  version: StableswapVersion;
 }
 
 const prepareFee = ({ liquidityProvidersFee }: Pick<Fees, 'liquidityProvidersFee'>): Fees => {
@@ -40,7 +42,7 @@ export const useCreateStableswapPool = () => {
   const { accountPkh } = useAuthStore();
 
   const createStableswapPool = useCallback(
-    async ({ amplificationParameter, fee, creationParams, creationPrice }: Params) => {
+    async ({ amplificationParameter, fee, creationParams, creationPrice, version }: Params) => {
       if (isNull(tezos) || isNull(accountPkh)) {
         return;
       }
@@ -49,7 +51,7 @@ export const useCreateStableswapPool = () => {
       try {
         const operation = await createStableswapPoolApi(
           tezos,
-          STABLESWAP_FACTORY_CONTRACT_ADDRESS,
+          version === StableswapVersion.V1 ? STABLESWAP_FACTORY_CONTRACT_ADDRESS : STABLESWAP_V2_FACTORY_ADDRESS!,
           creationParams,
           amplificationParameter,
           fees,

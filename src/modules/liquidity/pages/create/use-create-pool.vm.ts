@@ -2,6 +2,8 @@ import cx from 'classnames';
 
 import CreateHighEfficiencyPoolDark from '@images/create-efficient-pool-dark.png';
 import CreateHighEfficiencyPoolLight from '@images/create-efficient-pool-light.png';
+import CreateNewStablePoolDark from '@images/create-new-stable-pool-dark.png';
+import CreateNewStablePoolLight from '@images/create-new-stable-pool-light.png';
 import CreateRegularPoolDark from '@images/create-regular-pool-dark.png';
 import CreateRegularPoolLight from '@images/create-regular-pool-light.png';
 import CreateStablePoolDark from '@images/create-stable-pool-dark.png';
@@ -29,6 +31,7 @@ export const useCreatePoolViewModel = () => {
 
   const createRegularPoolIcon = shouldUseDarkIcons ? CreateRegularPoolDark : CreateRegularPoolLight;
 
+  const createNewStablePoolIcon = shouldUseDarkIcons ? CreateNewStablePoolDark : CreateNewStablePoolLight;
   const createStablePoolIcon = shouldUseDarkIcons ? CreateStablePoolDark : CreateStablePoolLight;
 
   const translations = {
@@ -43,6 +46,7 @@ export const useCreatePoolViewModel = () => {
     cardContentClassName: cx(modeClass[uiStore.colorThemeMode], styles.cardContent),
     translations,
     createHighEfficiencyPoolIcon,
+    createNewStablePoolIcon,
     createRegularPoolIcon,
     createStablePoolIcon
   };
