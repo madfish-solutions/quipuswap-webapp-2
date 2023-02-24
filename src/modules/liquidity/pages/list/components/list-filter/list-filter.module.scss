@@ -10,44 +10,34 @@
   flex-wrap: wrap !important;
 
   * {
-    order: 4 !important;
+    order: 4;
   }
-}
 
-.sorterView {
-  order: 1 !important;
-  align-self: flex-start !important;
-  flex: 0 !important;
-}
-
-.leftSide {
-  display: flex;
-  align-items: center;
-  order: 2 !important;
-}
-
-.rightSide {
-  display: flex;
-  align-items: center;
-  order: 3 !important;
+  .sorterView {
+    order: 1;
+    flex: 0 !important;
+  }
+  
+  .leftSide {
+    order: 2;
+  }
+  
+  .rightSide {
+    order: 3;
+  }
 }
 
 @include media('>Ltablet') {
   .filterCard {
     flex-direction: row !important;
     align-items: center !important;
-  }
 
-  .rightSide {
-    justify-content: flex-end;
-  }
-
-  .rightSide {
-    order: 4 !important;
-  }
-
-  .leftSide {
-    justify-content: flex-end;
-    order: 5 !important;
+    .leftSide {
+      order: 5;
+    }
+  
+    .rightSide {
+      order: 4;
+    }
   }
 }

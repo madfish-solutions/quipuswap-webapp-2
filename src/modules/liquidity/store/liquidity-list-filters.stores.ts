@@ -67,8 +67,6 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   }
 
   setPoolTypeOption(poolTypeOption: PoolTypeOptionEnum) {
-    // eslint-disable-next-line no-console
-    console.log('setPoolTypeOption', poolTypeOption);
     this.poolTypeOption = poolTypeOption;
   }
 }

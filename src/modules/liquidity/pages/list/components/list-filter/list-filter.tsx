@@ -14,16 +14,8 @@ export const ListFilter = observer(() => {
       <ListFilterBaseView
         sorterClassName={styles.sorterView}
         contentClassName={styles.filterCard}
-        leftSide={
-          <div className={styles.leftSide}>
-            <TokensFilter />
-          </div>
-        }
-        rightSide={
-          <div className={styles.rightSide}>
-            <PoolTypeFilter />
-          </div>
-        }
+        leftSide={<TokensFilter className={styles.leftSide} />}
+        rightSide={<PoolTypeFilter className={styles.rightSide} />}
         {...params}
       />
     </>
