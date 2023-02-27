@@ -38,8 +38,8 @@ export const useDetailsRulesViewModel = () => {
               )
             }
           : {
-              title: t('stableswap|onlyStandardFee'),
-              children: null
+              title: t('stableswap|poolCreationIsFree'),
+              children: <p className={styles.paragraph}>{t('stableswap|poolCreationIsFreeDescription')}</p>
             },
         {
           title: t('stableswap|setupLiquidityProvidersFee'),

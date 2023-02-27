@@ -61,7 +61,7 @@ export const useCreatePoolViewModel = () => {
           ? {
               imageAlt: 'Create new stable pool icon',
               imageUrl: createNewStablePoolIcon,
-              name: t('liquidity|stablePool'),
+              name: t('liquidity|yupanaStablePool'),
               href: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.create}?v2=true`
             }
           : null
