@@ -7,8 +7,9 @@ import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { getRealPoolCreationCostApi } from '../api';
+import { StableswapVersion } from '../types';
 
-export const usePoolCreationPrice = () => {
+export const usePoolCreationPrice = (poolVersion: StableswapVersion) => {
   const [creationPrice, setCreationPrice] = useState<Nullable<BigNumber>>(null);
 
   const { tezos } = useRootStore();
@@ -17,8 +18,8 @@ export const usePoolCreationPrice = () => {
     if (isNull(tezos)) {
       return;
     }
-    getRealPoolCreationCostApi(tezos).then(setCreationPrice);
-  }, [tezos]);
+    getRealPoolCreationCostApi(tezos, poolVersion).then(setCreationPrice);
+  }, [tezos, poolVersion]);
 
   return { creationPrice };
 };
