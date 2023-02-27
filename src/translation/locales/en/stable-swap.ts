@@ -80,6 +80,9 @@ export const stableswap = {
   youMayCreatePool: 'With the aid of this tool, you may create token pools with equal value.',
   rules: 'Rules:',
   chooseTokens: 'Choose two to four equal-value Tezos-based tokens and put the starting values in the input field.',
+  onlyStandardFee:
+    ' By creating a pool, you will pay only standard Tezos blockchain fee for interaction with smart contract.',
+  free: 'Free',
   followingFees: ' By creating a pool, you will pay the following fees:',
   standardFee: 'Standard tezos blockchain fee for interaction with the smart-contract',
   ourFee:

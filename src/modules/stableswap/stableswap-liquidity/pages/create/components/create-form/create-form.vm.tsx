@@ -2,11 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
-import { parse as parseQueryParams } from 'qs';
-import { useLocation } from 'react-router-dom';
 
 import { getUserTokenBalance } from '@blockchain';
-import { STABLESWAP_V2_IS_AVAILABLE } from '@config/config';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
@@ -32,7 +29,7 @@ import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Nullable, Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
-import { useCreateStableswapPool, usePoolCreationPrice } from '../../../../../hooks';
+import { useCreateStableswapPool, usePoolCreationPrice, usePoolToCreateVersion } from '../../../../../hooks';
 import { NotEnoughQuipuErrorToast } from '../not-enough-quipu-error-toast';
 import {
   AMPLIFICATION_FIELD_NAME,
@@ -50,18 +47,15 @@ import {
 } from './hooks';
 import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 
-const DEFAULT_VERSION = STABLESWAP_V2_IS_AVAILABLE ? StableswapVersion.V2 : StableswapVersion.V1;
-
 export const useCreateFormViewModel = () => {
   const { authStore, tezos } = useRootStore();
   const { accountPkh } = authStore;
-  const { creationPrice } = usePoolCreationPrice();
   const { chooseTokens } = useChooseTokens();
   const { createStableswapPool } = useCreateStableswapPool();
   const { showRichTextErrorToast } = useToasts();
   const [tokens, setTokens] = useState<Nullable<Array<Token>>>(null);
-  const location = useLocation();
-  const { version = DEFAULT_VERSION } = parseQueryParams(location.search, { ignoreQueryPrefix: true });
+  const version = usePoolToCreateVersion();
+  const { creationPrice } = usePoolCreationPrice(version);
 
   const balances = useTokensBalancesOnly(tokens);
 
