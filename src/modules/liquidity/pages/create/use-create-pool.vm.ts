@@ -1,5 +1,6 @@
 import cx from 'classnames';
 
+import { STABLESWAP_V2_IS_AVAILABLE } from '@config/config';
 import CreateHighEfficiencyPoolDark from '@images/create-efficient-pool-dark.png';
 import CreateHighEfficiencyPoolLight from '@images/create-efficient-pool-light.png';
 import CreateNewStablePoolDark from '@images/create-new-stable-pool-dark.png';
@@ -14,11 +15,6 @@ import { useUiStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import styles from './create-pool.module.scss';
-
-const modeClass = {
-  [ColorModes.Light]: styles.light,
-  [ColorModes.Dark]: styles.dark
-};
 
 export const useCreatePoolViewModel = () => {
   const uiStore = useUiStore();
@@ -43,7 +39,8 @@ export const useCreatePoolViewModel = () => {
   };
 
   return {
-    cardContentClassName: cx(modeClass[uiStore.colorThemeMode], styles.cardContent),
+    cardContentClassName: cx(styles.cardContent, STABLESWAP_V2_IS_AVAILABLE ? styles.twoColumns : styles.threeColumns),
+    shouldShowNewStableswapPoolOption: STABLESWAP_V2_IS_AVAILABLE,
     translations,
     createHighEfficiencyPoolIcon,
     createNewStablePoolIcon,
