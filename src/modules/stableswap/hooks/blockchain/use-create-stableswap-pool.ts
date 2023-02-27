@@ -26,6 +26,11 @@ interface Params {
   version: StableswapVersion;
 }
 
+const stableswapFactories = {
+  [StableswapVersion.V1]: STABLESWAP_FACTORY_CONTRACT_ADDRESS,
+  [StableswapVersion.V2]: STABLESWAP_V2_FACTORY_ADDRESS!
+};
+
 const prepareFee = ({ liquidityProvidersFee }: Pick<Fees, 'liquidityProvidersFee'>): Fees => {
   return {
     liquidityProvidersFee: liquidityProvidersFee.multipliedBy(STABLESWAP_PRECISION_FEE),
@@ -51,7 +56,7 @@ export const useCreateStableswapPool = () => {
       try {
         const operation = await createStableswapPoolApi(
           tezos,
-          version === StableswapVersion.V1 ? STABLESWAP_FACTORY_CONTRACT_ADDRESS : STABLESWAP_V2_FACTORY_ADDRESS!,
+          stableswapFactories[version],
           creationParams,
           amplificationParameter,
           fees,
