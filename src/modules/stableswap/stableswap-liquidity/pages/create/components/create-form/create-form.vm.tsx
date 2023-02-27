@@ -7,7 +7,6 @@ import { getUserTokenBalance } from '@blockchain';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
-import { StableswapVersion } from '@modules/stableswap/types';
 import { useRootStore } from '@providers/root-store-provider';
 import {
   defined,
@@ -113,7 +112,7 @@ export const useCreateFormViewModel = () => {
           },
           creationParams,
           creationPrice,
-          version: version as StableswapVersion
+          version
         });
 
         actions.resetForm();
