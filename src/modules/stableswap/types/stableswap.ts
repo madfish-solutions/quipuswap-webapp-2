@@ -15,8 +15,8 @@ export enum StableDividendsFormTabs {
 }
 
 export enum StableswapVersion {
-  V1 = '1',
-  V2 = '2'
+  V1 = 'V1',
+  V2 = 'V2'
 }
 
 export type StableswapFormTabs = StableDividendsFormTabs | StableswapLiquidityFormTabs;
