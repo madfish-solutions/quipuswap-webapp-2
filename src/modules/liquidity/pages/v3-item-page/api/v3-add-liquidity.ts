@@ -1,10 +1,10 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { getWithWtezMintOnInputParams, withApproveApiForManyTokens } from '@blockchain';
+import { getWithWtezBurnOnOutputParams, getWithWtezMintOnInputParams, withApproveApiForManyTokens } from '@blockchain';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { WTEZ_TOKEN } from '@config/tokens';
-import { isTezosToken } from '@shared/helpers';
+import { isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { Token } from '@shared/types';
 
 import { MaximumTokensContributed } from '../types';
@@ -18,7 +18,8 @@ export const V3AddLiquidityApi = async (
   deadline: string,
   tokenX: Token,
   tokenY: Token,
-  maximumTokensContributed: MaximumTokensContributed
+  maximumTokensContributed: MaximumTokensContributed,
+  mutezToBurn: BigNumber
 ) => {
   const v3Contract = await tezos.wallet.at(contractAddress);
 
@@ -50,6 +51,9 @@ export const V3AddLiquidityApi = async (
       receiverAddress,
       addLiquidityParams
     );
+  }
+  if (isGreaterThanZero(mutezToBurn)) {
+    addLiquidityParams = await getWithWtezBurnOnOutputParams(tezos, mutezToBurn, receiverAddress, addLiquidityParams);
   }
   const wrappedTokenX = isTezosToken(tokenX) ? WTEZ_TOKEN : tokenX;
   const wrappedTokenY = isTezosToken(tokenY) ? WTEZ_TOKEN : tokenY;
