@@ -1,10 +1,10 @@
 import { STABLEDIVIDENDS_LIST_API_URL } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 
 import { StableDividendsListResponse } from '../types';
 
 export const getStableDividendsListApi = async () => {
-  const response = await fetch(STABLEDIVIDENDS_LIST_API_URL);
-  const data = (await response.json()) as StableDividendsListResponse;
+  const data = await jsonFetch<StableDividendsListResponse>(STABLEDIVIDENDS_LIST_API_URL);
 
   return data.list;
 };
