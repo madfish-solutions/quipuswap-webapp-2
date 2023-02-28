@@ -172,5 +172,12 @@ export const common = {
   maxAvailableValueError: 'Max available value is {{value}}',
   'Back to the list': 'Back to the list',
   cancel: 'Cancel',
-  applyFilter: 'Apply Filter'
+  applyFilter: 'Apply Filter',
+  serverTemporarilyUnavailable: 'The server is temporarily unavailable.',
+  youRejectedTheOperation: 'You rejected the operation.',
+  failedToEstablishConnectionToHost: 'Failed to establish connection to {{hostname}}',
+  failedToFindContractWithAddress: 'Failed to find contract {{contractAddress}}',
+  requestFailed: 'Request to {{url}} failed',
+  requestFailedWithStatus: 'Request to {{url}} failed with status {{status}}',
+  requestFailedWithStatusAndBody: 'Request to {{url}} failed with status {{status}}: "{{body}}"'
 } as const;
