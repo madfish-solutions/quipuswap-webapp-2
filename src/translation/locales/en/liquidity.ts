@@ -53,6 +53,7 @@ export const liquidity = {
   highEfficiencyPool: 'High capital efficiency for 2 assets',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
+  yupanaStablePool: 'Stableswap with Yupana investment',
   back: 'Back',
   noPool: 'Can’t find appropriate pool? Create own!',
   migrate: 'Migrate',
