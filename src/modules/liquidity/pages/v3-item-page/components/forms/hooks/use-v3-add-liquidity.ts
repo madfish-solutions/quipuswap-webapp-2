@@ -17,7 +17,7 @@ import { useTranslation } from '@translation';
 import { V3AddLiquidityApi } from '../../../api/v3-add-liquidity';
 import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
 import { calculateLiquidity } from '../../../helpers/v3-liquidity-helpers';
-import { useCurrentTick, usePositionsWithStats } from '../../../hooks';
+import { useCurrentTick, useMutezRewards, usePositionsWithStats } from '../../../hooks';
 import { getTokensValues } from '../helpers/get-tokens-values';
 import { V3AddTokenInput } from '../interface';
 import { usePositionTicks } from './use-position-ticks';
@@ -37,6 +37,7 @@ export const useV3AddLiquidity = () => {
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const item = poolStore.item;
   const { lowerTick, upperTick } = usePositionTicks();
+  const mutezToBurn = useMutezRewards();
   const currentTick = useCurrentTick();
 
   const position = findUserPosition(positionsWithStats, positionId);
@@ -93,7 +94,8 @@ export const useV3AddLiquidity = () => {
         deadline,
         tokenX,
         tokenY,
-        tokensValues
+        tokensValues,
+        mutezToBurn
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyAdded') });
       amplitudeService.logEvent('V3_LIQUIDITY_ADD_SUCCESS', logData);

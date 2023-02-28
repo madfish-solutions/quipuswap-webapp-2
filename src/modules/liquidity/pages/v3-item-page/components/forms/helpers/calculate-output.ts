@@ -14,17 +14,13 @@ export const calculateOutput = (
   tokenX: Token,
   tokenY: Token
 ) => {
-  const { x: tokenXAtomicDeposit, y: tokenYAtomicDeposit } = calculateDeposit(position, poolStorage);
-
-  const atomicCalculatedTokenXDeposit = getPercentageFromNumber(
-    tokenXAtomicDeposit,
-    new BigNumber(inputAmount)
-  ).integerValue(BigNumber.ROUND_DOWN);
-
-  const atomicCalculatedTokenYDeposit = getPercentageFromNumber(
-    tokenYAtomicDeposit,
-    new BigNumber(inputAmount)
-  ).integerValue(BigNumber.ROUND_DOWN);
+  const liquidity = getPercentageFromNumber(position.liquidity, new BigNumber(inputAmount)).integerValue(
+    BigNumber.ROUND_DOWN
+  );
+  const { x: atomicCalculatedTokenXDeposit, y: atomicCalculatedTokenYDeposit } = calculateDeposit(
+    { ...position, liquidity },
+    poolStorage
+  );
 
   const realTokenXAtomicDeposit = toFixed(toReal(atomicCalculatedTokenXDeposit, tokenX));
   const realTokenYAtomicDeposit = toFixed(toReal(atomicCalculatedTokenYDeposit, tokenY));
