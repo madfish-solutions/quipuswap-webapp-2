@@ -1,11 +1,13 @@
-import { HttpResponseError } from '@taquito/http-utils';
+import { HttpResponseError, HttpRequestFailed } from '@taquito/http-utils';
 
 import { isEmptyString } from '@shared/helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const jsonFetch = async <T = any>(input: RequestInfo, init?: RequestInit): Promise<T> => {
-  const response = await fetch(input, init);
-  const url = typeof input === 'string' ? input : input.url;
+export const jsonFetch = async <T = any>(input: RequestInfo, init?: RequestInit, parser = JSON.parse): Promise<T> => {
+  const { url, method = 'GET' } = typeof input === 'string' ? { url: input, method: 'GET' } : input;
+  const response = await fetch(input, init).catch(e => {
+    throw new HttpRequestFailed(`${method} ${url} ${e.message}`);
+  });
 
   if (!response.ok) {
     throw new HttpResponseError(
@@ -30,5 +32,5 @@ export const jsonFetch = async <T = any>(input: RequestInfo, init?: RequestInit)
     );
   }
 
-  return JSON.parse(rawJSON);
+  return parser(rawJSON);
 };
