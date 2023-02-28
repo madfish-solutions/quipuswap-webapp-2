@@ -4,9 +4,10 @@ import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap
 
 import { FarmVersion } from '@modules/farming/interfaces';
 import { PoolType } from '@modules/liquidity/interfaces';
+import { isExist } from '@shared/helpers/type-checks';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
+import { NETWORK_ID, STABLESWAP_V2_FACTORY_ADDRESS, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
@@ -134,3 +135,6 @@ export const COINFLIP_TOKEN_DECIMALS = 6;
 
 // 3route
 export const THREE_ROUTE_APP_ID = 3;
+
+// Stableswap
+export const STABLESWAP_V2_IS_AVAILABLE = isExist(STABLESWAP_V2_FACTORY_ADDRESS);

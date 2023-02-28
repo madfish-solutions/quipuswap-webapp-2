@@ -80,6 +80,10 @@ export const stableswap = {
   youMayCreatePool: 'With the aid of this tool, you may create token pools with equal value.',
   rules: 'Rules:',
   chooseTokens: 'Choose two to four equal-value Tezos-based tokens and put the starting values in the input field.',
+  poolCreationIsFree: 'The pool creation is totally free.',
+  poolCreationIsFreeDescription:
+    "Since only some part of the liquidity is used for trading, some portion of reserves may be automatically deposited to Yupana lending protocol. In most cases, it won't affect liquidity providers or traders but will increase the liquidity in the money market.",
+  free: 'Free',
   followingFees: ' By creating a pool, you will pay the following fees:',
   standardFee: 'Standard tezos blockchain fee for interaction with the smart-contract',
   ourFee:
