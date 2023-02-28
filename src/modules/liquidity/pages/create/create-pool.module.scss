@@ -17,87 +17,22 @@
 .cardContent {
   position: relative;
   padding: 24px;
-  display: flex;
-  flex-direction: column;
-}
-
-.poolWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.img {
-  display: block;
-  margin-bottom: 8px;
-  height: auto;
-  width: 100%;
-}
-
-.subtitle {
-  margin-bottom: 40px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 1.142rem;
-  line-height: 1.5;
-}
-
-.button {
-  max-width: 280px;
-}
-
-@include media('<tablet') {
-  .poolWrapper {
-    position: relative;
-    margin-bottom: 64px;
-    &::after {
-      content: "";
-      position: absolute;
-      display: block;
-      height: 1px;
-      width: calc(100% + 48px);
-      left: -24px;
-      bottom: -24px;
-    }
-  }
-
-  .poolWrapper:last-child {
-    margin-bottom: 0;
-    &::after {
-      display: none;
-    }
-  }
-
-  .dark {
-    .poolWrapper::after {
-      background-color: $text-01;
-    }
-  }
-
-  .light {
-    .poolWrapper::after {
-      background-color: $ui-03;
-    }
-  }
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 @include media('>=tablet') {
   .cardContent {
     flex-direction: row;
-    column-gap: 40px;
+    gap: 40px;
     justify-content: space-between;
   }
-}
 
-@include media('>=Ltablet') {
-  .subtitle,
-  .img {
-    margin-bottom: 32px;
+  .twoColumns {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .subtitle {
-    font-size: 1.714rem;
-    line-height: 1.333;
+  .threeColumns {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

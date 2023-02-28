@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { QUIPU_TOKEN } from '@config/tokens';
-import { toAtomic } from '@shared/helpers';
+import { isGreaterThanZero, toAtomic } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { AmountToken, Nullable, Token, TokensValue } from '@shared/types';
 
@@ -58,12 +58,11 @@ const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees, c
 
   const inputTokens: Array<TokensValue> = [];
   const amountTokenList: Array<AmountToken> = [
-    // 1,000 QUIPU
     {
       token: QUIPU_TOKEN,
       amount: creationPrice ? toAtomic(creationPrice, QUIPU_TOKEN) : new BigNumber('1')
     }
-  ];
+  ].filter(({ amount }) => isGreaterThanZero(amount));
   const tokensInfo = new MichelsonMap<BigNumber, TokenInfo>();
 
   creationParams.forEach(({ token, reserves, rateF, precisionMultiplierF }, index) => {
