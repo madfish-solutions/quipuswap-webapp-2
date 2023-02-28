@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { THREE_ROUTE_API_AUTH_TOKEN, THREE_ROUTE_API_URL } from '@config/environment';
+import { jsonFetch } from '@shared/api';
 
 import { ThreeRouteDex, ThreeRouteSwapResponse, ThreeRouteToken } from '../../types';
 
@@ -25,12 +26,13 @@ export class ThreeRouteBackendApi {
   }
 
   private static async getThreeRouteResponse(path: string) {
-    const response = await fetch(`${THREE_ROUTE_API_URL}${path}`, {
-      headers: { Authorization: `Basic ${THREE_ROUTE_API_AUTH_TOKEN}` }
-    });
-    const rawJSON = await response.text();
-
-    return ThreeRouteBackendApi.jsonWithBigNumberParser(rawJSON);
+    return await jsonFetch(
+      `${THREE_ROUTE_API_URL}${path}`,
+      {
+        headers: { Authorization: `Basic ${THREE_ROUTE_API_AUTH_TOKEN}` }
+      },
+      ThreeRouteBackendApi.jsonWithBigNumberParser
+    );
   }
 
   static async getSwap(
