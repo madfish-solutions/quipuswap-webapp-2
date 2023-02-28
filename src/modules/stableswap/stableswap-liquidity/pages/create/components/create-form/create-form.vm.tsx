@@ -28,7 +28,7 @@ import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Nullable, Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
-import { useCreateStableswapPool, usePoolCreationPrice } from '../../../../../hooks';
+import { useCreateStableswapPool, usePoolCreationPrice, usePoolToCreateVersion } from '../../../../../hooks';
 import { NotEnoughQuipuErrorToast } from '../not-enough-quipu-error-toast';
 import {
   AMPLIFICATION_FIELD_NAME,
@@ -49,11 +49,12 @@ import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
 export const useCreateFormViewModel = () => {
   const { authStore, tezos } = useRootStore();
   const { accountPkh } = authStore;
-  const { creationPrice } = usePoolCreationPrice();
   const { chooseTokens } = useChooseTokens();
   const { createStableswapPool } = useCreateStableswapPool();
   const { showRichTextErrorToast } = useToasts();
   const [tokens, setTokens] = useState<Nullable<Array<Token>>>(null);
+  const version = usePoolToCreateVersion();
+  const { creationPrice } = usePoolCreationPrice(version);
 
   const balances = useTokensBalancesOnly(tokens);
 
@@ -110,7 +111,8 @@ export const useCreateFormViewModel = () => {
             liquidityProvidersFee: toFraction(prepareNumberAsString(values[LIQUIDITY_PROVIDERS_FEE_FIELD_NAME]))
           },
           creationParams,
-          creationPrice
+          creationPrice,
+          version
         });
 
         actions.resetForm();
@@ -119,7 +121,7 @@ export const useCreateFormViewModel = () => {
         actions.setSubmitting(false);
       }
     },
-    [accountPkh, createStableswapPool, creationPrice, showRichTextErrorToast, tezos, tokens]
+    [accountPkh, createStableswapPool, creationPrice, showRichTextErrorToast, tezos, tokens, version]
   );
 
   const { validationSchema, initialValues } = useFormikParams(tokens, balances);
