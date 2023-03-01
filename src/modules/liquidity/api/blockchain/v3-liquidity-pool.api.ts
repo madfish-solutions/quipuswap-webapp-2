@@ -11,6 +11,7 @@ import {
 } from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
 import { WTEZ_TOKEN } from '@config/tokens';
+import { jsonFetch } from '@shared/api';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   bigNumberToString,
@@ -97,11 +98,8 @@ export namespace V3LiquidityPoolApi {
     };
   };
 
-  export const getLiquidityV3Item = async (id: BigNumber) => {
-    const response = await fetch(`${LIQUIDITY_V3_ITEM_API_URL}/${id.toFixed()}`);
-
-    return await response.json();
-  };
+  export const getLiquidityV3Item = async (id: BigNumber) =>
+    await jsonFetch(`${LIQUIDITY_V3_ITEM_API_URL}/${id.toFixed()}`);
 
   export const claimFees = async (
     tezos: TezosToolkit,

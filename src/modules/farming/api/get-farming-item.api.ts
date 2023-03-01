@@ -1,4 +1,5 @@
 import { FARMING_LIST_API_URL, FARMING_LIST_API_URL_V2, FARMING_LIST_API_URL_V3 } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 import { Nullable } from '@shared/types';
 
 import { FarmingItemResponse, FarmVersion } from '../interfaces';
@@ -24,7 +25,5 @@ export const getFarmingItemApi = async (farmingId: Nullable<string>, version: Fa
     throw new Error('Failed to get nullable farmingId');
   }
 
-  const response = await fetch(`${getUrl(version, old)}/${farmingId}`);
-
-  return (await response.json()) as FarmingItemResponse;
+  return await jsonFetch<FarmingItemResponse>(`${getUrl(version, old)}/${farmingId}`);
 };

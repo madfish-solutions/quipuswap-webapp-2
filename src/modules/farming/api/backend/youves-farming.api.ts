@@ -1,4 +1,5 @@
 import { FARMING_ITEM_API_URL_V2, FARMING_ITEM_API_URL_V3 } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 
 import { FarmVersion } from '../../interfaces';
 
@@ -16,8 +17,6 @@ export class BackendYouvesFarmingApi {
     }
   }
   static async getYouvesFarmingItem(id: string, version: FarmVersion) {
-    const youvesFarmRaw = await fetch(`${this.getFarmItemUrl(version)}/${id}`);
-
-    return await youvesFarmRaw.json();
+    return await jsonFetch(`${this.getFarmItemUrl(version)}/${id}`);
   }
 }
