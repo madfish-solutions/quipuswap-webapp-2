@@ -4,6 +4,7 @@ import { TEZOS_TOKEN } from '@config/tokens';
 
 import { getTokenSlug, isTezosToken } from '../helpers';
 import { Nullable, TokenAddress } from '../types';
+import { jsonFetch } from './json-fetch';
 
 const DEFAULT_TOKEN_ID = 0;
 
@@ -52,12 +53,10 @@ export const getTokenMetadata = async ({
     return tokenFromLS;
   }
 
-  return await fetch(`${METADATA_API}/${contractAddress}/${fa2TokenId || DEFAULT_TOKEN_ID}`)
-    .then(async res => {
-      if (!res.ok) {
-        return null;
-      }
-      const tokenFromServer: RawTokenMetadata = await res.json();
+  return await jsonFetch<Nullable<RawTokenMetadata>>(
+    `${METADATA_API}/${contractAddress}/${fa2TokenId || DEFAULT_TOKEN_ID}`
+  )
+    .then(tokenFromServer => {
       if (tokenFromServer && tokenFromServer.decimals) {
         saveTokenToLS(tokenSlug, tokenFromServer);
       }
