@@ -6,7 +6,7 @@ export const useV3AprAndVolume = () => {
   const { apiItem, itemIsLoading } = useLiquidityV3PoolStore();
   const { item } = apiItem;
 
-  const apr = !itemIsLoading ? new BigNumber(item?.apr ?? '0') : null;
+  const apr = itemIsLoading ? null : new BigNumber(item?.apr ?? '0');
   const volume = item?.volumeForWeek ? new BigNumber(item.volumeForWeek) : null;
 
   return {
