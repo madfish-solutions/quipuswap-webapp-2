@@ -41,6 +41,14 @@ export class LiquidityV3PoolStore {
     async () => await V3LiquidityPoolApi.getPool(defined(this.rootStore.tezos, 'tezos'), defined(this.poolId, 'id')),
     t
   );
+
+  get itemIsLoading() {
+    return this.poolStore.isLoading || this.itemStore.isLoading;
+  }
+
+  get item() {
+    return this.poolStore.model;
+  }
   //#endregion Quipuswap V3 liquidity pool store
 
   //#region Quipuswap V3 liquidity item store
@@ -50,15 +58,11 @@ export class LiquidityV3PoolStore {
     model: LiquidityItemModel
   })
   readonly itemStore: LoadingErrorData<LiquidityItemModel, { item: null }>;
+
+  get apiItem() {
+    return this.itemStore.model;
+  }
   //#endregion Quipuswap V3 liquidity item store
-
-  get itemIsLoading() {
-    return this.poolStore.isLoading || this.itemStore.isLoading;
-  }
-
-  get item() {
-    return this.poolStore.model;
-  }
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {

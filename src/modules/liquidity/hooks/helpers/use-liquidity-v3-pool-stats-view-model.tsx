@@ -11,7 +11,8 @@ const MAX_SLIDES_TO_SHOW = 4;
 
 export const useLiquidityV3PoolStatsViewModel = () => {
   const { t } = useTranslation();
-  const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, feeBpsPercentage } = useLiquidityV3PoolStats();
+  const { isExchangeRatesError, poolTvl, tokenYToXCurrentPrice, feeBpsPercentage, apr, volume } =
+    useLiquidityV3PoolStats();
 
   const stats = useMemo(
     () => [
@@ -33,9 +34,21 @@ export const useLiquidityV3PoolStatsViewModel = () => {
         amount: feeBpsPercentage,
         tooltip: t('liquidity|feeRateTooltip'),
         currency: PERCENT
+      },
+      {
+        title: t('liquidity|APR'),
+        amount: apr,
+        tooltip: t('liquidity|aprTooltip'),
+        currency: PERCENT
+      },
+      {
+        title: t('liquidity|volume'),
+        amount: volume,
+        tooltip: t('liquidity|weeklyVolumeTooltip'),
+        currency: DOLLAR
       }
     ],
-    [t, poolTvl, tokenYToXCurrentPrice, feeBpsPercentage, isExchangeRatesError]
+    [t, poolTvl, isExchangeRatesError, tokenYToXCurrentPrice, feeBpsPercentage, apr, volume]
   );
 
   return { stats, slidesToShow: Math.min(stats.length, MAX_SLIDES_TO_SHOW) };
