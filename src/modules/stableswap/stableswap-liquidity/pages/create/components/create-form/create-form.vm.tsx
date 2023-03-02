@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { getUserTokenBalance } from '@blockchain';
 import { ZERO_AMOUNT_BN } from '@config/constants';
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
+import { QUIPU_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { CreationParams } from '@modules/stableswap/api';
 import { useRootStore } from '@providers/root-store-provider';
 import {
@@ -137,7 +137,7 @@ export const useCreateFormViewModel = () => {
   const handleSelectTokensClick = useCallback(async () => {
     const chosenTokens = await chooseTokens({
       tokens,
-      disabledTokens: [TEZOS_TOKEN],
+      disabledTokens: [WTEZ_TOKEN],
       min: MIN_QUANTITY_OF_TOKENS_IN_STABLEPOOL,
       max: MAX_QUANTITY_OF_TOKENS_IN_STABLEPOOL
     });
