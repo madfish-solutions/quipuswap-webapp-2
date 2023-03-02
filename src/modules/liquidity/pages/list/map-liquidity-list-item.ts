@@ -49,7 +49,7 @@ export const mapLiquidityListItem = ({
   if (!isNull(volumeForWeek)) {
     itemStats.push({
       cellName: i18n.t('liquidity|volume'),
-      tooltip: 'Volume tooltip',
+      tooltip: i18n.t('liquidity|weeklyVolumeTooltip'),
       amounts: {
         amount: volumeForWeek,
         currency: DOLLAR,
@@ -62,7 +62,7 @@ export const mapLiquidityListItem = ({
   if (!isNull(apr) && apr !== ZERO_AMOUNT) {
     itemStats.push({
       cellName: i18n.t('liquidity|APR'),
-      tooltip: 'APR tooltip',
+      tooltip: i18n.t('liquidity|aprTooltip'),
       amounts: {
         amount: apr,
         currency: PERCENT
@@ -70,7 +70,7 @@ export const mapLiquidityListItem = ({
     });
   }
 
-  if (!isNull(maxApr) && maxApr !== ZERO_AMOUNT) {
+  if (!isNull(maxApr) && maxApr !== ZERO_AMOUNT && type !== PoolType.UNISWAP) {
     itemStats.push({
       cellName: i18n.t('liquidity|maxApr'),
       tooltip: i18n.t('liquidity|maxAprTooltip'),
