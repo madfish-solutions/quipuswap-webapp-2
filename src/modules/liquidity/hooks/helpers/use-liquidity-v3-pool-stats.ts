@@ -16,7 +16,7 @@ import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 export const useLiquidityV3PoolStats = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractBalance, feeBps } = store;
+  const { contractBalance, feeBps, apiItem } = store;
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentYToXPrice();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
@@ -43,6 +43,9 @@ export const useLiquidityV3PoolStats = () => {
   const tokensSymbols = getSymbolsStringByActiveToken([tokenY, tokenX], store.activeTokenIndex);
   const tokenYToXTokensSymbols = getSymbolsString([tokenY, tokenX]);
 
+  const apr = apiItem.item?.apr ? new BigNumber(apiItem.item?.apr) : null;
+  const volume = apiItem.item?.volumeForWeek ? new BigNumber(apiItem.item?.volumeForWeek) : null;
+
   return {
     isExchangeRatesError,
     poolTvl,
@@ -52,6 +55,8 @@ export const useLiquidityV3PoolStats = () => {
     feeBpsPercentage,
     tokensSymbols,
     tokenYToXCurrentPrice: currentPrice,
-    tokenYToXTokensSymbols
+    tokenYToXTokensSymbols,
+    apr,
+    volume
   };
 };
