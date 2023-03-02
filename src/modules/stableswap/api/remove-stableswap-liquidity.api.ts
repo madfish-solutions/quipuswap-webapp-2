@@ -1,10 +1,13 @@
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { sendBatch } from '@blockchain';
+import { withWtezBurnOnOutput } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
+import { TEZOS_TOKEN } from '@config/tokens';
 import { AmountToken, Nullable } from '@shared/types';
+
+import { getTotalTokenAmount } from '../helpers';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();
@@ -23,15 +26,16 @@ export const removeStableswapLiquidityBalancedApi = async (
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
+  const mutezToBurn = getTotalTokenAmount(tokensAndAmounts, TEZOS_TOKEN);
   const receiverFixed = accountPkh === receiver ? null : receiver;
   const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
   const michelsonAmounts = createMichelsonMap(tokensAndAmounts);
 
-  const removeSwableswapLiquidityParams = stableswapPoolContract.methods
+  const removeStableswapLiquidityParams = stableswapPoolContract.methods
     .divest(DEFAULT_STABLESWAP_POOL_ID, michelsonAmounts, shares, deadline, receiverFixed)
     .toTransferParams();
 
-  return await sendBatch(tezos, [removeSwableswapLiquidityParams]);
+  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, [removeStableswapLiquidityParams]);
 };
 
 export const removeStableswapLiquidityImbalancedApi = async (
@@ -43,11 +47,12 @@ export const removeStableswapLiquidityImbalancedApi = async (
   accountPkh: string,
   receiver: Nullable<string> = null
 ) => {
+  const mutezToBurn = getTotalTokenAmount(tokensAndAmounts, TEZOS_TOKEN);
   const receiverFixed = accountPkh === receiver ? null : receiver;
   const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
   const michelsonAmounts = createMichelsonMap(tokensAndAmounts);
 
-  const removeSwableswapLiquidityParams = stableswapPoolContract.methods
+  const removeStableswapLiquidityParams = stableswapPoolContract.methods
     .divest_imbalanced(
       DEFAULT_STABLESWAP_POOL_ID,
       michelsonAmounts,
@@ -58,5 +63,5 @@ export const removeStableswapLiquidityImbalancedApi = async (
     )
     .toTransferParams();
 
-  return await sendBatch(tezos, [removeSwableswapLiquidityParams]);
+  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, [removeStableswapLiquidityParams]);
 };

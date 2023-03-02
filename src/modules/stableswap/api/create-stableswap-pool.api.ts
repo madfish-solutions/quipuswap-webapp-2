@@ -4,9 +4,11 @@ import { BigNumber } from 'bignumber.js';
 import { withApproveApiForManyTokens, getWithWtezMintOnInputParams } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
 import { QUIPU_TOKEN, WTEZ_TOKEN } from '@config/tokens';
-import { getSumOfNumbers, isTezosToken, isTokenEqual, toAtomic } from '@shared/helpers';
+import { isTezosToken, toAtomic } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { AmountToken, Nullable, Token, TokensValue } from '@shared/types';
+
+import { getTotalTokenAmount } from '../helpers';
 
 interface TokenInfo {
   rate_f: BigNumber;
@@ -94,9 +96,7 @@ export const createStableswapPoolApi = async (
     fees,
     creationPrice
   );
-  const mutezToMint = getSumOfNumbers(
-    amountTokenList.filter(({ token }) => isTokenEqual(token, WTEZ_TOKEN)).map(({ amount }) => amount)
-  );
+  const mutezToMint = getTotalTokenAmount(amountTokenList, WTEZ_TOKEN);
   const stableswapPoolContract = await tezos.wallet.at(stableswapFactoryContractAddress);
 
   const addPoolTransferParams = stableswapPoolContract.methods
