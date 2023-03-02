@@ -59,7 +59,7 @@ export const mapLiquidityListItem = ({
     });
   }
 
-  if (!isNull(apr)) {
+  if (!isNull(apr) && apr !== ZERO_AMOUNT) {
     itemStats.push({
       cellName: i18n.t('liquidity|APR'),
       tooltip: 'APR tooltip',
