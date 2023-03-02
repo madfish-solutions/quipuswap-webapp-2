@@ -28,7 +28,7 @@ export const useStableDividendsStake = () => {
       if (isNull(tezos) || isNull(item) || isNull(accountPkh)) {
         return;
       }
-      const { contractAddress, id, maxApr: apr, stakedToken, stakedTokenExchangeRate, tvl } = item;
+      const { contractAddress, id, aprOneWeek: apr, stakedToken, stakedTokenExchangeRate, tvl } = item;
       const logData = {
         stableswapDividendsStake: {
           poolId: id.toNumber(),
