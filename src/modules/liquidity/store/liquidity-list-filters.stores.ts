@@ -4,18 +4,8 @@ import { action, makeObservable, observable } from 'mobx';
 import { BaseFilterStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
 
-import {
-  filterByBridget,
-  filterByBTC,
-  filterByDexTwo,
-  filterByDust,
-  filterByQuipu,
-  filterByStableSwap,
-  filterByTezotopia,
-  filterByTokens,
-  filterByV3,
-  sortLiquidityItems
-} from '../helpers';
+import { filterByDust, filterByPoolType, filterByTokens, sortLiquidityItems } from '../helpers';
+import { PoolTypeOptionEnum } from '../interfaces';
 import { LiquidityItemModel } from '../models';
 import { LiquiditySortField } from '../pages/list/types';
 
@@ -28,13 +18,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
   showDust = true;
   investedOnly = false;
 
-  showStable = false;
-  showBridged = false;
-  showQuipu = false;
-  showTezotopia = false;
-  showBTC = false;
-  showDexTwo = false;
-  showV3 = false;
+  poolTypeOption = PoolTypeOptionEnum.ALL;
 
   sortField: LiquiditySortField = LiquiditySortField.TVL;
 
@@ -47,26 +31,14 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
       showDust: observable,
       investedOnly: observable,
 
-      showStable: observable,
-      showBridged: observable,
-      showQuipu: observable,
-      showTezotopia: observable,
-      showBTC: observable,
-      showDexTwo: observable,
-      showV3: observable,
+      poolTypeOption: observable,
 
       sortField: observable,
 
       setTokens: action,
       setShowDust: action,
       setInvestedOnly: action,
-      setShowStable: action,
-      setShowBridged: action,
-      setShowQuipu: action,
-      setShowTezotopia: action,
-      setShowBTC: action,
-      setShowDexTwo: action,
-      setShowV3: action,
+      setPoolTypeOption: action,
       onSortFieldChange: action
     });
   }
@@ -75,13 +47,7 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
     return list
       .filter(filterByTokens(this.tokens))
       .filter(filterByDust(this.showDust, DUST_THRESHOLD_BN))
-      .filter(filterByStableSwap(this.showStable))
-      .filter(filterByBridget(this.showBridged))
-      .filter(filterByQuipu(this.showQuipu))
-      .filter(filterByTezotopia(this.showTezotopia))
-      .filter(filterByBTC(this.showBTC))
-      .filter(filterByDexTwo(this.showDexTwo))
-      .filter(filterByV3(this.showV3))
+      .filter(filterByPoolType(this.poolTypeOption))
       .sort(sortLiquidityItems(this.sortField, this.sortDirection));
   }
 
@@ -96,29 +62,11 @@ export class LiquidityListFiltersStore extends BaseFilterStore {
     this.investedOnly = state;
   }
 
-  setShowStable(state: boolean) {
-    this.showStable = state;
-  }
-  setShowBridged(state: boolean) {
-    this.showBridged = state;
-  }
-  setShowQuipu(state: boolean) {
-    this.showQuipu = state;
-  }
-  setShowTezotopia(state: boolean) {
-    this.showTezotopia = state;
-  }
-  setShowBTC(state: boolean) {
-    this.showBTC = state;
-  }
-  setShowDexTwo(state: boolean) {
-    this.showDexTwo = state;
-  }
-  setShowV3(state: boolean) {
-    this.showV3 = state;
-  }
-
   onSortFieldChange(field: LiquiditySortField) {
     this.sortField = field;
+  }
+
+  setPoolTypeOption(poolTypeOption: PoolTypeOptionEnum) {
+    this.poolTypeOption = poolTypeOption;
   }
 }

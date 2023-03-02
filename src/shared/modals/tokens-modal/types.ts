@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { ButtonProps } from '@shared/components';
 import { Nullable, Token } from '@shared/types';
 
 import { ManagedTokensModalCellProps, TokensModalCellProps } from './components';
@@ -25,6 +26,8 @@ export interface TokensModalViewProps {
 interface TokensModalInitialParamsAbstraction {
   tokens?: Nullable<Array<Token>>;
   disabledTokens?: Nullable<Array<Token>>;
+  cancelButtonProps?: Nullable<Omit<ButtonProps, 'onClick'> & { children?: ReactNode }>;
+  confirmButtonProps?: Nullable<Omit<ButtonProps, 'onClick' | 'disabled'> & { children?: ReactNode }>;
 }
 interface TokensQuantityValidation extends TokensModalInitialParamsAbstraction {
   min: number;

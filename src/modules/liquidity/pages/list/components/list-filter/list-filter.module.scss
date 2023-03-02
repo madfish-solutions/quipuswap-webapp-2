@@ -8,34 +8,66 @@
   flex-direction: column !important;
   gap: 24px !important;
   flex-wrap: wrap !important;
+  padding-top: 4px;
 
   * {
-    order: 4 !important;
+    order: 4;
+  }
+
+  .sorterView {
+    order: 1;
+    flex: 0 !important;
+  }
+  
+  .leftSide {
+    order: 2;
+    margin-top: 12px;
+  }
+  
+  .rightSide {
+    order: 3;
   }
 }
 
 .sorterView {
-  order: 1 !important;
-  align-self: flex-end !important;
-}
+  margin: -12px 0;
+  position: relative;
+  width: 100%;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -24px;
+    width: calc(100% + 48px);
+    height: 1px;
+    background-color: $text-01;
+  }
 
-.leftSide {
-  flex: 1 !important;
-  order: 2 !important;
-}
-
-.rightSide {
-  order: 3 !important;
+  :global(.sorterSelect__single-value) {
+    padding-left: 0 !important;
+  }
 }
 
 @include media('>Ltablet') {
   .filterCard {
     flex-direction: row !important;
     align-items: center !important;
+    padding: 16px 8px 0;
+
+    .leftSide {
+      margin-top: 0;
+      order: 5;
+    }
+  
+    .rightSide {
+      order: 4;
+    }
   }
 
-  .rightSide,
   .sorterView {
-    order: 4 !important;
+    margin: -8px 0;
+    &::after {
+      display: none;
+    }
   }
 }

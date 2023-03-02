@@ -5,9 +5,17 @@ import { useParams } from 'react-router-dom';
 import { useFarmingYouvesItemStore } from '@modules/farming/hooks';
 import { useGetYouvesFarmingItem } from '@modules/farming/hooks/loaders/use-get-youves-farming-item';
 import { useReady } from '@providers/use-dapp';
-import { getTokensNames, isEmptyArray, isNull, isUndefined, useRedirectionCallback } from '@shared/helpers';
+import {
+  getTokensNames,
+  isEmptyArray,
+  isNotFoundError,
+  isNull,
+  isUndefined,
+  useRedirectionCallback
+} from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
+import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { makeNotFoundPageUrl, mapFarmVersion } from '../../helpers';
@@ -21,6 +29,7 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
 
   const { id, version } = useParams();
+  const { showErrorToast } = useToasts();
   const redirectToNotFoundPage = useRedirectionCallback(makeNotFoundPageUrl);
 
   const { getFarmingItem } = useGetYouvesFarmingItem();
@@ -41,10 +50,12 @@ export const useYouvesItemPageViewModel = (): { title: string } => {
   }, [getFarmingItem, dAppReady, id, version, accountPkh]);
 
   useEffect(() => {
-    if (itemApiError) {
+    if (itemApiError && isNotFoundError(itemApiError)) {
       redirectToNotFoundPage();
+    } else if (itemApiError) {
+      showErrorToast(itemApiError);
     }
-  }, [itemApiError, redirectToNotFoundPage]);
+  }, [itemApiError, redirectToNotFoundPage, showErrorToast]);
 
   /*
     Liveable Rewards.
