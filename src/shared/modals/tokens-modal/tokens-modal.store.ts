@@ -19,6 +19,8 @@ export class TokensModalStore {
   isSingle: Nullable<boolean> = null;
   maxQuantity: Nullable<number> = null;
   minQuantity: Nullable<number> = null;
+  cancelButtonProps: TokensModalInitialParams['cancelButtonProps'] = null;
+  confirmButtonProps: TokensModalInitialParams['confirmButtonProps'] = null;
 
   inputIndex: Nullable<number> = null;
   chosenTokensSingleModal: Array<Token> = new Array(MAX_INPUT_COUNT).fill(null);
@@ -72,6 +74,8 @@ export class TokensModalStore {
       toggleChosenToken: action,
       setChosenTokens: action,
       setInitialTokens: action,
+      setCancelButtonProps: action,
+      setConfirmButtonProps: action,
 
       setInputIndex: action,
       setChooseToken: action,
@@ -111,6 +115,14 @@ export class TokensModalStore {
     this._disabledTokens = tokens;
   }
 
+  setCancelButtonProps(props: TokensModalInitialParams['cancelButtonProps']) {
+    this.cancelButtonProps = props;
+  }
+
+  setConfirmButtonProps(props: TokensModalInitialParams['confirmButtonProps']) {
+    this.confirmButtonProps = props;
+  }
+
   toggleChosenToken(token: ManagedToken) {
     if (this.isDisabledToken(token)) {
       return;
@@ -143,7 +155,7 @@ export class TokensModalStore {
   }
 
   async open(params: TokensModalInitialParams = {}): Promise<Nullable<Array<Token>>> {
-    const { tokens: initialTokens, disabledTokens } = params;
+    const { tokens: initialTokens, disabledTokens, cancelButtonProps, confirmButtonProps } = params;
 
     if (isTokensQuantityValidation(params)) {
       this.minQuantity = params.min;
@@ -155,6 +167,8 @@ export class TokensModalStore {
     this.setInitialTokens(initialTokens ?? null);
     this.setChosenTokens(initialTokens ?? null);
     this.setDisabledTokens(disabledTokens ?? null);
+    this.setCancelButtonProps(cancelButtonProps);
+    this.setConfirmButtonProps(confirmButtonProps);
     this.setOpenState(true);
 
     const tokens = await new Promise<Nullable<Array<Token>>>(resolve => {

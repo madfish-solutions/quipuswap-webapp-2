@@ -3,22 +3,27 @@ import { BigNumber } from 'bignumber.js';
 import { getTokenSlug, isExist } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
-import { Categories } from '../interfaces';
+import { PoolType, PoolTypeOptionEnum } from '../interfaces';
 import { LiquidityItemModel } from '../models';
 
-const filterByCategory =
-  (enable: boolean, category: Categories) =>
-  ({ item }: LiquidityItemModel) =>
-    enable ? item.poolLabels.includes(category) : true;
+const poolTypesByOptions = {
+  [PoolTypeOptionEnum.ALL]: [
+    PoolType.TEZ_TOKEN,
+    PoolType.TOKEN_TOKEN,
+    PoolType.DEX_TWO,
+    PoolType.UNISWAP,
+    PoolType.STABLESWAP
+  ],
+  [PoolTypeOptionEnum.V1]: [PoolType.TOKEN_TOKEN, PoolType.TEZ_TOKEN],
+  [PoolTypeOptionEnum.V2]: [PoolType.DEX_TWO],
+  [PoolTypeOptionEnum.V3]: [PoolType.UNISWAP],
+  [PoolTypeOptionEnum.STABLESWAP]: [PoolType.STABLESWAP]
+};
 
-export const filterByStableSwap = (showStable: boolean) => filterByCategory(showStable, Categories.Stable);
-export const filterByBridget = (showBridged: boolean) => filterByCategory(showBridged, Categories.Bridge);
-export const filterByQuipu = (showQuipu: boolean) => filterByCategory(showQuipu, Categories.QuipuSwap);
-export const filterByTezotopia = (showTezotopia: boolean) => filterByCategory(showTezotopia, Categories.Tezotopia);
-export const filterByBTC = (showBTC: boolean) => filterByCategory(showBTC, Categories.BTC);
-// TODO Tezotopia -> DexTwo
-export const filterByDexTwo = (showDexTwo: boolean) => filterByCategory(showDexTwo, Categories.Tezotopia);
-export const filterByV3 = (showDexTwo: boolean) => filterByCategory(showDexTwo, Categories.V3);
+export const filterByPoolType =
+  (poolTypeOption: PoolTypeOptionEnum) =>
+  ({ item }: LiquidityItemModel) =>
+    poolTypesByOptions[poolTypeOption].includes(item.type);
 
 export const filterByDust =
   (showDust: boolean, dustThreshold: BigNumber) =>

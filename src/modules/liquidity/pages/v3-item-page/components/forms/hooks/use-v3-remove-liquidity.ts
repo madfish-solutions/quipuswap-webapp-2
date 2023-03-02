@@ -16,7 +16,7 @@ import { useTranslation } from '@translation';
 
 import { V3RemoveLiquidityApi } from '../../../api';
 import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
-import { usePositionsWithStats } from '../../../hooks';
+import { usePositionsWithStats, useMutezRewards } from '../../../hooks';
 import { V3RemoveTokenInput } from '../interface';
 
 export const useV3RemoveLiquidity = () => {
@@ -32,6 +32,7 @@ export const useV3RemoveLiquidity = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const mutezToBurn = useMutezRewards();
   const item = poolStore.item;
 
   const position = findUserPosition(positionsWithStats, positionId);
@@ -70,7 +71,8 @@ export const useV3RemoveLiquidity = () => {
         tokenX,
         tokenY,
         toAtomic(new BigNumber(tokenXOutput), tokenX),
-        toAtomic(new BigNumber(tokenYOutput), tokenY)
+        toAtomic(new BigNumber(tokenYOutput), tokenY),
+        mutezToBurn
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE_SUCCESS', logData);

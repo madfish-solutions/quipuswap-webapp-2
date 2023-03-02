@@ -53,6 +53,7 @@ export const liquidity = {
   highEfficiencyPool: 'High capital efficiency for 2 assets',
   regularPool: '2 assets with the volatile exchange rates',
   stablePool: 'From 2 to 4 tokens with the equal value',
+  yupanaStablePool: 'Stableswap with Yupana investment',
   back: 'Back',
   noPool: 'Can’t find appropriate pool? Create own!',
   migrate: 'Migrate',
@@ -155,5 +156,6 @@ export const liquidity = {
   v3PoolAddLiquidityWarning:
     'The liquidity will be added to the pool with the wrapped tez. All baker rewards will be used to fund QuipuSwap development. Thank you for your contribution!',
   cannotCreatePoolError: "Sorry, the pool can't be created",
-  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool.'
+  v3PoolRewardsTooltip: 'Your rewards that can be claimed in the pool.',
+  allPoolTypes: 'All'
 } as const;

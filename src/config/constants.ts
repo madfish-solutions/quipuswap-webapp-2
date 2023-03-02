@@ -138,6 +138,9 @@ export const USD_DECIMALS = 2;
 
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_HOPS_COUNT = 3;
+export const PRICE_IMPACT_WARNING_THRESHOLD = 10;
+
+export const DATA_TEST_ID_PROP_NAME = 'data-test-id';
 
 export const NO_WITHDRAWAL_FEE_VALUE = 0;
 

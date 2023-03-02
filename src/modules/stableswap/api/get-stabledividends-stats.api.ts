@@ -1,12 +1,10 @@
 import { STABLEDIVIDENDS_STATS_API_URL } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 
 import { StableDividendsStatsResponse } from '../types';
 
 export const getStableDividendsStatsApi = async () => {
-  const response = await fetch(STABLEDIVIDENDS_STATS_API_URL);
-  const data = (await response.json()) as StableDividendsStatsResponse;
+  const data = await jsonFetch<StableDividendsStatsResponse>(STABLEDIVIDENDS_STATS_API_URL);
 
-  const { stats } = data;
-
-  return stats;
+  return data.stats;
 };

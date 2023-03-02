@@ -1,5 +1,7 @@
 import { SyntheticEvent, useCallback, useEffect, useMemo } from 'react';
 
+import cx from 'classnames';
+
 import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { Button } from '@shared/components';
 import { isEmptyArray, isEqual } from '@shared/helpers';
@@ -20,8 +22,21 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk, chosenTokens, extendTokens } =
-    tokensModalStore;
+  const {
+    minQuantity,
+    maxQuantity,
+    tokensQuantityStatus,
+    isTokensQuantityOk,
+    chosenTokens,
+    extendTokens,
+    cancelButtonProps,
+    confirmButtonProps
+  } = tokensModalStore;
+  const {
+    className: confirmButtonClassName,
+    children: confirmButtonChildren,
+    ...restConfirmButtonProps
+  } = confirmButtonProps ?? {};
 
   const tokensQuantityInfoParams = {
     minQuantity,
@@ -117,9 +132,17 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     tokensModalFooter: !isEqual(maxQuantity, SINGLE_TOKEN_VALUE) && (
       <div className={styles.footerContent}>
         <TokensQuantityInfo {...tokensQuantityInfoParams} />
-        <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
-          {i18n.t('common|select')}
-        </Button>
+        <div className={styles.buttonsContainer}>
+          {cancelButtonProps && <Button {...cancelButtonProps} onClick={closeTokensModal} />}
+          <Button
+            {...restConfirmButtonProps}
+            disabled={!isTokensQuantityOk}
+            className={cx(styles.button, confirmButtonClassName)}
+            onClick={setTokens}
+          >
+            {confirmButtonChildren ?? i18n.t('common|select')}
+          </Button>
+        </div>
       </div>
     ),
     headerProps: {

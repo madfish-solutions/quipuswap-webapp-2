@@ -18,7 +18,8 @@ export const V3RemoveLiquidityApi = async (
   tokenX: TokenAddress,
   tokenY: TokenAddress,
   tokenXOutput: BigNumber,
-  tokenYOutput: BigNumber
+  tokenYOutput: BigNumber,
+  rewardMutezToBurn: BigNumber
 ) => {
   const v3Contract = await tezos.wallet.at(contractAddress);
 
@@ -37,10 +38,20 @@ export const V3RemoveLiquidityApi = async (
   ];
 
   if (isTezosToken(tokenX)) {
-    operationsParams = await getWithWtezBurnOnOutputParams(tezos, tokenXOutput, receiverAddress, operationsParams);
+    operationsParams = await getWithWtezBurnOnOutputParams(
+      tezos,
+      tokenXOutput.plus(rewardMutezToBurn),
+      receiverAddress,
+      operationsParams
+    );
   }
   if (isTezosToken(tokenY)) {
-    operationsParams = await getWithWtezBurnOnOutputParams(tezos, tokenYOutput, receiverAddress, operationsParams);
+    operationsParams = await getWithWtezBurnOnOutputParams(
+      tezos,
+      tokenYOutput.plus(rewardMutezToBurn),
+      receiverAddress,
+      operationsParams
+    );
   }
 
   return await sendBatch(tezos, operationsParams);
