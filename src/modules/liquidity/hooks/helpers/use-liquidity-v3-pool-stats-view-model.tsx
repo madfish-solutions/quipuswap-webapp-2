@@ -30,12 +30,6 @@ export const useLiquidityV3PoolStatsViewModel = () => {
         children: <PriceView price={tokenYToXCurrentPrice} textClassName={StatsStyles.currencyAmount} />
       },
       {
-        title: t('liquidity|feeRate'),
-        amount: feeBpsPercentage,
-        tooltip: t('liquidity|feeRateTooltip'),
-        currency: PERCENT
-      },
-      {
         title: t('liquidity|APR'),
         amount: apr,
         tooltip: t('liquidity|aprTooltip'),
@@ -46,6 +40,12 @@ export const useLiquidityV3PoolStatsViewModel = () => {
         amount: volume,
         tooltip: t('liquidity|weeklyVolumeTooltip'),
         currency: DOLLAR
+      },
+      {
+        title: t('liquidity|feeRate'),
+        amount: feeBpsPercentage,
+        tooltip: t('liquidity|feeRateTooltip'),
+        currency: PERCENT
       }
     ],
     [t, poolTvl, isExchangeRatesError, tokenYToXCurrentPrice, feeBpsPercentage, apr, volume]
