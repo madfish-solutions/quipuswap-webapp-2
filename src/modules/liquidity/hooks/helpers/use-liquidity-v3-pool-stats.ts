@@ -5,7 +5,8 @@ import { calculateV3ItemTvl, convertPrice, getSymbolsStringByActiveToken } from 
 import { findUserPosition } from '@modules/liquidity/pages/v3-item-page/helpers';
 import {
   useLiquidityV3ItemTokensExchangeRates,
-  usePositionsWithStats
+  usePositionsWithStats,
+  useV3AprAndVolume
 } from '@modules/liquidity/pages/v3-item-page/hooks';
 import { getSymbolsString, isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
@@ -16,12 +17,13 @@ import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
 
 export const useLiquidityV3PoolStats = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractBalance, feeBps, apiItem } = store;
+  const { contractBalance, feeBps } = store;
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentYToXPrice();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
+  const { apr, volume } = useV3AprAndVolume();
   const position = findUserPosition(positionsWithStats, positionId);
   const minPrice = position?.stats.minRange;
   const maxPrice = position?.stats.maxRange;
@@ -42,9 +44,6 @@ export const useLiquidityV3PoolStats = () => {
 
   const tokensSymbols = getSymbolsStringByActiveToken([tokenY, tokenX], store.activeTokenIndex);
   const tokenYToXTokensSymbols = getSymbolsString([tokenY, tokenX]);
-
-  const apr = apiItem.item?.apr ? new BigNumber(apiItem.item?.apr) : null;
-  const volume = apiItem.item?.volumeForWeek ? new BigNumber(apiItem.item?.volumeForWeek) : null;
 
   return {
     isExchangeRatesError,
