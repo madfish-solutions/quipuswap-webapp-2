@@ -8,7 +8,13 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull, getPercentageFromNumber, toAtomic } from '@shared/helpers';
+import {
+  getTransactionDeadline,
+  isNull,
+  getPercentageFromNumber,
+  toAtomic,
+  decreaseByPercentage
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -70,8 +76,12 @@ export const useV3RemoveLiquidity = () => {
         deadline,
         tokenX,
         tokenY,
-        toAtomic(new BigNumber(tokenXOutput), tokenX),
-        toAtomic(new BigNumber(tokenYOutput), tokenY),
+        toAtomic(decreaseByPercentage(new BigNumber(tokenXOutput), liquiditySlippage), tokenX).integerValue(
+          BigNumber.ROUND_DOWN
+        ),
+        toAtomic(decreaseByPercentage(new BigNumber(tokenYOutput), liquiditySlippage), tokenY).integerValue(
+          BigNumber.ROUND_DOWN
+        ),
         mutezToBurn
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
