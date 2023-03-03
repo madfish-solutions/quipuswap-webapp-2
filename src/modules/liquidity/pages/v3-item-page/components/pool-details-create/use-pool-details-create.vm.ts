@@ -8,7 +8,7 @@ import {
   useLiquidityV3PoolStats,
   useLiquidityV3ItemTokensSymbols
 } from '../../../../hooks';
-import { useV3PoolCategories } from '../../hooks';
+import { useV3AprAndVolume, useV3PoolCategories } from '../../hooks';
 
 export const usePoolDetailsCreateViewModel = () => {
   const { contractAddress, contractBalance } = useLiquidityV3PoolStore();
@@ -22,6 +22,8 @@ export const usePoolDetailsCreateViewModel = () => {
 
   const categories = useV3PoolCategories();
 
+  const { apr, volume } = useV3AprAndVolume();
+
   return {
     poolContractUrl: `${TZKT_EXPLORER_URL}${SLASH}${contractAddress}`,
     tvl: poolTvl,
@@ -31,6 +33,8 @@ export const usePoolDetailsCreateViewModel = () => {
     tokenXAmount,
     tokenYSymbol,
     tokenYAmount,
-    categories
+    categories,
+    apr,
+    volume
   };
 };

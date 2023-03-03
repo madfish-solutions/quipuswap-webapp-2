@@ -20,7 +20,7 @@ export const useDetailsVievModel = () => {
   const cardCellClassName = cx(commonContainerStyles.cellCenter, commonContainerStyles.cell, styles.vertical);
 
   if (isExist(item)) {
-    const { tvl, maxApr: apr, farmContractUrl, stakedToken, stakedTokenExchangeRate, isWhitelisted } = item;
+    const { tvl, aprOneWeek: apr, farmContractUrl, stakedToken, stakedTokenExchangeRate, isWhitelisted } = item;
 
     const whitelistedTag = isWhitelisted
       ? {

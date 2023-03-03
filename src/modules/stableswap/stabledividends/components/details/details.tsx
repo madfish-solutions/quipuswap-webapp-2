@@ -45,7 +45,12 @@ export const Details: FC = observer(() => {
         dollarEquivalent={dollarEquivalent}
       />
 
-      <DetailsCardCell cellName={t('stableswap|APR')} className={cardCellClassName} data-test-id="apr">
+      <DetailsCardCell
+        cellName={t('stableswap|aprSevenDays')}
+        className={cardCellClassName}
+        data-test-id="apr"
+        tooltipContent={t('stableswap|aprSevenDaysTooltip')}
+      >
         <StatePercentage isLoading={isLoading} value={apr} />
       </DetailsCardCell>
 

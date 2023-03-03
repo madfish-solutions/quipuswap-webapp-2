@@ -5,7 +5,8 @@ import { calculateV3ItemTvl, convertPrice, getSymbolsStringByActiveToken } from 
 import { findUserPosition } from '@modules/liquidity/pages/v3-item-page/helpers';
 import {
   useLiquidityV3ItemTokensExchangeRates,
-  usePositionsWithStats
+  usePositionsWithStats,
+  useV3AprAndVolume
 } from '@modules/liquidity/pages/v3-item-page/hooks';
 import { getSymbolsString, isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
@@ -22,6 +23,7 @@ export const useLiquidityV3PoolStats = () => {
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
+  const { apr, volume } = useV3AprAndVolume();
   const position = findUserPosition(positionsWithStats, positionId);
   const minPrice = position?.stats.minRange;
   const maxPrice = position?.stats.maxRange;
@@ -52,6 +54,8 @@ export const useLiquidityV3PoolStats = () => {
     feeBpsPercentage,
     tokensSymbols,
     tokenYToXCurrentPrice: currentPrice,
-    tokenYToXTokensSymbols
+    tokenYToXTokensSymbols,
+    apr,
+    volume
   };
 };

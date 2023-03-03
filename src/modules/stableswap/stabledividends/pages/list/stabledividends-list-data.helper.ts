@@ -37,17 +37,10 @@ export const stableDividendsListDataHelper = (
       }
     },
     {
-      cellName: i18n.t('stableswap|apr'),
+      cellName: i18n.t('stableswap|aprSevenDays'),
+      tooltip: i18n.t('stableswap|aprSevenDaysTooltip'),
       amounts: {
-        amount: item.maxApr,
-        currency: PERCENT,
-        amountDecimals: 2
-      }
-    },
-    {
-      cellName: i18n.t('stableswap|apy'),
-      amounts: {
-        amount: item.maxApy,
+        amount: item.aprOneWeek,
         currency: PERCENT,
         amountDecimals: 2
       }
