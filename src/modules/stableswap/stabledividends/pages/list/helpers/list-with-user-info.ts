@@ -6,8 +6,8 @@ export const listWithUserInfo = (listStore: Array<StableswapDividendsItemModel>,
     return {
       ...item,
       ...stakerInfo[index],
-      maxApr: item.maxApr,
-      maxApy: item.maxApy,
+      apr: item.aprOneWeek,
+      apy: item.apyOneWeek,
       tvl: item.tvl,
       stableDividendsItemUrl: item.stableDividendsItemUrl
     };
