@@ -1,12 +1,14 @@
 import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { withApproveApiForManyTokens } from '@blockchain';
+import { withApproveApiForManyTokens, getWithWtezMintOnInputParams } from '@blockchain';
 import { STABLESWAP_REFERRAL } from '@config/config';
-import { QUIPU_TOKEN } from '@config/tokens';
-import { isGreaterThanZero, toAtomic } from '@shared/helpers';
+import { QUIPU_TOKEN, WTEZ_TOKEN } from '@config/tokens';
+import { isTezosToken, toAtomic } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { AmountToken, Nullable, Token, TokensValue } from '@shared/types';
+
+import { getTotalTokenAmount } from '../helpers';
 
 interface TokenInfo {
   rate_f: BigNumber;
@@ -62,12 +64,13 @@ const prepareNewPoolData = (creationParams: Array<CreationParams>, fees: Fees, c
       token: QUIPU_TOKEN,
       amount: creationPrice ? toAtomic(creationPrice, QUIPU_TOKEN) : new BigNumber('1')
     }
-  ].filter(({ amount }) => isGreaterThanZero(amount));
+  ];
   const tokensInfo = new MichelsonMap<BigNumber, TokenInfo>();
 
   creationParams.forEach(({ token, reserves, rateF, precisionMultiplierF }, index) => {
-    inputTokens.push(mapTokensValue(token));
-    amountTokenList.push(mapToAmountToken({ token, reserves }));
+    const wrappedToken = isTezosToken(token) ? WTEZ_TOKEN : token;
+    inputTokens.push(mapTokensValue(wrappedToken));
+    amountTokenList.push(mapToAmountToken({ token: wrappedToken, reserves }));
     tokensInfo.set(new BigNumber(index), mapTokensInfo({ reserves, rateF, precisionMultiplierF }));
   });
 
@@ -93,6 +96,7 @@ export const createStableswapPoolApi = async (
     fees,
     creationPrice
   );
+  const mutezToMint = getTotalTokenAmount(amountTokenList, WTEZ_TOKEN);
   const stableswapPoolContract = await tezos.wallet.at(stableswapFactoryContractAddress);
 
   const addPoolTransferParams = stableswapPoolContract.methods
@@ -116,8 +120,11 @@ export const createStableswapPoolApi = async (
     .start_dex(inputs)
     .toTransferParams({ storageLimit: 60000 });
 
-  return await withApproveApiForManyTokens(tezos, stableswapFactoryContractAddress, amountTokenList, accountPkh, [
-    addPoolTransferParams,
-    startDexTransferParams
-  ]);
+  return await withApproveApiForManyTokens(
+    tezos,
+    stableswapFactoryContractAddress,
+    amountTokenList,
+    accountPkh,
+    await getWithWtezMintOnInputParams(tezos, mutezToMint, accountPkh, [addPoolTransferParams, startDexTransferParams])
+  );
 };
