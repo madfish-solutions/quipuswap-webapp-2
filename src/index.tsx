@@ -15,7 +15,7 @@ import { sentryService } from '@shared/services';
 import { App } from './app';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-require('dotenv').config();
+require('dotenv').config(); //
 
 const container = document.getElementById('root');
 
