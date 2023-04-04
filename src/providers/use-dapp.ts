@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SigningType } from '@airgap/beacon-sdk';
 import { RpcClientInterface } from '@taquito/rpc';
 import { TezosToolkit } from '@taquito/taquito';
-import { char2Bytes, verifySignature } from '@taquito/utils';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
@@ -21,6 +20,7 @@ import {
   getPreferredRpcUrl,
   getTempleWalletState,
   michelEncoder,
+  prepareInputForSign,
   ReadOnlySigner
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNetwork } from '@shared/types';
@@ -367,44 +367,43 @@ function useDApp() {
     lastBlockFetchSuccessTimestampRef.current = Date.now();
   }, []);
 
+  const getPublicKey = useCallback(async () => {
+    if (!tezos) {
+      throw new Error('Tezos is undefined');
+    }
+
+    if (connectionType === LastUsedConnectionKey.TEMPLE && templeWallet) {
+      return templeWallet.permission!.publicKey;
+    } else if (connectionType === LastUsedConnectionKey.BEACON && beaconWallet) {
+      return (await beaconWallet.client.getActiveAccount())!.publicKey;
+    }
+
+    throw new Error('No public key found');
+  }, [connectionType, templeWallet, tezos]);
+
   const signMessage = useCallback(
-    async (message: string) => {
+    async <Obj extends object>(data: Obj) => {
       if (!tezos) {
-        return null;
+        throw new Error('Tezos is undefined');
       }
-      // The data to format
-      const dappUrl = 'tezos-test-d.app';
-      const ISO8601formatedTimestamp = new Date().toISOString();
-      const input = message;
 
-      // The full string
-      const formattedInput: string = ['Tezos Signed Message:', dappUrl, ISO8601formatedTimestamp, input].join(' ');
-
-      const bytes = char2Bytes(formattedInput);
-      const payloadBytes = '05' + '0100' + char2Bytes(bytes.length.toString()) + bytes;
-
-      let signature = '';
-      let publicKey = '';
+      const payloadBytes = prepareInputForSign(data);
 
       if (connectionType === LastUsedConnectionKey.TEMPLE && templeWallet) {
-        signature = await templeWallet.sign(payloadBytes);
-        publicKey = templeWallet.permission!.publicKey;
+        const signature = await templeWallet.sign(payloadBytes);
 
-        console.debug('signature', signature);
+        return { payloadBytes, signature };
       } else if (connectionType === LastUsedConnectionKey.BEACON && beaconWallet) {
         const result = await beaconWallet.client.requestSignPayload({
           signingType: SigningType.MICHELINE,
           payload: payloadBytes
         });
-        signature = result.signature;
-        publicKey = (await beaconWallet.client.getActiveAccount())!.publicKey;
+        const { signature } = result;
 
-        console.debug('signature', signature);
+        return { payloadBytes, signature };
       }
 
-      const isVerified = verifySignature(payloadBytes, publicKey, signature);
-
-      console.debug('isVerified', isVerified);
+      throw new Error('Cannot sign message');
     },
     [connectionType, templeWallet, tezos]
   );
@@ -428,7 +427,8 @@ function useDApp() {
     nextRpcUrl,
     reconnect,
     rejectReconnection,
-    signMessage
+    signMessage,
+    getPublicKey
   };
 }
 
@@ -452,7 +452,8 @@ export const [
   useNextRpcUrl,
   useReconnect,
   useRejectReconnection,
-  useSignMessage
+  useSignMessage,
+  useGetPublicKey
 ] = constate(
   useDApp,
   v => v.connectionType,
@@ -473,5 +474,6 @@ export const [
   v => v.nextRpcUrl,
   v => v.reconnect,
   v => v.rejectReconnection,
-  v => v.signMessage
+  v => v.signMessage,
+  v => v.getPublicKey
 );

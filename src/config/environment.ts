@@ -43,5 +43,6 @@ export const THREE_ROUTE_CONTRACT_ADDRESS = process.env.REACT_APP_THREE_ROUTE_CO
 export const FARMING_API_URL = process.env.REACT_APP_FARMING_API_URL!;
 export const STABLESWAP_API_URL = process.env.REACT_APP_STABLESWAP_API_URL!;
 export const LIQUIDITY_API_URL = process.env.REACT_APP_LIQUIDITY_API_URL!;
+export const CLAIM_BOT_URL = process.env.REACT_APP_CLAIM_BOT_URL!;
 
 export const TZKT_API = process.env.REACT_APP_TZKT_API!;

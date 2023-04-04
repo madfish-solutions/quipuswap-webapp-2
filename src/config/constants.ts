@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';
 
-import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL } from './environment';
+import { FARMING_API_URL, NETWORK_ID, LIQUIDITY_API_URL, STABLESWAP_API_URL, CLAIM_BOT_URL } from './environment';
 
 //#region time
 export const MS_IN_SECOND = 1000;
@@ -120,6 +120,9 @@ export const LIQUIDITY_LIST_API_URL = `${LIQUIDITY_API_URL}/${LIST}`;
 export const LIQUIDITY_STATS_API_URL = `${LIQUIDITY_API_URL}/${STATS}`;
 export const LIQUIDITY_DEX_TWO_ITEM_API_URL = `${LIQUIDITY_API_URL}/${DEX_TWO_ITEM}`;
 export const LIQUIDITY_V3_ITEM_API_URL = `${LIQUIDITY_API_URL}/${UNISWAP_ITEM}`;
+
+export const CLAIM_BOT_AVAILABLE_REWARDS_URL = `${CLAIM_BOT_URL}/claim/available-rewards`;
+export const CLAIM_BOT_CLAIM_REWARDS_URL = `${CLAIM_BOT_URL}/claim/claim-rewards`;
 //#endregion
 
 //TODO: assort mix

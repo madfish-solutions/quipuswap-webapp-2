@@ -1,21 +1,31 @@
-import { TezosToolkit } from '@taquito/taquito';
-import BigNumber from 'bignumber.js';
+import { CLAIM_BOT_CLAIM_REWARDS_URL } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 
-import { sendBatch } from '@blockchain';
-import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { getContract } from '@shared/dapp';
+export interface Payload {
+  publicKey: string;
+  poolId: string;
+  timestamp: string;
+}
+export interface ClaimRequestBody {
+  payload: Payload;
+  payloadBytes: string;
+  signature: string;
+}
 
-export const claimLiquidityBakerRewards = async (
-  tezos: TezosToolkit,
-  contractAddress: string,
-  poolId: BigNumber,
-  accountPkh: string
-) => {
-  const contract = await getContract(tezos, contractAddress);
+export const claimLiquidityBakerRewards = async (body: ClaimRequestBody): Promise<{ opHash: string }> => {
+  const bodyStr = JSON.stringify(body);
 
-  const params = contract.methodsObject
-    .withdraw_profit({ pair_id: poolId, receiver: accountPkh, referral_code: QUIPUSWAP_REFERRAL_CODE })
-    .toTransferParams();
+  const requestParams = {
+    method: 'POST',
+    body: bodyStr,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
 
-  return await sendBatch(tezos, [params]);
+  const { txHash } = await jsonFetch<{ txHash: string }>(CLAIM_BOT_CLAIM_REWARDS_URL, requestParams);
+
+  return {
+    opHash: txHash
+  };
 };
