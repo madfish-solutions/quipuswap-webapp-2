@@ -14,13 +14,13 @@ const sortByApr = (
   first: StableswapDividendsItemModel,
   second: StableswapDividendsItemModel,
   sortDirection: SortDirection
-) => sortBigNumber(first.maxApr, second.maxApr, sortDirection);
+) => sortBigNumber(first.aprOneWeek, second.aprOneWeek, sortDirection);
 
 const sortByApy = (
   first: StableswapDividendsItemModel,
   second: StableswapDividendsItemModel,
   sortDirection: SortDirection
-) => sortBigNumber(first.maxApy, second.maxApy, sortDirection);
+) => sortBigNumber(first.apyOneWeek, second.apyOneWeek, sortDirection);
 
 const sortByTvl = (
   first: StableswapDividendsItemModel,

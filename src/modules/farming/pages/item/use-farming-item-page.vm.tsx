@@ -8,7 +8,8 @@ import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { DashPlug } from '@shared/components';
-import { getTokensNames, isNull, isUndefined, useRedirectionCallback } from '@shared/helpers';
+import { getTokensNames, isNotFoundError, isNull, isUndefined, useRedirectionCallback } from '@shared/helpers';
+import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
 import { FarmVersion } from '../../interfaces';
@@ -21,6 +22,7 @@ export const useFarmingItemPageViewModel = () => {
   const { getFarmingItem } = useGetFarmingItem();
   const accountPkh = useAccountPkh();
   const { id: rawStakeId } = useParams();
+  const { showErrorToast } = useToasts();
   const redirectToNotFoundPage = useRedirectionCallback(makeNotFoundPageUrl);
 
   /*
@@ -45,6 +47,13 @@ export const useFarmingItemPageViewModel = () => {
     return () => farmingItemStore.clearIntervals();
   }, [farmingItemStore]);
 
+  useEffect(() => {
+    return () => {
+      farmingItemStore.itemStore.resetData();
+      farmingItemStore.userInfoStore.resetData();
+    };
+  }, [farmingItemStore]);
+
   const { isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
   const farmingItem = farmingItemStore.item;
   const itemApiError = farmingItemStore.itemApiError;
@@ -52,11 +61,12 @@ export const useFarmingItemPageViewModel = () => {
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   useEffect(() => {
-    // TODO: https://madfish.atlassian.net/browse/QUIPU-701
-    if (itemApiError) {
+    if (itemApiError && isNotFoundError(itemApiError)) {
       redirectToNotFoundPage();
+    } else if (itemApiError) {
+      showErrorToast(itemApiError);
     }
-  }, [itemApiError, redirectToNotFoundPage]);
+  }, [itemApiError, redirectToNotFoundPage, showErrorToast]);
 
   const getTitle = () => {
     if (farmingItem) {

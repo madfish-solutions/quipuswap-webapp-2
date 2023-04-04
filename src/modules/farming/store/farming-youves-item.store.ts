@@ -10,7 +10,7 @@ import {
 } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
 import { Version } from '@modules/stableswap/types';
-import { getLastElement, isExist, isNull, MakeInterval, toReal } from '@shared/helpers';
+import { getLastElement, isExist, isNull, MakeInterval, toAtomic, toReal, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -51,7 +51,16 @@ export class FarmingYouvesItemStore {
   readonly itemStore: LoadingErrorData<YouvesFarmingItemResponseModel, typeof DEFAULT_ITEM>;
 
   get item() {
-    return this.itemStore.model.item;
+    const { item } = this.itemStore.model;
+    const currentStakeRealBalance = toRealIfPossible(this.currentStakeBalance, item?.stakedToken);
+
+    return (
+      item && {
+        ...item,
+        tvlInStakedToken: BigNumber.maximum(item.tvlInStakedToken, currentStakeRealBalance ?? ZERO_AMOUNT_BN),
+        staked: BigNumber.maximum(item.staked, this.currentStakeBalance ?? ZERO_AMOUNT_BN)
+      }
+    );
   }
 
   get investHref() {
@@ -143,7 +152,9 @@ export class FarmingYouvesItemStore {
       this.item,
       this.version,
       this.contractBalance,
-      this.currentStake
+      this.currentStake,
+      Date.now(),
+      toAtomic(this.item.dailyDistribution, this.item.rewardToken)
     );
 
     this.claimableRewards = toReal(claimableReward, this.item.rewardToken);

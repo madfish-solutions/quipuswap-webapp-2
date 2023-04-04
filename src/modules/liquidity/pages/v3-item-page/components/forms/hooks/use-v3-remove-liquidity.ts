@@ -8,7 +8,13 @@ import {
 } from '@modules/liquidity/hooks';
 import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh } from '@providers/use-dapp';
-import { getTransactionDeadline, isNull, getPercentageFromNumber } from '@shared/helpers';
+import {
+  getTransactionDeadline,
+  isNull,
+  getPercentageFromNumber,
+  toAtomic,
+  decreaseByPercentage
+} from '@shared/helpers';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
@@ -16,7 +22,7 @@ import { useTranslation } from '@translation';
 
 import { V3RemoveLiquidityApi } from '../../../api';
 import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
-import { usePositionsWithStats } from '../../../hooks';
+import { usePositionsWithStats, useMutezRewards } from '../../../hooks';
 import { V3RemoveTokenInput } from '../interface';
 
 export const useV3RemoveLiquidity = () => {
@@ -32,6 +38,7 @@ export const useV3RemoveLiquidity = () => {
   const { positionsWithStats } = usePositionsWithStats();
   const { positionId } = useLiquidityV3PositionStore();
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
+  const mutezToBurn = useMutezRewards();
   const item = poolStore.item;
 
   const position = findUserPosition(positionsWithStats, positionId);
@@ -45,14 +52,16 @@ export const useV3RemoveLiquidity = () => {
     const liquidity = getPercentageFromNumber(position.liquidity, percantage).integerValue(BigNumber.ROUND_DOWN);
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
+    const tokenXOutput = inputAmounts[V3RemoveTokenInput.tokenXOutput];
+    const tokenYOutput = inputAmounts[V3RemoveTokenInput.tokenYOutput];
     const logData = {
       removeLiquidity: makeV3LiquidityOperationLogData(
         position,
         liquiditySlippage,
         tokenX,
         tokenY,
-        inputAmounts[V3RemoveTokenInput.tokenXOutput],
-        inputAmounts[V3RemoveTokenInput.tokenYOutput]
+        tokenXOutput,
+        tokenYOutput
       )
     };
 
@@ -64,7 +73,16 @@ export const useV3RemoveLiquidity = () => {
         position.id,
         liquidity,
         accountPkh,
-        deadline
+        deadline,
+        tokenX,
+        tokenY,
+        toAtomic(decreaseByPercentage(new BigNumber(tokenXOutput), liquiditySlippage), tokenX).integerValue(
+          BigNumber.ROUND_DOWN
+        ),
+        toAtomic(decreaseByPercentage(new BigNumber(tokenYOutput), liquiditySlippage), tokenY).integerValue(
+          BigNumber.ROUND_DOWN
+        ),
+        mutezToBurn
       );
       await confirmOperation(operation.opHash, { message: t('liquidity|successfullyRemoved') });
       amplitudeService.logEvent('V3_LIQUIDITY_REMOVE_SUCCESS', logData);

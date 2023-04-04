@@ -1,15 +1,17 @@
 import { SyntheticEvent, useCallback, useEffect, useMemo } from 'react';
 
+import cx from 'classnames';
+
 import { SINGLE_TOKEN_VALUE } from '@config/constants';
 import { Button } from '@shared/components';
 import { isEmptyArray, isEqual } from '@shared/helpers';
 import { useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTokensManagerStore } from '@shared/hooks/use-tokens-manager-store';
-import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 import { i18n } from '@translation';
 
+import { chosenTokenFirstPredicate } from './chosen-token-first-predicate.helper';
 import { ManagedTokensModalCellProps, TokensModalCellProps, TokensQuantityInfo } from './components';
 import { useTokensModalTabsService } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
@@ -20,8 +22,21 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
   const tabsProps = useTokensModalTabsService();
 
   const tokensModalStore = useTokensModalStore();
-  const { minQuantity, maxQuantity, tokensQuantityStatus, isTokensQuantityOk, chosenTokens, extendTokens } =
-    tokensModalStore;
+  const {
+    minQuantity,
+    maxQuantity,
+    tokensQuantityStatus,
+    isTokensQuantityOk,
+    chosenTokens,
+    extendTokens,
+    cancelButtonProps,
+    confirmButtonProps
+  } = tokensModalStore;
+  const {
+    className: confirmButtonClassName,
+    children: confirmButtonChildren,
+    ...restConfirmButtonProps
+  } = confirmButtonProps ?? {};
 
   const tokensQuantityInfoParams = {
     minQuantity,
@@ -63,15 +78,17 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEmptyArray(filteredManagedTokens), tokensManagerStore]);
 
-  const tokensModalCellParams: TokensModalCellProps[] = useMemo(() => {
-    noopMap(chosenTokens);
-
-    return extendTokens.map(token => ({
-      token,
-      balance: null,
-      onTokenClick: () => handleTokenClick(token)
-    }));
-  }, [chosenTokens, extendTokens, handleTokenClick]);
+  const tokensModalCellParams: TokensModalCellProps[] = useMemo(
+    () =>
+      Array.from(extendTokens)
+        .sort(chosenTokenFirstPredicate(chosenTokens ?? []))
+        .map(token => ({
+          token,
+          balance: null,
+          onTokenClick: () => handleTokenClick(token)
+        })),
+    [chosenTokens, extendTokens, handleTokenClick]
+  );
 
   const managedTokensModalCellParams: ManagedTokensModalCellProps[] = useMemo(() => {
     return filteredManagedTokens.map(token => {
@@ -115,9 +132,17 @@ export const useTokensModalViewModel = (): TokensModalViewProps => {
     tokensModalFooter: !isEqual(maxQuantity, SINGLE_TOKEN_VALUE) && (
       <div className={styles.footerContent}>
         <TokensQuantityInfo {...tokensQuantityInfoParams} />
-        <Button disabled={!isTokensQuantityOk} className={styles.button} onClick={setTokens}>
-          {i18n.t('common|select')}
-        </Button>
+        <div className={styles.buttonsContainer}>
+          {cancelButtonProps && <Button {...cancelButtonProps} onClick={closeTokensModal} />}
+          <Button
+            {...restConfirmButtonProps}
+            disabled={!isTokensQuantityOk}
+            className={cx(styles.button, confirmButtonClassName)}
+            onClick={setTokens}
+          >
+            {confirmButtonChildren ?? i18n.t('common|select')}
+          </Button>
+        </div>
       </div>
     ),
     headerProps: {

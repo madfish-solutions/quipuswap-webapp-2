@@ -10,6 +10,7 @@ import {
   TokenInputProps,
   Tooltip
 } from '@shared/components';
+import { WarningAlert } from '@shared/components/warning-alert';
 import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import { Optional } from '@shared/types';
@@ -27,6 +28,7 @@ interface OpenNewPositionFormProps {
   loading: boolean;
   isFullRangePosition: boolean;
   onFullRangeSwitcherClick: (newState: boolean) => void;
+  warningMessages: string[];
 }
 
 export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
@@ -37,7 +39,8 @@ export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
   disabled,
   loading,
   isFullRangePosition,
-  onFullRangeSwitcherClick
+  onFullRangeSwitcherClick,
+  warningMessages
 }) => {
   const { t } = useTranslation();
 
@@ -63,6 +66,9 @@ export const OpenNewPositionForm: FC<OpenNewPositionFormProps> = ({
       <Iterator render={TokenInput} data={amountInputsProps} separator={<Plus className={styles.svg} />} />
 
       {isExist(bottomError) && <AlarmMessage message={bottomError} className={stylesCommonContainer.mt24} />}
+      {warningMessages.map(message => (
+        <WarningAlert message={message} key={message} className={stylesCommonContainer.mt24} />
+      ))}
 
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>

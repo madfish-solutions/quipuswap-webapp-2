@@ -3,11 +3,8 @@ import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';
 
 import { DEFAULT_TICK_SPACING, MAX_TICK_INDEX, ZERO_AMOUNT_BN } from '@config/constants';
-import { integerChordMethod, isExist } from '@shared/helpers';
+import { convertToAtomicPrice, convertToSqrtPrice, integerChordMethod, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
-
-import { convertToAtomicPrice } from './convert-to-atomic-price';
-import { convertToSqrtPrice } from './convert-to-sqrt-price';
 
 export interface Tick {
   index: BigNumber;
@@ -22,7 +19,7 @@ interface TokensDelta {
 export const calculateTickIndex = (atomicPrice: BigNumber, tickSpacing = DEFAULT_TICK_SPACING) => {
   return atomicPrice.isFinite()
     ? tickForSqrtPrice(new Nat(convertToSqrtPrice(atomicPrice)), new Nat(tickSpacing)).toBignumber()
-    : new BigNumber(MAX_TICK_INDEX);
+    : new BigNumber(MAX_TICK_INDEX).dividedToIntegerBy(tickSpacing).multipliedBy(tickSpacing);
 };
 
 export const calculateTickPrice = (index: BigNumber) => convertToAtomicPrice(sqrtPriceForTick(new Int(index)));

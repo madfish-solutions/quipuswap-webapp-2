@@ -6,7 +6,6 @@ import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStatsStore as IFarmingListStatsStore,
-  FarmingListRewardsStore as IFarmingListRewardsStore,
   FarmingListStore as IFarmingListStore,
   FarmingYouvesItemStore as IFarmingYouvesItemStore,
   HarvestAndRollStore as IHarvestAndRollStore
@@ -26,6 +25,7 @@ import {
   StableDividendsFilterStore as IStableDividendsFilterStore,
   StableDividendsItemStore as IStableDividendsItemStore
 } from '@modules/stableswap/store';
+import { SwapStore as ISwapStore } from '@modules/swap/store';
 import { TokensModalStore } from '@shared/modals/tokens-modal/tokens-modal.store';
 
 import { isExist, isNull } from '../helpers';
@@ -48,7 +48,6 @@ export class RootStore {
 
   farmingListStore: Nullable<IFarmingListStore> = null;
   farmingListStatsStore: Nullable<IFarmingListStatsStore> = null;
-  farmingListRewardsStore: Nullable<IFarmingListRewardsStore> = null;
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
@@ -70,6 +69,8 @@ export class RootStore {
 
   coinflipStore: Nullable<ICoinflipStore> = null;
 
+  swapStore: Nullable<ISwapStore> = null;
+
   tezos: Nullable<TezosToolkit> = null;
 
   constructor() {
@@ -85,7 +86,6 @@ export class RootStore {
       tezos: observable,
 
       farmingListStatsStore: observable,
-      farmingListRewardsStore: observable,
       farmingFilterStore: observable,
       farmingItemStore: observable,
 
@@ -102,9 +102,10 @@ export class RootStore {
 
       coinflipStore: observable,
 
+      swapStore: observable,
+
       setTezos: action,
       createFarmingListStatsStore: action,
-      createFarmingListRewardsStore: action,
       createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
@@ -122,12 +123,21 @@ export class RootStore {
       createLiquidityV3PoolStore: action,
       createLiquidityV3PositionStore: action,
       createLiquidityV3PositionsStore: action,
-      createLiquidityListFiltersStore: action
+      createLiquidityListFiltersStore: action,
+
+      createSwapStore: action
     });
   }
 
   setTezos(tezos: Nullable<TezosToolkit>) {
     this.tezos = tezos;
+  }
+
+  async createSwapStore() {
+    if (isNull(this.swapStore)) {
+      const { SwapStore } = await import('@modules/swap/store');
+      this.swapStore = new SwapStore();
+    }
   }
 
   async createLiquidityListStore() {
@@ -218,13 +228,6 @@ export class RootStore {
     if (isNull(this.farmingListStatsStore)) {
       const { FarmingListStatsStore } = await import('@modules/farming/store/farming-list-stats.store');
       this.farmingListStatsStore = new FarmingListStatsStore(this);
-    }
-  }
-
-  async createFarmingListRewardsStore() {
-    if (isNull(this.farmingListRewardsStore)) {
-      const { FarmingListRewardsStore } = await import('@modules/farming/store/farming-list-rewards.store');
-      this.farmingListRewardsStore = new FarmingListRewardsStore(this);
     }
   }
 

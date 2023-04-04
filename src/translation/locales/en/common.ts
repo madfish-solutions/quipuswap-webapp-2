@@ -166,7 +166,18 @@ export const common = {
     'Current RPC node {{currentRpcUrl}} is not responding. Click "Reconnect" to connect to {{nextRpcUrl}}.',
   Reconnect: 'Reconnect',
   tokensFilter: 'Filter by tokens',
+  filter: 'Filter',
   valueShouldBeNonNegative: 'The value should be non-negative.',
   valueShouldBePositive: 'The value should be greater than zero.',
-  maxAvailableValueError: 'Max available value is {{value}}'
+  maxAvailableValueError: 'Max available value is {{value}}',
+  'Back to the list': 'Back to the list',
+  cancel: 'Cancel',
+  applyFilter: 'Apply Filter',
+  serverTemporarilyUnavailable: 'The server is temporarily unavailable.',
+  youRejectedTheOperation: 'You rejected the operation.',
+  failedToEstablishConnectionToHost: 'Failed to establish connection to {{hostname}}',
+  failedToFindContractWithAddress: 'Failed to find contract {{contractAddress}}',
+  requestFailed: 'Request to {{url}} failed',
+  requestFailedWithStatus: 'Request to {{url}} failed with status {{status}}',
+  requestFailedWithStatusAndBody: 'Request to {{url}} failed with status {{status}}: "{{body}}"'
 } as const;

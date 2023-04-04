@@ -1,30 +1,26 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
-import cx from 'classnames';
 
 import { HIDE_ANALYTICS } from '@config/config';
 import { QUIPU_TOKEN, TEZOS_TOKEN } from '@config/tokens';
 import { eQuipuSwapVideo } from '@config/youtube';
 import {
   Card,
-  DashPlug,
   DetailsCardCell,
   RateView,
   StateCurrencyAmount,
   StatePriceImpact,
   Tabs,
-  ViewPairAnlytics,
   YouTube
 } from '@shared/components';
-import { isEmptyArray } from '@shared/helpers';
 import { useYoutubeTabs } from '@shared/hooks';
-import { DexPair, Nullable, Token, Undefined } from '@shared/types';
+import { Nullable, Token, Undefined } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { Route } from '../route';
-import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
+import { DexPool } from '../../types';
+import { ViewPairAnlytics } from '../view-pair-analytics';
 
 interface SwapDetailsProps {
   fee: Nullable<BigNumber>;
@@ -32,13 +28,11 @@ interface SwapDetailsProps {
   priceImpact: Nullable<BigNumber>;
   inputToken?: Token;
   outputToken?: Token;
-  route?: DexPair[];
-  buyRate: Nullable<BigNumber>;
+  route?: DexPool[];
   sellRate: Nullable<BigNumber>;
-  shouldHideRouteRow: boolean;
 }
 
-const FALLBACK_ROUTE: DexPair[] = [];
+const FALLBACK_ROUTE: DexPool[] = [];
 
 export const SwapDetails: FC<SwapDetailsProps> = ({
   fee,
@@ -47,23 +41,13 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   inputToken,
   outputToken,
   route,
-  buyRate,
-  sellRate,
-  shouldHideRouteRow
+  sellRate
 }) => {
   const { t } = useTranslation();
   const { isDetails, tabsContent, activeId, setTabId } = useYoutubeTabs({
     detailsLabel: t('swap|exchangeDetails'),
     page: t('common|Swap')
   });
-
-  const routes = useMemo(() => {
-    if (route) {
-      return inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : [];
-    }
-
-    return undefined;
-  }, [inputToken, route]);
 
   const fallbackInputToken = TEZOS_TOKEN;
   const fallbackOutputToken = QUIPU_TOKEN;
@@ -92,7 +76,8 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
             <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
           </DetailsCardCell>
 
-          <DetailsCardCell
+          {/* TODO: restore after optimal calculation of buy price is implemented */}
+          {/* <DetailsCardCell
             cellName={t('common|Buy Price')}
             tooltipContent={t(
               'common|The amount of token A you receive for 1 token B according to the current exchange rate.'
@@ -101,7 +86,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
             data-test-id="buyPrice"
           >
             <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
-          </DetailsCardCell>
+          </DetailsCardCell> */}
 
           <DetailsCardCell
             cellName={t('common|Price impact')}
@@ -121,18 +106,17 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
             <StateCurrencyAmount isError={Boolean(feeError)} amount={fee} currency="TEZ" />
           </DetailsCardCell>
 
-          {!shouldHideRouteRow && (
-            <DetailsCardCell
-              cellName={t('common|Route')}
-              tooltipContent={t(
-                "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades."
-              )}
-              className={cx(styles.cell, styles.routeLine)}
-              data-test-id="route"
-            >
-              {isEmptyArray(routes ?? null) ? <DashPlug animation={!routes} /> : <Route routes={routes!} />}
-            </DetailsCardCell>
-          )}
+          {/* TODO: restore after UI for multiple routes is defined */}
+          {/* <DetailsCardCell
+            cellName={t('common|Route')}
+            tooltipContent={t(
+              "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades."
+            )}
+            className={cx(styles.cell, styles.routeLine)}
+            data-test-id="route"
+          >
+            {isEmptyArray(route ?? null) ? <DashPlug animation={!route} /> : <Route route={route!} />}
+          </DetailsCardCell> */}
 
           {!HIDE_ANALYTICS && (
             <ViewPairAnlytics

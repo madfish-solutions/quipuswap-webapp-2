@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { ListItemCardCell } from '../list-item-card-cell';
 import { StateCurrencyAmount, StateCurrencyAmountProps } from '../state-components';
@@ -11,10 +11,12 @@ export interface StateListItemCardCellProps {
   amounts: StateCurrencyAmountProps;
   DTI?: string;
   tooltip?: string;
+  children?: ReactNode;
 }
 
 export const StateListItemCardCell: FC<StateListItemCardCellProps> = ({
   amounts,
+  children,
   cellName,
   cardCellClassName = styles.cardCell,
   cellNameClassName = styles.cardCellHeader,
@@ -28,6 +30,6 @@ export const StateListItemCardCell: FC<StateListItemCardCellProps> = ({
     cardCellClassName={cardCellClassName}
     data-test-id={DTI}
   >
-    <StateCurrencyAmount {...amounts} />
+    {children ?? <StateCurrencyAmount {...amounts} />}
   </ListItemCardCell>
 );

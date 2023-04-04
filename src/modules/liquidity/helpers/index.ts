@@ -11,6 +11,7 @@ export * from './sorter.helpers';
 export * from './filter.helpers';
 export * from './make-liquidity-operation-log-data';
 export * from './calculate-v3-item-tvl';
-export * from './get-current-price';
+export * from './convert-price';
 export * from './get-symbols-string-by-active-token';
 export * from './calculate-v3-pool-price-decimals';
+export * from './map-v3-token-address';

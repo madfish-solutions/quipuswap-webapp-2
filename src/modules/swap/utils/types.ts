@@ -1,7 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import { Trade } from 'swap-router-sdk';
 
-import { DexPair, Nullable, SwapTabAction, Token, Undefined } from '@shared/types';
+import { Nullable, SwapTabAction, Token, Undefined } from '@shared/types';
+
+import { DexPool, ThreeRouteSwapResponse } from '../types';
 
 export enum SwapField {
   INPUT_AMOUNT = 'inputAmount',
@@ -31,7 +33,8 @@ export interface SwapDetailsParams {
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
   slippageTolerance: Undefined<BigNumber>;
-  dexRoute: Undefined<DexPair[]>;
-  trade: Nullable<Trade>;
+  dexRoute: Undefined<DexPool[]>;
+  noMediatorsTrade: Nullable<Trade>;
+  threeRouteSwap: Nullable<ThreeRouteSwapResponse>;
   recipient: Undefined<string>;
 }

@@ -1,6 +1,6 @@
 @import "@styles/variables";
 
-@mixin creation-cost($border-color) {
+@mixin creation-cost($border-color, $text-color) {
   &.cost {
     display: grid;
     row-gap: 8px;
@@ -20,12 +20,18 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .freeLabel {
+    color: $text-color;
+    font-weight: 600;
+    line-height: 1.14;
+  }
 }
 
 .light {
-  @include creation-cost($ui-03);
+  @include creation-cost($ui-03, $text-01);
 }
 
 .dark {
-  @include creation-cost($text-01);
+  @include creation-cost($text-01, $ui-01);
 }

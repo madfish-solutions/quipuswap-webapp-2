@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DexTypeEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
 import { AppRootRoutes } from '@app.router';
@@ -13,6 +12,7 @@ import { useAccountPkh } from '@providers/use-dapp';
 import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import {
   amountsAreEqual,
+  canUseThreeRouteApi,
   getSymbolsString,
   getTokenPairSlug,
   getTokenSlug,
@@ -21,12 +21,14 @@ import {
   makeToken
 } from '@shared/helpers';
 import { getTokenIdFromSlug } from '@shared/helpers/tokens/get-token-id-from-slug';
-import { useDexGraph, useOnBlock } from '@shared/hooks';
+import { useOnBlock } from '@shared/hooks';
 import { useAmplitudeService } from '@shared/hooks/use-amplitude-service';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { SwapTabAction, Token, Undefined } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useGetThreeRouteTokens } from './hooks/loaders';
+import { useComplexErrorsProps } from './hooks/use-complex-errors-props';
 import { useInitialTokensSlugs } from './hooks/use-initial-tokens-slugs';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useRealSwapDetails } from './hooks/use-swap-details';
@@ -51,15 +53,19 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const amplitude = useAmplitudeService();
 
   const {
-    bestTrade,
+    atLeastOneRouteWithV3,
+    noMediatorsTrade,
+    threeRouteSwap,
     dexRoute,
     inputAmount,
+    isLoading,
     onInputAmountChange,
     onOutputAmountChange,
     onSwapPairChange,
     outputAmount,
     resetCalculations,
-    trade,
+    noMediatorsTradeWithSlippage,
+    poolsForTokensArePresent,
     updateCalculations
   } = useSwapCalculations();
 
@@ -73,7 +79,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik(initialAction, bestTrade, dexRoute, trade, exchangeRates);
+  } = useSwapFormik(initialAction, threeRouteSwap, noMediatorsTrade, noMediatorsTradeWithSlippage);
   const formik = values;
 
   const navigate = useNavigate();
@@ -84,6 +90,13 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const {
     settings: { tradingSlippage }
   } = useSettingsStore();
+  const { getThreeRouteTokens } = useGetThreeRouteTokens();
+
+  useEffect(() => {
+    if (canUseThreeRouteApi()) {
+      void getThreeRouteTokens();
+    }
+  }, [getThreeRouteTokens]);
 
   const getRedirectionUrl = useCallback(
     (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, formik.action),
@@ -126,14 +139,15 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     });
   }, [formik.outputAmount, validateField, setFieldTouched]);
 
-  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useRealSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, sellRate } = useRealSwapDetails({
     inputToken: formik.inputToken,
     outputToken: formik.outputToken,
     inputAmount: formik.inputAmount,
     outputAmount: formik.outputAmount,
     slippageTolerance: tradingSlippage,
     dexRoute,
-    trade,
+    noMediatorsTrade,
+    threeRouteSwap,
     recipient: formik.recipient
   });
 
@@ -152,9 +166,7 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === formik.action)!;
 
-  // TODO: remove useDexGraph and related functions globally
-  const { dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
-  const { routePairs, updateRoutePairs } = useRoutePairs();
+  const { routePairs, updateRoutePairs, dataIsStale, loading: dexPoolsLoading } = useRoutePairs();
   const prevRoutePairsRef = useRef<RoutePair[]>(routePairs);
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
@@ -180,7 +192,6 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
 
   const refreshDexPoolsIfNecessary = () => {
     if (dataIsStale && !dexPoolsLoading) {
-      refreshDexPools();
       updateRoutePairs();
     }
   };
@@ -401,21 +412,20 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
   const pairName =
     formik.inputToken && formik.outputToken ? getSymbolsString([formik.inputToken, formik.outputToken]) : '';
   const title = `${t('swap|Swap')} ${pairName}`;
-  const noRouteFound =
-    isEmptyArray(trade) && formik.inputToken && formik.outputToken && (formik.inputAmount || formik.outputAmount);
-  const shouldShowPriceImpactWarning = priceImpact?.gt(PRICE_IMPACT_WARNING_THRESHOLD);
-  const shouldHideRouteRow = trade?.some(({ dexType }) => dexType === DexTypeEnum.QuipuSwapCurveLike) ?? false;
-
-  const updateRates = () => {
-    refreshDexPools();
-    updateRoutePairs();
-  };
+  const complexErrorsProps = useComplexErrorsProps(
+    formik,
+    threeRouteSwap,
+    noMediatorsTradeWithSlippage,
+    isLoading,
+    priceImpact,
+    atLeastOneRouteWithV3,
+    poolsForTokensArePresent
+  );
 
   return {
     accountPkh,
     action: formik.action,
     blackListedTokens,
-    buyRate,
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,
@@ -433,8 +443,8 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     inputExchangeRate,
     inputToken: formik.inputToken,
     inputTokenBalance,
+    isLoading,
     isSubmitting,
-    noRouteFound,
     outputAmount: formik.outputAmount,
     outputExchangeRate,
     outputToken: formik.outputToken,
@@ -442,10 +452,9 @@ export const useSwapSendViewModel = (initialAction: Undefined<SwapTabAction>) =>
     PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient: formik.recipient,
-    updateRates,
+    updateRates: updateRoutePairs,
     sellRate,
-    shouldHideRouteRow,
-    shouldShowPriceImpactWarning,
+    complexErrorsProps,
     submitDisabled,
     swapFee,
     swapFeeError,

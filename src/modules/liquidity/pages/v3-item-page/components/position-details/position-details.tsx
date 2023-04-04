@@ -4,33 +4,23 @@ import { observer } from 'mobx-react-lite';
 
 import { PERCENT } from '@config/constants';
 import { LiquidityLabels } from '@modules/liquidity/components';
-import { Button, Card, DetailsCardCell, StateCurrencyAmount, AssetSwitcher } from '@shared/components';
+import { Button, Card, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { useShouldShowTokenXToYPrice } from '../../hooks';
 import { PositionStatus } from '../position-status';
+import { PriceView } from '../price-view';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './position-details.module.scss';
 import { usePositionDetailsViewModel } from './use-position-details.vm';
 
 export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();
-  const {
-    poolContractUrl,
-    id,
-    feeBps,
-    currentPrice,
-    tokensSymbols,
-    tokenXSymbol,
-    tokenYSymbol,
-    tokenActiveIndex,
-    handleButtonClick,
-    minPrice,
-    maxPrice,
-    priceRangeSymbols,
-    isInRange,
-    categories
-  } = usePositionDetailsViewModel();
+  const { poolContractUrl, id, feeBps, currentPrice, minPrice, maxPrice, isInRange, categories } =
+    usePositionDetailsViewModel();
+  const shouldShowTokenXToYPrice = useShouldShowTokenXToYPrice();
 
   return (
     <Card
@@ -38,12 +28,7 @@ export const PositionDetails: FC = observer(() => {
         content: (
           <div className={styles.cardHeader}>
             {t('liquidity|positionDetails')}
-            <AssetSwitcher
-              labels={[tokenYSymbol, tokenXSymbol]}
-              activeIndex={tokenActiveIndex}
-              handleButtonClick={handleButtonClick}
-              className={styles.tokenSwitcher}
-            />
+            <TokensOrderSwitcher className={styles.tokenSwitcher} />
           </div>
         ),
         className: styles.header
@@ -52,32 +37,32 @@ export const PositionDetails: FC = observer(() => {
     >
       <DetailsCardCell
         cellName={t('liquidity|tags')}
-        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        tooltipContent={t('liquidity|tagsTooltip')}
         className={styles.deviantBehavior}
       >
         <LiquidityLabels categories={categories} colored={true} />
       </DetailsCardCell>
       <DetailsCardCell
         cellName={t('liquidity|status')}
-        tooltipContent={t('liquidity|tvlV3PoolTooltip')}
+        tooltipContent={t('liquidity|statusTooltip')}
         className={styles.deviantBehavior}
       >
         <PositionStatus isInRange={isInRange} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|id')} tooltipContent={t('liquidity|weeklyVolumeV3PoolTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|id')} tooltipContent={t('liquidity|idTooltip')}>
         <StateCurrencyAmount amount={id} />
       </DetailsCardCell>
       <DetailsCardCell cellName={t('liquidity|currentPrice')} tooltipContent={t('liquidity|currentPriceTooltip')}>
-        <StateCurrencyAmount amount={currentPrice} currency={tokensSymbols} />
+        <PriceView price={currentPrice} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feesRateTooltip')}>
+      <DetailsCardCell cellName={t('liquidity|feeRate')} tooltipContent={t('liquidity|feeRateTooltipPosDetails')}>
         <StateCurrencyAmount amount={feeBps} currency={PERCENT} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
-        <StateCurrencyAmount amount={minPrice} currency={priceRangeSymbols} />
+      <DetailsCardCell cellName={t('liquidity|minPrice')} tooltipContent={t('liquidity|minPriceTooltip')}>
+        <PriceView price={shouldShowTokenXToYPrice ? maxPrice : minPrice} />
       </DetailsCardCell>
-      <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|tokenReservesTooltip')}>
-        <StateCurrencyAmount amount={maxPrice} currency={priceRangeSymbols} />
+      <DetailsCardCell cellName={t('liquidity|maxPrice')} tooltipContent={t('liquidity|maxPriceTooltip')}>
+        <PriceView price={shouldShowTokenXToYPrice ? minPrice : maxPrice} />
       </DetailsCardCell>
       <div className={commonContainerStyles.detailsButtons}>
         <Button
