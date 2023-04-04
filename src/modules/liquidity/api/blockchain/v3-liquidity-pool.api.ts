@@ -1,10 +1,17 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
+import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { sendBatch } from '@blockchain';
-import { QUIPUSWAP_REFERRAL_CODE, ZERO_AMOUNT_BN } from '@config/constants';
+import { withWtezBurnOnOutput } from '@blockchain';
+import {
+  DEFAULT_EXTRA_SLOTS,
+  LIQUIDITY_V3_ITEM_API_URL,
+  QUIPUSWAP_REFERRAL_CODE,
+  ZERO_AMOUNT_BN
+} from '@config/constants';
 import { DEX_V3_FACTORY_ADDRESS } from '@config/environment';
+import { WTEZ_TOKEN } from '@config/tokens';
+import { jsonFetch } from '@shared/api';
 import { getContract, getStorageInfo } from '@shared/dapp';
 import {
   bigNumberToString,
@@ -13,8 +20,7 @@ import {
   getWalletContract,
   isExist,
   getTransactionDeadline,
-  toHexString,
-  getSymbolsString
+  isTezosToken
 } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { address, BigMap, int, nat, Token, TokensValue, WithId } from '@shared/types';
@@ -70,13 +76,21 @@ export namespace V3LiquidityPoolApi {
     id: nat;
   }
 
-  interface V3FactoryStorage {
+  export interface V3FactoryStorage {
+    dev_fee_bps: BigNumber;
+    owner: string;
+    pool_count: BigNumber;
+    pool_ids: BigMapAbstraction;
+    pools: BigMapAbstraction;
+  }
+
+  interface V3PartialFactoryStorage {
     pools: BigMap<nat, address>;
   }
 
   export const getPool = async (tezos: TezosToolkit, id: BigNumber) => {
-    const factoryStorage = await getStorageInfo<V3FactoryStorage>(tezos, DEX_V3_FACTORY_ADDRESS);
-    const contractAddress = defined(await factoryStorage.pools.get(id), 'contractAddress');
+    const factoryStorage = await getStorageInfo<V3PartialFactoryStorage>(tezos, DEX_V3_FACTORY_ADDRESS);
+    const contractAddress = defined(await factoryStorage.pools.get(id), 'Cannot find pool contract');
 
     return {
       contractAddress,
@@ -84,18 +98,24 @@ export namespace V3LiquidityPoolApi {
     };
   };
 
+  export const getLiquidityV3Item = async (id: BigNumber) =>
+    await jsonFetch(`${LIQUIDITY_V3_ITEM_API_URL}/${id.toFixed()}`);
+
   export const claimFees = async (
     tezos: TezosToolkit,
     contractAddress: string,
     positionsIds: BigNumber[],
     accountPkh: string,
-    transactionDuration: BigNumber
+    transactionDuration: BigNumber,
+    mutezToBurn: BigNumber
   ) => {
     const contract = await getContract(tezos, contractAddress);
     const transactionDeadline = await getTransactionDeadline(tezos, transactionDuration);
 
-    return await sendBatch(
+    return await withWtezBurnOnOutput(
       tezos,
+      mutezToBurn,
+      accountPkh,
       positionsIds.map(id =>
         contract.methods
           .update_position(
@@ -177,24 +197,18 @@ export namespace V3LiquidityPoolApi {
     feeBps: nat,
     tickSpacing: int
   ) => {
+    const wrappedTokenX = isTezosToken(tokenX) ? WTEZ_TOKEN : tokenX;
+    const wrappedTokenY = isTezosToken(tokenY) ? WTEZ_TOKEN : tokenY;
     const factoryContract = await getWalletContract(tezos.wallet, DEX_V3_FACTORY_ADDRESS);
-
-    const symbol = getSymbolsString([tokenX, tokenY]);
-    const metadata = new MichelsonMap({ prim: 'map', args: [{ prim: 'string' }, { prim: 'bytes' }] });
-    metadata.set('description', toHexString('Yet another Quipuswap V3 pool'));
-    metadata.set('name', toHexString(symbol));
-    metadata.set('shouldPreferSymbol', toHexString(true));
-    metadata.set('symbol', toHexString(symbol));
-    metadata.set('thumbnailUri', toHexString('https://i.imgur.com/1J8Hr3B.png'));
 
     return factoryContract.methodsObject
       .deploy_pool({
         cur_tick_index: currentTickIndex,
-        token_x: mapTokensValue(tokenX),
-        token_y: mapTokensValue(tokenY),
+        token_x: mapTokensValue(wrappedTokenX),
+        token_y: mapTokensValue(wrappedTokenY),
         fee_bps: feeBps,
         tick_spacing: tickSpacing,
-        metadata
+        extra_slots: DEFAULT_EXTRA_SLOTS
       })
       .send();
   };

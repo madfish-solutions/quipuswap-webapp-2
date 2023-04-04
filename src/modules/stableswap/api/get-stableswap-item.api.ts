@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { STABLESWAP_LIST_API_URL } from '@config/constants';
+import { jsonFetch } from '@shared/api';
 import { NoPoolIdError } from '@shared/errors';
 import { Nullable } from '@shared/types';
 
@@ -21,9 +22,7 @@ export const getStableswapItemApi = async (poolId: Nullable<BigNumber>, version:
 
   const stableswapItemUrl = getStableswapItemUrl(poolId, version);
 
-  const response = await fetch(stableswapItemUrl);
-
-  const data = (await response.json()) as StableswapItemResponse;
+  const data = await jsonFetch<StableswapItemResponse>(stableswapItemUrl);
 
   //TODO: make model with blockInfo
   return data.item;

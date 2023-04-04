@@ -1,0 +1,74 @@
+@import "@styles/_breakpoints.scss";
+@import "@styles/_variables.scss";
+
+.root, .topContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.img {
+  display: block;
+  margin-bottom: 8px;
+  height: auto;
+  width: 100%;
+}
+
+.subtitle {
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.142rem;
+  line-height: 1.5;
+}
+
+.button {
+  max-width: 280px;
+}
+
+@include media('<tablet') {
+  .root {
+    position: relative;
+    margin-bottom: 64px;
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      height: 1px;
+      width: calc(100% + 48px);
+      left: -24px;
+      bottom: -24px;
+    }
+  }
+
+  .root:last-child {
+    margin-bottom: 0;
+    &::after {
+      display: none;
+    }
+  }
+
+  .root.dark::after {
+    background-color: $text-01;
+  }
+
+  .root.light::after {
+    background-color: $ui-03;
+  }
+}
+
+@include media('>=Ltablet') {
+  .root {
+    justify-content: space-between;
+  }
+
+  .subtitle,
+  .img {
+    margin-bottom: 32px;
+  }
+
+  .subtitle {
+    font-size: 1.714rem;
+    line-height: 1.333;
+  }
+}

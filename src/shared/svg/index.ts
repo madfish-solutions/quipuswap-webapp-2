@@ -65,3 +65,4 @@ export * from './opportunity-ticket';
 export * from './migrate-liquidity-icon';
 export * from './chart';
 export * from './all-bridge';
+export * from './filter';

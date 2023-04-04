@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { QUIPU_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
-import { getTokenSymbol } from '@shared/helpers';
+import { getTokenSymbol, isExist, isGreaterThanZero } from '@shared/helpers';
 import { Optional } from '@shared/types';
 import { i18n } from '@translation';
 
@@ -28,7 +28,11 @@ export const CreationCost: FC<CreationCostProps> = ({ total }) => {
     <div className={cx(modeClass[colorThemeMode], styles.cost)}>
       <div className={styles.costItem}>
         <div>{i18n.t('stableswap|totalCost')}</div>
-        <StateCurrencyAmount amount={total} currency={getTokenSymbol(QUIPU_TOKEN)} />
+        {!isExist(total) || isGreaterThanZero(total) ? (
+          <StateCurrencyAmount amount={total} currency={getTokenSymbol(QUIPU_TOKEN)} />
+        ) : (
+          <span className={styles.freeLabel}>{i18n.t('stableswap|free')}</span>
+        )}
       </div>
     </div>
   );

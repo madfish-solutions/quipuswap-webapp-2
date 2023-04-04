@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import { BigNumber } from 'bignumber.js';
 
 import { DOLLAR, USD_DECIMALS } from '@config/constants';
-import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
+import { CardHeaderWithBackButton, DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { Nullable } from '@shared/types';
 
@@ -24,6 +24,7 @@ interface Props {
   details: ReactNode;
   claimIsDisabled?: boolean;
   isRewardsError: boolean;
+  backHref?: string;
 }
 
 export const FeesList: FC<Props> = ({
@@ -34,9 +35,17 @@ export const FeesList: FC<Props> = ({
   translation,
   details,
   claimIsDisabled = false,
-  isRewardsError
+  isRewardsError,
+  backHref
 }) => {
-  const { rewardsTooltipTranslation, claimFeeTranslation, totalFeesTranslation, totalDepositTranslation } = translation;
+  const {
+    rewardsTooltipTranslation,
+    backToTheListTranslation,
+    claimFeeTranslation,
+    totalFeesTranslation,
+    totalDepositTranslation,
+    totalDepositTooltipTranslation
+  } = translation;
   const { totalDepositAmount, totalDepositLoading, totalDepositError } = userTotalDepositInfo;
 
   return (
@@ -56,12 +65,21 @@ export const FeesList: FC<Props> = ({
       details={details}
       disabled={claimIsDisabled}
       rewardsLabel={totalFeesTranslation}
+      header={
+        backHref
+          ? {
+              content: <CardHeaderWithBackButton backHref={backHref} text={backToTheListTranslation} />,
+              className: styles.rewardHeader
+            }
+          : undefined
+      }
     >
       {isUserTotalDepositExist && (
         <DetailsCardCell
           className={styles.totalDeposit}
           cellNameClassName={styles.totalDepositCellName}
           cellName={totalDepositTranslation}
+          tooltipContent={totalDepositTooltipTranslation}
           data-test-id="totalDeposit"
         >
           <StateCurrencyAmount

@@ -1,10 +1,37 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import constate from 'constate';
-import { useAllRoutePairs } from 'swap-router-sdk';
+import { DexTypeEnum, RouteDirectionEnum } from 'swap-router-sdk';
 import { RoutePair } from 'swap-router-sdk/dist/interface/route-pair.interface';
 
+import {
+  TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES,
+  TOKENS,
+  TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS
+} from '@config/config';
+import { ZERO_AMOUNT_BN } from '@config/constants';
+import { QUIPU_TOKEN, TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
+import { getTokenSlug, getUniqArray, isMainnet } from '@shared/helpers';
+import { mapBackendToken } from '@shared/mapping';
+import { Token } from '@shared/types';
+
 import { KNOWN_DEX_TYPES, TEZOS_DEXES_API_URL } from '../config';
+import { useAllRoutePairs } from '../hooks/use-all-route-pairs';
+import { extractTokensPools } from '../utils/map-dex-pairs';
+
+const tokensMap = new Map<string, Token>(
+  TOKENS.tokens
+    .map((token): [string, Token] => {
+      const mappedToken = mapBackendToken(token);
+
+      return [getTokenSlug(mappedToken), mappedToken];
+    })
+    .concat([
+      [getTokenSlug(TEZOS_TOKEN), TEZOS_TOKEN],
+      [getTokenSlug(WTEZ_TOKEN), WTEZ_TOKEN],
+      [getTokenSlug(QUIPU_TOKEN), QUIPU_TOKEN]
+    ])
+);
 
 // TODO: replace it with store after route pairs become available not only from hook
 export const [RoutePairsProvider, useRoutePairs] = constate(() => {
@@ -27,5 +54,37 @@ export const [RoutePairsProvider, useRoutePairs] = constate(() => {
     }
   }, [updateRoutePairs, loading, dataIsStale]);
 
-  return { dataIsStale, routePairs: displayedRoutePairs, updateRoutePairs, loading };
+  const whitelistedPairs = useMemo(() => {
+    return getUniqArray(
+      filteredRoutePairs
+        .filter(pair => {
+          try {
+            extractTokensPools(
+              {
+                ...pair,
+                aTokenAmount: ZERO_AMOUNT_BN,
+                bTokenAmount: ZERO_AMOUNT_BN,
+                direction: RouteDirectionEnum.Direct
+              },
+              tokensMap
+            );
+
+            return (
+              (pair.dexType !== DexTypeEnum.QuipuSwap && pair.dexType !== DexTypeEnum.QuipuSwapTokenToTokenDex) ||
+              !isMainnet ||
+              TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES.includes(pair.dexAddress) ||
+              TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS.some(
+                ({ address, id }) => pair.dexId?.eq(id) && pair.dexAddress === address
+              )
+            );
+          } catch {
+            return false;
+          }
+        })
+        .map(({ dexType, dexAddress, dexId }) => ({ dexType, dexAddress, dexId })),
+      ({ dexAddress, dexId }) => getTokenSlug({ contractAddress: dexAddress, fa2TokenId: dexId?.toNumber() })
+    );
+  }, [filteredRoutePairs]);
+
+  return { dataIsStale, routePairs: displayedRoutePairs, updateRoutePairs, loading, whitelistedPairs };
 });

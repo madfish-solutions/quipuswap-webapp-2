@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { Version } from '@modules/stableswap/types';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
-import { isUndefined } from '@shared/helpers';
+import { isGreaterThanZero, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 import { getStableswapTitle } from '../../../helpers';
@@ -41,7 +41,9 @@ export const useStableswapLiquiditAddItemPageViewModel = () => {
   }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore, version]);
 
   const title = getStableswapTitle(stableswapItem);
-  const opportunities = stableswapItem?.opportunities?.map(opportunityHelper);
+  const opportunities = stableswapItem?.opportunities
+    ?.map(opportunityHelper)
+    .filter(({ apr }) => isGreaterThanZero(apr));
 
   return { title, opportunities: opportunities ?? [] };
 };

@@ -10,13 +10,12 @@ import { DAppTokensProvider } from '@providers/dapp-tokens';
 import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppProvider } from '@providers/use-dapp';
 import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-new-exchange-rate';
-import { DexGraphProvider } from '@shared/hooks';
 import { sentryService } from '@shared/services';
 
 import { App } from './app';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-require('dotenv').config();
+require('dotenv').config(); //
 
 const container = document.getElementById('root');
 
@@ -34,9 +33,7 @@ if (container) {
                 <DAppBakerProvider>
                   <DAppTokensProvider>
                     <BalancesProvider>
-                      <DexGraphProvider>
-                        <App />
-                      </DexGraphProvider>
+                      <App />
                     </BalancesProvider>
                   </DAppTokensProvider>
                 </DAppBakerProvider>

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
-import { DOLLAR, PERCENT } from '@config/constants';
+import { DOLLAR, PERCENT, ZERO_AMOUNT } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
 import { Version } from '@modules/stableswap/types';
 import { isNull } from '@shared/helpers';
@@ -50,7 +50,7 @@ export const mapLiquidityListItem = ({
   if (!isNull(volumeForWeek)) {
     itemStats.push({
       cellName: i18n.t('liquidity|volume'),
-      tooltip: 'Volume tooltip',
+      tooltip: i18n.t('liquidity|weeklyVolumeTooltip'),
       amounts: {
         amount: volumeForWeek,
         currency: DOLLAR,
@@ -60,10 +60,10 @@ export const mapLiquidityListItem = ({
     });
   }
 
-  if (!isNull(apr)) {
+  if (!isNull(apr) && apr !== ZERO_AMOUNT) {
     itemStats.push({
       cellName: i18n.t('liquidity|APR'),
-      tooltip: 'APR tooltip',
+      tooltip: i18n.t('liquidity|aprTooltip'),
       amounts: {
         amount: apr,
         currency: PERCENT
@@ -71,7 +71,7 @@ export const mapLiquidityListItem = ({
     });
   }
 
-  if (!isNull(maxApr)) {
+  if (!isNull(maxApr) && maxApr !== ZERO_AMOUNT && type !== PoolType.UNISWAP) {
     itemStats.push({
       cellName: i18n.t('liquidity|maxApr'),
       tooltip: i18n.t('liquidity|maxAprTooltip'),
@@ -88,7 +88,7 @@ export const mapLiquidityListItem = ({
     id,
     type,
     tvlInUsd,
-    maxApr,
+    maxApr: type === PoolType.UNISWAP ? maxApr : maxApr ?? ZERO_AMOUNT,
     itemStats,
     categories: poolLabels,
     inputToken: tokens,

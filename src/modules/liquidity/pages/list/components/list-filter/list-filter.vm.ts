@@ -3,7 +3,7 @@ import cx from 'classnames';
 import styles from '@modules/farming/pages/list/structures/farming-list-filter/farming-list-filter.module.scss';
 import { SwitcherLabelProps } from '@shared/components';
 import { isDirectOrder, isNull } from '@shared/helpers';
-import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
+import { useAmplitudeService, useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
 import { useLiquidityListFiltersStore } from '../../../../hooks';
@@ -29,17 +29,16 @@ export const useListFilterViewModel = () => {
 
   const { showDust, investedOnly, sortField } = liquidityListFiltersStore;
   const { t } = useTranslation();
+  const { log } = useAmplitudeService();
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as LiquiditySortFieldItem;
+    log('LIQUIDITY_SORT_FIELD_CHANGED', { field: item.field });
 
     return liquidityListFiltersStore.onSortFieldChange(item.field);
   };
 
-  const sortingValues: LiquiditySortFieldItem[] = [
-    { label: t('common|ID'), field: LiquiditySortField.ID },
-    { label: t('farm|tvl'), field: LiquiditySortField.TVL }
-  ];
+  const sortingValues: LiquiditySortFieldItem[] = [{ label: t('farm|tvl'), field: LiquiditySortField.TVL }];
 
   const sortingValue = sortingValues
     .map(item => ({
@@ -51,9 +50,13 @@ export const useListFilterViewModel = () => {
   const sortDirectionRotate = isDirectOrder(sortDirection);
 
   const setShowDust = (state: boolean) => {
+    log('LIQUIDITY_SHOW_DUST_SET', { state });
+
     return liquidityListFiltersStore.setShowDust(state);
   };
   const setInvestedOnly = (state: boolean) => {
+    log('LIQUIDITY_INVESTED_ONLY_SET', { state });
+
     return liquidityListFiltersStore.setInvestedOnly(state);
   };
 

@@ -3,6 +3,7 @@ import constate from 'constate';
 
 import { EXCHANGE_RATES_URL, IS_NETWORK_MAINNET } from '@config/config';
 import { TEZOS_TOKEN } from '@config/tokens';
+import { jsonFetch } from '@shared/api';
 import { getTokenSlug } from '@shared/helpers';
 import { useUpdateOnBlockSWR } from '@shared/hooks';
 
@@ -21,15 +22,14 @@ interface ExchangeRateEntry extends RawExchangeRateEntry {
 export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
   const tezos = useTezos();
 
-  const getExchangeRates = async () =>
-    fetch(EXCHANGE_RATES_URL)
-      .then(async res => res.json())
-      .then((rawExchangeRates: RawExchangeRateEntry[]) =>
-        rawExchangeRates.map(({ tokenAddress, ...restProps }) => ({
-          ...restProps,
-          tokenAddress: tokenAddress ?? 'tez'
-        }))
-      );
+  const getExchangeRates = async () => {
+    const rawExchangeRates = await jsonFetch<RawExchangeRateEntry[]>(EXCHANGE_RATES_URL);
+
+    return rawExchangeRates.map(({ tokenAddress, ...restProps }) => ({
+      ...restProps,
+      tokenAddress: tokenAddress ?? 'tez'
+    }));
+  };
 
   const { data: exchangeRates } = useUpdateOnBlockSWR(tezos, ['exchange-rates'], getExchangeRates, {
     refreshInterval: 30000

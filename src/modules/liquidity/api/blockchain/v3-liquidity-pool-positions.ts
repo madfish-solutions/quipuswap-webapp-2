@@ -1,12 +1,13 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { withApproveApiForManyTokens } from '@blockchain';
+import { withApproveApiForManyTokens, getWithWtezMintOnInputParams } from '@blockchain';
 import { MIN_TICK_INDEX, QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
-import { calculateLiquidity, calculateTick, calculateTickPrice } from '@modules/liquidity/pages/v3-item-page/helpers';
+import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
+import { calculateLiquidity, calculateTicks } from '@modules/liquidity/pages/v3-item-page/helpers';
 import { Tzkt } from '@shared/api';
 import { getContract } from '@shared/dapp';
-import { decreaseByPercentage, getFirstElement, getTransactionDeadline } from '@shared/helpers';
+import { decreaseByPercentage, defined, getTransactionDeadline, isTezosToken, isTokenEqual } from '@shared/helpers';
 import { AmountToken, Token, Undefined } from '@shared/types';
 
 interface ILiquidityTickRaw {
@@ -26,7 +27,9 @@ export namespace V3Positions {
       active: true
     });
 
-    return new BigNumber(getFirstElement(rawTicks)?.key ?? MIN_TICK_INDEX);
+    const matchingTick = rawTicks.find(({ key, value }) => tickIndex.gt(key) && tickIndex.lte(value.next));
+
+    return new BigNumber(matchingTick?.key ?? MIN_TICK_INDEX);
   };
 
   export const doNewPositionTransaction = async (
@@ -42,6 +45,7 @@ export namespace V3Positions {
     liquiditySlippage: BigNumber,
 
     currentTickIndex: BigNumber,
+    currentPrice: BigNumber,
 
     minPrice: BigNumber,
     maxPrice: BigNumber,
@@ -51,9 +55,9 @@ export namespace V3Positions {
   ) => {
     const contract = await getContract(tezos, contractAddress);
 
-    const lowerTick = calculateTick(minPrice, tickSpacing);
-    const upperTick = calculateTick(maxPrice, tickSpacing);
-    const currentTickPrice = calculateTickPrice(currentTickIndex);
+    const ticks = calculateTicks(minPrice, maxPrice, tickSpacing);
+    const lowerTick = defined(ticks.lowerTick, 'lowerTick');
+    const upperTick = defined(ticks.upperTick, 'upperTick');
 
     const deadline = await getTransactionDeadline(tezos, transactionDeadline);
 
@@ -61,7 +65,7 @@ export namespace V3Positions {
       currentTickIndex,
       lowerTick.index,
       upperTick.index,
-      currentTickPrice,
+      currentPrice,
       lowerTick.price,
       upperTick.price,
       xTokenAmount,
@@ -74,36 +78,46 @@ export namespace V3Positions {
       await V3Positions.getTickWitnessIndex(contractAddress, upperTick.index)
     ]);
 
-    const operationParams = contract.methods
-      .set_position(
-        lowerTick.index,
-        upperTick.index,
+    let operationsParams = [
+      contract.methods
+        .set_position(
+          lowerTick.index,
+          upperTick.index,
 
-        lowerTickWitness, // lower_tick_witness
-        upperTickWitness, // upper_tick_witness
+          lowerTickWitness, // lower_tick_witness
+          upperTickWitness, // upper_tick_witness
 
-        liquidityWithSlippage,
+          liquidityWithSlippage,
 
-        deadline,
+          deadline,
 
-        xTokenAmount, // maximum_tokens_contributed X
-        yTokenAmount, // maximum_tokens_contributed Y
+          xTokenAmount, // maximum_tokens_contributed X
+          yTokenAmount, // maximum_tokens_contributed Y
 
-        QUIPUSWAP_REFERRAL_CODE
-      )
-      .toTransferParams({});
+          QUIPUSWAP_REFERRAL_CODE
+        )
+        .toTransferParams({})
+    ];
+    if (isTokenEqual(tokenX, TEZOS_TOKEN)) {
+      operationsParams = await getWithWtezMintOnInputParams(tezos, xTokenAmount, accountPkh, operationsParams);
+    }
+    if (isTokenEqual(tokenY, TEZOS_TOKEN)) {
+      operationsParams = await getWithWtezMintOnInputParams(tezos, yTokenAmount, accountPkh, operationsParams);
+    }
 
+    const wrappedTokenX = isTezosToken(tokenX) ? WTEZ_TOKEN : tokenX;
+    const wrappedTokenY = isTezosToken(tokenY) ? WTEZ_TOKEN : tokenY;
     const tokensAmount: AmountToken[] = [
       {
-        token: tokenX,
+        token: wrappedTokenX,
         amount: xTokenAmount // maximum_tokens_contributed X
       },
       {
-        token: tokenY,
+        token: wrappedTokenY,
         amount: yTokenAmount // maximum_tokens_contributed Y
       }
     ];
 
-    return await withApproveApiForManyTokens(tezos, contractAddress, tokensAmount, accountPkh, [operationParams]);
+    return await withApproveApiForManyTokens(tezos, contractAddress, tokensAmount, accountPkh, operationsParams);
   };
 }

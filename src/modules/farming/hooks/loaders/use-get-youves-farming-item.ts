@@ -1,11 +1,8 @@
 import { useCallback } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
-import { AppRootRoutes } from '@app.router';
 import { DELAY_BEFORE_DATA_UPDATE } from '@config/constants';
 import { useReady } from '@providers/use-dapp';
-import { isExist, isNotFoundError, sleep } from '@shared/helpers';
+import { isExist, sleep } from '@shared/helpers';
 import { Optional } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
@@ -16,10 +13,10 @@ export const useGetYouvesFarmingItem = () => {
   const { showErrorToast } = useToasts();
   const farmingYouvesItemStore = useFarmingYouvesItemStore();
   const isReady = useReady();
-  const navigate = useNavigate();
 
   const getFarmingItem = useCallback(
     async (id: Optional<string>, version: FarmVersion) => {
+      let itemStoreWasLoaded = false;
       try {
         if (!isReady || !isExist(id)) {
           return;
@@ -28,17 +25,17 @@ export const useGetYouvesFarmingItem = () => {
         farmingYouvesItemStore.setFarmingId(id);
         farmingYouvesItemStore.setFarmingVersion(version);
         await farmingYouvesItemStore.itemStore.load();
+        itemStoreWasLoaded = true;
         await farmingYouvesItemStore.stakesStore.load();
         await farmingYouvesItemStore.contractBalanceStore.load();
         await farmingYouvesItemStore.updatePendingRewards();
       } catch (error) {
-        showErrorToast(error as Error);
-        if (isNotFoundError(error as Error)) {
-          navigate(`${AppRootRoutes.NotFound}/${id}`);
+        if (itemStoreWasLoaded) {
+          showErrorToast(error as Error);
         }
       }
     },
-    [isReady, showErrorToast, farmingYouvesItemStore, navigate]
+    [isReady, showErrorToast, farmingYouvesItemStore]
   );
 
   const delayedGetFarmingItem = useCallback(

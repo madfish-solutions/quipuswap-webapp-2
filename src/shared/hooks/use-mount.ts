@@ -18,6 +18,7 @@ export const useMount = () => {
 
   useEffect(() => {
     isUnmounted.current = false;
+    location.current = window.location.href;
 
     return () => {
       isUnmounted.current = true;

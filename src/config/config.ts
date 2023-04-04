@@ -3,10 +3,11 @@ import GhostnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswa
 import MainnetWhitelistTokens from '@quipuswap/tokens-whitelist/tokens/quipuswap.whitelist.json';
 
 import { FarmVersion } from '@modules/farming/interfaces';
-import { Categories, PoolType } from '@modules/liquidity/interfaces';
+import { PoolType } from '@modules/liquidity/interfaces';
+import { isExist } from '@shared/helpers/type-checks';
 import { ConnectType, QSNetwork, QSNetworkType, SupportedNetworks } from '@shared/types';
 
-import { NETWORK_ID, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
+import { NETWORK_ID, STABLESWAP_V2_FACTORY_ADDRESS, TEMPLEWALLET_API_URL, TZKT_API } from './environment';
 
 export const QUIPUSWAP_DOMAIN_NAME = 'quipuswap.com';
 
@@ -53,6 +54,18 @@ const TOKENS_MAP = {
 
 export const TOKENS = TOKENS_MAP[NETWORK_ID];
 //#endregion TOKENS
+
+export const TEZ_TOKEN_MAINNET_WHITELISTED_POOLS_ADDRESSES = [
+  'KT1K4EwTpbvYN9agJdjpyJm4ZZdhpUNKB3F6',
+  'KT1WxgZ1ZSfMgmsSDDcUn8Xn577HwnQ7e1Lb',
+  'KT1PL1YciLdwMbydt21Ax85iZXXyGSrKT2BE',
+  'KT1KFszq8UFCcWxnXuhZPUyHT9FK3gjmSKm6',
+  'KT1Ucg1fTZXBD8P426rTRXyu7YQUgYXV7RVu',
+  'KT1EtjRRCBC2exyCRXz8UfV7jz7svnkqi7di',
+  'KT1X3zxdTzPB9DgVzA3ad6dgZe9JEamoaeRy'
+];
+
+export const TOKEN_TOKEN_MAINNET_WHITELISTED_POOLS = [{ address: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi', id: 21 }];
 
 export const FACTORIES: Record<SupportedNetworks, { fa1_2Factory: string[]; fa2Factory: string[] }> = {
   [NetworkType.MAINNET]: {
@@ -105,10 +118,11 @@ export const YOUVES_LINK = 'https://app.youves.com/earn';
 
 // Hot Pools
 export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
-  { id: '6', type: PoolType.STABLESWAP },
+  { id: '0', type: PoolType.UNISWAP },
   { id: '1', type: PoolType.UNISWAP },
-  { id: '7', type: PoolType.DEX_TWO },
-  { id: '8', type: PoolType.DEX_TWO },
+  { id: '2', type: PoolType.UNISWAP },
+  { id: '3', type: PoolType.UNISWAP },
+
   { id: '0', type: PoolType.DEX_TWO },
   { id: '1', type: PoolType.DEX_TWO },
   { id: '2', type: PoolType.DEX_TWO },
@@ -119,13 +133,8 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
 export const COINFLIP_CONTRACT_DECIMALS = 18;
 export const COINFLIP_TOKEN_DECIMALS = 6;
 
-const MAINNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {};
-const TESTNET_LIQUIDITY_V3_POOL_TAGS: Record<number, Array<Categories>> = {
-  0: [Categories.Stable, Categories.V3],
-  2: [Categories.Stable, Categories.QuipuSwap, Categories.V3]
-};
+// 3route
+export const THREE_ROUTE_APP_ID = 3;
 
-export const LIQUIDITY_V3_POOL_TAGS = {
-  [NetworkType.MAINNET]: MAINNET_LIQUIDITY_V3_POOL_TAGS,
-  [NetworkType.GHOSTNET]: TESTNET_LIQUIDITY_V3_POOL_TAGS
-};
+// Stableswap
+export const STABLESWAP_V2_IS_AVAILABLE = isExist(STABLESWAP_V2_FACTORY_ADDRESS);

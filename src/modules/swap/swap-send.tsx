@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { MAX_HOPS_COUNT } from '@config/constants';
+import { DATA_TEST_ID_PROP_NAME } from '@config/constants';
 import {
   Button,
   Card,
@@ -17,7 +17,7 @@ import {
   TestnetAlert
 } from '@shared/components';
 import { NewTokenSelect } from '@shared/components/ComplexInput/new-token-select';
-import { defined, FormatNumber } from '@shared/helpers';
+import { defined } from '@shared/helpers';
 import { SwapTabAction } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
@@ -36,7 +36,6 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     accountPkh,
     action,
     blackListedTokens,
-    buyRate,
     currentTabLabel,
     dataIsStale,
     dexPoolsLoading,
@@ -54,19 +53,17 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
     inputExchangeRate,
     inputToken,
     inputTokenBalance,
+    isLoading,
     isSubmitting,
-    noRouteFound,
     outputAmount,
     outputExchangeRate,
     outputToken,
     outputTokenBalance,
-    PRICE_IMPACT_WARNING_THRESHOLD,
     priceImpact,
     recipient,
     updateRates,
     sellRate,
-    shouldHideRouteRow,
-    shouldShowPriceImpactWarning,
+    complexErrorsProps,
     submitDisabled,
     swapFee,
     swapFeeError,
@@ -145,21 +142,9 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             />
           )}
 
-          {noRouteFound && (
-            <ComplexError
-              error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })}
-              data-test-id="noRouteFound"
-            />
-          )}
-
-          {shouldShowPriceImpactWarning && (
-            <ComplexError
-              error={t('swap|priceImpactWarning', {
-                priceImpact: FormatNumber(priceImpact ?? PRICE_IMPACT_WARNING_THRESHOLD)
-              })}
-              data-test-id="shouldShowPriceImpactWarning"
-            />
-          )}
+          {complexErrorsProps.map(({ error, [DATA_TEST_ID_PROP_NAME]: dataTestId }) => (
+            <ComplexError error={error} data-test-id={dataTestId} key={dataTestId} />
+          ))}
 
           {!accountPkh && <ConnectWalletButton className={styles.button} />}
           {accountPkh && dataIsStale && !isSubmitting && (
@@ -175,7 +160,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           {accountPkh && (!dataIsStale || isSubmitting) && (
             <Button
               disabled={submitDisabled}
-              loading={isSubmitting}
+              loading={isSubmitting || isLoading}
               type="submit"
               onClick={handleSubmit}
               className={styles.button}
@@ -191,9 +176,7 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
           inputToken={inputToken}
           outputToken={outputToken}
           route={dexRoute}
-          buyRate={buyRate}
           sellRate={sellRate}
-          shouldHideRouteRow={shouldHideRouteRow}
         />
       </StickyBlock>
     </>

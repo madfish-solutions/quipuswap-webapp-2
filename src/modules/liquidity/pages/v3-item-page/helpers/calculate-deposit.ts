@@ -1,8 +1,7 @@
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import { V3LiquidityPoolApi } from '@modules/liquidity/api';
 import { LiquidityV3Position } from '@modules/liquidity/types';
-
-import { X80_FORMAT_PRECISION } from './constants';
+import { X80_FORMAT_PRECISION } from '@shared/helpers/dex/constants';
 
 export const calculateDeposit = (position: LiquidityV3Position, poolStorage: V3LiquidityPoolApi.V3PoolStorage) => {
   const upperSqrtPrice = position.upper_tick.sqrt_price;
