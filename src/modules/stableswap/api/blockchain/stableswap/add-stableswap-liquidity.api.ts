@@ -8,7 +8,24 @@ import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { AmountToken, Nullable } from '@shared/types';
 
-import { getTotalTokenAmount } from '../helpers';
+import { getTotalTokenAmount } from '../../../helpers';
+
+const createMichelsonAmount = (tokensAndAmounts: Array<AmountToken>) => {
+  const michelsonAmounts = new MichelsonMap<number, BigNumber>();
+  tokensAndAmounts.forEach(({ amount }, index) => {
+    if (isGreaterThanZero(amount)) {
+      michelsonAmounts.set(index, amount);
+    }
+  });
+
+  return michelsonAmounts;
+};
+
+const prepareTokensAndAmounts = (tokensAndAmounts: Array<AmountToken>) => {
+  return tokensAndAmounts
+    .filter(({ amount }) => isGreaterThanZero(amount))
+    .map(({ token, amount }) => ({ token: isTezosToken(token) ? WTEZ_TOKEN : token, amount }));
+};
 
 export const addStableswapLiquidityApi = async (
   tezos: TezosToolkit,
@@ -23,20 +40,13 @@ export const addStableswapLiquidityApi = async (
   const receiverFixed = accountPkh === receiver ? null : receiver;
   const stableswapPoolContract = await tezos.wallet.at(stableswapPoolContractAddress);
 
-  const michelsonAmounts = new MichelsonMap();
-  tokensAndAmounts.forEach(({ amount }, index) => {
-    if (isGreaterThanZero(amount)) {
-      michelsonAmounts.set(index, amount);
-    }
-  });
+  const michelsonAmounts = createMichelsonAmount(tokensAndAmounts);
 
   const swableswapLiquidityParams = stableswapPoolContract.methods
     .invest(DEFAULT_STABLESWAP_POOL_ID, shares, michelsonAmounts, deadline, receiverFixed, STABLESWAP_REFERRAL)
     .toTransferParams();
 
-  const cleanedTokensAmount = tokensAndAmounts
-    .filter(({ amount }) => isGreaterThanZero(amount))
-    .map(({ token, amount }) => ({ token: isTezosToken(token) ? WTEZ_TOKEN : token, amount }));
+  const cleanedTokensAmount = prepareTokensAndAmounts(tokensAndAmounts);
 
   return await withApproveApiForManyTokens(
     tezos,

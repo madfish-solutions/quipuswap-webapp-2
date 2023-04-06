@@ -5,7 +5,7 @@ import { jsonFetch } from '@shared/api';
 import { NoPoolIdError } from '@shared/errors';
 import { Nullable } from '@shared/types';
 
-import { StableDividendsItemResponse, Version } from '../types';
+import { StableDividendsItemResponse, Version } from '../../../types';
 
 const getStableswapItemUrl = (poolId: BigNumber, version: Version) => {
   if (version === Version.v1) {

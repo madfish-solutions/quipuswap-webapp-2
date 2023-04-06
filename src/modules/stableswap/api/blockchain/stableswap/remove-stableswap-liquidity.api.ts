@@ -7,7 +7,7 @@ import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { AmountToken, Nullable } from '@shared/types';
 
-import { getTotalTokenAmount } from '../helpers';
+import { getTotalTokenAmount } from '../../../helpers';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();
