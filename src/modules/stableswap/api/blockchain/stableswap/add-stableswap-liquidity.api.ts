@@ -1,4 +1,4 @@
-import { TezosToolkit, MichelsonMap } from '@taquito/taquito';
+import { TezosToolkit, MichelsonMap, TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { getWithWtezMintOnInputParams, withApproveApiForManyTokens } from '@blockchain';
@@ -9,6 +9,8 @@ import { isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { AmountToken, Nullable } from '@shared/types';
 
 import { getTotalTokenAmount } from '../../../helpers';
+import { Version } from '../../../types';
+import { getYupanaRebalanceParams } from './utils';
 
 const createMichelsonAmount = (tokensAndAmounts: Array<AmountToken>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();
@@ -34,6 +36,7 @@ export const addStableswapLiquidityApi = async (
   tokensAndAmounts: Array<AmountToken>,
   deadline: string,
   accountPkh: string,
+  version: Version,
   receiver: Nullable<string> = null
 ) => {
   const mutezToMint = getTotalTokenAmount(tokensAndAmounts, TEZOS_TOKEN);
@@ -48,11 +51,27 @@ export const addStableswapLiquidityApi = async (
 
   const cleanedTokensAmount = prepareTokensAndAmounts(tokensAndAmounts);
 
+  let baseParams: Array<TransferParams> = [];
+  if (version === Version.v2) {
+    const params = await getYupanaRebalanceParams({
+      tezos,
+      stableswapContractAddress: stableswapPoolContractAddress,
+      stableswapPoolId: DEFAULT_STABLESWAP_POOL_ID,
+      tokensInPool: tokensAndAmounts.length
+    });
+
+    baseParams = baseParams.concat(params);
+  }
+
+  baseParams.push(swableswapLiquidityParams);
+
+  const paramsWithWtezMint = await getWithWtezMintOnInputParams(tezos, mutezToMint, accountPkh, baseParams);
+
   return await withApproveApiForManyTokens(
     tezos,
     stableswapPoolContractAddress,
     cleanedTokensAmount,
     accountPkh,
-    await getWithWtezMintOnInputParams(tezos, mutezToMint, accountPkh, [swableswapLiquidityParams])
+    paramsWithWtezMint
   );
 };
