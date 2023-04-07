@@ -46,13 +46,21 @@ export const useStableswapFormTabsCardViewModel = ({ subpath }: Params) => {
     [stableDividendsItemStore?.item?.id, stableswapItemStore?.item?.id, subpath]
   );
 
+  const version = useMemo(
+    () =>
+      subpath === StableswapRoutes.liquidity
+        ? stableswapItemStore?.item?.version
+        : stableDividendsItemStore?.item?.version,
+    [stableDividendsItemStore?.item?.version, stableswapItemStore?.item?.version, subpath]
+  );
+
   const changeTabHandle = useCallback(
     (tab: StableswapFormTabs) => {
-      const url = `${AppRootRoutes.Stableswap}${subpath}/${tab}/${item?.toFixed()}`;
+      const url = `${AppRootRoutes.Stableswap}${subpath}/${tab}/${version}/${item?.toFixed()}`;
 
       navigate(url);
     },
-    [item, navigate, subpath]
+    [item, navigate, subpath, version]
   );
 
   return {

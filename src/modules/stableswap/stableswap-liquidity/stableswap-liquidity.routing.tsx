@@ -57,7 +57,7 @@ export const StableswapLiquidityRouter: FC = observer(() => {
           element={<PageNotFoundPage />}
         />
         <Route
-          path={`/${StableswapLiquidityFormTabs.remove}/version/:poolId`}
+          path={`/${StableswapLiquidityFormTabs.remove}/:version/:poolId`}
           element={<StableswapLiquidityRemoveItemPage />}
         />
 
