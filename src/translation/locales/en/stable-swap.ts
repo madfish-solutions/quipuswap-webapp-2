@@ -104,6 +104,8 @@ export const stableswap = {
   devFeeDecriptions: 'Dev Fee:',
   clickThe: 'Click the',
   button: 'button!',
-  weeklyVolume: 'Volume(7d)'
+  weeklyVolume: 'Volume(7d)',
   //#endregion creation rules
+  stableswapWithInvestmentMessage:
+    "It's a special pool. When you deposit assets, part of it may be invested to the Yupana money market increasing the liquidity utilisation and earning the interest rate. 100% of interest rate goes to dv fee. It has no effect on you or traders, but we are deeply grateful that you feed our team ❤️"
 } as const;
