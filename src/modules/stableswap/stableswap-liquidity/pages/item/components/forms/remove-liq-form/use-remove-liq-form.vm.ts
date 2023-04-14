@@ -5,7 +5,6 @@ import { FormikHelpers, useFormik } from 'formik';
 
 import { LP_INPUT_KEY } from '@config/constants';
 import { StableswapItemModel } from '@modules/stableswap/models';
-import { Version } from '@modules/stableswap/types';
 import {
   findBalanceToken,
   toReal,
@@ -232,7 +231,6 @@ export const useRemoveLiqFormViewModel = () => {
     isLpInputDisabled: !stableswapItemFormStore.isBalancedProportion,
     handleSwitcherClick,
     handleLpInputChange,
-    handleSubmit: formik.handleSubmit,
-    isStableswapV2: item.version === Version.v2
+    handleSubmit: formik.handleSubmit
   };
 };
