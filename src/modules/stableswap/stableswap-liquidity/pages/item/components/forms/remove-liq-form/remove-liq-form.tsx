@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import { ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip, AlarmMessage } from '@shared/components';
+import { ConnectWalletOrDoSomething, Button, Iterator, Switcher, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
@@ -35,8 +35,7 @@ export const RemoveLiqForm: FC = observer(() => {
     disabled,
     handleSwitcherClick,
     handleSubmit,
-    handleLpInputChange,
-    isStableswapV2
+    handleLpInputChange
   } = removeLiqFormViewModel;
 
   return (
@@ -58,10 +57,6 @@ export const RemoveLiqForm: FC = observer(() => {
         <span className={styles.switcherTranslation}>{t('stableswap|balancedProportionRemove')}</span>
         <Tooltip content={tooltip} />
       </div>
-
-      {isStableswapV2 && (
-        <AlarmMessage message={t('stableswap|stableswapWithInvestmentMessage')} className={styles.thanksMessage} />
-      )}
 
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>
