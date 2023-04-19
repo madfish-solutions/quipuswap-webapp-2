@@ -1,4 +1,4 @@
-import { MichelsonMap, TezosToolkit } from '@taquito/taquito';
+import { MichelsonMap, TezosToolkit, TransferParams } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { withWtezBurnOnOutput } from '@blockchain';
@@ -7,7 +7,9 @@ import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { AmountToken, Nullable } from '@shared/types';
 
-import { getTotalTokenAmount } from '../helpers';
+import { getTotalTokenAmount } from '../../../helpers';
+import { Version } from '../../../types';
+import { getYupanaRebalanceParams } from './utils';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();
@@ -24,6 +26,7 @@ export const removeStableswapLiquidityBalancedApi = async (
   shares: BigNumber,
   deadline: string,
   accountPkh: string,
+  version: Version,
   receiver: Nullable<string> = null
 ) => {
   const mutezToBurn = getTotalTokenAmount(tokensAndAmounts, TEZOS_TOKEN);
@@ -35,7 +38,21 @@ export const removeStableswapLiquidityBalancedApi = async (
     .divest(DEFAULT_STABLESWAP_POOL_ID, michelsonAmounts, shares, deadline, receiverFixed)
     .toTransferParams();
 
-  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, [removeStableswapLiquidityParams]);
+  let baseParams: Array<TransferParams> = [];
+  if (version === Version.v2) {
+    const params = await getYupanaRebalanceParams({
+      tezos,
+      stableswapContractAddress: stableswapPoolContractAddress,
+      stableswapPoolId: DEFAULT_STABLESWAP_POOL_ID,
+      tokensInPool: tokensAndAmounts.length
+    });
+
+    baseParams = baseParams.concat(params);
+  }
+
+  baseParams.push(removeStableswapLiquidityParams);
+
+  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, baseParams);
 };
 
 export const removeStableswapLiquidityImbalancedApi = async (
@@ -45,6 +62,7 @@ export const removeStableswapLiquidityImbalancedApi = async (
   shares: BigNumber,
   deadline: string,
   accountPkh: string,
+  version: Version,
   receiver: Nullable<string> = null
 ) => {
   const mutezToBurn = getTotalTokenAmount(tokensAndAmounts, TEZOS_TOKEN);
@@ -63,5 +81,19 @@ export const removeStableswapLiquidityImbalancedApi = async (
     )
     .toTransferParams();
 
-  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, [removeStableswapLiquidityParams]);
+  let baseParams: Array<TransferParams> = [];
+  if (version === Version.v2) {
+    const params = await getYupanaRebalanceParams({
+      tezos,
+      stableswapContractAddress: stableswapPoolContractAddress,
+      stableswapPoolId: DEFAULT_STABLESWAP_POOL_ID,
+      tokensInPool: tokensAndAmounts.length
+    });
+
+    baseParams = baseParams.concat(params);
+  }
+
+  baseParams.push(removeStableswapLiquidityParams);
+
+  return await withWtezBurnOnOutput(tezos, mutezToBurn, accountPkh, baseParams);
 };

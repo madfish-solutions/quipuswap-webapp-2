@@ -9,6 +9,7 @@ import {
   ZERO_AMOUNT_BN
 } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
+import { Version } from '@modules/stableswap/types';
 import { getLastElement, isExist, isNull, MakeInterval, toAtomic, toReal, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
@@ -65,7 +66,10 @@ export class FarmingYouvesItemStore {
   get investHref() {
     return this.item?.type === V3PoolType.DEX_TWO
       ? DexLink.getCpmmPoolLink(this.tokens as [Token, Token])
-      : DexLink.getStableswapPoolLink(new BigNumber(this.item?.stableswapPoolId ?? 0));
+      : DexLink.getStableswapPoolLink(
+          new BigNumber(this.item?.stableswapPoolId ?? 0),
+          this.item?.stableswapPoolVersion ?? Version.v1
+        );
   }
 
   get farmingAddress() {

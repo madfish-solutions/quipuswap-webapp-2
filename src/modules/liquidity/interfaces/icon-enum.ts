@@ -6,5 +6,6 @@ export enum Categories {
   Tezotopia = 'Tezotopia',
   // TODO
   // DexTwo = 'DexTwo',
-  V3 = 'V3'
+  V3 = 'V3',
+  Invest = 'Invest'
 }
