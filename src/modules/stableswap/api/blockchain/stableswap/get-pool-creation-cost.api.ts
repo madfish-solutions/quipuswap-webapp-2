@@ -6,7 +6,7 @@ import { QUIPU_TOKEN } from '@config/tokens';
 import { getStorageInfo } from '@shared/dapp';
 import { toReal } from '@shared/helpers';
 
-import { StableswapVersion } from '../types';
+import { StableswapVersion } from '../../../types';
 
 interface Storage {
   storage: {

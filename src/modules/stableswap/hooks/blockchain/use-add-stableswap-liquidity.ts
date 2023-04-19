@@ -57,7 +57,7 @@ export const useAddStableswapLiquidity = () => {
         return;
       }
 
-      const { contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
+      const { contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee, version } = item;
 
       const tokens = extractTokens(tokensInfo);
       const atomicInputAmounts = inputAmounts.map((amount, index) =>
@@ -97,7 +97,8 @@ export const useAddStableswapLiquidity = () => {
           sharesWithSlippage,
           tokensAndAmounts,
           deadline,
-          accountPkh
+          accountPkh,
+          version
         );
 
         await confirmOperation(operation.opHash, { message: t('stableswap|successfullyAdded') });

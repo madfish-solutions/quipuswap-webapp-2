@@ -46,12 +46,15 @@ export const StableDividendsRouter: FC = observer(() => {
           path={`/${StableDividendsFormTabs.stake}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
           element={<PageNotFoundPage />}
         />
-        <Route path={`/${StableDividendsFormTabs.stake}/:poolId`} element={<StableDividendsStakeItemPage />} />
+        <Route path={`/${StableDividendsFormTabs.stake}/:version/:poolId`} element={<StableDividendsStakeItemPage />} />
         <Route
           path={`/${StableDividendsFormTabs.unstake}/${NOT_FOUND_LETTERS_ROUTE_NAME}`}
           element={<PageNotFoundPage />}
         />
-        <Route path={`/${StableDividendsFormTabs.unstake}/:poolId`} element={<StableDividendsUnstakeItemPage />} />
+        <Route
+          path={`/${StableDividendsFormTabs.unstake}/:version/:poolId`}
+          element={<StableDividendsUnstakeItemPage />}
+        />
 
         <Route path="*" element={<PageNotFoundPage />} />
       </SentryRoutes>

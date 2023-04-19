@@ -92,6 +92,7 @@ export const SKIP = -1;
 
 //#region API
 export const LIST = 'list';
+export const NEW_LIST = 'new-list';
 export const STATS = 'stats';
 export const DEX_TWO_ITEM = 'dex-two-item';
 export const UNISWAP_ITEM = 'uniswap-item';
@@ -114,6 +115,7 @@ export const FARMING_STATS_API_URL = `${FARMING_API_URL}/v3/${STATS}`;
 export const STABLESWAP_LIST_API_URL = `${STABLESWAP_API_URL}/${LIST}`;
 export const STABLESWAP_STATS_API_URL = `${STABLESWAP_API_URL}/${STATS}`;
 export const STABLEDIVIDENDS_LIST_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${LIST}`;
+export const STABLEDIVIDENDS_NEW_LIST_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${NEW_LIST}`;
 export const STABLEDIVIDENDS_STATS_API_URL = `${STABLESWAP_API_URL}/${DIVIDENDS}/${STATS}`;
 
 export const LIQUIDITY_LIST_API_URL = `${LIQUIDITY_API_URL}/${LIST}`;
