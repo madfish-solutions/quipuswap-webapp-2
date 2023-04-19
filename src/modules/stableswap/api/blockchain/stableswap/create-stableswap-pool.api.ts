@@ -8,7 +8,7 @@ import { isTezosToken, toAtomic } from '@shared/helpers';
 import { mapTokensValue } from '@shared/mapping/map-token-value';
 import { AmountToken, Nullable, Token, TokensValue } from '@shared/types';
 
-import { getTotalTokenAmount } from '../helpers';
+import { getTotalTokenAmount } from '../../../helpers';
 
 interface TokenInfo {
   rate_f: BigNumber;

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { Version } from '@modules/stableswap/types';
 import { Typed } from '@shared/decorators';
 import { TokenDto } from '@shared/dto';
 import type { Nullable } from '@shared/types';
@@ -69,4 +70,7 @@ export class FarmingItemV2YouvesDto {
 
   @Typed({ optional: true })
   stableswapPoolId?: number;
+
+  @Typed({ optional: true, isEnum: true })
+  stableswapPoolVersion?: Version;
 }

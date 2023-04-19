@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { OpportunityDto } from '@modules/stableswap/dto/opportunity.dto';
+import { Version } from '@modules/stableswap/types';
 import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 import type { Nullable } from '@shared/types';
@@ -50,6 +51,9 @@ export class LiquidityItemDto implements LiquidityItem {
 
   @Typed({ type: OpportunityDto, isArray: true, optional: true })
   opportunities?: Array<OpportunityDto>;
+
+  @Typed({ optional: true, isEnum: true })
+  version?: Version;
 }
 
 export class LiquidityItemResponseDto implements LiquidityItemResponse {

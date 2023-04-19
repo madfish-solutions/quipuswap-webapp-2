@@ -1,5 +1,10 @@
 import { BlockInfoWrap, RawToken } from '@shared/types';
 
+export enum Version {
+  v1 = 'v1',
+  v2 = 'v2'
+}
+
 export interface StableswapListResponse extends RawStableswapList, BlockInfoWrap {}
 export interface StableswapItemResponse extends IRawStableswapItem, BlockInfoWrap {}
 export interface StableswapStatsResponse extends IRawStableswapStats, BlockInfoWrap {}
@@ -45,6 +50,7 @@ interface AbstractRawStableItem {
   contractAddress: string;
   tokensInfo: Array<RawStableswapTokensInfo>;
   isWhitelisted: boolean;
+  version: Version;
 }
 
 export interface RawStableswapItem extends AbstractRawStableItem {

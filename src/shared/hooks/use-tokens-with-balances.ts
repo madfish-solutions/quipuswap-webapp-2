@@ -25,7 +25,7 @@ export const useTokensWithBalances = (tokens: Optional<Array<Token>>): Array<Bal
   const [wrapTokens, setWrapTokens] = useState<Nullable<Array<Token>>>(null);
 
   useEffect(() => {
-    const cleanTokens = toArray(tokens).filter(Boolean) as Array<Token>;
+    const cleanTokens = toArray(tokens).filter(Boolean);
     setWrapTokens(cleanTokens);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uniqSlugs(tokens)]);

@@ -26,7 +26,7 @@ export const useFarmingFormInvestLinkViewModel = () => {
 
     if (farmingItem.stableswapItemId) {
       return {
-        investHref: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${farmingItem.stableswapItemId}`
+        investHref: `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${StableswapLiquidityFormTabs.add}/${farmingItem.stableswapVersion}/${farmingItem.stableswapItemId}`
       };
     }
     const [tokenA, tokenB] = farmingItem.tokens;
