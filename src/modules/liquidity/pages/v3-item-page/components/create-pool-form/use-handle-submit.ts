@@ -8,7 +8,7 @@ import { AppRootRoutes } from '@app.router';
 import { DELAY_BEFORE_DATA_UPDATE, FEE_BASE_POINTS_PRECISION, FIRST_INDEX, SLASH } from '@config/constants';
 import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { useTezos } from '@providers/use-dapp';
-import { getFirstElement, isExist, toFraction, sleep, getInvertedValue } from '@shared/helpers';
+import { getFirstElement, isExist, toFraction, sleep, getInvertedValue, prepareNumberAsString } from '@shared/helpers';
 
 import { findPool, sortTokens } from '../../helpers';
 import { CreatePoolValues, eCreatePoolValues } from '../../types';
@@ -31,7 +31,8 @@ export const useHandleSubmit = (
       const [token0, token1] = sortedTokens;
       const tokensAreSwapped = token0 !== getFirstElement(tokens);
       const shouldInvertPrice = (activeAssetIndex === FIRST_INDEX) === tokensAreSwapped;
-      const rawInitialPrice = values[eCreatePoolValues.initialPrice];
+      const rawInitialPrice = prepareNumberAsString(values[eCreatePoolValues.initialPrice]);
+
       const initialPrice = shouldInvertPrice
         ? new BigNumber(rawInitialPrice)
         : getInvertedValue(new BigNumber(rawInitialPrice));
