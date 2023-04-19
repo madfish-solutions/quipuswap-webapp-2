@@ -29,6 +29,7 @@ export const AddLiqForm: FC = observer(() => {
     tooltip,
     switcherValue,
     shouldShowZeroInputsAlert,
+    isStableswapV2,
     handleSwitcherClick,
     handleSubmit
   } = addLiqFormViewModel;
@@ -43,6 +44,9 @@ export const AddLiqForm: FC = observer(() => {
       </div>
       {shouldShowZeroInputsAlert && (
         <AlarmMessage message={t('stableswap|allZeroInpupts')} className={styles.alarmMessage} />
+      )}
+      {isStableswapV2 && (
+        <AlarmMessage message={t('stableswap|stableswapWithInvestmentMessage')} className={styles.thanksMessage} />
       )}
       <div className={stylesCommonContainer.buttons}>
         <ConnectWalletOrDoSomething>

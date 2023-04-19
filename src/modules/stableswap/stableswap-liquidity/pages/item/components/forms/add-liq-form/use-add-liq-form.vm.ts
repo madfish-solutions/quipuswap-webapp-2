@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { FormikHelpers, useFormik } from 'formik';
 
+import { Version } from '@modules/stableswap/types';
 import {
   calculateOutputWithToken,
   extractTokens,
@@ -143,6 +144,7 @@ export const useAddLiqFormViewModel = () => {
     shouldShowZeroInputsAlert,
     switcherValue: formStore.isBalancedProportion,
     handleSwitcherClick,
-    handleSubmit: formik.handleSubmit
+    handleSubmit: formik.handleSubmit,
+    isStableswapV2: item.version === Version.v2
   };
 };

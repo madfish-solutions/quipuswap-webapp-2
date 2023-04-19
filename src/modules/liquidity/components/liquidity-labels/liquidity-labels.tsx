@@ -7,7 +7,8 @@ import {
   QuipuCategory,
   BridgeCategory,
   TezotopiaCategory,
-  V3Category
+  V3Category,
+  InvestCategory
 } from '@shared/svg/categories';
 
 import { Categories } from '../../interfaces';
@@ -19,7 +20,8 @@ const Component: Record<Categories, FC> = {
   [Categories.QuipuSwap]: QuipuCategory,
   [Categories.Bridge]: BridgeCategory,
   [Categories.Tezotopia]: TezotopiaCategory,
-  [Categories.V3]: V3Category
+  [Categories.V3]: V3Category,
+  [Categories.Invest]: InvestCategory
 };
 
 interface Props {
