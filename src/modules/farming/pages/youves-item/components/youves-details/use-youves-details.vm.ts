@@ -63,7 +63,7 @@ export const useYouvesDetailsViewModel = () => {
     dailyDistribution: item.dailyDistribution,
     dailyDistributionDollarEquivalent: item.dailyDistributionDollarEquivalent,
     vestingPeriod: item.vestingPeriodSeconds.times(MS_IN_SECOND).toNumber(),
-    stakeStatus: ActiveStatus.ACTIVE,
+    stakeStatus: !apr || apr.isZero() ? ActiveStatus.DISABLED : ActiveStatus.ACTIVE,
     shouldShowTags: true,
     stakedTokenSymbol: getTokensNames(item.tokens),
     rewardTokenSymbol: getTokenSymbol(item.rewardToken),
