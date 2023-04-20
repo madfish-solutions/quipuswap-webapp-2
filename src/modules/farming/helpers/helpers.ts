@@ -2,15 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
 import { getUserTokenBalance } from '@blockchain';
-import {
-  HOURS_IN_DAY,
-  PRECISION_FACTOR,
-  PRECISION_FACTOR_STABLESWAP_LP,
-  SECONDS_IN_DAY,
-  SECONDS_IN_MINUTE,
-  MINUTES_IN_HOUR,
-  ZERO_AMOUNT_BN
-} from '@config/constants';
+import { PRECISION_FACTOR, PRECISION_FACTOR_STABLESWAP_LP, SECONDS_IN_DAY, ZERO_AMOUNT_BN } from '@config/constants';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { Tzkt } from '@shared/api';
 import { getContract, getStorageInfo } from '@shared/dapp';
@@ -208,8 +200,7 @@ export const calculateYouvesFarmingRewards = (
   farmVersion: FarmVersion,
   farmRewardTokenBalance: BigNumber,
   stake: Optional<YouvesFarmStakes>,
-  timestampMs: number,
-  rewardsPerDay: BigNumber
+  timestampMs: number
 ) => {
   if (!isExist(stake)) {
     return {
@@ -231,20 +222,10 @@ export const calculateYouvesFarmingRewards = (
     vestingPeriodSeconds
   );
 
-  const futureFarmRewardTokenBalance = farmRewardTokenBalance.plus(
-    vestingPeriodSeconds
-      .minus(stakeAge)
-      .dividedToIntegerBy(SECONDS_IN_MINUTE * MINUTES_IN_HOUR)
-      .times(rewardsPerDay.dividedToIntegerBy(HOURS_IN_DAY))
-  );
-  const futureReward = futureFarmRewardTokenBalance.minus(lastRewards);
-  const futureNewDiscFactor = discFactor.plus(futureReward.multipliedBy(precision).dividedToIntegerBy(totalStaked));
-
   const fullReward = stakeAmount.times(newDiscFactor.minus(userDiscFactor)).dividedToIntegerBy(precision);
   const claimableReward = fullReward.times(stakeAge).dividedToIntegerBy(vestingPeriodSeconds);
-  const futureFullReward = stakeAmount.times(futureNewDiscFactor.minus(userDiscFactor)).dividedToIntegerBy(precision);
 
-  return { claimableReward, fullReward: futureFullReward };
+  return { claimableReward, fullReward };
 };
 
 const TOKEN_BALANCE_RETRY_TIMES = 3;
@@ -268,16 +249,14 @@ export const getUserYouvesFarmingBalances = async (
     last_rewards: lastRewards,
     disc_factor: discFactor,
     max_release_period: vestingPeriodSeconds,
-    total_stake: staked,
-    expected_rewards: rewardsPerDay
+    total_stake: staked
   } = await getStorageInfo<YouvesFarmStorage>(tezos, farmAddress);
   const { claimableReward, fullReward } = calculateYouvesFarmingRewards(
     { lastRewards: lastRewards.toFixed(), discFactor, vestingPeriodSeconds, staked },
     farming.version,
     farmRewardTokenBalance,
     stake,
-    timestampMs,
-    rewardsPerDay
+    timestampMs
   );
 
   return {
