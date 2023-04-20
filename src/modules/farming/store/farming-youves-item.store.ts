@@ -10,7 +10,7 @@ import {
 } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
 import { Version } from '@modules/stableswap/types';
-import { getLastElement, isExist, isNull, MakeInterval, toAtomic, toReal, toRealIfPossible } from '@shared/helpers';
+import { getLastElement, isExist, isNull, MakeInterval, toReal, toRealIfPossible } from '@shared/helpers';
 import { Led, ModelBuilder } from '@shared/model-builder';
 import { LoadingErrorData, RootStore } from '@shared/store';
 import { Nullable, Token } from '@shared/types';
@@ -153,8 +153,7 @@ export class FarmingYouvesItemStore {
       this.version,
       this.contractBalance,
       this.currentStake,
-      Date.now(),
-      toAtomic(this.item.dailyDistribution, this.item.rewardToken)
+      Date.now()
     );
 
     this.claimableRewards = toReal(claimableReward, this.item.rewardToken);
