@@ -248,3 +248,5 @@ export const PERCENT_100 = 100;
 
 export const NOT_FOUND_ROUTE_NAME = '404';
 export const NOT_FOUND_LETTERS_ROUTE_NAME = 'not-found';
+
+export const T_ROUTE_LINK = 'https://3route.io/swap';

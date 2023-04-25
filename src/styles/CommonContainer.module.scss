@@ -7,6 +7,26 @@
   row-gap: 16px;
 }
 
+.poweredBy3RouteContainer {
+  display: flex;
+  justify-content: center;
+
+  padding-top: 16px;
+  margin-bottom: -8px;
+  a {
+    margin-top: -2px;
+    display: flex;
+  }
+}
+
+.poweredBy3Route {
+  height: 14px;
+  width: fit-content;
+  align-self: center;
+  padding-left: 2px;
+  padding-top: 2px;
+}
+
 //TODO
 .rotation {
   -webkit-transition: all 2s ease;
@@ -291,7 +311,6 @@
     }
   }
 }
-
 
 .opportunitiesWrapper {
   display: flex;

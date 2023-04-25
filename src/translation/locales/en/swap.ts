@@ -19,5 +19,6 @@ export const swap = {
   exchangeDetails: 'Exchange Details',
   inputAmountIsTooBig: 'Input amount is too big, try a smaller one',
   tryChangingAmount: 'Failed to find a route, try changing the amount',
-  failedToFindNotEmptyPoolsForTokens: 'Failed to find not empty pools for the specified tokens'
+  failedToFindNotEmptyPoolsForTokens: 'Failed to find not empty pools for the specified tokens',
+  poweredBy: 'Powered by'
 } as const;

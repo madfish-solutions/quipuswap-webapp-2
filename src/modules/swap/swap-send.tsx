@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { DATA_TEST_ID_PROP_NAME } from '@config/constants';
+import { DATA_TEST_ID_PROP_NAME, T_ROUTE_LINK } from '@config/constants';
 import {
   Button,
   Card,
@@ -17,7 +17,8 @@ import {
   TestnetAlert
 } from '@shared/components';
 import { NewTokenSelect } from '@shared/components/ComplexInput/new-token-select';
-import { defined } from '@shared/helpers';
+import { defined, isMainnet } from '@shared/helpers';
+import { TRoute } from '@shared/svg';
 import { SwapTabAction } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
@@ -167,6 +168,15 @@ const OrdinarySwapSend: FC<SwapSendProps> = ({ className, initialAction }) => {
             >
               {currentTabLabel}
             </Button>
+          )}
+
+          {isMainnet() && (
+            <div className={styles.poweredBy3RouteContainer}>
+              <div>{t('swap|poweredBy')}</div>
+              <a href={T_ROUTE_LINK}>
+                <TRoute className={styles.poweredBy3Route} />
+              </a>
+            </div>
           )}
         </Card>
         <SwapDetails
