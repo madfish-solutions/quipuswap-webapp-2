@@ -57,7 +57,7 @@ export const useRemoveStableswapLiquidity = () => {
       if (isNull(tezos) || isNull(item) || isNull(shares) || isNull(accountPkh) || !inputAmounts.some(isExist)) {
         return;
       }
-      const { lpToken, contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee } = item;
+      const { lpToken, contractAddress, tokensInfo, providersFee, stakersFee, interfaceFee, devFee, version } = item;
 
       const fees = [providersFee, stakersFee, interfaceFee, devFee];
 
@@ -98,7 +98,8 @@ export const useRemoveStableswapLiquidity = () => {
               decreasedTokensAndAmounts,
               atomicShares,
               deadline,
-              accountPkh
+              accountPkh,
+              version
             )
           : await removeStableswapLiquidityImbalancedApi(
               tezos,
@@ -106,7 +107,8 @@ export const useRemoveStableswapLiquidity = () => {
               decreasedTokensAndAmounts,
               atomicShares,
               deadline,
-              accountPkh
+              accountPkh,
+              version
             );
 
         await confirmOperation(operation.opHash, { message });

@@ -8,15 +8,16 @@ import { Nullable } from '@shared/types';
 
 import { getStableDividendsItemApi, getStakerInfo } from '../api';
 import { StableswapDividendsItemResponseModel, StableswapDividendsItemModel, StakerInfoResponseModel } from '../models';
+import { Version } from '../types';
 
 @ModelBuilder()
 export class StableDividendsItemStore {
   poolId: Nullable<BigNumber> = null;
-
+  version: Nullable<Version> = null;
   //#region item store
   @Led({
     default: { item: null },
-    loader: async self => ({ item: await getStableDividendsItemApi(self.poolId) }),
+    loader: async self => ({ item: await getStableDividendsItemApi(self.poolId, self.version) }),
     model: StableswapDividendsItemResponseModel
   })
   readonly itemStore: LoadingErrorData<StableswapDividendsItemResponseModel, { item: null }>;
@@ -52,6 +53,10 @@ export class StableDividendsItemStore {
 
   setPoolId(poolId: BigNumber) {
     this.poolId = poolId;
+  }
+
+  setVersion(version: Version) {
+    this.version = version;
   }
 
   async getstakerInfo() {

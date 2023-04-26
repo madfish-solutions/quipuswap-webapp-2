@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { Version } from '@modules/stableswap/types';
 import { useReady } from '@providers/use-dapp';
 import { useRedirectToNotFoundLettersRoute } from '@shared/helpers';
 
@@ -13,13 +14,14 @@ export const useGetStableDividendsItem = () => {
   const redirectToNotFoundPage = useRedirectToNotFoundLettersRoute();
 
   const getStableDividendsItem = useCallback(
-    async (poolId: BigNumber) => {
+    async (poolId: BigNumber, version: Version) => {
       if (!isReady) {
         return;
       }
 
       try {
         stableDividendsItemStore.setPoolId(poolId);
+        stableDividendsItemStore.setVersion(version);
         await stableDividendsItemStore.itemStore.load();
         await stableDividendsItemStore.stakerInfoStore.load();
       } catch (error) {

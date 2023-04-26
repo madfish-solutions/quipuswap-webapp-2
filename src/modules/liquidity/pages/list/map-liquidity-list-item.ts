@@ -3,13 +3,14 @@ import { BigNumber } from 'bignumber.js';
 import { AppRootRoutes } from '@app.router';
 import { DOLLAR, PERCENT, ZERO_AMOUNT } from '@config/constants';
 import { DexLink } from '@modules/liquidity/helpers';
+import { Version } from '@modules/stableswap/types';
 import { isNull } from '@shared/helpers';
 import { ActiveStatus, Token } from '@shared/types';
 import { i18n } from '@translation';
 
 import { LiquidityItemResponse, PoolType, PreparedLiquidityItem } from '../../interfaces';
 
-const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => {
+const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>, stableswapVersion?: Version) => {
   const [aToken, bToken] = tokens;
 
   switch (type) {
@@ -19,7 +20,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
     case PoolType.TEZ_TOKEN:
       return DexLink.getOldLiquidityPoolLink([aToken, bToken]);
     case PoolType.STABLESWAP:
-      return DexLink.getStableswapPoolLink(id);
+      return DexLink.getStableswapPoolLink(id, stableswapVersion!);
     case PoolType.UNISWAP:
       return DexLink.getLiquidityV3PoolLink(id);
     default:
@@ -28,7 +29,7 @@ const getLiquidityHref = (id: BigNumber, type: string, tokens: Array<Token>) => 
 };
 
 export const mapLiquidityListItem = ({
-  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels }
+  item: { id, tokensInfo, tvlInUsd, apr, maxApr, volumeForWeek, type, poolLabels, version }
 }: LiquidityItemResponse): PreparedLiquidityItem => {
   const tokens = tokensInfo.map(({ token }) => token);
   const itemStats = [];
@@ -81,6 +82,8 @@ export const mapLiquidityListItem = ({
     });
   }
 
+  const stableswapVersion = type === PoolType.STABLESWAP ? version : undefined;
+
   return {
     id,
     type,
@@ -89,7 +92,7 @@ export const mapLiquidityListItem = ({
     itemStats,
     categories: poolLabels,
     inputToken: tokens,
-    href: getLiquidityHref(id, type, tokens),
+    href: getLiquidityHref(id, type, tokens, stableswapVersion),
     status: { status: ActiveStatus.ACTIVE, filled: true }
   };
 };

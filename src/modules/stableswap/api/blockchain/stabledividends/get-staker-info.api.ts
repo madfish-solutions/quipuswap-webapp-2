@@ -6,7 +6,7 @@ import { getStorageInfo } from '@shared/dapp/get-storage-info';
 import { isExist, isNull, toArray } from '@shared/helpers';
 import { nat, Nullable } from '@shared/types';
 
-import { earningsMapSchema, rewardMapSchema } from '../schemas/get-staker-info.schemas';
+import { earningsMapSchema, rewardMapSchema } from '../../../schemas/get-staker-info.schemas';
 import {
   EarningsValue,
   RawStakerInfo,
@@ -14,7 +14,7 @@ import {
   StableswapStorage,
   StakerAccumulator,
   StakersBalanceValue
-} from '../types';
+} from '../../../types';
 
 const DEFAULT_VALUE = new BigNumber('0');
 

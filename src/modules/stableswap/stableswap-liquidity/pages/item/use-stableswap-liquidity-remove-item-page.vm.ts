@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { useParams } from 'react-router-dom';
 
+import { Version } from '@modules/stableswap/types';
 import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { isUndefined, isGreaterThanZero } from '@shared/helpers';
 import { Nullable } from '@shared/types';
@@ -23,6 +24,7 @@ export const useStableswapLiquidityRemoveItemPageViewModel = () => {
   const { model: stableswapItem } = itemStore;
 
   const poolId = params.poolId;
+  const version = params.version as Version;
 
   useEffect(() => {
     const loadItem = async () => {
@@ -30,13 +32,13 @@ export const useStableswapLiquidityRemoveItemPageViewModel = () => {
         return;
       }
 
-      await getStableswapItem(new BigNumber(`${poolId}`));
+      await getStableswapItem(new BigNumber(`${poolId}`), version);
 
       prevAccountPkhRef.current = accountPkh;
     };
 
     void loadItem();
-  }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore]);
+  }, [getStableswapItem, dAppReady, poolId, accountPkh, stableswapItemStore, stableswapItemFormStore, version]);
 
   const title = getStableswapTitle(stableswapItem);
   const opportunities = stableswapItem?.opportunities
