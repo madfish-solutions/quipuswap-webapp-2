@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { AppRootRoutes } from '@app.router';
 import { StableswapRoutes } from '@modules/stableswap';
-import { StableswapLiquidityFormTabs } from '@modules/stableswap/types';
+import { StableswapLiquidityFormTabs, Version } from '@modules/stableswap/types';
 import { getTokenPairSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
 
@@ -21,10 +21,10 @@ export namespace DexLink {
     return `${AppRootRoutes.Liquidity}/${LiquidityTabs.add}/${tokenPairSlug}`;
   };
 
-  export const getStableswapPoolLink = (id: BigNumber) => {
+  export const getStableswapPoolLink = (id: BigNumber, version: Version) => {
     return `${AppRootRoutes.Stableswap}${StableswapRoutes.liquidity}/${
       StableswapLiquidityFormTabs.add
-    }/${id.toFixed()}`;
+    }/${version}/${id.toFixed()}`;
   };
 
   export const getLiquidityV3PositionLink = (poolId: BigNumber, positionId: BigNumber) =>
