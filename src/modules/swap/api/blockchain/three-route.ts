@@ -36,7 +36,9 @@ export class ThreeRouteBlockchainApi {
           // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           code: (index === FIRST_INDEX ? 1 : 0) + (forward ? 2 : 0),
           dex_id,
-          amount_opt: index === FIRST_INDEX ? toAtomic(chain.input, inputToken) : null
+          amount_opt: index === FIRST_INDEX ? toAtomic(chain.input, inputToken) : null,
+          //Empty array of taquito bytes
+          params: new Uint8Array()
         }))
       )
       .flat();

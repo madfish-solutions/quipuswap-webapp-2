@@ -5,6 +5,8 @@ import { jsonFetch } from '@shared/api';
 
 import { ThreeRouteDex, ThreeRouteSwapResponse, ThreeRouteToken } from '../../types';
 
+const TREE_ROUTE_VERSION = 'v3';
+
 export class ThreeRouteBackendApi {
   private static NUMBER_DISCRIMINATION_PREFIX = 'uniqueprefix';
 
@@ -27,7 +29,7 @@ export class ThreeRouteBackendApi {
 
   private static async getThreeRouteResponse(path: string) {
     return await jsonFetch(
-      `${THREE_ROUTE_API_URL}${path}`,
+      `${THREE_ROUTE_API_URL}/${TREE_ROUTE_VERSION}${path}`,
       {
         headers: { Authorization: `Basic ${THREE_ROUTE_API_AUTH_TOKEN}` }
       },
