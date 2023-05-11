@@ -66,3 +66,4 @@ export * from './migrate-liquidity-icon';
 export * from './chart';
 export * from './all-bridge';
 export * from './filter';
+export * from './3Route';

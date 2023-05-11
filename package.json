@@ -1,6 +1,6 @@
 {
   "name": "quipuswap-webapp-2",
-  "version": "3.3.8",
+  "version": "3.3.9",
   "private": true,
   "scripts": {
     "pre-build": "node -v && npm -v && yarn -v && node ./scripts/build.js",
@@ -25,7 +25,7 @@
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.3",
-    "@quipuswap/tokens-whitelist": "^1.1.13",
+    "@quipuswap/tokens-whitelist": "^1.1.14",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
     "@taquito/beacon-wallet": "15.0.1",
