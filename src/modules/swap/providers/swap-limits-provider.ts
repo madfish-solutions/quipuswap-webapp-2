@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import constate from 'constate';
-import { getMaxInputRoute, getMaxOutputRoute } from 'swap-router-sdk';
+import { getMaxInputRoute } from 'swap-router-sdk';
 
 import { toReal, getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
@@ -40,8 +40,7 @@ export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
 
       const { value: atomsMaxInputAmount } = getMaxInputRoute(combinations);
       updateMaxInputAmount(token1, token2, toReal(atomsMaxInputAmount, token1));
-      const { value: atomsMaxOutputAmount } = getMaxOutputRoute(combinations);
-      updateMaxOutputAmount(token1, token2, toReal(atomsMaxOutputAmount, token2));
+      updateMaxOutputAmount(token1, token2, new BigNumber(Infinity));
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
