@@ -29,7 +29,8 @@ export const useComplexErrorsProps = (
     isEmptyArray(noMediatorsTradeWithSlippage) &&
     isExist(inputToken) &&
     isExist(outputToken) &&
-    (isExist(inputAmount) || isExist(outputAmount));
+    (isExist(inputAmount) || isExist(outputAmount)) &&
+    !inputAmount?.isZero();
 
   return useMemo(() => {
     const result: ComplexErrorProps[] = [];

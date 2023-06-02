@@ -18,7 +18,8 @@ import {
   isEmptyArray,
   isExist,
   canUseThreeRouteApi,
-  getTokenSlug
+  getTokenSlug,
+  isNotDefined
 } from '@shared/helpers';
 import { useTokensLoader } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
@@ -121,7 +122,7 @@ export const useSwapCalculations = () => {
     setIsLoading(true);
     setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
 
-    if (!newInputAmount || isEmptyArray(routePairsCombinations)) {
+    if (isNotDefined(newInputAmount) || newInputAmount.isZero()) {
       return resetCalculations(newInputAmount, null);
     }
 
@@ -149,6 +150,8 @@ export const useSwapCalculations = () => {
         // eslint-disable-next-line no-console
         console.error(e);
       }
+    } else if (isEmptyArray(routePairsCombinations)) {
+      return resetCalculations(newInputAmount, null);
     }
     const bestTradeExact = getBestTradeExactInput(toAtomic(newInputAmount, newInputToken), routePairsCombinations);
     setBestTrade(bestTradeExact);
