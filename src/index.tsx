@@ -13,7 +13,7 @@ import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-
 import { sentryService } from '@shared/services';
 
 import { App } from './app';
-//
+
 // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
 require('dotenv').config(); //
 
