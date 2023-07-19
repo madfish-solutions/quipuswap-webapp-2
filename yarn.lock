@@ -2512,10 +2512,10 @@
   dependencies:
     bignumber.js "^9.1.0"
 
-"@quipuswap/tokens-whitelist@^1.1.15":
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.1.15.tgz#8159aeb0c7f770d9c991a51dce4131d0479206b6"
-  integrity sha512-fEnOKl7rI+QhEJAPDT8QsVxhqodbU7Wrd4AOKeltzwXlnN8uHFnF/VBcQB+anyKcp904lrr7sUIp+u4AXn9duA==
+"@quipuswap/tokens-whitelist@^1.1.16":
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.1.17.tgz#3ab9867592e77689901f0176e7e4d320bae14fa3"
+  integrity sha512-FuVAuH7zojB5i/9CGifCJcwvTKE/1/JRswWFsDb8e4ufbmYeO2LcRHGW5EK4zupQuqNsxLCzzTDH9jcadMKwCw==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -13225,9 +13225,9 @@ which@^2.0.1, which@^2.0.2:
     isexe "^2.0.0"
 
 word-wrap@^1.2.3, word-wrap@~1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
-  integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.4.tgz#cb4b50ec9aca570abd1f52f33cd45b6c61739a9f"
+  integrity sha512-2V81OA4ugVo5pRo46hAoD2ivUJx8jXmWXfUkY4KFNw0hEptvN0QfH3K4nHiwzGeKl5rFKedV48QVoqYavy4YpA==
 
 workbox-background-sync@6.5.3:
   version "6.5.3"
