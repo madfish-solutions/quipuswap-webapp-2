@@ -1,12 +1,10 @@
-import { OperationEntry } from '@taquito/rpc';
-
 import { useTezos } from '@providers/use-dapp';
 
-import { confirmOperation } from './confirm-operation.service';
-import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
-import { OperationMessage } from './confirm-operation.types';
 import { NoTezosError } from '../../errors/no-tezos.error';
 import { useToasts } from '../toasts';
+import { confirmOperation } from './confirm-operation.service';
+import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
+import { OperationMessage, OperationEntry } from './confirm-operation.types';
 
 export const useConfirmOperation = () => {
   const { showSuccessToast, showInfoToast, showErrorToast } = useToasts();
