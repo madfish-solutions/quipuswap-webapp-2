@@ -272,6 +272,7 @@ function useDApp() {
       if (!tezos?.rpc) {
         throw new Error('Tezos RPC in undefined');
       }
+      //@ts-ignore
       const cloneTezosToolkit = makeBasicToolkit(tezos.rpc);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 

@@ -61,6 +61,7 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
     await beaconWallet.requestPermissions(permissions);
   }
 
+  //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();

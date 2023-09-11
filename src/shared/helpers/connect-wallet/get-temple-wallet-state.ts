@@ -9,6 +9,7 @@ import { TempleWalletWithPK } from './temple-wallet';
 
 export const getTempleWalletState = async (wallet: TempleWalletWithPK, networkId: SupportedNetworks) => {
   const rpcClient = new FastRpcClient(getPreferredRpcUrl());
+  //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(wallet);
   tezos.setRpcProvider(rpcClient);
