@@ -95,6 +95,8 @@ class NoVespaiachHttpBackend extends HttpBackend {
   }
 }
 
+type THttpBackend = ConstructorParameters<typeof RpcClient>[2];
+
 /* eslint-disable no-param-reassign */
 export class FastRpcClient extends RpcClient {
   refreshInterval = REFRESH_INTERVAL;
@@ -106,8 +108,11 @@ export class FastRpcClient extends RpcClient {
     refreshedAt: number; // timestamp
   };
 
-  constructor(url: string, chain?: string, httpBackend?: HttpBackend) {
-    super(url, chain, httpBackend ?? new NoVespaiachHttpBackend());
+  constructor(url: string, chain?: string, httpBackend?: THttpBackend) {
+    const _httpBackend =
+      httpBackend ?? (new NoVespaiachHttpBackend() as unknown as ConstructorParameters<typeof RpcClient>[2]);
+
+    super(url, chain, _httpBackend);
   }
 
   async getBlockHash(opts?: RPCOptions) {

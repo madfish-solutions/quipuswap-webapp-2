@@ -1,5 +1,4 @@
-/* eslint-disable  import/order */
-
+/* eslint-disable import/order */
 import { NetworkType } from '@airgap/beacon-types';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 

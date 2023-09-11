@@ -1,4 +1,4 @@
-import { OperationEntry } from '@taquito/rpc';
+import { TezosToolkit } from '@taquito/taquito';
 
 export interface ConfirmOperationOptions {
   initializedAt?: number;
@@ -10,4 +10,9 @@ export interface OperationMessage {
   message: string;
 }
 
+export type BlockResponse = Awaited<ReturnType<TezosToolkit['rpc']['getBlock']>>;
+export type OperationEntry = BlockResponse['operations'][number][number];
+
 export type ConfirmationToastProps = Pick<OperationEntry, 'hash'> & Partial<OperationMessage>;
+
+export type OperationContentsOrOperationContentsAndResult = OperationEntry['contents'][number];

@@ -18,7 +18,8 @@ import {
   getPreferredRpcUrl,
   getTempleWalletState,
   michelEncoder,
-  ReadOnlySigner
+  ReadOnlySigner,
+  TempleWalletWithPK
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNetwork } from '@shared/types';
 
@@ -95,7 +96,10 @@ function useDApp() {
             console.error(error);
           }
 
-          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
+          const wlt = new TempleWalletWithPK(
+            APP_NAME,
+            lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null
+          );
 
           if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
             const { pkh, pk, tezos: _tezos } = await getTempleWalletState(wlt, NETWORK_ID);

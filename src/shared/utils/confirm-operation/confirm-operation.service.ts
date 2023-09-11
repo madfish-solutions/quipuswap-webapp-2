@@ -1,4 +1,3 @@
-import { OperationEntry } from '@taquito/rpc';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { CONFIRM_TIMEOUT, SYNC_INTERVAL } from './confirm-operation.config';
@@ -8,7 +7,7 @@ import {
   OperationRejectedError
 } from './confirm-operation.errors';
 import { findOperation, getOperationStatus } from './confirm-operation.helpers';
-import { ConfirmOperationOptions } from './confirm-operation.types';
+import { ConfirmOperationOptions, OperationEntry } from './confirm-operation.types';
 
 export const confirmOperation = async (
   tezos: TezosToolkit,
