@@ -33,6 +33,7 @@ export interface DAppType {
 }
 
 export function makeBasicToolkit(clientOrUrl?: RpcClientInterface | string) {
+  //@ts-ignore
   const tezos = new TezosToolkit(clientOrUrl ?? new FastRpcClient(getPreferredRpcUrl()));
   tezos.setPackerProvider(michelEncoder);
 
