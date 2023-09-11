@@ -6,8 +6,8 @@ import { getTokenSymbol, isNull } from '@shared/helpers';
 import { ActiveStatus, Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
-import { isNewFarming } from '../../helpers/is-new-farming';
 import { FarmingListItemWithBalances } from './types';
+import { isNewFarming } from '../../helpers/is-new-farming';
 
 const ZERO = 0;
 

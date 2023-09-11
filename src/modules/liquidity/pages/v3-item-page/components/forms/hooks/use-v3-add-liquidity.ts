@@ -14,13 +14,13 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { usePositionTicks } from './use-position-ticks';
 import { V3AddLiquidityApi } from '../../../api/v3-add-liquidity';
 import { findUserPosition, makeV3LiquidityOperationLogData } from '../../../helpers';
 import { calculateLiquidity } from '../../../helpers/v3-liquidity-helpers';
 import { useCurrentTick, useMutezRewards, usePositionsWithStats } from '../../../hooks';
 import { getTokensValues } from '../helpers/get-tokens-values';
 import { V3AddTokenInput } from '../interface';
-import { usePositionTicks } from './use-position-ticks';
 
 export const useV3AddLiquidity = () => {
   const { tezos } = useRootStore();

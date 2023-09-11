@@ -8,8 +8,8 @@ import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { CFC, Standard, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { TokensLogos } from '../tokens-logo';
 import styles from './ModalCell.module.scss';
+import { TokensLogos } from '../tokens-logo';
 
 interface TokenCellProps {
   token: Token;

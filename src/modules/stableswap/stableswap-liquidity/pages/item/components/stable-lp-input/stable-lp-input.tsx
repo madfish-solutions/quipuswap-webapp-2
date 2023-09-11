@@ -8,8 +8,8 @@ import { TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { IFormik, Optional } from '@shared/types';
 
-import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 import { useStableLpInputViewModel } from './stable-lp-input.vm';
+import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 
 interface Props {
   formik: IFormik<RemoveLiqFormValues>;

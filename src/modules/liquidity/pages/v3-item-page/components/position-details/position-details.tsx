@@ -9,12 +9,12 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import styles from './position-details.module.scss';
+import { usePositionDetailsViewModel } from './use-position-details.vm';
 import { useShouldShowTokenXToYPrice } from '../../hooks';
 import { PositionStatus } from '../position-status';
 import { PriceView } from '../price-view';
 import { TokensOrderSwitcher } from '../tokens-order-switcher';
-import styles from './position-details.module.scss';
-import { usePositionDetailsViewModel } from './use-position-details.vm';
 
 export const PositionDetails: FC = observer(() => {
   const { t } = useTranslation();

@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 import { Optional, TokenAddress } from '@shared/types';
 
+import { useTokensStore } from './use-tokens-store';
 import { getTokenMetadata } from '../api';
 import { getTokenAddress, getTokenSlug, isString } from '../helpers';
 import { mapToken } from '../mapping/token.map';
-import { useTokensStore } from './use-tokens-store';
 
 export const useTokensLoader = (tokens: Optional<Array<TokenAddress | string>>) => {
   const tokensStore = useTokensStore();

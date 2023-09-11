@@ -1,5 +1,5 @@
-import { Constructable } from '../types';
 import { TYPED_MARK_SYMBOL } from './typed-mark-symbol';
+import { Constructable } from '../types';
 
 interface ITyped {
   isArray?: boolean;

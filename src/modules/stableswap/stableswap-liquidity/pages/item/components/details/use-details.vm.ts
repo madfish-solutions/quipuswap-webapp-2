@@ -6,8 +6,8 @@ import { getTokenSymbol, isExist } from '@shared/helpers';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { useStableswapItemStore } from '../../../../../hooks';
 import styles from './details.module.scss';
+import { useStableswapItemStore } from '../../../../../hooks';
 
 const DEFAULT_DECIMALS = 2;
 const DEFAULT_COUNT_OF_TOKENS_IN_POOL = 2;

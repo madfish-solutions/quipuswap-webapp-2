@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { AlarmMessage } from '@shared/components';
 import { Nullable } from '@shared/types';
 
-import { TokensQuantityStatus } from '../../types';
 import styles from './tokens-quantity-info.module.scss';
+import { TokensQuantityStatus } from '../../types';
 
 export interface TokensQuantityInfoProps {
   tokensQuantityStatus: TokensQuantityStatus;

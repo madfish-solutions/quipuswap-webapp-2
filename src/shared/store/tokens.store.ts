@@ -2,8 +2,8 @@ import { action, makeObservable, observable } from 'mobx';
 
 import { isExist } from '@shared/helpers';
 
-import { Nullable, Token } from '../types';
 import { RootStore } from './root.store';
+import { Nullable, Token } from '../types';
 
 export type TokensMap = Map<string, Nullable<Token>>;
 

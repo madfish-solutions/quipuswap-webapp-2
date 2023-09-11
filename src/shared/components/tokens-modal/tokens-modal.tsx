@@ -10,11 +10,11 @@ import { Modal } from '@shared/modals';
 import { NotFound } from '@shared/svg';
 import { Token } from '@shared/types';
 
-import { Iterator } from '../iterator';
-import { LoadingTokenCell, TokenCell } from '../modal-cell';
 import { Header } from './header';
 import styles from './tokens-modal.module.scss';
 import { useTokensModalViewModel } from './tokens-modal.vm';
+import { Iterator } from '../iterator';
+import { LoadingTokenCell, TokenCell } from '../modal-cell';
 
 const themeClass = {
   [ColorModes.Light]: styles.light,

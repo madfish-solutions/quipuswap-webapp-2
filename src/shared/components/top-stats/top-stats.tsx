@@ -6,9 +6,9 @@ import { DOLLAR } from '@config/constants';
 import { isEqual, isExist } from '@shared/helpers';
 import { Nullable, Optional } from '@shared/types';
 
+import styles from './top-stats.module.scss';
 import { StateCurrencyAmount } from '../state-components';
 import { Tooltip } from '../tooltip';
-import styles from './top-stats.module.scss';
 
 interface TopStatsProps {
   title: string;

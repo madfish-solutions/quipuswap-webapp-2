@@ -3,8 +3,8 @@ import { Card, SettingsButton } from '@shared/components';
 import { CFC } from '@shared/types';
 import CommonContainerStyles from '@styles/CommonContainer.module.scss';
 
-import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './position-form-card.module.scss';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 
 interface PositionFormCardProps {
   backHref: string;

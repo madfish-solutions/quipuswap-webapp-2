@@ -3,9 +3,9 @@ import cx from 'classnames';
 import { isExist } from '@shared/helpers';
 import { CFC, Nullable } from '@shared/types';
 
+import styles from './details-card-cell.module.scss';
 import { CardCell } from '../card-cell';
 import { Tooltip } from '../tooltip';
-import styles from './details-card-cell.module.scss';
 
 interface DetailsCardCellProps {
   cellName: string;

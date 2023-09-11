@@ -1,6 +1,6 @@
-import { LiquidityV3PositionDto } from '../dto';
 import { FeeGrowthModel } from './fee-growth.model';
 import { TickModel } from './tick.model';
+import { LiquidityV3PositionDto } from '../dto';
 
 export class LiquidityV3PositionModel extends LiquidityV3PositionDto {
   fee_growth_inside_last: FeeGrowthModel;

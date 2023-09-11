@@ -16,10 +16,10 @@ import { BalanceToken } from '@shared/hooks';
 import { numberAsStringSchema } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { calculateTickIndex, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
-import { CreatePositionInput } from '../../types/create-position-form';
 import { useCurrentTick } from './use-current-tick';
 import { useTickSpacing } from './use-tick-spacing';
+import { calculateTickIndex, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
+import { CreatePositionInput } from '../../types/create-position-form';
 
 export const useCreateNewPositionFormValidationSchema = (tokensWithBalances: BalanceToken[]) => {
   const [tokenXWithBalance, tokenYWithBalance] = tokensWithBalances;

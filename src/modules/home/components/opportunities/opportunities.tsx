@@ -4,10 +4,10 @@ import cx from 'classnames';
 
 import { useTranslation } from '@translation';
 
-import { Section } from '../section';
 import { OpportunitiesCardsData } from './content';
 import s from './opportunities.module.scss';
 import { OpportunityCard } from './opportunity-card';
+import { Section } from '../section';
 
 interface OpportunitiesProps {
   className?: string;

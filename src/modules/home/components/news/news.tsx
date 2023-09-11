@@ -5,11 +5,11 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useTranslation } from '@translation';
 
-import { HomeSlider } from '../home-slider';
-import { Section } from '../section';
 import { NewsData } from './content';
 import { NewsCard } from './news-card';
 import styles from './news.module.scss';
+import { HomeSlider } from '../home-slider';
+import { Section } from '../section';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

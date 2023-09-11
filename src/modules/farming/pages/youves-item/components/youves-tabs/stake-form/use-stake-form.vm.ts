@@ -2,10 +2,10 @@ import { useRootStore } from '@providers/root-store-provider';
 import { isNotDefined } from '@shared/helpers';
 import { useAuthStore, useToken, useTokenBalance } from '@shared/hooks';
 
-import { useFarmingYouvesItemStore } from '../../../../../hooks';
 import { StakeFormProps } from './stake-form-props.interface';
 import { useGetConfirmationMessageParams } from './use-get-confirmation-message-params';
 import { useStakeFormForming } from './use-stake-form-forming';
+import { useFarmingYouvesItemStore } from '../../../../../hooks';
 
 export const useStakeFormViewModel = (): StakeFormProps => {
   const { tezos } = useRootStore();

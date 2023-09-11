@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Optional } from '../types';
 import { numberAsStringSchema } from './number-as-string';
+import { Optional } from '../types';
 
 const ZERO = 0;
 

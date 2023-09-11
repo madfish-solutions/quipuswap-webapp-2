@@ -4,9 +4,9 @@ import { useV3PoolPriceDecimals, useLiquidityV3PoolStore } from '@modules/liquid
 import { CreatePositionFormik } from '@modules/liquidity/types';
 import { getInvertedValue, stringToBigNumber, toAtomic } from '@shared/helpers';
 
+import { useTickSpacing } from './use-tick-spacing';
 import { calculateTicks } from '../../helpers';
 import { CreatePositionInput } from '../../types/create-position-form';
-import { useTickSpacing } from './use-tick-spacing';
 
 export const usePositionTicks = (formik: CreatePositionFormik) => {
   const priceDecimals = useV3PoolPriceDecimals();

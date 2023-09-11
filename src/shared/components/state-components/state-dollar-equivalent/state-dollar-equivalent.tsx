@@ -8,9 +8,9 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import styles from './state-dollar-equivalent.module.scss';
 import { DashPlug } from '../../dash-plug';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
-import styles from './state-dollar-equivalent.module.scss';
 
 const USD_DECIMALS_AMOUNT = 2;
 

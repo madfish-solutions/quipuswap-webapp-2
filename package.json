@@ -21,7 +21,8 @@
     "cy:run_browser": "npx cypress run e2e:parallel -- --browser chrome --group Chrome & npx cypress run e2e -- --browser firefox --group Firefox"
   },
   "dependencies": {
-    "@airgap/beacon-sdk": "^3.3.0",
+    "@airgap/beacon-sdk": "^4.0.10",
+    "@airgap/beacon-types": "^4.0.10",
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.3",

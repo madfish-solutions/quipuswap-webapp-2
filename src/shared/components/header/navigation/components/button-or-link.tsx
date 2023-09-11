@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 import { Nullable } from '@shared/types';
 
+import styles from './button-or-link.module.scss';
 import { ExternalLink } from '../../../../svg';
 import { NavigationDataProps } from '../navigation-data';
-import styles from './button-or-link.module.scss';
 
 interface Props {
   link: NavigationDataProps;

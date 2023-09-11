@@ -9,8 +9,8 @@ import { useYoutubeTabs } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { DexTwoDetailsView } from '../dex-two-details-view';
 import { useDexTwoDetailsViewModel } from './dex-two-details.vm';
+import { DexTwoDetailsView } from '../dex-two-details-view';
 
 export const DexTwoDetails: FC = observer(() => {
   const { t } = useTranslation();

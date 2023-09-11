@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
-import { shouldHarvestInBatch } from '../helpers';
 import { useFarmingListStore } from './stores';
+import { shouldHarvestInBatch } from '../helpers';
 
 export const useHarvestReadyFarmsIds = () => {
   const farmingListStore = useFarmingListStore();

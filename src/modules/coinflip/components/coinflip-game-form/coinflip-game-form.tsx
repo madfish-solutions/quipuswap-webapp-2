@@ -9,10 +9,10 @@ import { Nullable, Token } from '@shared/types';
 import commonStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { CoinSide, TokenToPlay } from '../../stores';
-import { CoinflipGameSelect } from '../coinflip-game-select';
 import styles from './coinflip-game-form.module.scss';
 import { useCoinflipGameFormViewModel } from './use-coinflip-game-form.vm';
+import { CoinSide, TokenToPlay } from '../../stores';
+import { CoinflipGameSelect } from '../coinflip-game-select';
 
 interface Props {
   isLoading: boolean;

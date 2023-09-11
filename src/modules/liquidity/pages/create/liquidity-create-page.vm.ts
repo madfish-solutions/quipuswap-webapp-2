@@ -17,13 +17,13 @@ import { useTokensModalStore } from '@shared/modals/tokens-modal/use-tokens-moda
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { useCreateLiquidityPool } from '../../hooks';
 import { DexTwoCreateFormCommonData } from './components/dex-two-create-form/dex-two-create-form.types';
 import { getInputSlugByIndex } from './components/helpers';
 import { getTokensAndAmounts } from './get-tokens-and-amounts.helper';
 import { LiquidityCreateInput } from './liquidity-create.interface';
 import { useIsPoolExist } from './use-is-pool-exist';
 import { useLiquidityCreateValidation } from './use-liquidity-create-validation';
+import { useCreateLiquidityPool } from '../../hooks';
 
 const ZERO_DECIMALS = 0;
 

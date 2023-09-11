@@ -6,10 +6,10 @@ import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
 
-import { StableDividendsRewardDetails } from '../stabledividends-reward-details';
-import { StableDividendsStatsItem } from '../stabledividends-stats-item';
 import styles from './stabledividends-reward-info.module.scss';
 import { useStableDividendsRewardInfoViewModel } from './use-stabledividends-reward-info.vm';
+import { StableDividendsRewardDetails } from '../stabledividends-reward-details';
+import { StableDividendsStatsItem } from '../stabledividends-stats-item';
 
 export const StableDividendsRewardInfo = observer(() => {
   const {

@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { Nullable } from '../types/types';
 import { RootStore } from './root.store';
+import { Nullable } from '../types/types';
 
 export class AuthStore {
   accountPkh: Nullable<string> = null;

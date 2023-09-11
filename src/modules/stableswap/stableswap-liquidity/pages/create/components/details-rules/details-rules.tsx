@@ -4,9 +4,9 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { DetailsRulesItem } from '../details-rules-item';
 import styles from './details-rules.module.scss';
 import { useDetailsRulesViewModel } from './use-details-rules.vm';
+import { DetailsRulesItem } from '../details-rules-item';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

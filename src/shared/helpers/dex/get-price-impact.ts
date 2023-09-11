@@ -5,9 +5,9 @@ import { DexTypeEnum, getTradeInputAmount, getTradeOutputAmount, RouteDirectionE
 
 import { ZERO_AMOUNT } from '@config/constants';
 
+import { convertToAtomicPrice } from './convert-to-atomic-price';
 import { getValueDiffPercentage } from '../percentage';
 import { defined } from '../type-checks';
-import { convertToAtomicPrice } from './convert-to-atomic-price';
 
 const FALLBACK_TOKEN_MULTIPLIER = 1;
 const getDexPairsAfterSwap = (trade: Trade) =>

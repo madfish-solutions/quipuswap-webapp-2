@@ -7,14 +7,14 @@ import { CreatePositionFormik } from '@modules/liquidity/types';
 import { getInvertedValue, isExist, stringToBigNumber } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
+import { useCurrentTick } from './use-current-tick';
+import { usePositionTicks } from './use-position-ticks';
 import {
   CreatePositionAmountInput,
   CreatePositionFormValues,
   CreatePositionInput
 } from '../../types/create-position-form';
-import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
-import { useCurrentTick } from './use-current-tick';
-import { usePositionTicks } from './use-position-ticks';
 
 export const useOnAmountInputChange = (formik: CreatePositionFormik) => {
   const lastEditedAmountFieldRef = useRef<Nullable<CreatePositionAmountInput>>(null);

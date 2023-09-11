@@ -5,8 +5,8 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Nullable } from '@shared/types';
 
-import { AssetInput } from '../asset-input';
 import styles from './presets-amount-input.module.scss';
+import { AssetInput } from '../asset-input';
 
 interface AmountPreset {
   label: string;

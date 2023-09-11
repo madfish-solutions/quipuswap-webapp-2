@@ -6,8 +6,8 @@ import { isDirectOrder, isNull } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { StableDividendsSortField, StableDividendsSortFieldItem } from '../../types';
 import styles from './stabledividends-list-filter.module.scss';
+import { StableDividendsSortField, StableDividendsSortFieldItem } from '../../types';
 
 export const useStableDividendsListFilterViewModel = (): ListFilterInputViewProps => {
   const { t } = useTranslation();

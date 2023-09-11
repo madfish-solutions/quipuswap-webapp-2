@@ -24,9 +24,9 @@ import {
 import { WhitelistedBaker } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 import { getTokenAndFieldData, getFormikInitialValues, getUserBalances, getEverstakeBaker } from '../helpers';
 import { Input, LiquidityFormValues } from '../interface';
-import { useDexTwoAddLiqValidation } from './use-dex-two-add-liq-form-validation';
 
 export const useDexTwoAddLiqFormViewModel = () => {
   const { t } = useTranslation();

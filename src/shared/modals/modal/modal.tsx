@@ -1,3 +1,4 @@
+/* eslint-disable  import/order */
 import { FC, ReactNode, useContext, useState } from 'react';
 
 import cx from 'classnames';
@@ -50,11 +51,11 @@ export const Modal: FC<ModalProps> = ({
 
   return (
     <ReactModal
-      className={cx(styles.root, className)}
+      className={cx(styles.root, className as string)}
       appElement={typeof window !== 'undefined' ? document.getElementById('root')! : undefined}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      overlayClassName={cx(styles.overlay, modeClass[colorThemeMode], overlayClassName)}
+      overlayClassName={cx(styles.overlay, modeClass[colorThemeMode], overlayClassName as string)}
       portalClassName={cx(styles.portal, { [styles.hidden]: !isOpen }, portalClassName)}
       {...props}
     >

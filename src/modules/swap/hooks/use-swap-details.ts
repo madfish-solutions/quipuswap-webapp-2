@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import { ZERO_AMOUNT } from '@config/constants';
 import { getRateByInputOutput } from '@shared/helpers';
 
-import { SwapDetailsParams } from '../utils/types';
 import { usePriceImpact } from './use-price-impact';
 import { useRealSwapFee } from './use-swap-fee';
+import { SwapDetailsParams } from '../utils/types';
 
 export const useRealSwapDetails = (params: SwapDetailsParams) => {
   const { noMediatorsTrade, inputToken, outputToken, inputAmount, outputAmount } = params;

@@ -6,9 +6,9 @@ import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@s
 import styles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { useStakeFormViewModel } from './use-stake-form.vm';
 import { FarmingAlert } from '../../farming-alert';
 import { FarmingFormInvestLink } from '../../farming-form-invest-link';
-import { useStakeFormViewModel } from './use-stake-form.vm';
 
 export const StakeForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'farm']);

@@ -12,8 +12,8 @@ import { getTokenSlug, multipliedIfPossible } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
-import { TokenWon } from '../../types';
 import styles from './game-user-info.module.scss';
+import { TokenWon } from '../../types';
 
 enum Columns {
   TOKEN = 'TOKEN',

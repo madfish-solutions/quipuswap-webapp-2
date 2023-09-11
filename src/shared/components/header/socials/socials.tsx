@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { amplitudeService } from '../../../services';
-import { Button } from '../../button';
 import { SocialLinksData } from './content';
 import styles from './socials.module.scss';
+import { amplitudeService } from '../../../services';
+import { Button } from '../../button';
 
 interface SocialsProps {
   id?: string;

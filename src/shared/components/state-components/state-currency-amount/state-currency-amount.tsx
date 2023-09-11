@@ -8,10 +8,10 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
 import { Nullable, Optional } from '@shared/types';
 
+import styles from './state-currency-amount.module.scss';
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
-import styles from './state-currency-amount.module.scss';
 
 export enum TextAlignment {
   START = 'START',

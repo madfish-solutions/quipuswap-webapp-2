@@ -4,8 +4,8 @@ import { DexLink } from '@modules/liquidity/helpers';
 import { getTokenPairSlug, isArrayPairTuple } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
-import { getDexTwoLiquidityItemApi } from '../../api/get-dex-two-liquidity-item.api';
 import { PoolLinkExist, PoolLinkNotExist } from './components/dex-two-create-form/dex-two-create-form.types';
+import { getDexTwoLiquidityItemApi } from '../../api/get-dex-two-liquidity-item.api';
 
 export const useIsPoolExist = (chosenTokens: Array<Token>): PoolLinkExist | PoolLinkNotExist => {
   const [isPoolExist, setIsPoolExist] = useState(false);

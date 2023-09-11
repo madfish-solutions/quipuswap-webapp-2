@@ -10,8 +10,8 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { getStakeUnstakeLogData } from '../../helpers';
 import { useFarmingTimeout } from './use-farming-timeout';
+import { getStakeUnstakeLogData } from '../../helpers';
 
 export const useDoUnstake = () => {
   const { t } = useTranslation();

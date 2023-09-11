@@ -6,8 +6,8 @@ import { isExist, isNull } from '@shared/helpers';
 import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
 
-import { TokenLogo } from '../token-logo';
 import s from './tokens-logos-deprecated.module.scss';
+import { TokenLogo } from '../token-logo';
 
 interface TokensLogosPropsAbstraction {
   firstTokenIcon: Nullable<string>;

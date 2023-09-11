@@ -1,5 +1,5 @@
-import { StableswapListDto } from '../dto';
 import { StableswapItemModel } from './stableswap-item.model';
+import { StableswapListDto } from '../dto';
 
 export class StableswapListModel extends StableswapListDto {
   list: Array<StableswapItemModel>;

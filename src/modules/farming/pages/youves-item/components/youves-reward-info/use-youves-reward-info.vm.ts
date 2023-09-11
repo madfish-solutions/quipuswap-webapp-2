@@ -8,9 +8,9 @@ import { defined, executeAsyncSteps, getLastElementFromArray, getSymbolsString }
 import { useMount, useOnBlock, useToken, useTokenBalance } from '@shared/hooks';
 import { amplitudeService } from '@shared/services';
 
-import { getRewardsDueDate } from '../../api';
 import { useYouvesHarvestConfirmationPopup } from './use-youves-harvest-confirmation-popup';
 import { useYouvesFarmingItemRewards } from './use-youves-rewards';
+import { getRewardsDueDate } from '../../api';
 
 export const useYouvesRewardInfoViewModel = () => {
   // TODO: remove useState using store

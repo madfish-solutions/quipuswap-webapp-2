@@ -16,10 +16,10 @@ import { ArrowDown, Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from '../../liquidity.module.scss';
-import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
+import styles from '../../liquidity.module.scss';
+import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 
 export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);

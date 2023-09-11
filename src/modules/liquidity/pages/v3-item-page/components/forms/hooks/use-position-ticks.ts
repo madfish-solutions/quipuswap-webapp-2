@@ -4,9 +4,9 @@ import { ZERO_AMOUNT_BN } from '@config/constants';
 import { useLiquidityV3PositionStore, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { toAtomic } from '@shared/helpers';
 
+import { useTickSpacing } from './use-tick-spacing';
 import { calculateTicks, findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
-import { useTickSpacing } from './use-tick-spacing';
 
 export const usePositionTicks = () => {
   const priceDecimals = useV3PoolPriceDecimals();

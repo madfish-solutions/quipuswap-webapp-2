@@ -9,8 +9,8 @@ import { StateCurrencyAmount } from '@shared/components';
 import { getTokenSymbol, isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { useShouldShowTokenXToYPrice } from '../../hooks';
 import styles from './price-view.module.scss';
+import { useShouldShowTokenXToYPrice } from '../../hooks';
 
 interface PriceViewProps {
   textClassName?: string;

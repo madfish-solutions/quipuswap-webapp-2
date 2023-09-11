@@ -2,9 +2,9 @@ import { observer } from 'mobx-react-lite';
 
 import { ListFilterBaseView, TokensFilter } from '@shared/components';
 
-import { PoolTypeFilter } from '../pool-type-filter';
 import styles from './list-filter.module.scss';
 import { useListFilterViewModel } from './list-filter.vm';
+import { PoolTypeFilter } from '../pool-type-filter';
 
 export const ListFilter = observer(() => {
   const params = useListFilterViewModel();

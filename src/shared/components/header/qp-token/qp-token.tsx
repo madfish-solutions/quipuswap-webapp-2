@@ -8,8 +8,8 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useExchangeRates } from '@providers/use-new-exchange-rate';
 import { QuipuToken } from '@shared/svg';
 
-import { amplitudeService } from '../../../services';
 import styles from './qp-token.module.scss';
+import { amplitudeService } from '../../../services';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

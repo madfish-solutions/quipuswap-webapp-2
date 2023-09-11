@@ -13,9 +13,9 @@ import {
 } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
+import styles from './tokens-logos.module.scss';
 import { Iterator } from '../iterator';
 import { TokenLogo } from '../token-logo';
-import styles from './tokens-logos.module.scss';
 
 type TokensList = Nullable<Token> | Array<Nullable<Token>>;
 

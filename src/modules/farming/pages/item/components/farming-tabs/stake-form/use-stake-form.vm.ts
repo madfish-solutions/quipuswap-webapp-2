@@ -21,10 +21,10 @@ import {
 import { useMount } from '@shared/hooks';
 import { ActiveStatus, WhitelistedBaker } from '@shared/types';
 
-import { canDelegate } from '../../../helpers';
 import { StakeFormFields, StakeFormValues } from './stake-form.interface';
 import { useStakeConfirmationPopup } from './use-stake-confirmation-popup';
 import { useStakeFormValidation } from './use-stake-form.validation';
+import { canDelegate } from '../../../helpers';
 
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 

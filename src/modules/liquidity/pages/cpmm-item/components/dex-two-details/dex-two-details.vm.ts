@@ -7,9 +7,9 @@ import { getTokenSymbol, isGreaterThanZero, toReal } from '@shared/helpers';
 import { useTokenExchangeRate } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 
-import { useLiquidityItemStore } from '../../../../hooks';
 import styles from './dex-two-details.module.scss';
 import { useDexTwoPoolCurrentBaker } from './use-dex-two-pool-current-baker';
+import { useLiquidityItemStore } from '../../../../hooks';
 
 export const useDexTwoDetailsViewModel = () => {
   const { item, itemIsLoading } = useLiquidityItemStore();

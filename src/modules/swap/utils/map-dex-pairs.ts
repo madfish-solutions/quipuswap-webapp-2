@@ -5,8 +5,8 @@ import { isExist } from '@shared/helpers';
 import { TokensMap } from '@shared/store/tokens.store';
 import { Nullable } from '@shared/types';
 
-import { DexPool } from '../types';
 import { swapRouterSdkTokenSlugToQuipuTokenSlug } from './swap-router-sdk-adapters';
+import { DexPool } from '../types';
 
 export const extractTokensPools = (operation: TradeOperation, knownTokens: TokensMap) => {
   const {

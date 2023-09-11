@@ -22,8 +22,8 @@ import { ExternalLink } from '@shared/svg';
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
+import { getCandidateInfo, getVotingInfo } from '../../helpers';
 
 export const VotingDetails: FC = () => {
   const { t } = useTranslation();

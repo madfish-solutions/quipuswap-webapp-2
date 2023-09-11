@@ -7,8 +7,8 @@ import { getMaxInputRoute } from 'swap-router-sdk';
 import { toReal, getTokenSlug } from '@shared/helpers';
 import { Token } from '@shared/types';
 
-import { getAllowedRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
 import { useRoutePairs } from './route-pairs-provider';
+import { getAllowedRoutePairsCombinations } from '../utils/swap-router-sdk-adapters';
 
 type TokensAmounts = Record<string, Record<string, BigNumber>>;
 

@@ -5,8 +5,8 @@ import { useLiquidityV3PoolStore, useV3NewPosition } from '@modules/liquidity/ho
 import { getInvertedValue, sleep, stringToBigNumber } from '@shared/helpers';
 import { BalanceToken } from '@shared/hooks';
 
-import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
 import { useCreateNewPositionFormValidationSchema } from './use-create-new-position-form-validation-schema';
+import { CreatePositionFormValues, CreatePositionInput } from '../../types/create-position-form';
 
 export const useCreatePositionFormik = (
   initialMinPrice: string,

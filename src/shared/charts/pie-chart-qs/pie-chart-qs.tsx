@@ -7,10 +7,10 @@ import { COLORS } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { formatValueBalance } from '@shared/helpers';
 
-import { DefaultChart } from '../components/default-chart';
-import { PieChartData } from '../types';
 import styles from './pie-chart-qs.module.scss';
 import { usePieCharViewModel } from './use-pie-chart-qs.vm';
+import { DefaultChart } from '../components/default-chart';
+import { PieChartData } from '../types';
 
 export const PieChartQs: FC<PieChartData> = ({ data }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);

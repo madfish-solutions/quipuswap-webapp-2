@@ -31,6 +31,8 @@ import { amplitudeService } from '@shared/services';
 import { Nullable, Optional, Token, Undefined } from '@shared/types';
 import { useConfirmOperation } from '@shared/utils';
 
+import { LastChangedToken } from './last-changed-token.enum';
+import { PairInfo } from './pair-info.interface';
 import {
   addLiquidityTez,
   addLiquidityTokenToToken,
@@ -40,8 +42,6 @@ import {
 import { calculatePoolAmount, checkIsPoolNotExists, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
-import { LastChangedToken } from './last-changed-token.enum';
-import { PairInfo } from './pair-info.interface';
 
 const EMPTY_BALANCE_AMOUNT = 0;
 

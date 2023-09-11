@@ -7,8 +7,8 @@ import { Button, TokensLogos, Tooltip } from '@shared/components';
 import { getSymbolsString } from '@shared/helpers';
 import { DexTwoCategoryIcon, StableCategory, V3Category } from '@shared/svg/categories';
 
-import { DexPool } from '../../types';
 import s from './pool-button.module.scss';
+import { DexPool } from '../../types';
 
 interface PoolButtonProps {
   pool: DexPool;

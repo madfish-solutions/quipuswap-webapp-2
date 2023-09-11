@@ -12,9 +12,9 @@ import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { LiquidityPoolExist } from '../../../../components';
 import styles from './dex-two-create-form.module.scss';
 import { DexTwoCreateFormProps } from './dex-two-create-form.types';
+import { LiquidityPoolExist } from '../../../../components';
 
 export const DexTwoCreateForm: FC<DexTwoCreateFormProps> = ({ data, onSubmit, bakerData, commonData }) => {
   const { t } = useTranslation();

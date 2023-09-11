@@ -8,9 +8,9 @@ import { TEZOS_TOKEN, WTEZ_TOKEN } from '@config/tokens';
 import { isGreaterThanZero, isTezosToken } from '@shared/helpers';
 import { AmountToken, Nullable } from '@shared/types';
 
+import { getYupanaRebalanceParams } from './utils';
 import { getTotalTokenAmount } from '../../../helpers';
 import { Version } from '../../../types';
-import { getYupanaRebalanceParams } from './utils';
 
 const createMichelsonAmount = (tokensAndAmounts: Array<AmountToken>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();

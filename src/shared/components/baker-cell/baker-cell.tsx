@@ -6,9 +6,9 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Baker } from '@shared/svg';
 
+import s from './baker-cell.module.scss';
 import { TokensLogosDeprecated } from '../tokens-logos-deprecated';
 import { Tooltip } from '../tooltip';
-import s from './baker-cell.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

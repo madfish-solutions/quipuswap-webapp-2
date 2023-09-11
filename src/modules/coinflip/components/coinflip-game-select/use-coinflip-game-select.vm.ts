@@ -9,10 +9,10 @@ import {
   TezosBackActiveIcon
 } from '@shared/svg';
 
+import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 import animationQuipuData from '../../animations/quipu.json';
 import animationTezosData from '../../animations/xtz.json';
 import { CoinSide, TokenToPlay } from '../../stores';
-import { CoinflipGameSelectProps } from './coinflip-game-select.props';
 
 export const useCoinflipGameSelectViewModel = ({
   isLoading,

@@ -4,8 +4,8 @@ import { useReady } from '@providers/use-dapp';
 import { useAuthStore } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useGetStableDividendsList, useStableDividendsListStore } from '../../../hooks';
 import { stableDividendsListDataHelper } from './stabledividends-list-data.helper';
+import { useGetStableDividendsList, useStableDividendsListStore } from '../../../hooks';
 
 export const useStableDividendsListPageViewModel = () => {
   const isReady = useReady();

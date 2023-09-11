@@ -4,11 +4,11 @@ import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import styles from './dex-two-remove-liq-form-view.module.scss';
 import { Button } from '../button';
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { Iterator } from '../iterator';
 import { TokenInput, TokenInputProps } from '../token-input';
-import styles from './dex-two-remove-liq-form-view.module.scss';
 
 interface Props {
   data: TokenInputProps[];

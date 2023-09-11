@@ -1,4 +1,4 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@airgap/beacon-types';
 
 import { SupportedNetworks } from '@shared/types';
 

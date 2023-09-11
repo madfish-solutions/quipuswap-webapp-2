@@ -10,8 +10,8 @@ import { useReady } from '@providers/use-dapp';
 import { bigNumberToString, getDollarEquivalent, getTimeLockDescription, getTokenSymbol } from '@shared/helpers';
 import s from '@styles/CommonContainer.module.scss';
 
-import { canDelegate, makeBaker } from '../../helpers';
 import styles from './farming-details.module.scss';
+import { canDelegate, makeBaker } from '../../helpers';
 
 export const useFarmingDetailsViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
