@@ -12,8 +12,8 @@ import { getTokensNames, isNotFoundError, isNull, isUndefined, useRedirectionCal
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { FarmVersion } from '../../interfaces';
 import styles from './farming-item.page.module.scss';
+import { FarmVersion } from '../../interfaces';
 
 export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);

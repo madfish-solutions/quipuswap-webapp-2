@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite';
 import { ListItemCard, PageTitle, TestnetAlert, VirtualList } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { CreateOwnPool, HotPools, LiquidityStats } from '../../components';
 import { ListFilter } from './components';
 import styles from './liquidity-list-page.module.scss';
 import { useLiquidityPageViewModel } from './use-liquidity-list-page.vm';
+import { CreateOwnPool, HotPools, LiquidityStats } from '../../components';
 
 export const LiquidityListPage: FC = observer(() => {
   const { preparedList, preparedHotPools } = useLiquidityPageViewModel();

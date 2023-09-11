@@ -18,8 +18,8 @@ import { Button } from '@shared/components/button';
 import { isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
 import s from './voting-stats.module.scss';
+import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

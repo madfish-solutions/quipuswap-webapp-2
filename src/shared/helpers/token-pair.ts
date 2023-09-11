@@ -1,5 +1,5 @@
-import { TokenPair } from '../types';
 import { isTokenEqual } from './tokens';
+import { TokenPair } from '../types';
 
 export const isEqualTokenPairs = (tp1: TokenPair, tp2: TokenPair): boolean =>
   isTokenEqual(tp1.token1, tp2.token1) &&

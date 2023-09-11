@@ -2,11 +2,11 @@ import { AppRootRoutes } from '@app.router';
 import { getSumOfNumbers, isEmptyArray, isNull } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { getPositionsIdsWithFees } from './get-positions-ids-with-fees.helper';
+import { useClaimAll, useClaimablePendingRewardsInUsd } from './hooks';
 import { useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { PositionsFeeTokensList } from '../positions-fee-tokens-list';
-import { getPositionsIdsWithFees } from './get-positions-ids-with-fees.helper';
-import { useClaimAll, useClaimablePendingRewardsInUsd } from './hooks';
 
 export const usePositionsFeesListViewModel = () => {
   const { t } = useTranslation();

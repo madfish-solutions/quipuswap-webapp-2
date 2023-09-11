@@ -6,9 +6,9 @@ import { getTokenSymbol, isNull, multipliedIfPossible } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { i18n } from '@translation';
 
+import { FarmingListItemWithBalances } from './types';
 import { getFarmingLabel, getFarmItemUrl } from '../../helpers';
 import { isNewFarming } from '../../helpers/is-new-farming';
-import { FarmingListItemWithBalances } from './types';
 
 interface StateCurrAmount {
   cellName: string;

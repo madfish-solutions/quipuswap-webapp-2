@@ -6,8 +6,8 @@ import { useNewExchangeRates } from '@providers/use-new-exchange-rate';
 import { getTokenSlug } from '@shared/helpers';
 import { useAmplitudeService } from '@shared/hooks';
 
-import { getGameResult } from '../helpers';
 import { useCoinflipStore } from './stores';
+import { getGameResult } from '../helpers';
 
 export const useLastGameResultAmplitude = () => {
   const coinflipStore = useCoinflipStore();

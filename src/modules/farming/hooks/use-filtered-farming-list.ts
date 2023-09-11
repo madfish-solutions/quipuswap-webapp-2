@@ -1,9 +1,9 @@
 import { useAuthStore } from '@shared/hooks';
 
+import { useFarmingFilterStore, useFarmingListStore } from './stores';
 import { filterByActiveOnly, filterBySearch, filterByStakedOnly } from '../helpers';
 import { sortFarming } from '../pages/list/helpers';
 import { mapFarmingItemForView } from '../pages/list/map-farming-item-for.view';
-import { useFarmingFilterStore, useFarmingListStore } from './stores';
 
 export const useFilteredFarmingList = () => {
   const { accountPkh } = useAuthStore();

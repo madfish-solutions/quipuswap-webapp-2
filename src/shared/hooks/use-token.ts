@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { TOKENS } from '@config/config';
 import { Nullable, Token, TokenAddress } from '@shared/types';
 
+import { useTokensStore } from './use-tokens-store';
 import { getTokenMetadata } from '../api';
 import { getTokenAddress, getTokenSlug, isString, isExist } from '../helpers';
 import { mapBackendToken } from '../mapping/backend-token.map';
 import { mapToken } from '../mapping/token.map';
-import { useTokensStore } from './use-tokens-store';
 
 export const useToken = (tokenSlugOrAddress: Nullable<TokenAddress | string>): Nullable<Token> => {
   const tokensStore = useTokensStore();

@@ -6,9 +6,9 @@ import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
-import { getGameResult, Statuses } from '../helpers';
 import { useCoinflipStore } from './stores';
 import { useLastGameResultAmplitude } from './use-last-game-result-amplitude';
+import { getGameResult, Statuses } from '../helpers';
 
 export const useUserPendingGame = () => {
   const { showErrorToast } = useToasts();

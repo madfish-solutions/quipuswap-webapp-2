@@ -1,5 +1,5 @@
-import { FarmingListUserInfoResponseDto } from '../../dto';
 import { FarmingListUserInfoModel } from './farming-list-user-info.model';
+import { FarmingListUserInfoResponseDto } from '../../dto';
 
 export class FarmingListUserInfoResponseModel extends FarmingListUserInfoResponseDto {
   userInfo: Array<FarmingListUserInfoModel>;

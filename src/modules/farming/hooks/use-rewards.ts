@@ -6,8 +6,8 @@ import { ZERO_AMOUNT_BN } from '@config/constants';
 import { getSumOfNumbers, getTokenSlug, isQuipuToken, multipliedIfPossible, sumIfPossible } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
-import { shouldHarvestInBatch } from '../helpers';
 import { useFarmingListStore } from './stores';
+import { shouldHarvestInBatch } from '../helpers';
 
 interface RewardAmount {
   amount: BigNumber;

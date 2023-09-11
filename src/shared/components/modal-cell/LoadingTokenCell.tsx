@@ -4,8 +4,8 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import { Skeleton } from '../skeleton';
 import s from './ModalCell.module.scss';
+import { Skeleton } from '../skeleton';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

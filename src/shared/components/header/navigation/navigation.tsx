@@ -5,13 +5,13 @@ import { useLocation } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import { isExist } from '../../../helpers';
-import { amplitudeService } from '../../../services';
-import { Undefined } from '../../../types';
 import { ButtonOrLink } from './components';
 import { DEFAULT_OPENED_MENU, isMenuItem, isShow, isSingleItem, NAVIGATION_DATA } from './navigation-data';
 import styles from './navigation.module.scss';
 import { isActivePath } from './utils';
+import { isExist } from '../../../helpers';
+import { amplitudeService } from '../../../services';
+import { Undefined } from '../../../types';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

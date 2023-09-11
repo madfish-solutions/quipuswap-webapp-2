@@ -7,15 +7,15 @@ import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { useAmplitudeService } from '@shared/hooks';
 import { TempleIcon } from '@shared/svg/temple-icon';
 
+import styles from './header.module.scss';
+import { Menu } from './menu';
+import { QPToken } from './qp-token';
 import { MenuClosed, MenuOpened } from '../../svg';
 import { Button } from '../button';
 import { ColorModeSwitcher } from '../color-mode-switcher';
 import { ConnectWalletButton } from '../connect-wallet-button';
 import { LogoButton } from '../logo-button';
 import { SettingsButton } from '../settings-button';
-import styles from './header.module.scss';
-import { Menu } from './menu';
-import { QPToken } from './qp-token';
 
 const TEMPLE_LINK = 'https://templewallet.com/mobile';
 const TEMPLE_BANNER_CLICK = 'TEMPLE_BANNER_CLICK';

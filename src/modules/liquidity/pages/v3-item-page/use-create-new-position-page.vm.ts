@@ -13,7 +13,6 @@ import { getInvertedValue, getTokenDecimals, isExist, stringToBigNumber } from '
 import { useTokensWithBalances } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 import { FULL_PATH_PREFIX } from './constants';
 import {
   useBottomMessages,
@@ -27,6 +26,7 @@ import {
   useToPriceRangeInputValue
 } from './hooks';
 import { CreatePositionInput } from './types/create-position-form';
+import { useGetLiquidityV3ItemBalances } from '../../hooks/loaders/use-get-liquidity-v3-item-balances';
 
 const MIN_PRICE_RANGE_DECIMALS = 6;
 const NO_EFFECT_MULTIPLIER = 1;

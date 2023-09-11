@@ -5,8 +5,8 @@ import { isNull, toReal } from '@shared/helpers';
 import { TokensMap } from '@shared/store/tokens.store';
 import { Nullable } from '@shared/types';
 
-import { swapRouterSdkTokenSlugToQuipuTokenSlug } from '../utils/swap-router-sdk-adapters';
 import { getDevFeeRatio } from './get-dev-fee-ratio';
+import { swapRouterSdkTokenSlugToQuipuTokenSlug } from '../utils/swap-router-sdk-adapters';
 
 export const getUserRouteFeesAndSlug = (tezos: Nullable<TezosToolkit>, routes: Nullable<Trade>, tokens: TokensMap) => {
   if (isNull(tezos) || isNull(routes)) {

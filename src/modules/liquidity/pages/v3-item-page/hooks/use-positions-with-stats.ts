@@ -8,8 +8,8 @@ import {
 } from '@modules/liquidity/hooks';
 import { isNull } from '@shared/helpers';
 
-import { mapPositionWithStats } from '../helpers';
 import { useLiquidityV3ItemTokensExchangeRates } from './use-liquidity-v3-item-tokens-exchange-rates';
+import { mapPositionWithStats } from '../helpers';
 
 export const usePositionsWithStats = () => {
   const currentPrice = useLiquidityV3CurrentYToXPrice();

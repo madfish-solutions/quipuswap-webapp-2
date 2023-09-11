@@ -21,6 +21,7 @@ import {
 import { useTokensBalancesOnly } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
+import { useV3AddLiqFormValidation } from './use-v3-add-liq-form.validation';
 import { findUserPosition, tezosTokenIsIncluded } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import { getCountOfTokens, getCurrentFormikKeyAdd, getValuesCorrectOrder } from '../helpers';
@@ -28,7 +29,6 @@ import { useCalculateValue, usePositionTicks } from '../hooks';
 import { useCurrentTick } from '../hooks/use-current-tick';
 import { useV3AddLiquidity } from '../hooks/use-v3-add-liquidity';
 import { V3AddFormValues, V3AddTokenInput } from '../interface';
-import { useV3AddLiqFormValidation } from './use-v3-add-liq-form.validation';
 
 export const useV3AddLiqFormViewModel = () => {
   const { t } = useTranslation();

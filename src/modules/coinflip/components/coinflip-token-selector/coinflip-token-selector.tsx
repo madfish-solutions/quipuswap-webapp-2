@@ -6,10 +6,10 @@ import { Card } from '@shared/components';
 import { QuipuToken, XtzToken } from '@shared/svg';
 import { useTranslation } from '@translation';
 
-import { TokenToPlay } from '../../stores';
-import { ButtonsSelector } from '../buttons-selector';
 import styles from './coinflip-token-selector.module.scss';
 import { useTokenSelectorViewModel } from './coinflip-token-selector.vm';
+import { TokenToPlay } from '../../stores';
+import { ButtonsSelector } from '../buttons-selector';
 
 export const CoinflipTokenSelector: FC = observer(() => {
   const { t } = useTranslation();

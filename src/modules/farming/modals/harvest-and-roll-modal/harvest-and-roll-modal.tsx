@@ -8,10 +8,10 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, StateCurrencyAmount } from '@shared/components';
 import { Modal } from '@shared/modals';
 
-import { TokenToPlay } from '../../../coinflip';
-import { CoinflipGameSelect } from '../../../coinflip/components';
 import styles from './harvest-and-roll-modal.module.scss';
 import { useHarvestAndRollModalViewModel } from './use-harvest-and-roll-modal.vm';
+import { TokenToPlay } from '../../../coinflip';
+import { CoinflipGameSelect } from '../../../coinflip/components';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

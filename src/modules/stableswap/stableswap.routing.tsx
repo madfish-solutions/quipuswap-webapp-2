@@ -4,10 +4,10 @@ import { Route } from 'react-router-dom';
 
 import { SentryRoutes } from '@shared/services';
 
-import { PageNotFoundPage } from '../errors';
 import { StableDividendsRouter } from './stabledividends';
 import { StableswapLiquidityRouter } from './stableswap-liquidity';
 import { StableswapRoutes } from './stableswap-routes.enum';
+import { PageNotFoundPage } from '../errors';
 
 export const StableswapRouter: FC = () => {
   return (

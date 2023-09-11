@@ -8,9 +8,9 @@ import { DetailsCardCell, StateCurrencyAmount } from '@shared/components';
 import { RewardInfo } from '@shared/structures';
 import { i18n } from '@translation';
 
-import { RewardTokensList } from '../reward-tokens-list';
 import styles from './farming-rewards-list.module.scss';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
+import { RewardTokensList } from '../reward-tokens-list';
 
 export const FarmingRewardsList: FC = observer(() => {
   const { handleHarvestAll, translation, userTotalDepositInfo, isUserTotalDepositExist } =

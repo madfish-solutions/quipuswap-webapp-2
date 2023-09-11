@@ -1,5 +1,5 @@
-import { LiquidityV3PositionsResponseDto } from '../dto';
 import { LiquidityV3PositionModel } from './liquidity-v3-position.model';
+import { LiquidityV3PositionsResponseDto } from '../dto';
 
 export class LiquidityV3PositionsResponseModel extends LiquidityV3PositionsResponseDto {
   value: LiquidityV3PositionModel[];

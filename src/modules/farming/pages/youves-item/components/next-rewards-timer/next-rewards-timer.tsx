@@ -4,9 +4,9 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import styles from './next-rewards-timer.module.scss';
 import { getNextRewardsTimestamp } from '../../helpers';
 import { Countdown } from '../countdown';
-import styles from './next-rewards-timer.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

@@ -6,10 +6,10 @@ import { Smiles } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { Currency } from '../state-currency-amount';
-import { StateWrapper } from '../state-wrapper';
 import styles from './price-impact.module.scss';
 import { usePriceImpactViewModel } from './use-price-impact.vm';
+import { Currency } from '../state-currency-amount';
+import { StateWrapper } from '../state-wrapper';
 
 interface StatePriceImpactProps {
   priceImpact: Nullable<BigNumber.Value>;

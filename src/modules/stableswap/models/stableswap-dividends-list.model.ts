@@ -1,5 +1,5 @@
-import { StableswapDividendsListDto } from '../dto';
 import { StableswapDividendsItemModel } from './stableswap-dividends-item.model';
+import { StableswapDividendsListDto } from '../dto';
 
 export class StableswapDividendsListModel extends StableswapDividendsListDto {
   list: Array<StableswapDividendsItemModel>;

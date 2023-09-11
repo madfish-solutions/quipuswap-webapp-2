@@ -9,10 +9,10 @@ import { TokensModal } from '@shared/modals/tokens-modal';
 import { FilterIcon } from '@shared/svg';
 import { useTranslation } from '@translation';
 
-import { Button } from '../button';
-import { TokensLogos } from '../tokens-logo';
 import styles from './tokens-filter.module.scss';
 import { useTokensFilterViewModel } from './tokens-filter.vm';
+import { Button } from '../button';
+import { TokensLogos } from '../tokens-logo';
 
 interface Props {
   className?: string;

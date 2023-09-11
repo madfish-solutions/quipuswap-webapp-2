@@ -18,6 +18,7 @@ import { Shevron } from '@shared/svg';
 import { Nullable, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import s from './ComplexInput.module.scss';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
 import { DashPlug } from '../dash-plug';
@@ -26,7 +27,6 @@ import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logo';
 import { TokensModal } from '../tokens-modal';
-import s from './ComplexInput.module.scss';
 
 const DEFAULT_EXCHANGE_RATE = 0;
 

@@ -8,12 +8,12 @@ import { amplitudeService } from '@shared/services';
 import { Nullable, SwapTabAction } from '@shared/types';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 
-import { ThreeRouteBlockchainApi, NoMediatorsSwapBlockchainApi } from '../api';
-import { ThreeRouteSwapResponse } from '../types';
-import { SwapField, SwapFormValues } from '../utils/types';
 import { useGetSwapSendLogData } from './use-get-swap-send-log-data';
 import { useSwapStore } from './use-swap-store';
 import { useValidationSchema } from './use-validation-schema';
+import { ThreeRouteBlockchainApi, NoMediatorsSwapBlockchainApi } from '../api';
+import { ThreeRouteSwapResponse } from '../types';
+import { SwapField, SwapFormValues } from '../utils/types';
 
 const initialErrors = {
   inputAmount: 'Required',

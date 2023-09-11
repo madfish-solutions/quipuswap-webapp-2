@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import { ToastContainer, ToastContent, ToastContentProps, TypeOptions } from 'react-toastify';
+import { ToastContainer, ToastContent, CloseButtonProps, TypeOptions } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -11,7 +11,7 @@ import { CloseIcon, ToastError, ToastSuccess } from '@shared/svg';
 
 import styles from './toast-wrapper.module.scss';
 
-const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (
+const CustomCloseButton = ({ closeToast }: Pick<CloseButtonProps, 'closeToast'>) => (
   <Button className={styles.closeButton} onClick={closeToast} theme="quaternary">
     <CloseIcon />
   </Button>

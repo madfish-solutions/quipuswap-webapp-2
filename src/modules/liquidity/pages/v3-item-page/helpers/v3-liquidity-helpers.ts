@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { BigNumber } from 'bignumber.js';
 import { sqrtPriceForTick, liquidityDeltaToTokensDelta, tickForSqrtPrice } from 'quipuswap-v3-sdk/dist/helpers/math';
 import { Nat, Int } from 'quipuswap-v3-sdk/dist/types';

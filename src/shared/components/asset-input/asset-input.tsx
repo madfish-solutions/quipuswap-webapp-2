@@ -4,8 +4,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { Nullable } from '@shared/types';
 
-import { Input, InputProps } from '../input';
 import { getOnlyDecimals } from './utils';
+import { Input, InputProps } from '../input';
 
 export interface AssetInputProps extends Omit<InputProps, 'value' | 'onChange'> {
   value: Nullable<number | string>;

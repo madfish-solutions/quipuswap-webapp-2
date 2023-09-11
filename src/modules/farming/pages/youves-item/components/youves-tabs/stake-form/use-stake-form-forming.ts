@@ -8,8 +8,8 @@ import { useMount } from '@shared/hooks';
 import { Nullable, Optional, Token } from '@shared/types';
 import { balanceAmountSchema } from '@shared/validators';
 
-import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '../../../../../hooks';
 import { ConfirmationMessageParams, useYouvesStakeConfirmationPopup } from './use-stake-confirmation-popup';
+import { useDoYouvesFarmingDeposit, useFarmingYouvesItemStore, useGetYouvesFarmingItem } from '../../../../../hooks';
 
 enum FormFields {
   inputAmount = 'inputAmount'

@@ -10,6 +10,9 @@ import { isNull } from '@shared/helpers';
 import { TokensModal } from '@shared/modals/tokens-modal';
 import { Shevron } from '@shared/svg';
 
+import styles from './token-input.module.scss';
+import { useTokenInputViewModel } from './token-input.vm';
+import { TokenInputProps } from './types';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
 import { DashPlug } from '../dash-plug';
@@ -19,9 +22,6 @@ import { StateCurrencyAmount, StateWrapper } from '../state-components';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
-import styles from './token-input.module.scss';
-import { useTokenInputViewModel } from './token-input.vm';
-import { TokenInputProps } from './types';
 
 const themeClass = {
   [ColorModes.Light]: styles.light,

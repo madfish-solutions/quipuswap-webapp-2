@@ -11,9 +11,9 @@ import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import styles from './pending-rewards.module.scss';
 import { StateCurrencyAmount } from '../state-components';
 import { Tooltip } from '../tooltip';
-import styles from './pending-rewards.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

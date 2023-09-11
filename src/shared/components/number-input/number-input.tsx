@@ -4,8 +4,8 @@ import cx from 'classnames';
 
 import { BotArrow, TopArrow } from '@shared/svg';
 
-import { Input, InputProps } from '../input';
 import s from './number-input.module.scss';
+import { Input, InputProps } from '../input';
 
 export type NumberInputProps = {
   theme?: keyof typeof themeClass;

@@ -3,9 +3,9 @@ import { FC } from 'react';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { SettingsIcon } from '@shared/svg';
 
+import styles from './settings-button.module.scss';
 import { amplitudeService } from '../../services';
 import { Button } from '../button';
-import styles from './settings-button.module.scss';
 
 interface Props {
   className?: string;

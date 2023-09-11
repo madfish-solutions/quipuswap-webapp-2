@@ -11,11 +11,11 @@ import { useTokenBalance } from '@shared/hooks';
 import { Standard } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
 import { getUserBalances, getFormikInitialValues, getInputsAmountFormFormikValues } from '../helpers';
 import { MOCK_ITEM } from '../helpers/mock-item';
 import { useCalculateValues } from '../hooks';
 import { Input, LiquidityFormValues } from '../interface';
-import { useDexTwoRemoveLiqValidation } from './use-dex-two-remove-liq-form-validation';
 
 const LP_INDEX = 2;
 

@@ -8,9 +8,9 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { TokenLocked } from '../../../components';
 import styles from './details.module.scss';
 import { useDetailsVievModel } from './use-details.vm';
+import { TokenLocked } from '../../../components';
 
 export const Details: FC = observer(() => {
   const { t } = useTranslation();

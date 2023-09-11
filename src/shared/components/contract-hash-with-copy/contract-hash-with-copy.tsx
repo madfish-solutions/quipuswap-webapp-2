@@ -5,8 +5,8 @@ import { noop } from 'rxjs';
 import { shortize } from '@shared/helpers';
 import { CheckMark, Copy } from '@shared/svg';
 
-import { Button } from '../button';
 import styles from './contract-hash-with-copy.module.scss';
+import { Button } from '../button';
 
 interface Props {
   contractAddress: string;

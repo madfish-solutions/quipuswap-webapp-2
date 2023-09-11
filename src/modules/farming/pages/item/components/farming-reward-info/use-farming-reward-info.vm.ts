@@ -4,10 +4,10 @@ import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { defined, getTokenSymbol, isExist, isNull, multipliedIfPossible, placeDecimals } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 
+import { getUserReward } from './get-user-reward.helper';
 import { getMinEndTime, getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '../../../../helpers';
 import { useFarmingItemStore, useDoHarvest, useGetFarmingItem } from '../../../../hooks';
 import { canDelegate, makeBaker } from '../../helpers';
-import { getUserReward } from './get-user-reward.helper';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
 

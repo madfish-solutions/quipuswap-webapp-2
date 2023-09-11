@@ -1,4 +1,4 @@
-import { BlockResponse, OperationEntry, OperationContents, OperationContentsAndResult } from '@taquito/rpc';
+import { OperationContents, OperationContentsAndResult, BlockResponse, OperationEntry } from '@taquito/rpc';
 
 import { Nullable } from '@shared/types';
 

@@ -10,7 +10,7 @@ const TREE_ROUTE_VERSION = 'v3';
 export class ThreeRouteBackendApi {
   private static NUMBER_DISCRIMINATION_PREFIX = 'uniqueprefix';
 
-  private static jsonWithBigNumberParser(origJSON: string): ReturnType<typeof JSON['parse']> {
+  private static jsonWithBigNumberParser(origJSON: string): ReturnType<(typeof JSON)['parse']> {
     const stringedJSON = origJSON.replace(
       /:\s*([-+Ee0-9.]+)/g,
       `: "${ThreeRouteBackendApi.NUMBER_DISCRIMINATION_PREFIX}$1"`

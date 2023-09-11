@@ -7,8 +7,8 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useTranslation } from '@translation';
 
-import { Button } from '../button';
 import styles from './donation-button.module.scss';
+import { Button } from '../button';
 
 interface DonationButtonProps {
   className?: string;

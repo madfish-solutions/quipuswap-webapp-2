@@ -7,8 +7,8 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { useDetailsViewModel } from '../details';
 import styles from './details-view.module.scss';
+import { useDetailsViewModel } from '../details';
 
 type Props = ReturnType<typeof useDetailsViewModel>;
 

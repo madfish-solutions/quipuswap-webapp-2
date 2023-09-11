@@ -9,10 +9,10 @@ import { ArrowDown, Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 import { StableLpInput } from '../../stable-lp-input';
 import { StableTokenInput } from '../../stable-token-input';
 import styles from '../forms.module.scss';
-import { useRemoveLiqFormViewModel } from './use-remove-liq-form.vm';
 
 export const RemoveLiqForm: FC = observer(() => {
   const { t } = useTranslation();

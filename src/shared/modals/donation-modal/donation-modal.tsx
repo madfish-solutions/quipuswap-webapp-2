@@ -15,9 +15,9 @@ import { isExist, isNull } from '@shared/helpers';
 import { useOnBlock } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { Modal } from '../modal';
 import styles from './donation-modal.module.scss';
 import { useDonationFormik } from './use-donation-formik';
+import { Modal } from '../modal';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

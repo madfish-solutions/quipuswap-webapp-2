@@ -24,9 +24,9 @@ import { ActiveStatus, Nullable } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import styles from './youves-details.module.scss';
 import { DeprecatedStateData } from '../state-data';
 import { TimespanView } from '../timespan-view';
-import styles from './youves-details.module.scss';
 
 interface Props {
   labels: Array<LabelComponentProps>;

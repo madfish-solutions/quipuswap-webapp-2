@@ -7,11 +7,11 @@ import { TokenInfo } from '@shared/elements';
 import { multipliedIfPossible, isNull } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import styles from './position-fee-tokens-list.module.scss';
 import { findUserPosition } from '../../helpers';
 import { useUserInfoRows } from '../../hooks';
 import { usePositionsWithStats } from '../../hooks/use-positions-with-stats';
 import { TokenFeeCell } from '../token-fee-cell';
-import styles from './position-fee-tokens-list.module.scss';
 
 enum Columns {
   TOKEN = 'TOKEN',

@@ -11,9 +11,9 @@ import {
 import { getSymbolsString, isExist, toReal } from '@shared/helpers';
 import { fractionToPercentage } from '@shared/helpers/percentage';
 
-import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '../store';
 import { useLiquidityV3CurrentYToXPrice } from './use-liquidity-v3-current-y-to-x-price';
 import { useLiquidityV3ItemTokens } from './use-liquidity-v3-item-tokens';
+import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '../store';
 
 export const useLiquidityV3PoolStats = () => {
   const store = useLiquidityV3PoolStore();

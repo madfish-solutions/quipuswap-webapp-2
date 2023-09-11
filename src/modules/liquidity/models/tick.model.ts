@@ -1,5 +1,5 @@
-import { TickDto } from '../dto/tick.dto';
 import { FeeGrowthModel } from './fee-growth.model';
+import { TickDto } from '../dto/tick.dto';
 
 export class TickModel extends TickDto {
   fee_growth_outside: FeeGrowthModel;

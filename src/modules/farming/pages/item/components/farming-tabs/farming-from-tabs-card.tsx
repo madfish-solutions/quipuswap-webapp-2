@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite';
 import { Card, Skeleton, Tabs } from '@shared/components';
 import styles from '@styles/CommonContainer.module.scss';
 
-import { FarmingFormTabs } from '../../types';
 import { StakeForm } from './stake-form/stake-form';
 import { UnstakeForm } from './unstake-form/unstake-form';
 import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
+import { FarmingFormTabs } from '../../types';
 
 export const FarmingFormTabsCard: FC = observer(() => {
   const { farmingItem, currentTab, isStakeForm, changeTabHandle } = useFarmingFormTabsCardViewModel();

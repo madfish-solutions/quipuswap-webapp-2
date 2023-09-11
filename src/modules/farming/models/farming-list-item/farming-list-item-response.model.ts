@@ -1,5 +1,5 @@
-import { FarmingListItemResponseDto } from '../../dto';
 import { FarmingListItemModel } from './farming-list-item.model';
+import { FarmingListItemResponseDto } from '../../dto';
 
 export class FarmingListItemResponseModel extends FarmingListItemResponseDto {
   item: FarmingListItemModel;

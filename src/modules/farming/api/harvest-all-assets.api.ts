@@ -3,8 +3,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import { FARMING_CONTRACT_ADDRESS } from '@config/environment';
 import { batchOperations, defined, getLastElementFromArray, getWalletContract } from '@shared/helpers';
 
-import { FarmVersion } from '../interfaces';
 import { BlockchainYouvesFarmingApi } from './blockchain/youves-farming.api';
+import { FarmVersion } from '../interfaces';
 
 interface FarmingId {
   id: string;

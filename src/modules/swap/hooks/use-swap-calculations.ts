@@ -25,6 +25,7 @@ import { useTokensLoader } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Optional, Token } from '@shared/types';
 
+import { useSwapStore } from './use-swap-store';
 import { threeRouteTokenMatches } from '../helpers';
 import { useRoutePairs } from '../providers/route-pairs-provider';
 import {
@@ -33,7 +34,6 @@ import {
   useTradeWithSlippageTolerance
 } from '../utils/swap-router-sdk-adapters';
 import { SwapAmountFieldName, SwapField } from '../utils/types';
-import { useSwapStore } from './use-swap-store';
 
 interface SwapPair {
   inputToken: Optional<Token>;

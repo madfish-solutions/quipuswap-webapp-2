@@ -79,7 +79,7 @@ export const FACTORIES: Record<SupportedNetworks, { fa1_2Factory: string[]; fa2F
 };
 
 const MAINNET_NETWORK: QSNetwork = {
-  id: NetworkType.MAINNET,
+  id: NetworkType.MAINNET as SupportedNetworks,
   connectType: ConnectType.DEFAULT,
   name: 'Mainnet',
   type: QSNetworkType.MAIN,
@@ -88,7 +88,7 @@ const MAINNET_NETWORK: QSNetwork = {
 
 const GHOSTNET_NETWORK: QSNetwork = {
   ...MAINNET_NETWORK,
-  id: NetworkType.GHOSTNET,
+  id: NetworkType.GHOSTNET as SupportedNetworks,
   name: 'Ghostnet',
   type: QSNetworkType.TEST
 };

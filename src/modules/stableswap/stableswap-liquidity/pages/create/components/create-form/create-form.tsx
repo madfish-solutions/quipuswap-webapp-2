@@ -17,10 +17,10 @@ import { TokensModal } from '@shared/modals/tokens-modal';
 import styles from '@styles/CommonContainer.module.scss';
 import { i18n } from '@translation';
 
-import { FormHeader } from '../../../../../components';
-import { CreationCost, SelectTokensButton } from '../../components';
 import createFormStyles from './create-form.module.scss';
 import { useCreateFormViewModel } from './create-form.vm';
+import { FormHeader } from '../../../../../components';
+import { CreationCost, SelectTokensButton } from '../../components';
 
 export const CreateForm: FC = observer(() => {
   const {

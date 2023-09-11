@@ -5,10 +5,10 @@ import { CreatePositionFormik } from '@modules/liquidity/types';
 import { getFormikError, getTokenSymbol, isExist } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { shouldAddTokenX, shouldAddTokenY, tezosTokenIsIncluded } from '../../helpers';
-import { CreatePositionInput } from '../../types';
 import { useCurrentTick } from './use-current-tick';
 import { usePositionTicks } from './use-position-ticks';
+import { shouldAddTokenX, shouldAddTokenY, tezosTokenIsIncluded } from '../../helpers';
+import { CreatePositionInput } from '../../types';
 
 export const useBottomMessages = (formik: CreatePositionFormik) => {
   const { t } = useTranslation();

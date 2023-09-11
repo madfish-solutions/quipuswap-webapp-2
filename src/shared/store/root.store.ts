@@ -28,14 +28,14 @@ import {
 import { SwapStore as ISwapStore } from '@modules/swap/store';
 import { TokensModalStore } from '@shared/modals/tokens-modal/tokens-modal.store';
 
-import { isExist, isNull } from '../helpers';
-import { Nullable } from '../types';
 import { AuthStore } from './auth.store';
 import { SettingsStore } from './settings.store';
 import { TokensBalancesStore } from './tokens-balances.store';
 import { TokensManagerStore } from './tokens-manager.store';
 import { TokensStore } from './tokens.store';
 import { UiStore } from './ui.store';
+import { isExist, isNull } from '../helpers';
+import { Nullable } from '../types';
 
 export class RootStore {
   authStore: AuthStore;

@@ -6,8 +6,8 @@ import { Typed } from '@shared/decorators';
 import { BlockInfoDto } from '@shared/dto';
 import type { Nullable } from '@shared/types';
 
-import { Categories, LiquidityItem, LiquidityItemResponse, PoolType } from '../interfaces';
 import { LiquidityTokenInfoDto } from './liquidity-token-info.dto';
+import { Categories, LiquidityItem, LiquidityItemResponse, PoolType } from '../interfaces';
 
 export class LiquidityItemDto implements LiquidityItem {
   @Typed()

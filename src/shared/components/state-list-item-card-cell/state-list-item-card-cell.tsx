@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react';
 
+import styles from './state-list-item-card-cell.module.scss';
 import { ListItemCardCell } from '../list-item-card-cell';
 import { StateCurrencyAmount, StateCurrencyAmountProps } from '../state-components';
-import styles from './state-list-item-card-cell.module.scss';
 
 export interface StateListItemCardCellProps {
   cellName: string;

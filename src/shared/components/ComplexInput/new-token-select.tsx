@@ -17,6 +17,7 @@ import { amountsAreEqual } from '@shared/helpers/comparison';
 import { Shevron } from '@shared/svg';
 import { Undefined, Token } from '@shared/types';
 
+import s from './ComplexInput.module.scss';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
 import { PercentSelector } from '../percent-selector';
@@ -24,7 +25,6 @@ import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logo';
 import { TokensModal } from '../tokens-modal';
-import s from './ComplexInput.module.scss';
 
 interface NewTokenSelectProps extends HTMLProps<HTMLDivElement> {
   className?: string;

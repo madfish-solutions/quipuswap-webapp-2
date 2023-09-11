@@ -23,9 +23,9 @@ import { WhitelistedBaker } from '@shared/types';
 import { isValidBakerAddress } from '@shared/validators';
 import { useTranslation } from '@translation';
 
-import { Modal } from '../modal';
 import s from './bakers-modal.module.scss';
 import { fixBakerFee } from './fix-baker-fee';
+import { Modal } from '../modal';
 
 const themeClass = {
   [ColorModes.Light]: s.light,

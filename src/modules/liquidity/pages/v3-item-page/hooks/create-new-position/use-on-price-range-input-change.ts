@@ -4,12 +4,12 @@ import { EMPTY_STRING } from '@config/constants';
 import { CreatePositionFormik } from '@modules/liquidity/types';
 import { Nullable } from '@shared/types';
 
+import { useOnPriceRangeChange } from './use-on-price-range-change';
 import {
   CreatePositionAmountInput,
   CreatePositionInput,
   CreatePositionPriceInput
 } from '../../types/create-position-form';
-import { useOnPriceRangeChange } from './use-on-price-range-change';
 
 export const useOnPriceRangeInputChange = (
   formik: CreatePositionFormik,

@@ -9,15 +9,15 @@ import { LoaderFallback, StateWrapper } from '@shared/components';
 import { getLastElement, getRouterParts, isSomeInArray, isUndefined } from '@shared/helpers';
 import { SentryRoutes } from '@shared/services';
 
-import { PageNotFoundPage } from '../../errors';
-import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableswapLiquidityFormTabs } from '../types';
 import {
   StableswapLiquidityAddItemPage,
   StableswapLiquidityCreatePage,
   StableswapLiquidityRemoveItemPage
 } from './pages';
 import { useStableswapLiquidityRouterViewModel } from './stableswap-liquidity.routing.vm';
+import { PageNotFoundPage } from '../../errors';
+import { StableswapRoutes } from '../stableswap-routes.enum';
+import { StableswapLiquidityFormTabs } from '../types';
 
 export const StableswapLiquidityRouter: FC = observer(() => {
   const { pathname } = useLocation();

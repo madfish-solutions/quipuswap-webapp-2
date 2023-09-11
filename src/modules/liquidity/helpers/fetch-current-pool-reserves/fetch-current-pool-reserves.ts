@@ -1,9 +1,9 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { BigNumber } from 'bignumber.js';
 
-import { PoolType } from '../../interfaces';
 import { fetchTezTokenPoolReserves } from './fetch-tez-token-pool-reserves';
 import { fetchTokenTokenPoolReserves } from './fetch-token-token-pool-reserves';
+import { PoolType } from '../../interfaces';
 
 interface IAccordance {
   contractAddress: string;

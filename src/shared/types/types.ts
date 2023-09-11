@@ -1,7 +1,8 @@
 import { SVGProps } from 'react';
 
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@airgap/beacon-types';
 import { FoundDex } from '@quipuswap/sdk';
+import { BeaconWallet } from '@taquito/beacon-wallet';
 import { BigNumber } from 'bignumber.js';
 
 export interface IconProps extends SVGProps<SVGSVGElement> {
@@ -14,7 +15,9 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export type SupportedNetworks = Extract<NetworkType, NetworkType.MAINNET | NetworkType.GHOSTNET>;
+export type BeaconWalletNetworkType = Required<ConstructorParameters<typeof BeaconWallet>[0]>['preferredNetwork'];
+
+export type SupportedNetworks = Extract<BeaconWalletNetworkType, NetworkType.MAINNET | NetworkType.GHOSTNET>;
 
 export enum QSNetworkType {
   MAIN = 'MAIN',

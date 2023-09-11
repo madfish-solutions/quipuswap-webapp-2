@@ -9,10 +9,10 @@ import { ExternalLink } from '@shared/svg';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { PriceView } from '../price-view';
-import { TokensOrderSwitcher } from '../tokens-order-switcher';
 import styles from './pool-details-create.module.scss';
 import { usePoolDetailsCreateViewModel } from './use-pool-details-create.vm';
+import { PriceView } from '../price-view';
+import { TokensOrderSwitcher } from '../tokens-order-switcher';
 
 export const PoolDetailsCreate: FC = observer(() => {
   const { t } = useTranslation();

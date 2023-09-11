@@ -8,8 +8,8 @@ import { useYoutubeTabs } from '@shared/hooks';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { DetailsView } from '../details-view';
 import { useDetailsViewModel } from './use-details.vm';
+import { DetailsView } from '../details-view';
 
 export const Details: FC = observer(() => {
   const detailsInfoParams = useDetailsViewModel();

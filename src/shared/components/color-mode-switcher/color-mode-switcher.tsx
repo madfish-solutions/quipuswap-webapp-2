@@ -4,9 +4,9 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import styles from './color-mode-switcher.module.scss';
 import { amplitudeService } from '../../services';
 import { DarkMode, LightMode } from '../../svg';
-import styles from './color-mode-switcher.module.scss';
 
 export interface ColorModeSwitcherProps {
   id?: string;

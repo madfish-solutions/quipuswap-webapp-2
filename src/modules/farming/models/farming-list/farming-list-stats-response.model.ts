@@ -1,5 +1,5 @@
-import { FarmingListStatsResponseDto } from '../../dto';
 import { FarmingListStatsModel } from './farming-list-stats.model';
+import { FarmingListStatsResponseDto } from '../../dto';
 
 export class FarmingListStatsResponseModel extends FarmingListStatsResponseDto {
   stats: FarmingListStatsModel;

@@ -1,5 +1,5 @@
-import { Nullable } from '../types/types';
 import { isExist } from './type-checks';
+import { Nullable } from '../types/types';
 
 export class MakeInterval<T extends () => void> {
   private interval: Nullable<ReturnType<typeof setInterval>> = null;

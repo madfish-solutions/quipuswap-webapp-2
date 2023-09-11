@@ -14,9 +14,9 @@ import { amplitudeService } from '@shared/services';
 import { useConfirmOperation, useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import { useClaimablePendingRewardsInUsd } from './use-claimable-pending-rewards-in-usd';
 import { usePositionsWithStats } from '../../../hooks/use-positions-with-stats';
 import { getPositionsIdsWithFees } from '../get-positions-ids-with-fees.helper';
-import { useClaimablePendingRewardsInUsd } from './use-claimable-pending-rewards-in-usd';
 
 export const useClaimAll = () => {
   const { t } = useTranslation();

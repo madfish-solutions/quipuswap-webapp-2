@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { FeeTokensList } from '../fee-tokens-list';
 import { usePositionsFeeTokensListViewModel } from './use-positions-fee-tokens-list.vm';
+import { FeeTokensList } from '../fee-tokens-list';
 
 export const PositionsFeeTokensList: FC = () => {
   const params = usePositionsFeeTokensListViewModel();

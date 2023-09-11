@@ -8,12 +8,12 @@ import { PageNotFoundPage } from '@modules/errors';
 import { LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
-import { LiquidityTabs } from '../../liquidity-routes.enum';
-import { LiquidityCreatePage } from '../create';
 import { CpmmDexTwoClaimRewards } from './cpmm-dex-two-claim-rewards';
 import { DexTwoAddLiq } from './dex-two-add-liq';
 import { DexTwoRemoveLiq } from './dex-two-remove-liq';
 import { useCpmmViewModel } from './use-dex-two-item-page.vm';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
+import { LiquidityCreatePage } from '../create';
 
 export const CpmmPageRouter: FC = observer(() => {
   const { isInitialized, title } = useCpmmViewModel();

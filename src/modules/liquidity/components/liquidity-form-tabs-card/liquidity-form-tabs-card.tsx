@@ -4,9 +4,9 @@ import { Card, SettingsButton, Skeleton, Tabs } from '@shared/components';
 import { CFC } from '@shared/types';
 import styles from '@styles/CommonContainer.module.scss';
 
+import { useLiquidityFormTabsCardViewModel } from './use-liquidity-form-tabs-card.vm';
 import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { FormHeader } from '../form-header';
-import { useLiquidityFormTabsCardViewModel } from './use-liquidity-form-tabs-card.vm';
 
 interface Props {
   tabActiveId: LiquidityTabs;

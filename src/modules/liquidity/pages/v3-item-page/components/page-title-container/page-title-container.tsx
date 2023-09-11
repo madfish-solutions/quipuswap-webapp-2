@@ -6,9 +6,9 @@ import { PageTitle } from '@shared/components';
 import { getTokensNames } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import styles from './page-title-container.module.scss';
 import { useLiquidityV3ItemTokens } from '../../../../hooks';
 import { TokensOrderSwitcher } from '../tokens-order-switcher';
-import styles from './page-title-container.module.scss';
 
 interface Props {
   dataTestId: string;

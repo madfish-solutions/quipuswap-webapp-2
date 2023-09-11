@@ -14,12 +14,12 @@ import { WalletType } from '@shared/types';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
-import { amplitudeService } from '../../services';
-import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
 import { TempleWalletButton } from './temple-wallet-button';
 import { WalletButton } from './wallet-button';
 import styles from './wallet-modal.module.scss';
+import { amplitudeService } from '../../services';
+import { Modal } from '../modal';
 
 export const WalletModal: FC = () => {
   const { isMobile } = useMobileDetect();

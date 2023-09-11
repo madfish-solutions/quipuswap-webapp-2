@@ -5,9 +5,9 @@ import { Cell, Column, HeaderGroup, MetaBase } from 'react-table';
 import { TokenInfo } from '@shared/elements';
 import { i18n } from '@translation';
 
+import styles from './reward-tokens-list.module.scss';
 import { useRewards } from '../../../../hooks';
 import { TokenRewardCell } from '../token-reward-cell';
-import styles from './reward-tokens-list.module.scss';
 
 enum Columns {
   TOKEN = 'TOKEN',

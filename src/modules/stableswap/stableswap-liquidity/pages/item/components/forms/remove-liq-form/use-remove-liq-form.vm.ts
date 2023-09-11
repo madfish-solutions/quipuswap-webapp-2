@@ -22,6 +22,7 @@ import { useAuthStore, useTokenBalance, useTokensWithBalances } from '@shared/ho
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 import {
   calculateOutputWithLp,
   getFormikInitialValues,
@@ -35,7 +36,6 @@ import {
   useStableswapItemStore,
   useCalcTokenAmountView
 } from '../../../../../../hooks';
-import { useRemoveLiqFormValidation } from './use-remove-liq-form-validation';
 
 const DEFAULT_LENGTH = 0;
 const DEFAULT_LP_BALANCE = null;

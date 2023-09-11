@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoadingErrorData } from '../store';
-import { Constructable } from '../types';
 import { LED_METADATA_KEY } from './led-metadata-key';
 import { createConfigMap, MapperConfig } from './mapper';
 import { LedMetadataValue } from './types';
+import { LoadingErrorData } from '../store';
+import { Constructable } from '../types';
 
 export const ModelBuilder = () => {
   return function <T extends Constructable>(Constructor: T) {

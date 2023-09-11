@@ -1,8 +1,8 @@
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
+import { isBakerNotEmpty } from './is-baker-not-empty';
 import { shortize } from '../shortize';
 import { isExist } from '../type-checks';
-import { isBakerNotEmpty } from './is-baker-not-empty';
 
 export function getWhitelistedBakerName(baker: WhitelistedBaker, sliceAmount?: number, charsLength?: number): string;
 export function getWhitelistedBakerName(

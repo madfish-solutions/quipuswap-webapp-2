@@ -7,8 +7,8 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button, Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { LiquidityRoutes } from '../../liquidity-routes.enum';
 import styles from './create-own-pool.module.scss';
+import { LiquidityRoutes } from '../../liquidity-routes.enum';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

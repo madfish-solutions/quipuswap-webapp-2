@@ -10,10 +10,10 @@ import { LoaderFallback, StateWrapper } from '@shared/components';
 import { getRouterParts, getLastElement, isSomeInArray, isUndefined } from '@shared/helpers';
 import { SentryRoutes } from '@shared/services';
 
-import { StableswapRoutes } from '../stableswap-routes.enum';
-import { StableDividendsFormTabs } from '../types';
 import { StableDividendsStakeItemPage, StableDividendsUnstakeItemPage, StableDividendsListPage } from './pages';
 import { useStableDividendsRouterViewModel } from './stabledividends.routing.vm';
+import { StableswapRoutes } from '../stableswap-routes.enum';
+import { StableDividendsFormTabs } from '../types';
 
 export const StableDividendsRouter: FC = observer(() => {
   const { pathname } = useLocation();

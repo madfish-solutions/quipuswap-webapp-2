@@ -6,8 +6,8 @@ import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/componen
 import s from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { FarmingFormInvestLink } from '../../farming-form-invest-link';
 import { useUnstakeFormViewModel } from './use-unstake-form.vm';
+import { FarmingFormInvestLink } from '../../farming-form-invest-link';
 
 export const UnstakeForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'farm']);

@@ -4,8 +4,8 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import { Iterator } from '../iterator';
 import styles from './radio-button.module.scss';
+import { Iterator } from '../iterator';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

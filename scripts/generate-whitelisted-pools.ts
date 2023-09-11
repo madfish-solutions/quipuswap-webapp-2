@@ -788,6 +788,7 @@ const MainnetWhitelistTokens: Array<WhitelistedToken> = [
 ];
 
 const ITERATION_STEP = 1;
+//@ts-ignore
 const tezos = new TezosToolkit(new FastRpcClient(RPC_URLS[0]));
 
 const sleep = async (ms: number) => {

@@ -4,11 +4,11 @@ import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
 import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { CheckMark, Copy } from '@shared/svg';
 
+import styles from './account-modal.module.scss';
 import { Button } from '../../components';
 import { shortize } from '../../helpers';
 import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
-import styles from './account-modal.module.scss';
 
 const ADDRESS_LENGTH = 8;
 const MS = 0;
