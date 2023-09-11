@@ -6,8 +6,8 @@ import { getStorageInfo } from '@shared/dapp';
 import { isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Undefined } from '@shared/types';
 
-import { getTokenDecimalsAndPrecision } from '../helpers';
 import { YouvesFarmStorage } from './types';
+import { getTokenDecimalsAndPrecision } from '../helpers';
 
 export const getTotalDeposit = async (
   tezos: Nullable<TezosToolkit>,

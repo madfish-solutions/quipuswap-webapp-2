@@ -2,8 +2,8 @@ import { BigNumber } from 'bignumber.js';
 
 import { ZERO_AMOUNT } from '@config/constants';
 
-import { RouteFeesAndSlug } from '../types';
 import { getFeeExchangeRate } from './get-fee-exchange-rate';
+import { RouteFeesAndSlug } from '../types';
 
 export const getUserRouteFeesInDollars = (
   userRouteFeesAndSlug: Array<RouteFeesAndSlug>,

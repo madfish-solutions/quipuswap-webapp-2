@@ -6,6 +6,7 @@ import { IS_NETWORK_MAINNET } from '@config/config';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DonationButton } from '@shared/components';
 
+import styles from './sidebar.module.scss';
 import { amplitudeService } from '../../../services';
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
@@ -13,7 +14,6 @@ import { ConnectWalletButton } from '../../connect-wallet-button';
 import { NetworkSelect } from '../../network-select';
 import { Navigation } from '../navigation';
 import { Socials } from '../socials';
-import styles from './sidebar.module.scss';
 
 interface SidebarProps {
   className?: string;

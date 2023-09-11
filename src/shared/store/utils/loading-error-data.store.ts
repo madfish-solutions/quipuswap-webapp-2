@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { mapperReader, MapperConfig } from '@shared/model-builder';
 import { Constructable } from '@shared/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export class LoadingErrorData<ModelType extends object, Default = any, RawData = any> {
+export class LoadingErrorData<
+  ModelType extends object,
+  Default = any,
+  RawData extends Record<string, any> | Record<string, any>[] = any
+> {
   rawData: RawData | undefined;
 
   isInitialized = false;

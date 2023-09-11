@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite';
 import { Card } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { CoinflipGameForm } from '../coinflip-game-form';
 import { useCoinflipGameViewModel } from './coinflip-game.vm';
+import { CoinflipGameForm } from '../coinflip-game-form';
 
 export const CoinflipGame: FC = observer(() => {
   const { t } = useTranslation(['coinflip']);

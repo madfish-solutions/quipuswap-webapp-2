@@ -7,8 +7,8 @@ import { TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { IFormik, Optional } from '@shared/types';
 
-import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 import { useStableTokenInputViewModel } from './stable-token-input.vm';
+import { RemoveLiqFormValues } from '../forms/remove-liq-form/use-remove-liq-form.vm';
 
 interface Props {
   index: number;

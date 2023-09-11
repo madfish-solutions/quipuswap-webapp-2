@@ -4,8 +4,8 @@ import { action, makeObservable, observable } from 'mobx';
 import { getUserTokenBalance } from '@blockchain';
 import { getRandomId, isEmptyArray, isExist, isTokenEqual, saveBigNumber, toReal } from '@shared/helpers';
 
-import { Nullable, Optional, Token } from '../types';
 import { RootStore } from './root.store';
+import { Nullable, Optional, Token } from '../types';
 
 interface TokenBalance {
   token: Token;

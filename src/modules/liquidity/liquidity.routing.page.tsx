@@ -6,11 +6,11 @@ import { NOT_FOUND_ROUTE_NAME } from '@config/constants';
 import { LoaderFallback, StateWrapper } from '@shared/components';
 import { SentryRoutes } from '@shared/services';
 
-import { PageNotFoundPage } from '../errors';
 import { LiquidityRoutes, LiquidityTabs } from './liquidity-routes.enum';
 import { useLiquidityRouterViewModel } from './liquidity.routing.vm';
 import { CpmmPageRouter, CreatePoolPage, LiquidityListPage, LiquidityPage } from './pages';
 import { V3ItemPageRouter } from './pages/v3-item-page';
+import { PageNotFoundPage } from '../errors';
 
 export const LiquidityPageRouter: FC = () => {
   const { isInitialized } = useLiquidityRouterViewModel();

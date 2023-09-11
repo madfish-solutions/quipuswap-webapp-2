@@ -7,11 +7,11 @@ import { defined, executeAsyncSteps } from '@shared/helpers';
 import { useMount } from '@shared/hooks';
 import { Nullable } from '@shared/types';
 
+import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
 import { getFarmItemUrl } from '../../../../../helpers';
 import { useDoYouvesFarmingWithdraw } from '../../../../../hooks';
 import { FarmVersion } from '../../../../../interfaces';
 import { YouvesFormTabs } from '../../../types';
-import { useYouvesUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
 
 export const useUnstakeFormForming = (
   contractAddress: Nullable<string>,

@@ -2,9 +2,9 @@ import amplitude from 'amplitude-js';
 
 import { AMPLITUDE_API_KEY } from '@config/environment';
 
+import { Console } from './console';
 import { hash, isDev } from '../helpers';
 import { Nullable, Optional } from '../types';
-import { Console } from './console';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export class AmplitudeService {

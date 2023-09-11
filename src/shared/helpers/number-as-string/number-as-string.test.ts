@@ -2,8 +2,8 @@
 import { expect } from '@jest/globals';
 import { BigNumber } from 'bignumber.js';
 
-import { isNull } from '../type-checks';
 import { numberAsString } from './number-as-string';
+import { isNull } from '../type-checks';
 
 const testCaseList = [
   {

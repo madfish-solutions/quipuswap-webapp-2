@@ -11,8 +11,8 @@ import {
   InvestCategory
 } from '@shared/svg/categories';
 
-import { Categories } from '../../interfaces';
 import styles from './liquidity-labels.module.scss';
+import { Categories } from '../../interfaces';
 
 const Component: Record<Categories, FC> = {
   [Categories.Stable]: StableCategory,

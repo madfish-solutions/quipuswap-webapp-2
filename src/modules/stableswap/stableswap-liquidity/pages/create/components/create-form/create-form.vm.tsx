@@ -28,8 +28,6 @@ import { useChooseTokens } from '@shared/modals/tokens-modal';
 import { Nullable, Token } from '@shared/types';
 import { useToasts } from '@shared/utils';
 
-import { useCreateStableswapPool, usePoolCreationPrice, usePoolToCreateVersion } from '../../../../../hooks';
-import { NotEnoughQuipuErrorToast } from '../not-enough-quipu-error-toast';
 import {
   AMPLIFICATION_FIELD_NAME,
   LIQUIDITY_PROVIDERS_FEE_FIELD_NAME,
@@ -45,6 +43,8 @@ import {
   useRadioButtonParams
 } from './hooks';
 import { getPrecisionMultiplier, getPrecisionRate } from './precision.helper';
+import { useCreateStableswapPool, usePoolCreationPrice, usePoolToCreateVersion } from '../../../../../hooks';
+import { NotEnoughQuipuErrorToast } from '../not-enough-quipu-error-toast';
 
 export const useCreateFormViewModel = () => {
   const { authStore, tezos } = useRootStore();

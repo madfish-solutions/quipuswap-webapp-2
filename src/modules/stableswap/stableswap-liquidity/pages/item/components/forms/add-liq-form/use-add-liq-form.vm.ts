@@ -16,6 +16,9 @@ import {
   calculateShares
 } from '@shared/helpers';
 
+import { useAddLiqFormValidation } from './use-add-liq-form-validation';
+import { useAddLiqFormHelper } from './use-add-liq-form.helper';
+import { useZeroInputsError } from './use-zero-inputs-error';
 import { getFormikInitialValues, getInputSlugByIndex } from '../../../../../../helpers';
 import {
   useAddStableswapLiquidity,
@@ -23,9 +26,6 @@ import {
   useStableswapItemStore,
   useStableswapTokensBalances
 } from '../../../../../../hooks';
-import { useAddLiqFormValidation } from './use-add-liq-form-validation';
-import { useAddLiqFormHelper } from './use-add-liq-form.helper';
-import { useZeroInputsError } from './use-zero-inputs-error';
 
 const DEFAULT_LENGTH = 0;
 

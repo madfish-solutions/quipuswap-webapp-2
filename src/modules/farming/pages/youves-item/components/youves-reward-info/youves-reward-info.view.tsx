@@ -11,11 +11,11 @@ import { StateCurrencyAmount, CardHeaderWithBackButton } from '@shared/component
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import styles from './youves-reward-info.module.scss';
 import { Countdown } from '../countdown';
 import { NextRewardsTimer } from '../next-rewards-timer';
 import { RewardInfo } from '../reward-info';
 import { YouvesStatsItem } from '../youves-stats-item';
-import styles from './youves-reward-info.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

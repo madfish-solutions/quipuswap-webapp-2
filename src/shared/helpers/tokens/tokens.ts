@@ -11,10 +11,10 @@ import { InvalidTokensListError } from '@shared/errors';
 import { QSNetwork, Standard, Token, TokenId, TokenPair, TokenWithQSNetworkType } from '@shared/types';
 import { isValidContractAddress } from '@shared/validators';
 
-import { mapBackendToken } from '../../mapping';
-import { getUniqArray } from '../arrays';
 import { isTokenEqual } from './is-token-equal';
 import { getTokenSlug } from './token-slug';
+import { mapBackendToken } from '../../mapping';
+import { getUniqArray } from '../arrays';
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {

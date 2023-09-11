@@ -6,7 +6,7 @@ export const useYouvesHarvestConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
   const { t } = useTranslation();
 
-  return (yesCallback: NoopAsync, rewardsDueDate: number) => {
+  return async (yesCallback: NoopAsync, rewardsDueDate: number) => {
     if (rewardsDueDate > Date.now()) {
       const message = t('farm|youvesConfirmationHarvestMessage');
 

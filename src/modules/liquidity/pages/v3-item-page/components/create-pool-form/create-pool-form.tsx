@@ -15,9 +15,9 @@ import { isExist } from '@shared/helpers';
 import { Plus } from '@shared/svg';
 import commonStyles from '@styles/CommonContainer.module.scss';
 
-import { LiquidityPoolExist } from '../../../../components';
 import styles from './create-pool-form.module.scss';
 import { useCreatePoolFormViewModel } from './create-pool-form.vm';
+import { LiquidityPoolExist } from '../../../../components';
 
 export const CreatePoolForm = () => {
   const {

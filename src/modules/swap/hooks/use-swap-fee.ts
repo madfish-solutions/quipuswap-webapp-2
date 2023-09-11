@@ -7,12 +7,12 @@ import { useUpdateOnBlockSWR } from '@shared/hooks';
 import { useSettingsStore } from '@shared/hooks/use-settings-store';
 import { Nullable, Undefined } from '@shared/types';
 
+import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
+import { useSwapStore } from './use-swap-store';
 import { NoMediatorsSwapBlockchainApi, ThreeRouteBlockchainApi } from '../api';
 import { getThreeRouteSwapSWRKey } from '../utils/get-three-route-swap-swr-key';
 import { getTradeSWRKey } from '../utils/get-trade-swr-key';
 import { SwapDetailsParams } from '../utils/types';
-import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
-import { useSwapStore } from './use-swap-store';
 
 export const useRealSwapFee = ({
   inputToken,

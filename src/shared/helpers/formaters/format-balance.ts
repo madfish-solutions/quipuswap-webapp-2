@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
-import { bigNumberToString } from '../bignumber';
 import { FormatNumber } from './format-number';
 import { shortNumberWithLetters } from './short-number-with-letters';
+import { bigNumberToString } from '../bignumber';
 
 const FIRST_POSITION = 0;
 const ONE_ELEMENT = 1;

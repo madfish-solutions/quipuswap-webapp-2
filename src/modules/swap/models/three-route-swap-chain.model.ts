@@ -1,5 +1,5 @@
-import { ThreeRouteSwapChainDto } from '../dto';
 import { ThreeRouteHopModel } from './three-route-hop.model';
+import { ThreeRouteSwapChainDto } from '../dto';
 
 export class ThreeRouteSwapChainModel extends ThreeRouteSwapChainDto {
   hops: ThreeRouteHopModel[];

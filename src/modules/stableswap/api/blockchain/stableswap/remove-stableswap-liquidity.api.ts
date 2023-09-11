@@ -7,9 +7,9 @@ import { DEFAULT_STABLESWAP_POOL_ID } from '@config/constants';
 import { TEZOS_TOKEN } from '@config/tokens';
 import { AmountToken, Nullable } from '@shared/types';
 
+import { getYupanaRebalanceParams } from './utils';
 import { getTotalTokenAmount } from '../../../helpers';
 import { Version } from '../../../types';
-import { getYupanaRebalanceParams } from './utils';
 
 const createMichelsonMap = (tokensAndAmounts: Array<AmountToken & Partial<{ index: number }>>) => {
   const michelsonAmounts = new MichelsonMap<number, BigNumber>();

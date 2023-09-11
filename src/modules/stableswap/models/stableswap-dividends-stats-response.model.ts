@@ -1,5 +1,5 @@
-import { StableswapDividendsStatsResponseDto } from '../dto';
 import { StableswapDividendsStatsModel } from './stableswap-dividends-stats.model';
+import { StableswapDividendsStatsResponseDto } from '../dto';
 
 export class StableswapDividendsStatsResponseModel extends StableswapDividendsStatsResponseDto {
   item: StableswapDividendsStatsModel;

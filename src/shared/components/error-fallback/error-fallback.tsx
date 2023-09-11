@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { Nullable } from '../../types';
 import styles from './error-fallback.module.scss';
+import { Nullable } from '../../types';
 
 interface Props {
   error: Nullable<Error | string>;

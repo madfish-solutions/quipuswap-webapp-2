@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { Skeleton } from '../skeleton';
 import s from './ModalCell.module.scss';
+import { Skeleton } from '../skeleton';
 
 export const LoadingBakerCell: FC = () => {
   const compoundClassName = cx(s.loading, s.listItem);

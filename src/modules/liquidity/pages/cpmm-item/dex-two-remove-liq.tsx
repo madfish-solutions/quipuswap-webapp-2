@@ -5,9 +5,9 @@ import { observer } from 'mobx-react-lite';
 import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { PageTitle, StickyBlock } from '@shared/components';
 
-import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoDetails, DexTwoRemoveLiqForm } from './components';
 import { useDexTwoItemViewModel } from './dex-two-item.vm';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 
 export const DexTwoRemoveLiq: FC = observer(() => {
   const { t, title } = useDexTwoItemViewModel();

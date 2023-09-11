@@ -22,11 +22,11 @@ import { ExternalLink } from '@shared/svg/external-link';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import styles from './farming-details.module.scss';
+import { useFarmingDetailsViewModel } from './use-farming-details.vm';
 import { Countdown } from '../countdown';
 import { DeprecatedStateData } from '../state-data';
 import { TimespanView } from '../timespan-view';
-import styles from './farming-details.module.scss';
-import { useFarmingDetailsViewModel } from './use-farming-details.vm';
 
 export const FarmingDetails: FC = observer(() => {
   const { t } = useTranslation();

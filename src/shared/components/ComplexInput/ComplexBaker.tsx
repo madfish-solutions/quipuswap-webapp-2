@@ -10,9 +10,9 @@ import { BakersModal } from '@shared/modals';
 import { Shevron } from '@shared/svg';
 import { Nullable, WhitelistedBaker } from '@shared/types';
 
+import s from './ComplexInput.module.scss';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
-import s from './ComplexInput.module.scss';
 
 export interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   className?: string;

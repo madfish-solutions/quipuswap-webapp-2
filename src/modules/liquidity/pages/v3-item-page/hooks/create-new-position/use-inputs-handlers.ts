@@ -7,6 +7,10 @@ import { useLiquidityV3PoolStore, useV3PoolPriceDecimals } from '@modules/liquid
 import { CreatePositionFormik } from '@modules/liquidity/types';
 import { getInvertedValue, isExist, numberAsString, toAtomic, toReal } from '@shared/helpers';
 
+import { useOnAmountInputChange } from './use-on-amount-input-change';
+import { useOnPriceRangeChange } from './use-on-price-range-change';
+import { useOnPriceRangeInputChange } from './use-on-price-range-input-change';
+import { useTickSpacing } from './use-tick-spacing';
 import { calculateTick } from '../../helpers';
 import {
   CreatePositionInput,
@@ -14,10 +18,6 @@ import {
   CreatePositionPriceInput,
   isAmountInput
 } from '../../types/create-position-form';
-import { useOnAmountInputChange } from './use-on-amount-input-change';
-import { useOnPriceRangeChange } from './use-on-price-range-change';
-import { useOnPriceRangeInputChange } from './use-on-price-range-input-change';
-import { useTickSpacing } from './use-tick-spacing';
 
 export const useInputsHandlers = (
   formik: CreatePositionFormik,

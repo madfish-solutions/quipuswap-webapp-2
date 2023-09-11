@@ -16,10 +16,10 @@ import { isExist, isNull, isUndefined } from '@shared/helpers';
 import { Nullable, Optional, Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { useLoadLiquidityShare } from '../../hooks';
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import styles from './liquidity-details.module.scss';
 import { useLiquidityDetailsViewModel } from './use-liqiudity-details.vm';
+import { useLoadLiquidityShare } from '../../hooks';
 
 interface Props {
   dex: Optional<FoundDex>;

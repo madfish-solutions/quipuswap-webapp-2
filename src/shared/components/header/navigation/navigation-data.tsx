@@ -20,8 +20,8 @@ import {
 import { ActiveStatus } from '@shared/types';
 import { i18n } from '@translation';
 
-import { getId } from '../../../helpers';
 import styles from './navigation.module.scss';
+import { getId } from '../../../helpers';
 
 interface LinkInterface {
   id: string;

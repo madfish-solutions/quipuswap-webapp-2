@@ -2,9 +2,9 @@ import { METADATA_API } from '@config/environment';
 import { TOKENS_KEY } from '@config/localstorage';
 import { TEZOS_TOKEN } from '@config/tokens';
 
+import { jsonFetch } from './json-fetch';
 import { getTokenSlug, isTezosToken } from '../helpers';
 import { Nullable, TokenAddress } from '../types';
-import { jsonFetch } from './json-fetch';
 
 const DEFAULT_TOKEN_ID = 0;
 

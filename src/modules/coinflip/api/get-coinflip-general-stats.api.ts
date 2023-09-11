@@ -4,8 +4,8 @@ import { getStorageInfo } from '@shared/dapp';
 import { isNull } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
-import { getCoinflipAssetId } from '../helpers';
 import { CoinflipStorage, GeneralStatsInterface } from './types';
+import { getCoinflipAssetId } from '../helpers';
 
 export const getCoinflipGeneralStatsApi = async (
   tezos: Nullable<TezosToolkit>,

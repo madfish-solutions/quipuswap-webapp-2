@@ -7,8 +7,8 @@ import { defined, formatIntegerWithDecimals, isNull } from '@shared/helpers';
 import { amplitudeService } from '@shared/services';
 import { Nullable, Optional } from '@shared/types';
 
-import { Button } from '../button';
 import styles from './percent-selector.module.scss';
+import { Button } from '../button';
 
 interface PercentSelectorProps {
   handleBalance?: (state: string) => void;

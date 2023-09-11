@@ -3,9 +3,9 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import { makeBasicToolkit } from '@providers/use-dapp';
 import { SupportedNetworks } from '@shared/types';
 
+import { getPreferredRpcUrl } from './get-preferred-rpc-url';
 import { ReadOnlySigner } from '../readonly-signer';
 import { FastRpcClient } from '../taquito-fast-rpc';
-import { getPreferredRpcUrl } from './get-preferred-rpc-url';
 
 export const getTempleWalletState = async (wallet: TempleWallet, networkId: SupportedNetworks) => {
   const rpcClient = new FastRpcClient(getPreferredRpcUrl());

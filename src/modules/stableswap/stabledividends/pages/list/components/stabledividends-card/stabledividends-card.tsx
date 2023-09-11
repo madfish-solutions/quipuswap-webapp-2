@@ -17,9 +17,9 @@ import {
 } from '@shared/components';
 import { extractTokens } from '@shared/helpers';
 
-import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '../../../../../types';
 import styles from './stabledividends-card.module.scss';
 import { useStableDividendsCardViewModel } from './stabledividends-card.vm';
+import { StableDividendsFormTabs, StableDividendsItem, StakerInfo } from '../../../../../types';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

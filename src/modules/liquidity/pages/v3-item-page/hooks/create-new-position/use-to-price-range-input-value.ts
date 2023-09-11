@@ -6,8 +6,8 @@ import { INFINITY_SIGN } from '@config/constants';
 import { useV3PoolPriceDecimals, useLiquidityV3PoolStore } from '@modules/liquidity/hooks';
 import { getInvertedValue, toAtomic, toReal } from '@shared/helpers';
 
-import { calculateTick } from '../../helpers';
 import { useTickSpacing } from './use-tick-spacing';
+import { calculateTick } from '../../helpers';
 
 export const useToPriceRangeInputValue = (priceRangeDecimals: number) => {
   const priceDecimals = useV3PoolPriceDecimals();

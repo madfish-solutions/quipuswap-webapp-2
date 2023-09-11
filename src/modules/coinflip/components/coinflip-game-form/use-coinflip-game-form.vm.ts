@@ -7,8 +7,8 @@ import { bigNumberToString, getFormikError, isEqual, stringToBigNumber } from '@
 import { useAmplitudeService } from '@shared/hooks';
 import { Nullable, Token } from '@shared/types';
 
-import { CoinSide, TokenToPlay } from '../../stores';
 import { useCoinflipValidation } from './use-coinflip.validation';
+import { CoinSide, TokenToPlay } from '../../stores';
 
 export enum FormFields {
   coinSide = 'coinSide',

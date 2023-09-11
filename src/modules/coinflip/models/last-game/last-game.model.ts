@@ -1,8 +1,8 @@
 import { Nullable } from '@shared/types';
 
-import { LastGameDto } from '../../dto';
 import { BetCoinSideModel } from './bet-coin-side.model';
 import { GameStatusModel } from './status.model';
+import { LastGameDto } from '../../dto';
 
 export class LastGameModel extends LastGameDto {
   betCoinSide: Nullable<BetCoinSideModel>;

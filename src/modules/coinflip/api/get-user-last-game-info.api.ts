@@ -4,9 +4,9 @@ import BigNumber from 'bignumber.js';
 import { isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import { UserLastGameRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';
 import { CoinflipStorage } from './types';
+import { UserLastGameRaw } from '../interfaces';
 
 export const getUserLastGameInfo = async (tezos: Nullable<TezosToolkit>, gameId: Nullable<BigNumber>) => {
   if (isNull(tezos) || isNull(gameId)) {

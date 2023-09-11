@@ -5,8 +5,8 @@ import { TEZOS_TOKEN } from '@config/tokens';
 import { useLiquidityV3ItemTokens, useLiquidityV3PositionStore } from '@modules/liquidity/hooks';
 import { getSumOfNumbers, isExist, isTokenEqual, toAtomic } from '@shared/helpers';
 
-import { findUserPosition } from '../helpers';
 import { usePositionsWithStats } from './use-positions-with-stats';
+import { findUserPosition } from '../helpers';
 
 export const useMutezRewards = () => {
   const { positionsWithStats } = usePositionsWithStats();

@@ -22,9 +22,9 @@ import { noopMap } from '@shared/mapping';
 import { Token } from '@shared/types';
 import { i18n, useTranslation } from '@translation';
 
-import { tezosTokenIsIncluded, tokenIsIncluded } from '../../helpers';
 import styles from './create-pool-form.module.scss';
 import { useHandleSubmit } from './use-handle-submit';
+import { tezosTokenIsIncluded, tokenIsIncluded } from '../../helpers';
 
 enum eCreatePoolValues {
   feeRate = 'feeRate',

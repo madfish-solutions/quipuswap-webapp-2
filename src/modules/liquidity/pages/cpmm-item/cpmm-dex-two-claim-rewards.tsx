@@ -4,8 +4,8 @@ import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { PageTitle, StickyBlock } from '@shared/components';
 import { useTranslation } from '@translation';
 
-import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoClaimRewardsFrom, DexTwoDetails } from './components';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 
 export const CpmmDexTwoClaimRewards: FC<{ title: string }> = ({ title }) => {
   const { t } = useTranslation();

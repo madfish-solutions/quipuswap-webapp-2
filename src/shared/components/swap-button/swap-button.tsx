@@ -4,8 +4,8 @@ import cx from 'classnames';
 
 import { SwapIcon } from '@shared/svg';
 
-import { Button } from '../button';
 import styles from './swap-button.module.scss';
+import { Button } from '../button';
 
 export interface SwapButtonProps {
   onClick: () => void;

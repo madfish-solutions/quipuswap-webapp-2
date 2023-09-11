@@ -2,9 +2,9 @@ import { useRootStore } from '@providers/root-store-provider';
 import { defined, isNotDefined, toReal } from '@shared/helpers';
 import { useAuthStore, useToken } from '@shared/hooks';
 
-import { useFarmingYouvesItemStore } from '../../../../../hooks';
 import { UnstakeFormProps } from './unstake-form-props.interface';
 import { useUnstakeFormForming } from './use-unstake-form-forming';
+import { useFarmingYouvesItemStore } from '../../../../../hooks';
 
 export const useUnstakeFormViewModel = (): UnstakeFormProps => {
   const { tezos } = useRootStore();

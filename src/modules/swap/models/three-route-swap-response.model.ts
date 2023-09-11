@@ -1,5 +1,5 @@
-import { ThreeRouteSwapResponseDto } from '../dto';
 import { ThreeRouteSwapChainModel } from './three-route-swap-chain.model';
+import { ThreeRouteSwapResponseDto } from '../dto';
 
 export class ThreeRouteSwapResponseModel extends ThreeRouteSwapResponseDto {
   chains: ThreeRouteSwapChainModel[];

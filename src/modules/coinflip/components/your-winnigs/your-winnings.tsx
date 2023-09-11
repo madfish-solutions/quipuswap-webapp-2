@@ -15,8 +15,8 @@ import { GobletIcon } from '@shared/svg';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { CoinflipStatsItem } from '../coinflip-stats-item';
 import styles from './your-winnings.module.scss';
+import { CoinflipStatsItem } from '../coinflip-stats-item';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

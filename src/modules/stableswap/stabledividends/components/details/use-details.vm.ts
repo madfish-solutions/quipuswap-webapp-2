@@ -6,8 +6,8 @@ import { ActiveStatus } from '@shared/types';
 import commonContainerStyles from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import { useStableDividendsItemStore } from '../../../hooks';
 import styles from './details.module.scss';
+import { useStableDividendsItemStore } from '../../../hooks';
 
 export const useDetailsVievModel = () => {
   const { t } = useTranslation();

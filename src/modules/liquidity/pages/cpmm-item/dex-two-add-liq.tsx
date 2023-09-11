@@ -6,10 +6,10 @@ import { LiquidityFormTabsCard } from '@modules/liquidity/components';
 import { useLiquidityItemStore } from '@modules/liquidity/hooks';
 import { LoaderFallback, PageTitle, StickyBlock } from '@shared/components';
 
-import { LiquidityTabs } from '../../liquidity-routes.enum';
 import { DexTwoAddLiqForm, DexTwoDetails, MigrateLiquidityCard } from './components';
 import styles from './dex-two-add-liq.module.scss';
 import { useDexTwoItemViewModel } from './dex-two-item.vm';
+import { LiquidityTabs } from '../../liquidity-routes.enum';
 
 export const DexTwoAddLiq: FC = observer(() => {
   const { t, title, migrateLiquidity } = useDexTwoItemViewModel();

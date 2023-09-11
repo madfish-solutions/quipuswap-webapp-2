@@ -7,9 +7,9 @@ import { TokenInfo } from '@shared/elements';
 import { isExist, isGreaterThanZero, isTokenEqual, multipliedIfPossible } from '@shared/helpers';
 import { i18n } from '@translation';
 
+import styles from './positions-fee-tokens-list.module.scss';
 import { usePositionsWithStats, useLiquidityV3ItemTokensExchangeRates } from '../../hooks';
 import { TokenFeeCell } from '../token-fee-cell';
-import styles from './positions-fee-tokens-list.module.scss';
 
 enum Columns {
   TOKEN = 'TOKEN',

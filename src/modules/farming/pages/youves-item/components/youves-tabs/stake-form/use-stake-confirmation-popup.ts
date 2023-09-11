@@ -36,7 +36,7 @@ export const useYouvesStakeConfirmationPopup = (
 ) => {
   const { openConfirmationModal } = useConfirmationModal();
 
-  return (yesCallback: NoopAsync, amountToStake: BigNumber) => {
+  return async (yesCallback: NoopAsync, amountToStake: BigNumber) => {
     const message = getConfirmationMessage(getConfirmationMessageParams(amountToStake));
 
     if (isExist(message)) {

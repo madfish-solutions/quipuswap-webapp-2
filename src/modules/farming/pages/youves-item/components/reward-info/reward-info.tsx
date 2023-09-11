@@ -7,8 +7,8 @@ import { Button, Card, ConnectWalletOrDoSomething } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { CFC, Nullable } from '@shared/types';
 
-import { YouvesPendingRewards } from '../youves-pending-rewards';
 import styles from './reward-info.module.scss';
+import { YouvesPendingRewards } from '../youves-pending-rewards';
 
 interface Props {
   claimablePendingRewards: Nullable<BigNumber>;

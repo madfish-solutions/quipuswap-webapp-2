@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { Loader } from '../loader';
 import styles from './loader-fallback.module.scss';
+import { Loader } from '../loader';
 
 export const LoaderFallback: FC = () => {
   return (

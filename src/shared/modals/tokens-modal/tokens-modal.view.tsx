@@ -6,11 +6,11 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Iterator, Skeleton } from '@shared/components';
 import { i18n } from '@translation';
 
-import { Modal } from '../modal';
 import { ManagedTokensModalCell, TokensModalCell, TokensModalHeader } from './components';
 import { TokensModalTab } from './tokens-modal-tabs.service';
 import styles from './tokens-modal.module.scss';
 import { TokensModalViewProps } from './types';
+import { Modal } from '../modal';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

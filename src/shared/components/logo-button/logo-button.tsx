@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import { Logo, LogoSmall } from '../../svg';
 import s from './logo-button.module.scss';
+import { Logo, LogoSmall } from '../../svg';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

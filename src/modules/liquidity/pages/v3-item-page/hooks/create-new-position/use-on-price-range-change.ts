@@ -8,15 +8,15 @@ import { CreatePositionFormik } from '@modules/liquidity/types';
 import { getInvertedValue, isExist, stringToBigNumber, toAtomic } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
+import { useCurrentTick } from './use-current-tick';
+import { useTickSpacing } from './use-tick-spacing';
 import { calculateTicks, shouldAddTokenX, shouldAddTokenY } from '../../helpers';
 import {
   CreatePositionAmountInput,
   CreatePositionFormValues,
   CreatePositionInput
 } from '../../types/create-position-form';
-import { useCalculateInputAmountValue } from './use-calculate-input-amount-value';
-import { useCurrentTick } from './use-current-tick';
-import { useTickSpacing } from './use-tick-spacing';
 
 export const useOnPriceRangeChange = (
   formik: CreatePositionFormik,

@@ -9,8 +9,8 @@ import { Button, Card } from '@shared/components';
 import { getRouterParts } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { LiquidityRoutes } from '../../../../liquidity-routes.enum';
 import styles from './create-new-position.module.scss';
+import { LiquidityRoutes } from '../../../../liquidity-routes.enum';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

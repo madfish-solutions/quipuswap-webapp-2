@@ -2,11 +2,11 @@ import { FC, ReactNode } from 'react';
 
 import cx from 'classnames';
 
+import styles from './list-filter-base-view.module.scss';
 import { Card } from '../card';
 import { Iterator } from '../iterator';
 import { SorterProps, SorterView } from '../sorter-view';
 import { SwitcherLabel, SwitcherLabelProps } from '../switcher-list-filter-view';
-import styles from './list-filter-base-view.module.scss';
 
 export interface ListFilterBaseViewProps {
   switcherDataList: Array<SwitcherLabelProps>;

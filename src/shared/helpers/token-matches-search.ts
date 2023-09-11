@@ -1,9 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Nullable, Token } from '../types';
 import { includesCaseInsensitive } from './includes-case-insensitive';
 import { isZeroTokenId } from './is-zero-token-id';
 import { isExist } from './type-checks';
+import { Nullable, Token } from '../types';
 
 export const tokenMatchesSearch = (
   { metadata, contractAddress, fa2TokenId }: Token,

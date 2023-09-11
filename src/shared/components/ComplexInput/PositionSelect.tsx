@@ -11,6 +11,7 @@ import { Shevron } from '@shared/svg';
 import { Nullable, Token, TokenPair } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import s from './ComplexInput.module.scss';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
 import { LoadableTokenPairName } from '../loadable-token-pair-name';
@@ -18,7 +19,6 @@ import { PercentSelector } from '../percent-selector';
 import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logo';
-import s from './ComplexInput.module.scss';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;

@@ -7,6 +7,7 @@ import { BalanceToken } from '@shared/hooks';
 import { Nullable } from '@shared/types';
 import { useTranslation } from '@translation';
 
+import { usePositionTicks } from './use-position-ticks';
 import { getCreatePositionAmountInputSlugByIndex, shouldAddTokenX, shouldAddTokenY, Tick } from '../../helpers';
 import {
   CreatePositionInput,
@@ -14,7 +15,6 @@ import {
   CreatePositionPriceInput
 } from '../../types/create-position-form';
 import { useLiquidityV3ItemTokensExchangeRates } from '../use-liquidity-v3-item-tokens-exchange-rates';
-import { usePositionTicks } from './use-position-ticks';
 
 export const useAmountInputsProps = (
   tokensWithBalances: BalanceToken[],

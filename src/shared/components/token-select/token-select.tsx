@@ -4,9 +4,9 @@ import BigNumber from 'bignumber.js';
 
 import { Undefined, Token } from '@shared/types';
 
+import { useTokenSelectViewModel } from './token-select.vm';
 import { TokenInput } from '../token-input';
 import { TokensModal } from '../tokens-modal';
-import { useTokenSelectViewModel } from './token-select.vm';
 
 export interface TokenSelectProps extends HTMLProps<HTMLDivElement> {
   className?: string;

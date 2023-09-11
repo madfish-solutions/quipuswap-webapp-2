@@ -9,9 +9,9 @@ import { Plus } from '@shared/svg';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import { useAddLiqFormViewModel } from './use-add-liq-form.vm';
 import { StableTokenInput } from '../../stable-token-input';
 import styles from '../forms.module.scss';
-import { useAddLiqFormViewModel } from './use-add-liq-form.vm';
 
 export const AddLiqForm: FC = observer(() => {
   const { t } = useTranslation();

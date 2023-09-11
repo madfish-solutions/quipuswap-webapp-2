@@ -4,9 +4,9 @@ import cx from 'classnames';
 
 import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 
-import { Card } from '../card';
 import styles from './dashboard-stats-info.module.scss';
 import { useDashboardStatsInfoViewModel } from './use-dashboard-stats-info.vm';
+import { Card } from '../card';
 
 const ZERO = 0;
 

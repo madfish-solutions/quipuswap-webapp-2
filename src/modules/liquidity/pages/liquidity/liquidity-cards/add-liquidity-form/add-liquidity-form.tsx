@@ -8,10 +8,10 @@ import { Plus } from '@shared/svg';
 import CC from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
-import styles from '../../liquidity.module.scss';
-import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
+import styles from '../../liquidity.module.scss';
+import { SlippageInfo, LiquiditySlippageType } from '../../slippage-info';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({
   dex,

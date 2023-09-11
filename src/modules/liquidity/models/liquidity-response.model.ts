@@ -1,8 +1,8 @@
 import { BlockInfoDto } from '@shared/dto';
 import { BlockInfoModel } from '@shared/models';
 
-import { LiquidityResponseDto, LiquidityStatsDto } from '../dto';
 import { LiquidityStatsModel } from './liquidity-stats.model';
+import { LiquidityResponseDto, LiquidityStatsDto } from '../dto';
 
 export class LiquidityResponseModel extends LiquidityResponseDto {
   stats: LiquidityStatsDto;

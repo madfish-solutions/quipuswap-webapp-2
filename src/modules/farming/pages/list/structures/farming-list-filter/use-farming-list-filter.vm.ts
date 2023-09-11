@@ -8,8 +8,8 @@ import { isNull, isDirectOrder } from '@shared/helpers';
 import { useAuthStore, useBaseFilterStoreConverter } from '@shared/hooks';
 import { useTranslation } from '@translation';
 
-import { FarmingSortField, FarmingSortFieldItem } from '../../types';
 import styles from './farming-list-filter.module.scss';
+import { FarmingSortField, FarmingSortFieldItem } from '../../types';
 
 export const useFarmingListFilterViewModel = (): ListFilterInputViewProps => {
   const { accountPkh } = useAuthStore();

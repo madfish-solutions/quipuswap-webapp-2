@@ -6,8 +6,8 @@ import ReactSlider from 'react-slick';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { CFC } from '@shared/types';
 
-import { Card } from '../card';
 import styles from './slider.module.scss';
+import { Card } from '../card';
 
 const SliderSettings = {
   slidesToShow: 4,

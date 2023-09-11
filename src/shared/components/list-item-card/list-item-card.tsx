@@ -11,13 +11,13 @@ import { isEmptyArray, isExist, isUndefined } from '@shared/helpers';
 import { ArrowDown } from '@shared/svg';
 import { Nullable, Token } from '@shared/types';
 
+import styles from './list-item-card.module.scss';
 import { Card } from '../card';
 import { Iterator } from '../iterator';
 import { LabelComponent, LabelComponentProps } from '../label-component';
 import { StateListItemCardCell, StateListItemCardCellProps } from '../state-list-item-card-cell';
 import { TokensLogos } from '../tokens-logo';
 import { TokensSymbols } from '../tokens-symbols';
-import styles from './list-item-card.module.scss';
 
 export interface ListItemCardProps {
   href: string;

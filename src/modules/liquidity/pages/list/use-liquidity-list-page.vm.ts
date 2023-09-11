@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useReady } from '@providers/use-dapp';
 import { useTranslation } from '@translation';
 
-import { useGetLiquidityList, useGetLiquidityStats, useLiquidityListStore } from '../../hooks';
 import { mapLiquidityListItem } from './map-liquidity-list-item';
+import { useGetLiquidityList, useGetLiquidityStats, useLiquidityListStore } from '../../hooks';
 
 export const useLiquidityPageViewModel = () => {
   const isReady = useReady();

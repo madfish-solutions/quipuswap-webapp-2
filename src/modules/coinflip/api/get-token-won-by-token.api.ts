@@ -4,10 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { toReal, isNull } from '@shared/helpers';
 import { Nullable, Token } from '@shared/types';
 
-import { getCoinflipAssetId } from '../helpers';
-import { GamersStatsRaw } from '../interfaces';
 import { getCoinflipStorageApi } from './get-coinflip-storage.api';
 import { CoinflipStorage } from './types';
+import { getCoinflipAssetId } from '../helpers';
+import { GamersStatsRaw } from '../interfaces';
 
 export const getTokenWonByTokenApi = async (tezos: Nullable<TezosToolkit>, accountPkh: string, token: Token) => {
   const coinFlipStorage = await getCoinflipStorageApi<CoinflipStorage>(tezos);

@@ -13,6 +13,7 @@ import { LiquidityRoutes } from '@modules/liquidity/liquidity-routes.enum';
 import { isEmptyString, isEqual, isNull, numberAsString, setCaretPosition } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
+import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 import { findUserPosition } from '../../../helpers';
 import { usePositionsWithStats } from '../../../hooks';
 import {
@@ -23,7 +24,6 @@ import {
 } from '../helpers';
 import { useV3RemoveLiquidity } from '../hooks';
 import { V3RemoveFormValues, V3RemoveTokenInput } from '../interface';
-import { useV3RemoveLiqFormValidation } from './use-v3-remove-liq-form.validation';
 
 const PERCENTAGE_INPUT_DECIMALS = 2;
 

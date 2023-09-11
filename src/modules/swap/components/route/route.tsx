@@ -6,9 +6,9 @@ import { getPoolSlug } from '@modules/swap/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isLastElementIndex } from '@shared/helpers';
 
+import s from './route.module.scss';
 import { DexPool } from '../../types';
 import { PoolButton } from '../pool-button';
-import s from './route.module.scss';
 
 export interface RouteProps {
   route: DexPool[];

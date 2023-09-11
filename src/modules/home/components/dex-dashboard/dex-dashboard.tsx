@@ -12,9 +12,9 @@ import { getStorageInfo } from '@shared/dapp';
 import { getPreferredRpcUrl, toReal } from '@shared/helpers';
 import { useTranslation } from '@translation';
 
-import { Section } from '../section';
 import { DexDashboardInner } from './dex-dashboard-inner';
 import s from './dex-dashboard.module.scss';
+import { Section } from '../section';
 
 const ZERO = 0;
 

@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { useLiquidityV3CurrentYToXPrice, useV3PoolPriceDecimals } from '@modules/liquidity/hooks';
 import { toAtomicIfPossible } from '@shared/helpers';
 
-import { calculateTickIndex } from '../../helpers';
 import { useTickSpacing } from './use-tick-spacing';
+import { calculateTickIndex } from '../../helpers';
 
 export const useCurrentTick = () => {
   const currentPrice = useLiquidityV3CurrentYToXPrice();

@@ -1,5 +1,5 @@
-import { YouvesStakesResponseDto } from '../../dto';
 import { YouvesStakeModel } from './youves-stake.model';
+import { YouvesStakesResponseDto } from '../../dto';
 
 export class YouvesStakesResponseModel extends YouvesStakesResponseDto {
   stakes: YouvesStakeModel[];

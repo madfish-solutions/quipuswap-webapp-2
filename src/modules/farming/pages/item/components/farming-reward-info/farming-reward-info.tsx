@@ -10,13 +10,13 @@ import { getBakerName, getSymbolsString } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
 import { useTranslation } from '@translation';
 
+import styles from './farming-reward-info.module.scss';
+import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 import { Countdown } from '../countdown';
 import { FarmingRewardHeader } from '../farming-reward-header';
 import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { DeprecatedStateData } from '../state-data';
-import styles from './farming-reward-info.module.scss';
-import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,

@@ -8,9 +8,9 @@ import { useAccountPkh, useReady } from '@providers/use-dapp';
 import { isUndefined, isGreaterThanZero } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
+import { opportunityHelper } from './opportunity.helper';
 import { getStableswapTitle } from '../../../helpers';
 import { useStableswapItemFormStore, useGetStableswapItem, useStableswapItemStore } from '../../../hooks';
-import { opportunityHelper } from './opportunity.helper';
 
 export const useStableswapLiquidityRemoveItemPageViewModel = () => {
   const params = useParams();

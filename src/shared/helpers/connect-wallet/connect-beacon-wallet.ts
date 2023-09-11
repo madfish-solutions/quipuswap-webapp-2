@@ -1,4 +1,6 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+/* eslint-disable  import/order */
+
+import { NetworkType } from '@airgap/beacon-types';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 
 import { APP_NAME, IS_NETWORK_MAINNET, NETWORK } from '@config/config';
@@ -6,7 +8,7 @@ import { BASE_URL, NETWORK_ID } from '@config/environment';
 import { LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/localstorage';
 import { makeBasicToolkit } from '@providers/use-dapp';
 import { NoBeaconWallet, WalletNotConnected } from '@shared/errors';
-import { ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';
+import { SupportedNetworks, ConnectType, LastUsedConnectionKey, QSNetwork } from '@shared/types';
 
 import { ReadOnlySigner } from '../readonly-signer';
 import { FastRpcClient } from '../taquito-fast-rpc';
@@ -15,7 +17,7 @@ import { isDefaultConnectType } from './is-default-connect-type';
 
 const getPreferredNetwork = () => {
   if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
-    return NetworkType.MAINNET;
+    return NetworkType.MAINNET as SupportedNetworks;
   }
 
   return NETWORK_ID;
@@ -26,6 +28,8 @@ export const beaconWallet = new BeaconWallet({
   iconUrl: `${BASE_URL}/favicon.ico`,
   preferredNetwork: getPreferredNetwork()
 });
+
+type Permissions = Required<Required<Parameters<typeof beaconWallet.requestPermissions>>[0]>;
 
 export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: QSNetwork) => {
   const rpcUrl = getPreferredRpcUrl();
@@ -40,15 +44,22 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
     if (activeAccount) {
       await beaconWallet.clearActiveAccount();
     }
-    const network =
-      isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET
-        ? ({ type: qsNetwork.id } as { type: NetworkType })
-        : {
-            type: NetworkType.CUSTOM,
-            name: qsNetwork.name,
-            rpcUrl
-          };
-    await beaconWallet.requestPermissions({ network });
+    const isMain = isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET;
+
+    const network = isMain
+      ? ({
+          type: qsNetwork.id
+        } as { type: Permissions['network']['type'] })
+      : ({
+          type: NetworkType.CUSTOM,
+          name: qsNetwork.name,
+          rpcUrl
+        } as Permissions['network']);
+
+    const permissions: Omit<Permissions, 'scopes'> = {
+      network
+    };
+    await beaconWallet.requestPermissions(permissions);
   }
 
   const tezos = makeBasicToolkit(rpcClient);

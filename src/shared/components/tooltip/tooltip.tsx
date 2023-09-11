@@ -6,8 +6,8 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Info } from '@shared/svg';
 
-import { CFC } from '../../types';
 import styles from './tooltip.module.sass';
+import { CFC } from '../../types';
 
 export interface TooltipProps extends TippyProps {
   content: ReactNode;

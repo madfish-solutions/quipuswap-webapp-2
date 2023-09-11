@@ -15,10 +15,10 @@ import { useGlobalModalsState } from '@providers/use-global-modals-state';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import styles from './reconnect-modal.module.scss';
 import { Button } from '../../components';
 import { amplitudeService } from '../../services';
 import { Modal } from '../modal';
-import styles from './reconnect-modal.module.scss';
 
 const MS = 0;
 

@@ -7,9 +7,9 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useToasts } from '@shared/utils';
 import { useTranslation } from '@translation';
 
+import s from './ComplexInput.module.scss';
 import { Button } from '../button';
 import { ComplexError } from '../complex-error';
-import s from './ComplexInput.module.scss';
 
 interface ComplexRecipientProps extends HTMLProps<HTMLTextAreaElement> {
   className?: string;

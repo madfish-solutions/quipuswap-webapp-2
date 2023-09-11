@@ -15,11 +15,11 @@ import { NotFound, Plus } from '@shared/svg';
 import { Token } from '@shared/types';
 import { useTranslation } from '@translation';
 
-import { Modal } from '../modal';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.scss';
 import { FormValues, IPositionsModalProps, PMFormField } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
+import { Modal } from '../modal';
 
 const themeClass = {
   [ColorModes.Light]: s.light,

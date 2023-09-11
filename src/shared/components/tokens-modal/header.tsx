@@ -6,10 +6,10 @@ import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '@config/constants';
 import { Search } from '@shared/svg';
 import { useTranslation } from '@translation';
 
-import { Input } from '../input';
-import { NumberInput } from '../number-input';
 import styles from './tokens-modal.module.scss';
 import { FormValues, TMFormField } from './types';
+import { Input } from '../input';
+import { NumberInput } from '../number-input';
 
 export interface HeaderProps {
   errors: FormikErrors<Partial<FormValues>>;

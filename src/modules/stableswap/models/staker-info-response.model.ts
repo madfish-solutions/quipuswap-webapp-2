@@ -1,5 +1,5 @@
-import { StakerInfoResponseDto } from '../dto';
 import { StakerInfoModel } from './staker-info.model';
+import { StakerInfoResponseDto } from '../dto';
 
 export class StakerInfoResponseModel extends StakerInfoResponseDto {
   item: StakerInfoModel;

@@ -7,10 +7,10 @@ import { Button, Card, StateCurrencyAmount } from '@shared/components';
 import { ArrowSign } from '@shared/svg';
 import { Nullable, Undefined } from '@shared/types';
 
-import { CoinflipStatsItem } from '../coinflip-stats-item';
-import { YourWinningsReward } from '../your-winnigs';
 import styles from './reward-info.module.scss';
 import { useRewardInfoViewModel } from './use-reward-info.vm';
+import { CoinflipStatsItem } from '../coinflip-stats-item';
+import { YourWinningsReward } from '../your-winnigs';
 
 interface Props {
   userReward: Nullable<BigNumber>;

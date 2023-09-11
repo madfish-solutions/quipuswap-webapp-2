@@ -5,13 +5,13 @@ import { Nullable, WhitelistedBaker } from '@shared/types';
 import stylesCommonContainer from '@styles/CommonContainer.module.scss';
 import { useTranslation } from '@translation';
 
+import styles from './dex-two-add-liq-form-view.module.scss';
 import { Button } from '../button';
 import { ComplexBaker, ComplexBakerProps } from '../ComplexInput';
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { Iterator } from '../iterator';
 import { TokenInput, TokenInputProps } from '../token-input';
 import { WarningAlert } from '../warning-alert';
-import styles from './dex-two-add-liq-form-view.module.scss';
 
 interface BakerProps extends ComplexBakerProps {
   shouldShowBakerInput: boolean;
