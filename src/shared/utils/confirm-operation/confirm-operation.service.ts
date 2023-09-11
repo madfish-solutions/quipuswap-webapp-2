@@ -33,9 +33,11 @@ export const confirmOperation = async (
 
     for (let i: number = fromBlockLevel ?? currentBlockLevel; i <= currentBlockLevel; i++) {
       const block = i === currentBlockLevel ? currentBlock : await tezos.rpc.getBlock({ block: String(i) });
+      //@ts-ignore
       const opEntry = findOperation(block, opHash);
 
       const operationIsRejected = opEntry?.contents.some(
+        //@ts-ignore
         operationContents => getOperationStatus(operationContents) === 'failed'
       );
 
