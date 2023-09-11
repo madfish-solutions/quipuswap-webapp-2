@@ -25,7 +25,7 @@
     "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.3",
-    "@quipuswap/tokens-whitelist": "^1.1.16",
+    "@quipuswap/tokens-whitelist": "^1.1.19",
     "@sentry/react": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
     "@taquito/beacon-wallet": "15.0.1",
