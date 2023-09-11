@@ -2684,7 +2684,7 @@
   dependencies:
     bignumber.js "^9.1.0"
 
-"@quipuswap/tokens-whitelist@^1.1.16":
+"@quipuswap/tokens-whitelist@^1.1.19":
   version "1.1.19"
   resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.1.19.tgz#50056322f00c2bbef0db3f2115cc860466a6bc6e"
   integrity sha512-7cZ9MFeyFkLBXiV3nHTBQbT7AK37RlmJYD4ctuZrvWTFKJXbXXtTZJbVZXEoWVC7HUG6BQrncX1aRTYmJAIqLw==
