@@ -1,5 +1,4 @@
-/* eslint-disable  import/order */
-
+/* eslint-disable import/order */
 import { NetworkType } from '@airgap/beacon-types';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 
@@ -62,6 +61,7 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
     await beaconWallet.requestPermissions(permissions);
   }
 
+  //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();

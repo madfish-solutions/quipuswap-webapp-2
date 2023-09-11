@@ -18,7 +18,8 @@ import {
   getPreferredRpcUrl,
   getTempleWalletState,
   michelEncoder,
-  ReadOnlySigner
+  ReadOnlySigner,
+  TempleWalletWithPK
 } from '@shared/helpers';
 import { LastUsedConnectionKey, Nullable, QSNetwork } from '@shared/types';
 
@@ -32,6 +33,7 @@ export interface DAppType {
 }
 
 export function makeBasicToolkit(clientOrUrl?: RpcClientInterface | string) {
+  //@ts-ignore
   const tezos = new TezosToolkit(clientOrUrl ?? new FastRpcClient(getPreferredRpcUrl()));
   tezos.setPackerProvider(michelEncoder);
 
@@ -95,7 +97,10 @@ function useDApp() {
             console.error(error);
           }
 
-          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
+          const wlt = new TempleWalletWithPK(
+            APP_NAME,
+            lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null
+          );
 
           if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
             const { pkh, pk, tezos: _tezos } = await getTempleWalletState(wlt, NETWORK_ID);
@@ -267,6 +272,7 @@ function useDApp() {
       if (!tezos?.rpc) {
         throw new Error('Tezos RPC in undefined');
       }
+      //@ts-ignore
       const cloneTezosToolkit = makeBasicToolkit(tezos.rpc);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 

@@ -1,4 +1,3 @@
-import { OperationEntry } from '@taquito/rpc';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { CONFIRM_TIMEOUT, SYNC_INTERVAL } from './confirm-operation.config';
@@ -8,7 +7,7 @@ import {
   OperationRejectedError
 } from './confirm-operation.errors';
 import { findOperation, getOperationStatus } from './confirm-operation.helpers';
-import { ConfirmOperationOptions } from './confirm-operation.types';
+import { ConfirmOperationOptions, OperationEntry } from './confirm-operation.types';
 
 export const confirmOperation = async (
   tezos: TezosToolkit,
@@ -34,9 +33,11 @@ export const confirmOperation = async (
 
     for (let i: number = fromBlockLevel ?? currentBlockLevel; i <= currentBlockLevel; i++) {
       const block = i === currentBlockLevel ? currentBlock : await tezos.rpc.getBlock({ block: String(i) });
+      //@ts-ignore
       const opEntry = findOperation(block, opHash);
 
       const operationIsRejected = opEntry?.contents.some(
+        //@ts-ignore
         operationContents => getOperationStatus(operationContents) === 'failed'
       );
 
@@ -45,6 +46,7 @@ export const confirmOperation = async (
       }
 
       if (opEntry) {
+        //@ts-ignore
         return opEntry;
       }
     }

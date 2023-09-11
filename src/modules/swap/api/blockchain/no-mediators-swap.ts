@@ -6,6 +6,8 @@ import { STABLESWAP_REFERRAL } from '@config/config';
 import { QUIPUSWAP_REFERRAL_CODE } from '@config/constants';
 import { estimateFee } from '@shared/api';
 
+type TTK = Parameters<typeof getTradeOpParams>[2];
+
 export class NoMediatorsSwapBlockchainApi {
   static async getSwapTransferParams(
     tezos: TezosToolkit,
@@ -17,7 +19,7 @@ export class NoMediatorsSwapBlockchainApi {
     return await getTradeOpParams(
       trade,
       accountPkh,
-      tezos,
+      tezos as unknown as TTK,
       STABLESWAP_REFERRAL,
       recipientPkh,
       deadlineTimespan?.toNumber(),

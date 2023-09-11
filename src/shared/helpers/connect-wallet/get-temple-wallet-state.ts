@@ -1,16 +1,18 @@
-import { TempleWallet } from '@temple-wallet/dapp';
-
+/* eslint-disable import/order */
 import { makeBasicToolkit } from '@providers/use-dapp';
 import { SupportedNetworks } from '@shared/types';
 
-import { getPreferredRpcUrl } from './get-preferred-rpc-url';
 import { ReadOnlySigner } from '../readonly-signer';
 import { FastRpcClient } from '../taquito-fast-rpc';
+import { getPreferredRpcUrl } from './get-preferred-rpc-url';
+import { TempleWalletWithPK } from './temple-wallet';
 
-export const getTempleWalletState = async (wallet: TempleWallet, networkId: SupportedNetworks) => {
+export const getTempleWalletState = async (wallet: TempleWalletWithPK, networkId: SupportedNetworks) => {
   const rpcClient = new FastRpcClient(getPreferredRpcUrl());
+  //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(wallet);
+  //@ts-ignore
   tezos.setRpcProvider(rpcClient);
   const pkh = wallet.connected ? await wallet.getPKH() : null;
   let pk: string | null = null;
