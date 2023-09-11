@@ -46,6 +46,7 @@ export const confirmOperation = async (
       }
 
       if (opEntry) {
+        //@ts-ignore
         return opEntry;
       }
     }
