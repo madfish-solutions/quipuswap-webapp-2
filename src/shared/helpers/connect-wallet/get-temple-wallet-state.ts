@@ -12,6 +12,7 @@ export const getTempleWalletState = async (wallet: TempleWalletWithPK, networkId
   //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(wallet);
+  //@ts-ignore
   tezos.setRpcProvider(rpcClient);
   const pkh = wallet.connected ? await wallet.getPKH() : null;
   let pk: string | null = null;
