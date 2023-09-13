@@ -72,3 +72,4 @@ export * from './math';
 export * from './get-precentage-from-number';
 export * from './set-caret-position';
 export * from './can-use-three-route-api';
+export * from './resolve-or-null';
