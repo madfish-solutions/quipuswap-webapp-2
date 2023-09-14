@@ -1,4 +1,4 @@
-import { BigMap, BlockInfoWrap, nat, Nullable } from '@shared/types';
+import { BigMap, BlockInfoWrap, nat, Option } from '@shared/types';
 
 export interface NewLiquidityStatsResponse extends IRawNewLiquidityStats, BlockInfoWrap {}
 
@@ -19,7 +19,7 @@ export interface DexTwoPair {
   token_b_price_cml: nat;
   total_supply: nat;
   last_block_timestamp: Date | string;
-  bucket: Nullable<string>;
+  bucket: Option<string>;
 }
 
 export interface DexTwoContractStorage {

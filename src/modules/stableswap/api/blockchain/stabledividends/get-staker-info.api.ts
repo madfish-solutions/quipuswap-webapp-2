@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { DEFAULT_STABLESWAP_POOL_ID, STABLESWAP_DIVIDENDS_ACCUM_PRECISION, ZERO_AMOUNT } from '@config/constants';
 import { getStorageInfo } from '@shared/dapp/get-storage-info';
-import { isExist, isNull, resolveOrNull, toArray } from '@shared/helpers';
+import { isExist, isNull, toArray } from '@shared/helpers';
 import { nat, Nullable } from '@shared/types';
 
 import { earningsMapSchema, rewardMapSchema } from '../../../schemas/get-staker-info.schemas';
@@ -49,9 +49,8 @@ const getSinglePoolStakerInfo = async (
 ) => {
   const { storage } = await getStorageInfo<StableswapStorage>(tezos, contractAddress);
   const { pools, stakers_balance } = storage;
-  const _stakerAccum = await resolveOrNull(stakers_balance.get([accountPkh, poolId]));
 
-  const stakerAccum = _stakerAccum ?? {
+  const stakerAccum = (await stakers_balance.get([accountPkh, poolId])) ?? {
     balance: new BigNumber(ZERO_AMOUNT),
     earnings: new MichelsonMap<nat, EarningsValue>(earningsMapSchema)
   };

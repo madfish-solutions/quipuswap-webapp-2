@@ -39,3 +39,5 @@ export interface FA2Token {
 }
 
 export type TokensValue = TezToken | FA12Token | FA2Token;
+
+export type Option<T> = { Some: T } | null;
