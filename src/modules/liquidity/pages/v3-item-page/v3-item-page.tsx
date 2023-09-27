@@ -15,7 +15,7 @@ import styles from './v3-item-page.module.scss';
 
 export const V3ItemPage: FC = observer(() => {
   const { t } = useTranslation();
-  const { isLoading, isAddLiqForm, tabId } = useV3ItemPageViewModel();
+  const { isLoading, isAddLiqForm, tabId, isBlocked } = useV3ItemPageViewModel();
 
   return (
     <>
@@ -28,7 +28,30 @@ export const V3ItemPage: FC = observer(() => {
       </StateWrapper>
       <StickyBlock>
         <LiquidityV3FormTabsCard tabActiveId={tabId}>
-          {isAddLiqForm ? <V3AddLiqForm /> : <V3RemoveLiqForm />}
+          {isAddLiqForm ? (
+            isBlocked ? (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  minHeight: '88px',
+                  background: '#000',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.5rem',
+                  color: 'rgba(255, 255, 0, 0.8)',
+                  paddingLeft: 8
+                }}
+              >
+                <p>The deposits to the pool are paused.</p>
+              </div>
+            ) : (
+              <V3AddLiqForm />
+            )
+          ) : (
+            <V3RemoveLiqForm />
+          )}
         </LiquidityV3FormTabsCard>
         <PositionDetails />
       </StickyBlock>
