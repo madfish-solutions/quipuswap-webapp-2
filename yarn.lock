@@ -2615,10 +2615,10 @@
   dependencies:
     bignumber.js "^9.1.0"
 
-"@quipuswap/tokens-whitelist@^1.1.24":
-  version "1.1.24"
-  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.1.24.tgz#0a9270727439dc304e739e48f7f2da7e71d68b81"
-  integrity sha512-EtKEcsAJm3v5RYcFndtAWNWU/vT78XDvM2xoGJjQZVk/9zIQiJwMlXdfFNyP2VtWUJqGTYIuSQHutL9TJuxqqw==
+"@quipuswap/tokens-whitelist@^1.1.25":
+  version "1.1.25"
+  resolved "https://registry.yarnpkg.com/@quipuswap/tokens-whitelist/-/tokens-whitelist-1.1.25.tgz#773b49d6e2ff23a3cf5f64bca17bf015834ceec4"
+  integrity sha512-0iX+4u0vVElDoO7IZXbEsoIZNlcVRrAhKI0U6+EYccJERbYf5WMd0zKomsyYnUUuD1yXx49nMrPsTO/GL0ddJA==
 
 "@remix-run/router@1.8.0":
   version "1.8.0"
