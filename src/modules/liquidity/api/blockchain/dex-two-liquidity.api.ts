@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { BucketContractStorage, DexTwoContractStorage } from '@modules/liquidity/types';
 import { getContract, getStorageInfo } from '@shared/dapp';
-import { defined } from '@shared/helpers';
+import { defined, unpackOption } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
 // TODO: https://madfish.atlassian.net/browse/QUIPU-613
@@ -11,7 +11,9 @@ export class BlockchainDexTwoLiquidityApi {
   static async getBucketContract(tezos: TezosToolkit, contractAddress: string, poolId: BigNumber) {
     const storage = await getStorageInfo<DexTwoContractStorage>(tezos, contractAddress);
 
-    const { bucket: bucketAddress } = defined(await storage.storage.pairs.get(poolId));
+    const pair = await storage.storage.pairs.get(poolId);
+
+    const bucketAddress = unpackOption(defined(pair).bucket);
 
     if (bucketAddress) {
       return await getContract(tezos, bucketAddress);

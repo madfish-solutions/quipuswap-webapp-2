@@ -6,7 +6,7 @@ import { OpenNewPositionForm, PageTitleContainer, PoolDetailsCreate, PositionFor
 import { useCreateNewPositionPageViewModel } from './use-create-new-position-page.vm';
 
 export const CreateNewPositionPage = observer(() => {
-  const { titleText, backHref, ...formProps } = useCreateNewPositionPageViewModel();
+  const { titleText, backHref, isBlocked, ...formProps } = useCreateNewPositionPageViewModel();
 
   return (
     <>
@@ -14,7 +14,26 @@ export const CreateNewPositionPage = observer(() => {
       <PageTitleContainer dataTestId="v3LiqCreatePosition" titleText={titleText} />
       <StickyBlock>
         <PositionFormCard backHref={backHref}>
-          <OpenNewPositionForm {...formProps} />
+          {isBlocked ? (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '88px',
+                background: '#000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.5rem',
+                color: 'rgba(255, 255, 0, 0.8)',
+                paddingLeft: 8
+              }}
+            >
+              <p>The deposits to the pool are paused.</p>
+            </div>
+          ) : (
+            <OpenNewPositionForm {...formProps} />
+          )}
         </PositionFormCard>
         <PoolDetailsCreate />
       </StickyBlock>

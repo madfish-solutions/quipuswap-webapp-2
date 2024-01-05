@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
 import {
   useLiquidityV3PoolStore,
   useLiquidityV3ItemTokens,
@@ -35,5 +36,5 @@ export const useV3ItemPageViewModel = () => {
     void v3PositionsStore.positionsStore.load();
   }, [getLiquidityV3ItemBalances, getLiquidityV3Pool, v3PositionsStore.positionsStore, poolId, tabId]);
 
-  return { isLoading, error, isAddLiqForm, tabId };
+  return { isLoading, error, isAddLiqForm, tabId, isBlocked: poolId?.toFixed() === '83' && IS_NETWORK_MAINNET };
 };

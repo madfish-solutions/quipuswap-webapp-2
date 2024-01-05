@@ -36,8 +36,7 @@ const getErrorMessage = (error: Error | object | string) => {
   }
 
   if (error instanceof HttpRequestFailed) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, url] = error.message.split(' ');
+    const [, url] = error.message.split(' ');
 
     return i18n.t('common|requestFailed', { url });
   }
