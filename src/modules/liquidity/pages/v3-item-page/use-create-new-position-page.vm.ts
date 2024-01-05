@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { IS_NETWORK_MAINNET } from '@config/config';
 import { ZERO_AMOUNT_BN } from '@config/constants';
 import {
   useGetLiquidityV3ItemWithPositions,
@@ -109,6 +110,7 @@ export const useCreateNewPositionPageViewModel = () => {
     rangeInputsProps,
     titleText: t('liquidity|createPosition'),
     backHref,
-    warningMessages
+    warningMessages,
+    isBlocked: poolStore.poolId?.toFixed() === '83' && IS_NETWORK_MAINNET
   };
 };

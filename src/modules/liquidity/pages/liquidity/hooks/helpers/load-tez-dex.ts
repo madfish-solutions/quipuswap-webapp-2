@@ -1,10 +1,9 @@
-import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
+import { FoundDex, Token as QuipuswapSdkToken, findDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { FACTORIES } from '@config/config';
 import { Nullable, SupportedNetworks, Token } from '@shared/types';
 
-import { findDex } from './find-dex';
 import { findNotTezToken } from '../../liquidity-cards/helpers';
 
 export const loadTezDex = async ({
