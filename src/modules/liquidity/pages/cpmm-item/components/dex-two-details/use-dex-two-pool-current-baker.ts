@@ -29,7 +29,7 @@ export const useDexTwoPoolCurrentBaker = () => {
   const error = errorData ? new Error(errorData) : null;
 
   return {
-    currentBaker: { data: makeBaker(bakerAddress, bakers), loading: bakersLoading || bakerAddressLoading, error },
+    currentBaker: { data: makeBaker(bakerAddress!, bakers), loading: bakersLoading || bakerAddressLoading, error },
     canHaveBaker
   };
 };
