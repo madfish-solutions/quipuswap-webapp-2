@@ -17,6 +17,7 @@ import {
   isExist,
   isNull,
   isTokenEqual,
+  unpackOption,
   useRedirectToNotFoundDigitsRoute
 } from '@shared/helpers';
 import { isEqualTokenPairs } from '@shared/helpers/token-pair';
@@ -193,7 +194,7 @@ const useVotingService = () => {
     voter: {
       vote: voter?.vote ?? null,
       veto: voter?.veto ?? null,
-      candidate: voter?.candidate ?? null,
+      candidate: unpackOption(voter?.candidate),
       setVoter
     },
 

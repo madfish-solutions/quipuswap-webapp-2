@@ -5,6 +5,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { BigNumber } from 'bignumber.js';
 
+import { Option } from './contract-storage.types';
+
 export interface IconProps extends SVGProps<SVGSVGElement> {
   id?: string;
   className?: string;
@@ -116,7 +118,7 @@ export interface TokenMetadata {
 export interface VoterType {
   vote: Nullable<BigNumber>;
   veto: Nullable<BigNumber>;
-  candidate: Nullable<string>;
+  candidate: Option<string>;
 }
 
 export interface TokenDataType {
