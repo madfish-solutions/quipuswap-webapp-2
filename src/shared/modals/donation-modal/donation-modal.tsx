@@ -24,6 +24,8 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const learnMoreUrl = ' https://donate.mad.fish/';
+
 export const DonationModal: FC = () => {
   const { t } = useTranslation(['common']);
   const { donationModalOpen, closeDonationModal } = useGlobalModalsState();
@@ -66,7 +68,7 @@ export const DonationModal: FC = () => {
         <div className={styles.description}>Donate TEZ - support Ukrainians in their fight with Putin occupants</div>
         <Button
           external
-          href="https://donate.tezos.org.ua/"
+          href={learnMoreUrl}
           theme="underlined"
           className={styles.learnMore}
           data-test-id="buttonLearnMore"
