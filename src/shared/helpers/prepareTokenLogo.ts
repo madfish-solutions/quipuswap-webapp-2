@@ -13,7 +13,7 @@ export const prepareTokenLogo = (url?: string | null) => {
   const isIpfs = getProtocol === IPFS;
 
   if (isIpfs) {
-    return `${TEMPLEWALLET_IMG}/${IPFS_GATEWAY}/${splitLink[1]}`;
+    return `${IPFS_GATEWAY}/${splitLink[1]}`;
   }
 
   if (

@@ -18,7 +18,7 @@ export const TZKT_API_DELEGATE_URL = `${TZKT_API}/delegates`;
 export const TZKT_API_CONTRACTS_URL = `${TZKT_API}/contracts`;
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
-export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
+export const CLOUDFLARE_IPFS = 'https://ipfs.io/ipfs';
 export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 
@@ -28,7 +28,7 @@ export const APP_NAME = 'QuipuSwap';
 export const FEE_RATE = 0.3;
 export const BAKERS_API = 'https://api.baking-bad.org/v2/bakers';
 export const EXCHANGE_RATES_URL = `${TEMPLEWALLET_API_URL}/api/exchange-rates`;
-export const IPFS_GATEWAY = 'https://cloudflare-ipfs.com/ipfs';
+export const IPFS_GATEWAY = 'https://ipfs.io/ipfs';
 
 export const YUPANA_URL = 'https://app.yupana.finance/';
 

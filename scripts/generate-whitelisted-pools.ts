@@ -26,7 +26,7 @@ const MainnetWhitelistTokens: Array<WhitelistedToken> = [
       decimals: 6,
       name: 'Tezos',
       symbol: 'TEZ',
-      thumbnailUri: 'https://cloudflare-ipfs.com/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222'
+      thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222'
     }
   },
   {
@@ -687,7 +687,7 @@ const MainnetWhitelistTokens: Array<WhitelistedToken> = [
       decimals: 6,
       name: 'Pixel',
       symbol: 'PXL',
-      thumbnailUri: 'https://cloudflare-ipfs.com/ipfs/Qma4wzNogtUkuhMgzyKBqzaYBqabLVZrHcLbLmJE38B5XH'
+      thumbnailUri: 'https://ipfs.io/ipfs/Qma4wzNogtUkuhMgzyKBqzaYBqabLVZrHcLbLmJE38B5XH'
     }
   },
   {
