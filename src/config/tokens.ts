@@ -71,6 +71,4 @@ export const networksWtezTokens: Record<SupportedNetworks, Token> = {
 
 export const WTEZ_TOKEN = networksWtezTokens[NETWORK_ID];
 
-export const COINFLIP_TOKENS_TO_PLAY = [TEZOS_TOKEN, QUIPU_TOKEN];
-
 export const QUIPU_TOKEN_DECIMALS_PRECISION = 1e6;

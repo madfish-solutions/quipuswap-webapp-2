@@ -126,10 +126,6 @@ export const HOT_POOLS: Array<{ id: string; type: PoolType }> = [
   { id: '3', type: PoolType.DEX_TWO }
 ];
 
-// Coinflip
-export const COINFLIP_CONTRACT_DECIMALS = 18;
-export const COINFLIP_TOKEN_DECIMALS = 6;
-
 // 3route
 export const THREE_ROUTE_APP_ID = 3;
 

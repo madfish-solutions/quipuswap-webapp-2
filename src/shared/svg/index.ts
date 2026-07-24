@@ -54,8 +54,6 @@ export * from './coin';
 export * from './xtz-token';
 export * from './favorite';
 export * from './bin';
-export * from './coinflip-fail-result';
-export * from './coinflip-success-result';
 export * from './new-liquidity';
 export * from './confetti-left';
 export * from './confetti-right';

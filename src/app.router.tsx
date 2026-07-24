@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { Route } from 'react-router-dom';
 
 import { AppRootRoutes } from '@app.router';
-import { CoinflipPage } from '@modules/coinflip';
 import { PageNotFoundPage } from '@modules/errors';
 import { FarmingRouter } from '@modules/farming';
 import { HomePage } from '@modules/home';
@@ -28,7 +27,6 @@ export const AppRouter: FC = () => (
 
     <Route path={`${AppRootRoutes.Farming}/*`} element={<FarmingRouter />} />
     <Route path={`${AppRootRoutes.Voting}/*`} element={<VotingRouter />} />
-    <Route path={AppRootRoutes.Coinflip} element={<CoinflipPage />} />
 
     <Route path={AppRootRoutes.PrivacyPolicy} element={<PrivacyPolicyPage />} />
     <Route path={AppRootRoutes.TermsOfService} element={<TermsOfServicePage />} />
