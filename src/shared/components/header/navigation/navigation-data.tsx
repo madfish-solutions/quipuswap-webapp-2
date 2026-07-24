@@ -10,7 +10,6 @@ import {
   AnalyticsIcon,
   FarmIcon,
   FeedbackIcon,
-  GameIcon,
   HomeIcon,
   LiquidityIcon,
   MoreIcon,
@@ -73,12 +72,6 @@ export const NAVIGATION_DATA: NavigationDataProps[] = [
     to: AppRootRoutes.Farming,
     label: i18n.t('common|Farming'),
     Icon: FarmIcon
-  },
-  {
-    id: 'Coinflip',
-    to: AppRootRoutes.Coinflip,
-    label: i18n.t('common|Game'),
-    Icon: GameIcon
   },
   {
     id: 'Stableswap_Dividends',

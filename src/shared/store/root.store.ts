@@ -1,14 +1,12 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { action, makeObservable, observable } from 'mobx';
 
-import { CoinflipStore as ICoinflipStore } from '@modules/coinflip';
 import {
   FarmingFilterStore as IFarmingFilterStore,
   FarmingItemStore as IFarmingItemStore,
   FarmingListStatsStore as IFarmingListStatsStore,
   FarmingListStore as IFarmingListStore,
-  FarmingYouvesItemStore as IFarmingYouvesItemStore,
-  HarvestAndRollStore as IHarvestAndRollStore
+  FarmingYouvesItemStore as IFarmingYouvesItemStore
 } from '@modules/farming/store';
 import {
   LiquidityListStore as ILiquidityListStore,
@@ -34,7 +32,7 @@ import { TokensBalancesStore } from './tokens-balances.store';
 import { TokensManagerStore } from './tokens-manager.store';
 import { TokensStore } from './tokens.store';
 import { UiStore } from './ui.store';
-import { isExist, isNull } from '../helpers';
+import { isNull } from '../helpers';
 import { Nullable } from '../types';
 
 export class RootStore {
@@ -51,7 +49,6 @@ export class RootStore {
   farmingFilterStore: Nullable<IFarmingFilterStore> = null;
   farmingItemStore: Nullable<IFarmingItemStore> = null;
   farmingYouvesItemStore: Nullable<IFarmingYouvesItemStore> = null;
-  harvestAndRollStore: Nullable<IHarvestAndRollStore> = null;
 
   stableswapItemStore: Nullable<IStableswapItemStore> = null;
   stableswapItemFormStore: Nullable<IStableswapItemFormStore> = null;
@@ -66,8 +63,6 @@ export class RootStore {
   liquidityV3PositionStore: Nullable<ILiquidityV3PositionStore> = null;
   liquidityV3PositionsStore: Nullable<ILiquidityV3PositionsStore> = null;
   liquidityListFiltersStore: Nullable<ILiquidityListFiltersStore> = null;
-
-  coinflipStore: Nullable<ICoinflipStore> = null;
 
   swapStore: Nullable<ISwapStore> = null;
 
@@ -100,8 +95,6 @@ export class RootStore {
       liquidityListStore: observable,
       liquidityItemStore: observable,
 
-      coinflipStore: observable,
-
       swapStore: observable,
 
       setTezos: action,
@@ -109,7 +102,6 @@ export class RootStore {
       createFarmingListStore: action,
       createFarmingFilterStore: action,
       createFarmingItemStore: action,
-      createCoinflipStore: action,
 
       createStableswapItemStore: action,
       createStableswapItemFormStore: action,
@@ -238,13 +230,6 @@ export class RootStore {
     }
   }
 
-  async createHarvestAndRollStore() {
-    if (isNull(this.harvestAndRollStore)) {
-      const { HarvestAndRollStore } = await import('@modules/farming/store/harvest-and-roll.store');
-      this.harvestAndRollStore = new HarvestAndRollStore(this);
-    }
-  }
-
   async createFarmingItemStore() {
     if (isNull(this.farmingItemStore)) {
       const { FarmingItemStore } = await import('@modules/farming/store/farming-item.store');
@@ -257,13 +242,5 @@ export class RootStore {
       const { FarmingYouvesItemStore } = await import('@modules/farming/store/farming-youves-item.store');
       this.farmingYouvesItemStore = new FarmingYouvesItemStore(this);
     }
-  }
-
-  async createCoinflipStore() {
-    if (isExist(this.coinflipStore)) {
-      return;
-    }
-    const { CoinflipStore } = await import('@modules/coinflip');
-    this.coinflipStore = new CoinflipStore(this);
   }
 }

@@ -1,5 +1,4 @@
 import { baker } from './baker';
-import { coinflip } from './coinflip';
 import { common } from './common';
 import { farm } from './farm';
 import { home } from './home';
@@ -18,6 +17,5 @@ export const locales = {
   swap,
   voting,
   settings,
-  stableswap,
-  coinflip
+  stableswap
 };

@@ -17,8 +17,6 @@ export const useFarmingRouterViewModel = () => {
           isNull(rootStore.farmingItemStore) ||
           isNull(rootStore.farmingListStatsStore) ||
           isNull(rootStore.farmingListStore) ||
-          isNull(rootStore.coinflipStore) ||
-          isNull(rootStore.harvestAndRollStore) ||
           isNull(rootStore.farmingYouvesItemStore)
         ) {
           await Promise.all([
@@ -26,8 +24,6 @@ export const useFarmingRouterViewModel = () => {
             await rootStore.createFarmingListStatsStore(),
             await rootStore.createFarmingListStore(),
             await rootStore.createFarmingItemStore(),
-            await rootStore.createCoinflipStore(),
-            await rootStore.createHarvestAndRollStore(),
             await rootStore.createFarmingYouvesItemStore()
           ]);
         }
