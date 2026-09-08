@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-import { NetworkType } from '@airgap/beacon-types';
+import { NetworkType } from '@ecadlabs/beacon-types';
 import { FoundDex } from '@quipuswap/sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { BigNumber } from 'bignumber.js';
@@ -17,7 +17,7 @@ export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null;
 export type Optional<T> = T | null | undefined;
 
-export type BeaconWalletNetworkType = Required<ConstructorParameters<typeof BeaconWallet>[0]>['preferredNetwork'];
+export type BeaconWalletNetworkType = Required<ConstructorParameters<typeof BeaconWallet>[0]>['network']['type'];
 
 export type SupportedNetworks = Extract<BeaconWalletNetworkType, NetworkType.MAINNET | NetworkType.GHOSTNET>;
 

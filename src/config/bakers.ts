@@ -1,4 +1,4 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@ecadlabs/beacon-types';
 
 import { SupportedNetworks, WhitelistedBaker } from '@shared/types';
 
