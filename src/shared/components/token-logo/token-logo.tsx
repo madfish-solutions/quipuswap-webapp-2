@@ -27,6 +27,7 @@ type Props = PropsFixed | PropsFill;
 
 const DEFAULT_SIZE = 24;
 const TZKT_SERVICES_URL = 'https://services.tzkt.io/v1';
+const TF_BAKER_ADDRESS = 'tz3UQN6nBQHofmgQ3pZannhiYE2CT7TEZFim';
 
 export const TokenLogo: FC<Props> = ({ src, tokenSymbol, contractAddress, layout = 'fixed', size = DEFAULT_SIZE }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -35,7 +36,14 @@ export const TokenLogo: FC<Props> = ({ src, tokenSymbol, contractAddress, layout
   const primaryUrl = prepareTokenLogo(src);
   const trimmedContractAddress = contractAddress?.trim();
   const avatarsPath = colorThemeMode === ColorModes.Dark ? 'avatars-dark' : 'avatars';
-  const fallbackUrl = trimmedContractAddress ? `${TZKT_SERVICES_URL}/${avatarsPath}/${trimmedContractAddress}` : null;
+  let fallbackUrl: string | null;
+  if (trimmedContractAddress === 'tez') {
+    fallbackUrl = `${TZKT_SERVICES_URL}/${avatarsPath}/${TF_BAKER_ADDRESS}`;
+  } else if (trimmedContractAddress) {
+    fallbackUrl = `${TZKT_SERVICES_URL}/${avatarsPath}/${trimmedContractAddress}`;
+  } else {
+    fallbackUrl = null;
+  }
   const url = [primaryUrl, fallbackUrl].find(candidate => isExist(candidate) && !failedUrls.includes(candidate));
 
   const handleLoadError = () => {
