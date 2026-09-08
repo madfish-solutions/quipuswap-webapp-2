@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isExist, prepareTokenLogo } from '@shared/helpers';
 import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
@@ -9,6 +10,7 @@ import s from './token-logo.module.scss';
 interface PropsAbstraction {
   src: Nullable<string>;
   tokenSymbol?: Nullable<string>;
+  contractAddress?: Nullable<string>;
 }
 
 interface PropsFixed extends PropsAbstraction {
@@ -24,19 +26,29 @@ interface PropsFill extends PropsAbstraction {
 type Props = PropsFixed | PropsFill;
 
 const DEFAULT_SIZE = 24;
+const TZKT_SERVICES_URL = 'https://services.tzkt.io/v1';
 
-export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = DEFAULT_SIZE }) => {
-  const [loadError, setLoadError] = useState(false);
+export const TokenLogo: FC<Props> = ({ src, tokenSymbol, contractAddress, layout = 'fixed', size = DEFAULT_SIZE }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const [failedUrls, setFailedUrls] = useState<string[]>([]);
 
-  const url = prepareTokenLogo(src);
+  const primaryUrl = prepareTokenLogo(src);
+  const trimmedContractAddress = contractAddress?.trim();
+  const avatarsPath = colorThemeMode === ColorModes.Dark ? 'avatars-dark' : 'avatars';
+  const fallbackUrl = trimmedContractAddress ? `${TZKT_SERVICES_URL}/${avatarsPath}/${trimmedContractAddress}` : null;
+  const url = [primaryUrl, fallbackUrl].find(candidate => isExist(candidate) && !failedUrls.includes(candidate));
 
-  const handleLoadError = () => setLoadError(true);
+  const handleLoadError = () => {
+    if (url) {
+      setFailedUrls(currentFailedUrls => [...currentFailedUrls, url]);
+    }
+  };
 
-  useEffect(() => setLoadError(false), [src]);
+  useEffect(() => setFailedUrls([]), [src, contractAddress]);
 
   const layoutBasedProps = layout === 'fill' ? { layout: 'fill' } : { layout: 'fixed', width: size, height: size };
 
-  return loadError || !isExist(url) ? (
+  return !isExist(url) ? (
     <FallbackLogo size={size} className={s.image} />
   ) : (
     <img

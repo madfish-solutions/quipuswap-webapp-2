@@ -46,6 +46,7 @@ const prepareTokens = (tokens: TokensList, layoutProps: FixedTokensLogos | FillT
     .map(token => ({
       src: defined(token).metadata.thumbnailUri,
       tokenSymbol: getTokenSymbol(defined(token)),
+      contractAddress: defined(token).contractAddress,
       ...layoutProps
     }));
 };

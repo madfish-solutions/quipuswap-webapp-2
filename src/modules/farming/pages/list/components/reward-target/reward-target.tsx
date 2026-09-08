@@ -30,7 +30,7 @@ export const RewardTarget: FC<Props> = ({ token }) => {
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode])}>
       <ArrowDown className={styles.iconButton} />
-      <TokenLogo src={tokenIcon} tokenSymbol={tokenSymbol} />
+      <TokenLogo src={tokenIcon} tokenSymbol={tokenSymbol} contractAddress={token.contractAddress} />
       <span className={styles.earn} data-test-id="earn">
         {EARN}
       </span>
