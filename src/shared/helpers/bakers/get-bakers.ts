@@ -1,4 +1,4 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@ecadlabs/beacon-types';
 
 import { GHOSTNET_BAKERS } from '@config/bakers';
 import { BAKERS_API } from '@config/config';

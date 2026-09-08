@@ -1,4 +1,4 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@ecadlabs/beacon-types';
 
 import { SupportedNetworks, Standard, Token } from '@shared/types';
 

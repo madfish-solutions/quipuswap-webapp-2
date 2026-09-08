@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { AbortedBeaconError } from '@airgap/beacon-sdk';
+import { AbortedBeaconError } from '@ecadlabs/beacon-core';
 import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 
 import { SAVED_TERMS_KEY } from '@config/localstorage';

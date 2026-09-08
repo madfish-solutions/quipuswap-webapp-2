@@ -1,4 +1,4 @@
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@ecadlabs/beacon-types';
 
 import { NETWORK_ID } from '@config/environment';
 

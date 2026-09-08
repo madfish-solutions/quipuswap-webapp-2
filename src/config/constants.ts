@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@ecadlabs/beacon-types';
 import { BigNumber } from 'bignumber.js';
 
 import { SupportedNetworks } from '@shared/types';

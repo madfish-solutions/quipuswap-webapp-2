@@ -141,7 +141,7 @@ function useDApp() {
       beaconWallet.client
         .getAccount(lastUsedAccount)
         .then(value => {
-          if (!value) {
+          if (!value?.publicKey) {
             localStorage.removeItem(LAST_USED_ACCOUNT_KEY);
             localStorage.removeItem(LAST_USED_CONNECTION_KEY);
             setFallbackState();
@@ -149,6 +149,7 @@ function useDApp() {
             return;
           }
 
+          const publicKey = value.publicKey;
           const toolkit = makeBasicToolkit();
           toolkit.setWalletProvider(beaconWallet);
 
@@ -156,7 +157,7 @@ function useDApp() {
             ...prevState,
             templeWallet: null,
             accountPkh: value.address,
-            accountPublicKey: value.publicKey,
+            accountPublicKey: publicKey,
             connectionType: LastUsedConnectionKey.BEACON,
             tezos: toolkit,
             network: NETWORK
@@ -226,7 +227,7 @@ function useDApp() {
   }, []);
 
   const connectWithBeacon = useCallback(async (forcePermission: boolean) => {
-    const { pkh, pk, toolkit } = await connectWalletBeacon(forcePermission, NETWORK);
+    const { pkh, pk, toolkit } = await connectWalletBeacon(forcePermission);
 
     setState(prevState => ({
       ...prevState,

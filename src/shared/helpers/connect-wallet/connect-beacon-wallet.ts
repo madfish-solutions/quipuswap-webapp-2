@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import { NetworkType } from '@airgap/beacon-types';
+import { NetworkType } from '@ecadlabs/beacon-types';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 
 import { APP_NAME, IS_NETWORK_MAINNET, NETWORK } from '@config/config';
@@ -22,15 +22,26 @@ const getPreferredNetwork = () => {
   return NETWORK_ID;
 };
 
+const getBeaconNetwork = (qsNetwork: QSNetwork) => {
+  if (isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET) {
+    return { type: qsNetwork.id };
+  }
+
+  return {
+    type: NetworkType.CUSTOM,
+    name: qsNetwork.name,
+    rpcUrl: getPreferredRpcUrl()
+  };
+};
+
 export const beaconWallet = new BeaconWallet({
   name: APP_NAME,
   iconUrl: `${BASE_URL}/favicon.ico`,
-  preferredNetwork: getPreferredNetwork()
+  preferredNetwork: getPreferredNetwork(),
+  network: getBeaconNetwork(NETWORK)
 });
 
-type Permissions = Required<Required<Parameters<typeof beaconWallet.requestPermissions>>[0]>;
-
-export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: QSNetwork) => {
+export const connectWalletBeacon = async (forcePermission: boolean) => {
   const rpcUrl = getPreferredRpcUrl();
   const rpcClient = new FastRpcClient(rpcUrl);
 
@@ -43,29 +54,14 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
     if (activeAccount) {
       await beaconWallet.clearActiveAccount();
     }
-    const isMain = isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET;
-
-    const network = isMain
-      ? ({
-          type: qsNetwork.id
-        } as { type: Permissions['network']['type'] })
-      : ({
-          type: NetworkType.CUSTOM,
-          name: qsNetwork.name,
-          rpcUrl
-        } as Permissions['network']);
-
-    const permissions: Omit<Permissions, 'scopes'> = {
-      network
-    };
-    await beaconWallet.requestPermissions(permissions);
+    await beaconWallet.requestPermissions();
   }
 
   //@ts-ignore
   const tezos = makeBasicToolkit(rpcClient);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();
-  if (!activeAcc) {
+  if (!activeAcc?.publicKey) {
     throw new WalletNotConnected();
   }
 
