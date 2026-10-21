@@ -22,9 +22,9 @@
     "cy:run_browser": "npx cypress run e2e:parallel -- --browser chrome --group Chrome & npx cypress run e2e -- --browser firefox --group Firefox"
   },
   "dependencies": {
+    "@craco/craco": "^6.4.3",
     "@ecadlabs/beacon-core": "4.8.4-ecad",
     "@ecadlabs/beacon-types": "4.8.4-ecad",
-    "@craco/craco": "^6.4.3",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.3",
     "@quipuswap/tokens-whitelist": "^1.1.29",
@@ -38,7 +38,7 @@
     "@types/throttle-debounce": "^5.0.0",
     "amplitude-js": "^8.18.2",
     "assert": "^2.0.0",
-    "bignumber.js": "^9.1.0",
+    "bignumber.js": "9.3.1",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
@@ -153,6 +153,7 @@
     }
   },
   "resolutions": {
-    "@taquito/beacon-wallet/@airgap/beacon-dapp": "npm:@ecadlabs/beacon-dapp@4.8.4-ecad"
+    "@taquito/beacon-wallet/@airgap/beacon-dapp": "npm:@ecadlabs/beacon-dapp@4.8.4-ecad",
+    "bignumber.js": "9.3.1"
   }
 }

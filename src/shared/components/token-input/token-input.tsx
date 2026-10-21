@@ -108,7 +108,7 @@ export const TokenInput: FC<TokenInputProps> = observer(
         <div className={styles.background}>
           <div className={cx(styles.shape, { [styles.fullWidth]: fullWidth })}>
             <div className={cx(styles.dollarEquivalent, styles.label2)}>
-              {dollarEquivalent && <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} />}
+              {dollarEquivalent ? <StateCurrencyAmount amount={dollarEquivalent} currency={DOLLAR} /> : null}
             </div>
             <div className={styles.balance}>
               {shownBalance && <Balance text={balanceText} balance={balance} colorMode={colorThemeMode} />}

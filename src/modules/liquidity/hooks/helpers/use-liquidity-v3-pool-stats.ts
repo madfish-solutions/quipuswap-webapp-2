@@ -17,7 +17,8 @@ import { useLiquidityV3PoolStore, useLiquidityV3PositionStore } from '../store';
 
 export const useLiquidityV3PoolStats = () => {
   const store = useLiquidityV3PoolStore();
-  const { contractBalance, feeBps } = store;
+  const contractBalance = store.contractBalance;
+  const feeBps = store.feeBps;
   const { tokenX, tokenY } = useLiquidityV3ItemTokens();
   const currentPrice = useLiquidityV3CurrentYToXPrice();
   const { tokenXExchangeRate, tokenYExchangeRate, isExchangeRatesError } = useLiquidityV3ItemTokensExchangeRates();

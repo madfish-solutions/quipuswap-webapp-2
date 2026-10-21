@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { Undefined } from '@shared/types';
 
-import { checker } from '../model-builder';
+import { checker } from '../model-builder/mapper/checker';
 
 export const bigNumberMapper = (arg: unknown, optional: Undefined<boolean>, nullable: Undefined<boolean>) => {
   if (checker(arg, optional, nullable)) {
