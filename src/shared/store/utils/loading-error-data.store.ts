@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { mapperReader, MapperConfig } from '@shared/model-builder';
+import { mapperReader, MapperConfig } from '@shared/model-builder/mapper';
 import { Constructable } from '@shared/types';
 
 export class LoadingErrorData<

@@ -2,7 +2,7 @@
 import { LED_METADATA_KEY } from './led-metadata-key';
 import { createConfigMap, MapperConfig } from './mapper';
 import { LedMetadataValue } from './types';
-import { LoadingErrorData } from '../store';
+import { LoadingErrorData } from '../store/utils/loading-error-data.store';
 import { Constructable } from '../types';
 
 export const ModelBuilder = () => {

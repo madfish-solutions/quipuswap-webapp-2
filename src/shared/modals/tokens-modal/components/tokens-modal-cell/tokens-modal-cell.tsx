@@ -50,7 +50,7 @@ export const TokensModalCell: FC<TokensModalCellProps> = ({ token, onTokenClick,
       </div>
 
       <div className={styles.checkboxContainer}>
-        {balance && <StateCurrencyAmount amount={balance} />}
+        {balance ? <StateCurrencyAmount amount={balance} /> : null}
         {!isEqual(maxQuantity, SINGLE_TOKEN_VALUE) && (
           <Checkbox className={styles.checkbox} checked={token.isChosen} disabled={token.disabled} />
         )}
