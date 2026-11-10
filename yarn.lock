@@ -12,18 +12,18 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.3.1.tgz#abfccb8ca78075a2b6187345c26243c1a0842f28"
   integrity sha512-/62yikz7NLScCGAAST5SHdnjaDJQBDq0M2muyRTpf2VQhw6StBg2ALiu73zSJQ4fMVLA+0uBhBHAle7Wg+2kSg==
 
-"@airgap/beacon-dapp@4.0.6", "@airgap/beacon-dapp@npm:@ecadlabs/beacon-dapp@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-dapp/-/beacon-dapp-4.8.4-ecad.tgz#58734ac6c2af86f8e8848034c5a6dd496d9c73b6"
-  integrity sha512-oqhpzfO37xQ1gFQ2pqpSzlzEAQdTK7LqM517MFvJZFWkt6vS3GPjgQwyihg9Qj11f0GRP004/1uXvOJoX5hbJA==
+"@airgap/beacon-dapp@4.0.6", "@airgap/beacon-dapp@npm:@ecadlabs/beacon-dapp@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-dapp/-/beacon-dapp-4.8.5-ecad.tgz#7a41b1256ce1909079a2d7abdc7a2ffc8ec51476"
+  integrity sha512-+U4131arjGaPhz7+1910l4RzSVayjp8Pk7yG4P271XU72q+U4KWjA1CgZ+faZ+YO81QM3jXOc7NCKmgwmjdBOQ==
   dependencies:
-    "@ecadlabs/beacon-core" "4.8.4-ecad"
-    "@ecadlabs/beacon-transport-matrix" "4.8.4-ecad"
-    "@ecadlabs/beacon-transport-postmessage" "4.8.4-ecad"
-    "@ecadlabs/beacon-transport-walletconnect" "4.8.4-ecad"
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
-    "@ecadlabs/beacon-ui" "4.8.4-ecad"
-    "@ecadlabs/beacon-utils" "4.8.4-ecad"
+    "@ecadlabs/beacon-core" "4.8.5-ecad"
+    "@ecadlabs/beacon-transport-matrix" "4.8.5-ecad"
+    "@ecadlabs/beacon-transport-postmessage" "4.8.5-ecad"
+    "@ecadlabs/beacon-transport-walletconnect" "4.8.5-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
+    "@ecadlabs/beacon-ui" "4.8.5-ecad"
+    "@ecadlabs/beacon-utils" "4.8.5-ecad"
     "@walletconnect/types" "2.18.0"
     broadcast-channel "^7.3.0"
     bs58check "4.0.0"
@@ -1363,13 +1363,13 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@ecadlabs/beacon-core@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-core/-/beacon-core-4.8.4-ecad.tgz#387fd4ecbbf9e383b99472ba5a34b16a4fe37887"
-  integrity sha512-UABP0xOGCK5r7Ys3Wk+lugLdIzJTo5Y0mDVcbSETevj2GiLN91sPA6jP6I2JfKJo+YHXJWXTher5j5z6xKGP6A==
+"@ecadlabs/beacon-core@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-core/-/beacon-core-4.8.5-ecad.tgz#7110c713e90a152c94995ad750b782fd4d76dbeb"
+  integrity sha512-wd6/4dkA8X8/s9xsdH6CH6ieT0a0mQrxb7c3qLsfCMKs9J2bq0nowMCJ7sOGu6Wm5bx2kFBGPm/ZhvoLNYapIw==
   dependencies:
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
-    "@ecadlabs/beacon-utils" "4.8.4-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
+    "@ecadlabs/beacon-utils" "4.8.5-ecad"
     "@stablelib/blake2b" "^2.0.1"
     "@stablelib/nacl" "^2.0.1"
     "@stablelib/utf8" "^2.1.0"
@@ -1377,52 +1377,52 @@
     broadcast-channel "^7.3.0"
     bs58check "4.0.0"
 
-"@ecadlabs/beacon-transport-matrix@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-matrix/-/beacon-transport-matrix-4.8.4-ecad.tgz#8f05363730ad9218f51fc2de2e238772932c1e81"
-  integrity sha512-VJ49Jy18jrhjGZCuhpU+beetglWW0H1W4C0l+dyC/q1EA/4Bmwz0cceetv1SYeriR3en0kHAYi7mbkgqvY0nDA==
+"@ecadlabs/beacon-transport-matrix@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-matrix/-/beacon-transport-matrix-4.8.5-ecad.tgz#c37e80a391cf97983aff499acdb924fb72eff236"
+  integrity sha512-DD/JLm8m69bIZsD/vx+x0cS3AVeahncSgynktH+JzUjFF5qnUYKpsC8hyJw9C/s6PNBaqlcw88/yO/fx4R00uA==
   dependencies:
-    "@ecadlabs/beacon-core" "4.8.4-ecad"
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
-    "@ecadlabs/beacon-utils" "4.8.4-ecad"
+    "@ecadlabs/beacon-core" "4.8.5-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
+    "@ecadlabs/beacon-utils" "4.8.5-ecad"
     "@stablelib/blake2b" "^2.0.1"
     "@stablelib/utf8" "^2.1.0"
 
-"@ecadlabs/beacon-transport-postmessage@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-postmessage/-/beacon-transport-postmessage-4.8.4-ecad.tgz#0e29c7c3aa4d6732b579c8d99c3c375a403cff92"
-  integrity sha512-/OkFfCyO1EYOKSbccx/2HM8ZrLg1KRkDgli2Axqwl9g9D7pHjFFt7kxUeSBCbQ3eUmV8jGwDPpDtnrHfRsdynQ==
+"@ecadlabs/beacon-transport-postmessage@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-postmessage/-/beacon-transport-postmessage-4.8.5-ecad.tgz#b54e3183ca15e32d63be7485e57568fdae73b84b"
+  integrity sha512-uCt0frGF09Ju9NIJmdlW8zuqd95wdj9hGGc+JB77zbZPjBl9H6LY2JUtFEgPKtrqC1tM4LBCRq4fbAs+R7rudg==
   dependencies:
-    "@ecadlabs/beacon-core" "4.8.4-ecad"
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
-    "@ecadlabs/beacon-utils" "4.8.4-ecad"
+    "@ecadlabs/beacon-core" "4.8.5-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
+    "@ecadlabs/beacon-utils" "4.8.5-ecad"
 
-"@ecadlabs/beacon-transport-walletconnect@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-walletconnect/-/beacon-transport-walletconnect-4.8.4-ecad.tgz#b318446bde3adfc60933ab67e39fc8b848141ff3"
-  integrity sha512-urZ/onRBPgdkINNm4PI31qIdyBmTEO4ze3z4jHusdMMumNqZlvDD9vIIrLxP9v+g5UdQa75Kld4Fof667Zv1Tg==
+"@ecadlabs/beacon-transport-walletconnect@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-transport-walletconnect/-/beacon-transport-walletconnect-4.8.5-ecad.tgz#0d054f47a34a046782e4e68b8a0d1ba3e72c1c8f"
+  integrity sha512-f+OGhGNkg4cbuYCY6ALgkRcDXNC0B8aMni7ZoDt3TgIAlbK5Cgn+TosqfwnK43R72qQ2HirDvjM5gwsGRyy2TQ==
   dependencies:
-    "@ecadlabs/beacon-core" "4.8.4-ecad"
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
-    "@ecadlabs/beacon-utils" "4.8.4-ecad"
+    "@ecadlabs/beacon-core" "4.8.5-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
+    "@ecadlabs/beacon-utils" "4.8.5-ecad"
     "@walletconnect/sign-client" "2.18.0"
     "@walletconnect/types" "2.18.0"
     "@walletconnect/utils" "2.18.0"
 
-"@ecadlabs/beacon-types@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-types/-/beacon-types-4.8.4-ecad.tgz#fe0f0b392dca339d9ea1391148c46833c331443f"
-  integrity sha512-LO07IxtGjeQXyiuZSxXoB8jTETlpct+3kFZP8mRAfbaGTrDDouR7cwYx623reKHn7ap9VtQXCkzzPBYRZNCV5g==
+"@ecadlabs/beacon-types@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-types/-/beacon-types-4.8.5-ecad.tgz#f3b65993870ee418b3f9213c4986164232d8362f"
+  integrity sha512-9GYHJg5J7M0GT5yPSAdayv2cu/BHw2eoj1LpxevYtT1alC43XArOu6PtOKWzcnsrAkxFOxEVpVt3CzrnsEx6hw==
   dependencies:
     "@types/chrome" "^0.1.40"
 
-"@ecadlabs/beacon-ui@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-ui/-/beacon-ui-4.8.4-ecad.tgz#3cf10480d18e6f3993b9a954c8f0f9d0ed4a3397"
-  integrity sha512-FcOVHQ/o32JmbPyL+N+GiL6O0KcXfR4hZDxFiyVJKBj+3sT3GuK3XyT57AAfP2BZNqwa2uXGs9NoyH5OZiMjYw==
+"@ecadlabs/beacon-ui@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-ui/-/beacon-ui-4.8.5-ecad.tgz#c216c454747643a395767fda9deb24fac90c255f"
+  integrity sha512-kj2jLq8rcGmSe3/zqlBjWh3Dm5A64Hr1h4C16F3lcOWQO0EMlVgLSsPHLP8++GitaoYsJJZFav0yY4a1hPWSLA==
   dependencies:
-    "@ecadlabs/beacon-core" "4.8.4-ecad"
-    "@ecadlabs/beacon-types" "4.8.4-ecad"
+    "@ecadlabs/beacon-core" "4.8.5-ecad"
+    "@ecadlabs/beacon-types" "4.8.5-ecad"
     qrcode "^1.5.3"
     react "^19.2.5"
     react-dom "^19.2.5"
@@ -1430,10 +1430,10 @@
     "@rollup/rollup-darwin-arm64" "4.60.2"
     "@rollup/rollup-linux-x64-gnu" "4.60.2"
 
-"@ecadlabs/beacon-utils@4.8.4-ecad":
-  version "4.8.4-ecad"
-  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-utils/-/beacon-utils-4.8.4-ecad.tgz#4119438caa771762328988904ebfb5fed9cfb3f9"
-  integrity sha512-9pKJyeXbxKH80PmuBF1JQwD/WMTMfzsGHoWTLg0kr9uN1C6IcjTtne/S2KiTvCoYvKpdSsEvTpSBLeuNUNhftw==
+"@ecadlabs/beacon-utils@4.8.5-ecad":
+  version "4.8.5-ecad"
+  resolved "https://registry.yarnpkg.com/@ecadlabs/beacon-utils/-/beacon-utils-4.8.5-ecad.tgz#df627cd87ec9ac024cc7788c64a6994ab7287349"
+  integrity sha512-j5WsooVUSm1KrJpaWCSqvp8uRlFZM4drYgogXuvVlSAYNi8atuCjyCxqduC0yCbiiCBQd0zZV2aWmj/7XdVuoA==
   dependencies:
     "@stablelib/blake2b" "^2.0.1"
     "@stablelib/bytes" "^2.0.1"

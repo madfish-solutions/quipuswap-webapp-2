@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@craco/craco": "^6.4.3",
-    "@ecadlabs/beacon-core": "4.8.4-ecad",
-    "@ecadlabs/beacon-types": "4.8.4-ecad",
+    "@ecadlabs/beacon-core": "4.8.5-ecad",
+    "@ecadlabs/beacon-types": "4.8.5-ecad",
     "@percy/cli": "^1.7.2",
     "@quipuswap/sdk": "^3.0.3",
     "@quipuswap/tokens-whitelist": "^1.1.29",
@@ -153,7 +153,7 @@
     }
   },
   "resolutions": {
-    "@taquito/beacon-wallet/@airgap/beacon-dapp": "npm:@ecadlabs/beacon-dapp@4.8.4-ecad",
+    "@taquito/beacon-wallet/@airgap/beacon-dapp": "npm:@ecadlabs/beacon-dapp@4.8.5-ecad",
     "bignumber.js": "9.3.1"
   }
 }
